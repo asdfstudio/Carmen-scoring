@@ -1,0 +1,55 @@
+
+
+
+// Carmen Showchoir Colors
+$cs-green: #68B155;
+$cs-orange: #E29231;
+$cs-red: #CA2128;
+$cs-purple: #7F4091;
+
+$cs-blue: #1976D2;
+$cs-blue-darker: #1565C0;
+$cs-blue-lighter: #2196F3;
+
+$cs-yellow: #f7f75a;
+
+// Color Variations
+$cs-green-lighter: lighten($cs-green,10);
+$cs-green-darker: darken($cs-green,10);
+
+
+
+//$cs-primary: $cs-purple;
+
+//$cs-secondary: adjust-hue($cs-primary,180);
+
+$cs-gray-light: #EFEFEF;
+$cs-gray-mid-1: darken($cs-gray-light,20);
+$cs-gray-mid-2: darken($cs-gray-light,30);
+$cs-gray-mid-3: darken($cs-gray-light,40);
+$cs-gray-dark: #272B2D;
+
+
+//$cs-primary: hsl(203, 41%, 41%); // #3E7293
+$cs-primary: $cs-blue;
+$cs-white: #FFF;
+$cs-black: #000;
+
+
+// Caption colors
+$cs-caption-music: $cs-purple;
+$cs-caption-show: $cs-orange;
+
+
+$cs-body-width: 900px;
+
+
+$cs-padding: 20px;
+
+
+$font-family-sans-serif:  'Lato',"Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$font-family-serif: 'Bitter', Georgia, "Times New Roman", Times, serif !default;
+
+$headings-font-family: $font-family-serif;
+
+$body-bg: #eee;

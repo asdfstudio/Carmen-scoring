@@ -1,0 +1,269 @@
+<?php
+
+namespace App\Http\Controllers\Organizer;
+
+use Illuminate\Http\Request;
+
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+
+use App\Competition;
+use App\Division;
+use App\Caption;
+
+use Kris\LaravelFormBuilder\FormBuilder;
+
+class CompetitionDivisionController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index($competition_id)
+    {
+				$competition = Competition::with('organization','place','divisions')->find($competition_id);
+				//dd($competition);
+        //
+				return view('competition_division.organizer.index', compact('competition'));
+    }
+
+
+
+    public function setup($competition_id, FormBuilder $formBuilder)
+    {
+      $competition = Competition::with('organization','place','divisions','divisions.rounds')->find($competition_id);
+
+      $form = $formBuilder->create('Competition\SetupForm', [
+        'method' => 'POST',
+        'url' => route('organizer.competition.division.setup.store',[$competition])
+      ]);
+
+      //dd($competition);
+      return view('competition_division.organizer.setup', compact('competition','form'));
+    }
+
+
+    public function storeMultiple(Request $request, $competition_id, FormBuilder $formBuilder)
+    {
+        $form = $formBuilder->create('Competition\SetupForm');
+
+				// Validate input
+				if (!$form->isValid()) {
+           return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+
+				$competition = Competition::with('organization','place','divisions')->find($competition_id);
+
+        foreach($request->input('divisions') as $division_input)
+        {
+          $division = new Division($division_input);
+          $competition->divisions()->save($division);
+        }
+
+
+				// Set flash data and redirect
+				return redirect()->route('organizer.competition.division.setup',[$competition]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create($competition_id, FormBuilder $formBuilder)
+    {
+				$competition = Competition::with('organization','place','divisions')->find($competition_id);
+
+        $form = $formBuilder->create('Division\CreateForm', [
+					'method' => 'POST',
+					'url' => route('organizer.competition.division.store',[$competition])
+				]);
+
+				return view('competition_division.organizer.create', compact('competition','form'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request, $competition_id, FormBuilder $formBuilder)
+    {
+        $form = $formBuilder->create('Division\CreateForm');
+
+				// Validate input
+				if (!$form->isValid()) {
+           return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+
+				$competition = Competition::with('organization','place','divisions')->find($competition_id);
+
+        //dd($request->all());
+
+				$division = new Division($request->all());
+				$competition->divisions()->save($division);
+
+        $successMessage = "$division->name has been created.";
+
+        if($request->exists('submit_create_another'))
+        {
+          return redirect()->back()->with('success',$successMessage);
+        }
+        else {
+          return redirect()->route('organizer.competition.division.index', [$competition])->with('success',$successMessage);
+        }
+
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($competition_id, $division_id, FormBuilder $formBuilder)
+    {
+        $competition = Competition::with('organization','place','divisions')->find($competition_id);
+
+				$division = Division::with(['choirs','rounds','judges' => function ($query) {
+					$query->groupBy('judge_id');
+				}, 'judges.captions' => function ($query) use ($division_id) {
+					$query->where('division_id',$division_id);
+				}])->find($division_id);
+
+				$captions = Caption::get();
+
+        $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
+          'method' => 'POST',
+          'url' => route('organizer.competition.division.scoring',[$competition,$division])
+        ]);
+
+        $deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm', [
+          'method' => 'POST',
+          'url' => route('organizer.competition.division.scoring',[$competition,$division])
+        ]);
+
+        $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm', [
+          'method' => 'POST',
+          'url' => route('organizer.competition.division.scoring',[$competition_id,$division_id])
+        ]);
+
+        //
+				return view('competition_division.organizer.show', compact('competition','division','captions','activateScoringForm','deactivateScoringForm','completeScoringForm'));
+    }
+
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function settings($competition_id, $division_id, FormBuilder $formBuilder)
+    {
+        $competition = Competition::with('organization', 'place', 'divisions')->find($competition_id);
+
+				$division = Division::find($division_id);
+
+        //
+				return view('competition_division.organizer.settings', compact('competition','division'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($competition_id, $division_id, FormBuilder $formBuilder)
+    {
+        $competition = Competition::with('organization','place','divisions')->find($competition_id);
+				$division = Division::find($division_id);
+
+        $form = $formBuilder->create('Division\CreateForm', [
+					'method' => 'PUT',
+					'model' => $division,
+					'url' => route('organizer.competition.division.update',[$competition,$division_id])
+				]);
+
+				return view('competition_division.organizer.edit', compact('competition','division','form'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $competition, $division_id, FormBuilder $formBuilder)
+    {
+        $form = $formBuilder->create('Division\CreateForm');
+
+				// Validate input
+				if (!$form->isValid()) {
+           return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+
+				//$competition = Competition::find($competition_id);
+				$division = Division::find($division_id);
+				$division->fill($request->all());
+				$division->save();
+
+				// Set flash data and redirect
+				return redirect()->route('organizer.competition.division.settings',[$competition, $division])->with('success',"$division->name has been updated.");
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+
+
+    public function scoring($competition_id, $division_id, Request $request)
+    {
+      $division = Division::with('rounds')->find($division_id);
+
+      // Activate scoring for
+      //all of the division rounds for this competition
+      if($request->input('activate'))
+      {
+        $is_scoring_active = true;
+        $is_completed = false;
+      }
+      // Deactive scoring for all division rounds
+      elseif($request->input('deactivate'))
+      {
+        $is_scoring_active = false;
+        $is_completed = NULL;
+      }
+      // Complete and deactive scoring for all division rounds
+      elseif($request->input('complete'))
+      {
+        $is_scoring_active = false;
+        $is_completed = true;
+      }
+      else {
+        return false;
+      }
+
+      foreach($division->rounds as $round)
+      {
+        $round->is_scoring_active = $is_scoring_active;
+        $round->is_completed = $is_completed;
+        $round->save();
+      }
+
+      return redirect()->route('organizer.competition.division.show',[$competition_id,$division_id]);
+    }
+}

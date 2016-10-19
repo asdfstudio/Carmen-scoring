@@ -1,0 +1,50 @@
+.toggle-buttons {
+
+  input {
+    display: none;
+
+    &:checked + label {
+      background-color: $cs-primary;
+      border: 1px solid $cs-primary;
+      color: $cs-white;
+
+      i.checked {
+        display:  inline-block;
+        //background: $cs-green;
+        border: 5px solid $cs-white;
+      }
+    }
+  }
+
+  label {
+    float: left;
+    display: inline-block;
+    width: auto;
+    background: #fff;
+    color: $cs-primary;
+    padding: 6px 12px;
+    text-align: center;
+    border: 1px solid;
+
+    i.checked {
+      display:  inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid $cs-gray-mid-1;
+      border-radius: 100px;
+      margin-right: 4px;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:first-of-type {
+      border-radius: 4px 0 0 4px;
+    }
+
+    &:last-of-type {
+      border-radius: 0 4px 4px 0;
+    }
+  }
+}

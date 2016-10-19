@@ -1,0 +1,50 @@
+
+.label {
+  border-radius: 0;
+  font-size: 1em;
+  font-weight: normal;
+  line-height: 1;
+  text-align: center;
+  vertical-align: baseline;
+  white-space: nowrap;
+  padding: 5px 11px;
+
+  &.small {
+    font-size: 0.8em;
+  }
+
+  &.x-small {
+    font-size: 0.6em;
+  }
+
+  &.radius {
+    border-radius: 3px;
+  }
+
+  &.caption {
+    &.music {
+      background: $cs-caption-music;
+    }
+    &.show {
+      background: $cs-caption-show;
+    }
+  }
+
+  &.status {
+    //float: right;
+    color: $cs-white;
+    padding: 5px 8px;
+
+    &.completed {
+      background-color: $cs-green;
+    }
+
+    &.active {
+      background-color: $cs-purple;
+    }
+
+    &.inactive {
+      background-color: $cs-orange;
+    }
+  }
+}

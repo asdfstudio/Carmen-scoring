@@ -1,0 +1,70 @@
+
+.caption-header {
+  font-size: 1.2em;
+  color: $cs-white;
+
+  th {
+    //padding: 8px 10px !important;
+    //text-align: center;
+  }
+
+  &.caption-music {
+    background: $cs-caption-music !important;
+  }
+
+  &.caption-show {
+    background: $cs-caption-show !important;
+  }
+
+  &.caption-place {
+    background: $cs-gray-mid-3 !important;
+  }
+}
+
+.caption-raw-score {
+  font-size: 1em;
+  color: $cs-white;
+
+  &.caption-music {
+    background: lighten($cs-caption-music, 15) !important;
+  }
+
+  &.caption-show {
+    background: lighten($cs-caption-show, 5) !important;
+  }
+}
+
+.caption-weighted-score {
+  font-size: 1em;
+  color: $cs-white;
+
+  &.caption-music {
+    background: lighten($cs-caption-music, 10) !important;
+  }
+
+  &.caption-show {
+    background: lighten($cs-caption-show, 10) !important;
+  }
+}
+
+.caption-rank {
+  font-size: 1.1em;
+  color: $cs-white;
+
+  &.caption-music {
+    background: darken($cs-caption-music, 5) !important;
+  }
+
+  &.caption-show {
+    background: darken($cs-caption-show, 5) !important;
+  }
+}
+
+.total-score {
+  font-size: 1.3em;
+  border-top: 4px solid;
+}
+
+.total-rank {
+  font-size: 1.2em;
+}

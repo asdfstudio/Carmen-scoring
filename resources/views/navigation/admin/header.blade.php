@@ -1,0 +1,35 @@
+<div class="header-wrap admin">
+  <div class="header body-width">
+    <ul class="navigation">
+      <li class="title">Admin</li>
+      <li>
+        <?php $link_class = Request::segment(2) == 'organization' ? 'active' : false; ?>
+        <a href="{{ route('admin.organization.index') }}" class="{{ $link_class }}">Organizations</a>
+      </li>
+      <li>
+        <?php $link_class = Request::segment(2) == 'user' ? 'active' : false; ?>
+        <a href="{{ route('admin.user.index') }}" class="{{ $link_class }}">Users</a>
+      </li>
+      <li>
+        <?php $link_class = Request::segment(2) == 'choir' ? 'active' : false; ?>
+        <a href="{{ route('admin.choir.index') }}" class="{{ $link_class }}">Choirs</a>
+      </li>
+      <li>
+        <?php $link_class = Request::segment(2) == 'school' ? 'active' : false; ?>
+        <a href="{{ route('admin.school.index') }}" class="{{ $link_class }}">Schools</a>
+      </li>
+
+
+    </ul>
+
+    <ul class="user-actions navigation">
+      <li>
+        <?php $link_class = Request::segment(1) == 'profile' ? 'active' : false; ?>
+        <a href="{{ route('profile.edit') }}" class="{{ $link_class }}">My Profile</a>
+      </li>
+      <li>
+        <a href="{{ url('logout') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</div>

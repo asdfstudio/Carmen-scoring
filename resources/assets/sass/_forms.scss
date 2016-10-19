@@ -1,0 +1,50 @@
+.new_choir_container {
+  display: none;
+}
+
+.new_school_container {
+  display: none;
+}
+
+.new_judge_container {
+  display: none;
+}
+
+label {
+  &.block {
+    display: block;
+  }
+}
+
+
+.choice-container {
+    padding: 6px 3px;
+
+    &:first-of-type {
+      clear: both;
+    }
+
+    &.inline {
+      display: inline-block;
+      margin-right: 25px;
+    }
+
+    &.bordered {
+      border: 1px solid $cs-gray-mid-1;
+      border-radius: 5px;
+      padding: 6px 12px;
+      margin-right: 0;
+      background: $cs-gray-light;
+    }
+
+    input {
+
+    }
+
+    label {
+        font-size: 1.1em;
+        font-weight: normal;
+        line-height: 1em;
+        margin-left: 8px;
+    }
+}

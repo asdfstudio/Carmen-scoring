@@ -1,0 +1,203 @@
+
+.list-group {
+
+
+  .list-group-item {
+
+    &:hover {
+      background: $cs-gray-light;
+    }
+
+    .group {
+      margin-bottom: 5px;
+    }
+
+    .actions-group {
+      margin-top: 10px;
+      //border-top: 1px dashed $cs-gray-mid-1;
+      clear: both;
+
+      .action {
+        //border: none;
+        //text-decoration: underline;
+
+        &.danger:hover {
+          background: $cs-red;
+        }
+
+        &:hover {
+          background: $cs-primary;
+          color: $cs-white;
+        }
+        &:active {
+          background: $cs-primary;
+          color: $cs-white;
+        }
+      }
+    }
+
+    &.award {
+      .name {
+        font-size: 22px;
+        //line-height: 26px;
+        display: block;
+        //margin-bottom: 5px;
+      }
+      .description {
+        font-size: 14px;
+        line-height: 18px;
+        display: block;
+        margin-top: 5px;
+      }
+      .owner {
+        display: none;
+      }
+      .recipient {
+        //border: 1px solid #ddd;
+        display: block;
+        margin-top: 15px;
+
+        .heading {
+          background: $cs-green;
+          color: $cs-white;
+          padding: 5px;
+          display: block;
+          margin-bottom: 5px;
+        }
+        .name {
+          padding: 0 5px;
+          font-size: 18px;
+          //line-height: 22px;
+        }
+        .choir {
+          padding: 0 5px;
+        }
+      }
+
+    }
+
+    &.choir {
+      .school {
+        font-size: 16px;
+        line-height: 19px;
+        display: block;
+        margin-bottom: 3px;
+        color: $cs-gray-mid-3;
+      }
+      .name {
+        font-size: 21px;
+        //line-height: 22px;
+        display: block;
+        //text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .location {
+        display: inline-block;
+        font-style: italic;
+        color: $cs-gray-mid-2;
+        //float: right;
+      }
+    }
+
+    &.school {
+      .name {
+        font-size: 21px;
+        //line-height: 22px;
+        display: block;
+        //text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .location {
+        display: inline-block;
+        font-style: italic;
+        color: $cs-gray-mid-2;
+        //float: right;
+      }
+    }
+
+    &.judge {
+      .name {
+        font-size: 22px;
+        //line-height: 26px;
+        display: inline-block;
+        //margin-bottom: 5px;
+      }
+      ul.captions-group {
+        display:  inline-block;
+        float: right;
+        margin: 0;
+        padding: 0;
+
+        li.caption {
+          display: inline-block;
+          padding: 5px 8px;
+          color: $cs-white;
+          float:  left;
+          margin-left: 3px;
+
+          &.music {
+            background: $cs-caption-music;
+          }
+          &.show {
+            background: $cs-caption-show;
+          }
+        }
+      }
+    }
+
+    &.round {
+      .name {
+        font-size: 22px;
+        //line-height: 26px;
+        display: inline-block;
+        //margin-bottom: 5px;
+      }
+
+      .status {
+        float: right;
+      }
+    }
+
+    &.penalty {
+
+      input {
+        margin-top: 10px;
+      }
+      input + .group {
+        margin-left: 15px;
+      }
+      .name {
+        font-size: 22px;
+        //line-height: 26px;
+        display: block;
+        margin-bottom: 5px;
+      }
+      .description {
+        font-size: 14px;
+        line-height: 18px;
+        display: block;
+      }
+
+      .details {
+        display: block;
+        margin-top: 5px;
+        text-align: right;
+
+        .amount {
+          font-weight: bold;
+          color: $cs-red;
+          font-size: 1.3em;
+        }
+        .apply_per_judge {
+          font-weight: bold;
+          display: block;
+          //text-decoration: underline;
+        }
+      }
+
+    }
+  }
+
+}

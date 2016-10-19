@@ -1,0 +1,63 @@
+.actions-group {
+
+  font-size: 0;
+  padding: 0;
+  margin: 0;
+
+  form {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+  }
+
+  li {
+    font-size: 14px;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+
+    &:not(:first-of-type) {
+      margin-left: -1px;
+    }
+  }
+
+}
+
+.action {
+  border: 1px solid;
+  border-bottom-width: 2px;
+  padding: 5px 10px;
+  text-transform: lowercase;
+  display:  inline-block;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+
+  &:hover {
+    text-decoration: none;
+    transition-duration: 300ms;
+    background: $cs-primary;
+    color: $cs-white;
+    border-color: $cs-primary;
+  }
+
+  &.danger {
+    color: $cs-red;
+
+    &:hover {
+      background: $cs-red;
+      color: $cs-white;
+      border-color: $cs-red;
+    }
+  }
+
+  &.secondary {
+    color: $cs-gray-mid-3;
+
+    &:hover {
+      background: $cs-gray-mid-3;
+      color: $cs-white;
+      border-color: $cs-gray-mid-3;
+    }
+  }
+}

@@ -1,0 +1,21 @@
+.table {
+  &.last-col-right {
+
+    th {
+      &:last-of-type:not(:only-of-type) {
+        text-align: right !important;
+      }
+    }
+    td {
+      &:last-of-type {
+        text-align: right !important;
+      }
+    }
+  }
+
+  tr.section-heading {
+    border-bottom: 2px solid;
+    font-size: 1.3em;
+  }
+
+}

@@ -1,0 +1,87 @@
+//var elixir = require('laravel-elixir');
+
+var gulp = require('gulp');
+var sass = require('gulp-sass');
+var concat = require('gulp-concat');
+var sourcemaps = require('gulp-sourcemaps');
+
+
+// Javascript concat and uglify
+//var js_input = './resources/assets/js/**/*.js';
+var js_input = './resources/assets/js/app.js';
+var js_output = './public/js';
+
+gulp.task('build-js', function() {
+
+  return gulp.src(js_input)
+    .pipe(concat('app.js'))
+    .pipe(gulp.dest(js_output));
+
+  //return gulp.src(js_input)
+    //.pipe(sourcemaps.init())
+      //.pipe(concat('app.js'))
+      //only uglify if gulp is ran with '--type production'
+      //.pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
+    //.pipe(sourcemaps.write())
+    //.pipe(gulp.dest(js_output));
+});
+
+var resources = './resources/assets/**/**/*';
+
+var input = './resources/assets/sass/**/*.scss';
+var output = './public/css';
+
+// source and distribution folder
+//var
+    //source = 'src/',
+    //dest = 'dist/';
+
+// Bootstrap scss source
+var bootstrapSass = {
+        in: './node_modules/bootstrap-sass/'
+    };
+
+var scss = {
+    //in: source + 'scss/main.scss',
+    //out: dest + 'css/',
+    //watch: source + 'scss/**/*',
+    sassOpts: {
+        //outputStyle: 'nested',
+        precison: 8,
+        errLogToConsole: true,
+        includePaths: [bootstrapSass.in + 'assets/stylesheets']
+    }
+};
+
+
+function swallowError (error) {
+
+  // If you want details of the error in the console
+  console.log(error.toString())
+
+  this.emit('end')
+}
+
+gulp.task('sass', function () {
+  return gulp
+    // Find all `.scss` files from the `stylesheets/` folder
+    .src(input)
+    // Run Sass on those files
+    .pipe(sass(scss.sassOpts))
+    // Write the resulting CSS in the output folder
+    .pipe(gulp.dest(output));
+});
+
+
+gulp.task('watch', function() {
+  return gulp
+    .watch(resources,['sass', 'build-js'])
+    .on('change', function(event) {
+      console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+    });
+
+});
+
+//gulp.task('default', ['watch','build-js'], function() {
+
+//});

@@ -1,0 +1,43 @@
+<?php
+
+use Illuminate\Database\Seeder;
+
+class CriterionSheetTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        // Advanced
+				$criteria = [
+					1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24
+				];
+				
+				$rows = [];
+				
+				foreach($criteria as $criterion)
+				{
+					$rows[] = ['sheet_id' => 1, 'criterion_id' => $criterion];
+				}
+				
+				DB::table('criterion_sheet')->insert($rows);
+				
+				
+				// Novice
+				$criteria = [
+					1,2,3,6,7,8,10,25,14,26,17,19,21,22
+				];
+				
+				$rows = [];
+				
+				foreach($criteria as $criterion)
+				{
+					$rows[] = ['sheet_id' => 2, 'criterion_id' => $criterion];
+				}
+				
+				DB::table('criterion_sheet')->insert($rows);
+    }
+}
