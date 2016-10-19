@@ -39,6 +39,11 @@ class ProfileController extends Controller
         $user->load('person');
         $person = Person::find($user->person_id);
 
+        if($person == false)
+        {
+          $person = new Person;
+        }
+
 				//$this->authorize('update',$user);
 
 				// Validate input
@@ -49,15 +54,19 @@ class ProfileController extends Controller
           return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 
+
         // Get the input
 				$input = $request->only('first_name','last_name','email');
 
+        // Update/Insert person attributes
+        $person->fill($input)->save();
+
         // Update user attributes
         $user->email = $input['email'];
+        $user->person()->associate($person);
         $user->save();
 
-        // Update person attributes
-        $user->person->fill($input)->save();
+
 
 				// Redirect
 				return redirect()->route('profile.edit')->with('success','Profile updated!');

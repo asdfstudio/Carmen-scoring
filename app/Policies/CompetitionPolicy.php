@@ -58,7 +58,7 @@ class CompetitionPolicy
 		}
 
 
-    public function clone(User $user, Competition $competition)
+    public function replicate(User $user, Competition $competition)
 		{
 
         if($user->isOrganizer() AND $user->organization_role == 'admin' AND $user->organization_id === $competition->organization_id)

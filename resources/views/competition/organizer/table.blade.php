@@ -30,7 +30,7 @@
 				Archived, no editing allowed
 			@endif
 
-			@can('clone', $competition)
+			@can('replicate', $competition)
 				{{ link_to_route('organizer.competition.clone', 'Duplicate', [$competition]) }}
 			@endcan
     </td>

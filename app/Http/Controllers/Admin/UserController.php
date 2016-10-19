@@ -183,10 +183,19 @@ class UserController extends Controller
 
         // Update person
         $person = $user->person;
+
+        if($person == false)
+        {
+          $person = new Person;
+        }
+
         $person->first_name = $data['person']['first_name'];
         $person->last_name = $data['person']['last_name'];
         $person->email = $data['email'];
         $person->save();
+
+        $user->person()->associate($person);
+        $user->save();
 
 				return redirect()->route('admin.user.index')->with('success', 'User updated!');
     }
