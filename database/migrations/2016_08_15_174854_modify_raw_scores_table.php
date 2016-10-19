@@ -12,9 +12,9 @@ class ModifyRawScoresTable extends Migration
      */
     public function up()
     {
-        Schema::table('raw_scores', function (Blueprint $table) {
+        /*Schema::table('raw_scores', function (Blueprint $table) {
             $table->renameColumn('round','round_id');
-        });
+        });*/
     }
 
     /**
@@ -24,8 +24,8 @@ class ModifyRawScoresTable extends Migration
      */
     public function down()
     {
-        Schema::table('raw_scores', function (Blueprint $table) {
+        /*Schema::table('raw_scores', function (Blueprint $table) {
             $table->renameColumn('round_id','round');
-        });
+        });*/
     }
 }
