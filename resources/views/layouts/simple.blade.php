@@ -15,7 +15,9 @@
     </div>
     <div class="heading">
       {{ $competition->name }}
-      <span class="subheading">{{ $competition->place->city }}, {{ $competition->place->state }}</span>
+      @if($competition->place)
+        <span class="subheading">{{ $competition->place->city }}, {{ $competition->place->state }}</span>
+      @endif
     </div>
   </div>
 </div>
