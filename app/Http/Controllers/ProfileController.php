@@ -24,7 +24,7 @@ class ProfileController extends Controller
       $user->load('person');
       $person = $user->person;
 
-      dd($user);
+      //dd($user);
 
       $form = $formBuilder->create('Person\EditPersonForm', [
         'url' => route('profile.update'),
