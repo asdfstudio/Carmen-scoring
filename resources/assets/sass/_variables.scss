@@ -31,7 +31,7 @@ $cs-gray-dark: #272B2D;
 
 
 //$cs-primary: hsl(203, 41%, 41%); // #3E7293
-$cs-primary: $cs-blue;
+$cs-primary: $cs-green;
 $cs-white: #FFF;
 $cs-black: #000;
 
@@ -39,6 +39,12 @@ $cs-black: #000;
 // Caption colors
 $cs-caption-music: $cs-purple;
 $cs-caption-show: $cs-orange;
+$cs-caption-combo: $cs-red;
+
+// Status colors
+$cs-status-inactive: $cs-orange;
+$cs-status-active: $cs-purple;
+$cs-status-completed: $cs-green;
 
 
 $cs-body-width: 900px;
@@ -53,3 +59,7 @@ $font-family-serif: 'Bitter', Georgia, "Times New Roman", Times, serif !default;
 $headings-font-family: $font-family-serif;
 
 $body-bg: #eee;
+
+
+$brand-primary: $cs-purple;
+$alert-border-radius: 0; 

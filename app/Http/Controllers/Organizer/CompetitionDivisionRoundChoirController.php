@@ -17,6 +17,8 @@ use App\Caption;
 use App\Carmen\WeightedScores;
 use App\Carmen\RankedScores;
 
+use Kris\LaravelFormBuilder\FormBuilder;
+
 class CompetitionDivisionRoundChoirController extends Controller
 {
 
@@ -33,8 +35,11 @@ class CompetitionDivisionRoundChoirController extends Controller
           //$query->distinct();
 				}])->find($division_id);
 
+      //dd($division->judges);
       //
-      $captions = Caption::get();
+
+      $caption_ids = $division->sheet->caption_ids;
+      $captions = Caption::whereIn('id', $caption_ids)->get();
       $rounds = $division->rounds;
 			$rawScores = RawScore::with('judge', 'criterion', 'criterion.caption')->where('division_id', $division_id)->where('round_id', $round_id)->get();
 
@@ -42,7 +47,6 @@ class CompetitionDivisionRoundChoirController extends Controller
       $weightedScores = $weightedScoresClass->all();
 
       $rankedScores = new RankedScores($weightedScores);
-
 
 			return view('competition_division_round_choir.organizer.show',compact('competition', 'rawScores', 'weightedScores', 'rankedScores', 'choir', 'round', 'division', 'rounds', 'divisions', 'captions'));
 
@@ -96,5 +100,42 @@ class CompetitionDivisionRoundChoirController extends Controller
 
       // Set flash data and redirect
       return redirect()->route('organizer.competition.division.round.choir.show', [$competition_id, $division_id, $round_id, $choir_id])->with('success','Choir Penalties Assigned.');
+    }
+
+
+    public function performance_order($competition_id, $division_id, $round_id, FormBuilder $formBuilder)
+    {
+
+      $division = Division::with('competition','rounds')->find($division_id);
+      $round = Round::with('choirs')->find($round_id);
+
+      $this->authorize('setPerformanceOrder', $round);
+
+      $form = $formBuilder->create('Choir\SortChoirsForm', [
+        'url' => route('organizer.competition.division.round.choir.performance_order.update', [$competition_id, $division_id, $round_id]),
+        'model' => $round->choirs
+      ]);
+
+      $choirs = $round->choirs;
+
+      return view('competition_division_round_choir.organizer.performance_order', compact('division', 'round', 'form', 'choirs'));
+    }
+
+    public function update_performance_order($competition_id, $division_id, $round_id, Request $request, FormBuilder $formBuilder)
+    {
+      $round = Round::with('choirs')->find($round_id);
+
+      $this->authorize('setPerformanceOrder', $round);
+
+      $data = [];
+
+      foreach($request->input('performance_order') as $choir_id => $performance_order)
+      {
+        $data[$choir_id] = ['performance_order' => $performance_order];
+      }
+
+      $round->choirs()->sync($data);
+
+      return redirect()->route('organizer.competition.division.round.index', [$competition_id, $division_id, $round_id])->with('success','Choir performance order updated!');
     }
 }

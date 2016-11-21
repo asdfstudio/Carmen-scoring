@@ -13,6 +13,7 @@ use App\Choir;
 use App\Round;
 use App\RawScore;
 use App\Caption;
+use App\Judge;
 
 use App\Carmen\Scorekeeper;
 use App\Carmen\Scoreboard;
@@ -23,39 +24,77 @@ class CompetitionDivisionRoundController extends Controller
 {
 
 
+    public function summary($competition_id,$division_id,$round_id)
+    {
 
-  public function summary($competition_id,$division_id,$round_id)
-  {
+      $judge_id = Auth::user()->person_id;
 
-    $judge_id = Auth::user()->person_id;
+      $rawScores = RawScore::with('judge','choir')
+        ->where('division_id',$division_id)
+        ->where('round_id',$round_id)
+        ->where('judge_id',$judge_id)
+        ->get();
 
-    $rawScores = RawScore::with('judge','choir')
-      ->where('division_id',$division_id)
-      ->where('round_id',$round_id)
-      ->where('judge_id',$judge_id)
-      ->get();
+      $scoreboard = new Scoreboard(['round_id' => $round_id]);
 
-    $competition = Competition::find($competition_id);
+      $rawScores = $scoreboard->rawScores;
+      $weightedScores = $scoreboard->weightedScores;
+      //$rankedScores = $scoreboard->rankedScores;
 
-    $round = Round::with(['division','division.competition','division.judges' => function($query) use ($judge_id) {
-        $query->where('judge_id',$judge_id)->first();
-      }, 'division.judges.captions' => function($query) use ($division_id) {
-        $query->where('division_id',$division_id);
-      }, 'division.judges.captions.criteria','division.choirs','division.rounds'])->find($round_id);
 
-    $captions = Caption::get();
+      $competition = Competition::find($competition_id);
 
-    $division = $round->division;
+      $round = Round::with(['division','division.competition','division.judges' => function($query) use ($judge_id) {
+          $query->where('judge_id',$judge_id)->first();
+        }, 'division.judges.captions' => function($query) use ($division_id) {
+          $query->where('division_id',$division_id);
+        }, 'division.judges.captions.criteria','choirs','division.rounds'])->find($round_id);
 
-    return view('competition_division_round.judge.summary',compact('rawScores','captions','round','competition','division'));
-  }
+      $captions = Caption::get();
+
+      $division = $round->division;
+
+      return view('competition_division_round.judge.summary',compact('rawScores', 'weightedScores', 'captions', 'round', 'competition', 'division'));
+    }
+
+
+
+    public function spreadsheet($competition_id,$division_id,$round_id)
+    {
+      $judge_id = Auth::user()->person_id;
+
+      $competition = Competition::find($competition_id);
+      $division = Division::find($division_id);
+
+      $round = Round::with(['division', 'division.competition', 'division.judges' => function($query) use ($judge_id) {
+          $query->where('judge_id',$judge_id)->first();
+        }, 'division.judges.captions' => function($query) use ($division_id) {
+          $query->where('division_id',$division_id);
+        }, 'division.judges.captions.criteria','choirs','division.rounds'])->find($round_id);
+
+      $judge = $division->judges->first();
+
+      $judge = Judge::with(['captions' => function($query) use ($division_id) {
+        $query->where('division_id', $division_id);
+      }])->find($judge_id);
+      //dd($judge);
+      //$captions = $judge->captions;
+      $scoreboard = new Scoreboard(['round_id' => $round_id]);
+
+      //dd($scoreboard);
+
+      //$rawScores = $scoreboard->rawScores;
+      //$weightedScores = $scoreboard->weightedScores;
+      //$rankedScores = $scoreboard->rankedScores;
+
+      return view('competition_division_round.judge.spreadsheet',compact('scoreboard', 'round', 'competition', 'division', 'judge'));
+    }
 
 
 
 
     public function details($competition,$division_id,$round_id)
 		{
-      echo 'a';
 			$judge_id = Auth::user()->person_id;
 
 			$rawScores = RawScore::with('judge','choir')->where('division_id',$division_id)->where('round_id',$round_id)->where('judge_id',$judge_id)->get();
@@ -86,37 +125,6 @@ class CompetitionDivisionRoundController extends Controller
 
 			return view('competition_division_round.judge.show',compact('rawScores','captions','round'));
 		}
-
-
-
-
-		public function show_ranked($competition,$division_id,$round_id)
-		{
-
-			$judge_id = Auth::user()->person_id;
-
-
-			$scoreboard = new Scoreboard([
-				'division_id' => $division_id,
-				'round_id' => $round_id,
-				'judge_id' => $judge_id
-			]);
-
-			$rankedScores = $scoreboard->ranked_scores();
-
-			//$round = Round::with('division','division.competition')->find($round_id);
-
-			$round = Round::with(['division','division.competition','division.judges' => function($query) use ($judge_id) {
-					$query->where('judge_id',$judge_id)->first();
-				}, 'division.judges.captions' => function($query) use ($division_id) {
-					$query->where('division_id',$division_id);
-				}, 'division.judges.captions.criteria','division.choirs'])->find($round_id);
-
-			$captions = Caption::get();
-
-			return view('competition_division_round.judge.show_ranked',compact('rankedScores','captions','round'));
-		}
-
 
 
 

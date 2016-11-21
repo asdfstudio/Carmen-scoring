@@ -11,13 +11,33 @@ class Round extends Model
 
 		protected $dates = ['deleted_at'];
 
-		protected $fillable = ['division_id','name'];
+		protected $fillable = ['division_id','name', 'sequence', 'max_choirs'];
 
 
 		public function division()
 		{
 			return $this->belongsTo('App\Division');
 		}
+
+    public function sources()
+    {
+      return $this->belongsToMany('App\Round', 'round_connections', 'target_round_id', 'source_round_id');
+    }
+
+    public function targets()
+    {
+      return $this->belongsToMany('App\Round', 'round_connections', 'source_round_id', 'target_round_id');
+    }
+
+    public function choirs()
+    {
+      return $this->belongsToMany('App\Choir')->withPivot( 'performance_order')->orderBy('performance_order', 'ASC');
+    }
+
+    public function penalties()
+    {
+      return $this->belongsToMany('App\Penalty', 'choir_penalty')->withPivot('choir_id');
+    }
 
 
 		public function isScoringActive()
@@ -57,5 +77,79 @@ class Round extends Model
 				return 'inactive';
 			}
 		}
+
+
+    ///
+    public function getStatusAttribute()
+    {
+      return $this->status();
+    }
+
+    public function getStatusSlugAttribute()
+    {
+      return $this->status_slug();
+    }
+
+
+    public function status_label($class_attr = false)
+    {
+      $class_array = ['label', 'status', $this->status_slug];
+
+      if($class_attr)
+        $class_array[] = $class_attr;
+
+      $class = implode($class_array,' ');
+
+      return '<span class="'.$class.'">'.$this->status.'</span>';
+    }
+
+    ///
+
+    public function getMaxChoirsTextAttribute()
+    {
+      return $this->max_choirs == 0 ? 'All' : $this->max_choirs;
+    }
+
+    public function getFullNameAttribute()
+    {
+      $h = '';
+
+      if($this->division)
+      {
+        $h.= $this->division->name . ' - ';
+      }
+
+      $h.= $this->name;
+
+      return $h;
+    }
+
+    public function activateScoring()
+    {
+      $this->is_scoring_active = true;
+      $this->is_completed = false;
+      return $this->save();
+    }
+
+    public function deactivateScoring()
+    {
+      $this->is_scoring_active = false;
+      $this->is_completed = false;
+      return $this->save();
+    }
+
+    public function reactivateScoring()
+    {
+      $this->is_scoring_active = true;
+      $this->is_completed = false;
+      return $this->save();
+    }
+
+    public function completeScoring()
+    {
+      $this->is_scoring_active = false;
+      $this->is_completed = true;
+      return $this->save();
+    }
 
 }

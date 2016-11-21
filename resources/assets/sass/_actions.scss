@@ -24,6 +24,7 @@
 }
 
 .action {
+  color: $cs-gray-mid-3;
   border: 1px solid;
   border-bottom-width: 2px;
   padding: 5px 10px;
@@ -32,13 +33,14 @@
   background: none;
   border-radius: 0;
   box-shadow: none;
+  //border-radius: 3px;
 
   &:hover {
     text-decoration: none;
     transition-duration: 300ms;
-    background: $cs-primary;
+    background: $cs-gray-mid-3;
     color: $cs-white;
-    border-color: $cs-primary;
+    border-color: $cs-gray-mid-3;
   }
 
   &.danger {
@@ -58,6 +60,36 @@
       background: $cs-gray-mid-3;
       color: $cs-white;
       border-color: $cs-gray-mid-3;
+    }
+  }
+
+  &.status-inactive {
+    color: $cs-status-inactive;
+
+    &:hover {
+      background: $cs-status-inactive;
+      border-color: $cs-status-inactive;
+      color: $cs-white;
+    }
+  }
+
+  &.status-active {
+    color: $cs-status-active;
+
+    &:hover {
+      background: $cs-status-active;
+      border-color: $cs-status-active;
+      color: $cs-white;
+    }
+  }
+
+  &.status-completed {
+    color: $cs-status-completed;
+
+    &:hover {
+      background: $cs-status-completed;
+      border-color: $cs-status-completed;
+      color: $cs-white;
     }
   }
 }

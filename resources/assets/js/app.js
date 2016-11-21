@@ -1,5 +1,39 @@
 $(document).ready(function() {
 
+
+    $('button.danger, a.danger, submit.danger').on('click', function(e) {
+        if(confirm('Are you sure you want to do this?') == false) {
+          e.preventDefault();
+          console.log('cancel');
+        }
+    });
+
+    $.fn.toggleChoirSource = function(choir_source) {
+      var form = $('form.create-round-form');
+      if(choir_source == 'all') {
+        form.find('input[name="max_choirs"]').val(0);
+        form.find('div.max-choirs-container').hide();
+        form.find('div.rounds-container').hide();
+      } else {
+        //form.find('input[name="max_choirs"]').val('');
+        form.find('div.max-choirs-container').show();
+        form.find('div.rounds-container').show();
+      }
+    }
+
+    $('form.create-round-form').ready(function() {
+      var choir_source = $(this).find('input[name="choir_source"]:checked').val();
+      $(this).toggleChoirSource(choir_source);
+
+    });
+
+
+    $('form.create-round-form input[name="choir_source"]').on('change', function(e) {
+      var choir_source = $(this).val();
+      $(this).toggleChoirSource(choir_source);
+    });
+
+
     $('.add-to-collection').on('click', function(e) {
         e.preventDefault();
         var container = $('.collection-container');
@@ -105,6 +139,43 @@ $(document).ready(function() {
     // Highlight the active tab link
     $(this).addClass('active');
 
+    });
+
+
+
+    $.fn.toggleScoreView = function(active_view) {
+
+      if(active_view == false) return false;
+
+      var table = $('table.scoreboard.toggle-scores');
+      var scores = table.find('span.score');
+      //var scores = table.find('span.score:not(".penalty")');
+
+      // Hide all scores
+      scores.hide();
+
+      // Show the active scores
+      scores.filter('.' + active_view).show();
+
+      // Remove highlight from other links
+      $('a.score-view-toggle').removeClass('active');
+
+      // Highlight the link that was clicked
+      $(this).addClass('active');
+
+    }
+
+    $('table.scoreboard.toggle-scores').ready(function() {
+      var active_view = $('.score-view-toggle.active').data('score-view');
+      console.log(active_view);
+      $('.score-view-toggle.active').toggleScoreView(active_view);
+    });
+
+
+    $('.score-view-toggle').on('click', function(e) {
+      e.preventDefault();
+      var active_view = $(this).data('score-view');
+      $(this).toggleScoreView(active_view);
     });
 
 

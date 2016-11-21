@@ -1,25 +1,29 @@
 @extends('layouts.simple')
 
+@section('content-header')
+
+	<h1>{{ $choir->full_name }}</h1>
+
+	<ul class="actions-group">
+		<li>
+			{{ link_to_route('organizer.competition.division.round.show', 'Back to all choirs', [$competition->id, $division->id, $round->id], ['class' => 'action'])}}
+		</li>
+	</ul>
+@endsection
+
 
 @section('content')
 
-	<div class="choir-bar">
-    <div class="heading">
-      <span class="subheading">{{ $choir->school->name }}</span>
-      {{ $choir->name }}
-    </div>
-    <div class="choir-actions">
-      <ul class="actions-group">
+	<h2>Penalties</h2>
 
-      </ul>
-    </div>
-  </div>
+	{{ link_to_route('organizer.competition.division.round.choir.penalty.assign', 'Assign / Remove Penalties', [$competition->id, $division->id, $round->id, $choir->id], ['class' => 'action'])}}
 
-
-	{{ link_to_route('organizer.competition.division.round.choir.penalty.assign', 'Assign / Remove Penalties', [$competition->id, $division->id, $round->id, $choir->id], ['class' => 'btn btn-primary'])}}
+	<hr>
 
 	@include('penalty.organizer.list', ['penalties' => $choir->penalties])
 
-  @include('scores.organizer.choir_raw',['division' => $round->division, 'judge' => $round->division->judges->first()])
+	<h2>Scores</h2>
+	
+  @include('scores.organizer.choir_raw',['division' => $division, 'judge' => $round->division->judges->first()])
 
 @endsection

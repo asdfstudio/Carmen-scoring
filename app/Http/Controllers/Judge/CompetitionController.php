@@ -17,7 +17,7 @@ class CompetitionController extends Controller
 		{
 			$judge_id = Auth::user()->person_id;
 
-			$competitions = Competition::whereHas('divisions.judges',function($query) use ($judge_id) {
+			$competitions = Competition::whereHas('divisions.judges', function($query) use ($judge_id) {
 				$query->where('judge_id',$judge_id);
 			})->active()->get();
 

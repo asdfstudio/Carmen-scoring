@@ -4,7 +4,7 @@
 
 @if(!$penalties->isEmpty())
 
-<ul class="actions-group">
+<ul class="actions-group mv">
 	<li>
 		<a href="#" class="check-all action secondary" data-checkbox="penalties">Check all</a>
 	</li>

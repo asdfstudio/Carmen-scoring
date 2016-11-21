@@ -24,8 +24,6 @@ class WeightedScores {
       $this->set_caption_weighting();
 
       $this->assign_weighting();
-
-      return $this->weightedScores;
     }
 
 
@@ -34,13 +32,23 @@ class WeightedScores {
       return $this->weightedScores;
     }
 
+
+    /*public function total($choir_id, $caption_id = false)
+    {
+      $query = $this->weightedScores->where('choir_id', $choir_id);
+
+      if($caption_id)
+      {
+        $query->where('criterion.caption_id', $caption_id);
+      }
+
+      $total = $query->sum('weightedScore');
+    }*/
+
     protected function assign_weighting()
     {
       $this->weightedScores = $this->rawScores->map(function ($item, $key)
       {
-        //dd($item->criterion->caption_id);
-        //echo $item->get('criterion.caption_id');
-
         if($item->criterion->caption_id == 1)
         {
           $weightedScore = $item->score * $this->musicWeighting;
@@ -70,48 +78,6 @@ class WeightedScores {
       }
 
       return $this->musicWeighting;
-    }
-
-    public function choir($id)
-    {
-      $this->choirId = $id;
-      $this->rawScores = $this->rawScores->where('choir_id',$id);
-      return $this;
-    }
-
-    public function judge($id)
-    {
-      $this->judgeId = $id;
-      $this->rawScores = $this->rawScores->where('judge_id',$id);
-      return $this;
-    }
-
-    public function caption($id)
-    {
-      $this->captionId = $id;
-      $this->rawScores = $this->rawScores->where('criterion.caption_id',$id);
-      return $this;
-    }
-
-    public function sum($reset = false)
-    {
-      $sum = $this->rawScores->sum('score');
-
-      if($this->captionId == 1)
-      {
-        $sum = $sum * $this->musicWeighting;
-      }
-
-      if($this->captionId == 2)
-      {
-        $sum = $sum * $this->showWeighting;
-      }
-
-      // reset
-      if($reset)
-        $this->rawScores = $this->rawScoresOriginal;
-
-      return $sum;
     }
 
 }

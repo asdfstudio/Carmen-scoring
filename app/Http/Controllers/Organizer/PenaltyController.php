@@ -73,7 +73,7 @@ class PenaltyController extends Controller
       $penalty->save();
 
       // Set flash data and redirect
-      return redirect()->route('organizer.penalty.index');
+      return redirect()->route('organizer.penalty.index')->with('success','Penalty created.');
     }
 
     /**
@@ -134,7 +134,7 @@ class PenaltyController extends Controller
       $penalty->save();
 
       // Set flash data and redirect
-      return redirect()->route('organizer.penalty.index');
+      return redirect()->route('organizer.penalty.index')->with('success','Penalty updated');
     }
 
     /**

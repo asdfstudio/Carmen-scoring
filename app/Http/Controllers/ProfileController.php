@@ -28,7 +28,7 @@ class ProfileController extends Controller
 
       $form = $formBuilder->create('Person\EditPersonForm', [
         'url' => route('profile.update'),
-        'model' => $person
+        'model' => $user
       ]);
 
       return view('profile.edit', compact('form', 'user','person'));
@@ -49,7 +49,9 @@ class ProfileController extends Controller
 				//$this->authorize('update',$user);
 
 				// Validate input
-				$form = $formBuilder->create('Person\EditPersonForm');
+				$form = $formBuilder->create('Person\EditPersonForm', [
+          'model' => $user
+        ]);
 
 				// Validate input
 				if (!$form->isValid()) {
@@ -64,7 +66,8 @@ class ProfileController extends Controller
         $person->fill($input)->save();
 
         // Update user attributes
-        $user->email = $input['email'];
+        $user->username = $request->input('username');
+        $user->email = $request->input('email');
         $user->person()->associate($person);
         $user->save();
 

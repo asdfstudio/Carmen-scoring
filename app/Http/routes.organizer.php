@@ -8,6 +8,22 @@
 Route::group([
   'prefix' => 'organizer',
   'middleware' => ['auth','auth.organizer'],
+  ], function() {
+
+  Route::get('user/{user}/password', [
+    'as' => 'user.password.edit', 'uses' => 'PasswordController@edit'
+  ]);
+
+  Route::put('user/{user}/password', [
+    'as' => 'user.password.update', 'uses' => 'PasswordController@update'
+  ]);
+
+});
+
+
+Route::group([
+  'prefix' => 'organizer',
+  'middleware' => ['auth','auth.organizer'],
   'namespace' => 'Organizer'
   ], function() {
 
@@ -17,6 +33,21 @@ Route::group([
   Route::resource('penalty', 'PenaltyController');
 
   Route::resource('award', 'AwardController');
+
+  // Division standings
+  Route::get('competition/{competition}/division/{division}/standing', [
+    'as' => 'organizer.competition.division.standing.show', 'uses' => 'CompetitionDivisionStandingController@show'
+  ]);
+
+  Route::get('competition/{competition}/division/{division}/standing/edit', [
+    'as' => 'organizer.competition.division.standing.edit', 'uses' => 'CompetitionDivisionStandingController@edit'
+  ]);
+
+  Route::post('competition/{competition}/division/{division}/standing/edit', [
+    'as' => 'organizer.competition.division.standing.update', 'uses' => 'CompetitionDivisionStandingController@update'
+  ]);
+
+
 
   // List division penalties
   Route::get('competition/{competition}/division/{division}/penalty', [
@@ -51,6 +82,17 @@ Route::group([
   // Save assigned penalties to choir
   Route::post('competition/{competition}/division/{division}/round/{round}/choir/{choir}/penalty', [
     'as' => 'organizer.competition.division.round.choir.penalty.update_assign', 'uses' => 'CompetitionDivisionRoundChoirController@update_penalty'
+	]);
+
+
+  // Set choir round performance order
+  Route::get('competition/{competition}/division/{division}/round/{round}/performance-order', [
+    'as' => 'organizer.competition.division.round.choir.performance_order', 'uses' => 'CompetitionDivisionRoundChoirController@performance_order'
+	]);
+
+  // Save choir round performance order
+  Route::post('competition/{competition}/division/{division}/round/{round}/performance-order', [
+    'as' => 'organizer.competition.division.round.choir.performance_order.update', 'uses' => 'CompetitionDivisionRoundChoirController@update_performance_order'
 	]);
 
 
@@ -134,6 +176,15 @@ Route::group([
 
   Route::post('competition/{competition}/division/{division}/choir/setup', [
     'as' => 'organizer.competition.division.choir.setup.store', 'uses' => 'CompetitionDivisionChoirController@storeMultiple'
+  ]);
+
+
+  Route::get('competition/{competition}/division/{division}/judge/import', [
+    'as' => 'organizer.competition.division.judge.import', 'uses' => 'CompetitionDivisionJudgeController@import'
+  ]);
+
+  Route::post('competition/{competition}/division/{division}/judge/import', [
+    'as' => 'organizer.competition.division.judge.import.process', 'uses' => 'CompetitionDivisionJudgeController@process_import'
   ]);
 
   Route::get('competition/{competition}/division/{division}/judge/setup', [

@@ -37,7 +37,7 @@ class RoundPolicy extends BasePolicy
 
 		public function create(User $user, $round, $division=false)
 		{
-      if($this->isOrgAdmin AND $division->status() == 'inactive')
+      if($this->isOrgAdmin AND $division->status_slug == 'inactive')
       {
         return true;
       }
@@ -61,6 +61,11 @@ class RoundPolicy extends BasePolicy
 
     public function activateScoring(User $user, Round $round)
     {
+      if($round->sources()->where('is_completed', false)->count() > 0)
+      {
+        return false;
+      }
+
       if($this->isOrgAdmin AND $round->status_slug() == 'inactive')
       {
         return true;
@@ -90,4 +95,12 @@ class RoundPolicy extends BasePolicy
         return true;
       }
     }
+
+    public function setPerformanceOrder(User $user, $round)
+		{
+      if($this->isOrgAdmin AND $round->status_slug() == 'inactive')
+      {
+        return true;
+      }
+		}
 }

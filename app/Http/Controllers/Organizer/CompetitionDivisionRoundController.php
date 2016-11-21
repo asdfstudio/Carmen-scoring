@@ -16,8 +16,14 @@ use App\Caption;
 
 use App\Carmen\WeightedScores;
 use App\Carmen\RankedScores;
+use App\Carmen\Scoreboard;
 
 use Kris\LaravelFormBuilder\FormBuilder;
+
+use Event;
+use App\Events\RoundScoringActivated;
+use App\Events\RoundScoringCompleted;
+use App\Events\RoundSaved;
 
 class CompetitionDivisionRoundController extends Controller
 {
@@ -95,9 +101,24 @@ class CompetitionDivisionRoundController extends Controller
 
         $this->authorize('create', ['App\Round', $division]);
 
+        $competition_rounds = Competition::find($competition_id)->rounds()->get();
+
+        $competition_rounds = Competition::find($competition_id )->rounds()->whereHas('division', function ($query) use ($division) {
+          $query->where('sheet_id', $division->sheet_id);
+        })->get();
+
+        $choices = $competition_rounds->lists('full_name', 'id')->toArray();
+        $selected = [];
+
         $form = $formBuilder->create('Round\CreateRoundForm', [
 					'method' => 'POST',
-					'url' => route('organizer.competition.division.round.store',[$division->competition,$division])
+          'class' => 'create-round-form',
+          'data' => [
+            'choices' => $choices,
+            'selected' => $selected,
+            'division' => $division
+          ],
+					'url' => route('organizer.competition.division.round.store', [$division->competition,$division])
 				]);
 
 				return view('competition_division_round.organizer.create', compact('division','form'));
@@ -120,15 +141,26 @@ class CompetitionDivisionRoundController extends Controller
 
         $round = new Round($request->all());
 
-				$form = $formBuilder->create('Round\CreateRoundForm');
+				$form = $formBuilder->create('Round\CreateRoundForm', [
+          'data' => [
+            'choices' => [],
+            'selected' => [],
+            'division' => $division
+          ],
+        ]);
 
 				// Validate input
 				if (!$form->isValid()) {
            return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 
-				$division->rounds()->save($round);
 
+
+				$round = $division->rounds()->save($round);
+        $round->sources()->sync($request->input('rounds.id',[]));
+        $round->save();
+
+        Event::fire(new RoundSaved($round));
 
         $successMessage = "$round->name has been added to this division.";
 
@@ -146,6 +178,7 @@ class CompetitionDivisionRoundController extends Controller
     public function show(Request $request,$competition_id,$division_id,$round_id, FormBuilder $formBuilder)
 		{
       $round = Round::with([
+        'choirs',
         'division',
         'division.competition',
         'division.choirs',
@@ -172,17 +205,28 @@ class CompetitionDivisionRoundController extends Controller
       $rounds = $division->rounds;
       $divisions = $competition->divisions;
 
-      $captions = Caption::get();
+      //dd($division->sheet->criteria);
 
-			$rawScores = RawScore::with('judge','choir','criterion')->where('division_id',$division_id)->where('round_id',$round_id)->get();
+      $caption_ids = $division->sheet->caption_ids;
+      $captions = Caption::whereIn('id', $caption_ids)->get();
 
-      $weightedScoresClass = new WeightedScores($rawScores,        $division->caption_weighting_id);
 
-      $weightedScores = $weightedScoresClass->all();
+			//$rawScores = RawScore::with('judge','choir','criterion')->where('division_id',$division_id)->where('round_id',$round_id)->get();
 
-      $rankedScores = new RankedScores($weightedScores);
+      //$weightedScoresClass = new WeightedScores($rawScores,        $division->caption_weighting_id);
+      //$weightedScores = $weightedScoresClass->all();
+      //$rankedScores = new RankedScores($weightedScores);
 
-      $rank = $rankedScores->rank(38);
+
+      //$scoreboard = new Scoreboard(['round_id' => [65, 68]]);
+      //$rawScores = $scoreboard->rawScores;
+      //dd($rawScores);
+
+      $scoreboard = new Scoreboard(['round_id' => $round_id]);
+
+      $rawScores = $scoreboard->rawScores;
+      $weightedScores = $scoreboard->weightedScores;
+      $rankedScores = $scoreboard->rankedScores;
 
       $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
         'url' => route('organizer.competition.division.round.scoring',[$competition_id,$division_id,$round_id])
@@ -201,7 +245,9 @@ class CompetitionDivisionRoundController extends Controller
       ]);
 
 
-      return view('competition_division_round.organizer.show', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round','competition','division','divisions','rounds','activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm'));
+
+
+      return view('competition_division_round.organizer.show', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round','competition','division','divisions','rounds','activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard'));
 		}
 
 
@@ -209,45 +255,44 @@ class CompetitionDivisionRoundController extends Controller
     {
       $round = Round::find($round_id);
 
+
       // Activate scoring
       if($request->input('activate'))
       {
         $this->authorize('activateScoring', $round);
-        $is_scoring_active = true;
-        $is_completed = false;
-        $new_status = 'enabled';
+        $round->activateScoring();
+        $new_status = 'activated';
+        Event::fire(new RoundScoringActivated($round));
       }
       // Deactivate scoring
       elseif($request->input('deactivate'))
       {
         $this->authorize('deactivateScoring', $round);
-        $is_scoring_active = false;
-        $is_completed = false;
+        $round->deactivateScoring();
         $new_status = 'disabled';
       }
       // Reactivate scoring
       elseif($request->input('reactivate'))
       {
         $this->authorize('reactivateScoring', $round);
-        $is_scoring_active = true;
-        $is_completed = false;
+        $round->reactivateScoring();
         $new_status = 'reactivated';
       }
       // Complete and deactive scoring for all division rounds
       elseif($request->input('complete'))
       {
         $this->authorize('completeScoring', $round);
-        $is_scoring_active = false;
-        $is_completed = true;
+        $round->completeScoring();
         $new_status = 'completed';
+        Event::fire(new RoundScoringCompleted($round));
       }
       else {
         return false;
       }
 
-      $round->is_scoring_active = $is_scoring_active;
-      $round->is_completed = $is_completed;
-      $round->save();
+      //$round->is_scoring_active = $is_scoring_active;
+      //$round->is_completed = $is_completed;
+      //$round->save();
 
       return redirect()->route('organizer.competition.division.round.index',[$competition_id,$division_id])->with('success', "Scoring for $round->name is now $new_status.");
     }
@@ -263,13 +308,36 @@ class CompetitionDivisionRoundController extends Controller
     public function edit($competition_id, $division_id, $round_id, FormBuilder $formBuilder)
     {
         $division = Division::with('competition','rounds')->find($division_id);
-				$round = Round::find($round_id);
+				$round = Round::with('sources', 'targets')->find($round_id);
+
+        //dd($division->sheet_id);
+
+        // whereHas('divisions', function ($query) use ($division) {
+          //$query->where('sheet_id', 2);
+        //})->
+
+        $competition_rounds = Competition::find($competition_id )->rounds()->where('rounds.id', '!=', $round_id)->whereHas('division', function ($query) use ($division) {
+          $query->where('sheet_id', $division->sheet_id);
+        })->get();
+
+        //dd($competition_rounds);
+
+        $choices = $competition_rounds->lists('full_name', 'id')->toArray();
+        $selected = $round->sources->pluck('id')->toArray();
+
+        //dd($choices);
+        //dd($selected);
 
         $this->authorize('update', $round);
 
         $form = $formBuilder->create('Round\CreateRoundForm', [
 					'method' => 'PATCH',
           'model' => $round,
+          'data' => [
+            'choices' => $choices,
+            'selected' => $selected,
+            'division' => $division
+          ],
 					'url' => route('organizer.competition.division.round.update', [$competition_id,$division_id, $round_id])
 				]);
 
@@ -280,7 +348,7 @@ class CompetitionDivisionRoundController extends Controller
 
         //$deleteForm->modify('submit','submit',['label' => 'Remove from division']);
 
-				return view('competition_division_round.organizer.edit', compact('division','round','form', 'deleteForm'));
+				return view('competition_division_round.organizer.edit', compact('division', 'round', 'form', 'deleteForm', 'competition_rounds'));
     }
 
 
@@ -301,7 +369,14 @@ class CompetitionDivisionRoundController extends Controller
 
         $this->authorize('update', $round);
 
-        $form = $formBuilder->create('Round\CreateRoundForm', ['model' => $round]);
+        $form = $formBuilder->create('Round\CreateRoundForm', [
+          'model' => $round,
+          'data' => [
+            'choices' => [],
+            'selected' => [],
+            'division' => $division
+          ]
+        ]);
 
 				// Validate input
 				if (!$form->isValid()) {
@@ -309,7 +384,15 @@ class CompetitionDivisionRoundController extends Controller
         }
 
         $round->name = $request->input('name');
+        $round->sequence = $request->input('sequence');
+        $round->max_choirs = $request->input('max_choirs');
+        //$round->fill($request->input());
+
+        $round->sources()->sync($request->input('rounds.id',[]));
+
         $round->save();
+
+        Event::fire(new RoundSaved($round));
 
         return redirect()->route('organizer.competition.division.round.index',[$division->competition, $division])->with('success',$round->name ." has been updated.");
     }

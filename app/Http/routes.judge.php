@@ -30,7 +30,7 @@ Route::group([
 
 
     Route::get('competition/{competition}/division/{division}', [
-			'as' => 'competition.division.show', 'uses' => 'CompetitionDivisionController@show'
+			'as' => 'competition.division.show', 'uses' => 'CompetitionDivisionController@details'
 		]);
 
 		Route::get('competition/{competition}/division/{division}/details', [
@@ -48,6 +48,10 @@ Route::group([
 
 		Route::get('competition/{competition}/division/{division}/round/{round}', [
    	 'as' => 'round.scores.summary', 'uses' => 'CompetitionDivisionRoundController@summary'
+		]);
+
+    Route::get('competition/{competition}/division/{division}/round/{round}/spreadsheet', [
+   	 'as' => 'round.scores.spreadsheet', 'uses' => 'CompetitionDivisionRoundController@spreadsheet'
 		]);
 
     Route::get('competition/{competition}/division/{division}/round/{round}/details', [

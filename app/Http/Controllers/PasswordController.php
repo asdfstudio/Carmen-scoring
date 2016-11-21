@@ -12,30 +12,64 @@ use App\Person;
 //use App\Judge;
 
 use Auth;
+use URL;
 
 use Kris\LaravelFormBuilder\FormBuilder;
 
 class PasswordController extends Controller
 {
-    public function edit(FormBuilder $formBuilder)
-    {
-      $user = Auth::user();
+    protected $user;
+    protected $self;
 
-      $form = $formBuilder->create('User\EditPasswordForm', [
-        'url' => route('password.update'),
-        'model' => $user
-      ]);
+    protected function getUser($user_id = false)
+    {
+      if($user_id)
+      {
+        $this->user = User::find($user_id);
+        $this->self = false;
+      }
+      else {
+        $this->user = Auth::user();
+        $this->self = true;
+      }
+
+      return $this->user;
+    }
+
+    public function edit(FormBuilder $formBuilder, $user_id = false)
+    {
+      $user = $this->getUser($user_id);
+
+      if($this->self)
+      {
+        $form = $formBuilder->create('User\EditPasswordForm', [
+          'url' => route('password.update'),
+          'model' => $user,
+          'data' => ['previous_url' => URL::previous()]
+        ]);
+      }
+      else
+      {
+        $form = $formBuilder->create('User\EditPasswordForm', [
+          'url' => route('user.password.update', [$user]),
+          'model' => $user,
+          'data' => ['previous_url' => URL::previous()]
+        ]);
+      }
+
 
       return view('profile.edit_password', compact('form', 'user'));
     }
 
 
-    public function update(Request $request, FormBuilder $formBuilder)
+    public function update(Request $request, FormBuilder $formBuilder, $user_id = false)
     {
-        $user = Auth::user();
+        $user = $this->getUser($user_id);
 
 				// Validate input
-				$form = $formBuilder->create('User\EditPasswordForm');
+				$form = $formBuilder->create('User\EditPasswordForm', [
+          'data' => ['previous_url' => URL::previous()]
+        ]);
 
 				// Validate input
 				if (!$form->isValid()) {
@@ -47,7 +81,15 @@ class PasswordController extends Controller
         $user->password = bcrypt($request->input('password'));
         $user->save();
 
-				// Redirect
-				return redirect()->route('password.edit')->with('success','Password updated!');
+        // Redirect
+        if($this->self)
+        {
+          return redirect()->route('password.edit')->with('success','Password updated!');
+        }
+        else
+        {
+          return redirect($request->input('previous_url'))->with('success','Password updated!');
+        }
+
     }
 }

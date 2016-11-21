@@ -4,26 +4,19 @@
 
 @endsection
 
+@section('content-header')
+  <h1>{{ $choir->full_name }}</h1>
+
+  <ul class="actions-group">
+    <li>
+      {{ link_to_route('judge.round.scores.summary', 'All Choirs', [$competition, $division, $round], ['class' => 'action'])}}
+    </li>
+  </ul>
+@endsection
+
+
 @section('content')
 
-
-
-  <div class="choir-bar">
-    <div class="heading">
-      <span class="subheading">{{ $choir->school->name }}</span>
-      {{ $choir->name }}
-    </div>
-    <div class="choir-actions">
-      <ul class="actions-group">
-        <!--<li>
-          <a href="#" class="action">Switch Choirs</a>
-        </li>-->
-        <li>
-          {{ link_to_route('judge.round.scores.summary', 'All Choirs', [$competition, $division, $round], ['class' => 'action'])}}
-        </li>
-      </ul>
-    </div>
-  </div>
 
   @if($round->is_scoring_active AND $judge->id == Auth::user()->person_id)
 

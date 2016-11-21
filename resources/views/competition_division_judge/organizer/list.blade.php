@@ -19,11 +19,17 @@
       @endforeach
       </ul>
 
-			<!--<ul class="actions-group">
-				<li>
+
+			<ul class="actions-group">
+				<!--<li>
 					{{ link_to_route('organizer.competition.division.judge.edit', 'Edit', [$division->competition,$division,$judge], ['class' => 'action']) }}
-				</li>
-			</ul>-->
+				</li>-->
+				@if($judge->user)
+					<li>
+						{{ link_to_route('user.password.edit', 'Change Password', [$judge->user->id], ['class' => 'action']) }}
+					</li>
+				@endif
+			</ul>
 
 		</li>
   @endforeach

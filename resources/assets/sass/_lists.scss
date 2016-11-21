@@ -26,11 +26,11 @@
         }
 
         &:hover {
-          background: $cs-primary;
+          background: $cs-gray-mid-3;
           color: $cs-white;
         }
         &:active {
-          background: $cs-primary;
+          background: $cs-gray-mid-3;
           color: $cs-white;
         }
       }
@@ -197,6 +197,61 @@
         }
       }
 
+    }
+
+    &.standing {
+      .choir {
+        font-size: 21px;
+        font-weight: bold;
+      }
+
+      .details {
+        float: right;
+
+        .final_rank {
+          font-weight: bold;
+          color: $cs-purple;
+          font-size: 2em;
+          margin-left: 10px;
+
+          & .text {
+            font-size: 0.5em;
+          }
+
+          & input {
+            max-width: 60px;
+          }
+        }
+        .raw_rank {
+          color: $cs-gray-mid-3;
+        }
+      }
+    }
+  }
+
+  &.sortable-list {
+
+    .list-group-item {
+
+      &:hover {
+        cursor: grab;
+      }
+
+      &.sortable-drag {
+        font-weight: bold;
+        cursor: grab;
+        background-color: $cs-green-lighter;
+      }
+
+      &.sortable-chosen {
+        font-weight: bold;
+        cursor: grabbing;
+        background-color: $cs-green-lighter;
+      }
+
+      &.sortable-ghost {
+        border: 1px dotted;
+      }
     }
   }
 

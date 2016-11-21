@@ -1,8 +1,14 @@
 @extends('layouts.simple')
 
-@section('content')
+@section('title')
+  Edit {{ $competition->name }} | @parent
+@endsection
 
-		{!! Breadcrumbs::render('organizer.competition.edit', $competition) !!}
+@section('breadcrumbs')
+	{!! Breadcrumbs::render('organizer.competition.edit', $competition) !!}
+@endsection
+
+@section('content')
 
 		<h1>Edit competition</h1>
 

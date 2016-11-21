@@ -1,5 +1,11 @@
 @extends('layouts.simple')
 
+@section('content-header')
+  <h1>My Scores - Summary View</h1>
+
+  {{ link_to_route('judge.round.scores.spreadsheet', 'Go to Spreadsheet View', [$competition, $division, $round], ['class' => 'action'])}}
+@endsection
+
 
 @section('division_navigation_bar')
 
@@ -12,17 +18,15 @@
       <ul class="round-navigation">
         @foreach ($division->rounds as $rd)
           <?php $active_class = $rd->id == $round->id ? 'active' : '';?>
-          <li>
+          <li class="round-{{ $rd->status_slug }}">
             <a href="{{ route('judge.round.scores.summary', [$competition, $division, $rd]) }}" class="{{ $active_class }}">
               {{ $rd->name }}
-              <span class="round-navigation-link-status">{{ $rd->status() }}</span>
+
+              {!! $rd->status_label('round-navigation-link-status') !!}
             </a>
           </li>
         @endforeach
       </ul>
-      <div class="round-status">
-        Status: {{ $round->status() }}
-      </div>
     </div>
   @endif
 @endsection
@@ -30,10 +34,14 @@
 
 @section('content')
 
-  @include('alert.all')
+  @if($round->status_slug == 'completed')
+    <ul class="actions-group mv-2">
+      <li>{{ link_to_route('judge.round.scores', "View All Judges' Scores", [$round->division->competition, $round->division, $round], ['class' => 'action']) }}</li>
+    </ul>
+  @endif
 
   @include('scores.choirs_judge_aggregate',[
-    'choirs' => $round->division->choirs,
+    'choirs' => $round->choirs,
     'division' => $round->division,
     'judge' => $round->division->judges->first()
   ])

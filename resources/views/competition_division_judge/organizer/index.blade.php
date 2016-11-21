@@ -8,9 +8,17 @@
 	<h1>Manage Judges</h1>
 
 	<ul class="actions-group">
+		@can('createJudge', $division)
+			<li>
+				{{ link_to_route('organizer.competition.division.judge.create','Add a judge',[$division->competition,$division], ['class' => 'action']) }}
+			</li>
+		@endcan
+
+		@can('importJudges', $division)
 		<li>
-			{{ link_to_route('organizer.competition.division.judge.create','Add a judge',[$division->competition,$division], ['class' => 'action']) }}
+			{{ link_to_route('organizer.competition.division.judge.import','Import judges',[$division->competition,$division], ['class' => 'action']) }}
 		</li>
+		@endcan
 	</ul>
 @endsection
 

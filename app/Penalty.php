@@ -30,6 +30,11 @@ class Penalty extends Model
 			return $this->belongsToMany('App\Choir');
 		}
 
+		public function rounds()
+		{
+			return $this->belongsToMany('App\Round', 'choir_penalty');
+		}
+
 
 		public function getAmountAttribute($value)
 		{

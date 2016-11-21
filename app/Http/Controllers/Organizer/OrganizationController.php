@@ -99,11 +99,11 @@ class OrganizationController extends Controller
 
         if($place == false)
           $place = new Place;
-          
+
         $place->fill($place_input);
         $organization->place()->save($place);
 
 				// Redirect
-				return redirect()->route('organizer.organization.show');
+				return redirect()->route('organizer.organization.show')->with('success', 'Organization updated.');
     }
 }

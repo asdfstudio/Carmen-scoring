@@ -75,7 +75,7 @@ class AwardController extends Controller
       $award->save();
 
       // Set flash data and redirect
-      return redirect()->route('organizer.award.index');
+      return redirect()->route('organizer.award.index')->with('success', 'Award created.');
     }
 
     /**
@@ -136,7 +136,7 @@ class AwardController extends Controller
        $award->save();
 
        // Set flash data and redirect
-       return redirect()->route('organizer.award.index');
+       return redirect()->route('organizer.award.index')->with('success', 'Award updated.');
      }
 
      /**

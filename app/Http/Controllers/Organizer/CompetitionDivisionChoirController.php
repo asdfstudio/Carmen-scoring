@@ -15,6 +15,10 @@ use App\Place;
 
 use Kris\LaravelFormBuilder\FormBuilder;
 
+use Event;
+use App\Events\DivisionChoirCreated;
+use App\Events\DivisionChoirRemoved;
+
 class CompetitionDivisionChoirController extends Controller
 {
     /**
@@ -128,7 +132,12 @@ class CompetitionDivisionChoirController extends Controller
     {
 				$division = Division::with('competition','choirs')->find($division_id);
 
+        // Division choirs
         $choirs = $division->choirs->lists('full_name', 'id')->toArray();
+
+        // All choirs
+        $choirs = Choir::all()->lists('full_name', 'id')->toArray();
+        //dd($choirs);
 
         $form = $formBuilder->create('Choir\CreateChoirForm', [
 					'method' => 'POST',
@@ -205,6 +214,7 @@ class CompetitionDivisionChoirController extends Controller
 					$division->choirs()->attach($choir->id);
 				}
 
+        Event::fire(new DivisionChoirCreated($division, $choir));
 
         $successMessage = "$choir->name has been added to this division.";
 
@@ -271,6 +281,8 @@ class CompetitionDivisionChoirController extends Controller
         $choir = Choir::with('school')->find($choir_id);
 
 				$division->choirs()->detach($choir_id);
+
+        Event::fire(new DivisionChoirRemoved($division, $choir));
 
 				// Set flash data and redirect
 				return redirect()->route('organizer.competition.division.choir.index',[$division->competition, $division])->with('success',"$choir->name has been removed from this division." );

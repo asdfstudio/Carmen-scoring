@@ -16,6 +16,10 @@
     background: $cs-caption-show !important;
   }
 
+  &.caption-combo {
+    background: $cs-caption-combo !important;
+  }
+
   &.caption-place {
     background: $cs-gray-mid-3 !important;
   }
@@ -67,4 +71,51 @@
 
 .total-rank {
   font-size: 1.2em;
+}
+
+$i: 0;
+@while $i <= 10 {
+  .score-gradient-#{$i * 10} {
+    $v: 100 - ($i * 12);
+
+    @if $i > 5 {
+      //color: $cs-white;
+    }
+
+    //background-color: mix($cs-green, $cs-gray-light, $i * 10);
+
+
+    $i: $i + 0.5;
+  }
+}
+
+.score {
+  //border: 1px solid #ddd;
+  padding: 0 3px;
+
+  &.raw {
+    //display: none;
+  }
+  &.weighted {
+
+  }
+  &.penalty {
+    color: $cs-red;
+
+    &:before {
+      content: "(";
+    }
+    &:after {
+      content: ")";
+    }
+  }
+  &.rank {
+    font-weight: bold;
+  }
+  &.total {
+    font-weight: bold;
+  }
+  &.subtotal {
+    color: $cs-gray-mid-3;
+  }
 }

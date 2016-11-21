@@ -12,8 +12,6 @@
 
 @section('content')
 
-		@include('alert/all')
-
 		{!! form($form) !!}
 
 @endsection

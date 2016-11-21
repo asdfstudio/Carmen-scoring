@@ -13,7 +13,8 @@ class CaptionsTableSeeder extends Seeder
     {
         DB::table('captions')->insert([
             ['name' => 'Music'],
-						['name' => 'Show']
+						['name' => 'Show'],
+            ['name' => 'Combo']
         ]);
 
     }

@@ -16,6 +16,22 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\SomeEvent' => [
             'App\Listeners\EventListener',
         ],
+        'App\Events\RoundScoringActivated' => [
+          'App\Listeners\SyncRoundChoirsFromSources'
+        ],
+        'App\Events\RoundScoringCompleted' => [
+          'App\Listeners\SyncRoundChoirsToTarget',
+          'App\Listeners\ProduceFinalStandings'
+        ],
+        'App\Events\DivisionChoirCreated' => [
+          'App\Listeners\AddChoirToRound'
+        ],
+        'App\Events\DivisionChoirRemoved' => [
+          'App\Listeners\RemoveChoirFromRound'
+        ],
+        'App\Events\RoundSaved' => [
+          'App\Listeners\SyncRoundChoirsFromDivision'
+        ],
     ];
 
     /**

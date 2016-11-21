@@ -3,6 +3,7 @@
 <div class="scorecard">
 
 
+
   @foreach($judge->captions as $caption)
 
     <div class="caption-container">
@@ -18,7 +19,7 @@
         </div>
 
         <div class="score" data-criterion-id="{{ $criterion->id }}">
-          <?php $rawScore = $rawScores->where('criterion_id', $criterion->id)->pluck('score');?>
+          <?php $rawScore = $rawScores->where('criterion_id', $criterion->id)->where('judge_id', $judge->id)->where('choir_id', $choir->id)->pluck('score');?>
           <?php $score = $rawScore->first(); ?>
           {{ Form::number("scores[$criterion->id]", $score,['min' => 0, 'max' => 10, 'step' => '0.5', 'data-criterion-id' => $criterion->id]) }}
         </div>

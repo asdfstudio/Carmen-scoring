@@ -1,11 +1,15 @@
-
-
 @if(!$choirs->isEmpty())
-<table class="table last-col-right">
+<table class="table scoreboard last-col-right">
   <tr>
   	<th>Choir</th>
-    <th>My Score</th>
-    <th>My Rank</th>
+    <th>My Raw Score</th>
+
+    @if($division->captionWeighting->slug == '60-40')
+      <th>
+        My Ranked Score
+      </th>
+    @endif
+
     <th>Actions</th>
   </tr>
 
@@ -18,11 +22,16 @@
 
     <td>
 			<?php $aggregateScore = $rawScores->where('choir_id',$choir->id)->sum('score');?>
-      {{ $aggregateScore }}
+      <span class="score raw">{{ $aggregateScore }}</span>
     </td>
-    <td>
-      -
-    </td>
+
+    @if($division->captionWeighting->slug == '60-40')
+      <td>
+        <?php $aggregateScore = $weightedScores->where('choir_id',$choir->id)->sum('weightedScore');?>
+        <span class="score weighted">{{ $aggregateScore }}</span>
+      </td>
+    @endif
+
     <td>
 
       @if($round->is_scoring_active AND $judge->id == Auth::user()->person_id)

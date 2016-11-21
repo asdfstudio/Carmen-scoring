@@ -63,8 +63,12 @@ class UserController extends Controller
     {
         //$this->authorize('update',$organization);
 
+        $user = new User;
+
 				// Validate input
-				$form = $formBuilder->create('User\CreateUserForm');
+				$form = $formBuilder->create('User\CreateUserForm', [
+          'model' => $user
+        ]);
 
 				// Validate input
 				if (!$form->isValid()) {
@@ -81,7 +85,7 @@ class UserController extends Controller
         $person->save();
 
         // Create user
-				$user = new User;
+        $user->username = $data['username'];
 				$user->email = $data['email'];
 				$user->password = bcrypt($data['password']);
 				$user->organization_id = Auth::user()->organization_id;
@@ -137,7 +141,11 @@ class UserController extends Controller
      */
     public function update(Request $request, FormBuilder $formBuilder, $id)
     {
-        $form = $formBuilder->create('User\EditUserForm');
+        $user = User::find($id);
+
+        $form = $formBuilder->create('User\EditUserForm', [
+          'model' => $user
+        ]);
 
 				// Validate input
 				if (!$form->isValid()) {
@@ -150,7 +158,7 @@ class UserController extends Controller
 
 
         // Update user
-				$user = User::find($id);
+        $user->username =  $data['username'];
 				$user->email = $data['email'];
         $user->organization_role = $data['organization_role'];
 

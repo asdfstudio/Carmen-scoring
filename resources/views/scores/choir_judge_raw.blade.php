@@ -1,26 +1,14 @@
 @if(!$division->sheet->criteria->isEmpty())
 
-<!--<ul class="list-group horizontal full-width">
+<?php
+if($division->captionWeighting->slug == '60-40') :
+  $toggle_scores = 'toggle-scores';
+else :
+  $toggle_scores = false;
+endif;
+?>
 
-  @foreach($captions as $caption)
-    <li class="list-group-item">
-
-      <span class="attr_label">{{ $caption->name }} Score</span>
-
-      <?php $score = $rawScores->where('criterion.caption_id', $caption->id)->sum('score'); ?>
-      <span class="attr_value">{{ $score }}</span>
-    </li>
-  @endforeach
-
-  <li class="list-group-item">
-    <span class="attr_label">Total Score</span>
-
-    <?php $score = $rawScores->sum('score'); ?>
-    <span class="attr_value">{{ $score }}</span>
-  </li>
-</ul>-->
-
-<table class="table table-bordered last-col-right">
+<table class="table table-bordered scoreboard last-col-right">
   <!--<tr>
   	<th>Criteria</th>
     <th>Score</th>
@@ -36,9 +24,18 @@
 
   @foreach($captions as $caption)
     <tr class="caption-header caption-{{ $caption->slug() }}">
-      <th colspan="2">
+      <th>
         {{ $caption->name }}
       </th>
+      <th class="score raw">
+        Raw Score
+      </th>
+
+      @if($division->captionWeighting->slug == '60-40')
+        <th class="score weighted">
+          Weighted Score
+        </th>
+      @endif
     </tr>
 
     @foreach($division->sheet->criteria->where('caption_id', $caption->id) as $criterion)
@@ -46,42 +43,48 @@
     	<td>{{ $criterion->name }}</td>
       <td>
       	<?php
-        $rawScore = $rawScores->where('criterion_id', $criterion->id)->pluck('score');
+        $rawScore = $rawScores->where('criterion_id', $criterion->id)->where('choir_id', $choir->id)->pluck('score');
         $score = $rawScore->first();
         ?>
-        {{ $score }}
+        <span class="score raw">{{ $score }}</span>
       </td>
+
+      @if($division->captionWeighting->slug == '60-40')
+        <td>
+          <?php
+          $weightedScore = $scoreboard->weightedScores->where('criterion_id', $criterion->id)->where('choir_id', $choir->id)->pluck('weightedScore');
+          $score = $weightedScore->first();
+          ?>
+          <span class="score weighted">{{ $score }}</span>
+        </td>
+      @endif
+
     </tr>
     @endforeach
 
 
     <tr class="caption-raw-score caption-{{ $caption->slug() }}">
       <th>
-        Total Raw {{ $caption->name }} Score
+        Total {{ $caption->name }} Score
       </th>
       <th>
         <?php $rawTotal = $rawScores->where('criterion.caption_id', $caption->id)->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('score');?>
         {{ $rawTotal }}
       </th>
-    </tr>
 
-    @if($caption->id == 1)
-      <tr class="caption-weighted-score caption-{{ $caption->slug() }}">
-        <th>
-          Total Weighted {{ $caption->name }} Score
-        </th>
+      @if($division->captionWeighting->slug == '60-40')
         <th>
           <?php $weightedTotal = $weightedScores->where('criterion.caption_id', $caption->id)->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('weightedScore');?>
           {{ $weightedTotal }}
         </th>
-      </tr>
-    @endif
+      @endif
+    </tr>
 
     <tr class="caption-rank caption-{{ $caption->slug() }}">
       <th>
         {{ $caption->name }} Ranking
       </th>
-      <th>
+      <th colspan="2">
         <?php $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();?>
         {{ $rank }}
       </th>
@@ -95,16 +98,23 @@
   	<th>Total Score</th>
 
     <th>
-      <?php $weightedTotal = $rawScores->where('judge_id',$judge->id)->where('choir_id',$choir->id)->sum('weightedScore');?>
-      {{ $weightedTotal }}
+      <?php $rawTotal = $rawScores->where('judge_id',$judge->id)->where('choir_id',$choir->id)->sum('score');?>
+      {{ $rawTotal }}
     </th>
+
+    @if($division->captionWeighting->slug == '60-40')
+      <th>
+        <?php $weightedTotal = $weightedScores->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('weightedScore');?>
+        {{ $weightedTotal }}
+      </th>
+    @endif
 
   </tr>
 
   <tr class="total-rank">
   	<th>Rankings</th>
 
-    <th>
+    <th colspan="2">
       <?php $rank = $rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('rank')->first();?>
       {{ $rank }}
     </th>

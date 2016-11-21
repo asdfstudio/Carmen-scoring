@@ -17,7 +17,15 @@ class CreateUserForm extends Form
           'label' => 'Last Name'
         ]);
 
-        $this->add('email','email', ['rules' => 'required']);
+        $this->add('email','email', [
+          'rules' => 'required|email|unique:users,email,'.$this->model->id
+        ]);
+
+        $this->add('username','text', [
+          'rules' => 'required|unique:users,username,'.$this->model->id,
+          'label' => 'Username'
+        ]);
+
 				$this->add('password','repeated', [
 					'type' => 'password',
 					'second_name' => 'password_confirmation',

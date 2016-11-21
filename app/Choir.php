@@ -37,6 +37,11 @@ class Choir extends Model
 			return $this->hasMany('App\Division');
 		}
 
+    public function rounds()
+    {
+      return $this->belongsToMany('App\Round');
+    }
+
 
 		public function competitions()
 		{
@@ -56,9 +61,11 @@ class Choir extends Model
 
     public function getFullNameAttribute()
     {
+      $h = '';
+
       if($this->school)
       {
-        $h = $this->school->name . ' ';
+        $h.= $this->school->name . ' ';
       }
       $h.= $this->name();
 

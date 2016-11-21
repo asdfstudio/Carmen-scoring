@@ -68,9 +68,31 @@ class Division extends Model
     }
 
 
+    public function standing()
+    {
+      return $this->hasOne('App\Standing');
+    }
+
+
     public function status()
     {
       if($this->is_completed)
+			{
+				return 'Completed';
+			}
+			elseif($this->is_scoring_active)
+			{
+				return 'Active';
+			}
+			else
+			{
+				return 'Inactive';
+			}
+    }
+
+    public function status_slug()
+		{
+			if($this->is_completed)
 			{
 				return 'completed';
 			}
@@ -82,5 +104,57 @@ class Division extends Model
 			{
 				return 'inactive';
 			}
+		}
+
+    public function getStatusAttribute()
+    {
+      return $this->status();
+    }
+
+    public function getStatusSlugAttribute()
+    {
+      return $this->status_slug();
+    }
+
+
+    public function status_label($class_attr = false)
+    {
+      $class_array = ['label', 'status', $this->status_slug];
+
+      if($class_attr)
+        $class_array[] = $class_attr;
+
+      $class = implode($class_array,' ');
+
+      return '<span class="'.$class.'">'.$this->status.'</span>';
+    }
+
+
+    public function activateScoring()
+    {
+      $this->is_scoring_active = true;
+      $this->is_completed = false;
+      return $this->save();
+    }
+
+    public function deactivateScoring()
+    {
+      $this->is_scoring_active = false;
+      $this->is_completed = false;
+      return $this->save();
+    }
+
+    public function reactivateScoring()
+    {
+      $this->is_scoring_active = true;
+      $this->is_completed = false;
+      return $this->save();
+    }
+
+    public function completeScoring()
+    {
+      $this->is_scoring_active = false;
+      $this->is_completed = true;
+      return $this->save();
     }
 }

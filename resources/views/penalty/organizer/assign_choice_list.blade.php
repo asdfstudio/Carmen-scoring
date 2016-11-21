@@ -6,11 +6,20 @@
 {!! Form::open(array('route' => array('organizer.competition.division.round.choir.penalty.update_assign',$division->competition,$division, $round, $choir), 'method' => 'post')) !!}
 <ul class="list-group">
   @foreach($penalties as $penalty)
-	  <li class="list-group-item">
+		<li class="penalty list-group-item">
 			<?php $selected = $selected_penalties->where('id', $penalty->id)->count();?>
-			{{ Form::checkbox("penalties[$penalty->id]", $penalty->id, $selected) }}
-			<h4>{{ $penalty->name }}</h4> - {{ $penalty->description }} <br/>
-			{{ $penalty->amount }} points - {{ $penalty->apply_per_judge() }}
+			{{ Form::checkbox("penalties[$penalty->id]", $penalty->id, $selected, ['class' => 'penalties pull-left']) }}
+
+			<div class="group pull-left">
+				<span class="name">{{ $penalty->name }}</span>
+				<span class="description">{{ $penalty->description }}</span>
+			</div>
+
+			<span class="details">
+				<span class="amount">{{ $penalty->amount }}</span>
+				point penalty
+				<span class="apply_per_judge">{{ $penalty->apply_per_judge_text() }}</span>
+			</span>
 		</li>
   @endforeach
 </ul>

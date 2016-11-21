@@ -1,13 +1,14 @@
 
 .label {
   border-radius: 0;
-  font-size: 1em;
+  font-size: 14px;
   font-weight: normal;
   line-height: 1;
   text-align: center;
   vertical-align: baseline;
   white-space: nowrap;
   padding: 5px 11px;
+  border-radius: 3px;
 
   &.small {
     font-size: 0.8em;
@@ -36,15 +37,15 @@
     padding: 5px 8px;
 
     &.completed {
-      background-color: $cs-green;
+      background-color: $cs-status-completed;
     }
 
     &.active {
-      background-color: $cs-purple;
+      background-color: $cs-status-active;
     }
 
     &.inactive {
-      background-color: $cs-orange;
+      background-color: $cs-status-inactive;
     }
   }
 }

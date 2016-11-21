@@ -27,6 +27,9 @@
         <li>
           <a href="#" class="tab-link" data-tab-id="awards">Awards</a>
         </li>
+        <li>
+          <a href="#" class="tab-link" data-tab-id="standings">Final Standings</a>
+        </li>
         <li class="scoring">
           <a href="{{ route('judge.competition.division.scoring', [$competition, $division]) }}">Enter Scoring Mode</a>
         </li>
@@ -69,6 +72,11 @@
     <div data-tab-id="awards" class="tab-content col-xs-12 col-sm-12">
     	<h2>Awards</h2>
     	@include('award.organizer.list', ['awards' => $division->awards])
+    </div>
+
+    <div data-tab-id="standings" class="tab-content col-xs-12 col-sm-12">
+    	<h2>Finals Standings</h2>
+    	@include('competition_division_standing.judge.show')
     </div>
 
 

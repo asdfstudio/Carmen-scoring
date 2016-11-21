@@ -6,6 +6,7 @@
 <table class="table table-striped table-bordered">
   <tr>
 		<th>Name</th>
+		<th>Username</th>
     <th>Email</th>
 		<th>Role Type</th>
 
@@ -20,6 +21,7 @@
 				{{ $user->person->full_name }}
 			@endif
 		</td>
+		<td>{{ $user->username }}</td>
   	<td>{{ $user->email }}</td>
 		<td>{{ $user->organization_role }}</td>
 

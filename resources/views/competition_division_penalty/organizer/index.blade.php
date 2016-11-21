@@ -1,5 +1,9 @@
 @extends('layouts.simple')
 
+@section('breadcrumbs')
+
+@endsection
+
 @section('content-header')
 	<h1>Division Penalties</h1>
 

@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
 class AuthController extends Controller
 {
+
     /*
     |--------------------------------------------------------------------------
     | Registration & Login Controller
@@ -29,6 +30,9 @@ class AuthController extends Controller
      * @var string
      */
     protected $redirectTo = '/';
+
+    // JK$
+    protected $username = 'username';
 
     /**
      * Create a new authentication controller instance.
@@ -87,5 +91,15 @@ class AuthController extends Controller
       }
 
       return redirect()->intended();
+    }
+
+
+    // Override AuthenticatesUsers method to allow logging in via username or email address
+    protected function getCredentials($request)
+    {
+        $field = filter_var($request->input('username'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $request->merge([$field => $request->input('username')]);
+
+        return $request->only($field, 'password');
     }
 }

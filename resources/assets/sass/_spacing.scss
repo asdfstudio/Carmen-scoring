@@ -1,0 +1,20 @@
+$spacer: 10px;
+$spacer-x-2: $spacer * 2;
+
+.mv {
+  margin-top: $spacer;
+  margin-bottom: $spacer;
+}
+
+.mv-2 {
+  margin-top: $spacer-x-2;
+  margin-bottom: $spacer-x-2;
+}
+
+.mt {
+  margin-top: $spacer;
+}
+
+.mb {
+  margin-bottom: $spacer;
+}

@@ -28,6 +28,10 @@ class EditPasswordForm extends Form
       ]
     ]);
 
+    $this->add('previous_url', 'hidden', [
+      'default_value' => $this->data['previous_url']
+    ]);
+
     $this->add('submit', 'submit', ['label' => 'Update', 'attr' => ['class' => 'btn btn-primary']]);
   }
 }

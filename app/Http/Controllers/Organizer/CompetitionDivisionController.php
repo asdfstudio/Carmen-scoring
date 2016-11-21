@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Competition;
 use App\Division;
 use App\Caption;
+use App\Standing;
 
 use Kris\LaravelFormBuilder\FormBuilder;
 
@@ -146,13 +147,18 @@ class CompetitionDivisionController extends Controller
           'url' => route('organizer.competition.division.scoring',[$competition,$division])
         ]);
 
+        $reactivateScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm', [
+          'method' => 'POST',
+          'url' => route('organizer.competition.division.scoring',[$competition,$division])
+        ]);
+
         $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm', [
           'method' => 'POST',
           'url' => route('organizer.competition.division.scoring',[$competition_id,$division_id])
         ]);
 
         //
-				return view('competition_division.organizer.show', compact('competition','division','captions','activateScoringForm','deactivateScoringForm','completeScoringForm'));
+				return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'deactivateScoringForm', 'reactivateScoringForm', 'completeScoringForm'));
     }
 
 
@@ -238,31 +244,33 @@ class CompetitionDivisionController extends Controller
       //all of the division rounds for this competition
       if($request->input('activate'))
       {
-        $is_scoring_active = true;
-        $is_completed = false;
+        $division->activateScoring();
       }
-      // Deactive scoring for all division rounds
+      // Deactivate scoring for all division rounds
       elseif($request->input('deactivate'))
       {
-        $is_scoring_active = false;
-        $is_completed = NULL;
+        $division->deactivateScoring();
       }
-      // Complete and deactive scoring for all division rounds
+      // Reactivate scoring for all division rounds
+      elseif($request->input('reactivate'))
+      {
+        $division->reactivateScoring();
+      }
+      // Complete scoring for all division rounds
       elseif($request->input('complete'))
       {
-        $is_scoring_active = false;
-        $is_completed = true;
+        $division->completeScoring();
       }
       else {
         return false;
       }
 
-      foreach($division->rounds as $round)
+      /*foreach($division->rounds as $round)
       {
         $round->is_scoring_active = $is_scoring_active;
         $round->is_completed = $is_completed;
         $round->save();
-      }
+      }*/
 
       return redirect()->route('organizer.competition.division.show',[$competition_id,$division_id]);
     }

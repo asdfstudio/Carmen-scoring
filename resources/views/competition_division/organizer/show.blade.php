@@ -3,19 +3,55 @@
 @section('breadcrumbs')
 	{!! Breadcrumbs::render('organizer.competition.division.show',$competition,$division) !!}
 @endsection
- 
+
 @section('content')
 
+	@can('activateScoring', $division)
+		{!! form($activateScoringForm) !!}
+	@endcan
 
-	{!! form($activateScoringForm) !!}
+	@can('deactivateScoring', $division)
+		{!! form($deactivateScoringForm) !!}
+	@endcan
 
-	{!! form($deactivateScoringForm) !!}
+	@can('reactivateScoring', $division)
+		{!! form($reactivateScoringForm) !!}
+	@endcan
 
-	{!! form($completeScoringForm) !!}
+	@can('completeScoring', $division)
+		{!! form($completeScoringForm) !!}
+	@endcan
 
-  {{ link_to_route('organizer.competition.division.edit', 'Edit Division', [$competition,$division],['class' => 'btn btn-primary']) }}
+  {{ link_to_route('organizer.competition.division.edit', 'Edit Division', [$competition,$division],['class' => 'action']) }}
 
-	{{ link_to_route('organizer.competition.division.clone', 'Clone Division', [$competition,$division],['class' => 'btn btn-primary']) }}
+	<div class="clearfix"></div>
+
+	<ul class="list-group">
+		<li class="list-group-item">
+			<h3>Settings</h3>
+			<p>{{ link_to_route('organizer.competition.division.settings', 'Manage scoring settings', [$competition, $division]) }}</p>
+		</li>
+		<li class="list-group-item">
+			<h3>Choirs</h3>
+			<p>{{ link_to_route('organizer.competition.division.choir.index', 'Manage choirs', [$competition, $division]) }}</p>
+		</li>
+		<li class="list-group-item">
+			<h3>Judges</h3>
+			<p>{{ link_to_route('organizer.competition.division.judge.index', 'Manage judges', [$competition, $division]) }}</p>
+		</li>
+		<li class="list-group-item">
+			<h3>Rounds</h3>
+			<p>{{ link_to_route('organizer.competition.division.round.index', 'Manage rounds', [$competition, $division]) }}</p>
+		</li>
+		<li class="list-group-item">
+			<h3>Penalties</h3>
+			<p>{{ link_to_route('organizer.competition.division.penalty.index', 'Manage penalties', [$competition, $division]) }}</p>
+		</li>
+		<li class="list-group-item">
+			<h3>Awards</h3>
+			<p>{{ link_to_route('organizer.competition.division.award.index', 'Manage awards', [$competition, $division]) }}</p>
+		</li>
+	</ul>
 
 	<div data-tab-id="scoring" class="tab-content">
 		@include('division.partial.single')

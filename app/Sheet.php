@@ -8,19 +8,28 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Sheet extends Model
 {
     use SoftDeletes;
-		
+
 		protected $dates = ['deleted_at'];
-		
+
 		protected $fillable = ['name'];
-		
-		
+
+
 		public function divisions()
 		{
-			return $this->hasMany('App\Division'); 
+			return $this->hasMany('App\Division');
 		}
-		
+
 		public function criteria()
     {
         return $this->belongsToMany('App\Criterion');
+    }
+
+    public function getCaptionIdsAttribute()
+    {
+      $caption_ids = $this->criteria->unique('caption_id')->pluck('caption_id')->toArray();
+
+      //dd($this->criteria->caption);
+
+      return $caption_ids;
     }
 }

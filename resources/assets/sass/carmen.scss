@@ -3,7 +3,7 @@
 @import 'bootstrap-custom';
 
 @import "scorecard";
-@import "scoreboard"; 
+@import "scoreboard";
 @import "tabs";
 @import "tables";
 @import "actions";
@@ -13,7 +13,17 @@
 @import "forms";
 @import "headings";
 @import "content";
+@import "spacing";
 
+
+
+.alert {
+  border-left-width: 6px;
+}
+
+a.active {
+  font-weight: bold;
+}
 .body-width {
   max-width: $cs-body-width;
   margin: auto;
@@ -91,7 +101,7 @@
 
 
 .header-wrap {
-  background: $cs-blue;
+  background: lighten($cs-gray-dark,10);
   //border-top: 5px solid $cs-blue-darker;
   //border-bottom: 1px solid $cs-blue-darker;
   overflow: hidden;
@@ -108,7 +118,7 @@
 
   &.admin {
     margin-bottom: 0;
-    background: $cs-blue-darker;
+    background: $cs-gray-dark;
     border-top: 0;
     border-bottom: 0;
     //margin-bottom: -6px;
@@ -169,12 +179,12 @@
           color:  $cs-white;
 
           &.active {
-            background: $cs-blue-lighter;
+            background: lighten($cs-gray-dark,15);
           }
 
           &:hover {
             text-decoration: underline;
-            background: darken($cs-blue-lighter, 8);
+            background: lighten($cs-gray-dark,7);
           }
         }
       }
@@ -214,17 +224,26 @@
         margin-left: 5px;
       }
     }
+
+    .status-container {
+      float: right;
+      padding: 20px 0;
+    }
   }
 }
 
 .division-bar {
 
   //border: 1px solid #d8d8d8;
-  background: $cs-blue;
+  background: lighten($cs-gray-dark, 15);
   color: $cs-white;
   overflow: hidden;
   clear: both;
   border-bottom-width: 4px;
+
+  & .status {
+    margin-left: 10px;
+  }
 
   & a {
     color: $cs-white;
@@ -270,6 +289,18 @@
         float: right;
 
         a {
+          background: $cs-status-active;
+          color: $cs-white;
+          font-weight: bold;
+          border-top: 1px solid darken($cs-status-active, 10);
+          border-right: 1px solid darken($cs-status-active, 10);
+          border-left: 1px solid darken($cs-status-active, 10);
+
+          &:hover {
+            background: darken($cs-status-active, 10);
+            color: $cs-white;
+            border-top-color: darken($cs-status-active, 10);
+          }
         }
       }
 
@@ -280,8 +311,23 @@
         display: block;
         color: $cs-gray-dark;
 
+        .count {
+          color: $cs-white;
+          background: lighten($cs-gray-dark, 30);
+          border-radius: 5px;
+          font-size: 11px;
+          padding: 2px 4px;
+          margin-left: 5px;
+          font-weight: bold;
+          display: inline;
+        }
+
         &:hover {
           background: $cs-white;
+          text-decoration: none;
+          padding-top: 8px;
+          border-top-width: 3px;
+          border-top-color: lighten($cs-primary, 20);
         }
 
         &.active {
@@ -323,6 +369,14 @@
       display:  inline-block;
       margin-right: 5px;
 
+      &.round-active {
+
+      }
+
+      &.round-inactive {
+
+      }
+
 
       a {
         padding: 10px 40px;
@@ -335,20 +389,24 @@
         &:hover {
           background: $cs-white;
           text-decoration: none;
+          border-left: 4px solid $cs-gray-mid-2;
+          padding-left: 37px;
         }
 
         &.active {
           background: $cs-white;
-          border-color: $cs-primary;
+          padding-left: 37px;
+          border-left: 4px solid $cs-primary;
           //border-bottom-color: $cs-white;
           //border-top-color: $cs-primary;
         }
 
 
         .round-navigation-link-status {
-            font-size: 0.8em;
+            font-size: 0.7em;
             font-weight: normal;
             margin-left: 5px;
+            border-radius: 5px;
 
         }
       }

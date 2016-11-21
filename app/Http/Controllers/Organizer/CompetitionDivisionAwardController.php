@@ -21,7 +21,9 @@ class CompetitionDivisionAwardController extends Controller
 {
     public function index($competition_id, $division_id)
     {
-      $division = Division::with(['competition', 'awards', 'awards.choirs' => function($query) use ($division_id) {
+      $division = Division::with(['competition', 'awards' => function($query) {
+        $query->withoutGlobalScope('organization');
+      }, 'awards.choirs' => function($query) use ($division_id) {
         $query->where('division_id',$division_id);
       }])->find($division_id);
 
@@ -30,6 +32,8 @@ class CompetitionDivisionAwardController extends Controller
       //dd($division->awards);
       $competition = $division->competition;
       $awards = $division->awards;
+
+      //dd($awards);
 
       return view('competition_division_award.organizer.index', compact('competition','division', 'awards'));
     }
@@ -90,7 +94,9 @@ class CompetitionDivisionAwardController extends Controller
 
     public function manage(FormBuilder $formBuilder, Competition $competition, $division_id)
     {
-      $division = $competition->divisions()->findOrFail($division_id);
+      $division = $competition->divisions()->with(['awards' => function($query) {
+        $query->withoutGlobalScope('organization');
+      }])->findOrFail($division_id);
       //$division = Division::with('competition','awards')->find($division_id);
 
       $selected_awards = $division->awards;
@@ -99,7 +105,7 @@ class CompetitionDivisionAwardController extends Controller
 
       $awards = Award::where('organization_id',    Auth::user()->organization_id)->get();
 
-      $standard_awards = Award::where('organization_id', NULL)->get();
+      $standard_awards = Award::withoutGlobalScope('organization')->where('organization_id', NULL)->get();
 
       return view('competition_division_award.organizer.manage', compact('competition','division', 'awards', 'standard_awards','selected_awards', 'form'));
     }

@@ -11,7 +11,7 @@ class SchoolForm extends Form
         $this->add('name','text', [
           'rules' => '',
           'label' => 'School Name',
-          'rules' => ['required_without:school_id'],
+          'rules' => ['required_without_all:choir_id,school_id'],
         ]);
 
         $this->add('place', 'form', [

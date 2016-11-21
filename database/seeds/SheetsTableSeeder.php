@@ -13,7 +13,10 @@ class SheetsTableSeeder extends Seeder
     {
         DB::table('sheets')->insert([
             ['name' => 'Advanced'],
-						['name' => 'Novice']
+						['name' => 'Novice'],
+            ['name' => 'Advanced with Combo'],
+            ['name' => 'Novice with Combo'],
+            ['name' => 'Combo']
         ]);
     }
 }

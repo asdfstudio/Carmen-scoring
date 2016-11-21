@@ -20,7 +20,7 @@
       </th>
     </tr>
 
-    @foreach($division->sheet->criteria as $criterion)
+    @foreach($division->sheet->criteria->where('caption_id', $caption->id) as $criterion)
 
 
     <tr data-criterion-id="{{ $criterion->id }}">

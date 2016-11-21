@@ -37,7 +37,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.3/js/standalone/selectize.min.js"></script>
     {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 
+    <!--<script src="/js/table-scroll.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+      $('table').table_scroll({
+          fixedColumnsLeft: 1,
+          rowsInHeader: 1
+
+      });
+    });
+    </script>-->
+
     <script src="/js/app.js"></script>
+    <script src="/js/responsive-tables.js"></script>
 
 </body>
 </html>

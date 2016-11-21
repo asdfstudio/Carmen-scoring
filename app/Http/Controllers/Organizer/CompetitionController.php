@@ -82,7 +82,7 @@ class CompetitionController extends Controller
 				$competition->place()->save($place);
 
 				// Set flash data and redirect
-				return redirect()->route('organizer.competition.division.setup',[$competition]);
+				return redirect()->route('organizer.competition.show',[$competition])->with('success', 'Competition created.');
     }
 
     /**
@@ -183,7 +183,7 @@ class CompetitionController extends Controller
 				// Set flash data
 
 				// Redirect
-				return redirect()->route('organizer.competition.show',[$competition]);
+				return redirect()->route('organizer.competition.show',[$competition])->with('success', 'Competition updated.');
     }
 
     /**

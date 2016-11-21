@@ -26,7 +26,7 @@ class CompetitionDivisionJudgeController extends Controller
      */
     public function index($competition_id,$division_id)
     {
-        $division = Division::with(['competition','judges' => function ($query) {
+        $division = Division::with(['competition','judges.user','judges' => function ($query) {
 					$query->groupBy('judge_id');
 				}, 'judges.captions' => function ($query) use ($division_id) {
 					$query->where('division_id',$division_id);
@@ -323,5 +323,47 @@ class CompetitionDivisionJudgeController extends Controller
 
 				// Set flash data and redirect
 				return redirect()->route('organizer.competition.division.judge.index',[$division->competition, $division])->with('success', $judge->full_name . ' was successfully removed as a judge for this division.');
+    }
+
+
+    // Import / duplicate / clone judges from another division
+    public function import($competition_id, $division_id, FormBuilder $formBuilder)
+    {
+      $competition = Competition::with('divisions')->find($competition_id);
+      $division = Division::with('competition')->find($division_id);
+
+      $this->authorize('importJudges', $division);
+
+      $data = ['choices' => $competition->divisions->reject(function($value,$key) use ($division_id) {
+        return $value->id == $division_id;
+      })->lists('name', 'id')->toArray()];
+
+      $form = $formBuilder->create('Division\ChooseDivisionForm', [
+        'method' => 'POST',
+        'url' => route('organizer.competition.division.judge.import.process', [$competition_id, $division_id]),
+        'data' => $data
+      ]);
+
+      return view('competition_division_judge.organizer.import', compact('division', 'form'));
+    }
+
+
+    public function process_import($competition_id, $division_id, Request $request, FormBuilder $formBuilder)
+    {
+      $competition = Competition::with('divisions')->find($competition_id);
+      $division = Division::with('competition')->find($division_id);
+
+      $this->authorize('importJudges', $division);
+
+      // Source division
+      $source_division_id = $request->input('id');
+      $source_division = Division::find($source_division_id);
+
+      foreach($source_division->judges as $judge)
+      {
+        $division->judges()->attach($judge->id, ['caption_id' => $judge->pivot->caption_id]);
+      }
+
+      return redirect()->route('organizer.competition.division.judge.index', [$competition_id, $division_id])->with('success',"Judges successfully imported from $source_division->name.");
     }
 }

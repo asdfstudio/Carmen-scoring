@@ -16,10 +16,14 @@ class CreateForm extends Form
 					'empty_value' => 'Choose caption weighting...',
 					'label' => 'Caption Weighting',
           'label_attr' => ['class' => 'block'],
+          //'property' => 'full_name',
           'expanded' => true,
           'multiple' => false,
           'choice_options' => [
             'wrapper' => ['class' => 'choice-container']
+          ],
+          'help_block' => [
+            'text' => ''
           ]
 				]);
 
@@ -32,6 +36,9 @@ class CreateForm extends Form
           'multiple' => false,
           'choice_options' => [
             'wrapper' => ['class' => 'choice-container']
+          ],
+          'help_block' => [
+            'text' => 'The Ranked scoring method should be used only if at least one of the following is true: 1) The Caption Weighting is 50/50. 2) All judges are scoring both the Music and Show captions. 3) There are 50% more judges scoring the Music caption than the Show caption.'
           ]
 				]);
 
