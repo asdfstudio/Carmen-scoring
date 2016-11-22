@@ -29,6 +29,9 @@
     &.show {
       background: $cs-caption-show;
     }
+    &.combo {
+      background: $cs-caption-combo;
+    }
   }
 
   &.status {

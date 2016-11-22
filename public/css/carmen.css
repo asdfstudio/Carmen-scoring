@@ -3169,6 +3169,8 @@ button.close {
     background: #a763ba !important; }
   .caption-raw-score.caption-show {
     background: #e59e47 !important; }
+  .caption-raw-score.caption-combo {
+    background: #dc2930 !important; }
 
 .caption-weighted-score {
   font-size: 1em;
@@ -3177,6 +3179,8 @@ button.close {
     background: #9d52b2 !important; }
   .caption-weighted-score.caption-show {
     background: #e8aa5e !important; }
+  .caption-weighted-score.caption-combo {
+    background: #e03e45 !important; }
 
 .caption-rank {
   font-size: 1.1em;
@@ -3185,6 +3189,8 @@ button.close {
     background: #70387f !important; }
   .caption-rank.caption-show {
     background: #db861f !important; }
+  .caption-rank.caption-combo {
+    background: #b41d24 !important; }
 
 .total-score {
   font-size: 1.3em;
@@ -3508,6 +3514,8 @@ button.close {
     background: #7F4091; }
   .label.caption.show {
     background: #E29231; }
+  .label.caption.combo {
+    background: #CA2128; }
   .label.status {
     color: #FFF;
     padding: 5px 8px; }

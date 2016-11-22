@@ -36,6 +36,10 @@
   &.caption-show {
     background: lighten($cs-caption-show, 5) !important;
   }
+
+  &.caption-combo {
+    background: lighten($cs-caption-combo, 5) !important;
+  }
 }
 
 .caption-weighted-score {
@@ -49,6 +53,10 @@
   &.caption-show {
     background: lighten($cs-caption-show, 10) !important;
   }
+
+  &.caption-combo {
+    background: lighten($cs-caption-combo, 10) !important;
+  }
 }
 
 .caption-rank {
@@ -61,6 +69,10 @@
 
   &.caption-show {
     background: darken($cs-caption-show, 5) !important;
+  }
+
+  &.caption-combo {
+    background: darken($cs-caption-combo, 5) !important;
   }
 }
 

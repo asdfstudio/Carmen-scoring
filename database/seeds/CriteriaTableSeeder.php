@@ -89,7 +89,7 @@ class CriteriaTableSeeder extends Seeder
 
 				foreach($names as $name)
 				{
-					$rows[] = ['caption_id' => 0, 'name' => $name];
+					$rows[] = ['caption_id' => 3, 'name' => $name];
 				}
 
 				DB::table('criteria')->insert($rows);
