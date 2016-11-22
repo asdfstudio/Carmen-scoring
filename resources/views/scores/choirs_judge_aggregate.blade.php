@@ -6,7 +6,7 @@
 
     @if($division->captionWeighting->slug == '60-40')
       <th>
-        My Ranked Score
+        My Weighted Score
       </th>
     @endif
 
