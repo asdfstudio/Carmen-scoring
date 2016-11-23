@@ -329,14 +329,20 @@ class CompetitionDivisionJudgeController extends Controller
     // Import / duplicate / clone judges from another division
     public function import($competition_id, $division_id, FormBuilder $formBuilder)
     {
-      $competition = Competition::with('divisions')->find($competition_id);
+      $competition = Competition::with('divisions','divisions.judges')->find($competition_id);
       $division = Division::with('competition')->find($division_id);
 
       $this->authorize('importJudges', $division);
 
-      $data = ['choices' => $competition->divisions->reject(function($value,$key) use ($division_id) {
+      $divisions = $competition->divisions->reject(function($value,$key) use ($division_id) {
         return $value->id == $division_id;
-      })->lists('name', 'id')->toArray()];
+      });
+
+      $data = [
+        'choices' => $competition->divisions->reject(function($value,$key) use ($division_id) {
+          return $value->id == $division_id;
+        })->lists('name', 'id')->toArray()
+      ];
 
       $form = $formBuilder->create('Division\ChooseDivisionForm', [
         'method' => 'POST',
@@ -344,7 +350,7 @@ class CompetitionDivisionJudgeController extends Controller
         'data' => $data
       ]);
 
-      return view('competition_division_judge.organizer.import', compact('division', 'form'));
+      return view('competition_division_judge.organizer.import', compact('division', 'form', 'divisions'));
     }
 
 

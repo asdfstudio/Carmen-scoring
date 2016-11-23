@@ -49,7 +49,10 @@
     </script>-->
 
     <script src="/js/app.js"></script>
-    <script src="/js/responsive-tables.js"></script>
+
+    @yield('body-footer')
+
+    
 
 </body>
 </html>

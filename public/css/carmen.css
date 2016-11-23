@@ -3112,6 +3112,9 @@ button.close {
         border: 3px solid #ccc; }
         .scorecard .criterion-container .score input.updating {
           background: #a6d19b; }
+    .scorecard .criterion-container .number-selector-container {
+      float: right;
+      max-width: 600px; }
     .scorecard .criterion-container .number-selector {
       float: right;
       margin: -4px 0 0 15px;
@@ -3126,6 +3129,7 @@ button.close {
         position: relative; }
         .scorecard .criterion-container .number-selector li a {
           border: 2px solid #eee;
+          border-radius: 5px;
           display: block;
           height: 44px;
           line-height: 44px;
@@ -3199,6 +3203,21 @@ button.close {
 .total-rank {
   font-size: 1.2em; }
 
+input.score {
+  margin: -8px;
+  padding: 8px;
+  text-align: center;
+  border: 0;
+  background: none; }
+  input.score:focus {
+    background: #a6d19b; }
+  input.score.saving {
+    background: #87c178; }
+  input.score.saved {
+    background: #378fe7; }
+  input.score.error {
+    background: #e03e45; }
+
 .score {
   padding: 0 3px; }
   .score.penalty {
@@ -3229,43 +3248,57 @@ button.close {
   border-bottom: 2px solid;
   font-size: 1.3em; }
 
-@media only screen and (max-width: 767px) {
-  table.responsive {
-    margin-bottom: 0; }
+table.responsive {
+  margin-bottom: 0; }
+
+.pinned {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #fff;
+  width: 35%;
+  overflow: hidden;
+  overflow-x: scroll;
+  border-right: 1px solid #ccc;
+  border-left: 1px solid #ccc; }
+
+.pinned table {
+  border-right: none;
+  border-left: none;
+  width: 100%; }
+
+.pinned table th, .pinned table td {
+  white-space: nowrap; }
+
+.pinned td:last-child {
+  border-bottom: 0; }
+
+div.table-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+  overflow: hidden;
+  border-right: 2px solid #ccc; }
+
+div.table-wrapper div.scrollable {
+  margin-left: 35%; }
+
+div.table-wrapper div.scrollable {
+  overflow: scroll;
+  overflow-y: hidden; }
+
+table.responsive td, table.responsive th {
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden; }
+
+table.responsive th:first-child, table.responsive td:first-child, table.responsive td:first-child, table.responsive.pinned td {
+  display: none; }
+
+@media only screen and (min-width: 768px) {
   .pinned {
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: #fff;
-    width: 35%;
-    overflow: hidden;
-    overflow-x: scroll;
-    border-right: 1px solid #ccc;
-    border-left: 1px solid #ccc; }
-  .pinned table {
-    border-right: none;
-    border-left: none;
-    width: 100%; }
-  .pinned table th, .pinned table td {
-    white-space: nowrap; }
-  .pinned td:last-child {
-    border-bottom: 0; }
-  div.table-wrapper {
-    position: relative;
-    margin-bottom: 20px;
-    overflow: hidden;
-    border-right: 2px solid #ccc; }
+    width: 320px; }
   div.table-wrapper div.scrollable {
-    margin-left: 35%; }
-  div.table-wrapper div.scrollable {
-    overflow: scroll;
-    overflow-y: hidden; }
-  table.responsive td, table.responsive th {
-    position: relative;
-    white-space: nowrap;
-    overflow: hidden; }
-  table.responsive th:first-child, table.responsive td:first-child, table.responsive td:first-child, table.responsive.pinned td {
-    display: none; } }
+    margin-left: 320px; } }
 
 .actions-group {
   font-size: 0;
@@ -3393,6 +3426,12 @@ button.close {
   display: inline-block;
   font-style: italic;
   color: #a3a3a3; }
+
+.list-group .list-group-item.choir .performance_order {
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 15px 25px 10px 10px; }
 
 .list-group .list-group-item.school .name {
   font-size: 21px;
@@ -3582,7 +3621,7 @@ a.active {
   font-weight: bold; }
 
 .body-width {
-  max-width: 900px;
+  max-width: 1000px;
   margin: auto;
   width: auto;
   box-sizing: border-box; }
@@ -3735,7 +3774,8 @@ a.active {
     white-space: nowrap;
     overflow-x: auto; }
     .division-navigation-bar .division-navigation li {
-      display: inline-block; }
+      display: inline-block;
+      float: left; }
       .division-navigation-bar .division-navigation li.scoring {
         float: right; }
         .division-navigation-bar .division-navigation li.scoring a {

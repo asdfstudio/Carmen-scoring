@@ -30,12 +30,14 @@
   </ul>
 
   <h3>Manage Divisions</h3>
-  <p>Divisions are used to organize your competition and consist of choirs, judges, scoring settings and more. {{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition]) }}</p>
+  <p>Divisions are used to organize your competition and consist of choirs, judges, scoring settings and more.</p>
+
+  <p>{{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition]) }}</p>
 
   @if($competition->divisions->count() > 0)
 
     @include('division.organizer.list',['divisions' => $competition->divisions])
-    
+
   @else
     <p>{{ link_to_route('organizer.competition.division.create','Create your first division',[$competition]) }}</p>
   @endif

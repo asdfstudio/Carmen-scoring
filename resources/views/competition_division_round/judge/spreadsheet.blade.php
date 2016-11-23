@@ -50,6 +50,12 @@
   		<li class="list-group-item">
   			<a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
   		</li>
+
+      @if($round->status_slug == 'active')
+        <li class="list-group-item">
+    			<a class="score-view-toggle" href="#edit" data-score-view="edit">Edit Scores</a>
+    		</li>
+      @endif
   	</ul>
   @endif
 
@@ -60,4 +66,15 @@
     //'round' => $round
   ])
 
+@endsection
+
+
+@section('body-footer')
+    <!--  Decide if we want to split the spreadsheet table  -->
+    <?php $splitTheTable = $round->choirs->count() > 1 ? 'true' : 'false'; ?>
+    <script type="text/javascript">
+      splitTheTable = {{ $splitTheTable }}
+    </script>
+
+  <script src="/js/responsive-tables.js"></script>
 @endsection

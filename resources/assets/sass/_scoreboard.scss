@@ -101,6 +101,31 @@ $i: 0;
   }
 }
 
+
+input.score {
+  margin: -8px;
+  padding: 8px;
+  text-align: center;
+  border: 0;
+  background: none;
+
+  &:focus {
+    background: lighten($cs-green-lighter,10);
+  }
+
+  &.saving {
+    background: $cs-green-lighter;
+  }
+
+  &.saved {
+    background: lighten($cs-blue,10);
+  }
+
+  &.error {
+    background: lighten($cs-red, 10);
+  }
+}
+
 .score {
   //border: 1px solid #ddd;
   padding: 0 3px;

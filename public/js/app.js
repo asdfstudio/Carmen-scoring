@@ -1,6 +1,39 @@
 $(document).ready(function() {
 
 
+    $('input.ajax-scoring').on('blur', function(){
+      var input = $(this);
+      var newScore = input.val();
+      var originalScore = input.data('original-score');
+      var form = input.parents('form');
+      var url = form.attr('action');
+      var newScore = input.val();
+      //console.log(originalScore + ' // ' + newScore);
+
+      if(originalScore == newScore) return false;
+
+      input.addClass('saving');
+      input.removeClass('saved');
+
+      data = form.serialize();
+
+      $.post(url, data, function(returnData, status){
+        console.log(status);
+        //console.log(returnData);
+        if(status == 'success')
+        {
+          input.removeClass('saving');
+          input.addClass('saved');
+          input.data('original-score', newScore);
+        }
+        else {
+          input.removeClass('saving');
+          input.addClass('error');
+          alert('There was an error saving your score.');
+        }
+      });
+    });
+
     $('button.danger, a.danger, submit.danger').on('click', function(e) {
         if(confirm('Are you sure you want to do this?') == false) {
           e.preventDefault();
@@ -148,7 +181,7 @@ $(document).ready(function() {
       if(active_view == false) return false;
 
       var table = $('table.scoreboard.toggle-scores');
-      var scores = table.find('span.score');
+      var scores = table.find('span.score, input.score');
       //var scores = table.find('span.score:not(".penalty")');
 
       // Hide all scores

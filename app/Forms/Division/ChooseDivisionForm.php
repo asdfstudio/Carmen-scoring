@@ -8,6 +8,7 @@ class ChooseDivisionForm extends Form
 {
     public function buildForm()
     {
+
       $this->add('id', 'choice', [
         'choices' => $this->data['choices'],
         //'selected' => $this->data['selected'],

@@ -98,6 +98,13 @@
         color: $cs-gray-mid-2;
         //float: right;
       }
+
+      .performance_order {
+        float: left;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 15px 25px 10px 10px;
+      }
     }
 
     &.school {

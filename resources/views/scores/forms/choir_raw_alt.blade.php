@@ -24,9 +24,13 @@
           {{ Form::number("scores[$criterion->id]", $score,['min' => 0, 'max' => 10, 'step' => '0.5', 'data-criterion-id' => $criterion->id]) }}
         </div>
 
-        @include('scores.forms.number_selector', ['criterion' => $criterion,'score' => $score, 'start' => 1, 'end' => 10, 'interval' => 1])
+        <div class="number-selector-container">
 
-        @include('scores.forms.number_selector', ['criterion' => $criterion,'score' => $score, 'start' => 1.5, 'end' => 9.5, 'interval' => 1, 'class' => 'half'])
+          @include('scores.forms.number_selector', ['criterion' => $criterion,'score' => $score, 'start' => 1, 'end' => 10, 'interval' => 1])
+
+          @include('scores.forms.number_selector', ['criterion' => $criterion,'score' => $score, 'start' => 1.5, 'end' => 9.5, 'interval' => 1, 'class' => 'half'])
+
+        </div>
 
       </div>
       @endforeach

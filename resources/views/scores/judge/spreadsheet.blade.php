@@ -47,6 +47,14 @@ endif;
 
             <span class="score raw">{{ $rawScore }}</span>
 
+            @if($round->status_slug == 'active')
+              {{ Form::open(['method' => 'POST', 'url' => route('judge.competition.division.round.save_scores', [$division->competition->id, $division->id, $round->id])]) }}
+
+              {{ Form::number("scores[$choir->id][$criterion->id]", $rawScore,['min' => 0, 'max' => 10, 'step' => '0.5', 'class' => 'col-xs-12 score edit ajax-scoring', 'data-original-score' => $rawScore]) }}
+
+              {{ Form::close() }}
+            @endif
+
             @if($division->captionWeighting->slug == '60-40')
               <?php
               $weightedScore = $scoreboard->weightedScores->where('choir_id', $choir->id)->where('criterion.id', $criterion->id)->sum('weightedScore');

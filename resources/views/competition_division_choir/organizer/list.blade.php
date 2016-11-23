@@ -10,7 +10,7 @@
         <span class="school">{{ $choir->school->name }}</span>
       @endif
 
-			<span class="name">{{ $choir->name() }}</span>
+			<span class="name">{{ $choir->name }}</span>
 
       @if($choir->school AND $choir->school->place AND $choir->school->place->city_state())
         <span class="location">{{ $choir->school->place->city_state() }} </span>

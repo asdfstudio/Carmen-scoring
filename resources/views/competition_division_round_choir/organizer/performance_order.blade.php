@@ -16,14 +16,25 @@
 
 @section('content')
 
-	<p>Drag and drop the choirs to change the performance order. The top of the list is the first performer and bottom of list is the final performer.</p>
+	<div class="alert alert-info">
+		<p>Drag and drop the choirs to change the performance order.</p>
+
+		<p>The top of the list is the first performer and bottom of list is the final performer.</p>
+	</div>
+
 
 	{{ Form::open(['method' => 'POST']) }}
 
 	<ul class="list-group sortable-list" id="sortable-list">
-		@foreach($choirs as $choir)
-			<li class="list-group-item" data-id="{{ $choir->id }}">
-				{{ $choir->full_name }}
+		@foreach($choirs as $index => $choir)
+			<li class="list-group-item choir" data-id="{{ $choir->id }}">
+				<span class="performance_order" id="performance-order-{{ $choir->id }}">{{ $index + 1 }}</span>
+
+				@if($choir->school)
+					<span class="school">{{ $choir->school->name }}</span>
+				@endif
+
+				<span class="name">{{ $choir->name }}</span>
 
 				{{ Form::hidden('performance_order['.$choir->id.']', $choir->pivot->performance_order, ['id' => 'input-choir-'.$choir->id]) }}
 			</li>
@@ -43,7 +54,9 @@
 		onEnd: function(e) {
 			var order = sortable.toArray();
 			order.forEach(function(choir_id, index) {
+				var index_base_1 = index + 1;
 				document.getElementById('input-choir-'+choir_id).value = index;
+				document.getElementById('performance-order-'+choir_id).innerHTML = index_base_1;
 			});
 		}
   });

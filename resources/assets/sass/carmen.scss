@@ -284,6 +284,7 @@ a.active {
     li {
 
       display:  inline-block;
+      float: left;
 
       &.scoring {
         float: right;

@@ -43,7 +43,7 @@
         .score {
             float: left;
             border: 0;
-            padding: 0; 
+            padding: 0;
 
             input {
                 padding: 5px;
@@ -62,53 +62,59 @@
 
         }
 
-        .number-selector {
-            float: right;
-            margin: -4px 0 0 15px;
-            padding: 0;
-            //display: none;
+        .number-selector-container {
+          float: right;
+          max-width: 600px;
+        }
 
-            &.half {
-              margin-right: 28px;
-              margin-top: 0;
-              font-size: 0.8em;
-            }
+          .number-selector {
+              float: right;
+              margin: -4px 0 0 15px;
+              padding: 0;
+              //display: none;
 
-            li {
-                display: inline-block;
-                margin: 4px;
-                position: relative;
+              &.half {
+                margin-right: 28px;
+                margin-top: 0;
+                font-size: 0.8em;
+              }
 
-                a {
-                    border: 2px solid #eee;
-                    display: block;
-                    height: 44px;
-                    line-height: 44px;
-                    position: relative;
-                    text-align: center;
-                    width: 44px;
-                    color: #777;
+              li {
+                  display: inline-block;
+                  margin: 4px;
+                  position: relative;
 
-                    &.current {
-                      background: $cs-green;
-                      color: #fff;
-                      font-weight: bold;
-                      text-decoration: none;
-                    }
+                  a {
+                      border: 2px solid #eee;
+                      border-radius: 5px;
+                      display: block;
+                      height: 44px;
+                      line-height: 44px;
+                      position: relative;
+                      text-align: center;
+                      width: 44px;
+                      color: #777;
 
-                    &:hover {
-                      background: $cs-green-lighter;
-                      color: #fff;
-                      text-decoration: none;
-                    }
+                      &.current {
+                        background: $cs-green;
+                        color: #fff;
+                        font-weight: bold;
+                        text-decoration: none;
+                      }
 
-                    &:active {
-                      background: $cs-green-lighter;
-                      color: #fff;
-                      text-decoration: none;
-                    }
-                }
-            }
+                      &:hover {
+                        background: $cs-green-lighter;
+                        color: #fff;
+                        text-decoration: none;
+                      }
+
+                      &:active {
+                        background: $cs-green-lighter;
+                        color: #fff;
+                        text-decoration: none;
+                      }
+                  }
+              }
         }
     }
 

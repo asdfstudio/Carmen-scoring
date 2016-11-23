@@ -140,13 +140,12 @@ class CompetitionDivisionRoundController extends Controller
 
 			$choirScores = $request->input('scores', NULL);
 
-			//dd($choirScores);
-
 			// Save multiple scores
 			if($choirScores)
 			{
 				$response = $scorekeeper->save_multiple_choirs_scores($choirScores);
-				dd($response);
+
+        return $response;
 			}
 		}
 }
