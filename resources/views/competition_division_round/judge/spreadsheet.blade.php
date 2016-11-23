@@ -34,21 +34,27 @@
 
 @section('content')
 
-  @if($division->captionWeighting->slug == '60-40')
+
     <ul class="list-group horizontal">
-  		<li class="list-group-item">
-  			<?php $active = $division->captionWeighting->slug == '60-40' ? 'active division-scoring-method' : false; ?>
-  			<a class="score-view-toggle {{ $active }}" href="#weighted" data-score-view="weighted">Weighted</a>
 
-  			@if($active)
-  				<span>({{ $division->captionWeighting->full_name }})</span>
-  			@else
-  				<span>({{ $division->captionWeighting->name }})</span>
-  			@endif
+      @if($division->captionWeighting->slug == '60-40')
+    		<li class="list-group-item">
+    			<?php $active = $division->captionWeighting->slug == '60-40' ? 'active division-scoring-method' : false; ?>
+    			<a class="score-view-toggle {{ $active }}" href="#weighted" data-score-view="weighted">Weighted</a>
 
-  		</li>
+    			@if($active)
+    				<span>({{ $division->captionWeighting->full_name }})</span>
+    			@else
+    				<span>({{ $division->captionWeighting->name }})</span>
+    			@endif
+
+    		</li>
+      @endif
+
+
+      <?php $active = $division->captionWeighting->slug == '50-50' ? 'active division-scoring-method' : false; ?>
   		<li class="list-group-item">
-  			<a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
+  			<a class="score-view-toggle {{ $active }}" href="#raw" data-score-view="raw">Raw</a>
   		</li>
 
       @if($round->status_slug == 'active')
@@ -57,7 +63,7 @@
     		</li>
       @endif
   	</ul>
-  @endif
+
 
   @include('scores.judge.spreadsheet',[
     'choirs' => $round->choirs,

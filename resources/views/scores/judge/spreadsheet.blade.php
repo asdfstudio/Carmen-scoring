@@ -6,7 +6,7 @@ else :
 endif;
 ?>
 
-<table class="table responsive table-striped table-bordered {{ $toggle_scores }} scoreboard">
+<table class="table responsive table-striped table-bordered toggle-scores scoreboard">
 
 
   @foreach($judge->captions as $caption)
