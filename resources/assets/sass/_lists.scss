@@ -221,6 +221,19 @@
           font-size: 2em;
           margin-left: 10px;
 
+          &.ceremony {
+            font-size: 1.2em;
+            color: inherit;
+
+            &.rank-1 {
+              font-size: 2em;
+            }
+          }
+
+
+
+
+
           & .text {
             font-size: 0.5em;
           }

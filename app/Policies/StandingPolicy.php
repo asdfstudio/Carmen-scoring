@@ -30,6 +30,8 @@ class StandingPolicy extends BasePolicy
       parent::__construct();
     }
 
+    
+
     public function show(User $user, $round)
 		{
       return $this->isOrgUser;
@@ -40,7 +42,7 @@ class StandingPolicy extends BasePolicy
 		{
       if($standing == false) return false;
 
-      if($this->isOrgAdmin AND $standing->division->status_slug() != 'completed')
+      if($this->isOrgAdmin AND $standing->division->status_slug() != 'finalized')
       {
         return true;
       }

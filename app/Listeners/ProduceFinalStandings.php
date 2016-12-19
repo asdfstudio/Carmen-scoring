@@ -8,10 +8,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 use App\Round;
 use App\Standing;
+use App\Caption;
 use App\Carmen\Scoreboard;
 
 class ProduceFinalStandings
 {
+    protected $round;
+    protected $scoreboard;
+
     /**
      * Create the event listener.
      *
@@ -30,33 +34,57 @@ class ProduceFinalStandings
      */
     public function handle(RoundScoringCompleted $event)
     {
-      $round = $event->round;
+      $this->round = $event->round;
 
-      if($round == false) return;
+      if($this->round == false) return;
 
       // Check if this is the last round in the division
-      $finalRound = $round->division->rounds()->orderBy('sequence', 'DESC')->first();
+      $finalRound = $this->round->division->rounds()->orderBy('sequence', 'DESC')->first();
 
       //dd($finalRound);
 
       // Return false if no final round is found
       // or this is not the final round
-      if($finalRound == false OR $finalRound->id != $round->id) return;
+      if($finalRound == false OR $finalRound->id != $this->round->id) return;
 
       // Get scoreboard for the source rounds
-      $scoreboard = new Scoreboard(['round_id' => $round->id]);
+      $attr = ['round_id' => $this->round->id];
+      $this->scoreboard = new Scoreboard($attr);
 
-      //dd($scoreboard->rankedScores);
+      // Overall
+      $this->calculateCaptionStandings();
 
-      // Raw
-      if($round->division->scoring_method_id == 1)
+      // Captions -- only those in use by the division's scoring sheet
+      $caption_ids = $this->round->division->sheet->caption_ids;
+
+      foreach($caption_ids as $caption_id)
       {
-        $choirPositions = $scoreboard->rankedScores->total_weighted_rank();
+        $this->calculateCaptionStandings($caption_id);
+      }
+
+      // Remove standing for captions that aren't available
+      $standingsToDelete = Standing::whereNotIn('caption_id', $caption_ids)->whereNotNull('caption_id')->get();
+
+      foreach($standingsToDelete as $toDelete)
+      {
+        $toDelete->delete();
+      }
+
+      return;
+    }
+
+
+    protected function calculateCaptionStandings($caption_id = NULL)
+    {
+      // Raw
+      if($this->round->division->scoring_method_id == 1)
+      {
+        $choirPositions = $this->scoreboard->rankedScores->total_weighted_rank($caption_id);
       }
       // Ranked
       else
       {
-        $choirPositions = $scoreboard->rankedScores->total_rank();
+        $choirPositions = $this->scoreboard->rankedScores->total_rank($caption_id);
       }
 
       $data = [];
@@ -70,12 +98,18 @@ class ProduceFinalStandings
       }
 
       // Get or create a standing for this division
-      $standing = Standing::firstOrCreate(['division_id' => $round->division_id]);
-      $standing->round_id = $round->id;
+      $attr = ['division_id' => $this->round->division_id];
+
+      if($caption_id)
+      {
+        $attr['caption_id'] = $caption_id;
+      }
+
+      $standing = Standing::firstOrCreate($attr);
+      $standing->round_id = $this->round->id;
       $standing->choirs()->sync($data);
 
       $standing->save();
 
-      return;
     }
 }

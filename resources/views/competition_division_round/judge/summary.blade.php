@@ -40,6 +40,13 @@
     </ul>
   @endif
 
+  @if($round->targets)
+    <div class="alert alert-info">
+      <h4>This round feeds into <strong>{{ $round->targets->first()->division->name }}, {{ $round->targets->first()->name }}</strong>  along with {{ $round->targets->first()->sources->count() }} other round(s).</h4>
+      <p>{{ link_to_route('judge.round.scores.sources', 'View a combined spreadsheet', [$round->division->competition_id, $round->targets->first()->division, $round->targets->first()]) }} showing your scores for all of these rounds together.</p>
+    </div>
+  @endif
+
   @include('scores.choirs_judge_aggregate',[
     'choirs' => $round->choirs,
     'division' => $round->division,

@@ -71,13 +71,9 @@ class Competition extends Model
 			{
 				return 'Completed';
 			}
-			elseif($this->is_scoring_active)
-			{
-				return 'Active';
-			}
 			else
 			{
-				return 'Inactive';
+				return 'Active';
 			}
     }
 
@@ -87,13 +83,9 @@ class Competition extends Model
 			{
 				return 'completed';
 			}
-			elseif($this->is_scoring_active)
-			{
-				return 'active';
-			}
 			else
 			{
-				return 'inactive';
+				return 'active';
 			}
 		}
 
@@ -106,7 +98,7 @@ class Competition extends Model
     {
       return $this->status_slug();
     }
-    
+
 
     public function status_label($class_attr = false)
     {

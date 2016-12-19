@@ -29,6 +29,11 @@ class RoundPolicy extends BasePolicy
       parent::__construct();
     }
 
+    public function before($user, $ability)
+		{
+
+		}
+
     public function show(User $user, $round)
 		{
       return $this->isOrgUser;
@@ -37,7 +42,7 @@ class RoundPolicy extends BasePolicy
 
 		public function create(User $user, $round, $division=false)
 		{
-      if($this->isOrgAdmin AND $division->status_slug == 'inactive')
+      if($this->isOrgAdmin AND $division->status_slug == 'active')
       {
         return true;
       }
@@ -82,7 +87,7 @@ class RoundPolicy extends BasePolicy
 
     public function reactivateScoring(User $user, Round $round)
     {
-      if($this->isOrgAdmin AND $round->status_slug() == 'completed')
+      if($this->isOrgAdmin AND $round->status_slug() == 'completed' AND $round->division->status_slug() != 'finalized')
       {
         return true;
       }

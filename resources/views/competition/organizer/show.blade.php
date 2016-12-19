@@ -23,10 +23,13 @@
 
 @section('content')
 
-  <ul class="actions-group">
-    <li>{!! form($activateScoringForm) !!}</li>
-    <li>{!! form($deactivateScoringForm) !!}</li>
-    <li>{!! form($completeScoringForm) !!}</li>
+  <ul class="actions-group mv">
+    @if($competition->is_completed)
+      <li>{!! form($activateScoringForm) !!}</li>
+    @endif
+    @if($competition->is_completed == false)
+      <li>{!! form($completeScoringForm) !!}</li>
+    @endif
   </ul>
 
   <h3>Manage Divisions</h3>

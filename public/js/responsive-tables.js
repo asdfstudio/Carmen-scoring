@@ -63,7 +63,7 @@ $(document).ready(function() {
     });
 
     tr_copy.each(function (index) {
-      $(this).height(heights[index]);
+      //$(this).height(heights[index]);
     });
   }
 

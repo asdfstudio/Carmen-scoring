@@ -2,7 +2,7 @@
 
 @section('content')
 
-	<h1>Assign Penalties to {{ $choir->name }}</h1>
+	<h1>Assign Penalties to {{ $choir->full_name }}</h1>
 
   @include('alert/all')
 

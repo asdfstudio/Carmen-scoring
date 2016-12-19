@@ -7,7 +7,7 @@ use Kris\LaravelFormBuilder\Form;
 class CompleteScoringForm extends Form
 {
     protected $formOptions = [
-      'class' => 'pull-left',
+      //'class' => 'pull-left',
       'method' => 'POST'
     ];
 

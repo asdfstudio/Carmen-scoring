@@ -158,10 +158,11 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-				
+
 				Collective\Html\HtmlServiceProvider::class,
 				Kris\LaravelFormBuilder\FormBuilderServiceProvider::class,
 				DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
+
 
     ],
 
@@ -212,6 +213,7 @@ return [
       	'Html' => Collective\Html\HtmlFacade::class,
 				'FormBuilder' => Kris\LaravelFormBuilder\Facades\FormBuilder::class,
 				'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
+        
 
     ],
 

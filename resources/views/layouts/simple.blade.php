@@ -88,6 +88,11 @@
             <?php $link_class = Request::segment(6) == 'standing' ? 'active' : false; ?>
             <a href="{{ route('organizer.competition.division.standing.show', [$competition, $division]) }}" class="{{ $link_class }}">Final Standings</a>
           </li>
+          <li>
+            <?php $link_class = Request::segment(6) == 'ceremony' ? 'active' : false; ?>
+            <a href="{{ route('organizer.competition.division.ceremony.show', [$competition, $division]) }}" class="{{ $link_class }}">Award Ceremony</a>
+          </li>
+
         </ul>
       </div>
     @endif

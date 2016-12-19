@@ -29,6 +29,11 @@ class DivisionPolicy extends BasePolicy
       parent::__construct();
     }
 
+    public function before($user, $ability)
+		{
+
+		}
+
     public function show(User $user, $round)
 		{
       return $this->isOrgUser;
@@ -45,7 +50,11 @@ class DivisionPolicy extends BasePolicy
 
     public function update(User $user, $division)
 		{
-      if($this->isOrgAdmin AND $division->status_slug() == 'inactive')
+      if($this->isOrgAdmin AND $division->status_slug() == 'active')
+      {
+        return true;
+      }
+      elseif($this->isAdmin)
       {
         return true;
       }
@@ -53,7 +62,7 @@ class DivisionPolicy extends BasePolicy
 
 		public function destroy(User $user, $division)
 		{
-      if($this->isOrgAdmin AND $division->status_slug() == 'inactive')
+      if($this->isOrgAdmin AND $division->status_slug() == 'active')
       {
         return true;
       }
@@ -61,27 +70,35 @@ class DivisionPolicy extends BasePolicy
 
     public function activateScoring(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'inactive')
+      if($this->isOrgAdmin AND $division->status_slug() == 'completed')
       {
         return true;
       }
     }
 
-    public function deactivateScoring(User $user, Division $division)
-    {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
-      {
-        return true;
-      }
-    }
-
-    public function reactivateScoring(User $user, Division $division)
+    public function finalizeScoring(User $user, Division $division)
     {
       if($this->isOrgAdmin AND $division->status_slug() == 'completed')
       {
         return true;
       }
     }
+
+    /*public function deactivateScoring(User $user, Division $division)
+    {
+      if($this->isOrgAdmin AND $division->status_slug() == 'active')
+      {
+        return true;
+      }
+    }*/
+
+    /*public function reactivateScoring(User $user, Division $division)
+    {
+      if($this->isOrgAdmin AND $division->status_slug() == 'completed')
+      {
+        return true;
+      }
+    }*/
 
     public function completeScoring(User $user, Division $division)
     {
@@ -94,7 +111,7 @@ class DivisionPolicy extends BasePolicy
 
     public function importJudges(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'inactive')
+      if($this->isOrgAdmin AND $division->status_slug() == 'active')
       {
         return true;
       }
@@ -102,7 +119,31 @@ class DivisionPolicy extends BasePolicy
 
     public function createJudge(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'inactive')
+      if($this->isOrgAdmin AND $division->status_slug() == 'active')
+      {
+        return true;
+      }
+    }
+
+    public function addChoir(User $user, Division $division)
+    {
+      if($this->isOrgAdmin AND $division->status_slug() == 'active')
+      {
+        return true;
+      }
+    }
+
+    public function removeChoir(User $user, Division $division)
+    {
+      if($this->isOrgAdmin AND $division->status_slug() == 'active')
+      {
+        return true;
+      }
+    }
+
+    public function viewFinalStandings(User $user, Division $division)
+    {
+      if($this->isOrgAdmin OR $division->status_slug() == 'finalized')
       {
         return true;
       }

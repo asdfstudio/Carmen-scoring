@@ -25,6 +25,7 @@ class Scoreboard {
 	public $rawScores;
 	public $weightedScores;
 	public $rankedScores;
+	public $extendedRawScores;
 	//protected $judgeScores;
 	//protected $criteriaScores;
 
@@ -44,7 +45,8 @@ class Scoreboard {
 
 	protected function getRawScores()
 	{
-		$query = RawScore::with('judge','choir','criterion');
+		//$query = RawScore::with('judge','choir','criterion');
+		$query = RawScore::with('criterion');
 
 		if($this->division_id)
 		{
@@ -69,7 +71,9 @@ class Scoreboard {
 
 		$weightedScoresClass = new WeightedScores($this->rawScores,        $this->division->caption_weighting_id);
 
-		return $this->weightedScores = $weightedScoresClass->all();
+		$this->weightedScores = $weightedScoresClass->all();
+		$this->extendedRawScores = $this->weightedScores;
+		return $this->weightedScores;
 	}
 
 	protected function getPenalties()
@@ -113,7 +117,7 @@ class Scoreboard {
 
 	protected function getRankedScores()
 	{
-		return $this->rankedScores = new RankedScores($this->weightedScores, $this->penalties);
+		return $this->rankedScores = new RankedScores($this->extendedRawScores, $this->penalties);
 	}
 
 

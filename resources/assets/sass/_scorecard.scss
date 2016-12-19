@@ -66,60 +66,80 @@
           float: right;
           max-width: 600px;
         }
-
-          .number-selector {
-              float: right;
-              margin: -4px 0 0 15px;
-              padding: 0;
-              //display: none;
-
-              &.half {
-                margin-right: 28px;
-                margin-top: 0;
-                font-size: 0.8em;
-              }
-
-              li {
-                  display: inline-block;
-                  margin: 4px;
-                  position: relative;
-
-                  a {
-                      border: 2px solid #eee;
-                      border-radius: 5px;
-                      display: block;
-                      height: 44px;
-                      line-height: 44px;
-                      position: relative;
-                      text-align: center;
-                      width: 44px;
-                      color: #777;
-
-                      &.current {
-                        background: $cs-green;
-                        color: #fff;
-                        font-weight: bold;
-                        text-decoration: none;
-                      }
-
-                      &:hover {
-                        background: $cs-green-lighter;
-                        color: #fff;
-                        text-decoration: none;
-                      }
-
-                      &:active {
-                        background: $cs-green-lighter;
-                        color: #fff;
-                        text-decoration: none;
-                      }
-                  }
-              }
-        }
     }
 
     .submit-container {
       margin-top: 20px;
       text-align: center;
+    }
+}
+
+
+
+.popup-input-container {
+  position: fixed;
+  bottom: 0;
+  //left: 10px;
+  //right: 10px;
+  padding: 10px;
+  background: #ccc;
+  width: 660px;
+  max-width: 100%;
+  display: none;
+
+  &.active {
+    display: block;
+  }
+}
+
+
+.number-selector {
+    float: right;
+    margin: -4px 0 0 15px;
+    padding: 0;
+    //display: none;
+
+    &.half {
+      margin-right: 28px;
+      margin-top: 0;
+      font-size: 0.8em;
+    }
+
+    li {
+        display: inline-block;
+        margin: 4px;
+        position: relative;
+
+        a {
+            border: 2px solid #eee;
+            border-radius: 5px;
+            display: block;
+            height: 44px;
+            line-height: 44px;
+            position: relative;
+            text-align: center;
+            width: 44px;
+            color: #777;
+            background: $cs-white;
+
+            &.current {
+              background: $cs-green;
+              color: #fff;
+              font-weight: bold;
+              text-decoration: none;
+            }
+
+            &:hover {
+              background: $cs-green-lighter;
+              color: #fff;
+              text-decoration: none;
+            }
+
+            &:active {
+              background: $cs-green-lighter;
+              color: #fff;
+              text-decoration: none;
+            }
+        }
     }
 }

@@ -4,9 +4,13 @@
       @if (Auth::user()->isAdmin())
         <li class="title">
           <span class="intro">Acting as:</span>
-          <span class="organization-name">{{ Auth::user()->organization->name }}</span> 
+          <span class="organization-name">{{ Auth::user()->organization->name }}</span>
         </li>
+      @else
+        <li class="title">Organizer: {{ Auth::user()->display_name }}</li>
       @endif
+
+
       <li>
         <?php $link_class = Request::segment(2) == 'competition' ? 'active' : false; ?>
         <a href="{{ route('organizer.competition.index') }}" class="{{ $link_class }}">Competitions</a>

@@ -50,6 +50,10 @@ Route::group([
    	 'as' => 'round.scores.summary', 'uses' => 'CompetitionDivisionRoundController@summary'
 		]);
 
+    Route::get('competition/{competition}/division/{division}/round/{round}/sources', [
+      'as' => 'round.scores.sources', 'uses' => 'CompetitionDivisionRoundController@spreadsheet_sources'
+  	]);
+
     Route::get('competition/{competition}/division/{division}/round/{round}/spreadsheet', [
    	 'as' => 'round.scores.spreadsheet', 'uses' => 'CompetitionDivisionRoundController@spreadsheet'
 		]);

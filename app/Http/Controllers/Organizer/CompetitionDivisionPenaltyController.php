@@ -119,4 +119,20 @@ class CompetitionDivisionPenaltyController extends Controller
       // Set flash data and redirect
       return redirect()->route('organizer.competition.division.penalty.index', [$competition_id, $division_id])->with('success','Division penalties updated.');
     }
+
+
+    public function assign($competition_id, $division_id, Request $request)
+    {
+      $division = Division::with('rounds')->find($division_id);
+      $round = false;
+
+      if($request->input('round'))
+      {
+        $round_id = $request->input('round');
+        $round = Division::find($division_id)->rounds()->find($round_id);
+        $round->load('choirs');
+      }
+
+      return view('competition_division_penalty.organizer.assign', compact('division', 'round'));
+    }
 }

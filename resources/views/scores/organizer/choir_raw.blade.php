@@ -28,7 +28,7 @@
 
       @foreach($division->judges as $judge)
      	<td data-judge-id="{{ $judge->id }}" data-criterion-id="{{ $criterion->id }}">
-      	<?php $rawScore = $rawScores->where('criterion_id', $criterion->id)->where('judge_id',$judge->id)->pluck('score');?>
+      	<?php $rawScore = $rawScores->where('criterion_id', $criterion->id)->where('judge_id',$judge->id)->where('choir_id', $choir->id)->pluck('score');?>
         <?php $score = $rawScore->first(); ?>
         {{ $score }}
       </td>

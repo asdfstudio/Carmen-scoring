@@ -24,10 +24,10 @@
 			@endif
 
 			@if(!$round->sources->isEmpty())
-				<h4>Source(s)</h4>
+				<h4>Source(s) - {{ link_to_route('organizer.competition.division.round.show_sources', 'View combined scores', [$division->competition_id, $division, $round]) }}</h4>
 				<ul>
 					@foreach($round->sources as $source)
-						<li>{{ $source->full_name }}</li>
+						<li>{{ link_to_route('organizer.competition.division.round.show', $source->full_name, [$division->competition_id, $division, $source->id]) }}</li>
 					@endforeach
 				</ul>
 			@endif

@@ -34,7 +34,7 @@ class OrganizationController extends Controller
      */
     public function index()
     {
-				$organizations = Organization::with('people')->get();
+				$organizations = Organization::with('people')->orderBy('name', 'asc')->get();
 
 				//$this->authorize('showAll',$organizations);
 

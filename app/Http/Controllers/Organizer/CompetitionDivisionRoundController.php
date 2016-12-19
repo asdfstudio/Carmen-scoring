@@ -13,10 +13,12 @@ use App\Choir;
 use App\Round;
 use App\RawScore;
 use App\Caption;
+use App\Judge;
 
 use App\Carmen\WeightedScores;
 use App\Carmen\RankedScores;
 use App\Carmen\Scoreboard;
+use App\Carmen\Test;
 
 use Kris\LaravelFormBuilder\FormBuilder;
 
@@ -177,6 +179,7 @@ class CompetitionDivisionRoundController extends Controller
 
     public function show(Request $request,$competition_id,$division_id,$round_id, FormBuilder $formBuilder)
 		{
+
       $round = Round::with([
         'choirs',
         'division',
@@ -204,6 +207,8 @@ class CompetitionDivisionRoundController extends Controller
       $competition = $division->competition;
       $rounds = $division->rounds;
       $divisions = $competition->divisions;
+      $judges = $division->judges;
+      $choirs = $round->choirs;
 
       //dd($division->sheet->criteria);
 
@@ -224,8 +229,8 @@ class CompetitionDivisionRoundController extends Controller
 
       $scoreboard = new Scoreboard(['round_id' => $round_id]);
 
-      $rawScores = $scoreboard->rawScores;
-      $weightedScores = $scoreboard->weightedScores;
+      $rawScores = $scoreboard->extendedRawScores;
+      $weightedScores = $scoreboard->extendedRawScores;
       $rankedScores = $scoreboard->rankedScores;
 
       $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
@@ -247,7 +252,87 @@ class CompetitionDivisionRoundController extends Controller
 
 
 
-      return view('competition_division_round.organizer.show', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round','competition','division','divisions','rounds','activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard'));
+      return view('competition_division_round.organizer.show', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round','competition','division','divisions','rounds','activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard', 'judges', 'choirs'));
+		}
+
+
+
+
+    public function show_sources(Request $request,$competition_id,$division_id,$round_id, FormBuilder $formBuilder)
+		{
+
+      $round = Round::with([
+        'sources',
+        'sources.choirs',
+        'division',
+        'division.competition',
+        //'division.choirs',
+        //'division.competition.divisions',
+        //'division.rounds',
+        'division.judges' => function($query) {
+					//$query->where('judge_id',$judge_id)->first();
+          $query->groupBy('judge_id');
+          //$query->distinct('id');
+				},
+        'division.judges.captions' => function($query) use ($division_id) {
+					$query->where('division_id',$division_id);
+				},
+        'division.judges.captions.criteria'
+      ])->find($round_id);
+
+      $this->authorize('show', $round);
+
+      //dd($round);
+
+      $division = $round->division;
+      $competition = $division->competition;
+      $rounds = $division->rounds;
+      $divisions = $competition->divisions;
+
+      $caption_ids = $division->sheet->caption_ids;
+      $captions = Caption::whereIn('id', $caption_ids)->get();
+
+      $source_division_ids = $round->sources->pluck('division_id')->toArray();
+
+      $source_divisions = Division::with('choirs', 'judges')->whereIn('id', $source_division_ids)->get();
+
+      $source_choirs = collect();
+      $source_judges = collect();
+
+      $source_divisions->each(function($item, $key) use ($source_choirs, $source_judges) {
+        if($item->has('choirs'))
+        {
+          $item->choirs->each(function($choir,$key) use ($source_choirs) {
+            return $source_choirs->push($choir);
+          });
+        }
+
+        if($item->has('judges'))
+        {
+          $item->judges->each(function($judge,$key) use ($source_judges) {
+            return $source_judges->push($judge->id);
+          });
+        }
+      });
+
+      $choirs = $source_choirs;
+
+
+      $judge_ids = $source_judges->unique();
+      $judges = Judge::whereIn('id', $judge_ids)->get();
+
+      //dd($judges);
+
+      $source_ids = $round->sources->pluck('id')->toArray();
+      $scoreboard = new Scoreboard(['round_id' => $source_ids]);
+
+      //dd($scoreboard);
+
+      $rawScores = $scoreboard->extendedRawScores;
+      $weightedScores = $scoreboard->extendedRawScores;
+      $rankedScores = $scoreboard->rankedScores;
+
+      return view('competition_division_round.organizer.show_sources', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round','competition','division', 'divisions','rounds', 'scoreboard', 'choirs', 'judges'));
 		}
 
 

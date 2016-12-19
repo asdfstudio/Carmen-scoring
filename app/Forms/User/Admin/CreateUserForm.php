@@ -19,15 +19,22 @@ class CreateUserForm extends Form
 
         $this->add('email','email', ['rules' => 'required']);
 
+        $this->add('username','text', [
+          'rules' => 'unique:users,username,'.$this->model->id
+        ]);
+
 				$this->add('password','repeated', [
 					'type' => 'password',
 					'second_name' => 'password_confirmation',
 					'first_options' => [
+            'default_value' => '',
 						'rules' => 'required|confirmed|min:4'
 					],
 					'second_options' => [
+            'default_value' => '',
 						'rules' => 'required'
-					]
+					],
+
 				]);
 
         $this->add('is_admin', 'choice', [

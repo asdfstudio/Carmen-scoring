@@ -23,7 +23,7 @@ class ChoirController extends Controller
      */
     public function index()
     {
-				$choirs = Choir::with('school', 'school.place')->withoutGlobalScope('organization')->get();
+				$choirs = Choir::with('school', 'school.place')->withoutGlobalScope('organization')->orderBy('name', 'asc')->get();
 
         return view('choir.admin.index', compact('choirs'));
 

@@ -24,6 +24,7 @@ class AwardPolicy extends BasePolicy
 
 
 
+
 		public function create(User $user, $award, $division=false)
 		{
       if($division)

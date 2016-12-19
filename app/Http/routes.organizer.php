@@ -34,16 +34,21 @@ Route::group([
 
   Route::resource('award', 'AwardController');
 
+  // Division Awards ceremony
+  Route::get('competition/{competition}/division/{division}/ceremony', [
+    'as' => 'organizer.competition.division.ceremony.show', 'uses' => 'CompetitionDivisionStandingController@ceremony'
+  ]);
+
   // Division standings
   Route::get('competition/{competition}/division/{division}/standing', [
     'as' => 'organizer.competition.division.standing.show', 'uses' => 'CompetitionDivisionStandingController@show'
   ]);
 
-  Route::get('competition/{competition}/division/{division}/standing/edit', [
+  Route::get('competition/{competition}/division/{division}/standing/{standing}/edit', [
     'as' => 'organizer.competition.division.standing.edit', 'uses' => 'CompetitionDivisionStandingController@edit'
   ]);
 
-  Route::post('competition/{competition}/division/{division}/standing/edit', [
+  Route::post('competition/{competition}/division/{division}/standing/{standing}/edit', [
     'as' => 'organizer.competition.division.standing.update', 'uses' => 'CompetitionDivisionStandingController@update'
   ]);
 
@@ -52,6 +57,11 @@ Route::group([
   // List division penalties
   Route::get('competition/{competition}/division/{division}/penalty', [
     'as' => 'organizer.competition.division.penalty.index', 'uses' => 'CompetitionDivisionPenaltyController@index'
+  ]);
+
+  // Choose round/choir to assign a penalty
+  Route::get('competition/{competition}/division/{division}/penalty/assign', [
+    'as' => 'organizer.competition.division.penalty.assign', 'uses' => 'CompetitionDivisionPenaltyController@assign'
   ]);
 
   // Create a division penalty
@@ -252,6 +262,10 @@ Route::group([
 
 	Route::get('competition/{competition}/division/{division}/round/{round}', [
     'as' => 'organizer.competition.division.round.show', 'uses' => 'CompetitionDivisionRoundController@show'
+	]);
+
+  Route::get('competition/{competition}/division/{division}/round/{round}/sources', [
+    'as' => 'organizer.competition.division.round.show_sources', 'uses' => 'CompetitionDivisionRoundController@show_sources'
 	]);
 
 

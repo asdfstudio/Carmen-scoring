@@ -3115,44 +3115,57 @@ button.close {
     .scorecard .criterion-container .number-selector-container {
       float: right;
       max-width: 600px; }
-    .scorecard .criterion-container .number-selector {
-      float: right;
-      margin: -4px 0 0 15px;
-      padding: 0; }
-      .scorecard .criterion-container .number-selector.half {
-        margin-right: 28px;
-        margin-top: 0;
-        font-size: 0.8em; }
-      .scorecard .criterion-container .number-selector li {
-        display: inline-block;
-        margin: 4px;
-        position: relative; }
-        .scorecard .criterion-container .number-selector li a {
-          border: 2px solid #eee;
-          border-radius: 5px;
-          display: block;
-          height: 44px;
-          line-height: 44px;
-          position: relative;
-          text-align: center;
-          width: 44px;
-          color: #777; }
-          .scorecard .criterion-container .number-selector li a.current {
-            background: #68B155;
-            color: #fff;
-            font-weight: bold;
-            text-decoration: none; }
-          .scorecard .criterion-container .number-selector li a:hover {
-            background: #87c178;
-            color: #fff;
-            text-decoration: none; }
-          .scorecard .criterion-container .number-selector li a:active {
-            background: #87c178;
-            color: #fff;
-            text-decoration: none; }
   .scorecard .submit-container {
     margin-top: 20px;
     text-align: center; }
+
+.popup-input-container {
+  position: fixed;
+  bottom: 0;
+  padding: 10px;
+  background: #ccc;
+  width: 660px;
+  max-width: 100%;
+  display: none; }
+  .popup-input-container.active {
+    display: block; }
+
+.number-selector {
+  float: right;
+  margin: -4px 0 0 15px;
+  padding: 0; }
+  .number-selector.half {
+    margin-right: 28px;
+    margin-top: 0;
+    font-size: 0.8em; }
+  .number-selector li {
+    display: inline-block;
+    margin: 4px;
+    position: relative; }
+    .number-selector li a {
+      border: 2px solid #eee;
+      border-radius: 5px;
+      display: block;
+      height: 44px;
+      line-height: 44px;
+      position: relative;
+      text-align: center;
+      width: 44px;
+      color: #777;
+      background: #FFF; }
+      .number-selector li a.current {
+        background: #68B155;
+        color: #fff;
+        font-weight: bold;
+        text-decoration: none; }
+      .number-selector li a:hover {
+        background: #87c178;
+        color: #fff;
+        text-decoration: none; }
+      .number-selector li a:active {
+        background: #87c178;
+        color: #fff;
+        text-decoration: none; }
 
 .caption-header {
   font-size: 1.2em;
@@ -3209,12 +3222,14 @@ input.score {
   text-align: center;
   border: 0;
   background: none; }
-  input.score:focus {
+  input.score:focus, input.score.focus {
     background: #a6d19b; }
   input.score.saving {
     background: #87c178; }
   input.score.saved {
-    background: #378fe7; }
+    background: #c0dcf7;
+    padding-right: 4px;
+    border-right: 4px solid #378fe7; }
   input.score.error {
     background: #e03e45; }
 
@@ -3510,6 +3525,11 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
     color: #7F4091;
     font-size: 2em;
     margin-left: 10px; }
+    .list-group .list-group-item.standing .details .final_rank.ceremony {
+      font-size: 1.2em;
+      color: inherit; }
+      .list-group .list-group-item.standing .details .final_rank.ceremony.rank-1 {
+        font-size: 2em; }
     .list-group .list-group-item.standing .details .final_rank .text {
       font-size: 0.5em; }
     .list-group .list-group-item.standing .details .final_rank input {
@@ -3564,6 +3584,8 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
       background-color: #7F4091; }
     .label.status.inactive {
       background-color: #E29231; }
+    .label.status.finalized {
+      background-color: #CA2128; }
 
 .new_choir_container {
   display: none; }
@@ -3664,16 +3686,16 @@ a.active {
   color: #777; }
 
 .header-wrap {
-  background: #3f4548;
+  background: #272B2D;
   overflow: hidden;
   color: #FFF; }
   .header-wrap + .header-wrap {
-    border-top: 0; }
+    border-top: 0;
+    background: #3f4548; }
   .header-wrap + .content {
     margin-top: 20px; }
   .header-wrap.admin {
     margin-bottom: 0;
-    background: #272B2D;
     border-top: 0;
     border-bottom: 0; }
     .header-wrap.admin .header .navigation li a, .header-wrap.admin .header .navigation li.title {
@@ -3894,6 +3916,46 @@ a.active {
       float: right;
       padding: 25px 0 15px; }
 
+.content-subheader {
+  display: block;
+  overflow: hidden;
+  border-bottom: 4px double #bcbcbc;
+  margin-bottom: 20px; }
+  .content-subheader.caption {
+    color: #FFF;
+    padding: 10px;
+    border: 0;
+    margin-top: 40px; }
+    .content-subheader.caption.overall {
+      background: #68B155; }
+    .content-subheader.caption.music {
+      background: #7F4091; }
+    .content-subheader.caption.show {
+      background: #E29231; }
+    .content-subheader.caption.combo {
+      background: #CA2128; }
+    .content-subheader.caption h2 {
+      padding: 0;
+      margin: 5px; }
+    .content-subheader.caption .action {
+      color: #FFF;
+      margin: 5px; }
+  .content-subheader h1, .content-subheader h2, .content-subheader .heading {
+    float: left;
+    display: inline;
+    border: 0; }
+  .content-subheader h2 {
+    margin-bottom: 5px;
+    padding-bottom: 5px; }
+  .content-subheader > .action {
+    display: block;
+    float: right;
+    margin: 30px 0 10px; }
+  .content-subheader .actions-group {
+    display: block;
+    float: right;
+    padding: 25px 0 15px; }
+
 .list-group .list-group-item {
   overflow: hidden; }
 
@@ -3944,3 +4006,11 @@ a.active {
     margin-bottom: 15px;
     padding-bottom: 15px;
     border-bottom: 1px solid #EFEFEF; }
+
+#autosave-alert-box {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 10px 20px;
+  background: #f7f75a;
+  color: #000; }

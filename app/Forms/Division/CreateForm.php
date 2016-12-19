@@ -55,6 +55,34 @@ class CreateForm extends Form
           ]
 				]);
 
+        $this->add('overall_award_count','number', [
+          'rules' => 'required',
+          'help_block' => [
+            'text' => 'How many choirs will receive Overall Awards?'
+          ]
+        ]);
+
+        $this->add('music_award_count','number', [
+          'rules' => 'required',
+          'help_block' => [
+            'text' => 'How many choirs will receive Music Awards?'
+          ]
+        ]);
+
+        $this->add('show_award_count','number', [
+          'rules' => 'required',
+          'help_block' => [
+            'text' => 'How many choirs will receive Show Awards?'
+          ]
+        ]);
+
+        $this->add('combo_award_count','number', [
+          'rules' => 'required',
+          'help_block' => [
+            'text' => 'How many choirs will receive Combo Awards?'
+          ]
+        ]);
+
 
 				$this->add('submit', 'submit', [
           'label' => 'Save Division',

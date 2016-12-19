@@ -26,9 +26,20 @@ class Person extends Model
 			return $this->first_name . ' ' . $this->last_name;
 		}
 
+		public function getIsJudgeAttribute()
+		{
+			return $this->person_type == 'App\Judge' ? true : false;
+		}
+
+		public function getIsJudgeTextAttribute()
+		{
+			return $this->getIsJudgeAttribute() ? 'Judge' : false;
+		}
 
 		public function user()
 		{
 			return $this->hasOne('App\User', 'person_id');
 		}
+
+
 }

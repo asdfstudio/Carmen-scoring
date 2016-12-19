@@ -102,17 +102,17 @@ class CompetitionController extends Controller
           'url' => route('organizer.competition.scoring',[$competition])
         ]);
 
-        $deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm', [
+        /*$deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm', [
           'method' => 'POST',
           'url' => route('organizer.competition.scoring',[$competition])
-        ]);
+        ]);*/
 
         $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm', [
           'method' => 'POST',
           'url' => route('organizer.competition.scoring',[$competition])
         ]);
 
-				return view('competition.organizer.show', compact('competition','activateScoringForm','deactivateScoringForm','completeScoringForm'));
+				return view('competition.organizer.show', compact('competition','activateScoringForm','completeScoringForm'));
     }
 
     /**
@@ -216,31 +216,34 @@ class CompetitionController extends Controller
       //all of the division rounds for this competition
       if($request->input('activate'))
       {
-        $is_scoring_active = true;
+        //$is_scoring_active = true;
         $is_completed = false;
       }
       // Deactive scoring for all division rounds
-      elseif($request->input('deactivate'))
+      /*elseif($request->input('deactivate'))
       {
         $is_scoring_active = false;
         $is_completed = NULL;
-      }
+      }*/
       // Complete and deactive scoring for all division rounds
       elseif($request->input('complete'))
       {
-        $is_scoring_active = false;
+        //$is_scoring_active = false;
         $is_completed = true;
       }
       else {
         return false;
       }
 
-      foreach($competition->rounds as $round)
+      $competition->is_completed = $is_completed;
+      $competition->save();
+
+      /*foreach($competition->rounds as $round)
       {
         $round->is_scoring_active = $is_scoring_active;
         $round->is_completed = $is_completed;
         $round->save();
-      }
+      }*/
 
       return redirect()->route('organizer.competition.show',[$competition]);
     }

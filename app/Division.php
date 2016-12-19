@@ -11,7 +11,7 @@ class Division extends Model
 
 		protected $dates = ['deleted_at'];
 
-		protected $fillable = ['name','caption_weighting_id','scoring_method_id','sheet_id'];
+		protected $fillable = ['name','caption_weighting_id','scoring_method_id','sheet_id', 'combo_award_count', 'music_award_count', 'show_award_count', 'overall_award_count'];
 
 		/*public function organization()
 		{
@@ -68,9 +68,9 @@ class Division extends Model
     }
 
 
-    public function standing()
+    public function standings()
     {
-      return $this->hasOne('App\Standing');
+      return $this->hasMany('App\Standing');
     }
 
 
@@ -78,15 +78,18 @@ class Division extends Model
     {
       if($this->is_completed)
 			{
-				return 'Completed';
+        if($this->is_published)
+          return 'Finalized / Published';
+        else
+				  return 'Completed';
 			}
-			elseif($this->is_scoring_active)
+			/*elseif($this->is_scoring_active)
 			{
 				return 'Active';
-			}
+			}*/
 			else
 			{
-				return 'Inactive';
+				return 'Active';
 			}
     }
 
@@ -94,15 +97,18 @@ class Division extends Model
 		{
 			if($this->is_completed)
 			{
-				return 'completed';
+        if($this->is_published)
+          return 'finalized';
+        else
+				  return 'completed';
 			}
-			elseif($this->is_scoring_active)
+			/*elseif($this->is_scoring_active)
 			{
 				return 'active';
-			}
+			}*/
 			else
 			{
-				return 'inactive';
+				return 'active';
 			}
 		}
 

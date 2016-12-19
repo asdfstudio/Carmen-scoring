@@ -142,23 +142,28 @@ class CompetitionDivisionController extends Controller
           'url' => route('organizer.competition.division.scoring',[$competition,$division])
         ]);
 
-        $deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm', [
+        /*$deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm', [
           'method' => 'POST',
           'url' => route('organizer.competition.division.scoring',[$competition,$division])
-        ]);
+        ]);*/
 
-        $reactivateScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm', [
+        /*$reactivateScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm', [
           'method' => 'POST',
           'url' => route('organizer.competition.division.scoring',[$competition,$division])
-        ]);
+        ]);*/
 
         $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm', [
           'method' => 'POST',
           'url' => route('organizer.competition.division.scoring',[$competition_id,$division_id])
         ]);
 
+        $finalizeScoringForm = $formBuilder->create('Scoring\FinalizeScoringForm', [
+          'method' => 'POST',
+          'url' => route('organizer.competition.division.scoring',[$competition_id,$division_id])
+        ]);
+
         //
-				return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'deactivateScoringForm', 'reactivateScoringForm', 'completeScoringForm'));
+				return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'publishScoringForm', 'completeScoringForm', 'finalizeScoringForm'));
     }
 
 
@@ -190,13 +195,19 @@ class CompetitionDivisionController extends Controller
         $competition = Competition::with('organization','place','divisions')->find($competition_id);
 				$division = Division::find($division_id);
 
+        $this->authorize('update', $division);
+
         $form = $formBuilder->create('Division\CreateForm', [
 					'method' => 'PUT',
 					'model' => $division,
 					'url' => route('organizer.competition.division.update',[$competition,$division_id])
 				]);
 
-				return view('competition_division.organizer.edit', compact('competition','division','form'));
+        $deleteForm = $formBuilder->create('GenericDeleteForm', [
+          'url' => route('organizer.competition.division.destroy',[$competition,$division])
+        ]);
+
+				return view('competition_division.organizer.edit', compact('competition','division','form', 'deleteForm'));
     }
 
     /**
@@ -217,6 +228,9 @@ class CompetitionDivisionController extends Controller
 
 				//$competition = Competition::find($competition_id);
 				$division = Division::find($division_id);
+
+        $this->authorize('update', $division);
+
 				$division->fill($request->all());
 				$division->save();
 
@@ -230,9 +244,15 @@ class CompetitionDivisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($competition_id, $division_id)
     {
-        //
+      $division = Division::find($division_id);
+
+      $this->authorize('destroy', $division);
+
+      $division->delete();
+
+      return redirect()->route('organizer.competition.show',[$competition_id])->with('success', "$division->name successfully deleted.");
     }
 
 
@@ -247,22 +267,27 @@ class CompetitionDivisionController extends Controller
         $division->activateScoring();
       }
       // Deactivate scoring for all division rounds
-      elseif($request->input('deactivate'))
+      /*elseif($request->input('deactivate'))
       {
         $division->deactivateScoring();
-      }
+      }*/
       // Reactivate scoring for all division rounds
-      elseif($request->input('reactivate'))
+      /*elseif($request->input('reactivate'))
       {
         $division->reactivateScoring();
-      }
+      }*/
       // Complete scoring for all division rounds
       elseif($request->input('complete'))
       {
         $division->completeScoring();
       }
+      elseif($request->input('finalize'))
+      {
+        $division->is_published = 1;
+        $division->save();
+      }
       else {
-        return false;
+        return 0;
       }
 
       /*foreach($division->rounds as $round)

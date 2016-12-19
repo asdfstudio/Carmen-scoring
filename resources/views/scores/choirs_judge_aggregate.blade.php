@@ -1,3 +1,5 @@
+
+
 @if(!$choirs->isEmpty())
 <table class="table scoreboard last-col-right">
   <tr>
@@ -21,13 +23,13 @@
     </td>
 
     <td>
-			<?php $aggregateScore = $rawScores->where('choir_id',$choir->id)->sum('score');?>
+			<?php $aggregateScore = $rawScores->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('score');?>
       <span class="score raw">{{ $aggregateScore }}</span>
     </td>
 
     @if($division->captionWeighting->slug == '60-40')
       <td>
-        <?php $aggregateScore = $weightedScores->where('choir_id',$choir->id)->sum('weightedScore');?>
+        <?php $aggregateScore = $weightedScores->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('weightedScore');?>
         <span class="score weighted">{{ $aggregateScore }}</span>
       </td>
     @endif

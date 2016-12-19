@@ -28,5 +28,18 @@
 
 
 @section('content')
+
+	<h2>Caption Specific Awards</h2>
+
+	{{ link_to_route('organizer.competition.division.edit', 'Edit number of awards', [$division->competition_id, $division], ['class' => 'action mv']) }}
+
+	<ul class="list-group">
+		<li class="list-group-item">Overall Awards: {{ $division->overall_award_count }}</li>
+		<li class="list-group-item">Music Awards: {{ $division->music_award_count }}</li>
+		<li class="list-group-item">Show Awards: {{ $division->show_award_count }}</li>
+		<li class="list-group-item">Combo Awards: {{ $division->combo_award_count }}</li>
+	</ul>
+
+	<h2>Other Awards</h2>
   @include('award.organizer.list')
 @endsection

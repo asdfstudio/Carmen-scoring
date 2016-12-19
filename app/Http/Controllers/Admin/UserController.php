@@ -43,10 +43,12 @@ class UserController extends Controller
     {
         $this->authorize('create','App\User');
 
+        $user = new User;
+
         $form = $formBuilder->create('User\Admin\CreateUserForm', [
 					'method' => 'POST',
 					'url' => route('admin.user.store'),
-					//'model' => $user
+					'model' => $user
 				]);
 
 				return view('user.admin.create', compact('form'));
@@ -62,7 +64,11 @@ class UserController extends Controller
     {
         $this->authorize('create','App\User');
 
-        $form = $formBuilder->create('User\Admin\CreateUserForm');
+        $user = new User;
+
+        $form = $formBuilder->create('User\Admin\CreateUserForm', [
+          'model' => $user
+        ]);
 
 				// Validate input
 				if (!$form->isValid()) {
@@ -81,6 +87,7 @@ class UserController extends Controller
 				// Create the user
 
         $user = new User;
+        $user->username = $data['username'];
 				$user->email = $data['email'];
 				$user->password = bcrypt($data['password']);
         $user->is_admin = $data['is_admin'];
@@ -150,7 +157,9 @@ class UserController extends Controller
 				$this->authorize('update', $user);
 
 				// Validate input
-				$form = $formBuilder->create('User\Admin\CreateUserForm');
+				$form = $formBuilder->create('User\Admin\CreateUserForm', [
+          'model' => $user
+        ]);
 
         $form->modify('password','repeated', [
 					'first_options' => [
@@ -169,6 +178,7 @@ class UserController extends Controller
         $data = $request->input();
 
         // Update user
+        $user->username = $data['username'];
         $user->email = $data['email'];
         $user->is_admin = $data['is_admin'];
         $user->organization_role = $data['organization_role'];

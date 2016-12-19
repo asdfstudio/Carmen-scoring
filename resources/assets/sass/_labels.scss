@@ -50,5 +50,9 @@
     &.inactive {
       background-color: $cs-status-inactive;
     }
+
+    &.finalized {
+      background-color: $cs-status-finalized;
+    }
   }
 }

@@ -1,3 +1,4 @@
+
 <table class="table table-striped table-bordered scoreboard toggle-scores">
   @foreach($captions as $caption)
 
@@ -14,7 +15,7 @@
     <tr>
       <th></th>
 
-      @foreach($division->judges as $judge)
+      @foreach($judges as $judge)
         <th>
           {{ $judge->full_name }}
         </th>
@@ -24,23 +25,31 @@
       <th>Place</th>
     </tr>
 
-    @foreach($round->choirs as $choir)
+    @foreach($choirs as $choir)
       <tr>
         <th>
           {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
         </th>
-        @foreach($division->judges as $judge)
-          <td>
-            <?php $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();?>
-            <span class="rank score">{{ $rank }}</span>
+        @foreach($judges as $judge)
 
-            <?php $weighted = $weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion.caption_id', $caption->id)->sum('weightedScore');?>
-            <span class="weighted score">{{ $weighted }}</span>
+          @if($judge->captions->where('id',$caption->id)->count() == 0)
+            <td>-</td>
+          @endif
 
-            <?php $raw = $rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion.caption_id', $caption->id)->sum('score');?>
-            <span class="raw score">{{ $raw }}</span>
+          @if($judge->captions->where('id',$caption->id)->count() > 0)
+            <td>
+              <?php $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();?>
+              <span class="rank score">{{ $rank }}</span>
 
-          </td>
+              <?php $weighted = $weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion.caption_id', $caption->id)->sum('weightedScore');?>
+              <span class="weighted score">{{ $weighted }}</span>
+
+              <?php $raw = $rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion.caption_id', $caption->id)->sum('score');?>
+              <span class="raw score">{{ $raw }}</span>
+
+            </td>
+          @endif
+
         @endforeach
 
         <td>
@@ -77,7 +86,7 @@
   <tr>
     <th></th>
 
-    @foreach($division->judges as $judge)
+    @foreach($judges as $judge)
       <th>
         {{ $judge->full_name }}
       </th>
@@ -90,12 +99,12 @@
   <?php $totalWeightedRank = $rankedScores->total_weighted_rank(); ?>
   <?php $totalRawRank = $rankedScores->total_raw_rank(); ?>
 
-  @foreach($round->choirs as $choir)
+  @foreach($choirs as $choir)
     <tr>
       <th>
         {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
       </th>
-      @foreach($division->judges as $judge)
+      @foreach($judges as $judge)
         <td>
           <?php $rank = $rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('rank')->first();?>
           <span class="rank score">{{ $rank }}</span>

@@ -47,6 +47,7 @@ class CompetitionDivisionController extends Controller
 				},
 				'competition','competition.organization', 'rounds'])->find($division_id);
 
+      //$this->authorize('viewFinalStandings', $division);
       //dd($division->judges);
 
 			$captions = Caption::get();

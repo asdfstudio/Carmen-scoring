@@ -101,15 +101,13 @@ a.active {
 
 
 .header-wrap {
-  background: lighten($cs-gray-dark,10);
-  //border-top: 5px solid $cs-blue-darker;
-  //border-bottom: 1px solid $cs-blue-darker;
+  background: $cs-gray-dark;
   overflow: hidden;
   color: $cs-white;
-  //margin-bottom: 20px;
 
   & + .header-wrap {
     border-top: 0;
+    background: lighten($cs-gray-dark,10);
   }
 
   & + .content {
@@ -118,7 +116,6 @@ a.active {
 
   &.admin {
     margin-bottom: 0;
-    background: $cs-gray-dark;
     border-top: 0;
     border-bottom: 0;
     //margin-bottom: -6px;
@@ -483,8 +480,71 @@ a.active {
       padding: 25px 0 15px;
     }
   }
+
 }
 
+
+
+.content-subheader {
+
+  display: block;
+  overflow: hidden;
+  border-bottom: 4px double $cs-gray-mid-1;
+  margin-bottom: 20px;
+
+  &.caption {
+    color: $cs-white;
+    padding: 10px;
+    border: 0;
+    margin-top: 40px;
+
+    &.overall {
+      background: $cs-caption-overall;
+    }
+    &.music {
+      background: $cs-caption-music;
+    }
+    &.show {
+      background: $cs-caption-show;
+    }
+    &.combo {
+      background: $cs-caption-combo;
+    }
+
+    & h2 {
+      padding: 0;
+      margin: 5px;
+    }
+
+    & .action {
+      color: $cs-white;
+      margin: 5px;
+    }
+  }
+
+  h1, h2, .heading {
+    float: left;
+    display: inline;
+    border: 0;
+  }
+
+  h2 {
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+  }
+
+  > .action {
+    display: block;
+    float: right;
+    margin: 30px 0 10px;
+  }
+
+  .actions-group {
+    display: block;
+    float: right;
+    padding: 25px 0 15px;
+  }
+}
 
 
 .list-group {
@@ -563,4 +623,13 @@ a.active {
     padding-bottom: 15px;
     border-bottom: 1px solid $cs-gray-light;
   }
+}
+
+#autosave-alert-box {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 10px 20px;
+  background: $cs-yellow;
+  color: $cs-black;
 }

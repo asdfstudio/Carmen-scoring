@@ -28,7 +28,7 @@ class CriterionSheetTableSeeder extends Seeder
 
 				// Novice
 				$criteria = [
-					1,2,3,6,7,8,10,25,14,26,17,19,21,22
+					39,2,40,6,7,8,10,25,36,26,37,19,38,22
 				];
 
 				$rows = [];
@@ -58,7 +58,7 @@ class CriterionSheetTableSeeder extends Seeder
 
 				// Novice with combo
 				$criteria = [
-					1,2,3,6,7,8,10,25,14,26,17,19,21,22,27,28
+					39,2,40,6,7,8,10,25,36,26,37,19,38,22,27,28
 				];
 
 				$rows = [];

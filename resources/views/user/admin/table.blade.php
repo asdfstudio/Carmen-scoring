@@ -7,8 +7,10 @@
   <tr>
 		<th>Name</th>
     <th>Email</th>
-		<th>Role Type</th>
-
+		<th>Admin?</th>
+		<th>Judge?</th>
+		<th>Organization</th>
+		<th>Role</th>
 	  <th>Edit</th>
 		<th>Delete</th>
   </tr>
@@ -21,7 +23,24 @@
 			@endif
 		</td>
   	<td>{{ $user->email }}</td>
-		<td>{{ $user->organization_role }}</td>
+		<td>
+			{{ $user->is_admin_text }}
+		</td>
+		<td>
+			@if($user->person)
+				{{ $user->person->is_judge_text }}
+			@endif
+		</td>
+
+		<td>
+			@if($user->organization_id)
+				{{ $user->organization->name }}
+			@endif
+		</td>
+
+		<td>
+			{{ $user->organization_role }}
+		</td>
 
 
 		<td>

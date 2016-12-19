@@ -10,31 +10,55 @@
 			</li>
     @endcan
 
-    @can('update', $division->standing)
-      <li>
-				{{ link_to_route('organizer.competition.division.standing.edit', 'Modify Standings', [$division->competition, $division], ['class' => 'action']) }}
-			</li>
-    @endcan
+
 	</ul>
 @endsection
 
 @section('content')
 
-  @if($division->standing == false)
-    <p>
-      There are no final standings yet.
-    </p>
-  @endif
+	@foreach($division->standings as $standing)
+		<div class="standing-container">
 
-  @if($division->standing)
-    @if($division->standing->is_consensus_scoring)
-      <p class="alert alert-warning">
-        Consensus scoring is used for this division.
-      </p>
-    @endif
+			<div class="content-subheader caption {{ $standing->caption_slug }}">
+				@if($standing->caption_id == NULL)
+					<h2>Overall Standings</h2>
+				@else
+					<h2>{{ $standing->caption->name }} Standings</h2>
+				@endif
 
-  	@include('standing.list', ['standing' => $division->standing])
+				@can('update', $standing)
 
-  @endif
+					{{ link_to_route('organizer.competition.division.standing.edit', 'Modify Standings', [$division->competition, $division, $standing], ['class' => 'action']) }}
+
+		    @endcan
+			</div>
+
+
+
+			@if($standing == false)
+		    <p>
+		      There are no final standings yet.
+		    </p>
+		  @endif
+
+			@if($standing)
+		    @if($standing->is_consensus_scoring)
+		      <p class="alert alert-warning">
+		        Consensus scoring is used for this division.
+		      </p>
+		    @endif
+
+		  	@include('standing.list', ['standing' => $standing])
+
+		  @endif
+
+
+
+		</div>
+	@endforeach
+
+
+
+
 
 @endsection

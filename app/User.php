@@ -58,6 +58,22 @@ class User extends Authenticatable
 			return $this->is_admin;
 		}
 
+    public function getIsAdminTextAttribute()
+		{
+			return $this->is_admin ? 'Admin' : '';
+		}
+
+
+    public function getDisplayNameAttribute()
+    {
+      if($this->person)
+      {
+        return $this->person->full_name;
+      }
+
+      return $this->email;
+    }
+
     //public function organization_role()
     //{
       //if(!empty($this->organization_role))

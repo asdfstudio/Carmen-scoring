@@ -16,9 +16,11 @@
         <span class="location">{{ $choir->school->place->city_state() }} </span>
       @endif
 
-			<div class="actions-group">
-				{!! form($deleteForm, ['url' => route('organizer.competition.division.choir.destroy',[$division->competition,$division,$choir])]) !!}
-			</div>
+			@can('removeChoir', $division)
+				<div class="actions-group">
+					{!! form($deleteForm, ['url' => route('organizer.competition.division.choir.destroy',[$division->competition,$division,$choir])]) !!}
+				</div>
+			@endcan
 
 		</li>
   @endforeach

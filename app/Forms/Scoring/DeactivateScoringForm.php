@@ -8,7 +8,7 @@ class DeactivateScoringForm extends Form
 {
 
     protected $formOptions = [
-      'class' => 'pull-left',
+      //'class' => 'pull-left',
       'method' => 'POST'
     ];
 

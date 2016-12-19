@@ -1,5 +1,88 @@
 $(document).ready(function() {
 
+    //$(document).on('click', function(e){
+
+      //if($('body').hasClass('input-popup-active') == false) return;
+
+      //console.log($(e.target).parents('score-input-popup'));
+      //if(e.target.id == 'score-input-popup' || $(e.target).parent() == 'aaa')
+      //console.log(e.target);
+      //$('body').removeClass('input-popup-active');
+    //});
+
+    /*$('div.popup-input-container').on('blur',function(){
+        $(this).removeClass('active');
+        $('.toggle-score-input-popup').removeClass('focus');
+    });*/
+
+    $('.toggle-score-input-popup').on('focus', function(e){
+      e.preventDefault();
+      var field = $(this);
+      var field_name = field.attr('name');
+      var score = Math.round(field.val());
+      var popup = $('div.popup-input-container');
+
+      field.addClass('focus');
+      popup.focus();
+      //console.log(field_name);
+      popup.data('field', field_name);
+      // Show the popup
+      //$('body').addClass('input-popup-active');
+      popup.addClass('active');
+      //popup.removeClass('hide');
+
+      // Set the selected value
+      popup.find('a').removeClass('current');
+      popup.find('a[data-number="'+score+'"]').addClass('current');
+    });
+
+
+    $.fn.autoSave = function() {
+      //console.log('attempt autosave');
+
+      var form = $('form.autosave');
+
+      if(form.hasClass('has-changed-data') == false)
+      {
+        //console.log('No data to save');
+        return false;
+      }
+
+      var url = form.attr('action');
+      var data = form.serialize();
+
+      alertBox = $('div#autosave-alert-box');
+      alertBox.removeClass('hide');
+      //var alertBoxHTML = '<div id="autosave-alert-box" class="">Autosaving scores...</div>';
+
+      //$('body').append(alertBoxHTML);
+
+      //alertBox.html('Saved!');
+
+      $.post(url, data, function(returnData, status){
+        console.log(status);
+
+        if(status == 'success')
+        {
+          alertBox.addClass('hide');
+          form.removeClass('has-changed-data');
+        }
+        else {
+          alert('There was an error saving your score.');
+        }
+      });
+    }
+
+    $('form.autosave').ready(function() {
+      //form = $('form.autosave');
+      setInterval(function(){
+        $(this).autoSave();
+      }, 10000);
+    });
+
+
+
+
 
     $('input.ajax-scoring').on('blur', function(){
       var input = $(this);
@@ -8,7 +91,7 @@ $(document).ready(function() {
       var form = input.parents('form');
       var url = form.attr('action');
       var newScore = input.val();
-      //console.log(originalScore + ' // ' + newScore);
+      console.log(originalScore + ' // ' + newScore);
 
       if(originalScore == newScore) return false;
 
@@ -16,6 +99,11 @@ $(document).ready(function() {
       input.removeClass('saved');
 
       data = form.serialize();
+
+      //console.log(url);
+      //console.log(data);
+
+      //return;
 
       $.post(url, data, function(returnData, status){
         console.log(status);
@@ -130,8 +218,10 @@ $(document).ready(function() {
 
 
     // scorecard
-    $('ul.number-selector a').on('click', function(e) {
+    $('.scorecard ul.number-selector a').on('click', function(e) {
     e.preventDefault();
+    var form = $(this).parents('form');
+    form.addClass('has-changed-data');
 
     var criterion_id = $(this).data('criterion-id');
     var number = $(this).data('number');
@@ -145,7 +235,36 @@ $(document).ready(function() {
     $(this).parents('.criterion-container').find('li a').removeClass('current');
     $(this).addClass('current');
 
-    console.log(criterion_id + ':' + number);
+    //console.log(criterion_id + ':' + number);
+    });
+
+
+
+    // scoreboard popup keyboard
+    $('.popup-input-container ul.number-selector a').on('click', function(e) {
+      e.preventDefault();
+      console.log('click number selector a');
+      var popup = $(this).parents('div.popup-input-container');
+      var field = popup.data('field');
+      var number = $(this).data('number');
+      var numberWeighted = number;
+      var input = $('input[name="'+field+'"]');
+      var choir_id = input.data('choir-id');
+      var criterion_id = input.data('criterion-id');
+      var td = $('td[data-choir-id="'+choir_id+'"][data-criterion-id="'+criterion_id+'"]');
+
+      td.find('span.raw').html(number);
+      td.find('span.weighted').html(numberWeighted);
+
+      input.val(number).trigger('blur');
+
+      popup.find('li a').removeClass('current');
+
+      $(this).addClass('current');
+
+      popup.removeClass('active');
+      input.removeClass('focus');
+
     });
 
 
@@ -200,7 +319,7 @@ $(document).ready(function() {
 
     $('table.scoreboard.toggle-scores').ready(function() {
       var active_view = $('.score-view-toggle.active').data('score-view');
-      console.log(active_view);
+      //console.log(active_view);
       $('.score-view-toggle.active').toggleScoreView(active_view);
     });
 
