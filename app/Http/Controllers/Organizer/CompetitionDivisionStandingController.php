@@ -23,6 +23,7 @@ class CompetitionDivisionStandingController extends Controller
         $query->where('division_id',$division_id);
       }])->find($division_id);
 
+
       return view('competition_division_ceremony.organizer.show', compact('division'));
     }
 

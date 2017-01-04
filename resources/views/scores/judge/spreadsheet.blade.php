@@ -1,15 +1,30 @@
 <?php
 if($division->captionWeighting->slug == '60-40') :
   $toggle_scores = 'toggle-scores';
+  $is_weighted_class = 'weighted-60-40';
 else :
   $toggle_scores = false;
+  $is_weighted_class = '';
 endif;
 ?>
 
-<table class="table responsive table-striped table-bordered toggle-scores scoreboard spreadsheet">
+<table class="table responsive table-striped table-bordered toggle-scores scoreboard spreadsheet {{ $is_weighted_class }}">
 
 
   @foreach($judge->captions as $caption)
+
+    <?php
+    $captionWeighting = 1;
+
+    if($division->captionWeighting->slug == '60-40') :
+      if($caption->id == 1) :
+        $captionWeighting = 1.5;
+      elseif($caption->id == 2) :
+        $captionWeighting = 1;
+      endif;
+    endif;
+    ?>
+
     <!--Caption heading-->
 
     <tr>
@@ -47,10 +62,12 @@ endif;
 
             <span class="score raw">{{ $rawScore }}</span>
 
+            <?php if($rawScore == false) $rawScore = 0; ?>
+
             @if($round->status_slug == 'active')
               {{ Form::open(['method' => 'POST', 'url' => route('judge.competition.division.round.save_scores', [$division->competition->id, $division->id, $round->id])]) }}
 
-              {{ Form::number("scores[$choir->id][$criterion->id]", $rawScore,['min' => 0, 'max' => 10, 'step' => '0.5', 'class' => 'col-xs-12 score edit ajax-scoring toggle-score-input-popup', 'data-original-score' => $rawScore, 'data-choir-id' => $choir->id, 'data-criterion-id' => $criterion->id]) }}
+              {{ Form::number("scores[$choir->id][$criterion->id]", $rawScore,['min' => 0, 'max' => 10, 'step' => '0.5', 'class' => 'col-xs-12 score edit ajax-scoring toggle-score-input-popup', 'data-original-score' => $rawScore, 'data-choir-id' => $choir->id, 'data-criterion-id' => $criterion->id, 'data-caption-id' => $caption->id, 'data-score-weighting' => $captionWeighting, 'readonly' => 'readonly']) }}
 
               {{ Form::close() }}
             @endif
@@ -66,23 +83,24 @@ endif;
       </tr>
     @endforeach
 
-    <tr class="caption-raw-score caption-{{ $caption->slug() }}">
+    <tr class="caption-raw-score caption-{{ $caption->slug() }} caption-id-{{ $caption->id }}">
       <td>
         Total
       </td>
 
       @foreach($choirs as $choir)
         <td>
+          &nbsp;
           <?php
           $rawScore = $scoreboard->rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion.caption_id', $caption->id)->sum('score');
           ?>
-          <span class="score raw">{{ $rawScore }}</span>
+          <span class="caption-total-score score edit raw" data-caption-id="{{ $caption->id }}" data-choir-id="{{ $choir->id }}" data-original-score="{{ $rawScore }}">{{ $rawScore }}</span>
 
           @if($division->captionWeighting->slug == '60-40')
             <?php
             $weightedScore = $scoreboard->weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion.caption_id', $caption->id)->sum('weightedScore');
             ?>
-            <span class="score weighted">{{ $weightedScore }}</span>
+            <span class="caption-total-weighted-score score weighted" data-caption-id="{{ $caption->id }}" data-choir-id="{{ $choir->id }}" data-original-score="{{ $weightedScore }}">{{ $weightedScore }}</span>
           @endif
         </td>
       @endforeach
@@ -96,16 +114,17 @@ endif;
 
     @foreach($choirs as $choir)
       <td>
+        &nbsp;
         <?php
         $rawScore = $scoreboard->rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->sum('score');
         ?>
-        <span class="score raw">{{ $rawScore }}</span>
+        <span class="sum-score score edit raw" data-choir-id="{{ $choir->id }}" data-original-score="{{ $rawScore }}">{{ $rawScore }}</span>
 
         @if($division->captionWeighting->slug == '60-40')
           <?php
           $weightedScore = $scoreboard->weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->sum('weightedScore');
           ?>
-          <span class="score weighted">{{ $weightedScore }}</span>
+          <span class="sum-weighted-score score weighted" data-choir-id="{{ $choir->id }}" data-original-score="{{ $weightedScore }}">{{ $weightedScore }}</span>
         @endif
 
       </td>

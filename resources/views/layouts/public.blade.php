@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@section('title') Carmen Showchoir @show</title>
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" >
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bitter:400,700|Lato:100,300,400,700">
+
+    <link rel="stylesheet" href="/css/carmen.css">
+    <link rel="stylesheet" href="/css/unslider.css">
+    <link rel="stylesheet" href="/css/unslider-dots.css">
+
+</head>
+<body id="public-layout">
+  <nav>
+
+    <?php $active_page = Request::segment(1); ?>
+
+    <ul>
+      <li>
+
+        <a href="/" class="logo"><img src="/images/flower.png" alt="Carmen Showchoir" width="24px"></a>
+      </li>
+      <li>
+
+        <a href="/" class="<?php if($active_page == '') echo 'active'; ?>">Home</a>
+      </li>
+      <li>
+        <a href="/system" class="<?php if($active_page == 'system') echo 'active'; ?>">Information</a>
+      </li>
+      <li>
+        <a href="/about" class="<?php if($active_page == 'about') echo 'active'; ?>">About</a>
+      </li>
+      <li>
+        <a href="/contact" class="<?php if($active_page == 'contact') echo 'active'; ?>">Contact</a>
+      </li>
+    </ul>
+  </nav>
+  <div class="">
+    @yield('body-content')
+  </div>
+
+  <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="/js/unslider-min.js"></script>
+  <script>
+		jQuery(document).ready(function($) {
+			$('.slider').unslider({
+        arrows: false,
+        //autoplay: true
+      });
+		});
+	</script>
+</body>
+</html>

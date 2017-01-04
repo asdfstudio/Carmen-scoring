@@ -39,7 +39,7 @@ class CreateUserForm extends Form
 
         $this->add('is_admin', 'choice', [
           'label' => 'Is User an Carmen Showchoir Admin?',
-          'choices' => ['1' => 'Administrator', '0' => 'Standard User'],
+          'choices' => ['1' => 'Admin', '0' => 'Non-Admin'],
           'empty_value' => 'Choose role...'
         ]);
 

@@ -14,6 +14,9 @@ use App\Standing;
 
 use Kris\LaravelFormBuilder\FormBuilder;
 
+use Event;
+use App\Events\DivisionScoringFinalized;
+
 class CompetitionDivisionController extends Controller
 {
     /**
@@ -197,11 +200,14 @@ class CompetitionDivisionController extends Controller
 
         $this->authorize('update', $division);
 
+        //dd($division->overall_award_sponsors);
+
         $form = $formBuilder->create('Division\CreateForm', [
 					'method' => 'PUT',
 					'model' => $division,
 					'url' => route('organizer.competition.division.update',[$competition,$division_id])
 				]);
+
 
         $deleteForm = $formBuilder->create('GenericDeleteForm', [
           'url' => route('organizer.competition.division.destroy',[$competition,$division])
@@ -231,7 +237,9 @@ class CompetitionDivisionController extends Controller
 
         $this->authorize('update', $division);
 
-				$division->fill($request->all());
+        $data = $request->all();
+
+				$division->fill($data);
 				$division->save();
 
 				// Set flash data and redirect
@@ -283,8 +291,8 @@ class CompetitionDivisionController extends Controller
       }
       elseif($request->input('finalize'))
       {
-        $division->is_published = 1;
-        $division->save();
+        $division->finalizeScoring();
+        Event::fire(new DivisionScoringFinalized($division));
       }
       else {
         return 0;

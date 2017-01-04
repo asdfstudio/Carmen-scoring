@@ -22,47 +22,55 @@
     @include('award.organizer.ceremony_list', ['awards' => $division->awards])
   </div>
 
-	@foreach($division->standings as $standing)
-		<div class="standing-container">
+	<div class="caption-awards-container">
 
-			<div class="content-subheader caption {{ $standing->caption_slug }}">
-				@if($standing->caption_id == NULL)
-					<h2>Overall Standings</h2>
-				@else
-					<h2>{{ $standing->caption->name }} Standings</h2>
-				@endif
-			</div>
-
-
-
-			@if($standing == false)
-		    <p>
-		      There are no final standings yet.
-		    </p>
-		  @endif
+		@foreach($division->standings as $standing)
 
 			@if($standing)
-        <?php
-        if($standing->caption_id == NULL)
-        {
-          $limit = $division->overall_award_count;
-        }
-        else
-        {
-          $column_name = $standing->caption->slug().'_award_count';
-          $limit = $division->{$column_name};
-        }
+				<?php
+				if($standing->caption_id == NULL)
+				{
+					$limit = $division->overall_award_count;
+				}
+				else
+				{
+					$column_name = $standing->caption->slug().'_award_count';
+					$limit = $division->{$column_name};
+				}
 
-        $standing->choirs = $standing->choirs->take($limit)->reverse();
-        ?>
-		  	@include('standing.ceremony_list', ['standing' => $standing])
+				if($limit == 0) continue;
 
-		  @endif
+				$standing->choirs = $standing->choirs->take($limit)->reverse();
+				?>
+
+			@endif
+
+			<div class="standing-container">
+
+				<div class="content-subheader caption {{ $standing->caption_slug }}">
+					@if($standing->caption_id == NULL)
+						<h2>Overall Standings</h2>
+					@else
+						<h2>{{ $standing->caption->name }} Standings</h2>
+					@endif
+				</div>
 
 
 
-		</div>
-	@endforeach
+				@if($standing == false)
+			    <p>
+			      There are no final standings yet.
+			    </p>
+			  @endif
+
+				@include('standing.ceremony_list', ['standing' => $standing])
+
+
+
+			</div>
+		@endforeach
+
+	</div>
 
 
   <div class="alert alert-info">

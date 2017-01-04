@@ -49,7 +49,10 @@ var scss = {
         //outputStyle: 'nested',
         precison: 8,
         errLogToConsole: true,
-        includePaths: [bootstrapSass.in + 'assets/stylesheets']
+        includePaths: [
+          bootstrapSass.in + 'assets/stylesheets',
+          './node_modules/sass-mediaqueries/'
+        ]
     }
 };
 

@@ -70,7 +70,10 @@ class DivisionPolicy extends BasePolicy
 
     public function activateScoring(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'completed')
+      if($this->isAdmin AND $division->status_slug() != 'active')
+      {
+        return true;
+      } elseif($this->isOrgAdmin AND $division->status_slug() == 'completed')
       {
         return true;
       }
@@ -94,7 +97,10 @@ class DivisionPolicy extends BasePolicy
 
     /*public function reactivateScoring(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'completed')
+      if($this->isAdmin)
+      {
+        return true;
+      } elseif($this->isOrgAdmin AND $division->status_slug() == 'completed')
       {
         return true;
       }

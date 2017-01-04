@@ -10,7 +10,7 @@
 		<th>Admin?</th>
 		<th>Judge?</th>
 		<th>Organization</th>
-		<th>Role</th>
+		<th>Org. Role</th>
 	  <th>Edit</th>
 		<th>Delete</th>
   </tr>

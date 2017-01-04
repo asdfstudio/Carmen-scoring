@@ -73,6 +73,21 @@
           padding: 0 5px;
         }
       }
+      .sponsor {
+        display: block;
+        margin: 15px 0;
+
+        .heading {
+          //padding: 5px;
+          //display: block;
+          margin-bottom: 5px;
+        }
+        .name {
+          //padding: 0 5px;
+          display: inline;;
+          font-size: 18px;
+        }
+      }
 
     }
 
@@ -121,6 +136,15 @@
         font-style: italic;
         color: $cs-gray-mid-2;
         //float: right;
+      }
+    }
+
+    &.person {
+      .name {
+        font-size: 22px;
+        //line-height: 26px;
+        display: inline-block;
+        //margin-bottom: 5px;
       }
     }
 

@@ -123,7 +123,6 @@ class RankedScores {
     if(array_key_exists($key, $this->totaled))
     {
       //echo "use_pretotaled-$key<br />";
-      //dd($this->ranked[$judge_id."x".$caption_id]);
       return $this->totaled[$key];
     }
 
@@ -219,7 +218,11 @@ class RankedScores {
       }
 
       // Add the choir and score to the $scores collection
-      $scores->put($choir_id, ['choir_id' => $choir_id, 'score' => $score]);
+      if($score)
+      {
+        $scores->put($choir_id, ['choir_id' => $choir_id, 'score' => $score]);
+      }
+
     });
 
     $this->calculated_scores[$judge_id."x".$caption_id] = $scores;

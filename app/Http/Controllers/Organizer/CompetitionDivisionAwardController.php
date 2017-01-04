@@ -117,10 +117,20 @@ class CompetitionDivisionAwardController extends Controller
       $this->authorize('manage', ['App\Award', $division]);
 
       $awards = $request->input('awards');
+      $sponsors = $request->input('sponsors');
 
-      if($awards == false) $awards = array();
+      $data = [];
 
-      $division->awards()->sync($awards);
+      foreach($awards as $award_id)
+      {
+        $data[$award_id] = ['sponsor' => $sponsors[$award_id]];
+      }
+
+      //dd($data);
+
+      //if($awards == false) $awards = array();
+
+      $division->awards()->sync($data);
 
       // Set flash data and redirect
       return redirect()->route('organizer.competition.division.award.index', [$competition, $division]);

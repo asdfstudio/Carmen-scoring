@@ -38,12 +38,27 @@ class CreateChoirForm extends Form
           'label_show' => false
         ]);
 
+        $this->add('heading', 'static', [
+          'tag' => 'h2',
+          'value' => 'Choir',
+          'label_show' => false,
+          'attr' => ['class' => 'new_choir_container']
+        ]);
+
         // Create a Choir
         $this->add('name','text', [
           'rules' => '',
           'wrapper' => ['class' => 'new_choir_container'],
           'label' => 'Choir Name',
           'rules' => ['required_without:choir_id']
+        ]);
+
+        // Add a director when creating a choir
+        $this->add('director', 'form', [
+          'class' => $this->formBuilder->create('Director\DirectorForm'),
+          'wrapper' => ['class' => 'new_choir_container'],
+          'label_show' => false,
+          'label' => 'Choir Director'
         ]);
 
         $this->add('school_id','entity', [

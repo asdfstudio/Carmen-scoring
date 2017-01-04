@@ -6,9 +6,10 @@
 
     <?php
     $class = $score * 10 == $i * 10 ? 'current' : '';
+    $number_no_decimal = $i * 10;
     ?>
     <li class="number">
-      <a href="#{{ $i }}" class="{{ $class }}" data-criterion-id="{{ $criterion_id }}" data-number="{{ $i }}">{{ $i }}</a>
+      <a href="#{{ $i }}" class="{{ $class }}" data-criterion-id="{{ $criterion_id }}" data-number="{{ $number_no_decimal }}">{{ $i }}</a>
     </li>
   @endfor
 </ul>

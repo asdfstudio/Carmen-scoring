@@ -118,9 +118,11 @@ input.score {
   }
 
   &.saved {
-    background: lighten($cs-blue,40);
-    padding-right: 4px;
-    border-right: 4px solid lighten($cs-blue,10);
+    //background: lighten($cs-blue,40);
+    //padding-right: 4px;
+    //border-right: 4px solid lighten($cs-blue,10);
+    color: $cs-blue;
+    font-weight: bold;
   }
 
   &.error {

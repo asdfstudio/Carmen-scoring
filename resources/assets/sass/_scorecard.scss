@@ -40,10 +40,15 @@
 
         }
 
+        .criterion-description {
+          margin-bottom: 20px;
+        }
+
         .score {
             float: left;
             border: 0;
             padding: 0;
+            margin-bottom: 20px;
 
             input {
                 padding: 5px;
@@ -78,12 +83,12 @@
 
 .popup-input-container {
   position: fixed;
-  bottom: 0;
+  top: 0;
   //left: 10px;
   //right: 10px;
   padding: 10px;
   background: #ccc;
-  width: 660px;
+  width: 610px;
   max-width: 100%;
   display: none;
 
@@ -95,7 +100,7 @@
 
 .number-selector {
     float: right;
-    margin: -4px 0 0 15px;
+    margin: -4px 0 0 0;
     padding: 0;
     //display: none;
 

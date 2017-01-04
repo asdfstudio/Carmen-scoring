@@ -3099,10 +3099,13 @@ button.close {
       margin-right: 15px;
       width: auto;
       font-size: 18px; }
+    .scorecard .criterion-container .criterion-description {
+      margin-bottom: 20px; }
     .scorecard .criterion-container .score {
       float: left;
       border: 0;
-      padding: 0; }
+      padding: 0;
+      margin-bottom: 20px; }
       .scorecard .criterion-container .score input {
         padding: 5px;
         text-align: center;
@@ -3121,10 +3124,10 @@ button.close {
 
 .popup-input-container {
   position: fixed;
-  bottom: 0;
+  top: 0;
   padding: 10px;
   background: #ccc;
-  width: 660px;
+  width: 610px;
   max-width: 100%;
   display: none; }
   .popup-input-container.active {
@@ -3132,7 +3135,7 @@ button.close {
 
 .number-selector {
   float: right;
-  margin: -4px 0 0 15px;
+  margin: -4px 0 0 0;
   padding: 0; }
   .number-selector.half {
     margin-right: 28px;
@@ -3227,9 +3230,8 @@ input.score {
   input.score.saving {
     background: #87c178; }
   input.score.saved {
-    background: #c0dcf7;
-    padding-right: 4px;
-    border-right: 4px solid #378fe7; }
+    color: #1976D2;
+    font-weight: bold; }
   input.score.error {
     background: #e03e45; }
 
@@ -3424,6 +3426,15 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
   .list-group .list-group-item.award .recipient .choir {
     padding: 0 5px; }
 
+.list-group .list-group-item.award .sponsor {
+  display: block;
+  margin: 15px 0; }
+  .list-group .list-group-item.award .sponsor .heading {
+    margin-bottom: 5px; }
+  .list-group .list-group-item.award .sponsor .name {
+    display: inline;
+    font-size: 18px; }
+
 .list-group .list-group-item.choir .school {
   font-size: 16px;
   line-height: 19px;
@@ -3458,6 +3469,10 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
   display: inline-block;
   font-style: italic;
   color: #a3a3a3; }
+
+.list-group .list-group-item.person .name {
+  font-size: 22px;
+  display: inline-block; }
 
 .list-group .list-group-item.judge .name {
   font-size: 22px;
@@ -3635,6 +3650,489 @@ label.block {
 
 .mb {
   margin-bottom: 10px; }
+
+body#public-layout {
+  background: #FFF;
+  font-size: 18px;
+  padding-bottom: 40px;
+  border-bottom: 40px solid #EFEFEF;
+  /*.slider {
+    position: relative;
+    height: 300px;
+    width: 100%;
+    min-height: 300px;
+    overflow: hidden;
+
+    .slides-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      overflow: hidden;
+      width: 9000px;
+      .slide {
+        float: left;
+        position: relative;
+        display: block;
+        width: 768px;
+        img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 1;
+          max-width: 100%;
+        }
+        h1, h2 {
+          z-index: 10;
+          background: none;
+          color: $cs-white;
+          position: relative;
+          border: none;
+          margin: 0;
+          padding: 10px;
+        }
+
+        h1 {
+          margin-top: 40px;
+        }
+        h2 {
+          text-transform: none;
+        }
+      }
+    }
+  }*/ }
+  @media only screen and (min-width: 768px) {
+    body#public-layout {
+      margin-top: 60px; } }
+  body#public-layout .align-center {
+    text-align: center !important; }
+  body#public-layout img {
+    max-width: 100%; }
+    body#public-layout img.centered {
+      margin: auto;
+      display: block; }
+  body#public-layout h1 {
+    background: #ddd;
+    border-bottom: 4px solid #ccc;
+    color: #777;
+    display: block;
+    padding: 20px;
+    text-align: center;
+    margin-top: 0;
+    font-size: 1.4em;
+    clear: both; }
+    @media only screen and (min-width: 768px) {
+      body#public-layout h1 {
+        font-size: 1.8em; } }
+  body#public-layout h2 {
+    display: block;
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 1.2em;
+    clear: both; }
+    body#public-layout h2.green {
+      background: #68B155;
+      border-bottom: 4px solid #539142; }
+  body#public-layout h3 {
+    border-bottom: 2px solid #7c3e8d;
+    color: #60306e;
+    display: block;
+    padding: 15px;
+    text-align: center;
+    clear: both; }
+  body#public-layout .carmen {
+    color: #7F4091;
+    font-weight: 700;
+    font-size: .9em; }
+  body#public-layout .slim-width {
+    width: auto;
+    margin: 0 15px;
+    box-sizing: border-box; }
+    @media only screen and (min-width: 768px) {
+      body#public-layout .slim-width {
+        max-width: 550px;
+        margin-left: auto;
+        margin-right: auto; } }
+    @media only screen and (min-width: 1024px) {
+      body#public-layout .slim-width {
+        max-width: 750px;
+        margin-left: auto;
+        margin-right: auto; } }
+  body#public-layout .medium-width {
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto; }
+  body#public-layout p {
+    margin-bottom: 20px;
+    line-height: 30px; }
+  body#public-layout p.intro {
+    font-size: 1.2em;
+    line-height: 1.6em;
+    margin-top: 0.6em;
+    margin-bottom: 1.2em;
+    font-weight: 300; }
+  body#public-layout ul.steps-group {
+    list-style: none;
+    margin: 40px 0;
+    padding: 0; }
+    body#public-layout ul.steps-group li {
+      margin: 20px 0;
+      overflow: hidden; }
+      body#public-layout ul.steps-group li span.step-label {
+        background: #7F4091;
+        color: #FFF;
+        padding: 10px;
+        display: inline-block;
+        margin-top: 6px;
+        margin-right: 5%;
+        text-align: center;
+        float: left;
+        text-transform: uppercase;
+        font-weight: 700;
+        border-radius: 5px;
+        width: 25%; }
+      body#public-layout ul.steps-group li span.step-content {
+        float: left;
+        width: 70%; }
+        @media only screen and (min-width: 768px) {
+          body#public-layout ul.steps-group li span.step-content {
+            width: 70%; } }
+  body#public-layout nav {
+    background: #60306e;
+    color: #FFF;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid #7c3e8d;
+    z-index: 100; }
+    @media only screen and (min-width: 768px) {
+      body#public-layout nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0; } }
+    body#public-layout nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0;
+      overflow: hidden;
+      display: block;
+      text-align: center; }
+      body#public-layout nav ul li {
+        display: inline-block; }
+        body#public-layout nav ul li:first-of-type {
+          border-left: 1px solid #7c3e8d; }
+        body#public-layout nav ul li a {
+          color: #FFF;
+          text-decoration: none;
+          display: block;
+          padding: 12px 9px;
+          font-size: 14px;
+          line-height: 22px;
+          font-weight: 300;
+          border-right: 1px solid #7c3e8d; }
+          @media only screen and (min-width: 768px) {
+            body#public-layout nav ul li a {
+              padding: 12px 24px;
+              font-size: 20px;
+              line-height: 34px; } }
+          body#public-layout nav ul li a.active, body#public-layout nav ul li a.current, body#public-layout nav ul li a:hover {
+            background: #7c3e8d; }
+  body#public-layout ul.social-icons {
+    list-style: none;
+    margin: 30px 0;
+    padding: 0; }
+    body#public-layout ul.social-icons li {
+      display: inline-block;
+      width: 47%;
+      text-align: center;
+      box-sizing: border-box;
+      margin: 1%; }
+      @media only screen and (min-width: 768px) {
+        body#public-layout ul.social-icons li {
+          width: 22%; } }
+      body#public-layout ul.social-icons li a {
+        background: #ddd;
+        padding: 30px;
+        display: block; }
+        body#public-layout ul.social-icons li a:hover, body#public-layout ul.social-icons li a:active {
+          background: #7F4091;
+          text-decoration: none;
+          color: #FFF; }
+      body#public-layout ul.social-icons li i {
+        display: block; }
+  body#public-layout .slider {
+    margin: auto;
+    position: relative;
+    height: 120px;
+    margin-bottom: 20px; }
+    @media only screen and (min-width: 768px) {
+      body#public-layout .slider {
+        margin-top: 30px;
+        height: 220px; } }
+    @media only screen and (min-width: 1024px) {
+      body#public-layout .slider {
+        margin-top: 30px;
+        height: 320px; } }
+    body#public-layout .slider .slide {
+      position: relative; }
+      body#public-layout .slider .slide img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+        max-width: 100%; }
+      body#public-layout .slider .slide h1, body#public-layout .slider .slide h2 {
+        z-index: 10;
+        background: none;
+        color: #FFF;
+        position: relative;
+        border: none;
+        margin: 0;
+        padding: 10px; }
+      body#public-layout .slider .slide h2 {
+        text-transform: none; }
+      @media only screen and (min-width: 768px) {
+        body#public-layout .slider .slide h1 {
+          margin-top: 40px; } }
+  body#public-layout .unslider {
+    position: relative; }
+    body#public-layout .unslider nav {
+      background: none;
+      border: none;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      top: 275px; }
+  body#public-layout ul.benefits-group {
+    padding: 0;
+    list-style: none; }
+    body#public-layout ul.benefits-group > li {
+      margin: 10px 0;
+      overflow: hidden; }
+      @media only screen and (min-width: 768px) {
+        body#public-layout ul.benefits-group > li {
+          margin: 40px 0; } }
+      body#public-layout ul.benefits-group > li .summary {
+        background: #E29231;
+        color: #FFF;
+        text-align: center;
+        border-radius: 100px;
+        display: block;
+        margin: auto;
+        width: 120px;
+        height: 120px;
+        padding: 25px 15px;
+        line-height: 23px;
+        font-size: 16px;
+        font-weight: 700; }
+        @media only screen and (min-width: 768px) {
+          body#public-layout ul.benefits-group > li .summary {
+            float: left;
+            margin-right: 20px; } }
+      body#public-layout ul.benefits-group > li > ul {
+        margin: 15px 0;
+        padding: 0;
+        list-style: none;
+        float: left;
+        display: block; }
+        @media only screen and (min-width: 768px) {
+          body#public-layout ul.benefits-group > li > ul {
+            width: 74%;
+            margin: 5px 0; } }
+        body#public-layout ul.benefits-group > li > ul > li {
+          border-bottom: 1px solid #EFEFEF;
+          padding: 8px;
+          text-align: center;
+          font-size: .9em; }
+          @media only screen and (min-width: 768px) {
+            body#public-layout ul.benefits-group > li > ul > li {
+              text-align: left;
+              font-size: 1em; } }
+          body#public-layout ul.benefits-group > li > ul > li:last-of-type {
+            border-bottom: none; }
+  body#public-layout .video-container {
+    background: #E29231;
+    color: #FFF;
+    overflow: hidden;
+    position: relative;
+    padding: 20px;
+    margin: 40px 0; }
+    body#public-layout .video-container .heading {
+      display: block;
+      font-size: 32px;
+      line-height: 42px;
+      margin-bottom: 20px; }
+      @media only screen and (min-width: 1024px) {
+        body#public-layout .video-container .heading {
+          float: right;
+          width: 40%;
+          display: inline-block;
+          text-align: right;
+          padding: 30px 20px 30px 60px; } }
+    body#public-layout .video-container iframe {
+      width: 100%;
+      height: 200px; }
+      @media only screen and (min-width: 1024px) {
+        body#public-layout .video-container iframe {
+          height: 300px; } }
+      @media only screen and (min-width: 1024px) {
+        body#public-layout .video-container iframe {
+          float: left;
+          width: 60%;
+          height: 350px; } }
+  body#public-layout ul.event-sizes {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    padding: 0; }
+    body#public-layout ul.event-sizes li {
+      color: #FFF;
+      background: #7F4091;
+      text-align: center;
+      padding: 15px;
+      text-transform: uppercase;
+      display: block;
+      float: left;
+      margin: 2%;
+      box-sizing: border-box;
+      font-weight: 700;
+      border-radius: 20px; }
+      body#public-layout ul.event-sizes li.event-small {
+        width: 35%; }
+      body#public-layout ul.event-sizes li.event-medium {
+        width: 60%;
+        font-size: 1.3em; }
+      body#public-layout ul.event-sizes li.event-big {
+        width: 100%;
+        font-size: 1.6em; }
+      @media only screen and (min-width: 768px) {
+        body#public-layout ul.event-sizes li.event-small {
+          width: 23%; }
+        body#public-layout ul.event-sizes li.event-medium {
+          width: 30%;
+          font-size: 1.3em; }
+        body#public-layout ul.event-sizes li.event-big {
+          width: 35%;
+          font-size: 1.6em; } }
+  body#public-layout ul.packages {
+    display: block;
+    overflow: hidden; }
+    body#public-layout ul.packages li {
+      background: #CA2128;
+      color: #FFF;
+      padding: 3% 5%;
+      margin: 2%;
+      display: block;
+      box-sizing: border-box;
+      float: left;
+      width: 28%;
+      font-size: 18px;
+      line-height: 22px;
+      font-weight: 700;
+      border-radius: 20px;
+      text-align: center;
+      text-transform: uppercase; }
+  body#public-layout ul.package-prices {
+    padding: 0;
+    list-style: none;
+    overflow: hidden;
+    display: block; }
+    body#public-layout ul.package-prices li.package {
+      margin-bottom: 20px;
+      background: #EFEFEF;
+      border-radius: 8px; }
+      @media only screen and (min-width: 768px) {
+        body#public-layout ul.package-prices li.package {
+          float: left;
+          width: 31%;
+          margin: auto 1%; } }
+      body#public-layout ul.package-prices li.package span.package-name {
+        background: #CA2128;
+        color: #FFF;
+        padding: 16px;
+        text-align: center;
+        margin-bottom: 16px;
+        display: block;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px; }
+      body#public-layout ul.package-prices li.package ul {
+        list-style: none;
+        padding: 10px;
+        margin: 0; }
+        body#public-layout ul.package-prices li.package ul li {
+          border-bottom: 1px solid #bcbcbc;
+          padding: 5px;
+          margin-bottom: 8px;
+          font-size: .8em;
+          text-align: center; }
+          body#public-layout ul.package-prices li.package ul li:last-of-type {
+            border-bottom: none; }
+  body#public-layout p.package-note {
+    font-style: italic;
+    font-size: .8em;
+    line-height: 1.2em; }
+  body#public-layout .competitions-container {
+    color: #272B2D;
+    text-align: center;
+    padding: 0px;
+    position: relative;
+    border-radius: 8px; }
+    body#public-layout .competitions-container h4 {
+      font-size: 24px;
+      line-height: 32px;
+      margin-bottom: 15px;
+      padding: 20px;
+      border-bottom: 2px solid; }
+    body#public-layout .competitions-container ul.competitions-group {
+      list-style: none;
+      margin: 30px;
+      margin-bottom: 0;
+      padding: 0;
+      background: #eee; }
+      body#public-layout .competitions-container ul.competitions-group li {
+        margin: 0px;
+        padding: 8px;
+        background: #FFF;
+        margin-bottom: 8px; }
+        body#public-layout .competitions-container ul.competitions-group li .name {
+          text-transform: capitalize;
+          font-size: 20px;
+          font-weight: 700;
+          margin: 4px 10px;
+          display: block; }
+        body#public-layout .competitions-container ul.competitions-group li .date {
+          text-transform: capitalize; }
+    body#public-layout .competitions-container iframe {
+      padding: 30px;
+      box-sizing: border-box;
+      position: relative;
+      display: block;
+      border: none; }
+  body#public-layout ul.scoresheet-options {
+    display: block;
+    overflow: hidden;
+    padding: 0;
+    margin: 1em 0; }
+    body#public-layout ul.scoresheet-options li {
+      background: #E29231;
+      color: #FFF;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 16px;
+      border-radius: 8px; }
+      @media only screen and (min-width: 1024px) {
+        body#public-layout ul.scoresheet-options li {
+          width: 31%;
+          margin: auto 1%;
+          display: inline-block; } }
 
 .alert {
   border-left-width: 6px; }

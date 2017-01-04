@@ -19,9 +19,11 @@ $(document).ready(function() {
       e.preventDefault();
       var field = $(this);
       var field_name = field.attr('name');
-      var score = Math.round(field.val());
+      //var score = Math.round(field.val());
+      var score = field.val() * 10;
       var popup = $('div.popup-input-container');
-
+      console.log(score);
+      $('.toggle-score-input-popup').removeClass('focus');
       field.addClass('focus');
       popup.focus();
       //console.log(field_name);
@@ -91,7 +93,50 @@ $(document).ready(function() {
       var form = input.parents('form');
       var url = form.attr('action');
       var newScore = input.val();
-      console.log(originalScore + ' // ' + newScore);
+      var scoreDifference = newScore - originalScore;
+
+      var scoreWeighting = input.data('score-weighting');
+      var newScoreWeighted = newScore * scoreWeighting;
+      var weightedScoreDifference = scoreDifference * scoreWeighting;
+      //console.log(newScoreWeighted);
+
+      var captionId = input.data('caption-id');
+      var choirId = input.data('choir-id');
+
+      // caption score
+      var captionScore = $('.caption-total-score[data-caption-id="'+captionId+'"][data-choir-id="'+choirId+'"]');
+      var captionOriginalScore = captionScore.data('original-score');
+      var newCaptionScore = captionOriginalScore + scoreDifference;
+
+      // total score
+      var totalScore = $('.sum-score[data-choir-id="'+choirId+'"]');
+      var originalTotalScore = totalScore.data('original-score');
+
+      if(originalTotalScore == false)
+        originalTotalScore = 0;
+
+      var newTotalScore = originalTotalScore + scoreDifference;
+
+      //console.log(originalTotalScore + ' // ' + newTotalScore);
+
+      // caption-total-weighted-score
+      var captionWeightedScore = $('.caption-total-weighted-score[data-caption-id="'+captionId+'"][data-choir-id="'+choirId+'"]');
+      var captionOriginalWeightedScore = captionWeightedScore.data('original-score');
+      var newCaptionWeightedScore = captionOriginalWeightedScore + weightedScoreDifference;
+
+      console.log(newCaptionWeightedScore);
+
+      // total weighted score
+      var totalWeightedScore = $('.sum-weighted-score[data-choir-id="'+choirId+'"]');
+      var originalTotalWeightedScore = totalWeightedScore.data('original-score');
+
+      if(originalTotalWeightedScore == false)
+        originalTotalWeightedScore = 0;
+
+      var newTotalWeightedScore = originalTotalWeightedScore + weightedScoreDifference;
+
+
+
 
       if(originalScore == newScore) return false;
 
@@ -106,13 +151,30 @@ $(document).ready(function() {
       //return;
 
       $.post(url, data, function(returnData, status){
-        console.log(status);
+        //console.log(status);
         //console.log(returnData);
         if(status == 'success')
         {
           input.removeClass('saving');
           input.addClass('saved');
           input.data('original-score', newScore);
+
+          captionScore.html(newCaptionScore);
+          captionScore.data('original-score', newCaptionScore);
+
+          captionWeightedScore.html(newCaptionWeightedScore);
+          captionWeightedScore.data('original-score', newCaptionWeightedScore);
+
+
+
+          totalScore.html(newTotalScore);
+          totalScore.data('original-score', newTotalScore);
+
+          totalWeightedScore.html(newTotalWeightedScore);
+          totalWeightedScore.data('original-score', newTotalWeightedScore);
+
+
+
         }
         else {
           input.removeClass('saving');
@@ -224,11 +286,11 @@ $(document).ready(function() {
     form.addClass('has-changed-data');
 
     var criterion_id = $(this).data('criterion-id');
-    var number = $(this).data('number');
+    var number = $(this).data('number') / 10;
     var input = $('.score input[data-criterion-id="'+criterion_id+'"]');
     // Update the input value
     //input.addClass('updating');
-    input.val(number);
+    input.val(number.toFixed(1));
     //input.removeClass('updating');
 
     // Highlight the current selection
@@ -243,20 +305,24 @@ $(document).ready(function() {
     // scoreboard popup keyboard
     $('.popup-input-container ul.number-selector a').on('click', function(e) {
       e.preventDefault();
-      console.log('click number selector a');
+
       var popup = $(this).parents('div.popup-input-container');
       var field = popup.data('field');
-      var number = $(this).data('number');
-      var numberWeighted = number;
+      var number = $(this).data('number') / 10;
       var input = $('input[name="'+field+'"]');
       var choir_id = input.data('choir-id');
       var criterion_id = input.data('criterion-id');
+      var scoreWeighting = input.data('score-weighting');
+      var numberWeighted = number * scoreWeighting;
+
+      //console.log(numberWeighted);
+
       var td = $('td[data-choir-id="'+choir_id+'"][data-criterion-id="'+criterion_id+'"]');
 
-      td.find('span.raw').html(number);
-      td.find('span.weighted').html(numberWeighted);
+      td.find('span.raw').html(number.toFixed(1));
+      td.find('span.weighted').html(numberWeighted.toFixed(1));
 
-      input.val(number).trigger('blur');
+      input.val(number.toFixed(1)).trigger('blur');
 
       popup.find('li a').removeClass('current');
 

@@ -142,7 +142,13 @@ class UserController extends Controller
 					]
 				]);
 
-				return view('user.admin.edit', compact('form','user'));
+
+        $makeJudgeForm = $formBuilder->create('User\Admin\MakeJudgeForm', [
+					'url' => route('admin.user.judge.set', [$user]),
+					'model' => $user
+				]);
+
+				return view('user.admin.edit', compact('form','user', 'makeJudgeForm'));
     }
 
     /**
@@ -222,5 +228,26 @@ class UserController extends Controller
 				$user->delete();
 
         return redirect()->route('admin.user.index')->with('success', 'User deleted!');
+    }
+
+
+
+    public function makeJudge(User $user)
+    {
+				$this->authorize('update', $user);
+
+        if($user->isJudge())
+        {
+          return redirect()->route('admin.user.index')->with('success', 'User is already a judge!');
+        }
+
+        // create person/judge if they dont exist
+        if($user->person)
+        {
+          $user->person->person_type = 'App\Judge';
+          $user->person->save();
+        }
+
+        return redirect()->route('admin.user.index')->with('success', 'User set up as a judge!');
     }
 }

@@ -12,6 +12,7 @@ use App\Division;
 use App\Choir;
 use App\School;
 use App\Place;
+use App\Director;
 
 use Kris\LaravelFormBuilder\FormBuilder;
 
@@ -28,9 +29,25 @@ class CompetitionDivisionChoirController extends Controller
      */
     public function index(FormBuilder $formBuilder, $competition_id,$division_id)
     {
-        $division = Division::with('competition','choirs')->find($division_id);
+        $division = Division::with('competition','choirs', 'choirs.directors')->find($division_id);
 				//$competition = Competition::with('organization','place','divisions')->find($competition_id);
 				//dd($division);
+
+        //$choir_ids = $division->choirs->pluck('id');
+        //$directors = Director::whereIn('choir_id', $choir_ids)->get();
+        //dd($directors);
+
+        /*$directors = collect();
+
+        $division->choirs->each(function($choir,$key) use ($directors) {
+          foreach($choir->directors as $director)
+          {
+            $directors->push($director);
+          }
+
+        });
+
+        dd($directors->pluck('email')->toArray());*/
 
         $deleteForm = $formBuilder->create('GenericDeleteForm', [
 					'method' => 'DELETE',
@@ -207,6 +224,14 @@ class CompetitionDivisionChoirController extends Controller
         }
 
         //dd($choir);
+
+        // Create a director and attach to choir
+        if($request->has('director'))
+				{
+          $director = new Director();
+          $director->fill($request->input('director'));
+					$choir->directors()->save($director);
+				}
 
 				// Attach choir to the division
 				if($choir)

@@ -26,6 +26,13 @@
 						@endif
 					</span>
 				@endif
+
+				@if($award->pivot->sponsor)
+					<span class="sponsor">
+						<span class="heading">Sponsor:</span>
+						<span class="name">{{ $award->pivot->sponsor }}</span>
+					</span>
+				@endif
 			@endif
 
 			<ul class="actions-group">

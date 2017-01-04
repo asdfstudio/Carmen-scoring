@@ -1,1 +1,1 @@
-<h2>{{ $choir->name }} from {{ $choir->school->name }} - # {{ $choir->id }}</h2>
+<h2>{{ $choir->full_name }}</h2>

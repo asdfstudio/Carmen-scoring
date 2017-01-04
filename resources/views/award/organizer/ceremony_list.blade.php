@@ -28,6 +28,13 @@
 				@endif
 			@endif
 
+			@if($award->pivot->sponsor)
+				<span class="sponsor">
+					<span class="heading">Sponsored by:</span>
+					<span class="name">{{ $award->pivot->sponsor }}</span>
+				</span>
+			@endif
+
 		</li>
   @endforeach
 </ul>

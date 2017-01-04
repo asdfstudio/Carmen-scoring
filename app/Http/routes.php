@@ -12,11 +12,25 @@
 */
 
 Route::get('/', function () {
-    //return view('welcome');
-    return redirect('login');
+    return view('public.home');
+    //return redirect('login');
 });
 
+Route::get('about', function () {
+    return view('public.about');
+});
 
+Route::get('contact', function () {
+    return view('public.contact');
+});
+
+Route::get('system', function () {
+    return view('public.system_information');
+});
+
+Route::get('results/division/{division}/{access_code}', [
+  'as' => 'results.division.show', 'uses' => 'ResultsController@division'
+]);
 
 Route::get('profile', [
   'as' => 'profile.edit', 'uses' => 'ProfileController@edit'

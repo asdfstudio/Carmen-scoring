@@ -11,7 +11,27 @@ class Division extends Model
 
 		protected $dates = ['deleted_at'];
 
-		protected $fillable = ['name','caption_weighting_id','scoring_method_id','sheet_id', 'combo_award_count', 'music_award_count', 'show_award_count', 'overall_award_count'];
+		protected $fillable =  [
+      'name',
+      'caption_weighting_id',
+      'scoring_method_id',
+      'sheet_id',
+      'combo_award_count',
+      'music_award_count',
+      'show_award_count',
+      'overall_award_count',
+      'overall_award_sponsors',
+      'music_award_sponsors',
+      'show_award_sponsors',
+      'combo_award_sponsors'
+    ];
+
+    protected $casts = [
+      'overall_award_sponsors' => 'array',
+      'music_award_sponsors' => 'array',
+      'show_award_sponsors' => 'array',
+      'combo_award_sponsors' => 'array'
+    ];
 
 		/*public function organization()
 		{
@@ -59,7 +79,7 @@ class Division extends Model
 
     public function awards()
     {
-        return $this->belongsToMany('App\Award', 'division_award')->withPivot( 'choir_id', 'recipient');
+        return $this->belongsToMany('App\Award', 'division_award')->withPivot( 'choir_id', 'recipient', 'sponsor');
     }
 
 		public function rounds()
@@ -140,6 +160,7 @@ class Division extends Model
     {
       $this->is_scoring_active = true;
       $this->is_completed = false;
+      $this->is_published = false;
       return $this->save();
     }
 
@@ -147,6 +168,7 @@ class Division extends Model
     {
       $this->is_scoring_active = false;
       $this->is_completed = false;
+      $this->is_published = false;
       return $this->save();
     }
 
@@ -154,6 +176,7 @@ class Division extends Model
     {
       $this->is_scoring_active = true;
       $this->is_completed = false;
+      $this->is_published = false;
       return $this->save();
     }
 
@@ -161,6 +184,42 @@ class Division extends Model
     {
       $this->is_scoring_active = false;
       $this->is_completed = true;
+      $this->is_published = false;
+      $saved = $this->save();
+
+      // Update all rounds
+      $this->rounds()->update(['is_completed' => true]);
+
+      return $saved;
+    }
+
+    public function finalizeScoring()
+    {
+      $this->is_published = true;
+      $this->is_scoring_active = false;
+      $this->is_completed = true;
+      $this->access_code = strtoupper(str_random(8));
       return $this->save();
     }
+
+/*
+    public function setOverallAwardSponsorsAttribute($value)
+    {
+      return $this->attributes['overall_award_sponsors'] = array_values(array_filter(explode(PHP_EOL, $value)));
+    }
+
+    public function setMusicAwardSponsorsAttribute($value)
+    {
+      return array_values(array_filter(explode(PHP_EOL, $value)));
+    }
+
+    public function setShowAwardSponsorsAttribute($value)
+    {
+      return array_values(array_filter(explode(PHP_EOL, $value)));
+    }
+
+    public function setComboAwardSponsorsAttribute($value)
+    {
+      return array_values(array_filter(explode(PHP_EOL, $value)));
+    }*/
 }

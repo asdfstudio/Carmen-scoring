@@ -9,6 +9,12 @@
 <?php endif; ?>
 
 <?php if ($showField): ?>
+    <?php
+    if(is_array($options['value']))
+    {
+      $options['value'] = implode(PHP_EOL, $options['value']);
+    }
+    ?>
     <?= Form::textarea($name, $options['value'], $options['attr']) ?>
 
     <?php include 'help_block.php' ?>

@@ -55,32 +55,95 @@ class CreateForm extends Form
           ]
 				]);
 
+        $this->add('award_heading', 'static', [
+          'tag' => 'h2',
+          'value' => 'Award Settings',
+          'label_show' => false
+        ]);
+
         $this->add('overall_award_count','number', [
           'rules' => 'required',
           'help_block' => [
             'text' => 'How many choirs will receive Overall Awards?'
-          ]
+          ],
+          'wrapper' => [
+            'class' => 'form-group col-md-3 col-xs-12'
+          ],
+          'attr' => ['min' => 0]
         ]);
 
         $this->add('music_award_count','number', [
           'rules' => 'required',
           'help_block' => [
             'text' => 'How many choirs will receive Music Awards?'
-          ]
+          ],
+          'wrapper' => [
+            'class' => 'form-group col-md-3 col-xs-12'
+          ],
+          'attr' => ['min' => 0]
         ]);
 
         $this->add('show_award_count','number', [
           'rules' => 'required',
           'help_block' => [
             'text' => 'How many choirs will receive Show Awards?'
-          ]
+          ],
+          'wrapper' => [
+            'class' => 'form-group col-md-3 col-xs-12'
+          ],
+          'attr' => ['min' => 0]
         ]);
 
         $this->add('combo_award_count','number', [
           'rules' => 'required',
           'help_block' => [
             'text' => 'How many choirs will receive Combo Awards?'
+          ],
+          'wrapper' => [
+            'class' => 'form-group col-md-3 col-xs-12'
+          ],
+          'attr' => ['min' => 0]
+        ]);
+
+
+        $this->add('overall_award_sponsors','textarea', [
+          'help_block' => [
+            'text' => 'Enter 1 sponsor per line, with Champion sponsor on line 1, 1st runner up on line 2 and so on...'
+          ],
+          'wrapper' => [
+            'class' => 'form-group col-md-3 col-xs-12'
           ]
+        ]);
+
+
+        $this->add('music_award_sponsors','textarea', [
+          'help_block' => [
+            'text' => 'Enter 1 sponsor per line, with Champion sponsor on line 1, 1st runner up on line 2 and so on...'
+          ],
+          'wrapper' => [
+            'class' => 'form-group col-md-3 col-xs-12'
+          ],
+          'default_value' => ''
+        ]);
+
+        $this->add('show_award_sponsors','textarea', [
+          'help_block' => [
+            'text' => 'Enter 1 sponsor per line, with Champion sponsor on line 1, 1st runner up on line 2 and so on...'
+          ],
+          'wrapper' => [
+            'class' => 'form-group col-md-3 col-xs-12'
+          ],
+          'default_value' => ''
+        ]);
+
+        $this->add('combo_award_sponsors','textarea', [
+          'help_block' => [
+            'text' => 'Enter 1 sponsor per line, with Champion sponsor on line 1, 1st runner up on line 2 and so on...'
+          ],
+          'wrapper' => [
+            'class' => 'form-group col-md-3 col-xs-12'
+          ],
+          'default_value' => ''
         ]);
 
 

@@ -5,7 +5,7 @@
 @if(!$awards->isEmpty())
 
 
-	
+
 
 <ul class="list-group">
   @foreach($awards as $award)
@@ -14,6 +14,16 @@
 			{{ Form::checkbox("awards[$award->id]", $award->id, $selected, ['class' => 'awards']) }}
 			<h4>{{ $award->name }}</h4>
 			{{ $award->description }}
+
+			<?php
+			$selected = $selected_awards->where('id', $award->id)->first();
+			$sponsor = $selected ? $selected->pivot->sponsor : false;
+			?>
+			<div class="sponsor-container mv">
+				{{ Form::label('Award Sponsor:') }}
+				{{ Form::text("sponsors[$award->id]", $sponsor) }}
+			</div>
+
 		</li>
   @endforeach
 </ul>
