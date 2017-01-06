@@ -6,7 +6,7 @@
 <ul class="list-group">
   @foreach($judges as $judge)
 	  <li class="judge list-group-item">
-			<span class="name">{{ link_to_route('organizer.competition.division.judge.edit', $judge->full_name, [$division->competition,$division,$judge]) }}</span>
+			<span class="name">{{ $judge->full_name }}</span>
 
       <ul class="captions-group">
       @foreach($captions as $caption)
@@ -21,9 +21,11 @@
 
 
 			<ul class="actions-group">
-				<!--<li>
-					{{ link_to_route('organizer.competition.division.judge.edit', 'Edit', [$division->competition,$division,$judge], ['class' => 'action']) }}
-				</li>-->
+				@can('updateJudge', $division)
+					<li>
+						{{ link_to_route('organizer.competition.division.judge.edit', 'Edit Captions', [$division->competition,$division,$judge], ['class' => 'action']) }}
+					</li>
+				@endcan
 				@if($judge->user)
 					<li>
 						{{ link_to_route('user.password.edit', 'Change Password', [$judge->user->id], ['class' => 'action']) }}

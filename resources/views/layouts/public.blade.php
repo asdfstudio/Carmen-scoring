@@ -39,6 +39,9 @@
       <li>
         <a href="/contact" class="<?php if($active_page == 'contact') echo 'active'; ?>">Contact</a>
       </li>
+      <li>
+        <a href="/login" class="<?php if($active_page == 'login') echo 'active'; ?>">Login</a>
+      </li>
     </ul>
   </nav>
   <div class="">

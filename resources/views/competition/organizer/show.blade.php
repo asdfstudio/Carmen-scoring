@@ -24,18 +24,21 @@
 @section('content')
 
   <ul class="actions-group mv">
-    @if($competition->is_completed)
+    @can('activateScoring', $competition)
       <li>{!! form($activateScoringForm) !!}</li>
-    @endif
-    @if($competition->is_completed == false)
+    @endcan
+    @can('archiveCompetition', $competition)
+      <li>{!! form($archiveCompetitionForm) !!}</li>
+    @endcan
+    @can('completeScoring', $competition)
       <li>{!! form($completeScoringForm) !!}</li>
-    @endif
+    @endcan
   </ul>
 
   <h3>Manage Divisions</h3>
   <p>Divisions are used to organize your competition and consist of choirs, judges, scoring settings and more.</p>
 
-  <p>{{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition]) }}</p>
+  <p>{{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition], ['class' => 'action']) }}</p>
 
   @if($competition->divisions->count() > 0)
 

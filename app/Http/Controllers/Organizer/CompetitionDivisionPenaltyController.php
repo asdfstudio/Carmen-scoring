@@ -30,9 +30,12 @@ class CompetitionDivisionPenaltyController extends Controller
 
     public function create(FormBuilder $formBuilder, $competition_id, $division_id)
     {
-      $this->authorize('create','App\Penalty');
-
       $division = Division::find($division_id);
+
+      $this->authorize('create','App\Penalty');
+      $this->authorize('createPenalty', $division);
+
+
 
       $form = $formBuilder->create('Penalty\CreatePenaltyForm', [
         'method' => 'POST',
@@ -94,6 +97,8 @@ class CompetitionDivisionPenaltyController extends Controller
         $query->where('division_id', $division_id);
       }])->where('organization_id', Auth::user()->organization_id)->get();
 
+      $this->authorize('managePenalties', $division);
+
       //dd($selected_penalties);
 
       //$form = $formBuilder->create('Penalty\DivisionPenaltiesForm', [
@@ -110,6 +115,8 @@ class CompetitionDivisionPenaltyController extends Controller
       $division = Division::find($division_id);
       //$this->authorize('update', $penalty);
 
+      $this->authorize('managePenalties', $division);
+
       $penalties = $request->input('penalties');
 
       if($penalties == false) $penalties = array();
@@ -125,6 +132,8 @@ class CompetitionDivisionPenaltyController extends Controller
     {
       $division = Division::with('rounds')->find($division_id);
       $round = false;
+
+      $this->authorize('assignPenalty', $division);
 
       if($request->input('round'))
       {

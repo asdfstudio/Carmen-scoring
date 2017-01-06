@@ -48,9 +48,10 @@
     @if (isset($division))
       <div class="division-navigation-bar body-width">
         <ul class="division-navigation">
-          <!--<li>
-            <a href="#overview">Overview</a>
-          </li>-->
+          <li>
+            <?php $link_class = in_array(Request::segment(6),['overview']) ? 'active' : false; ?>
+            <a href="{{ route('organizer.competition.division.show', [$competition, $division]) }}" class="{{ $link_class }}">Overview</a>
+          </li>
           <li>
             <?php $link_class = in_array(Request::segment(6),['settings','edit']) ? 'active' : false; ?>
             <a href="{{ route('organizer.competition.division.settings', [$competition, $division]) }}" class="{{ $link_class }}">Settings</a>

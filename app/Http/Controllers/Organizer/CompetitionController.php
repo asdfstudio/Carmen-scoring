@@ -102,6 +102,8 @@ class CompetitionController extends Controller
           'url' => route('organizer.competition.scoring',[$competition])
         ]);
 
+
+
         /*$deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm', [
           'method' => 'POST',
           'url' => route('organizer.competition.scoring',[$competition])
@@ -112,7 +114,12 @@ class CompetitionController extends Controller
           'url' => route('organizer.competition.scoring',[$competition])
         ]);
 
-				return view('competition.organizer.show', compact('competition','activateScoringForm','completeScoringForm'));
+        $archiveCompetitionForm = $formBuilder->create('Competition\ArchiveForm', [
+          'method' => 'POST',
+          'url' => route('organizer.competition.scoring',[$competition])
+        ]);
+
+				return view('competition.organizer.show', compact('competition', 'activateScoringForm', 'completeScoringForm', 'archiveCompetitionForm'));
     }
 
     /**
@@ -217,7 +224,8 @@ class CompetitionController extends Controller
       if($request->input('activate'))
       {
         //$is_scoring_active = true;
-        $is_completed = false;
+        $competition->is_completed = false;
+        $competition->is_archived = NULL;
       }
       // Deactive scoring for all division rounds
       /*elseif($request->input('deactivate'))
@@ -229,13 +237,18 @@ class CompetitionController extends Controller
       elseif($request->input('complete'))
       {
         //$is_scoring_active = false;
-        $is_completed = true;
+        $competition->is_completed = true;
+        $competition->is_archived = NULL;
+      }
+      elseif($request->input('archive'))
+      {
+        $competition->is_completed = true;
+        $competition->is_archived = true;
       }
       else {
         return false;
       }
 
-      $competition->is_completed = $is_completed;
       $competition->save();
 
       /*foreach($competition->rounds as $round)

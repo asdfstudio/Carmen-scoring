@@ -4,7 +4,7 @@
 @section('content-header')
 	<h1>Awards</h1>
 	<ul class="actions-group">
-		@can('create' , ['App\Award'])
+		@can('createAward' , $division)
 			<li>
 				{{ link_to_route('organizer.competition.division.award.create','Create new award', [$division->competition->id, $division->id], ['class' => 'action']) }}
 			</li>
@@ -31,7 +31,9 @@
 
 	<h2>Caption Specific Awards</h2>
 
-	{{ link_to_route('organizer.competition.division.edit', 'Edit number of awards', [$division->competition_id, $division], ['class' => 'action mv']) }}
+	@can('update', $division)
+		{{ link_to_route('organizer.competition.division.edit', 'Edit number of awards', [$division->competition_id, $division], ['class' => 'action mv']) }}
+	@endcan
 
 	<ul class="list-group">
 		<li class="list-group-item">Overall Awards: {{ $division->overall_award_count }}</li>

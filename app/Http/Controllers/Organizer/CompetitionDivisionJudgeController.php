@@ -227,9 +227,17 @@ class CompetitionDivisionJudgeController extends Controller
     public function edit($competition_id, $division_id, $judge_id, FormBuilder $formBuilder)
     {
         $division = Division::with('competition','choirs')->find($division_id);
-				$judge = Judge::with('captions')->find($judge_id);
 
+        $judge = Judge::with(['captions' => function($query) use ($division_id) {
+          $query->where('division_id', $division_id);
+        }])->find($judge_id);
+
+        $this->authorize('updateJudge', $division);
+
+        //$judges = $division->judges()->where('judge_id',$judge_id)->get();
         //dd($judge->captions->pluck('id')->toArray());
+
+        //dd($judge);
 
         $form = $formBuilder->create('Caption\ChooseCaptionForm', [
 					'method' => 'PATCH',

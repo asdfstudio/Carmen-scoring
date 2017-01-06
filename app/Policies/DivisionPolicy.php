@@ -131,6 +131,14 @@ class DivisionPolicy extends BasePolicy
       }
     }
 
+    public function updateJudge(User $user, Division $division)
+    {
+      if($this->isOrgAdmin AND $division->status_slug() == 'active')
+      {
+        return true;
+      }
+    }
+
     public function addChoir(User $user, Division $division)
     {
       if($this->isOrgAdmin AND $division->status_slug() == 'active')
@@ -150,6 +158,39 @@ class DivisionPolicy extends BasePolicy
     public function viewFinalStandings(User $user, Division $division)
     {
       if($this->isOrgAdmin OR $division->status_slug() == 'finalized')
+      {
+        return true;
+      }
+    }
+
+
+    public function createPenalty(User $user, Division $division)
+    {
+      if($this->isOrgAdmin AND $division->status_slug() == 'active')
+      {
+        return true;
+      }
+    }
+
+    public function assignPenalty(User $user, Division $division)
+    {
+      if($this->isOrgAdmin AND $division->status_slug() == 'active')
+      {
+        return true;
+      }
+    }
+
+    public function managePenalties(User $user, Division $division)
+    {
+      if($this->isOrgAdmin AND $division->status_slug() == 'active')
+      {
+        return true;
+      }
+    }
+
+    public function createAward(User $user, Division $division)
+    {
+      if($this->isOrgAdmin AND $division->status_slug() == 'active')
       {
         return true;
       }

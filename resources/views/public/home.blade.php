@@ -1,23 +1,25 @@
 @extends('layouts.public')
 
 @section('body-content')
-  <div class="slider slim-width">
-    <ul>
-      <li class="slide">
-        <img src="/images/contest.jpg" alt="Contest Image">
-        <h1>A new experience</h1>
-        <h2>Bring the best adjudication system to your event</h2>
-      </li>
-      <li class="slide">
-        <img src="http://unsplash.it/1000/419" alt="">
-        <span>A Revolution in the Showchoir World</span>
-      </li>
+  <div class="slider">
+    <div class="slider-inner">
+      <ul>
+        <li class="slide">
+          <img src="/images/contest.jpg" alt="Contest Image">
+          <h1>A new experience</h1>
+          <h2>Bring the best adjudication system to your event</h2>
+        </li>
+        <li class="slide">
+          <img src="/images/contest.jpg" alt="Contest Image">
+          <span>A Revolution in the Showchoir World</span>
+        </li>
 
-      <li class="slide">
-        <img src="http://unsplash.it/1000/418" alt="">
-        <span>Environmentally Friendly - Forget about paper waste</span>
-      </li>
-    </ul>
+        <li class="slide">
+          <img src="/images/contest.jpg" alt="Contest Image">
+          <span>Environmentally Friendly - Forget about paper waste</span>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div class="slim-width">
@@ -64,7 +66,14 @@
   <div class="slim-width">
     <div class="video-container">
       <span class="heading">Discover exactly what the judges love about Carmen</span>
-      <iframe src="https://www.youtube.com/embed/mWfdfZ1e9WE?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+
+      <div class="video-wrapper">
+        <div class="video">
+          <iframe src="https://www.youtube.com/embed/mWfdfZ1e9WE?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+        </div>
+
+      </div>
+
 
     </div>
   </div>
@@ -96,11 +105,11 @@
       <ul class="competitions-group">
         <li>
           <span class="name">marysville showcase</span>
-          <span class="date">january 21-22</span>
+          <span class="date">january 20-21</span>
         </li>
         <li>
           <span class="name">mt zion midwest invitational</span>
-          <span class="date">january 21-22</span>
+          <span class="date">january 20-21</span>
         </li>
         <li>
           <span class="name">danville midwest classic</span>
@@ -112,7 +121,7 @@
         </li>
         <li>
           <span class="name">edgewood contest of champions</span>
-          <span class="date">february 10</span>
+          <span class="date">february 11</span>
         </li>
         <li>
           <span class="name">bonita vista san diego sings!</span>

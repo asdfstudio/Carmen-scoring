@@ -90,7 +90,7 @@
 
     <h3>Transparency and Archives</h3>
 
-    <p>The director’s receive each and every number that is entered and calculated in the Carmen system. Absolutely nothing is hidden from the participating choirs. In addition, the results from each and every competition will be kept on our webpage, forever, so you can access your scores anywhere, anytime!</p>
+    <p>The director’s receive each and every number that is entered and calculated in the Carmen system. Absolutely nothing is hidden from the participating choirs. In addition, the results from all of our competitions will be kept on our webpage, forever, so you can access your scores anywhere, anytime!</p>
 
     <img src="/images/archives.png" alt="Score Transparency & Archives" />
 

@@ -67,7 +67,11 @@ class Competition extends Model
 
     public function status()
     {
-      if($this->is_completed)
+      if($this->is_archived)
+			{
+				return 'Archived';
+			}
+      elseif($this->is_completed)
 			{
 				return 'Completed';
 			}
@@ -79,7 +83,11 @@ class Competition extends Model
 
     public function status_slug()
 		{
-			if($this->is_completed)
+      if($this->is_archived)
+			{
+				return 'archived';
+			}
+      elseif($this->is_completed)
 			{
 				return 'completed';
 			}

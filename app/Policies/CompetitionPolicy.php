@@ -7,7 +7,9 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 use App\User;
 use App\Competition;
 
-class CompetitionPolicy
+use Auth;
+
+class CompetitionPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
@@ -18,79 +20,49 @@ class CompetitionPolicy
      */
     public function __construct()
     {
-        //
+        parent::__construct();
     }
 
 		public function before($user, $ability)
 		{
-			if($user->isAdmin())
+			/*if($user->isAdmin())
 			{
 				return true;
-			}
-		}
-
-
-		public function showAll()
-		{
-				return false;
-		}
-
-
-		public function create(User $user)
-		{
-        if($user->isOrganizer() AND $user->organization_role == 'admin')
-        {
-          return true;
-        }
-
-        return false;
-		}
-
-    public function update(User $user, Competition $competition)
-		{
-
-        if($user->isOrganizer() AND $user->organization_role == 'admin' AND $user->organization_id === $competition->organization_id)
-        {
-          return true;
-        }
-
-        return false;
+			}*/
 		}
 
 
     public function replicate(User $user, Competition $competition)
 		{
-
-        if($user->isOrganizer() AND $user->organization_role == 'admin' AND $user->organization_id === $competition->organization_id)
-        {
-          return true;
-        }
-
-        return false;
-		}
-
-
-		public function destroy(User $user, Competition $competition)
-		{
-      if($user->isOrganizer() AND $user->organization_role == 'admin' AND $user->organization_id === $competition->organization_id)
+      if($this->isOrgAdmin)
       {
         return true;
       }
-
-      return false;
 		}
 
-
-		public function show(User $user, Competition $competition)
-		{
-      if($user->isOrganizer() AND $user->organization_id === $competition->organization_id)
+    public function completeScoring(User $user, Competition $competition)
+    {
+      if($this->isOrgAdmin AND $competition->is_completed == false)
       {
         return true;
       }
+    }
 
-      return false;
-		}
+    public function activateScoring(User $user, Competition $competition)
+    {
+      if($this->isOrgAdmin AND $competition->is_completed)
+      {
+        return true;
+      }
+    }
 
+    public function archiveCompetition(User $user, Competition $competition)
+    {
+      if($this->isOrgAdmin AND $competition->is_completed AND $competition->is_archived == false)
+      {
+        return true;
+      }
+    }
 
 
 }

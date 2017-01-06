@@ -3601,6 +3601,8 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
       background-color: #E29231; }
     .label.status.finalized {
       background-color: #CA2128; }
+    .label.status.archived {
+      background-color: #CA2128; }
 
 .new_choir_container {
   display: none; }
@@ -3830,8 +3832,8 @@ body#public-layout {
           color: #FFF;
           text-decoration: none;
           display: block;
-          padding: 12px 9px;
-          font-size: 14px;
+          padding: 12px 6px;
+          font-size: 12px;
           line-height: 22px;
           font-weight: 300;
           border-right: 1px solid #7c3e8d; }
@@ -3866,51 +3868,66 @@ body#public-layout {
       body#public-layout ul.social-icons li i {
         display: block; }
   body#public-layout .slider {
+    max-width: 800px;
     margin: auto;
     position: relative;
-    height: 120px;
-    margin-bottom: 20px; }
-    @media only screen and (min-width: 768px) {
-      body#public-layout .slider {
-        margin-top: 30px;
-        height: 220px; } }
+    margin-bottom: 20px;
+    width: 100%;
+    padding-bottom: 50%;
+    background: #000; }
     @media only screen and (min-width: 1024px) {
       body#public-layout .slider {
-        margin-top: 30px;
-        height: 320px; } }
-    body#public-layout .slider .slide {
-      position: relative; }
-      body#public-layout .slider .slide img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 1;
-        max-width: 100%; }
-      body#public-layout .slider .slide h1, body#public-layout .slider .slide h2 {
-        z-index: 10;
-        background: none;
-        color: #FFF;
-        position: relative;
-        border: none;
-        margin: 0;
-        padding: 10px; }
-      body#public-layout .slider .slide h2 {
-        text-transform: none; }
-      @media only screen and (min-width: 768px) {
-        body#public-layout .slider .slide h1 {
-          margin-top: 40px; } }
+        padding-bottom: 30%; } }
+    body#public-layout .slider .slider-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0; }
+      body#public-layout .slider .slider-inner ul {
+        display: block;
+        height: 100%; }
+        body#public-layout .slider .slider-inner ul .slide {
+          display: block;
+          overflow: hidden;
+          position: relative;
+          height: 100%; }
+          body#public-layout .slider .slider-inner ul .slide img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            max-width: 100%; }
+          body#public-layout .slider .slider-inner ul .slide h1, body#public-layout .slider .slider-inner ul .slide h2 {
+            z-index: 10;
+            background: none;
+            color: #FFF;
+            position: relative;
+            border: none;
+            margin: 0;
+            padding: 10px;
+            text-shadow: 1px 1px 1px black;
+            background: rgba(0, 0, 0, 0.5); }
+          body#public-layout .slider .slider-inner ul .slide h1 {
+            margin-top: 40px;
+            background: rgba(0, 0, 0, 0.4); }
+          body#public-layout .slider .slider-inner ul .slide h2 {
+            text-transform: none;
+            background: rgba(0, 0, 0, 0.3); }
+          @media only screen and (min-width: 768px) {
+            body#public-layout .slider .slider-inner ul .slide h1 {
+              margin-top: 140px; } }
   body#public-layout .unslider {
     position: relative; }
     body#public-layout .unslider nav {
       background: none;
       border: none;
       position: absolute;
-      bottom: 0;
       left: 0;
       right: 0;
-      top: 275px; }
+      top: 20px; }
   body#public-layout ul.benefits-group {
     padding: 0;
     list-style: none; }
@@ -3976,18 +3993,29 @@ body#public-layout {
           width: 40%;
           display: inline-block;
           text-align: right;
-          padding: 30px 20px 30px 60px; } }
-    body#public-layout .video-container iframe {
+          padding: 16px 20px 0px 60px; } }
+    body#public-layout .video-container .video-wrapper {
       width: 100%;
-      height: 200px; }
+      padding-bottom: 56.25%;
+      position: relative;
+      display: inline-block;
+      box-sizing: border-box;
+      background: #000; }
       @media only screen and (min-width: 1024px) {
-        body#public-layout .video-container iframe {
-          height: 300px; } }
-      @media only screen and (min-width: 1024px) {
-        body#public-layout .video-container iframe {
+        body#public-layout .video-container .video-wrapper {
           float: left;
           width: 60%;
-          height: 350px; } }
+          padding-bottom: 33.75%; } }
+      body#public-layout .video-container .video-wrapper .video {
+        width: 100%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0; }
+      body#public-layout .video-container .video-wrapper iframe {
+        width: 100%;
+        height: 100%; }
   body#public-layout ul.event-sizes {
     display: block;
     position: relative;
@@ -4024,7 +4052,8 @@ body#public-layout {
           font-size: 1.6em; } }
   body#public-layout ul.packages {
     display: block;
-    overflow: hidden; }
+    overflow: hidden;
+    padding: 0; }
     body#public-layout ul.packages li {
       background: #CA2128;
       color: #FFF;
@@ -4032,14 +4061,17 @@ body#public-layout {
       margin: 2%;
       display: block;
       box-sizing: border-box;
-      float: left;
-      width: 28%;
+      width: 100%;
       font-size: 18px;
       line-height: 22px;
       font-weight: 700;
       border-radius: 20px;
       text-align: center;
       text-transform: uppercase; }
+      @media only screen and (min-width: 768px) {
+        body#public-layout ul.packages li {
+          float: left;
+          width: 28%; } }
   body#public-layout ul.package-prices {
     padding: 0;
     list-style: none;
