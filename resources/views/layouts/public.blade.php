@@ -24,12 +24,12 @@
     <ul>
       <li>
 
-        <a href="/" class="logo"><img src="/images/flower.png" alt="Carmen Showchoir" width="24px"></a>
+        <a href="/" class="logo <?php if($active_page == '') echo 'active'; ?>"><img src="/images/flower.png" alt="Carmen Showchoir" width="24px"></a>
       </li>
-      <li>
+      <!--<li>
 
         <a href="/" class="<?php if($active_page == '') echo 'active'; ?>">Home</a>
-      </li>
+      </li>-->
       <li>
         <a href="/system" class="<?php if($active_page == 'system') echo 'active'; ?>">Information</a>
       </li>
@@ -38,6 +38,9 @@
       </li>
       <li>
         <a href="/contact" class="<?php if($active_page == 'contact') echo 'active'; ?>">Contact</a>
+      </li>
+      <li>
+        <a href="/contest" class="<?php if($active_page == 'contest') echo 'active'; ?>">Contest</a>
       </li>
       <li>
         <a href="/login" class="<?php if($active_page == 'login') echo 'active'; ?>">Login</a>

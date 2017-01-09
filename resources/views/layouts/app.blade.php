@@ -28,6 +28,8 @@
 </head>
 <body id="app-layout">
 
+    @yield('body-header')
+
     @yield('body-content')
 
     <!-- JavaScripts -->
@@ -52,7 +54,7 @@
 
     @yield('body-footer')
 
-    
+
 
 </body>
 </html>

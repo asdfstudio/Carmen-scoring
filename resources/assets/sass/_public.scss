@@ -262,10 +262,13 @@ body#public-layout {
       margin: auto;
       position: relative;
       //height: 120px;
+      margin-top: 20px;
       margin-bottom: 20px;
       width: 100%;
       padding-bottom: 50%;
       background: $cs-black;
+      border: 5px solid $cs-gray-light;
+      border-radius: 20px;
 
       @include min-screen($tablet-min)
       {
@@ -354,7 +357,8 @@ body#public-layout {
       //bottom: 0;
       left: 0;
       right: 0;
-      top: 20px;
+      top: 40px;
+      z-index: 5;
 
       ol {
         li {
@@ -427,8 +431,16 @@ body#public-layout {
         margin: 40px 0;
       }
 
-      i {
+      .icon {
+        display: none;
 
+        @include min-screen($tablet-max)
+        {
+          display: block;
+          float: left;
+          margin-right: 25px;
+          width: 80px;
+        }
       }
       .summary {
         background: $cs-orange;
@@ -454,13 +466,14 @@ body#public-layout {
         margin: 15px 0;
         padding: 0;
         list-style: none;
-        float: left;
+
         display: block;
 
         @include min-screen($tablet-min)
         {
-          width: 74%;
+          width: 67%;
           margin: 5px 0;
+          float: left;
         }
 
         & > li {
@@ -764,4 +777,79 @@ body#public-layout {
     }
   }
 
+
+  img.page-featured-image {
+    border-radius: 20px;
+    padding: 5px;
+    background: $cs-gray-light;
+    margin-top: 20px;
+
+    @include min-screen($tablet-min)
+    {
+      border-radius: 30px;
+      padding: 10px;
+    }
+  }
+
+}
+
+
+/* Public results pages */
+.body-header {
+  padding: 20px;
+  text-align: center;
+  overflow: hidden;
+
+  img {
+
+
+    @include min-screen($tablet-min)
+    {
+      float: left;
+      //margin: 0 10px;
+    }
+  }
+
+
+  .heading-container {
+
+    margin-top: 20px;
+
+    @include min-screen($tablet-min)
+    {
+      margin-top: 3px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2em;
+    }
+    h2.subheader {
+      color: $cs-gray-mid-3;
+      font-size: 1.4em;
+      margin: 0;
+    }
+
+    @include min-screen($tablet-min)
+    {
+      float: right;
+      text-align: right;
+      max-width: 60%;
+    }
+  }
+
+}
+
+h1.division-heading {
+  border-bottom: 10px solid $cs-gray-light;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  margin-top: 0;
+  text-align: center;
+}
+
+ul.actions-group {
+  &.centered {
+    display: block;
+    text-align: center;
+  }
 }

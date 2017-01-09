@@ -5,18 +5,19 @@
     <div class="slider-inner">
       <ul>
         <li class="slide">
-          <img src="/images/contest.jpg" alt="Contest Image">
+          <img src="/images/slide-1.jpg" alt="Contest Image">
           <h1>A new experience</h1>
           <h2>Bring the best adjudication system to your event</h2>
         </li>
         <li class="slide">
-          <img src="/images/contest.jpg" alt="Contest Image">
-          <span>A Revolution in the Showchoir World</span>
+          <img src="/images/slide-2.jpg" alt="Contest Image">
+          <h1>A Revolution in the Showchoir World</h1>
         </li>
 
         <li class="slide">
-          <img src="/images/contest.jpg" alt="Contest Image">
-          <span>Environmentally Friendly - Forget about paper waste</span>
+          <img src="/images/slide-3.jpg" alt="Contest Image">
+          <h1>Environmentally Friendly</h1>
+          <h2>Forget about paper waste</h2>
         </li>
       </ul>
     </div>
@@ -25,6 +26,7 @@
   <div class="slim-width">
     <ul class="benefits-group">
       <li>
+        <img src="/images/prize.png" alt="" class="icon">
         <span class="summary">Fast<br /> Accurate<br /> Results</span>
         <ul>
           <li>No more waiting for manual calculations</li>
@@ -32,6 +34,7 @@
         </ul>
       </li>
       <li>
+        <img src="/images/lock.png" alt="" class="icon">
         <span class="summary">Trusted<br /> Secure<br /> Platform</span>
         <ul>
           <li>Trusted and loved by the best competitions in the USA</li>
@@ -39,6 +42,7 @@
         </ul>
       </li>
       <li>
+        <img src="/images/leaf.png" alt="" class="icon">
         <span class="summary">Small<br /> Carbon<br /> Footprint</span>
         <ul>
           <li>Everything is digital, from the scoresheets to the results</li>
@@ -46,6 +50,7 @@
         </ul>
       </li>
       <li>
+        <img src="/images/scoresheet.png" alt="" class="icon">
         <span class="summary">Custom<br /> Event<br /> Specs</span>
         <ul>
           <li>Keep the traditions of your competition and add the power of Carmen</li>
@@ -53,6 +58,7 @@
         </ul>
       </li>
       <li>
+        <img src="/images/devices-no-flower.png" alt="" class="icon">
         <span class="summary">Anywhere<br /> Any time<br /> Any device</span>
         <ul>
           <li>Compatible with tablets AND laptop computers</li>
