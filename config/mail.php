@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'showchoir@carmenscoring.com', 'name' => 'Carmen Showchoir'],
+    'from' => ['address' => 'no-reply@carmenscoring.com', 'name' => 'Carmen Showchoir'],
 
     /*
     |--------------------------------------------------------------------------
