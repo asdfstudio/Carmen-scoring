@@ -105,7 +105,7 @@
 
 
   <div class="slim-width">
-    <div class="competitions-container">
+    <div class="competitions-container" id="competitions">
       <h4>Carmen's<br /> 2017 Showchoir Competition Season</h4>
 
       <ul class="competitions-group">

@@ -3124,7 +3124,7 @@ button.close {
 
 .popup-input-container {
   position: fixed;
-  top: 0;
+  bottom: 0;
   padding: 10px;
   background: #ccc;
   width: 610px;
@@ -3273,7 +3273,7 @@ table.responsive {
   left: 0;
   top: 0;
   background: #fff;
-  width: 35%;
+  width: 200px;
   overflow: hidden;
   overflow-x: scroll;
   border-right: 1px solid #ccc;
@@ -3297,15 +3297,14 @@ div.table-wrapper {
   border-right: 2px solid #ccc; }
 
 div.table-wrapper div.scrollable {
-  margin-left: 35%; }
+  margin-left: 200px; }
 
 div.table-wrapper div.scrollable {
   overflow: scroll;
   overflow-y: hidden; }
 
-table.responsive td, table.responsive th {
-  position: relative;
-  white-space: nowrap;
+.pinned table th div, table.responsive th div {
+  height: 60px;
   overflow: hidden; }
 
 table.responsive th:first-child, table.responsive td:first-child, table.responsive td:first-child, table.responsive.pinned td {
@@ -3313,9 +3312,9 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
 
 @media only screen and (min-width: 768px) {
   .pinned {
-    width: 320px; }
+    width: 300px; }
   div.table-wrapper div.scrollable {
-    margin-left: 320px; } }
+    margin-left: 300px; } }
 
 .actions-group {
   font-size: 0;
@@ -3937,12 +3936,25 @@ body#public-layout {
     list-style: none; }
     body#public-layout ul.benefits-group > li {
       margin: 10px 0;
-      overflow: hidden; }
+      overflow: hidden;
+      /*.row {
+        margin: 0;
+        text-align: center;
+      }*/ }
       @media only screen and (min-width: 768px) {
         body#public-layout ul.benefits-group > li {
           margin: 40px 0; } }
       body#public-layout ul.benefits-group > li .icon {
-        display: none; }
+        display: block;
+        height: 100px;
+        margin: auto;
+        margin-bottom: 15px; }
+        @media only screen and (min-width: 768px) {
+          body#public-layout ul.benefits-group > li .icon {
+            display: block;
+            float: left;
+            margin-right: 25px;
+            width: 80px; } }
         @media only screen and (min-width: 1024px) {
           body#public-layout ul.benefits-group > li .icon {
             display: block;
@@ -3972,6 +3984,11 @@ body#public-layout {
         list-style: none;
         display: block; }
         @media only screen and (min-width: 768px) {
+          body#public-layout ul.benefits-group > li > ul {
+            width: 50%;
+            margin: 5px 0;
+            float: left; } }
+        @media only screen and (min-width: 1024px) {
           body#public-layout ul.benefits-group > li > ul {
             width: 67%;
             margin: 5px 0;

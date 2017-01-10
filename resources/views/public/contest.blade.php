@@ -17,7 +17,7 @@
 
     <h3>Rules</h3>
 
-    <p>You must submit a picture to <a href="mailto:contest@carmenscoring.com">contest@carmenscoring.com</a>  that has been taken ON SITE at one of our competitions (link this to the home page where the list of our competitions is displayed) on the day of the event.</p>
+    <p>You must submit a picture to <a href="mailto:contest@carmenscoring.com">contest@carmenscoring.com</a>  that has been taken ON SITE at one of our <a href="/#competitions">competitions</a>  on the day of the event.</p>
 
     <p>In the message with the picture attached, you must include:</p>
 

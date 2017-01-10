@@ -431,9 +431,26 @@ body#public-layout {
         margin: 40px 0;
       }
 
-      .icon {
-        display: none;
+      /*.row {
+        margin: 0;
+        text-align: center;
+      }*/
 
+      .icon {
+        display: block;
+        //float: left;
+        height: 100px;
+        margin: auto;
+        margin-bottom: 15px;
+        //margin-right: 25px;
+
+        @include min-screen($tablet-min)
+        {
+          display: block;
+          float: left;
+          margin-right: 25px;
+          width: 80px;
+        }
         @include min-screen($tablet-max)
         {
           display: block;
@@ -470,6 +487,13 @@ body#public-layout {
         display: block;
 
         @include min-screen($tablet-min)
+        {
+          width: 50%;
+          margin: 5px 0;
+          float: left;
+        }
+
+        @include min-screen($tablet-max)
         {
           width: 67%;
           margin: 5px 0;

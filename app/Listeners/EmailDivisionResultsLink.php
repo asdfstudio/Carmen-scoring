@@ -39,12 +39,13 @@ class EmailDivisionResultsLink
         $division->choirs->each(function($choir,$key) use ($directors) {
           foreach($choir->directors as $director)
           {
-            $directors->push($director);
+            if($director->email)
+            {
+              $directors->push($director);
+            }
+
           }
         });
-
-        //dd($directors->pluck('email')->toArray());
-
 
         $this->mailer->send('email.division_finalized',
 					['division' => $division],

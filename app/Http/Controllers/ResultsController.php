@@ -49,6 +49,9 @@ class ResultsController extends Controller
         $query->where('division_id',$division_id);
       }])->where('access_code', $access_code)->where('is_published', 1)->find($division_id);
 
+      if($this->division == false)
+        abort('404');
+
       $caption_ids = $this->division->sheet->caption_ids;
       $this->captions = Caption::whereIn('id', $caption_ids)->get();
     }

@@ -28,10 +28,14 @@ endif;
     <!--Caption heading-->
 
     <tr>
-      <th>&nbsp;</th>
+      <th><div>&nbsp;</div></th>
 
       @foreach($choirs as $choir)
-        <th>{{ $choir->full_name }}</th>
+        <th>
+          <div>
+            {{ $choir->full_name }}
+          </div>
+        </th>
       @endforeach
     </tr>
 
@@ -132,10 +136,14 @@ endif;
   </tr>
 
   <tr>
-    <th>&nbsp;</th>
+    <th><div>&nbsp;</div></th>
 
     @foreach($choirs as $choir)
-      <th>{{ $choir->full_name }}</th>
+      <th>
+        <div class="">
+          {{ $choir->full_name }}
+        </div>
+      </th>
     @endforeach
   </tr>
 </table>

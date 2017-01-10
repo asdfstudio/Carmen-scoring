@@ -27,6 +27,8 @@
 
 	table.responsive {
     margin-bottom: 0;
+    //background: yellow;
+    //-webkit-transform: translate3d(0, 0, 0);
   }
 
 	.pinned {
@@ -34,7 +36,7 @@
     left: 0;
     top: 0;
     background: #fff;
-    width: 35%;
+    width: 200px;
     overflow: hidden;
     overflow-x: scroll;
     border-right: 1px solid #ccc;
@@ -60,7 +62,7 @@
     border-right: 2px solid #ccc;
   }
 	div.table-wrapper div.scrollable {
-    margin-left: 35%;
+    margin-left: 200px;
   }
 	div.table-wrapper div.scrollable {
     overflow: scroll;
@@ -68,9 +70,18 @@
   }
 
 	table.responsive td, table.responsive th {
-    position: relative;
-    white-space: nowrap;
-    overflow: hidden;
+    //position: relative;
+    //white-space: nowrap;
+    //overflow: hidden;
+    //max-height: 60px;
+    //max-width: 100px;
+    //text-overflow: ellipsis;
+  }
+  .pinned table th, table.responsive th {
+    div {
+      height: 60px;
+      overflow: hidden;
+    }
   }
 	table.responsive th:first-child, table.responsive td:first-child, table.responsive td:first-child, table.responsive.pinned td {
     display: none;
@@ -79,11 +90,11 @@
 
   @media only screen and (min-width: 768px) {
     .pinned {
-      width: 320px;
+      width: 300px;
     }
 
     div.table-wrapper div.scrollable {
-      margin-left: 320px;
+      margin-left: 300px;
     }
   }
 
