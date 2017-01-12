@@ -28,7 +28,8 @@
 	<ul class="list-group sortable-list" id="sortable-list">
 		@foreach($choirs as $index => $choir)
 			<li class="list-group-item choir" data-id="{{ $choir->id }}">
-				<span class="performance_order" id="performance-order-{{ $choir->id }}">{{ $index + 1 }}</span>
+				<span class="sort-handle"><i class="fa fa-sort"></i></span>
+				<span class="performance-order" id="performance-order-{{ $choir->id }}">{{ $index + 1 }}</span>
 
 				@if($choir->school)
 					<span class="school">{{ $choir->school->name }}</span>
@@ -51,6 +52,7 @@
 <script type="text/javascript">
   var el = document.getElementById('sortable-list');
   var sortable = Sortable.create(el, {
+		handle: '.sort-handle',
 		onEnd: function(e) {
 			var order = sortable.toArray();
 			order.forEach(function(choir_id, index) {

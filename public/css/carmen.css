@@ -3125,6 +3125,9 @@ button.close {
 .popup-input-container {
   position: fixed;
   bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
   padding: 10px;
   background: #ccc;
   width: 610px;
@@ -3452,7 +3455,13 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
   font-style: italic;
   color: #a3a3a3; }
 
-.list-group .list-group-item.choir .performance_order {
+.list-group .list-group-item.choir .performance-order {
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 15px 25px 10px 10px; }
+
+.list-group .list-group-item.choir .sort-handle {
   float: left;
   font-size: 20px;
   font-weight: bold;
@@ -3551,7 +3560,7 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
   .list-group .list-group-item.standing .details .raw_rank {
     color: #898989; }
 
-.list-group.sortable-list .list-group-item:hover {
+.list-group.sortable-list .list-group-item .sort-handle:hover {
   cursor: grab; }
 
 .list-group.sortable-list .list-group-item.sortable-drag {

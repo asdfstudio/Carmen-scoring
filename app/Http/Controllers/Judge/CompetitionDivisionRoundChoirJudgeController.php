@@ -26,7 +26,9 @@ class CompetitionDivisionRoundChoirJudgeController extends Controller
 
 			$rawScores = RawScore::with('judge','choir')->where('division_id',$division_id)->where('round_id',$round_id)->where('choir_id',$choir_id)->get();
 
-			$round = Round::with(['division','division.competition','division.choirs' => function($query) use ($choir_id) {
+			$round = Round::with(['division','division.competition' => function($query) {
+        $query->withoutGlobalScope('organization');
+      },'division.choirs' => function($query) use ($choir_id) {
 				$query->where('choir_id',$choir_id);
 			}, 'division.judges' => function ($query) {
 					$query->groupBy('judge_id');
@@ -51,12 +53,16 @@ class CompetitionDivisionRoundChoirJudgeController extends Controller
 
 			//$division = Division::with('choirs','judges','judges.captions','competition','competition.organization')->find($division_id);
 
-			$round = Round::with(['division','division.competition','division.choirs' => function($query) use ($choir_id) {
+			$round = Round::with(['division','division.competition' => function($query) {
+        $query->withoutGlobalScope('organization');
+      },'division.choirs' => function($query) use ($choir_id) {
 				$query->where('choir_id',$choir_id);
 			}])->find($round_id);
 
 
-			$round = Round::with(['division','division.competition','division.judges' => function($query) use ($judge_id) {
+			$round = Round::with(['division','division.competition' => function($query) {
+        $query->withoutGlobalScope('organization');
+      },'division.judges' => function($query) use ($judge_id) {
 					$query->where('judge_id',$judge_id)->first();
 				}, 'division.judges.captions' => function($query) use ($division_id) {
 					$query->where('division_id',$division_id);

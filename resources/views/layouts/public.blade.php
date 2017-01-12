@@ -42,9 +42,18 @@
       <li>
         <a href="/contest" class="<?php if($active_page == 'contest') echo 'active'; ?>">Contest</a>
       </li>
-      <li>
-        <a href="/login" class="<?php if($active_page == 'login') echo 'active'; ?>">Login</a>
-      </li>
+      @if(Auth::guest())
+        <li>
+          <a href="/login" class="<?php if($active_page == 'login') echo 'active'; ?>">Login</a>
+        </li>
+      @endif
+
+      @if(Auth::check())
+        <li>
+          <a href="/logout" class="<?php if($active_page == 'login') echo 'active'; ?>">Logout</a>
+        </li>
+      @endif
+
     </ul>
   </nav>
   <div class="">

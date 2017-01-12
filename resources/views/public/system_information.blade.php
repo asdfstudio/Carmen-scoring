@@ -23,7 +23,7 @@
     <ul class="steps-group">
       <li>
         <span class="step-label">Step 1</span>
-        <span class="step-content">Contact Us (link) through Facebook, Twitter, Instagram, Snapchat, or email (email link) to request an Organizer account.</span>
+        <span class="step-content"><a href="/contact">Contact Us</a>  through <a href="https://www.facebook.com/carmenshowchoirscoring/" target="_blank">Facebook</a>, <a href="https://twitter.com/CarmenScoring" target="_blank">Twitter</a>, <a href="https://www.instagram.com/carmenscoring/" target="_blank"> Instagram</a>, <a href="https://www.snapchat.com/add/carmenshowchoir" target="_blank">Snapchat</a>, or <a href="mailto:info@carmenscoring.com">email</a> to request an Organizer account.</span>
 
       </li>
       <li>

@@ -31,14 +31,20 @@
           <?php
           $active = $current_page == 'round_'.$round->id ? 'active' : false;
           ?>
-
     			<a href="{{ route('results.division.round.show', [$division, $round, $access_code]) }}" class="{{ $active }} action">{{ $round->name }}</a>
     		</li>
-      @endforeach
 
-  		<!--<li>
-  			<a href="#" class="action">Shared Spreadsheet</a>
-  		</li>-->
+        @foreach($round->targets as $target)
+          @if($target AND $target->sources->count() > 1)
+            <li>
+              <?php
+              $active = $current_page == 'round_shared_'.$round->id ? 'active' : false;
+              ?>
+        			<a href="{{ route('results.division.round-shared.show', [$division, $round, $target->id, $access_code]) }}" class="{{ $active }} action">{{ $target->name }} > Source Rounds</a>
+        		</li>
+          @endif
+        @endforeach
+      @endforeach
   	</ul>
 
     @yield('content')

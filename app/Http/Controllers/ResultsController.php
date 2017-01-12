@@ -9,7 +9,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\View;
 
 use App\Division;
+use App\Round;
 use App\Caption;
+use App\Judge;
 use App\Carmen\Scoreboard;
 
 class ResultsController extends Controller
@@ -29,6 +31,10 @@ class ResultsController extends Controller
       elseif($segment == 'round')
       {
         $current_page = 'round_'.$request->segment(5);
+      }
+      elseif($segment == 'round-shared')
+      {
+        $current_page = 'round_shared_'.$request->segment(5);
       }
       else {
         $current_page = 'awards';
@@ -95,11 +101,60 @@ class ResultsController extends Controller
       $division = $this->division;
       $captions = $this->captions;
 
+
       $round = $division->rounds()->find($round_id);
+
+      $choirs = $round->choirs;
+      $judges = $division->judges;
 
       $scoreboard = new Scoreboard(['round_id' => $round_id]);
 
-      return view('results.division_round.show', compact('division', 'round', 'scoreboard', 'captions', 'access_code'));
+      $show_links = true;
+
+      return view('results.division_round.show', compact('division', 'round', 'scoreboard', 'captions', 'access_code', 'choirs', 'judges', 'show_links'));
+    }
+
+
+    public function divisionRoundShared($division_id, $round_id, $target_round_id, $access_code)
+    {
+      $this->loadDivision($division_id, $access_code);
+      $division = $this->division;
+      $captions = $this->captions;
+
+      $round = $division->rounds()->find($round_id)->targets()->find($target_round_id);
+
+      $source_rounds = $round->sources;
+
+      $source_choirs = collect();
+      $source_judges = collect();
+
+      $source_rounds->each(function($item, $key) use ($source_choirs, $source_judges) {
+        if($item->has('choirs'))
+        {
+          $item->choirs->each(function($choir,$key) use ($source_choirs) {
+            return $source_choirs->push($choir);
+          });
+        }
+
+        if($item->division->has('judges'))
+        {
+          $item->division->judges->each(function($judge,$key) use ($source_judges) {
+            return $source_judges->push($judge->id);
+          });
+        }
+      });
+
+      $choirs = $source_choirs;
+      $judge_ids = $source_judges->unique();
+      $judges = Judge::whereIn('id', $judge_ids)->get();
+
+      $scoreboard = new Scoreboard(['round_id' => $source_rounds->pluck('id')->toArray()]);
+
+      //dd($scoreboard->rawScores);
+
+      $show_links = false;
+
+      return view('results.division_round.show_shared', compact('division', 'round', 'scoreboard', 'captions', 'access_code', 'choirs', 'judges', 'show_links'));
     }
 
 

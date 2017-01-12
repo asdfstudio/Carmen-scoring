@@ -32,13 +32,16 @@ Route::get('contest', function () {
     return view('public.contest');
 });
 
-
 Route::get('results/division/{division}/standings/{access_code}', [
   'as' => 'results.division.standings', 'uses' => 'ResultsController@divisionStandings'
 ]);
 
 Route::get('results/division/{division}/round/{round}/{access_code}', [
   'as' => 'results.division.round.show', 'uses' => 'ResultsController@divisionRound'
+]);
+
+Route::get('results/division/{division}/round-shared/{round}/{target_round_id}/{access_code}', [
+  'as' => 'results.division.round-shared.show', 'uses' => 'ResultsController@divisionRoundShared'
 ]);
 
 Route::get('results/division/{division}/round/{round}/choir/{choir}/{access_code}', [
@@ -72,4 +75,4 @@ Route::put('profile/password', [
 
 Route::auth();
 
-Route::get('/home', 'HomeController@index');
+//Route::get('/home', 'HomeController@index');

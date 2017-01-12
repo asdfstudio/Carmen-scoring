@@ -3,14 +3,14 @@
   @foreach($divisions as $division)
   <li class="list-group-item round">
 
-		{{ link_to_route('judge.competition.division.details', $division->name, [$division->competition,$division], ['class' => 'name']) }}
+		{{ link_to_route('judge.competition.division.details', $division->name, [$competition,$division], ['class' => 'name']) }}
 
 		{!! $division->status_label('pull-right') !!}
 
 		@if($division->rounds)
 			<div class="clearfix mt">
 			@foreach($division->rounds as $round)
-				{{ link_to_route('judge.round.scores.summary', $round->name, [$division->competition, $division, $round], ['class' => 'action status-' . $round->status_slug, 'title' => $round->status]) }}
+				{{ link_to_route('judge.round.scores.summary', $round->name, [$competition, $division, $round], ['class' => 'action status-' . $round->status_slug, 'title' => $round->status]) }}
 			@endforeach
 		</div>
 		@endif

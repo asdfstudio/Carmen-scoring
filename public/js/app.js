@@ -7,7 +7,7 @@ $(document).ready(function() {
       //console.log($(e.target).parents('score-input-popup'));
       //if(e.target.id == 'score-input-popup' || $(e.target).parent() == 'aaa')
       //console.log(e.target);
-      //$('body').removeClass('input-popup-active');
+      //$('body').removeClass('input-popup-active'); 
     //});
 
     /*$('div.popup-input-container').on('blur',function(){
@@ -22,9 +22,10 @@ $(document).ready(function() {
       //var score = Math.round(field.val());
       var score = field.val() * 10;
       var popup = $('div.popup-input-container');
-      console.log(score);
+      //console.log(score);
       $('.toggle-score-input-popup').removeClass('focus');
       field.addClass('focus');
+      field.blur();
       popup.focus();
       //console.log(field_name);
       popup.data('field', field_name);
@@ -62,7 +63,7 @@ $(document).ready(function() {
       //alertBox.html('Saved!');
 
       $.post(url, data, function(returnData, status){
-        console.log(status);
+        //console.log(status);
 
         if(status == 'success')
         {
@@ -124,7 +125,7 @@ $(document).ready(function() {
       var captionOriginalWeightedScore = captionWeightedScore.data('original-score');
       var newCaptionWeightedScore = captionOriginalWeightedScore + weightedScoreDifference;
 
-      console.log(newCaptionWeightedScore);
+      //console.log(newCaptionWeightedScore);
 
       // total weighted score
       var totalWeightedScore = $('.sum-weighted-score[data-choir-id="'+choirId+'"]');
@@ -187,7 +188,7 @@ $(document).ready(function() {
     $('button.danger, a.danger, submit.danger').on('click', function(e) {
         if(confirm('Are you sure you want to do this?') == false) {
           e.preventDefault();
-          console.log('cancel');
+          //console.log('cancel');
         }
     });
 

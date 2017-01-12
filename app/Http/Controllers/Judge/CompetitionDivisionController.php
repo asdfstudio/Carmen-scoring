@@ -24,7 +24,9 @@ class CompetitionDivisionController extends Controller
 				},'judges.captions' => function($query) use ($division_id) {
 					$query->where('division_id',$division_id);
 				},
-				'competition','competition.organization', 'rounds', 'standing','standing.choirs'])->find($division_id);
+				'competition' => function($query) {
+          $query->withoutGlobalScope('organization');
+        }, 'competition.organization', 'rounds', 'standing','standing.choirs'])->find($division_id);
 
 			$captions = Caption::get();
       $competition = $division->competition;
@@ -45,7 +47,9 @@ class CompetitionDivisionController extends Controller
 				},'judges.captions' => function($query) use ($division_id) {
 					$query->where('division_id',$division_id);
 				},
-				'competition','competition.organization', 'rounds'])->find($division_id);
+				'competition' => function($query) {
+          $query->withoutGlobalScope('organization');
+        },'competition.organization', 'rounds'])->find($division_id);
 
       //$this->authorize('viewFinalStandings', $division);
       //dd($division->judges);
@@ -63,8 +67,9 @@ class CompetitionDivisionController extends Controller
 					$query->distinct('judge_id');
 				},'judges.captions' => function($query) use ($division_id) {
 					$query->where('division_id',$division_id);
-				},
-				'competition','competition.organization', 'rounds'])->find($division_id);
+				}, 'competition' => function($query) {
+          $query->withoutGlobalScope('organization');
+        }, 'competition.organization', 'rounds'])->find($division_id);
 
 
 			$captions = Caption::get();

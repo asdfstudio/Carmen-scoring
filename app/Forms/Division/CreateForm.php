@@ -69,6 +69,7 @@ class CreateForm extends Form
           'wrapper' => [
             'class' => 'form-group col-md-3 col-xs-12'
           ],
+          'default_value' => 0,
           'attr' => ['min' => 0]
         ]);
 
@@ -80,6 +81,7 @@ class CreateForm extends Form
           'wrapper' => [
             'class' => 'form-group col-md-3 col-xs-12'
           ],
+          'default_value' => 0,
           'attr' => ['min' => 0]
         ]);
 
@@ -91,6 +93,7 @@ class CreateForm extends Form
           'wrapper' => [
             'class' => 'form-group col-md-3 col-xs-12'
           ],
+          'default_value' => 0,
           'attr' => ['min' => 0]
         ]);
 
@@ -102,6 +105,7 @@ class CreateForm extends Form
           'wrapper' => [
             'class' => 'form-group col-md-3 col-xs-12'
           ],
+          'default_value' => 0,
           'attr' => ['min' => 0]
         ]);
 

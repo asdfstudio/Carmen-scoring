@@ -15,16 +15,12 @@ class Competition extends Model
 
 		protected $dates = ['deleted_at'];
 
-		protected $fillable = ['organization_id','name','is_archived'];
+		protected $fillable = ['organization_id', 'name', 'dates', 'use_runner_up_names' ,'is_archived'];
 
 
 		protected static function boot()
     {
         parent::boot();
-
-        /*static::addGlobalScope('active', function(Builder $builder) {
-            $builder->whereNull('is_archived');
-        });*/
     }
 
 

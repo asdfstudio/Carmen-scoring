@@ -42,9 +42,11 @@ class CompetitionDivisionRoundController extends Controller
       //$rankedScores = $scoreboard->rankedScores;
 
 
-      $competition = Competition::find($competition_id);
+      //$competition = Competition::find($competition_id);
 
-      $round = Round::with(['division','division.competition','division.judges' => function($query) use ($judge_id) {
+      $round = Round::with(['division','division.competition' => function($query) {
+        $query->withoutGlobalScope('organization');
+      },'division.judges' => function($query) use ($judge_id) {
           $query->where('judge_id',$judge_id)->first();
         }, 'division.judges.captions' => function($query) use ($division_id) {
           $query->where('division_id',$division_id);
@@ -57,6 +59,7 @@ class CompetitionDivisionRoundController extends Controller
       $captions = Caption::get();
 
       $division = $round->division;
+      $competition = $division->competition;
 
       return view('competition_division_round.judge.summary',compact('rawScores', 'weightedScores', 'captions', 'round', 'competition', 'division'));
     }
@@ -67,14 +70,19 @@ class CompetitionDivisionRoundController extends Controller
     {
       $judge_id = Auth::user()->person_id;
 
-      $competition = Competition::find($competition_id);
-      $division = Division::find($division_id);
+      //$competition = Competition::find($competition_id);
+      //$division = Division::find($division_id);
 
-      $round = Round::with(['division', 'division.competition', 'division.judges' => function($query) use ($judge_id) {
+      $round = Round::with(['division', 'division.competition'  => function($query) {
+        $query->withoutGlobalScope('organization');
+      }, 'division.judges' => function($query) use ($judge_id) {
           $query->where('judge_id',$judge_id)->first();
         }, 'division.judges.captions' => function($query) use ($division_id) {
           $query->where('division_id',$division_id);
         }, 'division.judges.captions.criteria','choirs','division.rounds'])->find($round_id);
+
+      $division = $round->division;
+      $competition = $division->competition;
 
       $judge = $division->judges->first();
 
@@ -100,14 +108,19 @@ class CompetitionDivisionRoundController extends Controller
     {
       $judge_id = Auth::user()->person_id;
 
-      $competition = Competition::find($competition_id);
-      $division = Division::find($division_id);
+      //$competition = Competition::find($competition_id);
+      //$division = Division::find($division_id);
 
-      $round = Round::with(['division', 'division.competition', 'division.judges' => function($query) use ($judge_id) {
+      $round = Round::with(['division', 'division.competition' => function($query) {
+        $query->withoutGlobalScope('organization');
+      }, 'division.judges' => function($query) use ($judge_id) {
           $query->where('judge_id',$judge_id)->first();
         }, 'division.judges.captions' => function($query) use ($division_id) {
           $query->where('division_id',$division_id);
         }, 'division.judges.captions.criteria','choirs','division.rounds', 'sources'])->find($round_id);
+
+      $division = $round->division;
+      $competition = $division->competition;
 
       $judge = $division->judges->first();
 
@@ -160,7 +173,9 @@ class CompetitionDivisionRoundController extends Controller
 
 			//$division = Division::with('choirs','judges','judges.captions','competition','competition.organization')->find($division_id);
 
-			$round = Round::with(['division','division.competition','division.judges' => function($query) use ($judge_id) {
+			$round = Round::with(['division','division.competition' => function($query) {
+        $query->withoutGlobalScope('organization');
+      },'division.judges' => function($query) use ($judge_id) {
 					$query->where('judge_id',$judge_id)->first();
 				}, 'division.judges.captions' => function($query) use ($division_id) {
 					$query->where('division_id',$division_id);

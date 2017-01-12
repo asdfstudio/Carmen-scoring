@@ -6,14 +6,9 @@
 
 @section('content')
 
-	<h2>{{ $round->name}}</h2>
+	<h2>{{ $round->name}} > Combined Source Rounds</h2>
 
-	@if($show_links)
-		<div class="alert alert-info">
-			<h4>Viewing Notes</h4>
-			<p>Click on a choir or judge to view their score details.</p>
-		</div>
-	@endif
+
 
 				<ul class="list-group horizontal">
 					<li class="list-group-item">

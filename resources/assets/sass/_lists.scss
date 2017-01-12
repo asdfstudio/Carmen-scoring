@@ -114,7 +114,14 @@
         //float: right;
       }
 
-      .performance_order {
+      .performance-order {
+        float: left;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 15px 25px 10px 10px;
+      }
+
+      .sort-handle {
         float: left;
         font-size: 20px;
         font-weight: bold;
@@ -277,9 +284,12 @@
 
     .list-group-item {
 
-      &:hover {
-        cursor: grab;
+      .sort-handle {
+        &:hover {
+          cursor: grab;
+        }
       }
+
 
       &.sortable-drag {
         font-weight: bold;

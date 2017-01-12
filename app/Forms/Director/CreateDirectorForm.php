@@ -22,13 +22,15 @@ class CreateDirectorForm extends Form
       'label' => 'Last Name'
     ]);
 
-    if($this->model)
+    /*if($this->model)
     {
       $rules = 'required|email|unique:people,email,'.$this->model->id;
     }
     else {
       $rules = 'required|email|unique:people,email';
-    }
+    }*/
+
+    $rules = 'required|email';
 
 
     $this->add('email','text', [

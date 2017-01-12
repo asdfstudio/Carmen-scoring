@@ -29,8 +29,13 @@ class DirectorForm extends Form
     ]);
 
 
-    $this->add('email','text', [
+    /*$this->add('email','text', [
       'rules' => 'required_without_all:choir_id|email|unique:people,email',
+      'label' => 'Email Address'
+    ]);*/
+
+    $this->add('email','text', [
+      'rules' => 'required_without_all:choir_id|email',
       'label' => 'Email Address'
     ]);
 

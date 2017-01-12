@@ -84,8 +84,9 @@
 .popup-input-container {
   position: fixed;
   bottom: 0;
-  //left: 10px;
-  //right: 10px;
+  left: 0;
+  right: 0;
+  margin: auto;
   padding: 10px;
   background: #ccc;
   width: 610px;

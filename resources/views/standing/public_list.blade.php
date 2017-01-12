@@ -47,14 +47,20 @@ $sponsors = explode(PHP_EOL, $sponsors);
 
       $sponsor = array_key_exists($index, $sponsors) ? $sponsors[$index] : false;
 
-      if($final_rank == 1)
+      if($division->competition->use_runner_up_names)
       {
-        $rank_name = 'Champion';
+        if($final_rank == 1)
+        {
+          $rank_name = 'Champion';
+        }
+        else
+        {
+          $runner_up_number = $final_rank - 1;
+          $rank_name = ordinal($runner_up_number) . ' Runner Up';
+        }
       }
-      else
-      {
-        $runner_up_number = $final_rank - 1;
-        $rank_name = ordinal($runner_up_number) . ' Runner Up';
+      else {
+        $rank_name = ordinal($final_rank);
       }
       ?>
 

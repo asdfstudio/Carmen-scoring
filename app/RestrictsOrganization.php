@@ -21,10 +21,12 @@ trait RestrictsOrganization
 					{
 						$user = Auth::user();
 
+            // No user, no filter
             if($user == false) return $builder;
 
             $organization_id = $user->organization_id;
 
+            // No organization, no filter
             if($organization_id == false) return $builder;
 
 						// Filter model
