@@ -8,7 +8,7 @@
     <li class="choir list-group-item">
 
       @if($choir->school)
-        <span class="school">{{ link_to_route('admin.school.show', $choir->school->name, [$choir->school]) }}</span>
+        <span class="school">{{ link_to_route('admin.school.edit', $choir->school->name, [$choir->school]) }}</span>
       @endif
 
       <span class="name">{{ link_to_route('admin.choir.show', $choir->name, [$choir]) }}</span>

@@ -5,4 +5,4 @@
 <p>{{ link_to_route('results.division.show', NULL, [$division, $division->access_code])}}</p>
 
 <p>Thank you,</p>
-<p>Carmen Showchoir</p>
+<p>Carmen Scoring</p>

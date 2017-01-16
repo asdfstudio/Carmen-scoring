@@ -31,6 +31,30 @@ class CompetitionPolicy extends BasePolicy
 			}*/
 		}
 
+    public function update(User $user, $competition)
+		{
+      if($user->isAdmin())
+			{
+				return true;
+			}
+      elseif($this->isOrgAdmin AND $competition->is_completed == false)
+      {
+        return true;
+      }
+		}
+
+    public function createDivision(User $user, $competition)
+		{
+      if($user->isAdmin())
+			{
+				return true;
+			}
+      elseif($this->isOrgAdmin AND $competition->is_completed == false)
+      {
+        return true;
+      }
+		}
+
 
     public function replicate(User $user, Competition $competition)
 		{

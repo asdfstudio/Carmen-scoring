@@ -1,5 +1,9 @@
 @extends('layouts.public')
 
+@section('title')
+  About | @parent
+@endsection
+
 @section('body-content')
   <h1>About Us</h1>
 

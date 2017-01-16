@@ -7,7 +7,9 @@
 @section('content-header')
 	<h1>Manage Divisions</h1>
 
-	{{ link_to_route('organizer.competition.division.create', 'Add a division', [$competition], ['class' => 'action']) }}
+	@can('createDivision', [$competition])
+		{{ link_to_route('organizer.competition.division.create', 'Add a division', [$competition], ['class' => 'action']) }}
+	@endcan
 @endsection
 
 @section('content')

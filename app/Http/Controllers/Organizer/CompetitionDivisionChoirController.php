@@ -149,6 +149,8 @@ class CompetitionDivisionChoirController extends Controller
     {
 				$division = Division::with('competition','choirs')->find($division_id);
 
+        $this->authorize('addChoir', $division);
+
         // Division choirs
         $choirs = $division->choirs->lists('full_name', 'id')->toArray();
 

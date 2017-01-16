@@ -7,7 +7,7 @@
 @section('body-content')
   <div class="login-container">
     <div class="logo-container">
-      <img src="/images/Carmen-Logo-185x60.jpg" alt="Carmen Showchoir"  />
+      <img src="/images/Carmen-Logo-185x54.png" alt="Carmen Scoring System"  />
     </div>
 
     <form role="form" method="POST" action="{{ url('/login') }}">

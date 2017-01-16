@@ -1,5 +1,9 @@
 @extends('layouts.public')
 
+@section('title')
+  Contact | @parent
+@endsection
+
 @section('body-content')
   <h1>Contact Us</h1>
 

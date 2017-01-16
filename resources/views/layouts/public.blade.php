@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@section('title') Carmen Showchoir @show</title>
+    <title>@section('title') Carmen Scoring @show</title>
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" >
@@ -24,7 +24,7 @@
     <ul>
       <li>
 
-        <a href="/" class="logo <?php if($active_page == '') echo 'active'; ?>"><img src="/images/flower.png" alt="Carmen Showchoir" width="24px"></a>
+        <a href="/" class="logo <?php if($active_page == '') echo 'active'; ?>"><img src="/images/flower.png" alt="Carmen Scoring System" width="24px"></a>
       </li>
       <!--<li>
 

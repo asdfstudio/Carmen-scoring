@@ -1,5 +1,9 @@
 @extends('layouts.public')
 
+@section('title')
+  Scoring System Information | @parent
+@endsection
+
 @section('body-content')
   <h1>Information</h1>
 

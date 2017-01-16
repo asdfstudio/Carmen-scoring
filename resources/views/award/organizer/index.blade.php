@@ -14,7 +14,7 @@
 @section('content')
 
 	<p class="content-intro">
-		This pages lists all of your award options. There are standard Carmen Showchoir awards and custom awards that you can create for your organization. For each division of your competition, you can choose which of these awards you'd like to give out.
+		This pages lists all of your award options. There are standard Carmen Scoring System awards and custom awards that you can create for your organization. For each division of your competition, you can choose which of these awards you'd like to give out.
 	</p>
 
 	<h2>Custom Awards</h2>
@@ -25,7 +25,7 @@
 
 	<h2>Standard Awards</h2>
 	<p class="content-intro">
-		Standard awards are the default awards that were created by Carmen Showchoir. If an award doesn't exist here, you can create a custom award for your organization.
+		Standard awards are the default awards that were created by Carmen Scoring. If an award doesn't exist here, you can create a custom award for your organization.
 	</p>
   @include('award.organizer.list', ['awards' => $standard_awards])
 

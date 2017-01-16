@@ -1,5 +1,9 @@
 @extends('layouts.public')
 
+@section('title')
+  Contest | @parent
+@endsection
+
 @section('body-content')
   <h1>Carmen Contest</h1>
 

@@ -21,7 +21,11 @@
   @foreach($competition->divisions as $division)
   <tr>
   	<td>{{ link_to_route('organizer.competition.division.show', $division->name, [$competition, $division]) }}</td>
-		<td>{{ link_to_route('organizer.competition.division.edit', 'Edit', [$competition,$division]) }}</td>
+		<td>
+			@can('update', $division)
+				{{ link_to_route('organizer.competition.division.edit', 'Edit', [$competition,$division]) }}
+			@endcan
+		</td>
 		<td>{!! $division->status_label('small') !!}</td>
     <td>@if ($division->captionWeighting){{ $division->captionWeighting->name }} @endif</td>
     <td>@if ($division->scoringMethod){{ $division->scoringMethod->name }} @endif</td>

@@ -29,7 +29,10 @@ class CompetitionDivisionController extends Controller
 				$competition = Competition::with('organization','place','divisions')->find($competition_id);
 				//dd($competition);
         //
-				return view('competition_division.organizer.index', compact('competition'));
+
+        //$division = new Division;
+
+				return view('competition_division.organizer.index', compact('competition', 'division'));
     }
 
 

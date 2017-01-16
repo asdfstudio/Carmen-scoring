@@ -50,11 +50,11 @@ class DivisionPolicy extends BasePolicy
 
     public function update(User $user, $division)
 		{
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
+      if($this->isAdmin)
       {
         return true;
       }
-      elseif($this->isAdmin)
+      elseif($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
       {
         return true;
       }
@@ -117,7 +117,7 @@ class DivisionPolicy extends BasePolicy
 
     public function importJudges(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
+      if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
       {
         return true;
       }
@@ -125,7 +125,7 @@ class DivisionPolicy extends BasePolicy
 
     public function createJudge(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
+      if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
       {
         return true;
       }
@@ -133,7 +133,7 @@ class DivisionPolicy extends BasePolicy
 
     public function updateJudge(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
+      if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
       {
         return true;
       }
@@ -141,7 +141,7 @@ class DivisionPolicy extends BasePolicy
 
     public function addChoir(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
+      if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
       {
         return true;
       }

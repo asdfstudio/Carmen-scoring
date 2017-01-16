@@ -115,6 +115,8 @@ class CompetitionDivisionJudgeController extends Controller
     {
 				$division = Division::with('competition','choirs')->find($division_id);
 
+        $this->authorize('addJudge', $division);
+
         $judges = Judge::get();
         $judges = $judges->lists('full_name', 'id')->toArray();
 

@@ -13,7 +13,7 @@
 
 
 
-  @if(!$competition->is_archived)
+  @can('update', $competition)
     {{ link_to_route('organizer.competition.edit', 'Edit Competition', [$competition], ['class' => 'action']) }}
   @endif
 
