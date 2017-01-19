@@ -47,7 +47,8 @@ class CompetitionDivisionAwardController extends Controller
 
       $form = $formBuilder->create('Award\CreateAwardForm', [
         'method' => 'POST',
-        'url' => route('organizer.competition.division.award.store', [$competition_id, $division_id])
+        'url' => route('organizer.competition.division.award.store', [$competition_id, $division_id]),
+        'data' => ['include_sponsor' => true]
       ]);
 
       return view('competition_division_award.organizer.create', compact('form', 'division'));
@@ -71,14 +72,21 @@ class CompetitionDivisionAwardController extends Controller
       $data['organization_id'] = Auth::user()->organization_id;
 
       // DB transaction
-      $award = DB::transaction(function () use ($data, $division) {
+      $award = DB::transaction(function () use ($data, $division, $request) {
 
         // Create the award
         $award = Award::create($data);
         $award->save();
 
         // Associate award with division
-        $division->awards()->attach($award->id);
+        $extra = [];
+
+        if($request->input('sponsor'))
+        {
+          $extra['sponsor'] = $request->input('sponsor');
+        }
+
+        $division->awards()->attach($award->id, $extra);
 
         return $award;
       });

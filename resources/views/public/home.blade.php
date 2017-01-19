@@ -134,8 +134,16 @@
           <span class="date">february 17-18</span>
         </li>
         <li>
+          <span class="name">Center Grove Best of the Midwest</span>
+          <span class="date">february 17-18</span>
+        </li>
+        <li>
           <span class="name">chesterton trojan classic</span>
           <span class="date">february 18</span>
+        </li>
+        <li>
+          <span class="name">Chaparral Showcase</span>
+          <span class="date">february 24-25</span>
         </li>
         <li>
           <span class="name">loveland showfest</span>
@@ -156,6 +164,10 @@
         <li>
           <span class="name">los alamitos xtravaganza</span>
           <span class="date">march 16-18</span>
+        </li>
+        <li>
+          <span class="name">Katella King of Champions</span>
+          <span class="date">march 24-25</span>
         </li>
         <li>
           <span class="name">burroughs music showcase</span>

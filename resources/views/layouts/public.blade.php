@@ -49,9 +49,31 @@
       @endif
 
       @if(Auth::check())
-        <li>
-          <a href="/logout" class="<?php if($active_page == 'login') echo 'active'; ?>">Logout</a>
-        </li>
+
+        <?php
+        if(Auth::user()->isAdmin())
+        {
+          $route = 'admin.dashboard';
+        }
+        elseif(Auth::user()->isOrganizer())
+        {
+          $route = 'organizer.competition.index';
+        }
+        elseif(Auth::user()->isJudge())
+        {
+          $route = 'judge.competition.index';
+        }
+        else {
+          $route = false;
+        }
+        ?>
+
+        @if($route)
+          <li>
+            <a href="{{ route($route) }}">Enter Carmen App</a>
+          </li>
+        @endif
+
       @endif
 
     </ul>
@@ -66,7 +88,7 @@
 		jQuery(document).ready(function($) {
 			$('.slider').unslider({
         arrows: false,
-        //autoplay: true
+        autoplay: true
       });
 		});
 	</script>

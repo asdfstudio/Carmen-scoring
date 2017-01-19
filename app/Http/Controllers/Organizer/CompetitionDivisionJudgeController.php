@@ -377,7 +377,10 @@ class CompetitionDivisionJudgeController extends Controller
 
       foreach($source_division->judges as $judge)
       {
-        $division->judges()->attach($judge->id, ['caption_id' => $judge->pivot->caption_id]);
+        if(!$division->judges->contains($judge->id))
+        {
+          $division->judges()->attach($judge->id, ['caption_id' => $judge->pivot->caption_id]);
+        }
       }
 
       return redirect()->route('organizer.competition.division.judge.index', [$competition_id, $division_id])->with('success',"Judges successfully imported from $source_division->name.");

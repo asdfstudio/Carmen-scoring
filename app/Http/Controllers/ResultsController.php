@@ -62,6 +62,22 @@ class ResultsController extends Controller
       $this->captions = Caption::whereIn('id', $caption_ids)->get();
     }
 
+    public function divisionPublic($division_id)
+    {
+      $division = Division::with(['standings' => function($query) {
+        $query->orderBy('caption_id', 'DESC');
+      }, 'standings.choirs','awards' => function($query) {
+        $query->withoutGlobalScope('organization');
+      }, 'awards.choirs' => function($query) use ($division_id) {
+        $query->where('division_id',$division_id);
+      }])->where('is_published', 1)->find($division_id);
+
+      $caption_ids = $division->sheet->caption_ids;
+      $captions = Caption::whereIn('id', $caption_ids)->get();
+
+      return view('results.division.show-public', compact('division', 'captions'));
+    }
+
     public function division($division_id, $access_code)
     {
       $this->loadDivision($division_id, $access_code);

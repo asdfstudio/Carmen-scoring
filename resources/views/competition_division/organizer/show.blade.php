@@ -29,6 +29,12 @@
 
 	<div class="clearfix"></div>
 
+	@if($division->status_slug() == 'finalized')
+		<div class="alert alert-info">
+			<p>Results for this division are available at {{ link_to_route('results.division.show', NULL, [$division, $division->access_code], ['target' => '_blank']) }} </p>
+		</div>
+	@endif
+
 	<ul class="list-group">
 		<li class="list-group-item">
 			<h3>Settings</h3>

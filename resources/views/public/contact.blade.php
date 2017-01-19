@@ -17,7 +17,7 @@
       <li><a href="https://twitter.com/CarmenScoring" target="_blank"><i class="fa fa-twitter fa-4x"></i> Twitter</a></li>
       <li><a href="https://www.facebook.com/carmenshowchoirscoring/" target="_blank"><i class="fa fa-facebook fa-4x"></i> Facebook</a></li>
       <li><a href="https://www.instagram.com/carmenscoring/" target="_blank"><i class="fa fa-instagram fa-4x"></i> Instagram</a></li>
-      <li><a href="https://www.snapchat.com/add/carmenshowchoir" target="_blank"><i class="fa fa-snapchat-ghost fa-4x"></i> Snapchat</a></li>
+      <li><a href="https://www.snapchat.com/add/carmenscoring" target="_blank"><i class="fa fa-snapchat-ghost fa-4x"></i> Snapchat</a></li>
     </ul>
 
     <p>Or send us an email at <a href="mailto:info@carmenscoring.com">info@carmenscoring.com</a>.</p>

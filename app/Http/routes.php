@@ -56,6 +56,10 @@ Route::get('results/division/{division}/{access_code}', [
   'as' => 'results.division.show', 'uses' => 'ResultsController@division'
 ]);
 
+Route::get('results/division/{division}', [
+  'as' => 'results.division.show-public', 'uses' => 'ResultsController@divisionPublic'
+]);
+
 Route::get('profile', [
   'as' => 'profile.edit', 'uses' => 'ProfileController@edit'
 ]);

@@ -27,7 +27,7 @@
     <ul class="steps-group">
       <li>
         <span class="step-label">Step 1</span>
-        <span class="step-content"><a href="/contact">Contact Us</a>  through <a href="https://www.facebook.com/carmenshowchoirscoring/" target="_blank">Facebook</a>, <a href="https://twitter.com/CarmenScoring" target="_blank">Twitter</a>, <a href="https://www.instagram.com/carmenscoring/" target="_blank"> Instagram</a>, <a href="https://www.snapchat.com/add/carmenshowchoir" target="_blank">Snapchat</a>, or <a href="mailto:info@carmenscoring.com">email</a> to request an Organizer account.</span>
+        <span class="step-content"><a href="/contact">Contact Us</a>  through <a href="https://www.facebook.com/carmenshowchoirscoring/" target="_blank">Facebook</a>, <a href="https://twitter.com/CarmenScoring" target="_blank">Twitter</a>, <a href="https://www.instagram.com/carmenscoring/" target="_blank"> Instagram</a>, <a href="https://www.snapchat.com/add/carmenscoring" target="_blank">Snapchat</a>, or <a href="mailto:info@carmenscoring.com">email</a> to request an Organizer account.</span>
 
       </li>
       <li>
@@ -154,7 +154,7 @@
   <div class="slim-width align-center">
     <h3>How do I get started?</h3>
 
-    <p>Contact us through <a href="https://www.facebook.com/carmenshowchoirscoring/" target="_blank">Facebook</a>, <a href="https://twitter.com/CarmenScoring" target="_blank">Twitter</a>, <a href="https://www.instagram.com/carmenscoring/" target="_blank">Instagram</a>, <a href="https://www.snapchat.com/add/carmenshowchoir" target="_blank">Snapchat</a>, or <a href="mailto:info@carmenscoring.com">email</a> to receive your Organizer account and get started today!</p>
+    <p>Contact us through <a href="https://www.facebook.com/carmenshowchoirscoring/" target="_blank">Facebook</a>, <a href="https://twitter.com/CarmenScoring" target="_blank">Twitter</a>, <a href="https://www.instagram.com/carmenscoring/" target="_blank">Instagram</a>, <a href="https://www.snapchat.com/add/carmenscoring" target="_blank">Snapchat</a>, or <a href="mailto:info@carmenscoring.com">email</a> to receive your Organizer account and get started today!</p>
 
     <a href="/contact"><img class="centered" src="/images/devices.png" alt="Contact Us to Get Started" /></a>
 

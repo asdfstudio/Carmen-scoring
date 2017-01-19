@@ -17,6 +17,14 @@ class CreateAwardForm extends Form
           'rules' => ''
         ]);
 
+        if(isset($this->data['include_sponsor']))
+        {
+          $this->add('sponsor','text', [
+            'rules' => ''
+          ]);
+        }
+
+
         //$this->add('submit', 'submit', ['label' => 'Save Award', 'attr' => ['class' => 'btn btn-primary']]);
 
         $this->add('submit', 'submit', [
