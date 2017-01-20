@@ -134,7 +134,7 @@
           <span class="date">february 17-18</span>
         </li>
         <li>
-          <span class="name">Center Grove Best of the Midwest</span>
+          <span class="name">Center Grove Best in the Midwest</span>
           <span class="date">february 17-18</span>
         </li>
         <li>
