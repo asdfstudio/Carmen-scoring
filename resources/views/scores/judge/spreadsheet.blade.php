@@ -6,9 +6,16 @@ else :
   $toggle_scores = false;
   $is_weighted_class = '';
 endif;
+
+if($choirs->count() > 2) :
+  $responsive_table_class = 'responsive';
+else :
+  $responsive_table_class = false;
+endif;
+
 ?>
 
-<table class="table responsive table-striped table-bordered toggle-scores scoreboard spreadsheet {{ $is_weighted_class }}">
+<table class="table {{ $responsive_table_class }} table-striped table-bordered toggle-scores scoreboard spreadsheet {{ $is_weighted_class }}">
 
 
   @foreach($judge->captions as $caption)
