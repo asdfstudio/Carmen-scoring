@@ -53,6 +53,8 @@ class ResultsController extends Controller
         $query->withoutGlobalScope('organization');
       }, 'awards.choirs' => function($query) use ($division_id) {
         $query->where('division_id',$division_id);
+      }, 'judges' => function($query) {
+        $query->groupBy('judge_id');
       }])->where('access_code', $access_code)->where('is_published', 1)->find($division_id);
 
       if($this->division == false)
