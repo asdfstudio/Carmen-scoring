@@ -75,7 +75,7 @@
 		</li>
 	</ul>
 
-	@include('scores.organizer.composite',['choirs' => $division->choirs, 'judges' => $division->judges])
+	@include('scores.organizer.composite',['choirs' => $choirs, 'judges' => $division->judges])
 
   </div>
 

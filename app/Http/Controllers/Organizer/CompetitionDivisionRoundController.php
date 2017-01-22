@@ -210,6 +210,8 @@ class CompetitionDivisionRoundController extends Controller
       $judges = $division->judges;
       $choirs = $round->choirs;
 
+      //dd($choirs); 
+
       //dd($division->sheet->criteria);
 
       $caption_ids = $division->sheet->caption_ids;
