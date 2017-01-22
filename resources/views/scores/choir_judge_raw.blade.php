@@ -43,7 +43,7 @@ endif;
     	<td>{{ $criterion->name }}</td>
       <td>
       	<?php
-        $rawScore = $rawScores->where('criterion_id', $criterion->id)->where('choir_id', $choir->id)->pluck('score');
+        $rawScore = $rawScores->where('criterion_id', $criterion->id)->where('judge_id', $judge->id)->where('choir_id', $choir->id)->pluck('score');
         $score = $rawScore->first();
         ?>
         <span class="score raw">{{ $score }}</span>
@@ -52,7 +52,7 @@ endif;
       @if($division->captionWeighting->slug == '60-40')
         <td>
           <?php
-          $weightedScore = $scoreboard->weightedScores->where('criterion_id', $criterion->id)->where('choir_id', $choir->id)->pluck('weightedScore');
+          $weightedScore = $scoreboard->weightedScores->where('criterion_id', $criterion->id)->where('judge_id', $judge->id)->where('choir_id', $choir->id)->pluck('weightedScore');
           $score = $weightedScore->first();
           ?>
           <span class="score weighted">{{ $score }}</span>
