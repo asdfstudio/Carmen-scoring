@@ -8,11 +8,14 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\View;
 
+use App\Competition;
 use App\Division;
 use App\Round;
 use App\Caption;
 use App\Judge;
 use App\Carmen\Scoreboard;
+
+use Kris\LaravelFormBuilder\FormBuilder;
 
 class ResultsController extends Controller
 {
@@ -62,9 +65,43 @@ class ResultsController extends Controller
 
       $caption_ids = $this->division->sheet->caption_ids;
       $this->captions = Caption::whereIn('id', $caption_ids)->get();
+
+      View::share('competition', $this->division->competition);
     }
 
-    public function divisionPublic($division_id)
+
+    public function index()
+    {
+      $competitions = Competition::completed()->orderBy('name', 'asc')->get();
+
+      return view('results.index', compact('competitions'));
+    }
+
+    public function competitionPublic($competition_id)
+    {
+      $competition = Competition::with(['divisions' => function($query) {
+        $query->published();
+      }])->completed()->find($competition_id);
+
+      return view('results.competition.show-public', compact('competition'));
+    }
+
+
+    public function divisionAccessProtected($division_id, Request $request)
+    {
+      $access_code = $request->input('access_code');
+
+      $division = Division::where('access_code', $access_code)->where('is_published', 1)->find($division_id);
+
+      if($division == false)
+      {
+        return redirect()->route('results.division.show-public', [$division_id])->with('access_code_alert', 'The access code you entered, "'.$access_code.'", is incorrect.');
+      }
+
+      return redirect()->route('results.division.show', [$division_id, $access_code]);
+    }
+
+    public function divisionPublic($division_id, FormBuilder $formBuilder)
     {
       $division = Division::with(['standings' => function($query) {
         $query->orderBy('caption_id', 'DESC');
@@ -77,7 +114,12 @@ class ResultsController extends Controller
       $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::whereIn('id', $caption_ids)->get();
 
-      return view('results.division.show-public', compact('division', 'captions'));
+      $accessCodeForm = $formBuilder->create('Division\AccessCodeForm', [
+        'url' => route('results.division.access-protected', [$division]),
+        'method' => 'post'
+      ]);
+
+      return view('results.division.show-public', compact('division', 'captions', 'accessCodeForm'));
     }
 
     public function division($division_id, $access_code)

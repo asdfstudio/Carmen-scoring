@@ -3115,6 +3115,9 @@ button.close {
         border: 3px solid #ccc; }
         .scorecard .criterion-container .score input.updating {
           background: #a6d19b; }
+        .scorecard .criterion-container .score input.missing-score {
+          border-color: #CA2128;
+          background: #f5c2c4; }
     .scorecard .criterion-container .number-selector-container {
       float: right;
       max-width: 600px; }

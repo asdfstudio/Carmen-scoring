@@ -42,6 +42,11 @@
       <li>
         <a href="/contest" class="<?php if($active_page == 'contest') echo 'active'; ?>">Contest</a>
       </li>
+      <li>
+        <a href="{{ route('results.index') }}" class="<?php if($active_page == 'results') echo 'active'; ?>">Results</a>
+      </li>
+
+
       @if(Auth::guest())
         <li>
           <a href="/login" class="<?php if($active_page == 'login') echo 'active'; ?>">Login</a>

@@ -1,5 +1,29 @@
 <?php
 
+// Public results
+Breadcrumbs::register('results.index', function($breadcrumbs)
+{
+    $breadcrumbs->push('Results', route('results.index'));
+});
+
+Breadcrumbs::register('results.competition.show-public', function($breadcrumbs, $competition)
+{
+    $breadcrumbs->parent('results.index');
+    $breadcrumbs->push($competition->name, route('results.competition.show-public', $competition));
+});
+
+Breadcrumbs::register('results.division.show-public', function($breadcrumbs, $division)
+{
+    $breadcrumbs->parent('results.competition.show-public', $division->competition);
+    $breadcrumbs->push($division->name, route('results.competition.show-public', $division));
+});
+
+Breadcrumbs::register('results.division.show', function($breadcrumbs, $division)
+{
+    $breadcrumbs->parent('results.competition.show-public', $division->competition);
+    $breadcrumbs->push($division->name . ' - Full Results', route('results.division.show', $division, $division->access_code));
+});
+
 
 // BEGIN ADMIN Breadcrumbs
 Breadcrumbs::register('admin.dashboard', function($breadcrumbs)

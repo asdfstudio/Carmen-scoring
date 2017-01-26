@@ -63,6 +63,11 @@
                   background: lighten($cs-green, 20);
 
                 }
+
+                &.missing-score {
+                  border-color: $cs-red;
+                  background: lighten($cs-red, 40);
+                }
             }
 
         }

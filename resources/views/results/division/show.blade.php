@@ -1,7 +1,7 @@
 @extends('layouts.public_results')
 
-@section('content-header')
-
+@section('breadcrumbs')
+	{!! Breadcrumbs::render('results.division.show-public', $division) !!}
 @endsection
 
 @section('content')

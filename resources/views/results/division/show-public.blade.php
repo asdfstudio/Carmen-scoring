@@ -1,10 +1,14 @@
 @extends('layouts.public_results')
 
-@section('content-header')
-
+@section('breadcrumbs')
+	{!! Breadcrumbs::render('results.division.show-public', $division) !!}
 @endsection
 
 @section('content')
+
+
+
+		@include('results/division/access_code_form')
 
 		<h2 id="awards">Awards</h2>
 

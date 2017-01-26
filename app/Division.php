@@ -94,6 +94,18 @@ class Division extends Model
     }
 
 
+    public function scopeCompleted($query)
+		{
+			return $query->where('is_completed', 1);
+		}
+
+
+    public function scopePublished($query)
+		{
+			return $query->where('is_published', 1);
+		}
+
+
     public function status()
     {
       if($this->is_completed)

@@ -60,6 +60,18 @@ Route::get('results/division/{division}', [
   'as' => 'results.division.show-public', 'uses' => 'ResultsController@divisionPublic'
 ]);
 
+Route::post('results/division/{division}', [
+  'as' => 'results.division.access-protected', 'uses' => 'ResultsController@divisionAccessProtected'
+]);
+
+Route::get('results/competition/{competition}', [
+  'as' => 'results.competition.show-public', 'uses' => 'ResultsController@competitionPublic'
+]);
+
+Route::get('results', [
+  'as' => 'results.index', 'uses' => 'ResultsController@index'
+]);
+
 Route::get('profile', [
   'as' => 'profile.edit', 'uses' => 'ProfileController@edit'
 ]);

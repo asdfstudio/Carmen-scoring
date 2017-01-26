@@ -1,7 +1,7 @@
 @extends('layouts.public_results')
 
-@section('content-header')
-
+@section('breadcrumbs')
+	{!! Breadcrumbs::render('results.division.show-public', $division) !!}
 @endsection
 
 @section('content')
@@ -10,8 +10,8 @@
 
 	@if($show_links)
 		<div class="alert alert-info">
-			<h4>Viewing Notes</h4>
-			<p>Click on a choir or judge to view their score details.</p>
+			<h3>Participants, You can view full scores</h3>
+			<p>Click on the name of a <strong>choir</strong> or <strong>judge</strong> to view their score details.</p>
 		</div>
 	@endif
 

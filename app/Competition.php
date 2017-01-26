@@ -35,6 +35,11 @@ class Competition extends Model
 			return $query->whereNotNull('is_archived');
 		}
 
+    public function scopeCompleted($query)
+		{
+			return $query->where('is_completed', 1);
+		}
+
 
 
 		public function organization()

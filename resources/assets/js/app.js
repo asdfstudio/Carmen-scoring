@@ -7,7 +7,7 @@ $(document).ready(function() {
       //console.log($(e.target).parents('score-input-popup'));
       //if(e.target.id == 'score-input-popup' || $(e.target).parent() == 'aaa')
       //console.log(e.target);
-      //$('body').removeClass('input-popup-active'); 
+      //$('body').removeClass('input-popup-active');
     //});
 
     /*$('div.popup-input-container').on('blur',function(){
@@ -292,6 +292,7 @@ $(document).ready(function() {
     // Update the input value
     //input.addClass('updating');
     input.val(number.toFixed(1));
+    input.removeClass('missing-score');
     //input.removeClass('updating');
 
     // Highlight the current selection
@@ -395,6 +396,39 @@ $(document).ready(function() {
       e.preventDefault();
       var active_view = $(this).data('score-view');
       $(this).toggleScoreView(active_view);
+    });
+
+
+
+    // Check for missing scores on individual scorecards
+    // Give the judge an opportunity to submit as-is or
+    // Return to scorecard to fill in missing values
+    $('form.scorecard').on('submit', function(e) {
+
+      var score_inputs = $('input.criterion-score-input');
+      var score_inputs_count = score_inputs.length;
+      var inputs_missing_scores_count = 0;
+
+      score_inputs.each(function(index, element) {
+        current_value = $(this).val();
+        if(current_value == 0){
+          $(this).addClass('missing-score');
+          inputs_missing_scores_count++;
+        }
+        else {
+          $(this).removeClass('missing-score');
+        }
+      });
+
+      if(inputs_missing_scores_count > 0)
+      {
+        if(confirm('Some of your scoring criteria are missing values. Choose "OK" to submit your scores as-is. Choose "Cancel" to stop submission and continue entering your scores.') == false)
+        {
+          e.preventDefault();
+        }
+
+      }
+
     });
 
 
