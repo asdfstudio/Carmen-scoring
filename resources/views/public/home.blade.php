@@ -130,6 +130,10 @@
           <span class="date">february 11</span>
         </li>
         <li>
+          <span class="name">Tantasqua Show Choir Spectacular</span>
+          <span class="date">february 11</span>
+        </li>
+        <li>
           <span class="name">bonita vista san diego sings!</span>
           <span class="date">february 17-18</span>
         </li>
