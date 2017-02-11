@@ -11,6 +11,8 @@ use App\Standing;
 use App\Caption;
 use App\Carmen\Scoreboard;
 
+use Log;
+
 class ProduceFinalStandings
 {
     protected $round;
@@ -36,10 +38,15 @@ class ProduceFinalStandings
     {
       $this->round = $event->round;
 
+      //Log::debug('ProduceFinalStandings listener started');
+
       if($this->round == false) return;
 
       // Check if this is the last round in the division
       $finalRound = $this->round->division->rounds()->orderBy('sequence', 'DESC')->first();
+
+      //Log::debug('This round: '. $this->round->id);
+      //Log::debug('Final round: '. $finalRound->id);
 
       //dd($finalRound);
 
@@ -76,6 +83,8 @@ class ProduceFinalStandings
 
     protected function calculateCaptionStandings($caption_id = NULL)
     {
+      //Log::debug('calculateCaptionStandings:'.$caption_id);
+
       // Raw
       if($this->round->division->scoring_method_id == 1)
       {
@@ -86,6 +95,8 @@ class ProduceFinalStandings
       {
         $choirPositions = $this->scoreboard->rankedScores->total_rank($caption_id);
       }
+
+      //Log::debug($choirPositions);
 
       $data = [];
 
@@ -98,16 +109,18 @@ class ProduceFinalStandings
       }
 
       // Get or create a standing for this division
-      $attr = ['division_id' => $this->round->division_id];
+      $attr = [
+        'division_id' => $this->round->division_id,
+        'caption_id' => $caption_id
+      ];
 
-      if($caption_id)
-      {
-        $attr['caption_id'] = $caption_id;
-      }
+      //Log::debug($attr);
 
       $standing = Standing::firstOrCreate($attr);
       $standing->round_id = $this->round->id;
       $standing->choirs()->sync($data);
+
+      //Log::debug($standing);
 
       $standing->save();
 

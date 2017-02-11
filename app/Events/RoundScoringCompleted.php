@@ -7,6 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 use App\Round;
+use Log;
 
 class RoundScoringCompleted extends Event
 {
@@ -22,6 +23,7 @@ class RoundScoringCompleted extends Event
     public function __construct(Round $round)
     {
         $this->round = $round;
+        //Log::debug('RoundScoringCompleted event:'.$this->round->id);
 
         // Set the target round, if any
         //$this->round = $round->targets()->first();
