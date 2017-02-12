@@ -32,6 +32,9 @@ class EmailDivisionResultsLink
      */
     public function handle(DivisionScoringFinalized $event)
     {
+        // Skip sending results
+        if(env('SEND_FINAL_RESULTS_EMAIL') == false) return true;
+
         $division = $event->division;
 
         $directors = collect();
