@@ -70,7 +70,9 @@ class ProduceFinalStandings
       }
 
       // Remove standing for captions that aren't available
-      $standingsToDelete = Standing::whereNotIn('caption_id', $caption_ids)->whereNotNull('caption_id')->get();
+      $standingsToDelete = Standing::whereNotIn('caption_id', $caption_ids)->whereNotNull('caption_id')->where('round_id', $this->round->id)->get();
+
+      //Log::debug('Standings to delete: '.$standingsToDelete->pluck('id'));
 
       foreach($standingsToDelete as $toDelete)
       {

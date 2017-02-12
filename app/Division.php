@@ -210,7 +210,12 @@ class Division extends Model
       $this->is_published = true;
       $this->is_scoring_active = false;
       $this->is_completed = true;
-      $this->access_code = strtoupper(str_random(8));
+
+      if($this->access_code == false)
+      {
+        $this->access_code = strtoupper(str_random(8));
+      }
+
       return $this->save();
     }
 
