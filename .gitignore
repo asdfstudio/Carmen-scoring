@@ -4,3 +4,5 @@
 Homestead.yaml
 Homestead.json
 .env
+
+/resources/views/public/competitions-list.php
