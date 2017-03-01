@@ -15,7 +15,7 @@ class Competition extends Model
 
 		protected $dates = ['deleted_at'];
 
-		protected $fillable = ['organization_id', 'name', 'dates', 'use_runner_up_names' ,'is_archived'];
+		protected $fillable = ['organization_id', 'name', 'slug', 'access_code', 'dates', 'use_runner_up_names' ,'is_archived'];
 
 
 		protected static function boot()
@@ -119,5 +119,29 @@ class Competition extends Model
       $class = implode($class_array,' ');
 
       return '<span class="'.$class.'">'.$this->status.'</span>';
+    }
+
+    public function setSlugAttribute($value)
+    {
+      if($value == false)
+      {
+        $this->attributes['slug'] = str_slug($this->name);
+      }
+      else {
+        $this->attributes['slug'] = str_slug($value);
+      }
+    }
+
+    public function getResultsUrlAttribute()
+    {
+      if($this->slug == false) return false;
+
+      return route('results.competition.show-custom', $this->slug);
+    }
+
+
+    public function setAccessCodeAttribute($value)
+    {
+      $this->attributes['access_code'] = strtolower($value);
     }
 }

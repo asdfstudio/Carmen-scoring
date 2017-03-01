@@ -13,6 +13,7 @@ use App\Division;
 use App\Round;
 use App\Caption;
 use App\Judge;
+use App\Director;
 use App\Carmen\Scoreboard;
 
 use Kris\LaravelFormBuilder\FormBuilder;
@@ -77,13 +78,60 @@ class ResultsController extends Controller
       return view('results.index', compact('competitions'));
     }
 
-    public function competitionPublic($competition_id)
+    public function competitionPublic($competition_id, Request $request)
     {
+      /*$competition = Competition::with(['divisions' => function($query) {
+        $query->published();
+      }])->completed()->find($competition_id);*/
+
       $competition = Competition::with(['divisions' => function($query) {
         $query->published();
-      }])->completed()->find($competition_id);
+      }])->find($competition_id);
+
+      if($request->session()->has('competition_access_code'))
+      {
+        return redirect()->route('results.competition.show-custom', [$competition->slug, 'access_code' => $request->session()->get('competition_access_code')]);
+      }
 
       return view('results.competition.show-public', compact('competition'));
+    }
+
+
+    public function competitionCustom($competition_slug, Request $request, FormBuilder $formBuilder)
+    {
+      $access_code = strtolower($request->input('access_code'));
+      $authorized = false;
+
+      $competition = Competition::with(['divisions' => function($query) {
+        $query->published();
+      }])->where('slug', $competition_slug)->first();
+
+      if($competition == false)
+      {
+        return redirect()->route('results.index');
+      }
+
+      if($access_code AND $competition)
+      {
+        if($competition->access_code != $access_code)
+        {
+          $request->session()->forget('competition_access_code');
+
+          return redirect()->route('results.competition.show-custom', [$competition_slug])->with('access_code_alert', 'The access code you entered, "'.$access_code.'", is incorrect.');
+        }
+        else {
+          $authorized = true;
+          $request->session()->put('competition_access_code', $access_code);
+        }
+      }
+
+
+      $accessCodeForm = $formBuilder->create('Division\AccessCodeForm', [
+        'url' => route('results.competition.show-custom', [$competition_slug]),
+        'method' => 'post'
+      ]);
+
+      return view('results.competition.show-custom', compact('competition', 'accessCodeForm', 'authorized'));
     }
 
 
@@ -91,11 +139,27 @@ class ResultsController extends Controller
     {
       $access_code = $request->input('access_code');
 
+      //dd($access_code);
+
       $division = Division::where('access_code', $access_code)->where('is_published', 1)->find($division_id);
+
+      // Division not found, check using access code to find director
+      if($division == false AND $access_code)
+      {
+        $division = Division::whereHas('choirs.directors', function($query) use ($access_code) {
+          $query->where('email', $access_code);
+        })->where('is_published', 1)->find($division_id);
+
+        if($division)
+        {
+          $access_code = $division->access_code;
+        }
+      }
+
 
       if($division == false)
       {
-        return redirect()->route('results.division.show-public', [$division_id])->with('access_code_alert', 'The access code you entered, "'.$access_code.'", is incorrect.');
+        return redirect()->route('results.division.show-public', [$division_id])->with('access_code_alert', 'The access code or email address you entered, "'.$access_code.'", is incorrect.');
       }
 
       return redirect()->route('results.division.show', [$division_id, $access_code]);

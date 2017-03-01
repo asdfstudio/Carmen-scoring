@@ -169,6 +169,8 @@ class CompetitionController extends Controller
 
 				// Update the record
 				$competition->name = $input['name'];
+        $competition->slug = $input['slug'];
+        $competition->access_code = $input['access_code'];
         $competition->use_runner_up_names = $input['use_runner_up_names'];
 				//$competition->organization_id = $input['organization_id'];
 				$competition->save();

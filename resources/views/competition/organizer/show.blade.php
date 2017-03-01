@@ -11,8 +11,6 @@
 @section('content-header')
   <h1>Competition Details</h1>
 
-
-
   @can('update', $competition)
     {{ link_to_route('organizer.competition.edit', 'Edit Competition', [$competition], ['class' => 'action']) }}
   @endif
@@ -34,6 +32,14 @@
       <li>{!! form($completeScoringForm) !!}</li>
     @endcan
   </ul>
+
+  <h3>Competition Results</h3>
+
+  <ul>
+    <li>Results URL: {{ link_to($competition->results_url) }}</li>
+    <li>Access Code: {{ $competition->access_code }}</li>
+  </ul>
+
 
   <h3>Manage Divisions</h3>
   <p>Divisions are used to organize your competition and consist of choirs, judges, scoring settings and more.</p>

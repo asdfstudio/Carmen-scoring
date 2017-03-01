@@ -10,6 +10,16 @@ class CreateCompetitionForm extends Form
     {
         $this->add('name','text', ['rules' => 'required', 'label' => 'Competition Name']);
 
+        $this->add('slug','text', [
+          'rules' => '',
+          'label' => 'Results URL Slug'
+        ]);
+
+        $this->add('access_code','text', [
+          'rules' => '',
+          'label' => 'Results Access Code'
+        ]);
+
         $this->add('use_runner_up_names', 'choice', [
           'choices' => [
             0 => '1st, 2nd, 3rd...',

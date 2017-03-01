@@ -33,7 +33,8 @@ class EventServiceProvider extends ServiceProvider
           'App\Listeners\SyncRoundChoirsFromDivision'
         ],
         'App\Events\DivisionScoringFinalized' => [
-          'App\Listeners\EmailDivisionResultsLink'
+          'App\Listeners\EmailDivisionResultsLink',
+          'App\Listeners\SendSMSDivisionResultsLink'
         ],
     ];
 

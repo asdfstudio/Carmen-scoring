@@ -162,6 +162,7 @@ return [
 				Collective\Html\HtmlServiceProvider::class,
 				Kris\LaravelFormBuilder\FormBuilderServiceProvider::class,
 				DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
+        Aloha\Twilio\Support\Laravel\ServiceProvider::class,
 
 
     ],
@@ -213,7 +214,8 @@ return [
       	'Html' => Collective\Html\HtmlFacade::class,
 				'FormBuilder' => Kris\LaravelFormBuilder\Facades\FormBuilder::class,
 				'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
-        
+        'Twilio' => Aloha\Twilio\Support\Laravel\Facade::class,
+
 
     ],
 

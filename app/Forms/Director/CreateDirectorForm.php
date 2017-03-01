@@ -38,6 +38,11 @@ class CreateDirectorForm extends Form
       'label' => 'Email Address'
     ]);
 
+    $this->add('tel','text', [
+      'rules' => '',
+      'label' => 'Mobile Phone Number (to receive link to results via text message)'
+    ]);
+
 
     $this->add('submit', 'submit', ['label' => 'Save Director', 'attr' => ['class' => 'btn btn-primary']]);
   }
