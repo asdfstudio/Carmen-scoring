@@ -42,21 +42,63 @@ class SendSMSDivisionResultsLink
 
       $message = "Carmen Scoring: ".$division->name." results now available at ". route('results.division.show', [$division, $division->access_code]);
 
-      $division->choirs->each(function($choir,$key) use ($message) {
+
+      $directors = collect();
+
+      // Dvisision > Choirs
+      $division->choirs->each(function($choir,$key) use ($directors) {
         foreach($choir->directors as $director)
         {
           if($director->getOriginal('tel'))
           {
-            try {
-              Twilio::message($director->getOriginal('tel'), $message);
-            } catch(\Services_Twilio_RestException $e)
-            {
-              //Log::info($e);
-              Log::error('Twilio SMS Error: Failed to deliver message "'.$message.'" to phone number "'.$director->getOriginal('tel').'"');
-            }
-
+            $directors->push([
+              'id' => $director->id,
+              'tel' => $director->getOriginal('tel')
+            ]);
           }
         }
       });
+
+      // Division > Final Round > Choirs
+      $division->rounds()->orderBy('sequence', 'DESC')->first()->choirs->each(function($choir,$key) use ($directors) {
+        foreach($choir->directors as $director)
+        {
+          if($director->getOriginal('tel'))
+          {
+            $directors->push([
+              'id' => $director->id,
+              'tel' => $director->getOriginal('tel')
+            ]);
+          }
+        }
+      });
+
+      // Get unique directors
+      $directors = $directors->unique('id');
+
+      Log::debug('Directors: '. $directors);
+
+      foreach($directors as $director)
+      {
+        try {
+          Twilio::message($director['tel'], $message);
+        } catch(\Services_Twilio_RestException $e)
+        {
+          Log::error('Twilio SMS Error: Failed to deliver message "'.$message.'" to phone number "'.$director['tel'].'"');
+        }
+      }
+
+      /*$directors->each(function($director,$key) use ($message) {
+        if($director->has('tel'))
+        {
+          try {
+            Twilio::message($director->get('tel'), $message);
+          } catch(\Services_Twilio_RestException $e)
+          {
+            //Log::info($e);
+            Log::error('Twilio SMS Error: Failed to deliver message "'.$message.'" to phone number "'.$director->get('tel').'"');
+          }
+        }
+      });*/
     }
 }
