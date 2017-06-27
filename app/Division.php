@@ -216,6 +216,11 @@ class Division extends Model
         $this->access_code = strtoupper(str_random(8));
       }
 
+      if(env('IS_WORKSHOP_ENABLED') == true)
+      {
+        $this->access_code = $this->id;
+      }
+
       return $this->save();
     }
 

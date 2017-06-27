@@ -26,6 +26,19 @@ Route::group([
     Route::get('dashboard', [
       'as' => 'admin.dashboard', 'uses' => 'OrganizationController@index'
     ]);
+
+    Route::get('workshop', [
+      'as' => 'workshop.index', 'uses' => 'WorkshopController@index'
+    ]);
+    Route::get('workshop/open', [
+      'as' => 'workshop.open', 'uses' => 'WorkshopController@open'
+    ]);
+    Route::get('workshop/close', [
+      'as' => 'workshop.close', 'uses' => 'WorkshopController@close'
+    ]);
+    Route::get('workshop/finalize', [
+      'as' => 'workshop.finalize', 'uses' => 'WorkshopController@finalize'
+    ]);
 });
 
 // ================

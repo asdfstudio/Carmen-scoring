@@ -19,6 +19,13 @@
         <a href="{{ route('admin.school.index') }}" class="{{ $link_class }}">Schools</a>
       </li>
 
+      @if(env('IS_WORKSHOP_ENABLED'))
+        <li>
+          <?php $link_class = Request::segment(2) == 'workshop' ? 'active' : false; ?>
+          <a href="{{ route('workshop.index') }}" class="{{ $link_class }}">Workshop</a>
+        </li>
+      @endif
+
 
     </ul>
 

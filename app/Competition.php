@@ -144,4 +144,26 @@ class Competition extends Model
     {
       $this->attributes['access_code'] = strtolower($value);
     }
+
+
+    public function activate()
+    {
+      $this->is_completed = false;
+      $this->is_archived = NULL;
+      return $this->save();
+    }
+
+    public function complete()
+    {
+      $this->is_completed = true;
+      $this->is_archived = NULL;
+      return $this->save();
+    }
+
+    public function archive()
+    {
+      $this->is_completed = true;
+      $this->is_archived = true;
+      return $this->save();
+    }
 }
