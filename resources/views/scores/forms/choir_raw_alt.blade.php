@@ -34,7 +34,9 @@
 
           @include('scores.forms.number_selector', ['criterion' => $criterion,'score' => $score, 'start' => 1, 'end' => 10, 'interval' => 1])
 
-          @include('scores.forms.number_selector', ['criterion' => $criterion,'score' => $score, 'start' => 0.5, 'end' => 9.5, 'interval' => 1, 'class' => 'half'])
+          @if(!env('IS_WORKSHOP_ENABLED'))
+            @include('scores.forms.number_selector', ['criterion' => $criterion,'score' => $score, 'start' => 0.5, 'end' => 9.5, 'interval' => 1, 'class' => 'half'])
+          @endif
 
         </div>
 
