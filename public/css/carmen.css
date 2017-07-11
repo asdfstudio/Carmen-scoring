@@ -3079,7 +3079,10 @@ button.close {
 
 .scorecard {
   background: #eee;
-  padding: 15px; }
+  padding: 10px 5px; }
+  @media only screen and (min-width: 768px) {
+    .scorecard {
+      padding: 15px; } }
   .scorecard .caption-container .caption-heading {
     border-bottom: 2px solid;
     font-size: 2em;
