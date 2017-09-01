@@ -173,6 +173,13 @@ class CompetitionController extends Controller
         $competition->access_code = $input['access_code'];
         $competition->use_runner_up_names = $input['use_runner_up_names'];
 				//$competition->organization_id = $input['organization_id'];
+
+        if($input['begin_date'])
+          $competition->begin_date = $input['begin_date'];
+
+        if($input['end_date'])
+          $competition->end_date = $input['end_date'];
+          
 				$competition->save();
 
 

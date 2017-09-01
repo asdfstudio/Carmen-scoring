@@ -15,7 +15,7 @@
 
     <ul class="social-icons">
       <li><a href="https://twitter.com/CarmenScoring" target="_blank"><i class="fa fa-twitter fa-4x"></i> Twitter</a></li>
-      <li><a href="https://www.facebook.com/carmenshowchoirscoring/" target="_blank"><i class="fa fa-facebook fa-4x"></i> Facebook</a></li>
+      <li><a href="https://www.facebook.com/carmenscoring/" target="_blank"><i class="fa fa-facebook fa-4x"></i> Facebook</a></li>
       <li><a href="https://www.instagram.com/carmenscoring/" target="_blank"><i class="fa fa-instagram fa-4x"></i> Instagram</a></li>
       <li><a href="https://www.snapchat.com/add/carmenscoring" target="_blank"><i class="fa fa-snapchat-ghost fa-4x"></i> Snapchat</a></li>
     </ul>

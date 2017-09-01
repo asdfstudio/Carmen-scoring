@@ -6,6 +6,12 @@ Breadcrumbs::register('results.index', function($breadcrumbs)
     $breadcrumbs->push('Results', route('results.index'));
 });
 
+Breadcrumbs::register('results.year', function($breadcrumbs, $year)
+{
+    $breadcrumbs->parent('results.index');
+    $breadcrumbs->push($year, route('results.year', $year));
+});
+
 Breadcrumbs::register('results.competition.show-public', function($breadcrumbs, $competition)
 {
     $breadcrumbs->parent('results.index');

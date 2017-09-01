@@ -13,9 +13,14 @@ class Competition extends Model
 
     use RestrictsOrganization;
 
-		protected $dates = ['deleted_at'];
+		protected $dates = ['deleted_at', 'begin_date', 'end_date'];
 
-		protected $fillable = ['organization_id', 'name', 'slug', 'access_code', 'dates', 'use_runner_up_names' ,'is_archived'];
+		protected $fillable = ['organization_id', 'name', 'slug', 'access_code', 'dates', 'use_runner_up_names' ,'is_archived', 'begin_date', 'end_date'];
+
+    /*protected $casts = [
+      'begin_date' => 'date',
+      'end_date' => 'date'
+    ];*/
 
 
 		protected static function boot()
@@ -23,10 +28,25 @@ class Competition extends Model
         parent::boot();
     }
 
+    public function getBeginDateAttribute($value)
+    {
+      return $value;
+    }
+
+    public function getEndDateAttribute($value)
+    {
+      return $value;
+    }
+
 
 		public function scopeActive($query)
 		{
 			return $query->whereNull('is_archived');
+		}
+
+    public function scopeYear($query, $year)
+		{
+			return $query->whereYear('begin_date', '=',$year);
 		}
 
 

@@ -20,6 +20,16 @@ class CreateCompetitionForm extends Form
           'label' => 'Results Access Code'
         ]);
 
+        $this->add('begin_date','text', [
+          'rules' => '',
+          'label' => 'Begin Date (YYYY-MM-DD)'
+        ]);
+
+        $this->add('end_date','text', [
+          'rules' => '',
+          'label' => 'End Date (YYYY-MM-DD)'
+        ]);
+
         $this->add('use_runner_up_names', 'choice', [
           'choices' => [
             0 => '1st, 2nd, 3rd...',

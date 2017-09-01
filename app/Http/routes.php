@@ -72,6 +72,10 @@ Route::any('/results/view/{competition_slug}', [
   'as' => 'results.competition.show-custom', 'uses' => 'ResultsController@competitionCustom'
 ]);
 
+Route::get('results/{year}', [
+  'as' => 'results.year', 'uses' => 'ResultsController@indexYear'
+]);
+
 Route::get('results', [
   'as' => 'results.index', 'uses' => 'ResultsController@index'
 ]);

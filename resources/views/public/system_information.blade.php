@@ -126,7 +126,7 @@
           <li>Access to the online Carmen System</li>
           <li>A Carmen Representative comes to your event to administer the Carmen System*</li>
           <li>Devices are provided for the judges and organizers for the day of the event**</li>
-          <li>Fee of $35 per group</li>
+          <li>Fee of $30 per group</li>
         </ul>
       </li>
       <li class="package">
@@ -134,14 +134,14 @@
         <ul>
           <li>Access to the online Carmen System</li>
           <li>A Carmen Representative comes to your event to administer the Carmen System*</li>
-          <li>Fee of $30 per group</li>
+          <li>Fee of $25 per group</li>
         </ul>
       </li>
       <li class="package">
         <span class="package-name">Carmen</span>
         <ul>
           <li>Access to the online Carmen System</li>
-          <li>Fee of $25 per group</li>
+          <li>Fee of $20 per group</li>
         </ul>
       </li>
     </ul>

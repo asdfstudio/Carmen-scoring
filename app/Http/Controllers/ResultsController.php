@@ -73,9 +73,24 @@ class ResultsController extends Controller
 
     public function index()
     {
-      $competitions = Competition::completed()->orderBy('name', 'asc')->get();
+      $years = [];
+      $i = 2017;
+      $currentYear = date('Y');
 
-      return view('results.index', compact('competitions'));
+      while($i <= $currentYear)
+      {
+        $years[] = $i; $i++;
+      }
+
+      return view('results.choose_year', compact('years'));
+    }
+
+
+    public function indexYear($year)
+    {
+      $competitions = Competition::withoutGlobalScope('organization')->completed()->year($year)->orderBy('name', 'asc')->get();
+
+      return view('results.index', compact('competitions', 'year'));
     }
 
     public function competitionPublic($competition_id, Request $request)
@@ -84,7 +99,7 @@ class ResultsController extends Controller
         $query->published();
       }])->completed()->find($competition_id);*/
 
-      $competition = Competition::with(['divisions' => function($query) {
+      $competition = Competition::withoutGlobalScope('organization')->with(['divisions' => function($query) {
         $query->published();
       }])->find($competition_id);
 
