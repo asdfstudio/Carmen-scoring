@@ -46,7 +46,7 @@ class AwardScheduleController extends Controller
     {
       $competition = Competition::find($competition_id);
 
-      $form = $formBuilder->create('awardSchedule\CreateForm', [
+      $form = $formBuilder->create('AwardSchedule\CreateForm', [
         'model' => false,
       ]);
 
