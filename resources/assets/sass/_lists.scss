@@ -8,6 +8,18 @@
       background: $cs-gray-light;
     }
 
+    &.unpadded {
+      padding: 0;
+      margin-bottom: 10px;
+      .header {
+        padding: 5px 10px;
+        background: $cs-gray-light;
+      }
+      .body {
+        padding: 5px 10px;
+      }
+    }
+
     .group {
       margin-bottom: 5px;
     }

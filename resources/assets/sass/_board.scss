@@ -1,0 +1,129 @@
+
+
+.board-list {
+  width: 290px;
+  background: #eee;
+  padding: 0 10px;
+  padding-bottom: 11px;
+  overflow: hidden;
+  float: left;
+  margin-right: 20px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 1px rgba(0,0,0,.2);
+  border-radius: 5px;
+
+  .list-header {
+    border-bottom: 1px solid #ccc;
+    overflow: hidden;
+    padding-top: 13px;
+
+    h3 {
+      float: left;
+      margin: 0;
+      font-size: 16px;
+      line-height: 20px;
+      padding-bottom: 5px;
+    }
+
+    .card-count {
+      float: right;
+      background: #ddd;
+      padding: 0 5px;
+      border-radius: 5px;
+      min-width: 25px;
+      text-align: center;
+      line-height: 25px;
+      font-size: 13px;
+      margin-top: -4px;
+      position: relative;
+    }
+  }
+
+  ul.cards {
+    margin: 10px 0;
+    padding: 0;
+    overflow: hidden;
+    list-style: none;
+
+    .card {
+      padding: 10px;
+      background: #fff;
+      margin-bottom: 3px;
+      border-radius: 5px;
+      box-shadow: 0px 1px 1px rgba(0,0,0,0.2);
+      margin-bottom: 8px;
+
+      &.choir {
+        .name {
+          font-size: 17px;
+        }
+      }
+
+      &.judge {
+        .name {
+          font-size: 17px;
+        }
+        .captions-group {
+          display: block;
+          float: none;
+          margin: 0;
+          margin-top: 6px;
+
+          .caption {
+            margin: 0;
+            margin-right: 3px;
+          }
+        }
+      }
+
+      &.round {
+        .name {
+          font-size: 17px;
+        }
+      }
+    }
+  }
+
+
+
+  .add-resource {
+    display: block;
+    background: #ddd;
+    text-align: center;
+    padding: 3px 10px;
+    border-radius: 5px;
+    color: #333;
+  }
+}
+
+
+
+
+#modal-cover {
+  display: none;
+  background: #444;
+  opacity: .5;
+  z-index: 99;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+#modal {
+  display: none;
+  z-index: 100;
+  background: #fff;
+  padding: 20px;
+  position: fixed;
+  margin: auto;
+  top: 20px;
+  left: 50px;
+  right: 50px;
+  width: 400px;
+	overflow-y: scroll;
+	max-height: 90%;
+}
+.add-resource-form-prototype, .card-prototype {
+  display: none;
+}

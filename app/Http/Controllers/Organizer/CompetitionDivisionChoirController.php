@@ -50,7 +50,7 @@ class CompetitionDivisionChoirController extends Controller
         dd($directors->pluck('email')->toArray());*/
 
         $deleteForm = $formBuilder->create('GenericDeleteForm', [
-					'method' => 'DELETE',
+					'method' => 'DELETE'
 					//'url' => route('organizer.competition.division.choir.destroy',[$division->competition,$division,$judge])
 				]);
 
@@ -178,7 +178,6 @@ class CompetitionDivisionChoirController extends Controller
     public function store($competition_id, $division_id, Request $request, FormBuilder $formBuilder)
     {
         //$this->authorize('create','App\Choir');
-
 				$form = $formBuilder->create('Choir\CreateChoirForm');
 
 				// Validate input
@@ -222,7 +221,7 @@ class CompetitionDivisionChoirController extends Controller
 				}
         elseif($request->has('choir_id'))
         {
-          $choir = Choir::find($request->input('choir_id'));
+          $choir = Choir::with('school')->find($request->input('choir_id'));
         }
 
         //dd($choir);
@@ -245,13 +244,22 @@ class CompetitionDivisionChoirController extends Controller
 
         $successMessage = "$choir->name has been added to this division.";
 
-        if($request->exists('submit_create_another'))
+        if($request->wantsJson())
         {
-          return redirect()->back()->with('success',$successMessage);
+          $choir->load('school');
+          return response()->json($choir);
         }
         else {
-          return redirect()->route('organizer.competition.division.choir.index', [$division->competition, $division])->with('success',$successMessage);
+          if($request->exists('submit_create_another'))
+          {
+            return redirect()->back()->with('success',$successMessage);
+          }
+          else {
+            return redirect()->route('organizer.competition.division.choir.index', [$division->competition, $division])->with('success',$successMessage);
+          }
         }
+
+
     }
 
     /**
@@ -293,7 +301,7 @@ class CompetitionDivisionChoirController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
     }
 
     /**
@@ -302,7 +310,7 @@ class CompetitionDivisionChoirController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($competition_id, $division_id, $choir_id, FormBuilder $formBuilder)
+    public function destroy($competition_id, $division_id, $choir_id, FormBuilder $formBuilder, Request $request)
     {
         $division = Division::with('competition')->find($division_id);
         $choir = Choir::with('school')->find($choir_id);
@@ -311,7 +319,15 @@ class CompetitionDivisionChoirController extends Controller
 
         Event::fire(new DivisionChoirRemoved($division, $choir));
 
-				// Set flash data and redirect
-				return redirect()->route('organizer.competition.division.choir.index',[$division->competition, $division])->with('success',"$choir->name has been removed from this division." );
+        if($request->wantsJson())
+        {
+          return response()->json($choir_id);
+        }
+        else {
+          // Set flash data and redirect
+  				return redirect()->route('organizer.competition.division.choir.index',[$division->competition, $division])->with('success',"$choir->name has been removed from this division." );
+        }
+
+
     }
 }

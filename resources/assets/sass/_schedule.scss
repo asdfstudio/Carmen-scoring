@@ -1,0 +1,264 @@
+.schedule-builder-container {
+  overflow: hidden;
+  position: relative;
+  background: #eee;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+
+  .is-dirty-message {
+    display: none;
+    color: $cs-green;
+    margin-left: 10px;
+    font-weight: bold;
+  }
+
+  &.is-dirty {
+    //border: 1px dotted red;
+
+    .is-dirty-message {
+      display: inline;
+    }
+  }
+
+  .schedule-builder-footer {
+    clear: both;
+    padding: 15px;
+    background: #d9d9d9;
+    border-top: 3px solid #ccc;
+  }
+
+  .schedule-builder {
+    width: 48%;
+    float: left;
+    margin: 10px 1%;
+
+    .schedule-builder-header {
+      font-size: 1.3em;
+      border-bottom: 2px solid #aaa;
+      margin-bottom: 10px;
+    }
+  }
+
+  ul.schedule-builder-list, ul.schedule-list {
+    background: #f5f5f5;
+    padding: 10px;
+    overflow: hidden;
+    list-style: none;
+    min-height: 200px;
+    height: 400px;
+    overflow-y: scroll;
+    border: 1px solid #ddd;
+
+    & ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .scheduled_time {
+      display: none;
+      margin-right: 10px;
+      border: none;
+      text-align: center;
+      color: #444;
+      background: #efefef;
+      padding: 3px 9px;
+      font-size: .9em;
+      width: 75px;
+      border-radius: 35px;
+    }
+
+    &.schedule {
+      .scheduled_time {
+        display: inline-block;
+      }
+    }
+
+    &.schedule-items {
+
+    }
+
+    li.division {
+      margin-bottom: 10px;
+      overflow: hidden;
+
+      .division-heading {
+        font-weight: bold;
+        border-bottom: 1px solid #ccc;
+        background: #ddd;
+        display: block;
+        padding: 3px 6px;
+        margin-bottom: 3px;
+        font-size: 1.2em;
+      }
+    }
+
+    ul.choirs {
+      margin-bottom: 10px;
+    }
+
+    .round-heading {
+      font-weight: bold;
+      padding: 3px;
+      margin-bottom: 3px;
+      font-size: 1.1em;
+    }
+
+    & li.schedule-item {
+      //border: 1px solid #ccc;
+      background: #fff;
+      margin: 2px 0;
+      padding: 5px 8px;
+      border-radius: 3px;
+
+      &.placeholder {
+        height: 26px;
+        border: 2px dashed #ccc;
+        background: none !important;
+      }
+
+      &.choir {
+        .division-name {
+          font-weight: bold;
+        }
+        .round-name {
+          color: #888;
+          font-size: 0.9em;
+          margin-left: 3px;
+        }
+        .choir-name {
+          float: right;
+
+          &.choir-tbd {
+            font-style: italic;
+          }
+        }
+      }
+
+      &.award {
+        .division-name {
+          font-weight: bold;
+        }
+        .award-name, .caption-name {
+          color: #888;
+          font-size: 0.9em;
+          margin-left: 3px;
+
+          &.caption-music {
+            color: $cs-caption-music;
+          }
+
+          &.caption-show {
+            color: $cs-caption-show;
+          }
+
+          &.caption-combo {
+            color: $cs-caption-combo;
+          }
+
+          &.caption-overall {
+            color: $cs-caption-overall;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+ul.schedule-list {
+  background: #f5f5f5;
+  padding: 10px;
+  overflow: hidden;
+  list-style: none;
+  min-height: 200px;
+  height: 400px;
+  overflow-y: scroll;
+  border: 1px solid #ddd;
+
+
+  & li.schedule-item {
+    //border: 1px solid #ccc;
+    background: #fff;
+    margin: 2px 0;
+    padding: 5px 8px;
+    border-radius: 3px;
+
+    &.choir {
+
+      .scheduled-time {
+        margin-right: 10px;
+        color: #444;
+        background: #efefef;
+        padding: 3px 9px;
+        font-size: .9em;
+        display: inline-block;
+        min-width: 75px;
+        text-align: center;
+        border-radius: 35px;
+      }
+
+      .division-name {
+        font-weight: bold;
+      }
+      .round-name {
+        color: #888;
+        font-size: 0.9em;
+        margin-left: 3px;
+      }
+      .choir-name {
+        float: right;
+
+        &.choir-tbd {
+          font-style: italic;
+        }
+      }
+    }
+
+    &.award {
+      .division-name {
+        font-weight: bold;
+      }
+      .award-name, .caption-name {
+        color: #888;
+        font-size: 0.9em;
+        margin-left: 3px;
+
+        &.caption-music {
+          color: $cs-caption-music;
+        }
+
+        &.caption-show {
+          color: $cs-caption-show;
+        }
+
+        &.caption-combo {
+          color: $cs-caption-combo;
+        }
+
+        &.caption-overall {
+          color: $cs-caption-overall;
+        }
+      }
+
+      .award-winner {
+        float: right;
+        background: #eee;
+        padding: 0px 17px;
+        border-radius: 20px;
+
+        .award-winner-recipient {
+          font-weight: bold;
+          margin-right: 5px;
+        }
+        .award-winner-choir { 
+          font-weight: bold;
+          font-style: italic;
+          font-size: .9em;
+          opacity: .7;
+        }
+      }
+    }
+  }
+
+}

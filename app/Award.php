@@ -28,7 +28,13 @@ class Award extends Model
 
   public function choirs()
   {
-    return $this->belongsToMany('App\Choir', 'division_award');
+    return $this->belongsToMany('App\Choir', 'division_award')->withPivot('recipient', 'sponsor');
+  }
+
+
+  public function winner()
+  {
+    return $this->hasOne('App\AwardWinner', 'award_id');
   }
 
 

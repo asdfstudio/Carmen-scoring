@@ -234,6 +234,52 @@ Breadcrumbs::register('organizer.competition.clone', function($breadcrumbs, $com
     $breadcrumbs->push('Clone', route('organizer.competition.clone',$competition));
 });
 
+// Competitions > [Competition] > Schedules
+Breadcrumbs::register('organizer.competition.schedule.index', function($breadcrumbs, $competition)
+{
+    $breadcrumbs->parent('organizer.competition.show',$competition);
+    $breadcrumbs->push('Schedules', route('organizer.competition.schedule.index',$competition));
+});
+
+// Competitions > [Competition] > Schedules > [Schedule]
+Breadcrumbs::register('organizer.competition.schedule.show', function($breadcrumbs, $competition, $schedule)
+{
+    $breadcrumbs->parent('organizer.competition.schedule.index',$competition);
+    $breadcrumbs->push($schedule->name, route('organizer.competition.schedule.show', [$competition, $schedule]));
+});
+
+// Competitions > [Competition] > Schedules > [Schedule] > Edit
+Breadcrumbs::register('organizer.competition.schedule.edit', function($breadcrumbs, $competition, $schedule)
+{
+    $breadcrumbs->parent('organizer.competition.schedule.show', $competition, $schedule);
+    $breadcrumbs->push($schedule->name, route('organizer.competition.schedule.edit', [$competition, $schedule]));
+});
+
+///
+
+// Competitions > [Competition] > Award Schedules
+Breadcrumbs::register('organizer.competition.award-schedule.index', function($breadcrumbs, $competition)
+{
+    $breadcrumbs->parent('organizer.competition.show',$competition);
+    $breadcrumbs->push('Schedules', route('organizer.competition.award-schedule.index',$competition));
+});
+
+// Competitions > [Competition] > Award Schedules > [Schedule]
+Breadcrumbs::register('organizer.competition.award-schedule.show', function($breadcrumbs, $competition, $schedule)
+{
+    $breadcrumbs->parent('organizer.competition.award-schedule.index',$competition);
+    $breadcrumbs->push($schedule->name, route('organizer.competition.award-schedule.show', [$competition, $schedule]));
+});
+
+// Competitions > [Competition] > Award Schedules > [Schedule] > Edit
+Breadcrumbs::register('organizer.competition.award-schedule.edit', function($breadcrumbs, $competition, $schedule)
+{
+    $breadcrumbs->parent('organizer.competition.award-schedule.show', $competition, $schedule);
+    $breadcrumbs->push($schedule->name, route('organizer.competition.award-schedule.edit', [$competition, $schedule]));
+});
+
+///
+
 // Competitions > [Competition] > Divisions
 Breadcrumbs::register('organizer.competition.division.index', function($breadcrumbs, $competition)
 {

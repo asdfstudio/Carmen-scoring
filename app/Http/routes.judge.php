@@ -22,6 +22,14 @@ Route::group([
 		]);
 
 
+    Route::get('competition/{competition}/schedule', [
+			'as' => 'competition.schedule.index', 'uses' => 'ScheduleController@index'
+		]);
+
+    Route::get('competition/{competition}/schedule/{schedule}', [
+			'as' => 'competition.schedule.show', 'uses' => 'ScheduleController@show'
+		]);
+
 
 
     /*Route::bind('competition', function($id){

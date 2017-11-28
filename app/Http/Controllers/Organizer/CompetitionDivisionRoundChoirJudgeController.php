@@ -14,6 +14,7 @@ use App\Judge;
 use App\Division;
 use App\Competition;
 use App\Caption;
+use App\Comment;
 
 use App\Carmen\WeightedScores;
 use App\Carmen\RankedScores;
@@ -35,6 +36,12 @@ class CompetitionDivisionRoundChoirJudgeController extends Controller
 
       $captions = Caption::get();
 
+      $comment = Comment::where('judge_id', $judge_id)
+									->where('choir_id', $choir_id)
+									->where('subject_type', 'App\Round')
+									->where('subject_id', $round_id)
+									->pluck('comments')->first();
+
 			$rawScores = RawScore::where('division_id',$division_id)->where('round_id',$round_id)->where('choir_id',$choir_id)->where('judge_id',$judge_id)->get();
 
       $weightedScoresClass = new WeightedScores($rawScores,        $division->caption_weighting_id);
@@ -44,6 +51,6 @@ class CompetitionDivisionRoundChoirJudgeController extends Controller
 
       //dd($rawScores);
 
-			return view('competition_division_round_choir_judge.organizer.show',compact('rawScores', 'weightedScores', 'rankedScores', 'choir', 'judge', 'round', 'division', 'competition', 'rounds', 'divisions', 'captions'));
+			return view('competition_division_round_choir_judge.organizer.show',compact('rawScores', 'weightedScores', 'rankedScores', 'choir', 'judge', 'round', 'division', 'competition', 'rounds', 'divisions', 'captions', 'comment'));
 		}
 }

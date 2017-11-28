@@ -54,5 +54,17 @@
     <p>{{ link_to_route('organizer.competition.division.create','Create your first division',[$competition]) }}</p>
   @endif
 
+  <h3>Manage Schedules</h3>
+
+  <p>Set the performance order for your competition. Do this after you have created all of your divisions, rounds and choirs.</p>
+
+  <p>{{ link_to_route('organizer.competition.schedule.index','Manage your schedules',[$competition], ['class' => 'action']) }}</p>
+
+  <h3>Manage Award Ceremony Schedules</h3>
+
+  <p>Set the schedule for your award ceremonies..</p>
+
+  <p>{{ link_to_route('organizer.competition.award-schedule.index','Manage your award ceremony schedules',[$competition], ['class' => 'action']) }}</p>
+
 
 @endsection

@@ -166,6 +166,11 @@ class CompetitionDivisionRoundController extends Controller
 
         $successMessage = "$round->name has been added to this division.";
 
+        if($request->wantsJson())
+        {
+          return response()->json($round);
+        }
+
         if($request->exists('submit_create_another'))
         {
           return redirect()->back()->with('success',$successMessage);
@@ -210,7 +215,7 @@ class CompetitionDivisionRoundController extends Controller
       $judges = $division->judges;
       $choirs = $round->choirs;
 
-      //dd($choirs); 
+      //dd($choirs);
 
       //dd($division->sheet->criteria);
 

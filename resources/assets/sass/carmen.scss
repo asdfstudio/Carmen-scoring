@@ -2,7 +2,7 @@
 
 @import 'bootstrap-custom';
 
-@import "media-queries"; 
+@import "media-queries";
 
 @import "scorecard";
 @import "scoreboard";
@@ -15,7 +15,10 @@
 @import "forms";
 @import "headings";
 @import "content";
+@import "schedule";
 @import "spacing";
+@import "jquery.timepicker";
+@import "board";
 @import "public";
 
 
@@ -453,6 +456,7 @@ a.active {
   margin-top: -1px;
   background: $cs-white;
   //box-shadow: 0 3px 3px rgba(0,0,0,0.3);
+  overflow: hidden;
 
   &.collapse {
     //margin-top: -1px;

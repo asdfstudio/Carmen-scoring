@@ -77,6 +77,11 @@ class CompetitionDivisionPenaltyController extends Controller
 
       $successMessage = "$penalty->name has been created and added to this division.";
 
+      if($request->wantsJson())
+      {
+        return response()->json($penalty);
+      }
+
       if($request->exists('submit_create_another'))
       {
         return redirect()->back()->with('success',$successMessage);

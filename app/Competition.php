@@ -15,12 +15,16 @@ class Competition extends Model
 
 		protected $dates = ['deleted_at', 'begin_date', 'end_date'];
 
-		protected $fillable = ['organization_id', 'name', 'slug', 'access_code', 'dates', 'use_runner_up_names' ,'is_archived', 'begin_date', 'end_date'];
+		protected $fillable = ['organization_id', 'name', 'slug', 'access_code', 'dates', 'use_runner_up_names', 'rating_system', 'is_archived', 'begin_date', 'end_date'];
 
     /*protected $casts = [
       'begin_date' => 'date',
       'end_date' => 'date'
     ];*/
+
+    protected $casts = [
+      'rating_system' => 'array'
+    ];
 
 
 		protected static function boot()
@@ -73,6 +77,16 @@ class Competition extends Model
 			return $this->morphOne('App\Place','subject');
 		}
 
+
+    public function schedules()
+		{
+			return $this->hasMany('App\Schedule');
+		}
+
+    public function awardSchedules()
+		{
+			return $this->hasMany('App\AwardSchedule');
+		}
 
 		public function divisions()
 		{

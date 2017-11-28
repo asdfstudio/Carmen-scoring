@@ -37,6 +37,11 @@ class Choir extends Model
 			return $this->hasMany('App\Division');
 		}
 
+    public function scheduleItems()
+    {
+        return $this->hasMany('App\ScheduleItem');
+    }
+
     public function rounds()
     {
       return $this->belongsToMany('App\Round');
@@ -51,6 +56,11 @@ class Choir extends Model
     public function penalties()
 		{
 			return $this->belongsToMany('App\Penalty');
+		}
+
+    public function comments()
+		{
+			return $this->belongsToMany('App\Comment');
 		}
 
 

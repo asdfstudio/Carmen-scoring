@@ -10,5 +10,8 @@
     "gulp-concat": "^2.6.0",
     "gulp-sass": "^2.3.2",
     "gulp-sourcemaps": "^1.7.3"
+  },
+  "dependencies": {
+    "mustache": "^2.3.0"
   }
 }

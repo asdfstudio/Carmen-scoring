@@ -8,4 +8,6 @@
 
     @include('division.judge.list',['divisions' => $competition->divisions])
 
+    {{ link_to_route('judge.competition.schedule.index', 'Show Schedules', [$competition]) }}
+
 @endsection

@@ -23,13 +23,16 @@
   }
 
   &.caption {
-    &.music {
+
+    background: #999;
+
+    &.music, &.Music {
       background: $cs-caption-music;
     }
-    &.show {
+    &.show, &.Show {
       background: $cs-caption-show;
     }
-    &.combo {
+    &.combo, &.Combo {
       background: $cs-caption-combo;
     }
   }

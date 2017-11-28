@@ -6,6 +6,11 @@ use Kris\LaravelFormBuilder\Form;
 
 class CreatePenaltyForm extends Form
 {
+    protected $formOptions = [
+      'class' => 'add-resource-form-prototype add-resource-form',
+      'data-resource-type' => 'penalty'
+    ];
+
     public function buildForm()
     {
         /*$this->add('penalty', 'form', [

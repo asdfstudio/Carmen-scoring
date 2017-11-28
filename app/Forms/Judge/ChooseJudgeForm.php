@@ -6,6 +6,11 @@ use Kris\LaravelFormBuilder\Form;
 
 class ChooseJudgeForm extends Form
 {
+    protected $formOptions = [
+      'class' => 'add-resource-form-prototype add-resource-form',
+      'data-resource-type' => 'judge'
+    ];
+
     public function buildForm()
     {
         /*$this->add('judge_id','entity', [
@@ -21,6 +26,7 @@ class ChooseJudgeForm extends Form
 					'choices' => $this->data,
 					'empty_value' => 'Choose judge...',
 					'label' => 'Choose from existing judges',
+          'attr' => ['class' => 'judge_id', 'id' => ''],
 					//'property' => 'first_name',
           'rules' => ['required_without:judge.first_name'],
           'wrapper' => ['class' => 'existing_judge_container']

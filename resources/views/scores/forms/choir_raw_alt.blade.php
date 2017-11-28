@@ -46,6 +46,14 @@
     </div>
   @endforeach
 
+  <div class="caption-container">
+    <div class="caption-heading">
+      Feedback / Comments for Choir
+    </div>
+
+    {{ Form::textarea('comment', $comment, ['placeholder' => 'Enter comments/feedback for choir..']) }}
+  </div>
+
   <div class="submit-container">
     {{ Form::submit('Save Scores & Stay',['class' => 'btn btn-primary btn-lg', 'name' => 'save_stay']) }}
     {{ Form::submit('Save Scores & Back to All Choirs',['class' => 'btn btn-primary btn-lg', 'name' => 'save_go']) }}

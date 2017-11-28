@@ -14,9 +14,13 @@ use App\Round;
 use App\RawScore;
 use App\Caption;
 use App\Judge;
+use App\Comment;
 
 use App\Carmen\Scorekeeper;
 use App\Carmen\Scoreboard;
+
+use Event;
+use App\Events\CommentSaved;
 
 use Auth;
 
@@ -62,6 +66,12 @@ class CompetitionDivisionRoundChoirController extends Controller
 	    $weightedScores = $scoreboard->weightedScores;
 			$rankedScores = $scoreboard->rankedScores;
 
+			$comment = Comment::where('judge_id', $judge_id)
+									->where('choir_id', $choir_id)
+									->where('subject_type', 'App\Round')
+									->where('subject_id', $round_id)
+									->pluck('comments')->first();
+
 			//dd($rawScores);
 
 			//$division = Division::with('choirs','judges','judges.captions','competition','competition.organization')->find($division_id);
@@ -100,7 +110,7 @@ class CompetitionDivisionRoundChoirController extends Controller
 			//dd($captions);
 
 
-			return view('competition_division_round_choir.judge.show',compact('scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'captions','round','choir','judge','competition','division'));
+			return view('competition_division_round_choir.judge.show',compact('scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'captions','round','choir','judge','competition','division', 'comment'));
 		}
 
 
@@ -108,6 +118,7 @@ class CompetitionDivisionRoundChoirController extends Controller
 		public function save_scores($competition_id, $division_id, $round_id, $choir_id, Request $request)
 		{
 			// Check that we can do this
+			$competition = Competition::withoutGlobalScope('organization')->find($competition_id);
 
 			$judge_id = Auth::user()->person_id;
 
@@ -121,6 +132,18 @@ class CompetitionDivisionRoundChoirController extends Controller
 			$criterion_id = $request->input('criterion_id', NULL);
 			$score = $request->input('score', NULL);
 			$scores = $request->input('scores', NULL);
+
+			// Save comments
+			$comment = Comment::firstOrNew([
+				'judge_id' => $judge_id,
+				'choir_id' => $choir_id,
+				'subject_type' => 'App\Round',
+				'subject_id' => $round_id
+			]);
+			$comment->comments = $request->input('comment');
+			$comment->save();
+
+			Event::fire(new CommentSaved($comment, $competition));
 
 
 			// Save a single score

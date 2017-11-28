@@ -230,22 +230,23 @@ $(document).ready(function() {
         choir_container.find('.new_school_container').addClass('hidden');
     });
 
-    $('.toggle-new-choir-container').on('click', function(e) {
+    /*$('.toggle-new-choir-container').on('click', function(e) {
       e.preventDefault();
+      console.log('toggle choir');
       var parent = $(this).parents('form');
       parent.find('.new_choir_container').show();
       parent.find('.new_school_container').hide();
       parent.find('.existing_choir_container').hide();
       $(this).hide();
-    });
+    });*/
 
-    $('.toggle-new-school-container').on('click', function(e) {
+    /*$('.toggle-new-school-container').on('click', function(e) {
       e.preventDefault();
       var parent = $(this).parents('form');
       parent.find('.new_school_container').show();
       parent.find('.existing_school_container').hide();
       $(this).hide();
-    });
+    });*/
 
     $('.toggle-new-judge-container').on('click', function(e) {
       e.preventDefault();
@@ -273,11 +274,12 @@ $(document).ready(function() {
     //$('.new_school_container').addClass('hidden');
     //$('.new_judge_container').addClass('hidden');
 
-    $('.choir_id').selectize({
+    // Turned of 2017-11-02 to support new division boards functionality
+    /*$('.choir_id').selectize({
       //persist: false,
       //createOnBlur: true,
       create: true
-    });
+    });*/
 
 
     // scorecard

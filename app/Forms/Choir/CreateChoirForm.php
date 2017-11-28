@@ -7,7 +7,8 @@ use Kris\LaravelFormBuilder\Form;
 class CreateChoirForm extends Form
 {
   protected $formOptions = [
-        //'attr' => ['class' => 'choir_container']
+    'class' => 'add-resource-form-prototype add-resource-form',
+    'data-resource-type' => 'choir'
   ];
 
   public function buildForm()
@@ -26,7 +27,7 @@ class CreateChoirForm extends Form
           'choices' => $this->data,
           'empty_value' => 'Choose choir...',
           'label' => 'Choose from existing choirs',
-          'attr' => ['class' => 'choir_id'],
+          'attr' => ['class' => 'choir_id', 'id' => ''],
           'rules' => ['required_without:name'],
           'wrapper' => ['class' => 'existing_choir_container']
         ]);

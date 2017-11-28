@@ -24,6 +24,11 @@ class Caption extends Model
         return $this->belongsToMany('App\Judge','division_judge');
     }
 
+    public function getSlugAttribute()
+    {
+      return strtolower($this->name);
+    }
+
     public function slug()
     {
       return strtolower($this->name);

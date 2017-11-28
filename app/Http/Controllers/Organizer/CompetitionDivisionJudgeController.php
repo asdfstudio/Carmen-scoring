@@ -192,6 +192,15 @@ class CompetitionDivisionJudgeController extends Controller
 
         $successMessage = $judge->full_name." has been added to this division.";
 
+
+        if($request->wantsJson())
+        {
+          $judge->load(['captions' => function($query) use ($division_id) {
+            $query->wherePivot('division_id', $division_id);
+          }]);
+          return response()->json($judge);
+        }
+
         if($request->exists('submit_create_another'))
         {
           return redirect()->back()->with('success',$successMessage);

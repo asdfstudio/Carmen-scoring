@@ -3391,6 +3391,15 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
 .list-group .list-group-item:hover {
   background: #EFEFEF; }
 
+.list-group .list-group-item.unpadded {
+  padding: 0;
+  margin-bottom: 10px; }
+  .list-group .list-group-item.unpadded .header {
+    padding: 5px 10px;
+    background: #EFEFEF; }
+  .list-group .list-group-item.unpadded .body {
+    padding: 5px 10px; }
+
 .list-group .list-group-item .group {
   margin-bottom: 5px; }
 
@@ -3598,12 +3607,14 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
     font-size: 0.6em; }
   .label.radius {
     border-radius: 3px; }
-  .label.caption.music {
-    background: #7F4091; }
-  .label.caption.show {
-    background: #E29231; }
-  .label.caption.combo {
-    background: #CA2128; }
+  .label.caption {
+    background: #999; }
+    .label.caption.music, .label.caption.Music {
+      background: #7F4091; }
+    .label.caption.show, .label.caption.Show {
+      background: #E29231; }
+    .label.caption.combo, .label.caption.Combo {
+      background: #CA2128; }
   .label.status {
     color: #FFF;
     padding: 5px 8px; }
@@ -3653,6 +3664,172 @@ label.block {
   border-bottom: 4px double #bcbcbc;
   padding: 10px 0; }
 
+.schedule-builder-container {
+  overflow: hidden;
+  position: relative;
+  background: #eee;
+  border: 1px solid #ddd;
+  border-radius: 5px; }
+  .schedule-builder-container .is-dirty-message {
+    display: none;
+    color: #68B155;
+    margin-left: 10px;
+    font-weight: bold; }
+  .schedule-builder-container.is-dirty .is-dirty-message {
+    display: inline; }
+  .schedule-builder-container .schedule-builder-footer {
+    clear: both;
+    padding: 15px;
+    background: #d9d9d9;
+    border-top: 3px solid #ccc; }
+  .schedule-builder-container .schedule-builder {
+    width: 48%;
+    float: left;
+    margin: 10px 1%; }
+    .schedule-builder-container .schedule-builder .schedule-builder-header {
+      font-size: 1.3em;
+      border-bottom: 2px solid #aaa;
+      margin-bottom: 10px; }
+  .schedule-builder-container ul.schedule-builder-list, .schedule-builder-container ul.schedule-list {
+    background: #f5f5f5;
+    padding: 10px;
+    overflow: hidden;
+    list-style: none;
+    min-height: 200px;
+    height: 400px;
+    overflow-y: scroll;
+    border: 1px solid #ddd; }
+    .schedule-builder-container ul.schedule-builder-list ul, .schedule-builder-container ul.schedule-list ul {
+      list-style: none;
+      margin: 0;
+      padding: 0; }
+    .schedule-builder-container ul.schedule-builder-list .scheduled_time, .schedule-builder-container ul.schedule-list .scheduled_time {
+      display: none;
+      margin-right: 10px;
+      border: none;
+      text-align: center;
+      color: #444;
+      background: #efefef;
+      padding: 3px 9px;
+      font-size: .9em;
+      width: 75px;
+      border-radius: 35px; }
+    .schedule-builder-container ul.schedule-builder-list.schedule .scheduled_time, .schedule-builder-container ul.schedule-list.schedule .scheduled_time {
+      display: inline-block; }
+    .schedule-builder-container ul.schedule-builder-list li.division, .schedule-builder-container ul.schedule-list li.division {
+      margin-bottom: 10px;
+      overflow: hidden; }
+      .schedule-builder-container ul.schedule-builder-list li.division .division-heading, .schedule-builder-container ul.schedule-list li.division .division-heading {
+        font-weight: bold;
+        border-bottom: 1px solid #ccc;
+        background: #ddd;
+        display: block;
+        padding: 3px 6px;
+        margin-bottom: 3px;
+        font-size: 1.2em; }
+    .schedule-builder-container ul.schedule-builder-list ul.choirs, .schedule-builder-container ul.schedule-list ul.choirs {
+      margin-bottom: 10px; }
+    .schedule-builder-container ul.schedule-builder-list .round-heading, .schedule-builder-container ul.schedule-list .round-heading {
+      font-weight: bold;
+      padding: 3px;
+      margin-bottom: 3px;
+      font-size: 1.1em; }
+    .schedule-builder-container ul.schedule-builder-list li.schedule-item, .schedule-builder-container ul.schedule-list li.schedule-item {
+      background: #fff;
+      margin: 2px 0;
+      padding: 5px 8px;
+      border-radius: 3px; }
+      .schedule-builder-container ul.schedule-builder-list li.schedule-item.placeholder, .schedule-builder-container ul.schedule-list li.schedule-item.placeholder {
+        height: 26px;
+        border: 2px dashed #ccc;
+        background: none !important; }
+      .schedule-builder-container ul.schedule-builder-list li.schedule-item.choir .division-name, .schedule-builder-container ul.schedule-list li.schedule-item.choir .division-name {
+        font-weight: bold; }
+      .schedule-builder-container ul.schedule-builder-list li.schedule-item.choir .round-name, .schedule-builder-container ul.schedule-list li.schedule-item.choir .round-name {
+        color: #888;
+        font-size: 0.9em;
+        margin-left: 3px; }
+      .schedule-builder-container ul.schedule-builder-list li.schedule-item.choir .choir-name, .schedule-builder-container ul.schedule-list li.schedule-item.choir .choir-name {
+        float: right; }
+        .schedule-builder-container ul.schedule-builder-list li.schedule-item.choir .choir-name.choir-tbd, .schedule-builder-container ul.schedule-list li.schedule-item.choir .choir-name.choir-tbd {
+          font-style: italic; }
+      .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .division-name, .schedule-builder-container ul.schedule-list li.schedule-item.award .division-name {
+        font-weight: bold; }
+      .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name {
+        color: #888;
+        font-size: 0.9em;
+        margin-left: 3px; }
+        .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-music, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-music, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-music, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-music {
+          color: #7F4091; }
+        .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-show, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-show, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-show, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-show {
+          color: #E29231; }
+        .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-combo, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-combo, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-combo, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-combo {
+          color: #CA2128; }
+        .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-overall, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-overall, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-overall, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-overall {
+          color: #68B155; }
+
+ul.schedule-list {
+  background: #f5f5f5;
+  padding: 10px;
+  overflow: hidden;
+  list-style: none;
+  min-height: 200px;
+  height: 400px;
+  overflow-y: scroll;
+  border: 1px solid #ddd; }
+  ul.schedule-list li.schedule-item {
+    background: #fff;
+    margin: 2px 0;
+    padding: 5px 8px;
+    border-radius: 3px; }
+    ul.schedule-list li.schedule-item.choir .scheduled-time {
+      margin-right: 10px;
+      color: #444;
+      background: #efefef;
+      padding: 3px 9px;
+      font-size: .9em;
+      display: inline-block;
+      min-width: 75px;
+      text-align: center;
+      border-radius: 35px; }
+    ul.schedule-list li.schedule-item.choir .division-name {
+      font-weight: bold; }
+    ul.schedule-list li.schedule-item.choir .round-name {
+      color: #888;
+      font-size: 0.9em;
+      margin-left: 3px; }
+    ul.schedule-list li.schedule-item.choir .choir-name {
+      float: right; }
+      ul.schedule-list li.schedule-item.choir .choir-name.choir-tbd {
+        font-style: italic; }
+    ul.schedule-list li.schedule-item.award .division-name {
+      font-weight: bold; }
+    ul.schedule-list li.schedule-item.award .award-name, ul.schedule-list li.schedule-item.award .caption-name {
+      color: #888;
+      font-size: 0.9em;
+      margin-left: 3px; }
+      ul.schedule-list li.schedule-item.award .award-name.caption-music, ul.schedule-list li.schedule-item.award .caption-name.caption-music {
+        color: #7F4091; }
+      ul.schedule-list li.schedule-item.award .award-name.caption-show, ul.schedule-list li.schedule-item.award .caption-name.caption-show {
+        color: #E29231; }
+      ul.schedule-list li.schedule-item.award .award-name.caption-combo, ul.schedule-list li.schedule-item.award .caption-name.caption-combo {
+        color: #CA2128; }
+      ul.schedule-list li.schedule-item.award .award-name.caption-overall, ul.schedule-list li.schedule-item.award .caption-name.caption-overall {
+        color: #68B155; }
+    ul.schedule-list li.schedule-item.award .award-winner {
+      float: right;
+      background: #eee;
+      padding: 0px 17px;
+      border-radius: 20px; }
+      ul.schedule-list li.schedule-item.award .award-winner .award-winner-recipient {
+        font-weight: bold;
+        margin-right: 5px; }
+      ul.schedule-list li.schedule-item.award .award-winner .award-winner-choir {
+        font-weight: bold;
+        font-style: italic;
+        font-size: .9em;
+        opacity: .7; }
+
 .mv {
   margin-top: 10px;
   margin-bottom: 10px; }
@@ -3666,6 +3843,164 @@ label.block {
 
 .mb {
   margin-bottom: 10px; }
+
+.ui-timepicker-wrapper {
+  overflow-y: auto;
+  max-height: 150px;
+  width: 6.5em;
+  background: #fff;
+  border: 1px solid #ddd;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  outline: none;
+  z-index: 10001;
+  margin: 0; }
+
+.ui-timepicker-wrapper.ui-timepicker-with-duration {
+  width: 13em; }
+
+.ui-timepicker-wrapper.ui-timepicker-with-duration.ui-timepicker-step-30,
+.ui-timepicker-wrapper.ui-timepicker-with-duration.ui-timepicker-step-60 {
+  width: 11em; }
+
+.ui-timepicker-list {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+
+.ui-timepicker-duration {
+  margin-left: 5px;
+  color: #888; }
+
+.ui-timepicker-list:hover .ui-timepicker-duration {
+  color: #888; }
+
+.ui-timepicker-list li {
+  padding: 3px 0 3px 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  color: #000;
+  list-style: none;
+  margin: 0; }
+
+.ui-timepicker-list:hover .ui-timepicker-selected {
+  background: #fff;
+  color: #000; }
+
+li.ui-timepicker-selected,
+.ui-timepicker-list li:hover,
+.ui-timepicker-list .ui-timepicker-selected:hover {
+  background: #1980EC;
+  color: #fff; }
+
+li.ui-timepicker-selected .ui-timepicker-duration,
+.ui-timepicker-list li:hover .ui-timepicker-duration {
+  color: #ccc; }
+
+.ui-timepicker-list li.ui-timepicker-disabled,
+.ui-timepicker-list li.ui-timepicker-disabled:hover,
+.ui-timepicker-list li.ui-timepicker-selected.ui-timepicker-disabled {
+  color: #888;
+  cursor: default; }
+
+.ui-timepicker-list li.ui-timepicker-disabled:hover,
+.ui-timepicker-list li.ui-timepicker-selected.ui-timepicker-disabled {
+  background: #f2f2f2; }
+
+.board-list {
+  width: 290px;
+  background: #eee;
+  padding: 0 10px;
+  padding-bottom: 11px;
+  overflow: hidden;
+  float: left;
+  margin-right: 20px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 5px; }
+  .board-list .list-header {
+    border-bottom: 1px solid #ccc;
+    overflow: hidden;
+    padding-top: 13px; }
+    .board-list .list-header h3 {
+      float: left;
+      margin: 0;
+      font-size: 16px;
+      line-height: 20px;
+      padding-bottom: 5px; }
+    .board-list .list-header .card-count {
+      float: right;
+      background: #ddd;
+      padding: 0 5px;
+      border-radius: 5px;
+      min-width: 25px;
+      text-align: center;
+      line-height: 25px;
+      font-size: 13px;
+      margin-top: -4px;
+      position: relative; }
+  .board-list ul.cards {
+    margin: 10px 0;
+    padding: 0;
+    overflow: hidden;
+    list-style: none; }
+    .board-list ul.cards .card {
+      padding: 10px;
+      background: #fff;
+      margin-bottom: 3px;
+      border-radius: 5px;
+      box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
+      margin-bottom: 8px; }
+      .board-list ul.cards .card.choir .name {
+        font-size: 17px; }
+      .board-list ul.cards .card.judge .name {
+        font-size: 17px; }
+      .board-list ul.cards .card.judge .captions-group {
+        display: block;
+        float: none;
+        margin: 0;
+        margin-top: 6px; }
+        .board-list ul.cards .card.judge .captions-group .caption {
+          margin: 0;
+          margin-right: 3px; }
+      .board-list ul.cards .card.round .name {
+        font-size: 17px; }
+  .board-list .add-resource {
+    display: block;
+    background: #ddd;
+    text-align: center;
+    padding: 3px 10px;
+    border-radius: 5px;
+    color: #333; }
+
+#modal-cover {
+  display: none;
+  background: #444;
+  opacity: .5;
+  z-index: 99;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0; }
+
+#modal {
+  display: none;
+  z-index: 100;
+  background: #fff;
+  padding: 20px;
+  position: fixed;
+  margin: auto;
+  top: 20px;
+  left: 50px;
+  right: 50px;
+  width: 400px;
+  overflow-y: scroll;
+  max-height: 90%; }
+
+.add-resource-form-prototype, .card-prototype {
+  display: none; }
 
 body#public-layout {
   background: #FFF;
@@ -4519,7 +4854,8 @@ a.active {
   border: 1px solid #d8d8d8;
   padding: 20px;
   margin-top: -1px;
-  background: #FFF; }
+  background: #FFF;
+  overflow: hidden; }
   .content .content-header {
     display: block;
     overflow: hidden;

@@ -36,6 +36,9 @@ class EventServiceProvider extends ServiceProvider
           'App\Listeners\EmailDivisionResultsLink',
           'App\Listeners\SendSMSDivisionResultsLink'
         ],
+        'App\Events\CommentSaved' => [
+          'App\Listeners\CreateCommentsUrlIfNonexistent'
+        ]
     ];
 
     /**

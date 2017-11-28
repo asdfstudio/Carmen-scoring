@@ -39,6 +39,11 @@ class Round extends Model
       return $this->belongsToMany('App\Penalty', 'choir_penalty')->withPivot('choir_id');
     }
 
+    public function feedback()
+		{
+			return $this->morphMany('App\Comment', 'subject');
+		}
+
 
 		public function isScoringActive()
 		{

@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class AddFieldsToAwardScheduleItems extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('award_schedule_items', function (Blueprint $table) {
+            $table->integer('caption_id')->index()->after('award_id');
+            $table->integer('rank')->index()->after('award_id');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('award_schedule_items', function (Blueprint $table) {
+            $table->dropColumn('caption_id');
+            $table->dropColumn('rank');
+        });
+    }
+}

@@ -34,6 +34,119 @@ Route::group([
 
   Route::resource('award', 'AwardController');
 
+  // List competition schedules
+  Route::get('competition/{competition}/schedule', [
+    'as' => 'organizer.competition.schedule.index', 'uses' => 'ScheduleController@index'
+  ]);
+
+  // Add a competition schedule
+  Route::get('competition/{competition}/schedule/create', [
+    'as' => 'organizer.competition.schedule.create', 'uses' => 'ScheduleController@create'
+  ]);
+
+  // Show a competition schedule
+  Route::get('competition/{competition}/schedule/{schedule}', [
+    'as' => 'organizer.competition.schedule.show', 'uses' => 'ScheduleController@show'
+  ]);
+
+  // Build a competition schedule
+  Route::get('competition/{competition}/schedule/{schedule}/builder', [
+    'as' => 'organizer.competition.schedule.builder', 'uses' => 'ScheduleController@builder'
+  ]);
+
+  // Store a build for a competition schedule
+  Route::post('competition/{competition}/schedule/{schedule}/builder', [
+    'as' => 'organizer.competition.schedule.builder.store', 'uses' => 'ScheduleController@builderStore'
+  ]);
+
+  // Destroy a competition schedule
+  Route::delete('competition/{competition}/schedule/{schedule}', [
+    'as' => 'organizer.competition.schedule.destroy', 'uses' => 'ScheduleController@destroy'
+  ]);
+
+  // Edit a competition schedule
+  Route::get('competition/{competition}/schedule/{schedule}/edit', [
+    'as' => 'organizer.competition.schedule.edit', 'uses' => 'ScheduleController@edit'
+  ]);
+
+  // update a competition schedule
+  Route::post('competition/{competition}/schedule/{schedule}', [
+    'as' => 'organizer.competition.schedule.update', 'uses' => 'ScheduleController@update'
+  ]);
+
+  // store a competition schedule
+  Route::post('competition/{competition}/schedule', [
+    'as' => 'organizer.competition.schedule.store', 'uses' => 'ScheduleController@store'
+  ]);
+
+  // update a competition schedule item
+  Route::post('competition/{competition}/schedule/{schedule}/item/{item}', [
+    'as' => 'organizer.competition.schedule.item.update', 'uses' => 'ScheduleItemController@update'
+  ]);
+
+  // store a competition schedule item
+  Route::post('competition/{competition}/schedule/{schedule}/item', [
+    'as' => 'organizer.competition.schedule.item.store', 'uses' => 'ScheduleItemController@store'
+  ]);
+
+  // Destroy a competition schedule item
+  Route::delete('competition/{competition}/schedule/{schedule}/item/{item}', [
+    'as' => 'organizer.competition.schedule.item.destroy', 'uses' => 'ScheduleItemController@destroy'
+  ]);
+
+
+  // Award schedule
+
+
+  // List competition schedules
+  Route::get('competition/{competition}/award-schedule', [
+    'as' => 'organizer.competition.award-schedule.index', 'uses' => 'AwardScheduleController@index'
+  ]);
+
+  // Add a competition schedule
+  Route::get('competition/{competition}/award-schedule/create', [
+    'as' => 'organizer.competition.award-schedule.create', 'uses' => 'AwardScheduleController@create'
+  ]);
+
+  // Show a competition schedule
+  Route::get('competition/{competition}/award-schedule/{schedule}', [
+    'as' => 'organizer.competition.award-schedule.show', 'uses' => 'AwardScheduleController@show'
+  ]);
+
+  // Build a competition schedule
+  Route::get('competition/{competition}/award-schedule/{schedule}/builder', [
+    'as' => 'organizer.competition.award-schedule.builder', 'uses' => 'AwardScheduleController@builder'
+  ]);
+
+  // Store a build for a competition schedule
+  Route::post('competition/{competition}/award-schedule/{schedule}/builder', [
+    'as' => 'organizer.competition.award-schedule.builder.store', 'uses' => 'AwardScheduleController@builderStore'
+  ]);
+
+  // Destroy a competition schedule
+  Route::delete('competition/{competition}/award-schedule/{schedule}', [
+    'as' => 'organizer.competition.award-schedule.destroy', 'uses' => 'AwardScheduleController@destroy'
+  ]);
+
+  // Edit a competition schedule
+  Route::get('competition/{competition}/award-schedule/{schedule}/edit', [
+    'as' => 'organizer.competition.award-schedule.edit', 'uses' => 'AwardScheduleController@edit'
+  ]);
+
+  // update a competition schedule
+  Route::post('competition/{competition}/award-schedule/{schedule}', [
+    'as' => 'organizer.competition.award-schedule.update', 'uses' => 'AwardScheduleController@update'
+  ]);
+
+  // store a competition schedule
+  Route::post('competition/{competition}/award-schedule', [
+    'as' => 'organizer.competition.award-schedule.store', 'uses' => 'AwardScheduleController@store'
+  ]);
+
+  // End award schedule
+
+
+
   // Division Awards ceremony
   Route::get('competition/{competition}/division/{division}/ceremony', [
     'as' => 'organizer.competition.division.ceremony.show', 'uses' => 'CompetitionDivisionStandingController@ceremony'

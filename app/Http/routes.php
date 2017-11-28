@@ -11,6 +11,16 @@
 |
 */
 
+Route::any('/test', function () {
+    return view('test.test-1');
+    //return redirect('login');
+});
+
+Route::any('/schedule-test', [
+  'as' => 'schedule.test',
+  'uses' => 'Organizer\ScheduleController@test'
+]);
+
 Route::get('/', function () {
     return view('public.home');
     //return redirect('login');
@@ -31,6 +41,10 @@ Route::get('system', function () {
 Route::get('contest', function () {
     return view('public.contest');
 });
+
+Route::get('feedback/{access_code?}', [
+  'as' => 'feedback.show', 'uses' => 'FeedbackController@show'
+]);
 
 Route::get('results/division/{division}/standings/{access_code}', [
   'as' => 'results.division.standings', 'uses' => 'ResultsController@divisionStandings'

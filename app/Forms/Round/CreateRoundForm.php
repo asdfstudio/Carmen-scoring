@@ -6,7 +6,10 @@ use Kris\LaravelFormBuilder\Form;
 
 class CreateRoundForm extends Form
 {
-  protected $formOptions = ['class' => 'create-round-form'];
+  protected $formOptions = [
+    'class' => 'create-round-form add-resource-form-prototype add-resource-form',
+    'data-resource-type' => 'round'
+  ];
 
   public function buildForm()
   {
@@ -22,7 +25,6 @@ class CreateRoundForm extends Form
 
       if($this->data['division'] AND $this->data['division']->rounds)
       {
-        echo $this->data['division']->rounds->count();
         $default_sequence_value = $this->data['division']->rounds->count() + 1;
       }
 
