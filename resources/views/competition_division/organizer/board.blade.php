@@ -6,6 +6,35 @@
 
 @section('content')
 
+	<ul class="actions-group mv">
+		@can('activateScoring', $division)
+			<li>{!! form($activateScoringForm) !!}</li>
+		@endcan
+
+		@can('completeScoring', $division)
+			<li>{!! form($completeScoringForm) !!}</li>
+
+		@endcan
+
+		@can('finalizeScoring', $division)
+			<li>{!! form($finalizeScoringForm) !!}</li>
+
+		@endcan
+
+		@can('update', $division)
+			<li>{{ link_to_route('organizer.competition.division.edit', 'Edit Division', [$competition,$division],['class' => 'action']) }}</li>
+		@endcan
+
+	</ul>
+
+	<div class="clearfix"></div>
+
+	@if($division->status_slug() == 'finalized')
+		<div class="alert alert-info">
+			<p>Results for this division are available at {{ link_to_route('results.division.show', NULL, [$division, $division->access_code], ['target' => '_blank']) }} </p>
+		</div>
+	@endif
+
 
   <div class="division-board" id="division-13-board">
     <h2>{{ $division->name }}</h2>
@@ -17,7 +46,7 @@
 
 		@include('round.board.board-list')
 
-		
+
 
   </div> <!-- end board-->
 
