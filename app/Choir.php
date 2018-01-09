@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\OrderByNameScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -12,6 +13,13 @@ class Choir extends Model
 		protected $dates = ['deleted_at'];
 
 		protected $fillable = ['school_id','name'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new OrderByNameScope);
+    }
 
 
 		public function school()

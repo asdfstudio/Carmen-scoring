@@ -84,14 +84,19 @@ class CompetitionDivisionRoundController extends Controller
       $division = $round->division;
       $competition = $division->competition;
 
-      $judge = $division->judges->first();
+      //$judge = $division->judges->first();
 
       $judge = Judge::with(['captions' => function($query) use ($division_id) {
         $query->where('division_id', $division_id);
       }])->find($judge_id);
       //dd($judge);
       //$captions = $judge->captions;
-      $scoreboard = new Scoreboard(['round_id' => $round_id]);
+
+      //$before = memory_get_usage();
+      $scoreboard = new Scoreboard(['round_id' => $round_id, 'judge_id' => $judge_id]);
+      //$after = memory_get_usage();
+      //$allocatedSize = ($after - $before);
+      //dd($allocatedSize/1024/1024);
 
       //dd($scoreboard);
 

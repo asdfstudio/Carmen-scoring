@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\OrderByNameScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -23,20 +24,24 @@ class Division extends Model
       'overall_award_sponsors',
       'music_award_sponsors',
       'show_award_sponsors',
-      'combo_award_sponsors'
+      'combo_award_sponsors',
+      'rating_system'
     ];
 
     protected $casts = [
       'overall_award_sponsors' => 'array',
       'music_award_sponsors' => 'array',
       'show_award_sponsors' => 'array',
-      'combo_award_sponsors' => 'array'
+      'combo_award_sponsors' => 'array',
+      'rating_system' => 'array'
     ];
 
-		/*public function organization()
-		{
-			// There is no belongsToThrough method
-		}*/
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new OrderByNameScope);
+    }
 
 		public function competition()
 		{

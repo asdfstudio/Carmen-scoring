@@ -21,7 +21,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\RoundScoringCompleted' => [
           'App\Listeners\SyncRoundChoirsToTarget',
-          'App\Listeners\ProduceFinalStandings'
+          'App\Listeners\ProduceFinalStandings',
+          'App\Listeners\EmailFeedbackLink',
+          'App\Listeners\SendSMSFeedbackLink',
         ],
         'App\Events\DivisionChoirCreated' => [
           'App\Listeners\AddChoirToRound'
@@ -35,6 +37,10 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\DivisionScoringFinalized' => [
           'App\Listeners\EmailDivisionResultsLink',
           'App\Listeners\SendSMSDivisionResultsLink'
+        ],
+        'App\Events\SoloDivisionScoringFinalized' => [
+          'App\Listeners\EmailSoloDivisionResultsLink',
+          'App\Listeners\SendSMSSoloDivisionResultsLink'
         ],
         'App\Events\CommentSaved' => [
           'App\Listeners\CreateCommentsUrlIfNonexistent'

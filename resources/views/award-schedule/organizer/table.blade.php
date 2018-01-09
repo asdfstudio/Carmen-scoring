@@ -12,12 +12,18 @@
   @foreach($competition->awardSchedules as $schedule)
   <tr>
   	<td>
-			{{ link_to_route('organizer.competition.award-schedule.show', $schedule->name, [$competition, $schedule]) }}
+			{{ $schedule->name }}
 		</td>
 		<td>
-			{{ link_to_route('organizer.competition.award-schedule.edit', 'Edit', [$competition,$schedule], ['class' => 'action']) }}
+			{{ link_to_route('organizer.competition.award-schedule.edit', 'Edit Name', [$competition, $schedule], ['class' => 'action']) }}
 
-			{{ link_to_route('organizer.competition.award-schedule.builder', 'Build schedule', [$competition,$schedule], ['class' => 'action']) }}
+			{{ link_to_route('organizer.competition.award-schedule.show', 'View Schedule', [$competition, $schedule], ['class' => 'action']) }}
+
+			{{ link_to_route('organizer.competition.award-schedule.builder', 'Build schedule', [$competition, $schedule], ['class' => 'action']) }}
+
+			{{ link_to_route('organizer.competition.award-schedule.show-announcer', 'Announcer View', [$competition, $schedule], ['class' => 'action']) }}
+
+
 		</td>
   </tr>
   @endforeach

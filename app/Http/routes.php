@@ -11,15 +11,6 @@
 |
 */
 
-Route::any('/test', function () {
-    return view('test.test-1');
-    //return redirect('login');
-});
-
-Route::any('/schedule-test', [
-  'as' => 'schedule.test',
-  'uses' => 'Organizer\ScheduleController@test'
-]);
 
 Route::get('/', function () {
     return view('public.home');
@@ -76,6 +67,10 @@ Route::get('results/division/{division}', [
 
 Route::post('results/division/{division}', [
   'as' => 'results.division.access-protected', 'uses' => 'ResultsController@divisionAccessProtected'
+]);
+
+Route::get('results/solo-division/{soloDivision}/{access_code}', [
+  'as' => 'results.solo-division.show', 'uses' => 'ResultsController@soloDivision'
 ]);
 
 Route::get('results/competition/{competition}', [

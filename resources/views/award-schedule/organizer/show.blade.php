@@ -4,15 +4,18 @@
   {!! Breadcrumbs::render('organizer.competition.award-schedule.show', $competition, $schedule) !!}
 @endsection
 
-@section('content')
-
+@section('content-header')
   <h1>{{ $schedule->name }}</h1>
 
-  {{ link_to_route('organizer.competition.award-schedule.edit', 'Edit Name', [$competition,$schedule], ['class' => 'action']) }}
+  <ul class="actions-group">
+    <li>{{ link_to_route('organizer.competition.award-schedule.edit', 'Edit Name', [$competition,$schedule], ['class' => 'action']) }}</li>
+    <li>{{ link_to_route('organizer.competition.award-schedule.builder', 'Build Schedule', [$competition,$schedule], ['class' => 'action']) }}</li>
+    <li>{!! form($deleteForm) !!}</li>
+	</ul>
 
-  {{ link_to_route('organizer.competition.award-schedule.builder', 'Build Schedule', [$competition,$schedule], ['class' => 'action']) }}
+@endsection
 
-  {!! form($deleteForm) !!}
+@section('content')
 
   <ul class="schedule-list">
     @foreach($schedule->items as $item)

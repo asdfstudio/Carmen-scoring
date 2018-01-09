@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\OrderByNameScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -13,6 +14,13 @@ class Penalty extends Model
 		protected $dates = ['deleted_at'];
 
 		protected $fillable = ['name', 'description', 'amount', 'apply_per_judge', 'organization_id'];
+
+		protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new OrderByNameScope);
+    }
 
 
 		public function organization()

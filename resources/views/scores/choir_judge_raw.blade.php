@@ -68,13 +68,13 @@ endif;
         Total {{ $caption->name }} Score
       </th>
       <th>
-        <?php $rawTotal = $rawScores->where('criterion.caption_id', $caption->id)->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('score');?>
+        <?php $rawTotal = $rawScores->where('criterion_caption_id', $caption->id)->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('score');?>
         {{ $rawTotal }}
       </th>
 
       @if($division->captionWeighting->slug == '60-40')
         <th>
-          <?php $weightedTotal = $weightedScores->where('criterion.caption_id', $caption->id)->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('weightedScore');?>
+          <?php $weightedTotal = $weightedScores->where('criterion_caption_id', $caption->id)->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('weightedScore');?>
           {{ $weightedTotal }}
         </th>
       @endif

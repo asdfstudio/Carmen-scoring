@@ -144,6 +144,30 @@ class AwardScheduleController extends Controller
 
 
 
+    public function showAsAnnouncer($competition_id, $schedule_id)
+    {
+      $competition = Competition::find($competition_id);
+      $schedule = AwardSchedule::with(['items' => function($query) {
+        $query->performanceOrder();
+      }, 'items.division', 'items.award' => function($query) {
+        $query->withoutGlobalScope('organization');
+      }, 'items.caption'])->find($schedule_id);
+
+      $awardWinners = AwardWinner::whereHas('division', function($query) use ($competition_id) {
+        $query->where('competition_id', $competition_id);
+      })->with(['choir'])->get();
+
+
+      $standings = Standing::whereHas('division', function($query) use ($competition_id) {
+        $query->where('competition_id', $competition_id);
+      })->with(['choirs'])->get();
+
+
+      return view('award-schedule.organizer.show-announcer', compact('competition', 'schedule', 'awardWinners', 'standings'));
+    }
+
+
+
     public function builder($competition_id, $schedule_id, FormBuilder $formBuilder)
     {
       $competition = Competition::with(['divisions', 'divisions.awards' => function($query) {
@@ -168,20 +192,11 @@ class AwardScheduleController extends Controller
 
     public function builderStore($competition_id, $schedule_id, FormBuilder $formBuilder, Request $request)
     {
+      $items = $request->input('items');
       $competition = Competition::find($competition_id);
       $schedule = AwardSchedule::find($schedule_id);
 
-      $items = $request->input('items');
-
-      $scheduleItems = [];
-
-      foreach($items as $item)
-      {
-        $scheduleItems[] = new AwardScheduleItem($item);
-      }
-
-      $deleted = $schedule->items()->delete();
-      $success = $schedule->items()->saveMany($scheduleItems);
+      $schedule->syncItems($items);
 
       if($request->wantsJson())
       {

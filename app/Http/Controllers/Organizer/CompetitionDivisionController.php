@@ -112,6 +112,8 @@ class CompetitionDivisionController extends Controller
         //dd($request->all());
 
 				$division = new Division($request->all());
+        $division->rating_system = array_filter($request->input('rating_system'));
+
 				$competition->divisions()->save($division);
 
         $successMessage = "$division->name has been created.";
@@ -127,6 +129,7 @@ class CompetitionDivisionController extends Controller
 
     }
 
+
     /**
      * Display the specified resource.
      *
@@ -134,6 +137,126 @@ class CompetitionDivisionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($competition_id, $division_id, FormBuilder $formBuilder)
+    {
+        $competition = Competition::with('organization','place','divisions')->find($competition_id);
+
+				$division = Division::with(['choirs','rounds','judges' => function ($query) {
+					$query->groupBy('judge_id');
+				}, 'judges.captions' => function ($query) use ($division_id) {
+					$query->where('division_id',$division_id);
+				}])->find($division_id);
+
+				$captions = Caption::get();
+
+        $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
+          'method' => 'POST',
+          'url' => route('organizer.competition.division.scoring',[$competition,$division])
+        ]);
+
+        /*$deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm', [
+          'method' => 'POST',
+          'url' => route('organizer.competition.division.scoring',[$competition,$division])
+        ]);*/
+
+        /*$reactivateScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm', [
+          'method' => 'POST',
+          'url' => route('organizer.competition.division.scoring',[$competition,$division])
+        ]);*/
+
+        $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm', [
+          'method' => 'POST',
+          'url' => route('organizer.competition.division.scoring',[$competition_id,$division_id])
+        ]);
+
+        $finalizeScoringForm = $formBuilder->create('Scoring\FinalizeScoringForm', [
+          'method' => 'POST',
+          'url' => route('organizer.competition.division.scoring',[$competition_id,$division_id])
+        ]);
+
+
+        // Support for new board view
+        $choirs = Choir::all()->lists('full_name', 'id')->toArray();
+
+        //dd($choirs);
+
+        $newChoirForm = $formBuilder->create('Choir\CreateChoirForm', [
+					'method' => 'POST',
+          'data' => $choirs,
+					'url' => route('organizer.competition.division.choir.store',[$division->competition,$division])
+				]);
+
+        $competition_rounds = Competition::find($competition_id )->rounds()->whereHas('division', function ($query) use ($division) {
+          $query->where('sheet_id', $division->sheet_id);
+        })->get();
+
+        $choices = $competition_rounds->lists('full_name', 'id')->toArray();
+        $selected = [];
+
+
+        $newRoundForm = $formBuilder->create('Round\CreateRoundForm', [
+					'method' => 'POST',
+          'data' => [
+            'choices' => $choices,
+            'selected' => $selected,
+            'division' => $division
+          ],
+					'url' => route('organizer.competition.division.round.store', [$division->competition,$division])
+				]);
+
+        $deleteChoirForm = $formBuilder->create('GenericDeleteForm', [
+					'method' => 'DELETE',
+          'class' => 'remove-resource'
+				]);
+
+        $deleteChoirForm->modify('submit','submit',['label' => 'Remove']);
+
+
+        $judges = Judge::get();
+        $judges = $judges->lists('full_name', 'id')->toArray();
+
+        $newJudgeForm = $formBuilder->create('Judge\ChooseJudgeForm', [
+					'method' => 'POST',
+          'data' => $judges,
+					'url' => route('organizer.competition.division.judge.store',[$division->competition,$division])
+				]);
+
+
+        $deleteJudgeForm = $formBuilder->create('GenericDeleteForm', [
+					'method' => 'DELETE',
+          'class' => 'remove-resource'
+				]);
+
+        $deleteJudgeForm->modify('submit','submit',['label' => 'Remove']);
+
+
+        $newPenaltyForm = $formBuilder->create('Penalty\CreatePenaltyForm', [
+          'method' => 'POST',
+          'url' => route('organizer.competition.division.penalty.store', [$competition_id, $division_id])
+        ]);
+
+
+        $deletePenaltyForm = $formBuilder->create('GenericDeleteForm', [
+					'method' => 'DELETE',
+          'class' => 'remove-resource'
+				]);
+
+        $deletePenaltyForm->modify('submit','submit',['label' => 'Remove']);
+
+        //
+				//return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'publishScoringForm', 'completeScoringForm', 'finalizeScoringForm'));
+
+
+
+        return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'publishScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function board($competition_id, $division_id, FormBuilder $formBuilder)
     {
         $competition = Competition::with('organization','place','divisions')->find($competition_id);
 
@@ -318,6 +441,7 @@ class CompetitionDivisionController extends Controller
         $data = $request->all();
 
 				$division->fill($data);
+        $division->rating_system = array_filter($request->input('rating_system'));
 				$division->save();
 
 				// Set flash data and redirect

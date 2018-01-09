@@ -55,6 +55,10 @@
       padding: 0;
     }
 
+    ul.non-performance-items li:not(:first-of-type) {
+      display: none;
+    }
+
     .scheduled_time {
       display: none;
       margin-right: 10px;
@@ -176,6 +180,21 @@ ul.schedule-list {
   overflow-y: scroll;
   border: 1px solid #ddd;
 
+  &.announcer-view {
+    height: auto;
+
+    & li.schedule-item {
+      font-size: 1.4em;
+      padding: 15px;
+      margin-bottom: 8px;
+
+      &.done {
+        background: #ccc;
+        text-decoration: line-through;
+      }
+    }
+  }
+
 
   & li.schedule-item {
     //border: 1px solid #ccc;
@@ -183,6 +202,10 @@ ul.schedule-list {
     margin: 2px 0;
     padding: 5px 8px;
     border-radius: 3px;
+
+    > .item-name {
+      font-style: italic;
+    }
 
     &.choir {
 
@@ -251,7 +274,7 @@ ul.schedule-list {
           font-weight: bold;
           margin-right: 5px;
         }
-        .award-winner-choir { 
+        .award-winner-choir {
           font-weight: bold;
           font-style: italic;
           font-size: .9em;

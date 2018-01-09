@@ -19,6 +19,12 @@ class Sheet extends Model
 			return $this->hasMany('App\Division');
 		}
 
+    public function captions()
+    {
+      //return $this->criteria()->pluck('caption_id')->toArray();
+      //return $this->hasManyThrough('App\Caption', 'App\Criterion');
+    }
+
 		public function criteria()
     {
         return $this->belongsToMany('App\Criterion');
@@ -27,8 +33,6 @@ class Sheet extends Model
     public function getCaptionIdsAttribute()
     {
       $caption_ids = $this->criteria->unique('caption_id')->pluck('caption_id')->toArray();
-
-      //dd($this->criteria->caption);
 
       return $caption_ids;
     }

@@ -53,7 +53,7 @@ class RankedScores {
       $query = $this->weightedScores->where('choir_id', $choir_id);
 
       if($caption_id)
-        $query = $query->where('criterion.caption_id', $caption_id);
+        $query = $query->where('criterion_caption_id', $caption_id);
 
       $score = $query->sum($scoreField);
 
@@ -198,7 +198,7 @@ class RankedScores {
 
       // Filter by caption
       if($caption_id)
-        $query = $query->where('criterion.caption_id', $caption_id);
+        $query = $query->where('criterion_caption_id', $caption_id);
 
       // Get the sum
       $score = $query->sum('weightedScore');

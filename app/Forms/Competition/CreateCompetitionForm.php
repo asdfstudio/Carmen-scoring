@@ -43,57 +43,6 @@ class CreateCompetitionForm extends Form
           'label' => 'Results Naming'
         ]);
 
-        /*$this->add('rating_system', 'textarea', [
-          'help_block' => [
-            'text' => 'Enter the name of the rating and the minimum percent. One per line'
-          ]
-        ]);*/
-
-        $i = 0;
-        $maxRatingSystemSets = 3;
-
-        $this->add('rating_system_heading', 'static', [
-          'tag' => 'h2',
-          'value' => 'Rating System (optional)',
-          'label_show' => false
-        ]);
-
-        while($i < $maxRatingSystemSets)
-        {
-
-          if($this->model)
-          {
-            $nameValue = $this->model->rating_system[$i]['name'];
-            $minScoreValue = $this->model->rating_system[$i]['min_score'];
-          }
-          else {
-            $nameValue = false;
-            $minScoreValue = false;
-          }
-
-          $this->add('rating_system['.$i.'][name]', 'text', [
-            'label' => 'Rating Name',
-            'default_value' => $nameValue,
-            'wrapper' => [
-              'class' => 'form-group col-md-6 col-xs-12'
-            ],
-          ]);
-
-          $this->add('rating_system['.$i.'][min_score]', 'number', [
-            'label' => 'Minimum Score',
-            'attr' => [
-              'min' => 0,
-              'max' => 100
-            ],
-            'default_value' => $minScoreValue,
-            'wrapper' => [
-              'class' => 'form-group col-md-6 col-xs-12'
-            ],
-          ]);
-
-          $i++;
-        }
-
 
         $this->add('place_heading', 'static', [
           'tag' => 'h2',

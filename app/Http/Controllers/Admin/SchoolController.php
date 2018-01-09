@@ -23,7 +23,7 @@ class SchoolController extends Controller
      */
     public function index()
     {
-				$schools = School::with('place')->withoutGlobalScope('organization')->orderBy('name', 'asc')->get();
+				$schools = School::with('place')->withoutGlobalScope('organization')->get();
 
         return view('school.admin.index', compact('schools'));
 

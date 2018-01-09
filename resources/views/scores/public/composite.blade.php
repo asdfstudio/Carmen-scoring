@@ -49,10 +49,10 @@
               <?php $rank = $scoreboard->rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();?>
               <span class="rank score">{{ $rank }}</span>
 
-              <?php $weighted = $scoreboard->weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion.caption_id', $caption->id)->sum('weightedScore');?>
+              <?php $weighted = $scoreboard->weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_caption_id', $caption->id)->sum('weightedScore');?>
               <span class="weighted score">{{ $weighted }}</span>
 
-              <?php $raw = $scoreboard->rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion.caption_id', $caption->id)->sum('score');?>
+              <?php $raw = $scoreboard->rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_caption_id', $caption->id)->sum('score');?>
               <span class="raw score">{{ $raw }}</span>
 
             </td>
@@ -64,10 +64,10 @@
           <?php $rank = $scoreboard->rankedScores->total($choir->id, $caption->id);?>
           <span class="rank score">{{ $rank }}</span>
 
-          <?php $weighted = $scoreboard->weightedScores->where('choir_id', $choir->id)->where('criterion.caption_id', $caption->id)->sum('weightedScore');?>
+          <?php $weighted = $scoreboard->weightedScores->where('choir_id', $choir->id)->where('criterion_caption_id', $caption->id)->sum('weightedScore');?>
           <span class="weighted score">{{ $weighted }}</span>
 
-          <?php $raw = $scoreboard->rawScores->where('choir_id', $choir->id)->where('criterion.caption_id', $caption->id)->sum('score');?>
+          <?php $raw = $scoreboard->rawScores->where('choir_id', $choir->id)->where('criterion_caption_id', $caption->id)->sum('score');?>
           <span class="raw score">{{ $raw }}</span>
         </td>
         <td>

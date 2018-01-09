@@ -15,6 +15,10 @@ class Judge extends Person
             $builder->where('person_type', '=', 'App\Judge');
         });
 
+				static::addGlobalScope('orderByLastName', function(Builder $builder) {
+					$builder->orderBy('last_name', 'ASC');
+				});
+
 				static::saving(function ($model)
         {
             $model->attributes['person_type'] = get_class($model);

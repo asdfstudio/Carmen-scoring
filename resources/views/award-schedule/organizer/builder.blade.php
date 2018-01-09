@@ -4,9 +4,17 @@
   {!! Breadcrumbs::render('organizer.competition.award-schedule.show', $competition, $schedule) !!}
 @endsection
 
-@section('content')
-
+@section('content-header')
   <h1>{{ $schedule->name }}</h1>
+
+  <ul class="actions-group">
+		<li>{{ link_to_route('organizer.competition.award-schedule.show', 'View Schedule', [$competition,$schedule], ['class' => 'action']) }}</li>
+    <li>{{ link_to_route('organizer.competition.award-schedule.edit', 'Edit Name', [$competition,$schedule], ['class' => 'action']) }}</li>
+	</ul>
+
+@endsection
+
+@section('content')
 
   <p>Build your schedule by dragging awards to the schedule.</p>
 

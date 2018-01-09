@@ -2,10 +2,10 @@
 
 namespace App;
 
+use App\Scopes\OrderByNameScope;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Competition extends Model
 {
@@ -15,21 +15,21 @@ class Competition extends Model
 
 		protected $dates = ['deleted_at', 'begin_date', 'end_date'];
 
-		protected $fillable = ['organization_id', 'name', 'slug', 'access_code', 'dates', 'use_runner_up_names', 'rating_system', 'is_archived', 'begin_date', 'end_date'];
+		protected $fillable = ['organization_id', 'name', 'slug', 'access_code', 'dates', 'use_runner_up_names',  'is_archived', 'begin_date', 'end_date'];
 
     /*protected $casts = [
       'begin_date' => 'date',
       'end_date' => 'date'
     ];*/
 
-    protected $casts = [
-      'rating_system' => 'array'
-    ];
+    protected $casts = [];
 
 
 		protected static function boot()
     {
         parent::boot();
+
+        static::addGlobalScope(new OrderByNameScope);
     }
 
     public function getBeginDateAttribute($value)
@@ -91,6 +91,11 @@ class Competition extends Model
 		public function divisions()
 		{
 			return $this->hasMany('App\Division');
+		}
+
+    public function soloDivisions()
+		{
+			return $this->hasMany('App\SoloDivision');
 		}
 
     public function rounds()

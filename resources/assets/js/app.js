@@ -433,5 +433,12 @@ $(document).ready(function() {
 
     });
 
+    $('body').popover({
+      container: 'body',
+      selector: '[data-toggle="popover"]'
+    });
+
+    $('.selectize').selectize();
+
 
 });

@@ -26,34 +26,20 @@ class WeightedScores {
       $this->assign_weighting();
     }
 
-
     public function all()
     {
       return $this->weightedScores;
     }
 
-
-    /*public function total($choir_id, $caption_id = false)
-    {
-      $query = $this->weightedScores->where('choir_id', $choir_id);
-
-      if($caption_id)
-      {
-        $query->where('criterion.caption_id', $caption_id);
-      }
-
-      $total = $query->sum('weightedScore');
-    }*/
-
     protected function assign_weighting()
     {
-      $this->weightedScores = $this->rawScores->map(function ($item, $key)
-      {
-        if($item->criterion->caption_id == 1)
+      $this->weightedScores = $this->rawScores->map(function ($item, $key) {
+
+        if($item->criterion_caption_id == 1)
         {
           $weightedScore = $item->score * $this->musicWeighting;
         }
-        elseif($item->criterion->caption_id == 2)
+        elseif($item->criterion_caption_id == 2)
         {
           $weightedScore = $item->score * $this->showWeighting;
         }
@@ -65,6 +51,7 @@ class WeightedScores {
         $item->weightedScore = $weightedScore;
 
         return $item;
+
       });
 
       return $this->weightedScores;

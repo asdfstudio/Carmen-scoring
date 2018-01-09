@@ -21,7 +21,7 @@ class ScheduleItem extends Model
       });
     }
 
-		protected $fillable = ['round_id', 'choir_id', 'performance_order', 'scheduled_time'];
+		protected $fillable = ['round_id', 'choir_id', 'name', 'performance_order', 'scheduled_time'];
 
 
 		public function schedule()

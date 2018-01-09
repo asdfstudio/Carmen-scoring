@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -25,6 +26,16 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('orderByEmail', function(Builder $builder) {
+					$builder->orderBy('email', 'ASC');
+				});
+    }
 
 
 		public function organization()

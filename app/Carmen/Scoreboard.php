@@ -2,6 +2,7 @@
 
 namespace App\Carmen;
 
+use DB;
 use App\RawScore;
 use App\Division;
 use App\Round;
@@ -17,7 +18,7 @@ class Scoreboard {
 	protected $round;
 	protected $rounds;
 	public $penalties;
-	//protected $judge_id;
+	protected $judge_id;
 
 	//protected $criteria;
 	//protected $judges;
@@ -45,8 +46,20 @@ class Scoreboard {
 
 	protected function getRawScores()
 	{
-		//$query = RawScore::with('judge','choir','criterion');
-		$query = RawScore::with('criterion');
+		//$query = RawScore::with('criterion');
+
+		$query = DB::table('raw_scores')
+			->join('criteria', 'raw_scores.criterion_id', '=', 'criteria.id')
+			->select([
+				'raw_scores.id',
+				'raw_scores.division_id',
+				'raw_scores.round_id',
+				'raw_scores.choir_id',
+				'raw_scores.judge_id',
+				'raw_scores.criterion_id',
+				'raw_scores.score',
+				'criteria.caption_id as criterion_caption_id'
+			]);
 
 		if($this->division_id)
 		{
@@ -61,7 +74,14 @@ class Scoreboard {
 				$query->where('round_id', $this->round_id);
 		}
 
-		return $this->rawScores = $query->get();
+		// Added 2018-01-04 to speed up scoreboard/reduce memory usage
+		if($this->judge_id)
+		{
+			$query->where('judge_id', $this->judge_id);
+		}
+
+		//return $this->rawScores = $query->get();
+		return $this->rawScores = collect($query->get());
 	}
 
 

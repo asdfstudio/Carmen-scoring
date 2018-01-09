@@ -93,7 +93,7 @@ class CompetitionController extends Controller
      */
     public function show($id, FormBuilder $formBuilder)
     {
-				$competition = Competition::with('place','organization','divisions')->find($id);
+				$competition = Competition::with('place','organization','divisions', 'soloDivisions')->find($id);
 
         $this->authorize($competition);
 
@@ -174,7 +174,7 @@ class CompetitionController extends Controller
         $competition->slug = $input['slug'];
         $competition->access_code = $input['access_code'];
         $competition->use_runner_up_names = $input['use_runner_up_names'];
-        $competition->rating_system = array_filter($input['rating_system']);
+        //$competition->rating_system = array_filter($input['rating_system']);
 
         //dd($input['rating_system']);
 

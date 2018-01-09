@@ -24,6 +24,22 @@
       margin-bottom: 5px;
     }
 
+    &.choice {
+
+      padding-left: 45px;
+
+      .checkbox {
+        position: relative;
+        margin: 0;
+
+
+        & input {
+          margin-left: -25px;
+          margin-top: 8px;
+        }
+      }
+    }
+
     .actions-group {
       margin-top: 10px;
       //border-top: 1px dashed $cs-gray-mid-1;

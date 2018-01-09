@@ -98,47 +98,52 @@ Route::group([
   // Award schedule
 
 
-  // List competition schedules
+  // List competition award schedules
   Route::get('competition/{competition}/award-schedule', [
     'as' => 'organizer.competition.award-schedule.index', 'uses' => 'AwardScheduleController@index'
   ]);
 
-  // Add a competition schedule
+  // Add a competition award schedule
   Route::get('competition/{competition}/award-schedule/create', [
     'as' => 'organizer.competition.award-schedule.create', 'uses' => 'AwardScheduleController@create'
   ]);
 
-  // Show a competition schedule
+  // Show a competition award schedule
   Route::get('competition/{competition}/award-schedule/{schedule}', [
     'as' => 'organizer.competition.award-schedule.show', 'uses' => 'AwardScheduleController@show'
   ]);
 
-  // Build a competition schedule
+  // Show a competition award schedule in presenter mode
+  Route::get('competition/{competition}/award-schedule/{schedule}/announcer', [
+    'as' => 'organizer.competition.award-schedule.show-announcer', 'uses' => 'AwardScheduleController@showAsAnnouncer'
+  ]);
+
+  // Build a competition award schedule
   Route::get('competition/{competition}/award-schedule/{schedule}/builder', [
     'as' => 'organizer.competition.award-schedule.builder', 'uses' => 'AwardScheduleController@builder'
   ]);
 
-  // Store a build for a competition schedule
+  // Store a build for a competition award schedule
   Route::post('competition/{competition}/award-schedule/{schedule}/builder', [
     'as' => 'organizer.competition.award-schedule.builder.store', 'uses' => 'AwardScheduleController@builderStore'
   ]);
 
-  // Destroy a competition schedule
+  // Destroy a competition award schedule
   Route::delete('competition/{competition}/award-schedule/{schedule}', [
     'as' => 'organizer.competition.award-schedule.destroy', 'uses' => 'AwardScheduleController@destroy'
   ]);
 
-  // Edit a competition schedule
+  // Edit a competition award schedule
   Route::get('competition/{competition}/award-schedule/{schedule}/edit', [
     'as' => 'organizer.competition.award-schedule.edit', 'uses' => 'AwardScheduleController@edit'
   ]);
 
-  // update a competition schedule
+  // update a competition award schedule
   Route::post('competition/{competition}/award-schedule/{schedule}', [
     'as' => 'organizer.competition.award-schedule.update', 'uses' => 'AwardScheduleController@update'
   ]);
 
-  // store a competition schedule
+  // store a competition award schedule
   Route::post('competition/{competition}/award-schedule', [
     'as' => 'organizer.competition.award-schedule.store', 'uses' => 'AwardScheduleController@store'
   ]);
@@ -217,6 +222,11 @@ Route::group([
   Route::post('competition/{competition}/division/{division}/round/{round}/performance-order', [
     'as' => 'organizer.competition.division.round.choir.performance_order.update', 'uses' => 'CompetitionDivisionRoundChoirController@update_performance_order'
 	]);
+
+
+  Route::get('competition/{competition}/division/{division}/board', [
+    'as' => 'organizer.competition.division.board', 'uses' => 'CompetitionDivisionController@board'
+  ]);
 
 
   // List division awards
@@ -326,9 +336,38 @@ Route::group([
 	Route::resource('competition.division.choir', 'CompetitionDivisionChoirController');
 	Route::resource('competition.division.judge', 'CompetitionDivisionJudgeController');
   Route::resource('competition.division.round', 'CompetitionDivisionRoundController');
+  Route::resource('competition.solo-division', 'CompetitionSoloDivisionController');
 
   Route::get('dashboard', [
     'as' => 'organizer.dashboard', 'uses' => 'CompetitionController@index'
+  ]);
+
+  Route::get('competition/{competition}/solo-division/{soloDivision}/manage', [
+    'as' => 'organizer.competition.solo-division.manage', 'uses' => 'CompetitionSoloDivisionController@manage'
+  ]);
+
+  Route::post('competition/{competition}/solo-division/{soloDivision}/manage', [
+    'as' => 'organizer.competition.solo-division.manage.store', 'uses' => 'CompetitionSoloDivisionController@manageStore'
+  ]);
+
+  Route::post('competition/{competition}/solo-division/{soloDivision}/update-status', [
+    'as' => 'organizer.competition.solo-division.update-status', 'uses' => 'CompetitionSoloDivisionController@updateStatus'
+  ]);
+
+  Route::get('competition/{competition}/solo-division/{soloDivision}/performer/{performer}', [
+    'as' => 'organizer.competition.solo-division.performer.show', 'uses' => 'CompetitionSoloDivisionController@showPerformer'
+  ]);
+
+  Route::get('competition/{competition}/solo-division/{soloDivision}/results', [
+    'as' => 'organizer.competition.solo-division.results', 'uses' => 'CompetitionSoloDivisionController@results'
+  ]);
+
+  Route::get('competition/{competition}/solo-division/{soloDivision}/results/female', [
+    'as' => 'organizer.competition.solo-division.results.female', 'uses' => 'CompetitionSoloDivisionController@resultsFemale'
+  ]);
+
+  Route::get('competition/{competition}/solo-division/{soloDivision}/results/male', [
+    'as' => 'organizer.competition.solo-division.results.male', 'uses' => 'CompetitionSoloDivisionController@resultsMale'
   ]);
 
   Route::get('competition/{competition}/division/{division}/clone', [

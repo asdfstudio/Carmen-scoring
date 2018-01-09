@@ -26,8 +26,9 @@ class CompetitionController extends Controller
     public function index()
     {
 				$competitions = Competition::with('organization','place')->get();
+
 				return view('competition.index', compact('competitions'));
-				
+
     }
 
     /**
@@ -38,12 +39,12 @@ class CompetitionController extends Controller
     public function create(FormBuilder $formBuilder)
     {
         $this->authorize('create','App\Competition');
-				
+
 				$form = $formBuilder->create('CompetitionForm', [
 					'method' => 'POST',
 					'url' => route('admin.competition.store')
 				]);
-				
+
 				return view('competition.create', compact('form'));
     }
 
@@ -58,7 +59,7 @@ class CompetitionController extends Controller
         $this->authorize('create','App\Competition');
 
 				$form = $formBuilder->create('CompetitionForm');
-				
+
 				// Validate input
 				if (!$form->isValid()) {
            return redirect()->back()->withErrors($form->getErrors())->withInput();
@@ -66,10 +67,10 @@ class CompetitionController extends Controller
 
 				// Create the organization
 				$competition = Competition::create($request->input());
-				
-				
+
+
 				$place_input = $request->input('place');
-				
+
 
 				$place = new Place;
 				$place->address = $place_input['address'];
@@ -78,7 +79,7 @@ class CompetitionController extends Controller
 				$place->state = $place_input['state'];
 				$place->postal_code = $place_input['postal_code'];
 				$competition->place()->save($place);
-				
+
 				// Set flash data and redirect
 				return redirect()->route('admin.competition.index');
     }
@@ -92,9 +93,9 @@ class CompetitionController extends Controller
     public function show(Competition $competition)
     {
 				//$competition = Competition::find($id);
-				
+
         $this->authorize($competition);
-				
+
 				return view('competition.show', ['competition' => $competition]);
     }
 
@@ -109,13 +110,13 @@ class CompetitionController extends Controller
 				//$competition = Competition::find($id);
 
 				$this->authorize('update',$competition);
-				
+
 				$form = $formBuilder->create('CompetitionForm', [
 					'method' => 'PATCH',
 					'url' => route('admin.competition.update', [$competition]),
 					'model' => $competition
 				]);
-				
+
 				return view('competition.edit', compact('form','competition'));
     }
 
@@ -131,40 +132,40 @@ class CompetitionController extends Controller
 				$competition = Competition::with('organization','place')->find($id);
 
 				$this->authorize('update',$competition);
-				
+
 				// Validate input
 				$form = $formBuilder->create('CompetitionForm');
-				
+
 				// Validate input
 				if (!$form->isValid()) {
            return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
-				
+
         // Get the input
 				$input = $request->input();
-				
+
 				// Update the record
 				$competition->name = $input['name'];
 				$competition->organization_id = $input['organization_id'];
-				$competition->save();	
-				
-				
+				$competition->save();
+
+
 				$place_input = $request->input('place');
-				
+
 				if($competition->place)
 					$place = $competition->place;
 				else
 					$place = new Place;
-					
+
 				$place->address = $place_input['address'];
 				$place->address_2 = $place_input['address_2'];
 				$place->city = $place_input['city'];
 				$place->state = $place_input['state'];
 				$place->postal_code = $place_input['postal_code'];
-				$competition->place()->save($place);			
-				
+				$competition->place()->save($place);
+
 				// Set flash data
-				
+
 				// Redirect
 				return redirect()->route('admin.competition.show',[$competition]);
     }
@@ -180,7 +181,7 @@ class CompetitionController extends Controller
         $competition = Competition::find($id);
 
 				$this->authorize('destroy',$competition);
-				
+
 				dd($competition);
     }
 }

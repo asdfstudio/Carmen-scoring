@@ -19,6 +19,21 @@
         <a href="{{ route('admin.school.index') }}" class="{{ $link_class }}">Schools</a>
       </li>
 
+      <li>
+        <?php $link_class = Request::segment(2) == 'sheet' ? 'active' : false; ?>
+        <a href="{{ route('admin.sheet.index') }}" class="{{ $link_class }}">Sheets</a>
+      </li>
+
+      <li>
+        <?php $link_class = Request::segment(2) == 'criteria' ? 'active' : false; ?>
+        <a href="{{ route('admin.criteria.index') }}" class="{{ $link_class }}">Criteria</a>
+      </li>
+
+      <li>
+        <?php $link_class = Request::segment(2) == 'caption' ? 'active' : false; ?>
+        <a href="{{ route('admin.caption.index') }}" class="{{ $link_class }}">Captions</a>
+      </li>
+
       @if(env('IS_WORKSHOP_ENABLED'))
         <li>
           <?php $link_class = Request::segment(2) == 'workshop' ? 'active' : false; ?>

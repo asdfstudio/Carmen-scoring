@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\AwardScheduleItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -23,5 +24,20 @@ class AwardSchedule extends Model
     {
         return $this->hasMany('App\AwardScheduleItem');
     }
+
+		public function syncItems($items = [])
+		{
+			$scheduleItems = [];
+
+      foreach($items as $item)
+      {
+        $scheduleItems[] = new AwardScheduleItem($item);
+      }
+
+      $deleted = $this->items()->delete();
+      $success = $this->items()->saveMany($scheduleItems);
+
+			return $this;
+		}
 
 }

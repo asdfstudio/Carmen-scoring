@@ -25,15 +25,12 @@
 			<li>{{ link_to_route('organizer.competition.division.edit', 'Edit Division', [$competition,$division],['class' => 'action']) }}</li>
 		@endcan
 
+		<li>{{ link_to_route('organizer.competition.division.show', 'Exit Set Up Mode', [$competition,$division],['class' => 'action']) }}</li>
+
 	</ul>
 
 	<div class="clearfix"></div>
 
-	@if($division->status_slug() == 'finalized')
-		<div class="alert alert-info">
-			<p>Results for this division are available at {{ link_to_route('results.division.show', NULL, [$division, $division->access_code], ['target' => '_blank']) }} </p>
-		</div>
-	@endif
 
 
   <div class="division-board" id="division-13-board">

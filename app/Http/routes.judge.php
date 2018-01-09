@@ -30,7 +30,38 @@ Route::group([
 			'as' => 'competition.schedule.show', 'uses' => 'ScheduleController@show'
 		]);
 
+    Route::get('competition/{competition}/solo-division/{soloDivision}', [
+			'as' => 'competition.solo-division.show', 'uses' => 'SoloDivisionController@show'
+		]);
 
+    Route::get('competition/{competition}/solo-division/{soloDivision}/results', [
+			'as' => 'competition.solo-division.results', 'uses' => 'SoloDivisionController@results'
+		]);
+
+    Route::get('competition/{competition}/solo-division/{soloDivision}/results/female', [
+			'as' => 'competition.solo-division.results.female', 'uses' => 'SoloDivisionController@resultsFemale'
+		]);
+
+    Route::get('competition/{competition}/solo-division/{soloDivision}/results/male', [
+			'as' => 'competition.solo-division.results.male', 'uses' => 'SoloDivisionController@resultsMale'
+		]);
+
+    Route::get('competition/{competition}/solo-division/{soloDivision}/performer/{performer}', [
+			'as' => 'competition.solo-division.performer.score', 'uses' => 'SoloDivisionPerformerController@score'
+		]);
+
+    Route::post('competition/{competition}/solo-division/{soloDivision}/performer/{performer}', [
+			'as' => 'competition.solo-division.performer.score.store', 'uses' => 'SoloDivisionPerformerController@storeScore'
+		]);
+
+
+    Route::get('competition/{competition}/solo-division/{soloDivision}/performer/{performer}/edit', [
+			'as' => 'competition.solo-division.performer.edit', 'uses' => 'SoloDivisionPerformerController@edit'
+		]);
+
+    Route::post('competition/{competition}/solo-division/{soloDivision}/performer/{performer}/edit', [
+			'as' => 'competition.solo-division.performer.update', 'uses' => 'SoloDivisionPerformerController@update'
+		]);
 
     /*Route::bind('competition', function($id){
       return App\Competition::findOrFail($id);

@@ -19,9 +19,13 @@ class CompetitionController extends Controller
 
 			$competitions = Competition::withoutGlobalScope('organization')->whereHas('divisions.judges', function($query) use ($judge_id) {
 				$query->where('judge_id',$judge_id);
+			})->orWhereHas('soloDivisions.judges', function($query) use ($judge_id) {
+				$query->where('judge_id',$judge_id);
 			})->active()->get();
 
 			$archivedCompetitions = Competition::withoutGlobalScope('organization')->whereHas('divisions.judges',function($query) use ($judge_id) {
+				$query->where('judge_id',$judge_id);
+			})->orWhereHas('soloDivisions.judges', function($query) use ($judge_id) {
 				$query->where('judge_id',$judge_id);
 			})->archived()->get();
 
@@ -36,7 +40,11 @@ class CompetitionController extends Controller
 					$query->whereHas('judges', function($query) use ($judge_id) {
 						$query->where('judge_id', $judge_id);
 					});
-				},'divisions.judges'])->active()->find($id);
+				}, 'soloDivisions' => function($query) use ($judge_id) {
+  					$query->whereHas('judges', function($query) use ($judge_id) {
+  						$query->where('judge_id', $judge_id);
+  					});
+  				},'divisions.judges'])->active()->find($id);
 
       //dd($competition);
 

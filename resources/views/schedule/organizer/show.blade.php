@@ -4,15 +4,18 @@
   {!! Breadcrumbs::render('organizer.competition.schedule.show', $competition, $schedule) !!}
 @endsection
 
-@section('content')
-
+@section('content-header')
   <h1>{{ $schedule->name }}</h1>
 
-  {{ link_to_route('organizer.competition.schedule.edit', 'Edit Name', [$competition,$schedule], ['class' => 'action']) }}
+  <ul class="actions-group">
+		<li>{{ link_to_route('organizer.competition.schedule.edit', 'Edit Name', [$competition,$schedule], ['class' => 'action']) }}</li>
+    <li>{{ link_to_route('organizer.competition.schedule.builder', 'Build Schedule', [$competition,$schedule], ['class' => 'action']) }}</li>
+    <li>{!! form($deleteForm) !!}</li>
+	</ul>
 
-  {{ link_to_route('organizer.competition.schedule.builder', 'Build Schedule', [$competition,$schedule], ['class' => 'action']) }}
+@endsection
 
-  {!! form($deleteForm) !!}
+@section('content')
 
   <ul class="schedule-list">
     @foreach($schedule->items as $item)
@@ -22,12 +25,19 @@
           <span class="scheduled-time">{{ \Carbon\Carbon::parse($item->scheduled_time)->format('g:i a') }}</span>
         @endif
 
-        <span class="division-name">{{ $item->round->division->name }}</span>
-        <span class="round-name">{{ $item->round->name }}</span>
+        @if ($item->name)
+          <span class="item-name">{{ $item->name }}</span>
+        @endif
+
+        @if($item->round)
+          <span class="division-name">{{ $item->round->division->name }}</span>
+          <span class="round-name">{{ $item->round->name }}</span>
+        @endif
+
 
         @if($item->choir)
-          <span class="choir-name">{{ $item->choir->name }}</span>
-        @else
+          <span class="choir-name">{{ $item->choir->full_name }}</span>
+        @elseif(!$item->name)
           <span class="choir-name tbd">TBD</span>
         @endif
       </li>

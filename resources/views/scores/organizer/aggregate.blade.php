@@ -31,14 +31,14 @@
           $rawScoreLink = link_to_route('organizer.round.scores.choir.judge.show',$rawScore,[$round->division->competition,$round->division,$round,$choir,$judge], ['class' => 'raw-score-total']);
         endif;
 
-        $rawScoreMusic = $rawScores->where('judge_id', $judge->id)->where('choir_id', $choir->id)->where('criterion.caption_id', 1)->sum('score');
+        $rawScoreMusic = $rawScores->where('judge_id', $judge->id)->where('choir_id', $choir->id)->where('criterion_caption_id', 1)->sum('score');
 
-        $rawScoreShow = $rawScores->where('judge_id', $judge->id)->where('choir_id', $choir->id)->where('criterion.caption_id', 2)->sum('score');
+        $rawScoreShow = $rawScores->where('judge_id', $judge->id)->where('choir_id', $choir->id)->where('criterion_caption_id', 2)->sum('score');
 
         // Weighted scores
-        $weightedScoreMusic = $weightedScores->where('judge_id', $judge->id)->where('choir_id', $choir->id)->where('criterion.caption_id', 1)->sum('weightedScore');
+        $weightedScoreMusic = $weightedScores->where('judge_id', $judge->id)->where('choir_id', $choir->id)->where('criterion_caption_id', 1)->sum('weightedScore');
 
-        $weightedScoreShow = $weightedScores->where('judge_id', $judge->id)->where('choir_id', $choir->id)->where('criterion.caption_id', 2)->sum('weightedScore');
+        $weightedScoreShow = $weightedScores->where('judge_id', $judge->id)->where('choir_id', $choir->id)->where('criterion_caption_id', 2)->sum('weightedScore');
 
         $weightedScore = $weightedScores->where('judge_id', $judge->id)->where('choir_id', $choir->id)->sum('weightedScore');
 

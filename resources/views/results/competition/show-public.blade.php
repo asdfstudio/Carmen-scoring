@@ -24,5 +24,9 @@
     </ul>
   @endif
 
+  <h3>Solo Divisions</h3>
+
+  <p>Please use the results link provided by the competition organizer to view solo division results</p>
+
 
 @endsection

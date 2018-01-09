@@ -23,6 +23,18 @@ Route::group([
   	Route::resource('competition', 'CompetitionController');
   	Route::resource('user', 'UserController');
 
+    Route::resource('sheet', 'SheetController');
+    Route::resource('criteria', 'CriteriaController');
+    Route::resource('caption', 'CaptionController');
+
+    Route::get('sheet/{sheet}/manage', [
+      'as' => 'admin.sheet.manage', 'uses' => 'SheetController@manage'
+    ]);
+
+    Route::post('sheet/{sheet}/manage', [
+      'as' => 'admin.sheet.manage.update', 'uses' => 'SheetController@syncCriteria'
+    ]);
+
     Route::get('dashboard', [
       'as' => 'admin.dashboard', 'uses' => 'OrganizationController@index'
     ]);

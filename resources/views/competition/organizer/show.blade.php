@@ -15,6 +15,7 @@
     {{ link_to_route('organizer.competition.edit', 'Edit Competition', [$competition], ['class' => 'action']) }}
   @endif
 
+
 @endsection
 
 
@@ -35,9 +36,9 @@
 
   <h3>Competition Results</h3>
 
-  <ul>
-    <li>Results URL: {{ link_to($competition->results_url) }}</li>
-    <li>Access Code: {{ $competition->access_code }}</li>
+  <ul class="list-group">
+    <li class="list-group-item">Results URL: {{ link_to($competition->results_url) }}</li>
+    <li class="list-group-item">Access Code: {{ $competition->access_code }}</li>
   </ul>
 
 
@@ -54,17 +55,34 @@
     <p>{{ link_to_route('organizer.competition.division.create','Create your first division',[$competition]) }}</p>
   @endif
 
+  <h3>Manage Solo Divisions</h3>
+
+  @if($competition->soloDivisions->count() > 0)
+    <p>{{ link_to_route('organizer.competition.solo-division.create','Create a solo division',[$competition], ['class' => 'action']) }}</p>
+
+    @include('solo-division.organizer.list',['soloDivisions' => $competition->soloDivisions])
+  @else
+    <p>{{ link_to_route('organizer.competition.solo-division.create','Create your first solo division',[$competition]) }}</p>
+  @endif
+
+
   <h3>Manage Schedules</h3>
 
   <p>Set the performance order for your competition. Do this after you have created all of your divisions, rounds and choirs.</p>
 
-  <p>{{ link_to_route('organizer.competition.schedule.index','Manage your schedules',[$competition], ['class' => 'action']) }}</p>
+  <p>{{ link_to_route('organizer.competition.schedule.create','Add a performance schedule',[$competition], ['class' => 'action']) }}</p>
+
+  @include('schedule.organizer.table', ['schedules' => $competition->schedules])
 
   <h3>Manage Award Ceremony Schedules</h3>
 
-  <p>Set the schedule for your award ceremonies..</p>
+  <p>Set the schedule for your award ceremonies.</p>
 
-  <p>{{ link_to_route('organizer.competition.award-schedule.index','Manage your award ceremony schedules',[$competition], ['class' => 'action']) }}</p>
+  <p>{{ link_to_route('organizer.competition.award-schedule.create','Add an award ceremony schedule',[$competition], ['class' => 'action']) }}</p>
+
+  @include('award-schedule.organizer.table', ['schedules' => $competition->awardSchedules])
+
+
 
 
 @endsection

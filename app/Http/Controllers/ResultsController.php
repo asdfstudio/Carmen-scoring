@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\View;
-
-use App\Competition;
-use App\Division;
 use App\Round;
-use App\Caption;
 use App\Judge;
+use App\Caption;
 use App\Director;
+use App\Division;
+use App\Competition;
+use App\SoloDivision;
+use App\Http\Requests;
 use App\Carmen\Scoreboard;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
+use App\Http\Controllers\Controller;
 use Kris\LaravelFormBuilder\FormBuilder;
 
 class ResultsController extends Controller
@@ -100,6 +98,8 @@ class ResultsController extends Controller
       }])->completed()->find($competition_id);*/
 
       $competition = Competition::withoutGlobalScope('organization')->with(['divisions' => function($query) {
+        $query->published();
+      }, 'soloDivisions' => function($query) {
         $query->published();
       }])->find($competition_id);
 
@@ -250,7 +250,11 @@ class ResultsController extends Controller
       $choirs = $round->choirs;
       $judges = $division->judges;
 
+      //$before = memory_get_usage();
       $scoreboard = new Scoreboard(['round_id' => $round_id]);
+      //$after = memory_get_usage();
+      //$allocatedSize = ($after - $before);
+      //dd($allocatedSize/1024/1024);
 
       $show_links = true;
 
@@ -328,8 +332,14 @@ class ResultsController extends Controller
       }])->find($judge_id);
 
 
-      $scoreboard = new Scoreboard(['round_id' => $round_id]);
+      $scoreboard = new Scoreboard(['round_id' => $round_id, 'judge_id' => $judge_id]);
 
       return view('results.division_round_judge.show', compact('division', 'round', 'judge', 'scoreboard', 'captions', 'access_code'));
+    }
+
+
+    public function soloDivision(SoloDivision $soloDivision, $access_code)
+    {
+      dd($soloDivision);
     }
 }

@@ -12,14 +12,21 @@
 
   &.small {
     font-size: 0.8em;
+    padding: 5px 9px;
   }
 
   &.x-small {
     font-size: 0.6em;
+    padding: 3px 7px;
   }
 
   &.radius {
     border-radius: 3px;
+  }
+
+  &.count {
+    background: #aaa;
+    color: #fff;
   }
 
   &.caption {
@@ -33,6 +40,20 @@
       background: $cs-caption-show;
     }
     &.combo, &.Combo {
+      background: $cs-caption-combo;
+    }
+  }
+
+  &.gender {
+
+    background: #999;
+    color: $cs-white;
+
+    &.male {
+      background: $cs-caption-music;
+    }
+
+    &.female {
       background: $cs-caption-combo;
     }
   }

@@ -4,20 +4,32 @@
   {!! Breadcrumbs::render('organizer.competition.schedule.show', $competition, $schedule) !!}
 @endsection
 
-@section('content')
+@section('content-header')
+  <h1>Build Your Schedule: {{ $schedule->name }}</h1>
 
-  <h1>{{ $schedule->name }}</h1>
+  <ul class="actions-group">
+		<li>{{ link_to_route('organizer.competition.schedule.show', 'View Schedule', [$competition,$schedule], ['class' => 'action']) }}</li>
+    <li>{{ link_to_route('organizer.competition.schedule.edit', 'Edit Name', [$competition,$schedule], ['class' => 'action']) }}</li>
+	</ul>
+
+@endsection
+
+@section('content')
 
   <p>Build your schedule by dragging choirs to the schedule.</p>
 
-  <label for="">First Performance</label>
-  <input type="text" class="timepicker-options" name="first_performance" placeholder="First performance" value="8:00">
+  <div class="well">
+    <label for="">First Performance</label>
+    <input type="text" class="timepicker-options" name="first_performance" placeholder="First performance" value="8:00">
 
-  <label for="">Last Performance</label>
-  <input type="text" class="timepicker-options" name="last_performance" placeholder="Last performance" value="22:00">
+    <label for="">Last Performance</label>
+    <input type="text" class="timepicker-options" name="last_performance" placeholder="Last performance" value="22:00">
 
-  <label for="">Time interval in minutes</label>
-  <input type="text" class="timepicker-options" name="step" placeholder="Time increment" value="30">
+    <label for="">Time interval in minutes</label>
+    <input type="text" class="timepicker-options" name="step" placeholder="Time increment" value="30">
+  </div>
+
+
 
   <div class="schedule-builder-container">
     <div class="schedule-builder">
@@ -28,12 +40,20 @@
         @foreach($schedule->items as $item)
           <li class="schedule-item choir" id="item_{{ $item->round_id }}_{{ $item->choir_id }}" data-round-id="{{ $item->round_id }}" data-choir-id="{{ $item->choir_id }}">
             <input type="text" class="scheduled_time" value="{{ $item->scheduled_time }}">
-            <span class="division-name">{{ $item->round->division->name }}</span>
-            <span class="round-name">{{ $item->round->name }}</span>
+
+            @if ($item->name)
+              <input type="text" class="item_name" value="{{ $item->name }}">
+            @endif
+
+            @if ($item->round)
+              <span class="division-name">{{ $item->round->division->name }}</span>
+              <span class="round-name">{{ $item->round->name }}</span>
+            @endif
+
 
             @if($item->choir)
               <span class="choir-name">{{ $item->choir->name }}</span>
-            @else
+            @elseif(!$item->name)
               <span class="choir-name tbd">TBD</span>
             @endif
           </li>
@@ -47,6 +67,22 @@
         Choirs
       </div>
       <ul class="schedule-builder-list schedule-items divisions">
+
+        <li class="division">
+          <span class="division-heading">Placeholders / Non-Performances</span>
+          <ul class="choirs non-performance-items">
+            <?php $i = 0; ?>
+            @while ($i < 10)
+              <li class="schedule-item">
+                <input type="text" class="scheduled_time" value="">
+                <input type="text" class="item_name" value="" placeholder="Lunch, Break, etc.">
+              </li>
+              <?php $i++; ?>
+            @endwhile
+
+          </ul>
+        </li>
+
         @foreach($competition->divisions as $div)
           <li class="division">
             <span class="division-heading">{{ $div->name }}</span>
@@ -66,7 +102,7 @@
                           <input type="text" class="scheduled_time" value="">
                           <span class="division-name">{{ $div->name }}</span>
                           <span class="round-name">{{ $round->name }} </span>
-                          <span class="choir-name">{{ $choir->name }}</span>
+                          <span class="choir-name">{{ $choir->full_name }}</span>
                         </li>
                       @endif
                     @endforeach

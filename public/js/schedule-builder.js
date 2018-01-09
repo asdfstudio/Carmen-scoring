@@ -19,6 +19,10 @@ var ScheduleBuilder = (function() {
         $('.schedule-builder-container').addClass('is-dirty');
       }
     });
+
+    $('.item_name').on('blur', function() {
+      $('.schedule-builder-container').addClass('is-dirty');
+    });
   }
 
   /*var handleListUpdate = function(event, ui) {
@@ -43,10 +47,11 @@ var ScheduleBuilder = (function() {
       scheduleItem.caption_id = $(this).data('caption-id');
       scheduleItem.rank = $(this).data('rank');
       scheduleItem.scheduled_time = $(this).find('input.scheduled_time').val();
+      scheduleItem.name = $(this).find('input.item_name').val();
       data.push(scheduleItem);
     });
 
-    console.log(data);
+    //console.log(data);
 
     var request = {
       data: JSON.stringify({ 'items': data }),
