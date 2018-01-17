@@ -44,4 +44,5 @@ class RawScore extends Model
 		{
 			return number_format($value, 1);
 		}
+
 }

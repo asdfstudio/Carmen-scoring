@@ -15,6 +15,7 @@ use App\RawScore;
 use App\Caption;
 use App\Judge;
 use App\Carmen\Scoreboard;
+use App\Carmen\Ratings;
 
 use Auth;
 
@@ -48,16 +49,12 @@ class CompetitionDivisionRoundJudgeController extends Controller
       $weightedScores = $scoreboard->weightedScores;
       $rankedScores = $scoreboard->rankedScores;
 
-			//dd($rawScores);
-
-
-
-			//dd($round);
+      $ratings = (new Ratings($round))->all();
 
       $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::whereIn('id', $caption_ids)->get();
 
-			return view('competition_division_round_judge.judge.index', compact('rawScores', 'weightedScores', 'rankedScores', 'scoreboard', 'captions', 'round', 'competition', 'division', 'judges'));
+			return view('competition_division_round_judge.judge.index', compact('rawScores', 'weightedScores', 'rankedScores', 'scoreboard', 'captions', 'round', 'competition', 'division', 'judges', 'ratings'));
 		}
 
 

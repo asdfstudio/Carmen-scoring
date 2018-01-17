@@ -9,6 +9,10 @@ use App\Director;
 use App\Division;
 use App\Competition;
 use App\SoloDivision;
+use App\SoloRawScore;
+use App\Carmen\Ratings;
+use App\Carmen\SoloTotalScores;
+use App\Carmen\SoloRankedScores;
 use App\Http\Requests;
 use App\Carmen\Scoreboard;
 use Illuminate\Http\Request;
@@ -49,15 +53,24 @@ class ResultsController extends Controller
 
     private function loadDivision($division_id, $access_code)
     {
-      $this->division = Division::with(['standings' => function($query) {
-        $query->orderBy('caption_id', 'DESC');
-      }, 'standings.choirs','awards' => function($query) {
-        $query->withoutGlobalScope('organization');
-      }, 'awards.choirs' => function($query) use ($division_id) {
-        $query->where('division_id',$division_id);
-      }, 'judges' => function($query) {
-        $query->groupBy('judge_id');
-      }])->where('access_code', $access_code)->where('is_published', 1)->find($division_id);
+      $this->division = Division::with([
+        'competition' => function($query) {
+          $query->withoutGlobalScope('organization');
+        },
+        'standings' => function($query) {
+          $query->orderBy('caption_id', 'DESC');
+        },
+        'standings.choirs',
+        'awards' => function($query) {
+          $query->withoutGlobalScope('organization');
+        },
+        'awards.choirs' => function($query) use ($division_id) {
+          $query->where('division_id',$division_id);
+        },
+        'judges' => function($query) {
+          $query->groupBy('judge_id');
+        }
+      ])->where('access_code', $access_code)->where('is_published', 1)->find($division_id);
 
       if($this->division == false)
         abort('404');
@@ -244,7 +257,6 @@ class ResultsController extends Controller
       $division = $this->division;
       $captions = $this->captions;
 
-
       $round = $division->rounds()->find($round_id);
 
       $choirs = $round->choirs;
@@ -252,13 +264,14 @@ class ResultsController extends Controller
 
       //$before = memory_get_usage();
       $scoreboard = new Scoreboard(['round_id' => $round_id]);
+      $ratings = (new Ratings($round))->all();
       //$after = memory_get_usage();
       //$allocatedSize = ($after - $before);
       //dd($allocatedSize/1024/1024);
 
       $show_links = true;
 
-      return view('results.division_round.show', compact('division', 'round', 'scoreboard', 'captions', 'access_code', 'choirs', 'judges', 'show_links'));
+      return view('results.division_round.show', compact('division', 'round', 'scoreboard', 'captions', 'access_code', 'choirs', 'judges', 'show_links', 'ratings'));
     }
 
 
@@ -338,8 +351,59 @@ class ResultsController extends Controller
     }
 
 
-    public function soloDivision(SoloDivision $soloDivision, $access_code)
+    public function soloDivision(SoloDivision $soloDivision, $access_code, $gender = null)
     {
-      dd($soloDivision);
+      $competition = $soloDivision->competition;
+
+      if ($gender) {
+        $genderName = $gender == 'M' ? 'Male' : 'Female';
+        $soloDivision->performers = $soloDivision->performers->where('gender', $gender);
+      } else {
+        $genderName = 'Overall';
+      }
+
+      $rawScores = SoloRawScore::where('solo_division_id', $soloDivision->id)->get();
+
+      $totalScores = (new SoloTotalScores($rawScores , $soloDivision->performers))->get();
+      $rankedScores = (new SoloRankedScores($totalScores , $soloDivision->performers))->get();
+
+      if (!$gender) {
+        $maleRank = (new SoloRankedScores($totalScores, $soloDivision->performers->where('gender', 'M')))->get();
+        $femaleRank = (new SoloRankedScores($totalScores, $soloDivision->performers->where('gender', 'F')))->get();
+      } else {
+        $maleRank = null;
+        $femaleRank = null;
+      }
+
+      $judges = $soloDivision->judges;
+
+      $soloDivision->performers->transform(function($performer, $key) use ($rawScores, $rankedScores, $maleRank, $femaleRank, $judges) {
+        $performer->rank = $rankedScores->where('performer_id', $performer->id)->pluck('rank')->first();
+        $performer->score = $rawScores->where('performer_id', $performer->id)->sum('score');
+
+        if ($performer->gender == 'M') {
+          $genderRank = $maleRank;
+        } elseif ($performer->gender == 'F') {
+          $genderRank = $femaleRank;
+        }
+
+        if ($genderRank) {
+          $performer->gender_rank = $genderRank->where('performer_id', $performer->id)->pluck('rank')->first();
+        }
+
+        $judgeScores = [];
+
+        foreach ($judges as $judge) {
+          $judgeScores[$judge->id] = $rawScores->where('performer_id', $performer->id)->where('judge_id', $judge->id)->sum('score');
+        }
+
+        $performer->judgeScores = $judgeScores;
+
+        return $performer;
+      });
+
+      $soloDivision->performers = $soloDivision->performers->sortBy('rank');
+
+      return view('results.solo_division.results', compact('competition', 'judges', 'soloDivision', 'access_code', 'genderName'));
     }
 }

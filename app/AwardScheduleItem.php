@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AwardScheduleItem extends Model
 {
-		protected $fillable = ['division_id', 'award_id', 'caption_id', 'rank', 'performance_order'];
+		protected $fillable = ['division_id', 'round_id', 'award_id', 'caption_id', 'rank', 'performance_order'];
 
 
 		public function schedule()
@@ -17,6 +17,11 @@ class AwardScheduleItem extends Model
 		public function division()
 		{
 			return $this->belongsTo('App\Division');
+		}
+
+		public function round()
+		{
+			return $this->belongsTo('App\Round');
 		}
 
 		public function award()

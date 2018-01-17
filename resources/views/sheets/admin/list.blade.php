@@ -8,7 +8,10 @@
     <li class="school list-group-item">
 
       <span class="name">{{ $sheet->name }}</span>
-			<span class="description">Criteria: {{ $sheet->criteria->count() }}</span>
+			<ul class="list-group">
+				<li class="list-group-item">Criteria: {{ $sheet->criteria()->count() }}</li>
+				<li class="list-group-item">Total Points Available: {{ $sheet->max_score }} ({{ $sheet->weighted_max_score }} if using Weighted Scoring)</li>
+			</ul>
 
       <ul class="actions-group">
         <li>{{ link_to_route('admin.sheet.show', 'View', [$sheet], ['class' => 'action']) }}</li>

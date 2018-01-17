@@ -69,7 +69,7 @@ Route::post('results/division/{division}', [
   'as' => 'results.division.access-protected', 'uses' => 'ResultsController@divisionAccessProtected'
 ]);
 
-Route::get('results/solo-division/{soloDivision}/{access_code}', [
+Route::get('results/solo-division/{soloDivision}/{access_code}/{gender?}', [
   'as' => 'results.solo-division.show', 'uses' => 'ResultsController@soloDivision'
 ]);
 

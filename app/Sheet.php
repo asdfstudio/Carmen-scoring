@@ -36,4 +36,16 @@ class Sheet extends Model
 
       return $caption_ids;
     }
+
+    public function getMaxScoreAttribute()
+    {
+      return $this->criteria()->sum('max_score');
+    }
+
+    public function getWeightedMaxScoreAttribute()
+    {
+      $musicScore = 1.5 * $this->criteria()->where('criteria.caption_id', 1)->sum('max_score');
+      $nonMusicScore = 1 * $this->criteria()->where('criteria.caption_id', 1)->sum('max_score');
+      return $musicScore + $nonMusicScore;
+    }
 }

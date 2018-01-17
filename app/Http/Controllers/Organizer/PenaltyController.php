@@ -41,6 +41,7 @@ class PenaltyController extends Controller
       $this->authorize('create','App\Penalty');
 
       $form = $formBuilder->create('Penalty\CreatePenaltyForm', [
+        'class' => '',
         'method' => 'POST',
         'url' => route('organizer.penalty.store')
       ]);
@@ -100,6 +101,7 @@ class PenaltyController extends Controller
       $this->authorize('update',$penalty);
 
       $form = $formBuilder->create('Penalty\CreatePenaltyForm', [
+        'class' => '',
         'method' => 'PATCH',
         'url' => route('organizer.penalty.update', [$penalty]),
         'model' => $penalty

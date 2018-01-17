@@ -25,9 +25,13 @@
       </div>
       <ul class="schedule-builder-list schedule">
         @foreach($schedule->items as $item)
-          <li class="schedule-item award" data-division-id="{{ $item->division_id }}" data-award-id="{{ $item->award_id }}" data-caption-id="{{ $item->caption_id }}" data-rank="{{ $item->rank }}">
+          <li class="schedule-item award" data-division-id="{{ $item->division_id }}" data-round-id="{{ $item->round_id }}" data-award-id="{{ $item->award_id }}" data-caption-id="{{ $item->caption_id }}" data-rank="{{ $item->rank }}">
             @if($item->division)
               <span class="division-name">{{ $item->division->name }}</span>
+            @endif
+
+            @if($item->round)
+              <span class="award-name">{{ $item->round->name }} Ratings</span>
             @endif
 
             @if($item->award)
@@ -97,6 +101,23 @@
               @endforeach
 
               <!-- End division overall and caption specific awards -->
+
+              <!-- Begin Round Ratings -->
+              @foreach ($div->rounds as $round)
+                <?php
+                $isInSchedule = $schedule->items->where('division_id', $div->id)->where('round_id', $round->id)->count();
+
+                $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('round_id', $round->id)->count();
+                ?>
+                @if(!$isInSchedule AND !$isInAnotherSchedule)
+                  <li class="schedule-item award" data-division-id="{{ $div->id }}" data-round-id="{{ $round->id }}">
+                    <span class="division-name">{{ $div->name }}</span>
+                    <span class="award-name rating">{{ $round->name }} Ratings</span>
+                  </li>
+                @endif
+              @endforeach
+              <!-- End Round Ratings -->
+
 
               @foreach($div->awards as $award)
                 <?php

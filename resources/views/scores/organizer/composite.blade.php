@@ -23,6 +23,7 @@
 
       <th>Total</th>
       <th>Place</th>
+      <th>Rating</th>
     </tr>
 
     @foreach($choirs as $choir)
@@ -72,6 +73,7 @@
           <?php $rank = $totalRawRank->where('choir_id' , $choir->id)->pluck('rank')->first(); ?>
           <span class="raw score">{{ $rank }}</span>
         </td>
+        <td></td>
       </tr>
     @endforeach
   @endforeach
@@ -94,6 +96,7 @@
 
     <th>Total</th>
     <th>Place</th>
+    <th>Rating</th>
   </tr>
 
   <?php $totalWeightedRank = $rankedScores->total_weighted_rank(); ?>
@@ -156,6 +159,9 @@
 
 
       </td>
+
+      <td>{{ $ratings->where('choir.id', $choir->id)->pluck('rating.name')->first() }}</td>
+
     </tr>
   @endforeach
 

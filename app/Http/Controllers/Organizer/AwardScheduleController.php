@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Competition;
 use App\AwardSchedule;
 use App\AwardScheduleItem;
+use App\Carmen\Ratings;
 use App\Caption;
 use App\AwardWinner;
 use App\Standing;
@@ -115,7 +116,7 @@ class AwardScheduleController extends Controller
       $competition = Competition::find($competition_id);
       $schedule = AwardSchedule::with(['items' => function($query) {
         $query->performanceOrder();
-      }, 'items.division', 'items.award' => function($query) {
+      }, 'items.division', 'items.round', 'items.award' => function($query) {
         $query->withoutGlobalScope('organization');
       }, 'items.caption'])->find($schedule_id);
 
@@ -131,10 +132,6 @@ class AwardScheduleController extends Controller
         $query->where('competition_id', $competition_id);
       })->with(['choirs'])->get();
 
-      //dd($standings);
-
-      //dd($schedule);
-
       $deleteForm = $formBuilder->create('GenericDeleteForm', [
         'url' => route('organizer.competition.award-schedule.destroy',[$competition, $schedule])
       ]);
@@ -149,7 +146,7 @@ class AwardScheduleController extends Controller
       $competition = Competition::find($competition_id);
       $schedule = AwardSchedule::with(['items' => function($query) {
         $query->performanceOrder();
-      }, 'items.division', 'items.award' => function($query) {
+      }, 'items.division', 'items.round', 'items.award' => function($query) {
         $query->withoutGlobalScope('organization');
       }, 'items.caption'])->find($schedule_id);
 
@@ -162,8 +159,20 @@ class AwardScheduleController extends Controller
         $query->where('competition_id', $competition_id);
       })->with(['choirs'])->get();
 
+      $ratings = [];
 
-      return view('award-schedule.organizer.show-announcer', compact('competition', 'schedule', 'awardWinners', 'standings'));
+      foreach ($schedule->items as $item) {
+        if(!$item->round) continue;
+
+        $ratings[] = [
+          'round_id' => $item->round_id,
+          'ratings' => (new Ratings($item->round))->all()
+        ];
+      }
+
+      $ratings = collect($ratings);
+
+      return view('award-schedule.organizer.show-announcer', compact('competition', 'schedule', 'awardWinners', 'standings', 'ratings'));
     }
 
 
@@ -176,7 +185,7 @@ class AwardScheduleController extends Controller
 
       $schedule = AwardSchedule::with(['items' => function($query) {
         $query->performanceOrder();
-      }, 'items.division', 'items.award' => function($query) {
+      }, 'items.division', 'items.round', 'items.award' => function($query) {
         $query->withoutGlobalScope('organization');
       }, 'items.caption'])->find($schedule_id);
 

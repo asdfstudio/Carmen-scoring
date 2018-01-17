@@ -10,6 +10,7 @@
   <ul class="actions-group">
     <li>{{ link_to_route('organizer.competition.award-schedule.edit', 'Edit Name', [$competition,$schedule], ['class' => 'action']) }}</li>
     <li>{{ link_to_route('organizer.competition.award-schedule.builder', 'Build Schedule', [$competition,$schedule], ['class' => 'action']) }}</li>
+    <li>{{ link_to_route('organizer.competition.award-schedule.show-announcer', 'Announcer View', [$competition, $schedule], ['class' => 'action']) }}</li>
     <li>{!! form($deleteForm) !!}</li>
 	</ul>
 
@@ -51,6 +52,10 @@
       <li class="schedule-item award">
         @if($item->division)
           <span class="division-name" data-division-id="{{ $item->division->id }}">{{ $item->division->name }}</span>
+        @endif
+
+        @if($item->round)
+          <span class="award-name">{{ $item->round->name }} Ratings</span>
         @endif
 
         @if($item->award)

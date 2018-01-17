@@ -47,6 +47,21 @@
           <span class="division-name" data-division-id="{{ $item->division->id }}">{{ $item->division->name }}</span>
         @endif
 
+        @if($item->round)
+          <span class="award-name">{{ $item->round->name }} Ratings</span>
+
+          <?php $roundRatings = $ratings->where('round_id', $item->round->id)->first();?>
+
+          @if($roundRatings)
+            <ul class="list-group">
+              @foreach($roundRatings['ratings'] as $rating)
+                <li class="list-group-item">{{ $rating['choir']->full_name }}: {{ $rating['rating']['name'] }}</li>
+              @endforeach
+            </ul>
+          @endif
+
+        @endif
+
         @if($item->award)
           <span class="award-name">{{ $item->award->name }}</span>
         @endif

@@ -80,7 +80,7 @@ endif;
             @if($round->status_slug == 'active')
               {{ Form::open(['method' => 'POST', 'url' => route('judge.competition.division.round.save_scores', [$division->competition->id, $division->id, $round->id])]) }}
 
-              {{ Form::number("scores[$choir->id][$criterion->id]", $rawScore,['min' => 0, 'max' => 10, 'step' => '0.5', 'class' => 'col-xs-12 score edit ajax-scoring toggle-score-input-popup', 'data-original-score' => $rawScore, 'data-choir-id' => $choir->id, 'data-criterion-id' => $criterion->id, 'data-caption-id' => $caption->id, 'data-score-weighting' => $captionWeighting, 'readonly' => 'readonly']) }}
+              {{ Form::number("scores[$choir->id][$criterion->id]", $rawScore,['min' => 0, 'max' => $criterion->max_score, 'step' => '0.5', 'class' => 'col-xs-12 score edit ajax-scoring toggle-score-input-popup', 'data-original-score' => $rawScore, 'data-choir-id' => $choir->id, 'data-criterion-id' => $criterion->id, 'data-caption-id' => $caption->id, 'data-score-weighting' => $captionWeighting, 'readonly' => 'readonly']) }}
 
               {{ Form::close() }}
             @endif

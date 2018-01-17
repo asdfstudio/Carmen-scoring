@@ -98,9 +98,15 @@ class CompetitionDivisionPenaltyController extends Controller
       $competition = $division->competition;
       $selected_penalties = $division->penalties;
 
+      /*$penalties = Penalty::with(['divisions' => function($query) use ($division_id) {
+        $query->where('division_id', $division_id);
+      }])->where('organization_id', Auth::user()->organization_id)->get();*/
+
       $penalties = Penalty::with(['divisions' => function($query) use ($division_id) {
         $query->where('division_id', $division_id);
-      }])->where('organization_id', Auth::user()->organization_id)->get();
+      }])->get();
+
+
 
       $this->authorize('managePenalties', $division);
 

@@ -15,8 +15,13 @@
 
 @section('content')
 
+    <h4>Total Points Available: {{ $sheet->max_score }}</h4>
+    <h4>Total Weighted Points Available: {{ $sheet->weighted_max_score }}</h4>
+
 		@foreach ($sheet->captions as $caption)
       <h2>{{ $caption->name }}</h2>
+
+
 
       @include('criteria.admin.list-simple', ['criteria' => $sheet->criteria->where('caption_id', $caption->id) ])
     @endforeach

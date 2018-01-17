@@ -19,24 +19,36 @@ $(document).ready(function() {
       e.preventDefault();
       var field = $(this);
       var field_name = field.attr('name');
-      //var score = Math.round(field.val());
+      var max_score = field.attr('max') * 10;
       var score = field.val() * 10;
       var popup = $('div.popup-input-container');
-      //console.log(score);
+
       $('.toggle-score-input-popup').removeClass('focus');
       field.addClass('focus');
       field.blur();
       popup.focus();
-      //console.log(field_name);
+
       popup.data('field', field_name);
+
       // Show the popup
-      //$('body').addClass('input-popup-active');
       popup.addClass('active');
-      //popup.removeClass('hide');
 
       // Set the selected value
       popup.find('a').removeClass('current');
       popup.find('a[data-number="'+score+'"]').addClass('current');
+
+      // Show all the score options
+      popup.find('a').show();
+
+      // Then hide those that are greater than max allowed score
+      if(max_score < 100) {
+        popup.find('a').each(function(index) {
+          if($(this).data('number') > max_score) {
+            $(this).hide();
+          }
+        });
+      }
+
     });
 
 
