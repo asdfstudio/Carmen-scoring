@@ -30,7 +30,7 @@
                   {{ $comment->judge->full_name }}
                 </div>
                 <div class="body">
-                  {{ $comment->comments }}
+                  {!! nl2br($comment->comments) !!}
                 </div>
 
               </li>

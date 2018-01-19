@@ -38,6 +38,7 @@ class CompetitionDivisionPenaltyController extends Controller
 
 
       $form = $formBuilder->create('Penalty\CreatePenaltyForm', [
+        'class' => '',
         'method' => 'POST',
         'url' => route('organizer.competition.division.penalty.store', [$competition_id, $division_id])
       ]);
