@@ -75,7 +75,8 @@
 
 @section('body-footer')
     <!--  Decide if we want to split the spreadsheet table  -->
-    <?php $splitTheTable = $round->choirs->count() > 1 ? 'true' : 'false'; ?>
+    <?php //$splitTheTable = $round->choirs->count() > 1 ? 'true' : 'false'; ?>
+    <?php $splitTheTable = 'true'; ?>
     <script type="text/javascript">
       splitTheTable = {{ $splitTheTable }}
     </script>
