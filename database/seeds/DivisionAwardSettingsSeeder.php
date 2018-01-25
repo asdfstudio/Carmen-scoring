@@ -14,7 +14,7 @@ class DivisionAwardSettingsSeeder extends Seeder
     public function run()
     {
         // get all divisions
-        $divisions = Division::all();
+        $divisions = Division::all(); 
 
         $captions = [
           '0' => 'overall',
