@@ -41,6 +41,7 @@
 		<li class="list-group-item">
 			<h3>Settings</h3>
 			<p>{{ link_to_route('organizer.competition.division.settings', 'Manage scoring settings', [$competition, $division]) }}</p>
+			<p>{{ link_to_route('organizer.competition.division.award.settings.edit','Edit Award Settings',[$competition, $division]) }}</p>
 		</li>
 		<li class="list-group-item">
 			<h3>Choirs</h3>

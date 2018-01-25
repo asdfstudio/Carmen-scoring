@@ -35,7 +35,7 @@
           $standing = $standings->where('division_id', $item->division->id)->where('caption_id', $item->caption->id)->first();
         }
         else {
-          $standing = $standings->where('division_id', $item->division->id)->first();
+          $standing = $standings->where('division_id', $item->division->id)->where('caption_id', NULL)->first();
         }
 
 
@@ -63,9 +63,9 @@
         @endif
 
         @if($item->caption)
-          <span class="caption-name caption-{{ $item->caption->slug }}">{{ $item->caption->name }} {{ ordinal($item->rank) }} Place</span>
-        @elseif($item->rank)
-          <span class="caption-name caption-overall">Overall {{ ordinal($item->rank) }} Place</span>
+          <span class="caption-name caption-{{ $item->caption->slug }}">{{ $item->caption->name }} {{ $item->named_rank }}</span>
+        @elseif($item->named_rank)
+          <span class="caption-name caption-overall">Overall {{ $item->named_rank }} </span>
         @endif
 
         @if($awardWinner)

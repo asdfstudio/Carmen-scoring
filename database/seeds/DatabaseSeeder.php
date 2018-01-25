@@ -27,5 +27,8 @@ class DatabaseSeeder extends Seeder
 				$this->call(PeopleTableSeeder::class);
 				$this->call(DivisionJudgeTableSeeder::class);
 				$this->call(UsersTableSeeder::class);
+
+        //
+        this->call(DivisionAwardSettingsSeeder::class);
     }
 }

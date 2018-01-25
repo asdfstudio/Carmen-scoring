@@ -87,6 +87,11 @@ class Division extends Model
         return $this->belongsToMany('App\Award', 'division_award')->withPivot( 'choir_id', 'recipient', 'sponsor');
     }
 
+    public function awardSettings()
+    {
+        return $this->hasMany('App\DivisionAwardSetting');
+    }
+
 		public function rounds()
     {
         return $this->hasMany('App\Round');

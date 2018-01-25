@@ -55,7 +55,7 @@ class CreateForm extends Form
           ]
 				]);
 
-        $this->add('award_heading', 'static', [
+        /*$this->add('award_heading', 'static', [
           'tag' => 'h2',
           'value' => 'Award Settings',
           'label_show' => false
@@ -148,7 +148,7 @@ class CreateForm extends Form
             'class' => 'form-group col-md-3 col-xs-12'
           ],
           'default_value' => ''
-        ]);
+        ]);*/
 
 
         $i = 0;

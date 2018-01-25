@@ -4098,6 +4098,12 @@ ul.schedule-list {
         font-style: italic;
         font-size: .9em;
         opacity: .7; }
+    ul.schedule-list li.schedule-item.award .award-sponsor {
+      background: #eee;
+      padding: 5px 10px;
+      border-radius: 36px;
+      font-size: .8em;
+      margin-left: 10px; }
 
 .mv {
   margin-top: 10px;

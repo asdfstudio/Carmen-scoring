@@ -116,7 +116,7 @@ class AwardScheduleController extends Controller
       $competition = Competition::find($competition_id);
       $schedule = AwardSchedule::with(['items' => function($query) {
         $query->performanceOrder();
-      }, 'items.division', 'items.round', 'items.award' => function($query) {
+      }, 'items.division', 'items.division.awardSettings', 'items.round', 'items.award' => function($query) {
         $query->withoutGlobalScope('organization');
       }, 'items.caption'])->find($schedule_id);
 
@@ -132,6 +132,8 @@ class AwardScheduleController extends Controller
         $query->where('competition_id', $competition_id);
       })->with(['choirs'])->get();
 
+      //dd($standings);
+
       $deleteForm = $formBuilder->create('GenericDeleteForm', [
         'url' => route('organizer.competition.award-schedule.destroy',[$competition, $schedule])
       ]);
@@ -146,7 +148,7 @@ class AwardScheduleController extends Controller
       $competition = Competition::find($competition_id);
       $schedule = AwardSchedule::with(['items' => function($query) {
         $query->performanceOrder();
-      }, 'items.division', 'items.round', 'items.award' => function($query) {
+      }, 'items.division', 'items.division.awardSettings', 'items.round', 'items.award' => function($query) {
         $query->withoutGlobalScope('organization');
       }, 'items.caption'])->find($schedule_id);
 

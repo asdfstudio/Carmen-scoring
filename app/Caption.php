@@ -13,6 +13,10 @@ class Caption extends Model
 
 		protected $fillable = ['name'];
 
+    /*protected $attributes = [
+      'slug' => 'overall'
+    ];*/
+
 		public function criteria()
 		{
 			return $this->hasMany('App\Criterion');

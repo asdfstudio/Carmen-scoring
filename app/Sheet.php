@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -19,11 +20,23 @@ class Sheet extends Model
 			return $this->hasMany('App\Division');
 		}
 
-    public function captions()
+    /*public function captions()
     {
+      //$this->load('criteria');
+      //dd($this->criteria);
+      return $this->belongsToMany('App\Criterion')->distinct('caption_id');
+      //dd($x);
+      //return $this->belongsToMany('App\Criterion')->unique('caption_id')->pluck('caption');
+      //return $this->criteria->unique('caption_id')->pluck('caption');
+      //return $this->criteria()->select(DB::raw('distinct caption_id'));
       //return $this->criteria()->pluck('caption_id')->toArray();
       //return $this->hasManyThrough('App\Caption', 'App\Criterion');
-    }
+    }*/
+
+    /*public function getCaptionsAttribute()
+    {
+      return $this->criteria->unique('caption_id')->pluck('caption');
+    }*/
 
 		public function criteria()
     {

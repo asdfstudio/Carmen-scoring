@@ -28,7 +28,7 @@
 				    <p class="alert alert-warning">Consensus scoring is used for this division.</p>
 				  @endif
 
-				  @include('standing.public_list', ['standing' => $standing])
+				  @include('standing.public_list', ['standing' => $standing, 'showSponsor' => false])
 
 				@endif
 			</div>

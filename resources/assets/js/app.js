@@ -92,7 +92,7 @@ $(document).ready(function() {
       //form = $('form.autosave');
       setInterval(function(){
         $(this).autoSave();
-      }, 10000);
+      }, 5000);
     });
 
 
@@ -293,6 +293,12 @@ $(document).ready(function() {
       create: true
     });*/
 
+
+    // scorecard comments/feedback
+    $('.scorecard textarea[name="comment"]').on('change', function(e) {
+      console.log('comment changed');
+      $(this).parents('form').addClass('has-changed-data');
+    });
 
     // scorecard
     $('.scorecard ul.number-selector a').on('click', function(e) {

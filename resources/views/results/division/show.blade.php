@@ -20,12 +20,11 @@
 				<?php
 				if($standing->caption_id == NULL)
 				{
-					$limit = $division->overall_award_count;
+					$limit = $division->awardSettings->where('caption_id', 0)->first()->award_count;
 				}
 				else
 				{
-					$column_name = $standing->caption->slug().'_award_count';
-					$limit = $division->{$column_name};
+					$limit = $division->awardSettings->where('caption_id', $standing->caption_id)->first()->award_count;
 				}
 
 				$standing->choirs = $standing->choirs->take($limit)->reverse();
@@ -42,7 +41,7 @@
 						@endif
 					</div>
 
-					@include('standing.public_list', ['standing' => $standing])
+					@include('standing.public_list', ['standing' => $standing, 'showSponsor' => true])
 
 				</div>
 			@endif

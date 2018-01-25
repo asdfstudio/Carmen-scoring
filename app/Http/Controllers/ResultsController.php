@@ -69,11 +69,11 @@ class ResultsController extends Controller
         },
         'judges' => function($query) {
           $query->groupBy('judge_id');
-        }
+        },
+        'awardSettings'
       ])->where('access_code', $access_code)->where('is_published', 1)->find($division_id);
 
-      if($this->division == false)
-        abort('404');
+      if($this->division == false) abort('404');
 
       $caption_ids = $this->division->sheet->caption_ids;
       $this->captions = Caption::whereIn('id', $caption_ids)->get();
@@ -169,7 +169,7 @@ class ResultsController extends Controller
 
       //dd($access_code);
 
-      $division = Division::where('access_code', $access_code)->where('is_published', 1)->find($division_id);
+      $division = Division::with('awardSettings')->where('access_code', $access_code)->where('is_published', 1)->find($division_id);
 
       // Division not found, check using access code to find director
       if($division == false AND $access_code)

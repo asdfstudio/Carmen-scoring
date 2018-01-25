@@ -62,43 +62,36 @@
 
               <!-- Begin division overall and caption specific awards -->
 
-              @if($div->overall_award_count > 0)
-                <?php $i = 1; ?>
-                @while($i <= $div->overall_award_count)
+              @foreach ($div->awardSettings as $awardSetting)
+                @if($awardSetting->award_count > 0)
                   <?php
-                  $isInSchedule = $schedule->items->where('division_id', $div->id)->where('caption_id', 0)->where('rank', $i)->count();
+                  $i = 1;
 
-                  $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('caption_id', 0)->where('rank', $i)->count();
+                  if ($awardSetting->caption) {
+                    $captionName = $awardSetting->caption->name;
+                    $captionSlug = $awardSetting->caption->slug;
+                  } else {
+                    $captionName = 'Overall';
+                    $captionSlug = 'overall';
+                  }
                   ?>
-                  @if(!$isInSchedule AND !$isInAnotherSchedule)
-                    <li class="schedule-item award" data-division-id="{{ $div->id }}" data-caption-id="0" data-rank="{{ $i }}">
-                      <span class="division-name">{{ $div->name }}</span>
-                      <span class="caption-name caption-overall">Overall {{ ordinal($i) }} Place</span>
-                    </li>
-                  @endif
-                  <?php $i++; ?>
-                @endwhile
-              @endif
-
-              @foreach($captions as $caption)
-                @if($div->{$caption->slug.'_award_count'} > 0)
-                  <?php $i = 1; ?>
-                  @while($i <= $div->{$caption->slug.'_award_count'})
+                  @while($i <= $awardSetting->award_count)
                     <?php
-                    $isInSchedule = $schedule->items->where('division_id', $div->id)->where('caption_id', $caption->id)->where('rank', $i)->count();
+                    $isInSchedule = $schedule->items->where('division_id', $div->id)->where('caption_id', $awardSetting->caption_id)->where('rank', $i)->count();
 
-                    $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('caption_id', $caption->id)->where('rank', $i)->count();
+                    $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('caption_id', $awardSetting->caption_id)->where('rank', $i)->count();
                     ?>
                     @if(!$isInSchedule AND !$isInAnotherSchedule)
-                      <li class="schedule-item award" data-division-id="{{ $div->id }}" data-caption-id="{{ $caption->id }}" data-rank="{{ $i }}">
+                      <li class="schedule-item award" data-division-id="{{ $div->id }}" data-caption-id="{{ $awardSetting->caption_id }}" data-rank="{{ $i }}">
                         <span class="division-name">{{ $div->name }}</span>
-                        <span class="caption-name caption-{{ $caption->slug }}">{{ $caption->name }} {{ ordinal($i) }} Place</span>
+                        <span class="caption-name caption-{{ $captionSlug }}">{{ $captionName}} {{ ordinal($i) }} Place</span>
                       </li>
                     @endif
                     <?php $i++; ?>
                   @endwhile
                 @endif
               @endforeach
+
 
               <!-- End division overall and caption specific awards -->
 

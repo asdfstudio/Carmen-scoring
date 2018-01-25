@@ -6,7 +6,8 @@
 
 
 <?php
-$caption_id = $standing->caption_id;
+//dd($division->awardSettings);
+/*$caption_id = $standing->caption_id;
 
 if($caption_id == NULL)
 {
@@ -28,9 +29,11 @@ else {
   $sponsors = false;
 }
 
-$sponsors = explode(PHP_EOL, $sponsors);
+$sponsors = explode(PHP_EOL, $sponsors);*/
 
 //dd($sponsors);
+//
+$captionId = $standing->caption_id ? $standing->caption_id : 0;
 
 ?>
 
@@ -43,9 +46,10 @@ $sponsors = explode(PHP_EOL, $sponsors);
       <?php
       $rank_name = false;
       $final_rank = $choir->pivot->final_rank;
-      $index = $final_rank - 1;
+      //$index = $final_rank - 1;
 
-      $sponsor = array_key_exists($index, $sponsors) ? $sponsors[$index] : false;
+      //$sponsor = array_key_exists($index, $sponsors) ? $sponsors[$index] : false;
+      $sponsor = $division->awardSettings->where('caption_id', $captionId)->first()->awardSponsor($final_rank);
 
       if($division->competition->use_runner_up_names)
       {
@@ -64,8 +68,8 @@ $sponsors = explode(PHP_EOL, $sponsors);
       }
       ?>
 
-      @if(strlen($sponsor) > 0)
-        <span>Sponsor: {{ $sponsor }}</span>
+      @if($sponsor AND $showSponsor)
+        <span>Sponsored by: {{ $sponsor }}</span>
       @endif
 
       <div class="details">

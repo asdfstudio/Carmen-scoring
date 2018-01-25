@@ -16,19 +16,25 @@
 
       <?php
       $awardWinner = false;
+      $sponsor = false;
 
       if($item->division AND $item->award)
       {
         $awardWinner = $awardWinners->where('division_id', $item->division->id)->where('award_id', $item->award->id)->first();
+        $sponsor = $awardWinner->sponsor;
       }
       elseif($item->division)
       {
         if($item->caption)
         {
           $standing = $standings->where('division_id', $item->division->id)->where('caption_id', $item->caption->id)->first();
+
+          $sponsor = $item->division->awardSettings->where('caption_id', $item->caption->id)->first()->awardSponsor($item->rank);
         }
         else {
-          $standing = $standings->where('division_id', $item->division->id)->first();
+          $standing = $standings->where('division_id', $item->division->id)->where('caption_id', 0)->first();
+          $sponsor = $item->division->awardSettings->where('caption_id', 0)->first()->awardSponsor($item->rank);
+          //dd($item->division->awardSettings->where('caption_id', 0)->first()->awardSponsor($item->rank));
         }
 
 
@@ -36,9 +42,7 @@
         {
           $awardWinner = $standing->choirs()->wherePivot('final_rank', $item->rank)->first();
         }
-
       }
-
 
       ?>
 
@@ -67,9 +71,9 @@
         @endif
 
         @if($item->caption)
-          <span class="caption-name caption-{{ $item->caption->slug }}">{{ $item->caption->name }} {{ ordinal($item->rank) }} Place</span>
+          <span class="caption-name caption-{{ $item->caption->slug }}">{{ $item->caption->name }} {{ $item->named_rank }}</span>
         @elseif($item->rank)
-          <span class="caption-name caption-overall">Overall {{ ordinal($item->rank) }} Place</span>
+          <span class="caption-name caption-overall">Overall {{ $item->named_rank }}</span>
         @endif
 
         @if($awardWinner)
@@ -87,10 +91,13 @@
             @endif
 
           </span>
-          @if($awardWinner->sponsor)
-            <span class="award-sponsor">{{ $awardWinner->sponsor }}</span>
-          @endif
         @endif
+
+        @if($sponsor)
+          <span class="award-sponsor">Sponsor: {{ $sponsor }}</span>
+        @endif
+
+
       </li>
     @endforeach
   </ul>

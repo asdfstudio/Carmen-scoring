@@ -295,6 +295,14 @@ Route::group([
     'as' => 'organizer.competition.division.settings', 'uses' => 'CompetitionDivisionController@settings'
   ]);
 
+  Route::get('competition/{competition}/division/{division}/award-settings', [
+    'as' => 'organizer.competition.division.award.settings.edit', 'uses' => 'CompetitionDivisionAwardSettingsController@edit'
+  ]);
+
+  Route::post('competition/{competition}/division/{division}/settings', [
+    'as' => 'organizer.competition.division.award.settings.store', 'uses' => 'CompetitionDivisionAwardSettingsController@update'
+  ]);
+
   Route::get('competition/{competition}/division/{division}/round/setup', [
     'as' => 'organizer.competition.division.round.setup', 'uses' => 'CompetitionDivisionRoundController@setup'
   ]);
