@@ -4091,10 +4091,14 @@ ul.schedule-list {
         color: #7F4091; }
       ul.schedule-list li.schedule-item.award .award-name.caption-show, ul.schedule-list li.schedule-item.award .caption-name.caption-show {
         color: #E29231; }
+      ul.schedule-list li.schedule-item.award .award-name.caption-overall-show, ul.schedule-list li.schedule-item.award .caption-name.caption-overall-show {
+        color: #E29231; }
       ul.schedule-list li.schedule-item.award .award-name.caption-combo, ul.schedule-list li.schedule-item.award .caption-name.caption-combo {
         color: #CA2128; }
       ul.schedule-list li.schedule-item.award .award-name.caption-overall, ul.schedule-list li.schedule-item.award .caption-name.caption-overall {
         color: #68B155; }
+      ul.schedule-list li.schedule-item.award .award-name.caption-visual-performance, ul.schedule-list li.schedule-item.award .caption-name.caption-visual-performance {
+        color: #CA2128; }
     ul.schedule-list li.schedule-item.award .award-winner {
       float: right;
       background: #eee;

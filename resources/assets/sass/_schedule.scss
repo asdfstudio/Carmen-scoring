@@ -263,12 +263,21 @@ ul.schedule-list {
           color: $cs-caption-show;
         }
 
+        &.caption-overall-show {
+          color: $cs-caption-show;
+        }
+
         &.caption-combo {
           color: $cs-caption-combo;
         }
 
         &.caption-overall {
           color: $cs-caption-overall;
+        }
+
+
+        &.caption-visual-performance {
+          color: $cs-caption-combo;
         }
       }
 
