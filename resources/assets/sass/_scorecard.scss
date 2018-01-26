@@ -6,7 +6,7 @@
     padding: 10px 5px;
 
     @media only screen and (min-width: 768px) {
-      padding: 15px; 
+      padding: 15px;
     }
 
 
@@ -118,6 +118,10 @@
       margin-right: 28px;
       margin-top: 0;
       font-size: 0.8em;
+    }
+
+    + .number-selector {
+      clear: both;
     }
 
     li {

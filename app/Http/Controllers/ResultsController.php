@@ -197,7 +197,7 @@ class ResultsController extends Controller
     {
       $division = Division::with(['standings' => function($query) {
         $query->orderBy('caption_id', 'DESC');
-      }, 'standings.choirs',
+      }, 'standings.choirs', 'awardSettings',
       'competition' => function($query) {
         $query->withoutGlobalScope('organization');
       },

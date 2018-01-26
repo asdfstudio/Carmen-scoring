@@ -46,7 +46,7 @@
 						@endif
 					</div>
 
-					@include('standing.public_list', ['standing' => $standing])
+					@include('standing.public_list', ['standing' => $standing ,'showSponsor' => true])
 
 				</div>
 			@endif

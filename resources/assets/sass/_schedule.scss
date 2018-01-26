@@ -156,12 +156,20 @@
             color: $cs-caption-show;
           }
 
+          &.caption-overall-show {
+            color: $cs-caption-show;
+          }
+
           &.caption-combo {
             color: $cs-caption-combo;
           }
 
           &.caption-overall {
             color: $cs-caption-overall;
+          }
+
+          &.caption-visual-performance {
+            color: $cs-caption-combo;
           }
         }
       }
@@ -285,7 +293,7 @@ ul.schedule-list {
       .award-sponsor {
           background: #eee;
           padding: 5px 10px;
-          border-radius: 36px; 
+          border-radius: 36px;
           font-size: .8em;
           margin-left: 10px;
       }

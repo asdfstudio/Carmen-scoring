@@ -121,6 +121,7 @@ class CompetitionDivisionJudgeController extends Controller
         $judges = $judges->lists('full_name', 'id')->toArray();
 
         $form = $formBuilder->create('Judge\ChooseJudgeForm', [
+          'class' => '',
 					'method' => 'POST',
           'data' => $judges,
 					'url' => route('organizer.competition.division.judge.store',[$division->competition,$division])

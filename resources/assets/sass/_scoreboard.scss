@@ -17,7 +17,15 @@
     background: $cs-caption-show !important;
   }
 
+  &.caption-overall-show {
+    background: $cs-caption-show !important;
+  }
+
   &.caption-combo {
+    background: $cs-caption-combo !important;
+  }
+
+  &.caption-visual-performance {
     background: $cs-caption-combo !important;
   }
 

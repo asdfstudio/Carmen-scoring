@@ -32,7 +32,7 @@
           $sponsor = $item->division->awardSettings->where('caption_id', $item->caption->id)->first()->awardSponsor($item->rank);
         }
         else {
-          $standing = $standings->where('division_id', $item->division->id)->where('caption_id', 0)->first();
+          $standing = $standings->where('division_id', $item->division->id)->where('caption_id', null)->first();
           $sponsor = $item->division->awardSettings->where('caption_id', 0)->first()->awardSponsor($item->rank);
           //dd($item->division->awardSettings->where('caption_id', 0)->first()->awardSponsor($item->rank));
         }

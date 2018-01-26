@@ -30,11 +30,11 @@ class Caption extends Model
 
     public function getSlugAttribute()
     {
-      return strtolower($this->name);
+      return str_slug($this->name);
     }
 
     public function slug()
     {
-      return strtolower($this->name);
+      return str_slug($this->name);
     }
 }

@@ -3381,6 +3381,8 @@ button.close {
     margin-right: 28px;
     margin-top: 0;
     font-size: 0.8em; }
+  .number-selector + .number-selector {
+    clear: both; }
   .number-selector li {
     display: inline-block;
     margin: 4px;
@@ -3418,7 +3420,11 @@ button.close {
     background: #7F4091 !important; }
   .caption-header.caption-show {
     background: #E29231 !important; }
+  .caption-header.caption-overall-show {
+    background: #E29231 !important; }
   .caption-header.caption-combo {
+    background: #CA2128 !important; }
+  .caption-header.caption-visual-performance {
     background: #CA2128 !important; }
   .caption-header.caption-place {
     background: #898989 !important; }
@@ -4021,10 +4027,14 @@ label.block {
           color: #7F4091; }
         .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-show, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-show, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-show, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-show {
           color: #E29231; }
+        .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-overall-show, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-overall-show, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-overall-show, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-overall-show {
+          color: #E29231; }
         .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-combo, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-combo, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-combo, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-combo {
           color: #CA2128; }
         .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-overall, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-overall, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-overall, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-overall {
           color: #68B155; }
+        .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-visual-performance, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-visual-performance, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-visual-performance, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-visual-performance {
+          color: #CA2128; }
 
 ul.schedule-list {
   background: #f5f5f5;
