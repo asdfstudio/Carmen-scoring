@@ -18,14 +18,19 @@
 
 			@if($standing)
 				<?php
-				if($standing->caption_id == NULL)
-				{
-					$limit = $division->awardSettings->where('caption_id', 0)->first()->award_count;
+				if ($division->awardSettings) {
+					if($standing->caption_id == NULL)
+					{
+						$limit = $division->awardSettings->where('caption_id', 0)->first()->award_count;
+					}
+					else
+					{
+						$limit = $division->awardSettings->where('caption_id', $standing->caption_id)->first()->award_count;
+					}
+				} else {
+					$limit = 0;
 				}
-				else
-				{
-					$limit = $division->awardSettings->where('caption_id', $standing->caption_id)->first()->award_count;
-				}
+
 
 				$standing->choirs = $standing->choirs->take($limit)->reverse();
 				?>
