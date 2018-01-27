@@ -47,8 +47,21 @@
     background: lighten($cs-caption-show, 5) !important;
   }
 
+
+  &.caption-overall-show {
+    background: $cs-caption-show !important;
+  }
+
   &.caption-combo {
     background: lighten($cs-caption-combo, 5) !important;
+  }
+
+  &.caption-visual-performance {
+    background: $cs-caption-combo !important;
+  }
+
+  &.caption-place {
+    background: $cs-gray-mid-3 !important;
   }
 }
 

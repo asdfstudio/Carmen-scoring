@@ -3437,8 +3437,14 @@ button.close {
     background: #a763ba !important; }
   .caption-raw-score.caption-show {
     background: #e59e47 !important; }
+  .caption-raw-score.caption-overall-show {
+    background: #E29231 !important; }
   .caption-raw-score.caption-combo {
     background: #dc2930 !important; }
+  .caption-raw-score.caption-visual-performance {
+    background: #CA2128 !important; }
+  .caption-raw-score.caption-place {
+    background: #898989 !important; }
 
 .caption-weighted-score {
   font-size: 1em;
