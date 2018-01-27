@@ -3888,6 +3888,12 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
       background: #E29231; }
     .label.caption.combo, .label.caption.Combo {
       background: #CA2128; }
+    .label.caption.overall-show {
+      background: #E29231; }
+    .label.caption.visual-performance {
+      background: #CA2128; }
+    .label.caption.place {
+      background: #898989; }
   .label.gender {
     background: #999;
     color: #FFF; }

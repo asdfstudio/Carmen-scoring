@@ -42,6 +42,17 @@
     &.combo, &.Combo {
       background: $cs-caption-combo;
     }
+    &.overall-show {
+      background: $cs-caption-show;
+    }
+
+    &.visual-performance {
+      background: $cs-caption-combo;
+    }
+
+    &.place {
+      background: $cs-gray-mid-3;
+    }
   }
 
   &.gender {
