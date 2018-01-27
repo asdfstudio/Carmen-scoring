@@ -49,7 +49,15 @@ $captionId = $standing->caption_id ? $standing->caption_id : 0;
       //$index = $final_rank - 1;
 
       //$sponsor = array_key_exists($index, $sponsors) ? $sponsors[$index] : false;
-      $sponsor = $division->awardSettings->where('caption_id', $captionId)->first()->awardSponsor($final_rank);
+      
+      $awardSetting = $division->awardSettings->where('caption_id', $captionId)->first();
+
+      if ($awardSetting) {
+        $sponsor = $awardSetting->awardSponsor($final_rank);
+      } else {
+        $sponsor = false;
+      }
+
 
       if($division->competition->use_runner_up_names)
       {
