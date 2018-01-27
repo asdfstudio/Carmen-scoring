@@ -81,6 +81,19 @@
   &.caption-combo {
     background: lighten($cs-caption-combo, 10) !important;
   }
+
+  &.caption-overall-show {
+    background: lighten($cs-caption-show, 5) !important;
+  }
+
+
+  &.caption-visual-performance {
+    background: lighten($cs-caption-combo, 5) !important;
+  }
+
+  &.caption-place {
+    background: lighten($cs-gray-mid-3, 5) !important;
+  }
 }
 
 .caption-rank {
@@ -98,6 +111,19 @@
 
   &.caption-combo {
     background: darken($cs-caption-combo, 5) !important;
+  }
+
+  &.caption-overall-show {
+    background: darken($cs-caption-show, 5) !important;
+  }
+
+
+  &.caption-visual-performance {
+    background: darken($cs-caption-combo, 5) !important;
+  }
+
+  &.caption-place {
+    background: darken($cs-gray-mid-3, 5) !important;
   }
 }
 

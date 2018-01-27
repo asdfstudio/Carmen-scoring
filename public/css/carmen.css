@@ -3456,6 +3456,12 @@ button.close {
     background: #e8aa5e !important; }
   .caption-weighted-score.caption-combo {
     background: #e03e45 !important; }
+  .caption-weighted-score.caption-overall-show {
+    background: #e59e47 !important; }
+  .caption-weighted-score.caption-visual-performance {
+    background: #dc2930 !important; }
+  .caption-weighted-score.caption-place {
+    background: #969696 !important; }
 
 .caption-rank {
   font-size: 1.1em;
@@ -3467,6 +3473,12 @@ button.close {
     background: #db861f !important; }
   .caption-rank.caption-combo {
     background: #b41d24 !important; }
+  .caption-rank.caption-overall-show {
+    background: #db861f !important; }
+  .caption-rank.caption-visual-performance {
+    background: #b41d24 !important; }
+  .caption-rank.caption-place {
+    background: #7c7c7c !important; }
 
 .total-score {
   font-size: 1.3em;
