@@ -5185,6 +5185,12 @@ a.active {
       background: #E29231; }
     .content-subheader.caption.combo {
       background: #CA2128; }
+    .content-subheader.caption.overall-show {
+      background: #E29231; }
+    .content-subheader.caption.visual-performance {
+      background: #CA2128; }
+    .content-subheader.caption.place {
+      background: #898989; }
     .content-subheader.caption h2 {
       padding: 0;
       margin: 5px; }
