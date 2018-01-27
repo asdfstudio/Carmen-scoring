@@ -1,4 +1,3 @@
-<h3>Award Settings</h3>
 
 <ul class="list-group">
   @foreach ($awardSettings as $awardSetting)

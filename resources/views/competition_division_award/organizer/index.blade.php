@@ -32,15 +32,10 @@
 	<h2>Caption Specific Awards</h2>
 
 	@can('update', $division)
-		{{ link_to_route('organizer.competition.division.edit', 'Edit number of awards', [$division->competition_id, $division], ['class' => 'action mv']) }}
+		{{ link_to_route('organizer.competition.division.award.settings.edit', 'Edit Award Settings', [$division->competition_id, $division], ['class' => 'action mv']) }}
 	@endcan
 
-	<ul class="list-group">
-		<li class="list-group-item">Overall Awards: {{ $division->overall_award_count }}</li>
-		<li class="list-group-item">Music Awards: {{ $division->music_award_count }}</li>
-		<li class="list-group-item">Show Awards: {{ $division->show_award_count }}</li>
-		<li class="list-group-item">Combo Awards: {{ $division->combo_award_count }}</li>
-	</ul>
+	@include('division_award_settings.organizer.list', ['awardSettings' => $division->awardSettings])
 
 	<h2>Other Awards</h2>
   @include('award.organizer.list')

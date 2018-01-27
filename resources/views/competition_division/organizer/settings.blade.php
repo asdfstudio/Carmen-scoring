@@ -21,6 +21,8 @@
 
 		@include('division.partial.single')
 
+		<h3>Award Settings</h3>
+		
 		@include('division_award_settings.organizer.list', ['awardSettings' => $division->awardSettings])
 
 @endsection
