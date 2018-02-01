@@ -11,7 +11,7 @@ class Caption extends Model
 
 		protected $dates = ['deleted_at'];
 
-		protected $fillable = ['name'];
+		protected $fillable = ['name', 'color_id'];
 
     /*protected $attributes = [
       'slug' => 'overall'
@@ -36,5 +36,36 @@ class Caption extends Model
     public function slug()
     {
       return str_slug($this->name);
+    }
+
+
+    public function getBackgroundCssAttribute()
+    {
+      return 'background-color-' . $this->color_id;
+    }
+
+    public function getLighterBackgroundCssAttribute()
+    {
+      return 'lighter-background-color-' . $this->color_id;
+    }
+
+    public function getDarkerBackgroundCssAttribute()
+    {
+      return 'darker-background-color-' . $this->color_id;
+    }
+
+    public function getTextCssAttribute()
+    {
+      return 'text-color-' . $this->color_id;
+    }
+
+    public function getBorderCssAttribute()
+    {
+      return 'border-color-' . $this->color_id;
+    }
+
+    public function getBorderLeftCssAttribute()
+    {
+      return 'border-left-color-' . $this->color_id;
     }
 }

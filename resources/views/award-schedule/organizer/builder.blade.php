@@ -39,7 +39,7 @@
             @endif
 
             @if($item->caption)
-              <span class="caption-name caption-{{ $item->caption->slug }}">{{ $item->caption->name }} {{ ordinal($item->rank) }} Place</span>
+              <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ ordinal($item->rank) }} Place</span>
             @elseif($item->rank)
               <span class="caption-name caption-overall">Overall {{ ordinal($item->rank) }} Place</span>
             @endif
@@ -70,9 +70,11 @@
                   if ($awardSetting->caption) {
                     $captionName = $awardSetting->caption->name;
                     $captionSlug = $awardSetting->caption->slug;
+                    $captionCss = $awardSetting->caption->text_css;
                   } else {
                     $captionName = 'Overall';
                     $captionSlug = 'overall';
+                    $captionCss = false;
                   }
                   ?>
                   @while($i <= $awardSetting->award_count)
@@ -84,7 +86,7 @@
                     @if(!$isInSchedule AND !$isInAnotherSchedule)
                       <li class="schedule-item award" data-division-id="{{ $div->id }}" data-caption-id="{{ $awardSetting->caption_id }}" data-rank="{{ $i }}">
                         <span class="division-name">{{ $div->name }}</span>
-                        <span class="caption-name caption-{{ $captionSlug }}">{{ $captionName}} {{ ordinal($i) }} Place</span>
+                        <span class="caption-name {{ $captionCss }}">{{ $captionName}} {{ ordinal($i) }} Place</span>
                       </li>
                     @endif
                     <?php $i++; ?>

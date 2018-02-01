@@ -9,4 +9,6 @@
 
 @section('content')
 		{!! form($form) !!}
+
+    @include('caption.admin.color-chart')
 @endsection

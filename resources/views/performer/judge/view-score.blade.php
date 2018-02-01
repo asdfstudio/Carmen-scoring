@@ -2,7 +2,7 @@
 
 
   @foreach($captions as $caption)
-    <tr class="caption-header caption-{{ $caption->slug() }}">
+    <tr class="caption-header {{ $caption->background_css }}">
       <th>
         {{ $caption->name }}
       </th>
@@ -24,7 +24,7 @@
     </tr>
     @endforeach
 
-    <tr class="caption-raw-score caption-{{ $caption->slug() }}">
+    <tr class="caption-raw-score {{ $caption->lighter_background_css }}">
       <th>
         Total {{ $caption->name }} Score
       </th>

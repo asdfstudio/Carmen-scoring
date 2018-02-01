@@ -12,7 +12,7 @@
 
   @foreach($judge->captions as $caption)
 
-    <tr class="caption-header caption-{{ $caption->slug() }}">
+    <tr class="caption-header {{ $caption->background_css }}">
       <th colspan="30">
         {{ $caption->name }}
       </th>
@@ -33,7 +33,7 @@
     </tr>
     @endforeach
 
-    <tr class="caption-raw-score caption-{{ $caption->slug() }}">
+    <tr class="caption-raw-score {{ $caption->lighter_background_css }}">
       <th>
         Total Raw {{ $caption->name }} Score
       </th>
@@ -46,7 +46,7 @@
     </tr>
 
     @if($caption->id == 1)
-      <tr class="caption-weighted-score caption-{{ $caption->slug() }}">
+      <tr class="caption-weighted-score {{ $caption->background_css }}">
         <th>
           Total Weighted {{ $caption->name }} Score
         </th>
@@ -59,7 +59,7 @@
       </tr>
     @endif
 
-    <tr class="caption-rank caption-{{ $caption->slug() }}">
+    <tr class="caption-rank {{ $caption->darker_background_css }}">
       <th>
         {{ $caption->name }} Ranking
       </th>

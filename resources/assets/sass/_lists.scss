@@ -174,6 +174,24 @@
       }
     }
 
+    &.caption {
+      .name {
+        font-size: 21px;
+        //line-height: 22px;
+        display: block;
+        //text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .color_swatch {
+        float: left;
+        width: 30px;
+        height: 30px;
+      }
+
+    }
+
     &.person {
       .name {
         font-size: 22px;

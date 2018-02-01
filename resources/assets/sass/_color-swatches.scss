@@ -1,0 +1,25 @@
+.color-list {
+  margin: 20px 0;
+
+  .list-group-item {
+    .color-name {
+      width: 60px;
+      float: left;
+    }
+    .swatches-list-group {
+      display: inline-block;
+      margin-left: 10px;
+      padding-left: 0;
+      font-size: 0;
+
+      .swatch {
+        width: 40px;
+        height: 12px;
+        display: inline-block;
+        &.small {
+          width: 20px;
+        }
+      }
+    }
+  }
+}

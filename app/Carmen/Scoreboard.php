@@ -59,7 +59,8 @@ class Scoreboard {
 				'raw_scores.criterion_id',
 				'raw_scores.score',
 				'criteria.caption_id as criterion_caption_id'
-			]);
+			])
+			->whereNull('raw_scores.deleted_at');
 
 		if($this->division_id)
 		{

@@ -23,7 +23,7 @@ endif;
   </tr>-->
 
   @foreach($captions as $caption)
-    <tr class="caption-header caption-{{ $caption->slug() }}">
+    <tr class="caption-header {{ $caption->background_css }}">
       <th>
         {{ $caption->name }}
       </th>
@@ -63,7 +63,7 @@ endif;
     @endforeach
 
 
-    <tr class="caption-raw-score caption-{{ $caption->slug() }}">
+    <tr class="caption-raw-score {{ $caption->lighter_background_css }}">
       <th>
         Total {{ $caption->name }} Score
       </th>
@@ -80,7 +80,7 @@ endif;
       @endif
     </tr>
 
-    <tr class="caption-rank caption-{{ $caption->slug() }}">
+    <tr class="caption-rank {{ $caption->darker_background_css }}">
       <th>
         {{ $caption->name }} Ranking
       </th>

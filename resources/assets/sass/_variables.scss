@@ -17,11 +17,9 @@ $cs-yellow: #f7f75a;
 $cs-green-lighter: lighten($cs-green,10);
 $cs-green-darker: darken($cs-green,10);
 
-
-
-//$cs-primary: $cs-purple;
-
-//$cs-secondary: adjust-hue($cs-primary,180);
+// Dynamic colors
+//$dynamic-color-base: saturate($cs-green,10);
+$dynamic-color-base: saturate(lighten($cs-purple, 9),6);
 
 $cs-gray-light: #EFEFEF;
 $cs-gray-mid-1: darken($cs-gray-light,20);

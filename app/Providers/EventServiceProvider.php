@@ -29,7 +29,8 @@ class EventServiceProvider extends ServiceProvider
           'App\Listeners\AddChoirToRound'
         ],
         'App\Events\DivisionChoirRemoved' => [
-          'App\Listeners\RemoveChoirFromRound'
+          'App\Listeners\RemoveChoirFromRound',
+          'App\Listeners\RemoveChoirDivisionRawScores'
         ],
         'App\Events\RoundSaved' => [
           'App\Listeners\SyncRoundChoirsFromDivision'

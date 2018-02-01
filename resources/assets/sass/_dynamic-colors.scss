@@ -1,0 +1,36 @@
+
+$i: 1;
+$max-dynamic-colors: 12;
+
+@while $i <= $max-dynamic-colors {
+  $rotation: ($i - 1) * 30;
+  $color: adjust-hue($dynamic-color-base, $rotation);
+  $lighter-color: lighten($color, 10);
+  $darker-color: darken($color, 10);
+
+  .background-color-#{$i} {
+    background: $color !important;
+  }
+
+  .lighter-background-color-#{$i} {
+    background: $lighter-color !important;
+  }
+
+  .darker-background-color-#{$i} {
+    background: $darker-color !important;
+  }
+
+  .text-color-#{$i} {
+    color: $color !important;
+  }
+
+  .border-color-#{$i} {
+    border-color: $color !important;
+  }
+
+  .border-left-color-#{$i} {
+    border-left: 8px solid $color !important;
+  }
+
+  $i: $i + 1;
+}

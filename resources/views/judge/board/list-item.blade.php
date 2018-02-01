@@ -5,7 +5,7 @@
 
   <ul class="captions-group">
     @foreach($judge->captions as $caption)
-      <li class="{{ $caption->slug }} caption label">{{ $caption->name }}</li>
+      <li class="{{ $caption->background_css }} caption label">{{ $caption->name }}</li>
     @endforeach
   </ul>
 

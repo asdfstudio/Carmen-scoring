@@ -2,7 +2,7 @@
 .caption-header {
   font-size: 1.2em;
   color: $cs-white;
-  background: $cs-gray-mid-3 !important;
+  background: $cs-gray-mid-3;
 
   th {
     //padding: 8px 10px !important;
@@ -37,9 +37,9 @@
 .caption-raw-score {
   font-size: 1em;
   color: $cs-white;
-  background: lighten($cs-gray-mid-3, 5) !important;
+  background: lighten($cs-gray-mid-3, 5);
 
-  &.caption-music {
+  /*&.caption-music {
     background: lighten($cs-caption-music, 15) !important;
   }
 
@@ -62,15 +62,15 @@
 
   &.caption-place {
     background: $cs-gray-mid-3 !important;
-  }
+  }*/
 }
 
 .caption-weighted-score {
   font-size: 1em;
   color: $cs-white;
-  background: lighten($cs-gray-mid-3, 10) !important;
+  background: lighten($cs-gray-mid-3, 10);
 
-  &.caption-music {
+  /*&.caption-music {
     background: lighten($cs-caption-music, 10) !important;
   }
 
@@ -93,15 +93,15 @@
 
   &.caption-place {
     background: lighten($cs-gray-mid-3, 5) !important;
-  }
+  }*/
 }
 
 .caption-rank {
   font-size: 1.1em;
   color: $cs-white;
-  background: lighten($cs-gray-mid-3, 5) !important;
+  background: lighten($cs-gray-mid-3, 5);
 
-  &.caption-music {
+  /*&.caption-music {
     background: darken($cs-caption-music, 5) !important;
   }
 
@@ -124,7 +124,7 @@
 
   &.caption-place {
     background: darken($cs-gray-mid-3, 5) !important;
-  }
+  }*/
 }
 
 .total-score {

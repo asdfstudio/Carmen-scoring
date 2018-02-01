@@ -1,7 +1,7 @@
 @import 'variables';
-
+@import "dynamic-colors";
 @import 'bootstrap-custom';
-
+@import "color-swatches";
 @import "media-queries";
 
 @import "scorecard";
@@ -20,6 +20,7 @@
 @import "jquery.timepicker";
 @import "board";
 @import "public";
+
 
 
 
@@ -525,7 +526,7 @@ a.active {
     &.visual-performance {
       background: $cs-caption-combo;
     }
-  
+
     &.place {
       background: $cs-gray-mid-3;
     }

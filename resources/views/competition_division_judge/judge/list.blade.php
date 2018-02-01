@@ -12,7 +12,7 @@
       @foreach($captions as $caption)
 
           @if(in_array($caption->id, $judge->captions->pluck('id')->toArray() ))
-            <li class="{{ $caption->slug() }} caption label">{{ $caption->name }}</li>
+            <li class="{{ $caption->slug }} caption label {{ $caption->background_css }}">{{ $caption->name }}</li>
           @endif
 
 

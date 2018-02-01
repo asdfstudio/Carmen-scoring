@@ -46,7 +46,7 @@ endif;
       @endforeach
     </tr>
 
-    <tr class="caption-header caption-{{ $caption->slug() }}">
+    <tr class="caption-header {{ $caption->background_css }}">
       <td>{{ $caption->name }}</td>
 
       @foreach($choirs as $choir)
@@ -96,7 +96,7 @@ endif;
       </tr>
     @endforeach
 
-    <tr class="caption-raw-score caption-{{ $caption->slug() }} caption-id-{{ $caption->id }}">
+    <tr class="caption-raw-score {{ $caption->lighter_background_css }} caption-id-{{ $caption->id }}">
       <td>
         Total
       </td>

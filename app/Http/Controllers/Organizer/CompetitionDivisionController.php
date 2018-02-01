@@ -383,6 +383,8 @@ class CompetitionDivisionController extends Controller
         $competition = Competition::with('organization', 'place', 'divisions')->find($competition_id);
 
 				$division = Division::find($division_id);
+        $division->load('competition', 'awardSettings', 'sheet', 'sheet.criteria', 'sheet.criteria.caption');
+        $division->sheet->captions = $division->sheet->criteria->unique('caption_id')->pluck('caption');
 
         //
 				return view('competition_division.organizer.settings', compact('competition','division'));

@@ -160,6 +160,7 @@ class CompetitionDivisionChoirController extends Controller
 
         $form = $formBuilder->create('Choir\CreateChoirForm', [
 					'method' => 'POST',
+          'class' => '',
           'data' => $choirs,
 					'url' => route('organizer.competition.division.choir.store',[$division->competition,$division])
 				]);

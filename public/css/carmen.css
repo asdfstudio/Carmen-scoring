@@ -1,4 +1,220 @@
 @charset "UTF-8";
+.background-color-1 {
+  background: #9f46b8 !important; }
+
+.lighter-background-color-1 {
+  background: #b26bc7 !important; }
+
+.darker-background-color-1 {
+  background: #7f3894 !important; }
+
+.text-color-1 {
+  color: #9f46b8 !important; }
+
+.border-color-1 {
+  border-color: #9f46b8 !important; }
+
+.border-left-color-1 {
+  border-left: 8px solid #9f46b8 !important; }
+
+.background-color-2 {
+  background: #b84699 !important; }
+
+.lighter-background-color-2 {
+  background: #c76bad !important; }
+
+.darker-background-color-2 {
+  background: #94387a !important; }
+
+.text-color-2 {
+  color: #b84699 !important; }
+
+.border-color-2 {
+  border-color: #b84699 !important; }
+
+.border-left-color-2 {
+  border-left: 8px solid #b84699 !important; }
+
+.background-color-3 {
+  background: #b84660 !important; }
+
+.lighter-background-color-3 {
+  background: #c76b80 !important; }
+
+.darker-background-color-3 {
+  background: #94384d !important; }
+
+.text-color-3 {
+  color: #b84660 !important; }
+
+.border-color-3 {
+  border-color: #b84660 !important; }
+
+.border-left-color-3 {
+  border-left: 8px solid #b84660 !important; }
+
+.background-color-4 {
+  background: #b86646 !important; }
+
+.lighter-background-color-4 {
+  background: #c7856b !important; }
+
+.darker-background-color-4 {
+  background: #945238 !important; }
+
+.text-color-4 {
+  color: #b86646 !important; }
+
+.border-color-4 {
+  border-color: #b86646 !important; }
+
+.border-left-color-4 {
+  border-left: 8px solid #b86646 !important; }
+
+.background-color-5 {
+  background: #b89f46 !important; }
+
+.lighter-background-color-5 {
+  background: #c7b26b !important; }
+
+.darker-background-color-5 {
+  background: #947f38 !important; }
+
+.text-color-5 {
+  color: #b89f46 !important; }
+
+.border-color-5 {
+  border-color: #b89f46 !important; }
+
+.border-left-color-5 {
+  border-left: 8px solid #b89f46 !important; }
+
+.background-color-6 {
+  background: #99b846 !important; }
+
+.lighter-background-color-6 {
+  background: #adc76b !important; }
+
+.darker-background-color-6 {
+  background: #7a9438 !important; }
+
+.text-color-6 {
+  color: #99b846 !important; }
+
+.border-color-6 {
+  border-color: #99b846 !important; }
+
+.border-left-color-6 {
+  border-left: 8px solid #99b846 !important; }
+
+.background-color-7 {
+  background: #60b846 !important; }
+
+.lighter-background-color-7 {
+  background: #80c76b !important; }
+
+.darker-background-color-7 {
+  background: #4d9438 !important; }
+
+.text-color-7 {
+  color: #60b846 !important; }
+
+.border-color-7 {
+  border-color: #60b846 !important; }
+
+.border-left-color-7 {
+  border-left: 8px solid #60b846 !important; }
+
+.background-color-8 {
+  background: #46b866 !important; }
+
+.lighter-background-color-8 {
+  background: #6bc785 !important; }
+
+.darker-background-color-8 {
+  background: #389452 !important; }
+
+.text-color-8 {
+  color: #46b866 !important; }
+
+.border-color-8 {
+  border-color: #46b866 !important; }
+
+.border-left-color-8 {
+  border-left: 8px solid #46b866 !important; }
+
+.background-color-9 {
+  background: #46b89f !important; }
+
+.lighter-background-color-9 {
+  background: #6bc7b2 !important; }
+
+.darker-background-color-9 {
+  background: #38947f !important; }
+
+.text-color-9 {
+  color: #46b89f !important; }
+
+.border-color-9 {
+  border-color: #46b89f !important; }
+
+.border-left-color-9 {
+  border-left: 8px solid #46b89f !important; }
+
+.background-color-10 {
+  background: #4699b8 !important; }
+
+.lighter-background-color-10 {
+  background: #6badc7 !important; }
+
+.darker-background-color-10 {
+  background: #387a94 !important; }
+
+.text-color-10 {
+  color: #4699b8 !important; }
+
+.border-color-10 {
+  border-color: #4699b8 !important; }
+
+.border-left-color-10 {
+  border-left: 8px solid #4699b8 !important; }
+
+.background-color-11 {
+  background: #4660b8 !important; }
+
+.lighter-background-color-11 {
+  background: #6b80c7 !important; }
+
+.darker-background-color-11 {
+  background: #384d94 !important; }
+
+.text-color-11 {
+  color: #4660b8 !important; }
+
+.border-color-11 {
+  border-color: #4660b8 !important; }
+
+.border-left-color-11 {
+  border-left: 8px solid #4660b8 !important; }
+
+.background-color-12 {
+  background: #6646b8 !important; }
+
+.lighter-background-color-12 {
+  background: #856bc7 !important; }
+
+.darker-background-color-12 {
+  background: #523894 !important; }
+
+.text-color-12 {
+  color: #6646b8 !important; }
+
+.border-color-12 {
+  border-color: #6646b8 !important; }
+
+.border-left-color-12 {
+  border-left: 8px solid #6646b8 !important; }
+
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
@@ -3308,6 +3524,23 @@ button.close {
   .hidden-print {
     display: none !important; } }
 
+.color-list {
+  margin: 20px 0; }
+  .color-list .list-group-item .color-name {
+    width: 60px;
+    float: left; }
+  .color-list .list-group-item .swatches-list-group {
+    display: inline-block;
+    margin-left: 10px;
+    padding-left: 0;
+    font-size: 0; }
+    .color-list .list-group-item .swatches-list-group .swatch {
+      width: 40px;
+      height: 12px;
+      display: inline-block; }
+      .color-list .list-group-item .swatches-list-group .swatch.small {
+        width: 20px; }
+
 .scorecard {
   background: #eee;
   padding: 10px 5px; }
@@ -3415,7 +3648,7 @@ button.close {
 .caption-header {
   font-size: 1.2em;
   color: #FFF;
-  background: #898989 !important; }
+  background: #898989; }
   .caption-header.caption-music {
     background: #7F4091 !important; }
   .caption-header.caption-show {
@@ -3432,53 +3665,89 @@ button.close {
 .caption-raw-score {
   font-size: 1em;
   color: #FFF;
-  background: #969696 !important; }
-  .caption-raw-score.caption-music {
-    background: #a763ba !important; }
-  .caption-raw-score.caption-show {
-    background: #e59e47 !important; }
-  .caption-raw-score.caption-overall-show {
-    background: #E29231 !important; }
-  .caption-raw-score.caption-combo {
-    background: #dc2930 !important; }
-  .caption-raw-score.caption-visual-performance {
-    background: #CA2128 !important; }
-  .caption-raw-score.caption-place {
-    background: #898989 !important; }
+  background: #969696;
+  /*&.caption-music {
+    background: lighten($cs-caption-music, 15) !important;
+  }
+
+  &.caption-show {
+    background: lighten($cs-caption-show, 5) !important;
+  }
+
+
+  &.caption-overall-show {
+    background: $cs-caption-show !important;
+  }
+
+  &.caption-combo {
+    background: lighten($cs-caption-combo, 5) !important;
+  }
+
+  &.caption-visual-performance {
+    background: $cs-caption-combo !important;
+  }
+
+  &.caption-place {
+    background: $cs-gray-mid-3 !important;
+  }*/ }
 
 .caption-weighted-score {
   font-size: 1em;
   color: #FFF;
-  background: #a3a3a3 !important; }
-  .caption-weighted-score.caption-music {
-    background: #9d52b2 !important; }
-  .caption-weighted-score.caption-show {
-    background: #e8aa5e !important; }
-  .caption-weighted-score.caption-combo {
-    background: #e03e45 !important; }
-  .caption-weighted-score.caption-overall-show {
-    background: #e59e47 !important; }
-  .caption-weighted-score.caption-visual-performance {
-    background: #dc2930 !important; }
-  .caption-weighted-score.caption-place {
-    background: #969696 !important; }
+  background: #a3a3a3;
+  /*&.caption-music {
+    background: lighten($cs-caption-music, 10) !important;
+  }
+
+  &.caption-show {
+    background: lighten($cs-caption-show, 10) !important;
+  }
+
+  &.caption-combo {
+    background: lighten($cs-caption-combo, 10) !important;
+  }
+
+  &.caption-overall-show {
+    background: lighten($cs-caption-show, 5) !important;
+  }
+
+
+  &.caption-visual-performance {
+    background: lighten($cs-caption-combo, 5) !important;
+  }
+
+  &.caption-place {
+    background: lighten($cs-gray-mid-3, 5) !important;
+  }*/ }
 
 .caption-rank {
   font-size: 1.1em;
   color: #FFF;
-  background: #969696 !important; }
-  .caption-rank.caption-music {
-    background: #70387f !important; }
-  .caption-rank.caption-show {
-    background: #db861f !important; }
-  .caption-rank.caption-combo {
-    background: #b41d24 !important; }
-  .caption-rank.caption-overall-show {
-    background: #db861f !important; }
-  .caption-rank.caption-visual-performance {
-    background: #b41d24 !important; }
-  .caption-rank.caption-place {
-    background: #7c7c7c !important; }
+  background: #969696;
+  /*&.caption-music {
+    background: darken($cs-caption-music, 5) !important;
+  }
+
+  &.caption-show {
+    background: darken($cs-caption-show, 5) !important;
+  }
+
+  &.caption-combo {
+    background: darken($cs-caption-combo, 5) !important;
+  }
+
+  &.caption-overall-show {
+    background: darken($cs-caption-show, 5) !important;
+  }
+
+
+  &.caption-visual-performance {
+    background: darken($cs-caption-combo, 5) !important;
+  }
+
+  &.caption-place {
+    background: darken($cs-gray-mid-3, 5) !important;
+  }*/ }
 
 .total-score {
   font-size: 1.3em;
@@ -3761,6 +4030,17 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
   font-style: italic;
   color: #a3a3a3; }
 
+.list-group .list-group-item.caption .name {
+  font-size: 21px;
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px; }
+
+.list-group .list-group-item.caption .color_swatch {
+  float: left;
+  width: 30px;
+  height: 30px; }
+
 .list-group .list-group-item.person .name {
   font-size: 22px;
   display: inline-block; }
@@ -3881,19 +4161,27 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
     background: #aaa;
     color: #fff; }
   .label.caption {
-    background: #999; }
-    .label.caption.music, .label.caption.Music {
-      background: #7F4091; }
-    .label.caption.show, .label.caption.Show {
-      background: #E29231; }
-    .label.caption.combo, .label.caption.Combo {
-      background: #CA2128; }
-    .label.caption.overall-show {
-      background: #E29231; }
-    .label.caption.visual-performance {
-      background: #CA2128; }
-    .label.caption.place {
-      background: #898989; }
+    background: #999;
+    /*&.music, &.Music {
+      background: $cs-caption-music;
+    }
+    &.show, &.Show {
+      background: $cs-caption-show;
+    }
+    &.combo, &.Combo {
+      background: $cs-caption-combo;
+    }
+    &.overall-show {
+      background: $cs-caption-show;
+    }
+
+    &.visual-performance {
+      background: $cs-caption-combo;
+    }
+
+    &.place {
+      background: $cs-gray-mid-3;
+    }*/ }
   .label.gender {
     background: #999;
     color: #FFF; }
@@ -4046,19 +4334,30 @@ label.block {
       .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name {
         color: #888;
         font-size: 0.9em;
-        margin-left: 3px; }
-        .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-music, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-music, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-music, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-music {
-          color: #7F4091; }
-        .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-show, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-show, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-show, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-show {
-          color: #E29231; }
-        .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-overall-show, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-overall-show, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-overall-show, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-overall-show {
-          color: #E29231; }
-        .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-combo, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-combo, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-combo, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-combo {
-          color: #CA2128; }
-        .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-overall, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-overall, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-overall, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-overall {
-          color: #68B155; }
-        .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name.caption-visual-performance, .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name.caption-visual-performance, .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name.caption-visual-performance, .schedule-builder-container ul.schedule-list li.schedule-item.award .caption-name.caption-visual-performance {
-          color: #CA2128; }
+        margin-left: 3px;
+        /*&.caption-music {
+            color: $cs-caption-music;
+          }
+
+          &.caption-show {
+            color: $cs-caption-show;
+          }
+
+          &.caption-overall-show {
+            color: $cs-caption-show;
+          }
+
+          &.caption-combo {
+            color: $cs-caption-combo;
+          }
+
+          &.caption-overall {
+            color: $cs-caption-overall;
+          }
+
+          &.caption-visual-performance {
+            color: $cs-caption-combo;
+          }*/ }
 
 ul.schedule-list {
   background: #f5f5f5;

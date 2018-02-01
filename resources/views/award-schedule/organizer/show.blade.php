@@ -63,7 +63,7 @@
         @endif
 
         @if($item->caption)
-          <span class="caption-name caption-{{ $item->caption->slug }}">{{ $item->caption->name }} {{ $item->named_rank }}</span>
+          <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ $item->named_rank }}</span>
         @elseif($item->named_rank)
           <span class="caption-name caption-overall">Overall {{ $item->named_rank }} </span>
         @endif

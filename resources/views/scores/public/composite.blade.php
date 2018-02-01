@@ -6,7 +6,7 @@
     <?php $totalWeightedRank = $scoreboard->rankedScores->total_weighted_rank($caption->id); ?>
     <?php $totalRawRank = $scoreboard->rankedScores->total_raw_rank($caption->id); ?>
 
-    <tr class="caption-header caption-{{ $caption->slug() }}">
+    <tr class="caption-header {{ $caption->background_css }}">
       <th colspan="30">
         {{ $caption->name }}
       </th>
