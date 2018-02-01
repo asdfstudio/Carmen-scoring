@@ -136,6 +136,27 @@ class SheetController extends Controller
 
     public function syncCriteria($id, FormBuilder $formBuilder, Request $request)
     {
+      dd($request->input('criteria', []));
+      $sheet = Sheet::with('criteria')->find($id);
+      $sheet->criteria()->sync($request->input('criteria', []));
+
+      return redirect()->route('admin.sheet.index', $id)->with('success',"$sheet->name successfully updated.");
+    }
+
+
+    public function manageOrder($id)
+    {
+      $captions = Caption::get();
+      $sheet = Sheet::with('criteria')->find($id);
+      $criteria = Criterion::with('sheets')->orderBy('name', 'asc')->get();
+
+      return view('sheets.admin.manage-order', compact('sheet', 'criteria', 'captions'));
+    }
+
+
+    public function syncCriteriaOrder($id, FormBuilder $formBuilder, Request $request)
+    {
+      //dd($request->input('criteria', []));
       $sheet = Sheet::with('criteria')->find($id);
       $sheet->criteria()->sync($request->input('criteria', []));
 

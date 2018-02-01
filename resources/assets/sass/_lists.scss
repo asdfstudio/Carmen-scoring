@@ -38,6 +38,20 @@
           margin-top: 8px;
         }
       }
+
+      .input-container {
+        position: relative;
+        margin: 0;
+        float: left;
+
+        & input {
+          margin-left: -30px;
+          margin-top: 6px;
+          width: 22px;
+          font-size: 11px;
+          text-align: center;
+        }
+      }
     }
 
     .actions-group {

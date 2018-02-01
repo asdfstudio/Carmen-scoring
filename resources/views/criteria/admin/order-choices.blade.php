@@ -1,14 +1,12 @@
 @if(!$criteria->isEmpty())
 <ul class="list-group">
+
   @foreach($criteria as $criterion)
     <li class="school list-group-item choice">
 
-      <div class="checkbox">
-        <?php $selected = $selectedCriteria->where('id', $criterion->id)->count(); ?>
-        {{ Form::checkbox('criteria['.$criterion->id.']', $criterion->id, $selected) }}
+      <div class="input-container">
+        {{ Form::text('criteria['.$criterion->id.'][sequence]', $criterion->pivot->sequence) }}
       </div>
-
-
 
       <div class="">
         <div class="name">

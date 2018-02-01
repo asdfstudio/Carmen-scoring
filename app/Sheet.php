@@ -40,7 +40,7 @@ class Sheet extends Model
 
 		public function criteria()
     {
-        return $this->belongsToMany('App\Criterion');
+        return $this->belongsToMany('App\Criterion')->withPivot('sequence')->orderBy('sequence', 'asc');
     }
 
     public function getCaptionIdsAttribute()

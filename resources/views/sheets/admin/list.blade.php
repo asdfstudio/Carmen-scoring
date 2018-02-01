@@ -17,6 +17,7 @@
         <li>{{ link_to_route('admin.sheet.show', 'View', [$sheet], ['class' => 'action']) }}</li>
 				<li>{{ link_to_route('admin.sheet.edit', 'Edit', [$sheet], ['class' => 'action']) }}</li>
 				<li>{{ link_to_route('admin.sheet.manage', 'Manage Criteria', [$sheet], ['class' => 'action']) }}</li>
+				<li>{{ link_to_route('admin.sheet.manage-order', 'Manage Criteria Display Order', [$sheet], ['class' => 'action']) }}</li>
       </ul>
 
 

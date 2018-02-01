@@ -35,6 +35,14 @@ Route::group([
       'as' => 'admin.sheet.manage.update', 'uses' => 'SheetController@syncCriteria'
     ]);
 
+    Route::get('sheet/{sheet}/manage-order', [
+      'as' => 'admin.sheet.manage-order', 'uses' => 'SheetController@manageOrder'
+    ]);
+
+    Route::post('sheet/{sheet}/manage-order', [
+      'as' => 'admin.sheet.manage-order.update', 'uses' => 'SheetController@syncCriteriaOrder'
+    ]);
+
     Route::get('dashboard', [
       'as' => 'admin.dashboard', 'uses' => 'OrganizationController@index'
     ]);
