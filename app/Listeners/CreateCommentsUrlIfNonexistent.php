@@ -31,7 +31,22 @@ class CreateCommentsUrlIfNonexistent
         $comment = $event->comment;
         $competition = $event->competition;
 
-        $commentUrl = CommentUrl::firstOrCreate(['competition_id' => $competition->id, 'choir_id' => $comment->choir->id]);
+        if ($comment->recipient_type == 'App\Choir') {
+          $choir = $comment->recipient;
+        } elseif ($comment->recipient_type == 'App\Performer') {
+          $choir = $comment->recipient->choir;
+        } else {
+          $choir = false;
+        }
+
+        if (!$choir) return;
+
+        $commentUrl = CommentUrl::firstOrCreate([
+          'competition_id' => $competition->id,
+          'recipient_type' => 'App\Choir',
+          'recipient_id' => $choir->id,
+          'choir_id' => $choir->id
+        ]);
 
         if(!$commentUrl->wasRecentlyCreated) return;
 

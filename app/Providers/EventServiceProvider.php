@@ -41,7 +41,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\SoloDivisionScoringFinalized' => [
           'App\Listeners\EmailSoloDivisionResultsLink',
-          'App\Listeners\SendSMSSoloDivisionResultsLink'
+          'App\Listeners\SendSMSSoloDivisionResultsLink',
+          'App\Listeners\EmailSoloDivisionFeedbackLink',
+          'App\Listeners\SendSMSSoloDivisionFeedbackLink',
         ],
         'App\Events\CommentSaved' => [
           'App\Listeners\CreateCommentsUrlIfNonexistent'

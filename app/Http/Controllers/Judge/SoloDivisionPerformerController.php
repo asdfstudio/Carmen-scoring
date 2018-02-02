@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Judge;
 
 use Auth;
+use Event;
+use App\Comment;
 use App\Caption;
 use App\Performer;
 use App\Competition;
 use App\SoloDivision;
 use App\SoloRawScore;
 use App\Http\Requests;
-use App\Carmen\SoloScorekeeper;
 use Illuminate\Http\Request;
+use App\Events\CommentSaved;
+use App\Carmen\SoloScorekeeper;
 use App\Http\Controllers\Controller;
 use Kris\LaravelFormBuilder\FormBuilder;
 
@@ -54,7 +57,15 @@ class SoloDivisionPerformerController extends Controller
                                     ->get();
       $rankedScores = collect();
 
-      return view('performer.judge.score', compact('competition', 'soloDivision', 'performer', 'captions', 'rawScores', 'rankedScores'));
+
+      $comment = Comment::where('judge_id', Auth::user()->person_id)
+                  ->where('recipient_type', 'App\Performer')
+									->where('recipient_id', $performer->id)
+									->where('subject_type', 'App\SoloDivision')
+									->where('subject_id', $soloDivision->id)
+									->pluck('comments')->first();
+
+      return view('performer.judge.score', compact('competition', 'soloDivision', 'performer', 'captions', 'rawScores', 'rankedScores', 'comment'));
     }
 
     /**
@@ -71,6 +82,22 @@ class SoloDivisionPerformerController extends Controller
       $scorekeeper->performer($performer->id);
       $scorekeeper->judge(Auth::user()->person_id);
       $response = $scorekeeper->save_multiple_scores($request->input('scores'));
+
+
+      // Save comments
+      $comment = Comment::firstOrNew([
+        'judge_id' => Auth::user()->person_id,
+        'recipient_type' => 'App\Performer',
+				'recipient_id' => $performer->id,
+				'subject_type' => 'App\SoloDivision',
+				'subject_id' => $soloDivision->id,
+        'choir_id' => $performer->choir->id
+      ]);
+
+			$comment->comments = $request->input('comment');
+			$comment->save();
+
+			Event::fire(new CommentSaved($comment, $competition));
 
       // Redirect
 			if($request->input('save_go'))

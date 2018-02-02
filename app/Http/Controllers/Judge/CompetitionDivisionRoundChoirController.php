@@ -137,6 +137,8 @@ class CompetitionDivisionRoundChoirController extends Controller
 			$comment = Comment::firstOrNew([
 				'judge_id' => $judge_id,
 				'choir_id' => $choir_id,
+				'recipient_type' => 'App\Choir',
+				'recipient_id' => $choir_id,
 				'subject_type' => 'App\Round',
 				'subject_id' => $round_id
 			]);

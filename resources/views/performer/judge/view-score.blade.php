@@ -45,4 +45,16 @@
 
   </tr>
 
+  <tr class="">
+  	<th colspan="2">Feedback / Comments for Performer</th>
+  </tr>
+  <tr>
+    <td>
+      {{ $comment }}
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+
+
+
 </table>

@@ -20,15 +20,31 @@ class FeedbackController extends Controller
         return view('feedback.guest', ['message' => 'Please enter an access token to view comments from judges.']);
       }
 
-      $commentUrl = CommentUrl::with(['choir', 'choir.school', 'competition', 'competition.divisions', 'competition.divisions.rounds'])->where('access_code', $accessCode)->first();
+      $commentUrl = CommentUrl::with(['recipient', 'choir', 'competition', 'competition.divisions' => function($q) {
+        $q->withoutGlobalScope('organization');
+      }, 'competition.divisions.rounds', 'competition.soloDivisions'])->where('access_code', $accessCode)->first();
 
       if(!$commentUrl)
       {
         return view('feedback.guest', ['message' => 'The access token you specified is not valid.']);
       }
 
-      $comments = Comment::with(['judge'])->where('choir_id', $commentUrl->choir_id)->get();
+      /*if ($commentUrl->recipient_type == 'App\Choir') {
+        $commentUrl->load('recipient.school');
+        $choir = $commentUrl->recipient;
+      }
 
-      return view('feedback.show', ['comments' => $comments, 'competition' => $commentUrl->competition, 'choir' => $commentUrl->choir]);
+      if ($commentUrl->recipient_type == 'App\Performer') {
+        $commentUrl->load('recipient.choir', 'recipient.choir.school');
+        $performer = $commentUrl->recipient;
+        $choir = $performer->choir;
+      }*/
+
+      $choir = $commentUrl->choir;
+
+
+      $comments = Comment::with(['judge'])->where('choir_id', $commentUrl->recipient_id)->get();
+
+      return view('feedback.show', ['comments' => $comments, 'competition' => $commentUrl->competition, 'choir' => $choir]);
     }
 }

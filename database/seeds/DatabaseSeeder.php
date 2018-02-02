@@ -28,5 +28,7 @@ class DatabaseSeeder extends Seeder
 				$this->call(DivisionJudgeTableSeeder::class);
 				$this->call(UsersTableSeeder::class);
         $this->call(DivisionAwardSettingsSeeder::class);
+        $this->call(CommentsTableSeeder::class);
+        $this->call(CommentUrlsTableSeeder::class);
     }
 }
