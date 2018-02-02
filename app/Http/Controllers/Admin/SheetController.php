@@ -136,7 +136,6 @@ class SheetController extends Controller
 
     public function syncCriteria($id, FormBuilder $formBuilder, Request $request)
     {
-      dd($request->input('criteria', []));
       $sheet = Sheet::with('criteria')->find($id);
       $sheet->criteria()->sync($request->input('criteria', []));
 
@@ -156,7 +155,6 @@ class SheetController extends Controller
 
     public function syncCriteriaOrder($id, FormBuilder $formBuilder, Request $request)
     {
-      //dd($request->input('criteria', []));
       $sheet = Sheet::with('criteria')->find($id);
       $sheet->criteria()->sync($request->input('criteria', []));
 
