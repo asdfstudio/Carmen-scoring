@@ -33,7 +33,7 @@ class EmailFeedbackLink
      */
     public function handle(RoundScoringCompleted $event)
     {
-        
+
         // Skip sending results
         if(env('SEND_FEEDBACK_URL_EMAIL') == false)
         {
@@ -68,6 +68,8 @@ class EmailFeedbackLink
           $directors = $directors->unique('id');
 
           Log::debug('Directors to notify of Feedback URL: ' . $directors);
+
+          if ($directors->count() < 1) return;
 
           $this->mailer->send('email.feedback_available',
   					['commentUrl' => $commentUrl, 'competition' => $competition],

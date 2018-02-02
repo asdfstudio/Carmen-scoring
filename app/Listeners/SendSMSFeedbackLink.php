@@ -77,6 +77,8 @@ class SendSMSFeedbackLink
         Log::debug('Directors to notify via SMS of Feedback URL: ' . $directors);
         Log::debug('Message to Directors: ' . $message);
 
+        if ($directors->count() < 1) return;
+
         foreach($directors as $director)
         {
           try {
