@@ -163,6 +163,7 @@ return [
 				Kris\LaravelFormBuilder\FormBuilderServiceProvider::class,
 				DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
         Aloha\Twilio\Support\Laravel\ServiceProvider::class,
+        Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
 
 
     ],
@@ -215,7 +216,7 @@ return [
 				'FormBuilder' => Kris\LaravelFormBuilder\Facades\FormBuilder::class,
 				'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
         'Twilio' => Aloha\Twilio\Support\Laravel\Facade::class,
-
+        'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
 
     ],
 
