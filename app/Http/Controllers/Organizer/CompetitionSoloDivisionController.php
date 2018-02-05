@@ -185,10 +185,14 @@ class CompetitionSoloDivisionController extends Controller
             $genderRank = $maleRank;
           } elseif ($performer->gender == 'F') {
             $genderRank = $femaleRank;
+          } else {
+            $genderRank = false;
           }
 
           if ($genderRank) {
             $performer->gender_rank = $genderRank->where('performer_id', $performer->id)->pluck('rank')->first();
+          } else {
+            $performer->gender_rank = false;
           }
 
           $judgeScores = [];

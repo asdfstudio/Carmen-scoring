@@ -126,8 +126,10 @@ class CompetitionDivisionAwardController extends Controller
 
       $this->authorize('manage', ['App\Award', $division]);
 
-      $awards = $request->input('awards');
-      $sponsors = $request->input('sponsors');
+      $awards = $request->input('awards', []);
+      $sponsors = $request->input('sponsors', []);
+
+      //dd($awards, $sponsors);
 
       $data = [];
 
