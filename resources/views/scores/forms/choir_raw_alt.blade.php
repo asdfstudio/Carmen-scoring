@@ -4,7 +4,7 @@
 
 
 
-  @foreach($judge->captions as $caption)
+  @foreach($captions as $caption)
 
     <div class="caption-container">
 

@@ -69,9 +69,23 @@ Route::post('results/division/{division}', [
   'as' => 'results.division.access-protected', 'uses' => 'ResultsController@divisionAccessProtected'
 ]);
 
-Route::get('results/solo-division/{soloDivision}/{access_code}/{gender?}', [
+Route::post('results/solo-division/{soloDivision}/performer/{performer}/{access_code?}/{director_email?}/', [
+  'as' => 'results.solo-division.performer.show', 'uses' => 'ResultsController@soloDivisionPerformer'
+]);
+
+Route::get('results/solo-division/{soloDivision}/performer/{performer}/{access_code?}/{director_email?}/', [
+  'as' => 'results.solo-division.performer.show', 'uses' => 'ResultsController@soloDivisionPerformer'
+]);
+
+Route::post('results/solo-division/{soloDivision}/{access_code?}/{gender?}', [
   'as' => 'results.solo-division.show', 'uses' => 'ResultsController@soloDivision'
 ]);
+
+Route::get('results/solo-division/{soloDivision}/{access_code?}/{gender?}', [
+  'as' => 'results.solo-division.show', 'uses' => 'ResultsController@soloDivision'
+]);
+
+
 
 Route::get('results/competition/{competition}', [
   'as' => 'results.competition.show-public', 'uses' => 'ResultsController@competitionPublic'

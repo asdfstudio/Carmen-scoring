@@ -17,6 +17,7 @@ class Caption extends Model
       'slug' => 'overall'
     ];*/
 
+
 		public function criteria()
 		{
 			return $this->hasMany('App\Criterion');
@@ -36,6 +37,45 @@ class Caption extends Model
     public function slug()
     {
       return str_slug($this->name);
+    }
+
+    public function scopeForSheet($query, $sheet)
+    {
+      $raw = $query->whereIn('id', $sheet->caption_ids)->get();
+
+      $desiredOrder = $sheet->caption_sort_order;
+
+      $ordered = $raw->sort(function($a, $b) use ($desiredOrder) {
+        $pos_a = array_search($a->id, $desiredOrder);
+        $pos_b = array_search($b->id, $desiredOrder);
+        return $pos_a - $pos_b;
+      });
+
+      return $ordered;
+    }
+
+
+    public function scopeForDivision($query, $division)
+    {
+      $raw = $query->where('division_id', $division->id)->get();
+
+      $raw = collect();
+      return $raw;
+
+      /*$desiredOrder = $division->sheet->caption_sort_order;
+
+      $ordered = $raw->sort(function($a, $b) use ($desiredOrder) {
+        $pos_a = array_search($a->id, $desiredOrder);
+        $pos_b = array_search($b->id, $desiredOrder);
+        return $pos_a - $pos_b;
+      });
+
+      return $ordered;*/
+    }
+
+    public function orderByDivisionCaption($quer)
+    {
+
     }
 
 

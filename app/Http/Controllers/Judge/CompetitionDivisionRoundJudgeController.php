@@ -52,7 +52,7 @@ class CompetitionDivisionRoundJudgeController extends Controller
       $ratings = (new Ratings($round))->all();
 
       $caption_ids = $division->sheet->caption_ids;
-      $captions = Caption::whereIn('id', $caption_ids)->get();
+      $captions = Caption::forSheet($division->sheet);
 
 			return view('competition_division_round_judge.judge.index', compact('rawScores', 'weightedScores', 'rankedScores', 'scoreboard', 'captions', 'round', 'competition', 'division', 'judges', 'ratings'));
 		}
@@ -74,7 +74,7 @@ class CompetitionDivisionRoundJudgeController extends Controller
 
 			$judge = Judge::find($judge_id);
 
-			$captions = Caption::get();
+			$captions = Caption::forSheet($round->division->sheet);
 
 			return view('competition_division_round_judge.judge.show',compact('rawScores','captions','round','judge'));
 		}

@@ -12,7 +12,15 @@ class Sheet extends Model
 
 		protected $dates = ['deleted_at'];
 
-		protected $fillable = ['name'];
+		protected $fillable = ['name', 'caption_sort_order'];
+
+    protected $casts = [
+      'caption_sort_order' => 'array'
+    ];
+
+    protected $attributes = [
+      'caption_sort_order' => []
+    ];
 
 
 		public function divisions()
@@ -38,6 +46,13 @@ class Sheet extends Model
       return $this->criteria->unique('caption_id')->pluck('caption');
     }*/
 
+
+    /*public function abb()
+    {
+      return $this->hasMany('App\Caption', 'App\Criterion');
+      return Caption::whereIn('id', $this->caption_ids)->get();
+    }*/
+
 		public function criteria()
     {
         return $this->belongsToMany('App\Criterion')->withPivot('sequence')->orderBy('sequence', 'asc');
@@ -49,6 +64,11 @@ class Sheet extends Model
 
       return $caption_ids;
     }
+
+    /*public function getCaptionSortOrderAttribute($value)
+    {
+      return $value ? $value : [];
+    }*/
 
     public function getMaxScoreAttribute()
     {

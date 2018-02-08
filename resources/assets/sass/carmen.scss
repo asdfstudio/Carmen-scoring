@@ -505,8 +505,9 @@ a.active {
     padding: 10px;
     border: 0;
     margin-top: 40px;
+    background: $cs-gray-mid-3;
 
-    &.overall {
+    /*&.overall {
       background: $cs-caption-overall;
     }
     &.music {
@@ -529,7 +530,7 @@ a.active {
 
     &.place {
       background: $cs-gray-mid-3;
-    }
+    }*/ 
 
     & h2 {
       padding: 0;

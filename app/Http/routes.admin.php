@@ -43,6 +43,16 @@ Route::group([
       'as' => 'admin.sheet.manage-order.update', 'uses' => 'SheetController@syncCriteriaOrder'
     ]);
 
+
+    Route::get('sheet/{sheet}/manage-caption-order', [
+      'as' => 'admin.sheet.manage-caption-order', 'uses' => 'SheetController@manageCaptionOrder'
+    ]);
+
+    Route::post('sheet/{sheet}/manage-caption-order', [
+      'as' => 'admin.sheet.manage-caption-order.update', 'uses' => 'SheetController@syncCaptionOrder'
+    ]);
+
+
     Route::get('dashboard', [
       'as' => 'admin.dashboard', 'uses' => 'OrganizationController@index'
     ]);

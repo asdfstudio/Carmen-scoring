@@ -41,7 +41,7 @@ class CompetitionDivisionRoundChoirController extends Controller
 
 			$choir = Choir::find($choir_id);
 
-			$captions = Caption::get();
+			$captions = Caption::forSheet($round->division->sheet);
 
 			return view('competition_division_round_choir_judge.judge.index',compact('rawScores','captions','round','choir'));
 		}
@@ -104,10 +104,10 @@ class CompetitionDivisionRoundChoirController extends Controller
 			$division = $round->division;
       $competition = $division->competition;
 
-			$captions = $division->judges->first()->captions;
-
-			//dd($division->sheet->criteria);
-			//dd($captions);
+			//$captions = $division->judges->first()->captions;
+			$judgeCaptionIds = $division->judges->first()->captions->pluck('id')->toArray();
+			$captions = Caption::forSheet($division->sheet);
+			$captions = $captions->whereIn('id', $judgeCaptionIds);
 
 
 			return view('competition_division_round_choir.judge.show',compact('scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'captions','round','choir','judge','competition','division', 'comment'));

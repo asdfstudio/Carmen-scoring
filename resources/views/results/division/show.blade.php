@@ -39,12 +39,14 @@
 
 			@if($standing->choirs->count() > 0)
 				<div class="standing-container">
-					<div class="content-subheader caption {{ $standing->caption_slug }}">
-						@if($standing->caption_id == NULL)
+
+					@if($standing->caption_id == NULL)
+						<div class="content-subheader caption">
 							<h3>Overall Standings</h3>
-						@else
+					@else
+						<div class="content-subheader caption {{ $standing->caption->background_css }}">
 							<h3>{{ $standing->caption->name }} Standings</h3>
-						@endif
+					@endif
 					</div>
 
 					@include('standing.public_list', ['standing' => $standing, 'showSponsor' => true])

@@ -18,7 +18,7 @@ endif;
 <table class="table {{ $responsive_table_class }} table-striped table-bordered toggle-scores scoreboard spreadsheet {{ $is_weighted_class }}">
 
 
-  @foreach($judge->captions as $caption)
+  @foreach($captions as $caption)
 
     <?php
     $captionWeighting = 1;

@@ -30,12 +30,17 @@
 				<?php
 				if($standing->caption_id == NULL)
 				{
-					$limit = $division->overall_award_count;
+					$awardSetting = $division->awardSettings->where('caption_id', 0)->first();
 				}
 				else
 				{
-					$column_name = $standing->caption->slug().'_award_count';
-					$limit = $division->{$column_name};
+					$awardSetting = $division->awardSettings->where('caption_id', $standing->caption_id)->first();
+				}
+
+				if ($awardSetting) {
+					$limit = $awardSetting->award_count;
+				} else {
+					$limit = 0;
 				}
 
 				if($limit == 0) continue;

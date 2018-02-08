@@ -70,7 +70,9 @@ class SheetController extends Controller
     public function show($id)
     {
       $sheet = Sheet::with('criteria')->find($id);
-      $sheet->captions = Caption::whereIn('id', $sheet->caption_ids)->get();
+      $sheet->captions = Caption::forSheet($sheet);
+
+      //dd([$sheet->captions->pluck('name', 'id')->toArray()]);
 
       return view('sheets.admin.show', compact('sheet'));
     }
@@ -128,6 +130,7 @@ class SheetController extends Controller
     {
       $captions = Caption::get();
       $sheet = Sheet::with('criteria')->find($id);
+
       $criteria = Criterion::with('sheets')->orderBy('name', 'asc')->get();
 
       return view('sheets.admin.manage', compact('sheet', 'criteria', 'captions'));
@@ -159,6 +162,32 @@ class SheetController extends Controller
       $sheet->criteria()->sync($request->input('criteria', []));
 
       return redirect()->route('admin.sheet.index', $id)->with('success',"$sheet->name successfully updated.");
+    }
+
+
+    public function manageCaptionOrder($id)
+    {
+      $captions = Caption::get();
+      $sheet = Sheet::with('criteria')->find($id);
+      //$criteria = Criterion::with('sheets')->orderBy('name', 'asc')->get();
+
+      return view('sheets.admin.manage-caption-order', compact('sheet', 'captions'));
+    }
+
+
+    public function syncCaptionOrder($id, FormBuilder $formBuilder, Request $request)
+    {
+      $input = $request->input('captions', []);
+      $flipped = array_flip($input);
+      ksort($flipped);
+      $reKeyed = array_values($flipped);
+      //dd([$input, $flipped, $reKeyed]);
+      $sheet = Sheet::find($id);
+      $sheet->caption_sort_order = $reKeyed;
+      $sheet->save();
+
+
+      return redirect()->route('admin.sheet.index')->with('success',"$sheet->name successfully updated.");
     }
 
     /**

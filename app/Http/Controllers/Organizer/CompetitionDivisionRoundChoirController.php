@@ -39,7 +39,7 @@ class CompetitionDivisionRoundChoirController extends Controller
       //
 
       $caption_ids = $division->sheet->caption_ids;
-      $captions = Caption::whereIn('id', $caption_ids)->get();
+      $captions = Caption::forSheet($division->sheet);
       $rounds = $division->rounds;
 			$rawScores = RawScore::with('judge', 'criterion', 'criterion.caption')->where('division_id', $division_id)->where('round_id', $round_id)->get();
 

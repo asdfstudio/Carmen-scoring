@@ -18,18 +18,23 @@
 		  @include('award.organizer.ceremony_list', ['awards' => $division->awards])
 		</div>
 
-		@foreach($division->standings as $standing)
 
+		@foreach($division->standings as $standing)
 			@if($standing)
 				<?php
 				if($standing->caption_id == NULL)
 				{
-					$limit = $division->overall_award_count;
+					$awardSetting = $division->awardSettings->where('caption_id', 0)->first();
 				}
 				else
 				{
-					$column_name = $standing->caption->slug().'_award_count';
-					$limit = $division->{$column_name};
+					$awardSetting = $division->awardSettings->where('caption_id', $standing->caption_id)->first();
+				}
+
+				if ($awardSetting) {
+					$limit = $awardSetting->award_count;
+				} else {
+					$limit = 0;
 				}
 
 				$standing->choirs = $standing->choirs->take($limit)->reverse();
@@ -38,13 +43,15 @@
 
 			@if($standing->choirs->count() > 0)
 				<div class="standing-container">
-					<div class="content-subheader caption {{ $standing->caption_slug }}">
-						@if($standing->caption_id == NULL)
-							<h3>Overall Standings</h3>
-						@else
-							<h3>{{ $standing->caption->name }} Standings</h3>
-						@endif
-					</div>
+					@if($standing->caption_id == NULL)
+						<div class="content-subheader caption">
+						<h3>Overall Standings</h3>
+						</div>
+					@else
+						<div class="content-subheader caption {{ $standing->caption->background_css }}">
+						<h3>{{ $standing->caption->name }} Standings</h3>
+						</div>
+					@endif
 
 					@include('standing.public_list', ['standing' => $standing ,'showSponsor' => true])
 

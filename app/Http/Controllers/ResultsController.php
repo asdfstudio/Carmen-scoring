@@ -6,6 +6,7 @@ use App\Round;
 use App\Judge;
 use App\Caption;
 use App\Director;
+use App\Performer;
 use App\Division;
 use App\Competition;
 use App\SoloDivision;
@@ -76,7 +77,7 @@ class ResultsController extends Controller
       if($this->division == false) abort('404');
 
       $caption_ids = $this->division->sheet->caption_ids;
-      $this->captions = Caption::whereIn('id', $caption_ids)->get();
+      $this->captions = Caption::forSheet($this->division->sheet);
 
       View::share('competition', $this->division->competition);
     }
@@ -197,7 +198,7 @@ class ResultsController extends Controller
     {
       $division = Division::with(['standings' => function($query) {
         $query->orderBy('caption_id', 'DESC');
-      }, 'standings.choirs', 'awardSettings',
+      }, 'standings.choirs', 'standings.caption', 'awardSettings',
       'competition' => function($query) {
         $query->withoutGlobalScope('organization');
       },
@@ -208,7 +209,7 @@ class ResultsController extends Controller
       }])->where('is_published', 1)->find($division_id);
 
       $caption_ids = $division->sheet->caption_ids;
-      $captions = Caption::whereIn('id', $caption_ids)->get();
+      $captions = Caption::forSheet($division->sheet);
 
       $accessCodeForm = $formBuilder->create('Division\AccessCodeForm', [
         'url' => route('results.division.access-protected', [$division]),
@@ -351,9 +352,36 @@ class ResultsController extends Controller
     }
 
 
-    public function soloDivision(SoloDivision $soloDivision, $access_code, $gender = null)
+    public function soloDivision(FormBuilder $formBuilder, Request $request, SoloDivision $soloDivision, $access_code = NULL, $gender = null)
     {
       $competition = $soloDivision->competition;
+
+      if($request->has('access_code'))
+      {
+        return redirect()->route('results.solo-division.show', [$soloDivision, 'access_code' => $request->input('access_code')]);
+      }
+
+      if ($soloDivision->access_code != $access_code) {
+
+        $accessCodeForm = $formBuilder->create('SoloDivision\AccessCodeForm', [
+          'method' => 'post'
+        ]);
+
+        return view('results.solo_division.restricted', compact('access_code', 'accessCodeForm'));
+      }
+
+      // Division not found, check using access code to find director
+      /*if($division == false AND $access_code)
+      {
+        $division = Division::whereHas('choirs.directors', function($query) use ($access_code) {
+          $query->where('email', $access_code);
+        })->where('is_published', 1)->find($division_id);
+
+        if($division)
+        {
+          $access_code = $division->access_code;
+        }
+      }*/
 
       if ($gender) {
         $genderName = $gender == 'M' ? 'Male' : 'Female';
@@ -405,5 +433,59 @@ class ResultsController extends Controller
       $soloDivision->performers = $soloDivision->performers->sortBy('rank');
 
       return view('results.solo_division.results', compact('competition', 'judges', 'soloDivision', 'access_code', 'genderName'));
+    }
+
+
+    public function soloDivisionPerformer(Request $request, FormBuilder $formBuilder, SoloDivision $soloDivision, Performer $performer, $access_code = NULL, $director_email = NULL)
+    {
+      $competition = $soloDivision->competition;
+
+      $directorValidated = false;
+
+      if ($director_email AND in_array($director_email, $performer->choir->directors->pluck('email')->toArray())) {
+        $directorValidated = true;
+      }
+
+      if (!$director_email) {
+        if($request->has('director_email') OR $request->session()->has('director_email'))
+        {
+          if ($request->has('director_email')) {
+            $email = $request->input('director_email');
+            $request->session()->put('director_email', $email);
+          } elseif ($request->session()->has('director_email')) {
+            $email = $request->session()->get('director_email');
+          }  else {
+            $email = false;
+          }
+
+          if ($email) {
+            return redirect()->route('results.solo-division.performer.show', [$soloDivision, $performer, $access_code, $email]);
+          }
+        }
+      }
+
+
+      if (!$directorValidated) {
+
+        $accessCodeForm = $formBuilder->create('SoloDivision\PerformerAccessCodeForm', [
+          'method' => 'post',
+          'url' => route('results.solo-division.performer.show', [$soloDivision, $performer, $access_code])
+        ]);
+
+        return view('results.solo_division.performer-restricted', compact('director_email', 'accessCodeForm'));
+      }
+
+      $soloDivision->load('sheet', 'judges');
+      $captionsIds = $soloDivision->sheet->caption_ids;
+      $captions = Caption::forSheet($soloDivision->sheet);
+
+      $rawScores = SoloRawScore::with(['criterion'])
+                    ->where('solo_division_id', $soloDivision->id)
+                    ->where('performer_id', $performer->id)
+                    ->get();
+
+
+
+      return view('results.solo_division.performer-results', compact('competition', 'judges', 'soloDivision', 'access_code', 'performer', 'captions', 'rawScores'));
     }
 }

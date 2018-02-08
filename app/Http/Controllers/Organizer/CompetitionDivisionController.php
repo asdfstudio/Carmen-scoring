@@ -146,7 +146,7 @@ class CompetitionDivisionController extends Controller
 					$query->where('division_id',$division_id);
 				}])->find($division_id);
 
-				$captions = Caption::get();
+				$captions = Caption::forSheet($division->sheet);
 
         $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
           'method' => 'POST',
@@ -266,7 +266,7 @@ class CompetitionDivisionController extends Controller
 					$query->where('division_id',$division_id);
 				}])->find($division_id);
 
-				$captions = Caption::get();
+				$captions = Caption::forSheet($division->sheet);
 
         $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
           'method' => 'POST',

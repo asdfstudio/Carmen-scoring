@@ -46,7 +46,7 @@
         Total {{ $caption->name }} Score
       </th>
       <th>
-        <?php $rawTotal = $rawScores->where('criterion_caption_id', $caption->id)->sum('score');?>
+        <?php $rawTotal = $rawScores->where('criterion.caption_id', $caption->id)->sum('score');?>
         {{ $rawTotal }}
       </th>
 

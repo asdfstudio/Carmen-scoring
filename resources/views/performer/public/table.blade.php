@@ -25,7 +25,7 @@
         @endif
       </td>
       <td>
-        {{ $performer->name }}
+        {{ link_to_route('results.solo-division.performer.show', $performer->name, [$soloDivision, $performer, $access_code]) }}
       </td>
       <td>{{ $performer->score }}</td>
       <td>{{ $performer->rank }}</td>

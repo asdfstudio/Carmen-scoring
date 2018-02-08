@@ -65,7 +65,7 @@
           <li>
             <?php $link_class = Request::segment(6) == 'judge' ? 'active' : false; ?>
             <a href="{{ route('organizer.competition.division.judge.index', [$competition, $division]) }}" class="{{ $link_class }}">Judges
-              <span class="count">{{ $division->judges->count() }}</span></a>
+              <span class="count">{{ $division->judges->unique('id')->count() }}</span></a>
           </li>
           <li>
             <?php $link_class = Request::segment(6) == 'round' ? 'active' : false; ?>

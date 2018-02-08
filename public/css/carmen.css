@@ -5509,21 +5509,32 @@ a.active {
     color: #FFF;
     padding: 10px;
     border: 0;
-    margin-top: 40px; }
-    .content-subheader.caption.overall {
-      background: #68B155; }
-    .content-subheader.caption.music {
-      background: #7F4091; }
-    .content-subheader.caption.show {
-      background: #E29231; }
-    .content-subheader.caption.combo {
-      background: #CA2128; }
-    .content-subheader.caption.overall-show {
-      background: #E29231; }
-    .content-subheader.caption.visual-performance {
-      background: #CA2128; }
-    .content-subheader.caption.place {
-      background: #898989; }
+    margin-top: 40px;
+    background: #898989;
+    /*&.overall {
+      background: $cs-caption-overall;
+    }
+    &.music {
+      background: $cs-caption-music;
+    }
+    &.show {
+      background: $cs-caption-show;
+    }
+    &.combo {
+      background: $cs-caption-combo;
+    }
+
+    &.overall-show {
+      background: $cs-caption-show;
+    }
+
+    &.visual-performance {
+      background: $cs-caption-combo;
+    }
+
+    &.place {
+      background: $cs-gray-mid-3;
+    }*/ }
     .content-subheader.caption h2 {
       padding: 0;
       margin: 5px; }

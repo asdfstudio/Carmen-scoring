@@ -297,11 +297,12 @@ class CompetitionSoloDivisionController extends Controller
     {
         $soloDivision->load('sheet', 'judges');
         $captionsIds = $soloDivision->sheet->caption_ids;
-        $captions = Caption::whereIn('id', $captionsIds)->get();
+        $captions = Caption::forSheet($soloDivision->sheet);
 
-        $rawScores = SoloRawScore::where('solo_division_id', $soloDivision->id)
-                                      ->where('performer_id', $performer->id)
-                                      ->get();
+        $rawScores = SoloRawScore::with(['criterion'])
+                      ->where('solo_division_id', $soloDivision->id)
+                      ->where('performer_id', $performer->id)
+                      ->get();
 
         return view('solo-division.organizer.show-performer', compact('competition', 'soloDivision', 'performer', 'captions', 'rawScores'));
     }

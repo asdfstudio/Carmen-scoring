@@ -34,7 +34,7 @@ class CompetitionDivisionRoundChoirJudgeController extends Controller
 
       $rounds = $division->rounds;
 
-      $captions = Caption::get();
+      $captions = Caption::forSheet($division->sheet);
 
       $comment = Comment::where('judge_id', $judge_id)
 									->where('choir_id', $choir_id)

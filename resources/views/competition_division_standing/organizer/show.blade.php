@@ -19,12 +19,14 @@
 	@foreach($division->standings as $standing)
 		<div class="standing-container">
 
-			<div class="content-subheader caption {{ $standing->caption_slug }}">
-				@if($standing->caption_id == NULL)
+
+			@if($standing->caption_id == NULL)
+				<div class="content-subheader caption">
 					<h2>Overall Standings</h2>
-				@else
+			@else
+				<div class="content-subheader caption {{ $standing->caption->background_css }}">
 					<h2>{{ $standing->caption->name }} Standings</h2>
-				@endif
+			@endif
 
 				@can('update', $standing)
 

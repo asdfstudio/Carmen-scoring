@@ -18,6 +18,12 @@ class SheetForm extends Form
         'label' => 'Name'
       ]);
 
+      /*$this->add('caption_sort_order','textarea', [
+        'help_block' => [
+          'text' => 'Enter 1 caption per line'
+        ]
+      ]);*/
+
 
       $this->add('submit', 'submit', [
         'label' => 'Save Sheet',

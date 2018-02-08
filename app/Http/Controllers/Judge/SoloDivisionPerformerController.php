@@ -50,7 +50,7 @@ class SoloDivisionPerformerController extends Controller
     {
       $soloDivision->load(['sheet', 'sheet.criteria']);
       $captionsIds = $soloDivision->sheet->caption_ids;
-      $captions = Caption::whereIn('id', $captionsIds)->get();
+      $captions = Caption::forSheet($soloDivision->sheet);
       $rawScores = SoloRawScore::where('solo_division_id', $soloDivision->id)
                                     ->where('performer_id', $performer->id)
                                     ->where('judge_id', Auth::user()->person_id)

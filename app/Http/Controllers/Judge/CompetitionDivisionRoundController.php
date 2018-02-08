@@ -55,11 +55,12 @@ class CompetitionDivisionRoundController extends Controller
         }])->find($round_id);
 
       //dd($round->targets);
-
-      $captions = Caption::get();
-
       $division = $round->division;
       $competition = $division->competition;
+
+      $captions = Caption::forSheet($division->sheet);
+
+
 
       return view('competition_division_round.judge.summary',compact('rawScores', 'weightedScores', 'captions', 'round', 'competition', 'division'));
     }
@@ -86,11 +87,16 @@ class CompetitionDivisionRoundController extends Controller
 
       //$judge = $division->judges->first();
 
-      $judge = Judge::with(['captions' => function($query) use ($division_id) {
+      $judge = Judge::with(['captions' => function($query) use ($division_id, $division) {
         $query->where('division_id', $division_id);
+        //$query->orderBy('name')->forDivision($division);
       }])->find($judge_id);
-      //dd($judge);
+      //dd($judge->captions->pluck('name', 'id')->toArray());
       //$captions = $judge->captions;
+
+      $judgeCaptionIds = $judge->captions->pluck('id')->toArray();
+			$captions = Caption::forSheet($division->sheet);
+			$captions = $captions->whereIn('id', $judgeCaptionIds);
 
       //$before = memory_get_usage();
       $scoreboard = new Scoreboard(['round_id' => $round_id, 'judge_id' => $judge_id]);
@@ -104,7 +110,7 @@ class CompetitionDivisionRoundController extends Controller
       //$weightedScores = $scoreboard->weightedScores;
       //$rankedScores = $scoreboard->rankedScores;
 
-      return view('competition_division_round.judge.spreadsheet',compact('scoreboard', 'round', 'competition', 'division', 'judge'));
+      return view('competition_division_round.judge.spreadsheet',compact('scoreboard', 'round', 'competition', 'division', 'judge', 'captions'));
     }
 
 
@@ -154,7 +160,10 @@ class CompetitionDivisionRoundController extends Controller
 
       $source_ids = $round->sources->pluck('id')->toArray();
       $scoreboard = new Scoreboard(['round_id' => $source_ids]);
-      //
+
+      $judgeCaptionIds = $judge->captions->pluck('id')->toArray();
+			$captions = Caption::forSheet($division->sheet);
+			$captions = $captions->whereIn('id', $judgeCaptionIds);
 
       //dd($scoreboard);
 
@@ -162,7 +171,7 @@ class CompetitionDivisionRoundController extends Controller
       //$weightedScores = $scoreboard->weightedScores;
       //$rankedScores = $scoreboard->rankedScores;
 
-      return view('competition_division_round.judge.spreadsheet_sources',compact('scoreboard', 'round', 'competition', 'division', 'judge', 'choirs'));
+      return view('competition_division_round.judge.spreadsheet_sources',compact('scoreboard', 'round', 'competition', 'division', 'judge', 'choirs', 'captions'));
     }
 
 
@@ -198,9 +207,13 @@ class CompetitionDivisionRoundController extends Controller
 
 			dd($division);*/
 
-			$captions = Caption::get();
+			$captions = Caption::forSheet($round->division->sheet);
 
-			return view('competition_division_round.judge.show',compact('rawScores','captions','round'));
+      //$judgeCaptionIds = $judge->captions->pluck('id')->toArray();
+			//$captions = Caption::forSheet($division->sheet);
+			//$captions = $captions->whereIn('id', $judgeCaptionIds);
+
+			return view('competition_division_round.judge.show',compact('rawScores','captions','round', 'captions'));
 		}
 
 

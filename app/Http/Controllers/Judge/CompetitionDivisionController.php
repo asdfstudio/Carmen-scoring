@@ -28,7 +28,7 @@ class CompetitionDivisionController extends Controller
           $query->withoutGlobalScope('organization');
         }, 'competition.organization', 'rounds', 'standing','standing.choirs'])->find($division_id);
 
-			$captions = Caption::get();
+			$captions = Caption::forSheet($division->sheet);
       $competition = $division->competition;
 
 			return view('competition_division.judge.introduction',compact('division','captions','competition'));
@@ -54,7 +54,7 @@ class CompetitionDivisionController extends Controller
       //$this->authorize('viewFinalStandings', $division);
       //dd($division->judges);
 
-			$captions = Caption::get();
+			$captions = Caption::forSheet($division->sheet);
       $competition = $division->competition;
 
 			return view('competition_division.judge.show',compact('division','captions','competition'));
@@ -72,7 +72,7 @@ class CompetitionDivisionController extends Controller
         }, 'competition.organization', 'rounds'])->find($division_id);
 
 
-			$captions = Caption::get();
+			$captions = Caption::forSheet($division->sheet);
       $competition = $division->competition;
 
 			return view('competition_division.judge.scoring', compact('division','captions','competition'));

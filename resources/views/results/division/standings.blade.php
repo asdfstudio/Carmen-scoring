@@ -11,12 +11,13 @@
 		@foreach($division->standings as $standing)
 			<div class="standing-container">
 
-				<div class="content-subheader caption {{ $standing->caption_slug }}">
-					@if($standing->caption_id == NULL)
-						<h3>Overall Standings</h3>
-					@else
-						<h2>{{ $standing->caption->name }} Standings</h2>
-					@endif
+				@if($standing->caption_id == NULL)
+					<div class="content-subheader caption">
+					<h3>Overall Standings</h3>
+				@else
+					<div class="content-subheader caption {{ $standing->caption->background_css }}">
+					<h2>{{ $standing->caption->name }} Standings</h2>
+				@endif
 				</div>
 
 				@if($standing == false)
