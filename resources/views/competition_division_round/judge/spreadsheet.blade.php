@@ -57,7 +57,7 @@
   			<a class="score-view-toggle {{ $active }}" href="#raw" data-score-view="raw">Raw</a>
   		</li>
 
-      @if($round->status_slug == 'active')
+      @if($isScoringActive)
         <li class="list-group-item">
     			<a class="score-view-toggle" href="#edit" data-score-view="edit">Edit Scores</a>
     		</li>

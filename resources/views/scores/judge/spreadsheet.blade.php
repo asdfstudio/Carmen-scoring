@@ -68,19 +68,46 @@ endif;
 
         @foreach($choirs as $choir)
           <?php
-          $rawScore = $scoreboard->rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_id', $criterion->id)->pluck('score')->first();
+          $rawScoreEntry = $scoreboard->rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_id', $criterion->id)->first();
+          $rawScore = $rawScoreEntry->score;
+          $roundId = $rawScoreEntry->round_id;
+          $divisionId = $rawScoreEntry->division_id;
+
+          if ($round->sources->count() > 0) {
+
+            if ($round->sources->where('id', $roundId)->first()->status_slug == 'active') {
+              $isRoundScoringActive = true;
+            } else {
+              $isRoundScoringActive = false;
+            }
+
+          } else {
+            $isRoundScoringActive = true;
+          }
+          //dd($rawScoreEntry);
+          //$rawScore = $scoreboard->rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_id', $criterion->id)->pluck('score')->first();
           ?>
 
-          <td class="score-gradient-{{ $rawScore * 10 }}" data-choir-id="{{ $choir->id }}" data-criterion-id="{{ $criterion->id }}">
+          <td class="score-gradient-{{ $rawScore * 10 }}" data-choir-id="{{ $choir->id }}" data-criterion-id="{{ $criterion->id }}" data-round-id="{{ $roundId }}">
 
             <span class="score raw">{{ $rawScore }}</span>
 
             <?php if($rawScore == false) $rawScore = 0; ?>
 
-            @if($round->status_slug == 'active')
-              {{ Form::open(['method' => 'POST', 'url' => route('judge.competition.division.round.save_scores', [$division->competition->id, $division->id, $round->id])]) }}
+            @if($isScoringActive AND $isRoundScoringActive)
+              {{ Form::open(['method' => 'POST', 'url' => route('judge.competition.division.round.save_scores', [$division->competition->id, $divisionId, $roundId])]) }}
 
-              {{ Form::number("scores[$choir->id][$criterion->id]", $rawScore,['min' => 0, 'max' => $criterion->max_score, 'step' => '0.5', 'class' => 'col-xs-12 score edit ajax-scoring toggle-score-input-popup', 'data-original-score' => $rawScore, 'data-choir-id' => $choir->id, 'data-criterion-id' => $criterion->id, 'data-caption-id' => $caption->id, 'data-score-weighting' => $captionWeighting, 'readonly' => 'readonly']) }}
+              {{ Form::number("scores[$choir->id][$criterion->id]", $rawScore,[
+                'min' => 0,
+                'max' => $criterion->max_score,
+                'step' => '0.5',
+                'class' => 'col-xs-12 score edit ajax-scoring toggle-score-input-popup', 'data-original-score' => $rawScore,
+                'data-choir-id' => $choir->id,
+                'data-criterion-id' => $criterion->id,
+                'data-caption-id' => $caption->id,
+                'data-score-weighting' => $captionWeighting,
+                'readonly' => 'readonly'
+                ]) }}
 
               {{ Form::close() }}
             @endif

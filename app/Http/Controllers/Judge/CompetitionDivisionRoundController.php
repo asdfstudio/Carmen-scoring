@@ -110,7 +110,14 @@ class CompetitionDivisionRoundController extends Controller
       //$weightedScores = $scoreboard->weightedScores;
       //$rankedScores = $scoreboard->rankedScores;
 
-      return view('competition_division_round.judge.spreadsheet',compact('scoreboard', 'round', 'competition', 'division', 'judge', 'captions'));
+      if ($round->status_slug == 'active') {
+        $isScoringActive = true;
+      } else {
+        $isScoringActive = false;
+      }
+
+
+      return view('competition_division_round.judge.spreadsheet',compact('scoreboard', 'round', 'competition', 'division', 'judge', 'captions', 'isScoringActive'));
     }
 
 
@@ -165,13 +172,23 @@ class CompetitionDivisionRoundController extends Controller
 			$captions = Caption::forSheet($division->sheet);
 			$captions = $captions->whereIn('id', $judgeCaptionIds);
 
+
+      $isScoringActive = false;
+
+      foreach ($round->sources as $source) {
+        if ($source->status_slug == 'active') {
+          $isScoringActive = true;
+          continue;
+        }
+      }
+
       //dd($scoreboard);
 
       //$rawScores = $scoreboard->rawScores;
       //$weightedScores = $scoreboard->weightedScores;
       //$rankedScores = $scoreboard->rankedScores;
 
-      return view('competition_division_round.judge.spreadsheet_sources',compact('scoreboard', 'round', 'competition', 'division', 'judge', 'choirs', 'captions'));
+      return view('competition_division_round.judge.spreadsheet_sources',compact('scoreboard', 'round', 'competition', 'division', 'judge', 'choirs', 'captions', 'isScoringActive'));
     }
 
 
