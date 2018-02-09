@@ -69,9 +69,13 @@ endif;
         @foreach($choirs as $choir)
           <?php
           $rawScoreEntry = $scoreboard->rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_id', $criterion->id)->first();
-          $rawScore = $rawScoreEntry->score;
-          $roundId = $rawScoreEntry->round_id;
-          $divisionId = $rawScoreEntry->division_id;
+
+          if ($rawScoreEntry) {
+            $rawScore = $rawScoreEntry->score;
+            $roundId = $rawScoreEntry->round_id;
+            $divisionId = $rawScoreEntry->division_id;
+          }
+          
 
           if ($round->sources->count() > 0) {
 

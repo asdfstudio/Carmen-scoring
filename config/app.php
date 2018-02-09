@@ -164,6 +164,7 @@ return [
 				DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
         Aloha\Twilio\Support\Laravel\ServiceProvider::class,
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+        //Barryvdh\DomPDF\ServiceProvider::class,
 
 
     ],
@@ -217,6 +218,7 @@ return [
 				'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
         'Twilio' => Aloha\Twilio\Support\Laravel\Facade::class,
         'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
+        //'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 

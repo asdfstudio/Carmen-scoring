@@ -33,6 +33,10 @@ Route::get('contest', function () {
     return view('public.contest');
 });
 
+/*Route::get('pdf-test', [
+  'as' => 'pdf.test', 'uses' => 'ResultsPdfController@test'
+]);*/
+
 Route::get('feedback/{access_code?}', [
   'as' => 'feedback.show', 'uses' => 'FeedbackController@show'
 ]);

@@ -1,19 +1,22 @@
-@if(!$standing->choirs)
-  <p>
-    No standings to display
-  </p>
-@endif
-
-
-<?php
-$captionId = $standing->caption_id ? $standing->caption_id : 0;
-?>
-
 @if($standing->choirs)
-<ul class="list-group">
+<table>
+  <tr>
+    <th colspan="2">
+      @if($standing->caption_id == NULL)
+        Overall Standings
+      @else
+        {{ $standing->caption->name }} Standings
+      @endif
+    </th>
+  </tr>
+
+  <?php
+  $captionId = $standing->caption_id ? $standing->caption_id : 0;
+  ?>
+
   @foreach($standing->choirs as $choir)
-    <li class="list-group-item standing">
-      <span class="choir">{{ $choir->full_name }}</span>
+    <tr>
+      <td>{{ $choir->full_name }}</td>
 
       <?php
       $rank_name = false;
@@ -49,18 +52,15 @@ $captionId = $standing->caption_id ? $standing->caption_id : 0;
       ?>
 
       @if($sponsor AND $showSponsor)
-        <span>Sponsored by: {{ $sponsor }}</span>
+        <td>Sponsored by: {{ $sponsor }}</td>
       @endif
 
-      <div class="details">
 
-        <span class="final_rank ceremony rank-{{ $choir->pivot->final_rank }}">
+      <td>
           {{ $rank_name }}
-        </span>
+      </td>
 
-      </div>
-
-    </li>
+    </tr>
   @endforeach
-</ul>
+</table>
 @endif
