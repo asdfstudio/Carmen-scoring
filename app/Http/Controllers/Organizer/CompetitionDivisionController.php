@@ -387,8 +387,6 @@ class CompetitionDivisionController extends Controller
 
         if ($division->sheet) {
           $division->sheet->captions = $division->sheet->criteria->unique('caption_id')->pluck('caption');
-        } else {
-          $division->sheet->captions = false;
         }
 
 
