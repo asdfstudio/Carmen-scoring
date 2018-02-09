@@ -118,11 +118,15 @@ class Scoreboard {
 		$penalties = collect();
 
 		$penalties_raw->each(function($item, $key) use ($penalties){
-      $penalties->put($key, [
-				'choir_id' => $item->choir_id,
-				'amount' => $item->penalty->amount,
-				'apply_per_judge' => $item->penalty->apply_per_judge
-			]);
+
+			if ($item->penalty) {
+				$penalties->put($key, [
+					'choir_id' => $item->choir_id,
+					'amount' => $item->penalty->amount,
+					'apply_per_judge' => $item->penalty->apply_per_judge
+				]);
+			}
+
     });
 
 		return $this->penalties = $penalties;

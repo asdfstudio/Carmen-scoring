@@ -76,12 +76,16 @@ endif;
             $divisionId = $rawScoreEntry->division_id;
           } else {
             $rawScore = false;
+            $roundId = $round->id;
+            $divisionId = $division->id;
           }
 
 
-          if ($round->sources->count() > 0) {
+          if ($round AND $round->sources AND $round->sources->count() > 0) {
 
-            if ($round->sources->where('id', $roundId)->first()->status_slug == 'active') {
+            $firstRound = $round->sources->where('id', $roundId)->first();
+
+            if ($firstRound AND $firstRound->status_slug == 'active') {
               $isRoundScoringActive = true;
             } else {
               $isRoundScoringActive = false;
