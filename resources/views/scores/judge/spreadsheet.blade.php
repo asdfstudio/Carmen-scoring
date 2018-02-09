@@ -74,8 +74,10 @@ endif;
             $rawScore = $rawScoreEntry->score;
             $roundId = $rawScoreEntry->round_id;
             $divisionId = $rawScoreEntry->division_id;
+          } else {
+            $rawScore = false;
           }
-          
+
 
           if ($round->sources->count() > 0) {
 
