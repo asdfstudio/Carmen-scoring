@@ -7,6 +7,7 @@ use App\RawScore;
 use App\Division;
 use App\Round;
 use App\Penalty;
+use App\ChoirRoundPenalty;
 use App\Carmen\WeightedScores;
 use App\Carmen\RankedScores;
 
@@ -90,7 +91,7 @@ class Scoreboard {
 	{
 		$this->getDivision();
 
-		$weightedScoresClass = new WeightedScores($this->rawScores,        $this->division->caption_weighting_id);
+		$weightedScoresClass = new WeightedScores($this->rawScores, $this->division->caption_weighting_id);
 
 		$this->weightedScores = $weightedScoresClass->all();
 		$this->extendedRawScores = $this->weightedScores;
@@ -99,15 +100,24 @@ class Scoreboard {
 
 	protected function getPenalties()
 	{
-		$penalties_raw = Round::find($this->round_id)->penalties;
+		//$penalties_raw = Round::find($this->round_id)->penalties;
+		//$penalties_raw = Round::whereIn('id', $this->round_id)->get()->penalties;
+
+		if (is_array($this->round_id)) {
+			$roundsArray = $this->round_id;
+		} else {
+			$roundsArray = (array) $this->round_id;
+		}
+
+		$penalties_raw = ChoirRoundPenalty::with('penalty')->whereIn('round_id', $roundsArray)->get();
 
 		$penalties = collect();
 
 		$penalties_raw->each(function($item, $key) use ($penalties){
       $penalties->put($key, [
-				'choir_id' => $item->pivot->choir_id,
-				'amount' => $item->amount,
-				'apply_per_judge' => $item->apply_per_judge
+				'choir_id' => $item->choir_id,
+				'amount' => $item->penalty->amount,
+				'apply_per_judge' => $item->penalty->apply_per_judge
 			]);
     });
 
