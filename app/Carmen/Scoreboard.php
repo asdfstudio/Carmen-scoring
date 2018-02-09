@@ -103,13 +103,17 @@ class Scoreboard {
 		//$penalties_raw = Round::find($this->round_id)->penalties;
 		//$penalties_raw = Round::whereIn('id', $this->round_id)->get()->penalties;
 
-		if (is_array($this->round_id)) {
-			$roundsArray = $this->round_id;
-		} else {
-			$roundsArray = (array) $this->round_id;
+		$query = ChoirRoundPenalty::with('penalty');
+
+		if($this->round_id)
+		{
+			if(is_array($this->round_id))
+				$query->whereIn('round_id', $this->round_id);
+			else
+				$query->where('round_id', $this->round_id);
 		}
 
-		$penalties_raw = ChoirRoundPenalty::with('penalty')->whereIn('round_id', $roundsArray)->get();
+		$penalties_raw = $query->get();
 
 		$penalties = collect();
 
@@ -126,11 +130,14 @@ class Scoreboard {
 
 	protected function getRound()
 	{
-		if(is_array($this->round_id))
-		{
-			$this->round_id = array_shift($this->round_id);
+		if (is_array($this->round_id)) {
+			$roundIds = $this->round_id;
+			$roundId = array_shift($roundIds);
+			//$this->round_id = array_shift($this->round_id);
+		} else {
+			$roundId = $this->round_id;
 		}
-		return $this->round = Round::find($this->round_id);
+		return $this->round = Round::find($roundId);
 	}
 
 	protected function getDivision()
