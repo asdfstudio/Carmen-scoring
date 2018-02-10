@@ -52,7 +52,11 @@ class EmailDivisionResultsLink
         });
 
         // Division > Final Round > Choirs
-        $division->rounds()->orderBy('sequence', 'DESC')->first()->choirs->each(function($choir,$key) use ($directors) {
+        $finalRound = $division->rounds()->orderBy('sequence', 'DESC')->first();
+
+        if (!$finalRound) return;
+
+        $finalRound->choirs->each(function($choir,$key) use ($directors) {
           foreach($choir->directors as $director)
           {
             if($director->email)
