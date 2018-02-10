@@ -117,6 +117,10 @@ class ResultsController extends Controller
         $query->published();
       }])->find($competition_id);
 
+      if (!$competition) {
+        return view('results.competition.no-match');
+      }
+
       if($request->session()->has('competition_access_code'))
       {
         return redirect()->route('results.competition.show-custom', [$competition->slug, 'access_code' => $request->session()->get('competition_access_code')]);
