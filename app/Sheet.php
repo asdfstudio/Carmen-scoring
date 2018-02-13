@@ -18,9 +18,9 @@ class Sheet extends Model
       'caption_sort_order' => 'array'
     ];
 
-    protected $attributes = [
+    /*protected $attributes = [
       'caption_sort_order' => []
-    ];
+    ];*/
 
 
 		public function divisions()
