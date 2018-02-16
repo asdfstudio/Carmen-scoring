@@ -3756,6 +3756,10 @@ button.close {
 .total-rank {
   font-size: 1.2em; }
 
+.missing-score {
+  background: #CA2128;
+  color: #FFF; }
+
 input.score {
   margin: -8px;
   padding: 8px;

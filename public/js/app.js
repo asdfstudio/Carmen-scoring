@@ -115,6 +115,7 @@ $(document).ready(function() {
 
       var captionId = input.data('caption-id');
       var choirId = input.data('choir-id');
+      var criterionId = input.data('criterion-id');
 
       // caption score
       var captionScore = $('.caption-total-score[data-caption-id="'+captionId+'"][data-choir-id="'+choirId+'"]');
@@ -171,6 +172,14 @@ $(document).ready(function() {
           input.removeClass('saving');
           input.addClass('saved');
           input.data('original-score', newScore);
+
+          // highlight blank scores in spreadsheet
+          /*var cell = $('.highlight-zeros[data-choir-id="'+choirId+'"]');
+
+          if (cell) {
+            console.log(cell);
+            cell.data('raw-score', newScore);
+          }*/
 
           captionScore.html(newCaptionScore);
           captionScore.data('original-score', newCaptionScore);
@@ -343,6 +352,13 @@ $(document).ready(function() {
 
       td.find('span.raw').html(number.toFixed(1));
       td.find('span.weighted').html(numberWeighted.toFixed(1));
+
+      if (number.toFixed(1) <= 0) {
+        td.addClass('missing-score');
+      } else {
+        td.removeClass('missing-score');
+      }
+      //td.data('raw-score', number.toFixed(1));
 
       input.val(number.toFixed(1)).trigger('blur');
 

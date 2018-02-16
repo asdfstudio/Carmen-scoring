@@ -13,6 +13,8 @@ use App\Division;
 use App\Caption;
 use App\Standing;
 use App\Judge;
+use App\RawScore;
+use App\Carmen\CountExpectedScores;
 
 use Kris\LaravelFormBuilder\FormBuilder;
 
@@ -242,12 +244,27 @@ class CompetitionDivisionController extends Controller
 
         $deletePenaltyForm->modify('submit','submit',['label' => 'Remove']);
 
+
+        $divisionRoundIsMissingScores = false;
+
+        foreach ($division->rounds as $round) {
+          $expectedScores = new CountExpectedScores($round);
+          $expectectedScoresCount = $expectedScores->run();
+          $actualScoresCount = RawScore::where('round_id', $round->id)->where('score','>',0)->count();
+          //dd([$expectectedScoresCount, $actualScoresCount]);
+
+          if ($actualScoresCount < $expectectedScoresCount) {
+            $divisionRoundIsMissingScores = true;
+          }
+        }
+
+
         //
 				//return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'publishScoringForm', 'completeScoringForm', 'finalizeScoringForm'));
 
 
 
-        return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'publishScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
+        return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'publishScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm', 'divisionRoundIsMissingScores'));
     }
 
     /**

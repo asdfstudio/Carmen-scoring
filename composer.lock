@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "774d00a96864c360db36c7ae6e37e330",
+    "content-hash": "d37c939ed8696a2ffe53c8ff1f10254b",
     "packages": [
         {
             "name": "aloha/twilio",
@@ -3041,6 +3041,49 @@
                 "dump"
             ],
             "time": "2016-07-26T08:03:56+00:00"
+        },
+        {
+            "name": "tolawho/loggy",
+            "version": "v1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tolawho/loggy.git",
+                "reference": "5a734e96b1752fc7fd67282a92dd0d57373d8cb8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tolawho/loggy/zipball/5a734e96b1752fc7fd67282a92dd0d57373d8cb8",
+                "reference": "5a734e96b1752fc7fd67282a92dd0d57373d8cb8",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Tolawho\\Loggy\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "Loggy": "Tolawho\\Loggy\\Facades\\Loggy"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Tolawho\\Loggy\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "tolawho",
+                    "email": "tolawho@gmail.com"
+                }
+            ],
+            "description": "Laravel 5 log with multiple channel",
+            "time": "2017-11-22T07:56:42+00:00"
         },
         {
             "name": "twilio/sdk",

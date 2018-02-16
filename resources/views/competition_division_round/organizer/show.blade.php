@@ -50,6 +50,10 @@
 
 	@parent
 
+	@if ($roundIsMissingScores)
+		<p class="alert alert-warning">This round is currently missing scores. Do not complete the scoring until you have received scores from all judges.</p>
+	@endif
+
 	<ul class="list-group horizontal">
 		<li class="list-group-item">
 			<?php $active = $division->scoringMethod->slug == 'ranked' ? 'active division-scoring-method' : false; ?>

@@ -31,6 +31,10 @@
 
 	<div class="clearfix"></div>
 
+	@if ($divisionRoundIsMissingScores)
+		<p class="alert alert-warning">At least one round of this division is currently missing scores. Do not complete the scoring until you have received scores from all judges.</p>
+	@endif
+
 	@if($division->status_slug() == 'finalized')
 		<div class="alert alert-info">
 			<p>Results for this division are available at {{ link_to_route('results.division.show', NULL, [$division, $division->access_code], ['target' => '_blank']) }} </p>

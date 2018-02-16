@@ -152,6 +152,11 @@ $i: 0;
   }
 }
 
+.missing-score {
+  background: $cs-red;
+  color: $cs-white;
+}
+
 
 input.score {
   margin: -8px;

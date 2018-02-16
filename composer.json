@@ -14,7 +14,8 @@
         "guzzlehttp/guzzle": "^6.2",
         "aloha/twilio": "^3.0",
         "bugsnag/bugsnag-laravel": "^2.0",
-        "barryvdh/laravel-dompdf": "^0.8.2"
+        "barryvdh/laravel-dompdf": "^0.8.2",
+        "tolawho/loggy": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -3,6 +3,7 @@
 namespace App\Carmen;
 
 use App\RawScore;
+use Loggy;
 
 class Scorekeeper {
 
@@ -98,7 +99,11 @@ class Scorekeeper {
 		];
 
 		$score = RawScore::firstOrNew($data);
-		$score->score = $this->score;
+
+		if ($score->score != $this->score) {
+			$score->score = $this->score;
+			Loggy::write('scores', $score);
+		}
 
 		return $score->save();
 	}

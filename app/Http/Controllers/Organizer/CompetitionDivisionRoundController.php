@@ -20,6 +20,7 @@ use App\Carmen\RankedScores;
 use App\Carmen\Scoreboard;
 use App\Carmen\Test;
 use App\Carmen\Ratings;
+use App\Carmen\CountExpectedScores;
 
 use Kris\LaravelFormBuilder\FormBuilder;
 
@@ -245,6 +246,18 @@ class CompetitionDivisionRoundController extends Controller
       $weightedScores = $scoreboard->extendedRawScores;
       $rankedScores = $scoreboard->rankedScores;
 
+      $expectedScores = new CountExpectedScores($round);
+      $expectectedScoresCount = $expectedScores->run();
+      $actualScoresCount = RawScore::where('round_id', $round_id)->where('score','>',0)->count();
+      //dd([$expectectedScoresCount, $actualScoresCount]);
+
+      if ($actualScoresCount < $expectectedScoresCount) {
+        $roundIsMissingScores = true;
+      } else {
+        $roundIsMissingScores = false;
+      }
+
+
       $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
         'url' => route('organizer.competition.division.round.scoring',[$competition_id,$division_id,$round_id])
       ]);
@@ -264,7 +277,7 @@ class CompetitionDivisionRoundController extends Controller
 
 
 
-      return view('competition_division_round.organizer.show', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round','competition','division','divisions','rounds','activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard', 'judges', 'choirs', 'ratings'));
+      return view('competition_division_round.organizer.show', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round','competition','division','divisions','rounds','activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard', 'judges', 'choirs', 'ratings', 'roundIsMissingScores'));
 		}
 
 

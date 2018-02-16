@@ -96,9 +96,18 @@ endif;
           }
           //dd($rawScoreEntry);
           //$rawScore = $scoreboard->rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_id', $criterion->id)->pluck('score')->first();
+          //$
+
+
+
+          if ($rawScore == 0) {
+            $missingScoresClass = 'missing-score';
+          } else {
+            $missingScoresClass = '';
+          }
           ?>
 
-          <td class="score-gradient-{{ $rawScore * 10 }}" data-choir-id="{{ $choir->id }}" data-criterion-id="{{ $criterion->id }}" data-round-id="{{ $roundId }}">
+          <td class="score-gradient-{{ $rawScore * 10 }} {{ $missingScoresClass }}" data-choir-id="{{ $choir->id }}" data-criterion-id="{{ $criterion->id }}" data-round-id="{{ $roundId }}">
 
             <span class="score raw">{{ $rawScore }}</span>
 
