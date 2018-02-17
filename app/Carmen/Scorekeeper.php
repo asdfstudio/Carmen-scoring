@@ -101,11 +101,19 @@ class Scorekeeper {
 		$score = RawScore::firstOrNew($data);
 
 		if ($score->score != $this->score) {
-			$score->score = $this->score;
+			$scoreChanged = true;
+		} else {
+			$scoreChanged = false;
+		}
+
+		$score->score = (float) $this->score;
+		$result = $score->save();
+
+		if ($scoreChanged) {
 			Loggy::write('scores', $score);
 		}
 
-		return $score->save();
+		return $result;
 	}
 
 }
