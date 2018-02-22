@@ -10,19 +10,20 @@ class CountExpectedScores {
 
   protected $round;
   protected $captions;
+  protected $choirCount;
   protected $expectedTotalCount;
 
   public function __construct(Round $round)
   {
-    $round->load(['division', 'division.judges', 'division.sheet', 'division.sheet.criteria']);
+    $round->load(['choirs', 'division', 'division.judges', 'division.sheet', 'division.sheet.criteria']);
     $this->round = $round;
-
   }
 
 
   public function run()
   {
     $this->getDistinctCaptions();
+    $this->countChoirs();
     $this->countCaptionJudges();
     $this->countCaptionCriteria();
     $this->calculateExpectedTotalCaptionCount();
@@ -44,6 +45,11 @@ class CountExpectedScores {
     }
   }
 
+  public function countChoirs()
+  {
+    $this->choirCount = $this->round->choirs->count();
+  }
+
   public function countCaptionJudges()
   {
     foreach ($this->round->division->judges as $judge) {
@@ -63,7 +69,7 @@ class CountExpectedScores {
   public function calculateExpectedTotalCaptionCount()
   {
     foreach ($this->captions as $key => $caption) {
-      $this->captions[$key]['expectedTotalCount'] = $caption['judgeCount'] * $caption['criteriaCount'];
+      $this->captions[$key]['expectedTotalCount'] = $this->choirCount * $caption['judgeCount'] * $caption['criteriaCount'];
     }
   }
 

@@ -4387,7 +4387,9 @@ ul.schedule-list {
     ul.schedule-list.announcer-view li.schedule-item {
       font-size: 1.4em;
       padding: 15px;
-      margin-bottom: 8px; }
+      margin-bottom: 30px;
+      border: 1px solid #ddd;
+      border-radius: 10px; }
       ul.schedule-list.announcer-view li.schedule-item.done {
         background: #ccc;
         text-decoration: line-through; }
@@ -4418,43 +4420,51 @@ ul.schedule-list {
       float: right; }
       ul.schedule-list li.schedule-item.choir .choir-name.choir-tbd {
         font-style: italic; }
-    ul.schedule-list li.schedule-item.award .division-name {
-      font-weight: bold; }
-    ul.schedule-list li.schedule-item.award .award-name, ul.schedule-list li.schedule-item.award .caption-name {
-      color: #888;
-      font-size: 0.9em;
-      margin-left: 3px; }
-      ul.schedule-list li.schedule-item.award .award-name.caption-music, ul.schedule-list li.schedule-item.award .caption-name.caption-music {
-        color: #7F4091; }
-      ul.schedule-list li.schedule-item.award .award-name.caption-show, ul.schedule-list li.schedule-item.award .caption-name.caption-show {
-        color: #E29231; }
-      ul.schedule-list li.schedule-item.award .award-name.caption-overall-show, ul.schedule-list li.schedule-item.award .caption-name.caption-overall-show {
-        color: #E29231; }
-      ul.schedule-list li.schedule-item.award .award-name.caption-combo, ul.schedule-list li.schedule-item.award .caption-name.caption-combo {
-        color: #CA2128; }
-      ul.schedule-list li.schedule-item.award .award-name.caption-overall, ul.schedule-list li.schedule-item.award .caption-name.caption-overall {
-        color: #68B155; }
-      ul.schedule-list li.schedule-item.award .award-name.caption-visual-performance, ul.schedule-list li.schedule-item.award .caption-name.caption-visual-performance {
-        color: #CA2128; }
-    ul.schedule-list li.schedule-item.award .award-winner {
-      float: right;
-      background: #eee;
-      padding: 0px 17px;
-      border-radius: 20px; }
-      ul.schedule-list li.schedule-item.award .award-winner .award-winner-recipient {
-        font-weight: bold;
-        margin-right: 5px; }
-      ul.schedule-list li.schedule-item.award .award-winner .award-winner-choir {
-        font-weight: bold;
-        font-style: italic;
-        font-size: .9em;
-        opacity: .7; }
-    ul.schedule-list li.schedule-item.award .award-sponsor {
-      background: #eee;
-      padding: 5px 10px;
-      border-radius: 36px;
-      font-size: .8em;
-      margin-left: 10px; }
+    ul.schedule-list li.schedule-item.award {
+      overflow: hidden; }
+      ul.schedule-list li.schedule-item.award .division-name {
+        font-weight: bold; }
+      ul.schedule-list li.schedule-item.award .award-name, ul.schedule-list li.schedule-item.award .caption-name {
+        color: #888;
+        font-size: 0.9em;
+        margin-left: 3px; }
+        ul.schedule-list li.schedule-item.award .award-name.caption-music, ul.schedule-list li.schedule-item.award .caption-name.caption-music {
+          color: #7F4091; }
+        ul.schedule-list li.schedule-item.award .award-name.caption-show, ul.schedule-list li.schedule-item.award .caption-name.caption-show {
+          color: #E29231; }
+        ul.schedule-list li.schedule-item.award .award-name.caption-overall-show, ul.schedule-list li.schedule-item.award .caption-name.caption-overall-show {
+          color: #E29231; }
+        ul.schedule-list li.schedule-item.award .award-name.caption-combo, ul.schedule-list li.schedule-item.award .caption-name.caption-combo {
+          color: #CA2128; }
+        ul.schedule-list li.schedule-item.award .award-name.caption-overall, ul.schedule-list li.schedule-item.award .caption-name.caption-overall {
+          color: #68B155; }
+        ul.schedule-list li.schedule-item.award .award-name.caption-visual-performance, ul.schedule-list li.schedule-item.award .caption-name.caption-visual-performance {
+          color: #CA2128; }
+      ul.schedule-list li.schedule-item.award .award-heading {
+        display: block;
+        border-bottom: 1px dashed #ccc;
+        margin-bottom: 10px;
+        padding-bottom: 3px; }
+      ul.schedule-list li.schedule-item.award .award-winner {
+        background: #eee;
+        padding: 7px 17px;
+        border-radius: 10px;
+        display: block; }
+        ul.schedule-list li.schedule-item.award .award-winner.pull-right {
+          padding: 0 12px; }
+        ul.schedule-list li.schedule-item.award .award-winner .award-winner-recipient {
+          font-weight: bold;
+          margin-right: 5px; }
+        ul.schedule-list li.schedule-item.award .award-winner .award-winner-choir {
+          font-weight: bold;
+          font-style: italic;
+          font-size: .9em;
+          opacity: .7; }
+      ul.schedule-list li.schedule-item.award .award-sponsor {
+        padding: 5px 10px;
+        font-size: .8em;
+        margin-top: 5px;
+        display: block; }
 
 .mv {
   margin-top: 10px;

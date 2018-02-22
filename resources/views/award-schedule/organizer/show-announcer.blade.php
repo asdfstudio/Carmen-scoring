@@ -47,13 +47,31 @@
       ?>
 
       <li class="schedule-item award">
-        @if($item->division)
-          <span class="division-name" data-division-id="{{ $item->division->id }}">{{ $item->division->name }}</span>
-        @endif
+
+        <div class="award-heading">
+
+          @if($item->division)
+            <span class="division-name" data-division-id="{{ $item->division->id }}">{{ $item->division->name }}</span>
+          @endif
+
+          @if($item->round)
+            <span class="award-name">{{ $item->round->name }} Ratings</span>
+          @endif
+
+          @if($item->award)
+            <span class="award-name">{{ $item->award->name }}</span>
+          @endif
+
+          @if($item->caption)
+            <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ $item->named_rank }}</span>
+          @elseif($item->rank)
+            <span class="caption-name caption-overall">Overall {{ $item->named_rank }}</span>
+          @endif
+
+        </div> <!-- end award heading-->
+
 
         @if($item->round)
-          <span class="award-name">{{ $item->round->name }} Ratings</span>
-
           <?php $roundRatings = $ratings->where('round_id', $item->round->id)->first();?>
 
           @if($roundRatings)
@@ -64,16 +82,6 @@
             </ul>
           @endif
 
-        @endif
-
-        @if($item->award)
-          <span class="award-name">{{ $item->award->name }}</span>
-        @endif
-
-        @if($item->caption)
-          <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ $item->named_rank }}</span>
-        @elseif($item->rank)
-          <span class="caption-name caption-overall">Overall {{ $item->named_rank }}</span>
         @endif
 
         @if($awardWinner)

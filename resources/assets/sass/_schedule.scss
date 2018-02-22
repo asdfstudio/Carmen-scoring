@@ -194,7 +194,9 @@ ul.schedule-list {
     & li.schedule-item {
       font-size: 1.4em;
       padding: 15px;
-      margin-bottom: 8px;
+      margin-bottom: 30px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
 
       &.done {
         background: #ccc;
@@ -247,6 +249,8 @@ ul.schedule-list {
     }
 
     &.award {
+      overflow: hidden;
+
       .division-name {
         font-weight: bold;
       }
@@ -281,11 +285,22 @@ ul.schedule-list {
         }
       }
 
+      .award-heading {
+        display: block;
+        border-bottom: 1px dashed #ccc;
+        margin-bottom: 10px;
+        padding-bottom: 3px;
+      }
+
       .award-winner {
-        float: right;
         background: #eee;
-        padding: 0px 17px;
-        border-radius: 20px;
+        padding: 7px 17px;
+        border-radius: 10px;
+        display: block;
+
+        &.pull-right {
+          padding: 0 12px;
+        }
 
         .award-winner-recipient {
           font-weight: bold;
@@ -300,11 +315,10 @@ ul.schedule-list {
       }
 
       .award-sponsor {
-          background: #eee;
-          padding: 5px 10px;
-          border-radius: 36px;
-          font-size: .8em;
-          margin-left: 10px;
+        padding: 5px 10px;
+        font-size: .8em;
+        margin-top: 5px;
+        display: block;
       }
     }
   }

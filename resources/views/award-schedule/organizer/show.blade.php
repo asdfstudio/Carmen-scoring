@@ -69,7 +69,7 @@
         @endif
 
         @if($awardWinner)
-          <span class="award-winner">
+          <span class="award-winner pull-right">
             @if($awardWinner->recipient)
               <span class="award-winner-recipient">{{ $awardWinner->recipient }}</span>
             @endif
@@ -83,8 +83,9 @@
             @endif
 
           </span>
+
           @if($awardWinner->sponsor)
-            <span class="award-sponsor">{{ $awardWinner->sponsor }}</span>
+            <!--<span class="award-sponsor">{{ $awardWinner->sponsor }}</span>-->
           @endif
         @endif
       </li>
