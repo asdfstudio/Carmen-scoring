@@ -103,6 +103,11 @@ class Competition extends Model
 			return $this->hasManyThrough('App\Round','App\Division');
 		}
 
+    public function commentUrls()
+    {
+      return $this->hasMany('App\CommentUrl');
+    }
+
 
 
     public function status()

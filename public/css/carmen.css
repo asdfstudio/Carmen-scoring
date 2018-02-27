@@ -3541,6 +3541,18 @@ button.close {
       .color-list .list-group-item .swatches-list-group .swatch.small {
         width: 20px; }
 
+table.spreadsheet-legend {
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+  font-size: 13px; }
+  table.spreadsheet-legend th {
+    padding: 10px;
+    font-size: 1.1em; }
+  table.spreadsheet-legend td {
+    padding: 8px 10px; }
+  table.spreadsheet-legend .score-in-focus {
+    background: #a6d19b; }
+
 .scorecard {
   background: #eee;
   padding: 10px 5px; }
@@ -3895,6 +3907,13 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
       background: #CA2128;
       color: #FFF;
       border-color: #CA2128; }
+  .action.disabled {
+    opacity: 0.4;
+    cursor: not-allowed; }
+    .action.disabled:hover {
+      background: inherit;
+      color: inherit;
+      border-color: inherit; }
   .action.secondary {
     color: #898989; }
     .action.secondary:hover {

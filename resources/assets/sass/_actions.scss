@@ -53,6 +53,17 @@
     }
   }
 
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;;
+
+    &:hover {
+      background: inherit;
+      color:inherit;
+      border-color: inherit;
+    }
+  }
+
   &.secondary {
     color: $cs-gray-mid-3;
 

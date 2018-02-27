@@ -246,7 +246,7 @@ class CompetitionDivisionRoundController extends Controller
       $weightedScores = $scoreboard->extendedRawScores;
       $rankedScores = $scoreboard->rankedScores;
 
-      $expectedScores = new CountExpectedScores($round);
+      /*$expectedScores = new CountExpectedScores($round);
       $expectectedScoresCount = $expectedScores->run();
       $actualScoresCount = RawScore::where('round_id', $round_id)->where('score','>',0)->count();
       //dd([$expectectedScoresCount, $actualScoresCount]);
@@ -255,23 +255,43 @@ class CompetitionDivisionRoundController extends Controller
         $roundIsMissingScores = true;
       } else {
         $roundIsMissingScores = false;
-      }
+      }*/
 
+      $roundIsMissingScores = $round->isMissingScores();
 
       $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
-        'url' => route('organizer.competition.division.round.scoring',[$competition_id,$division_id,$round_id])
+        'url' => route('organizer.competition.division.round.scoring', [
+          $competition_id,
+          $division_id,
+          $round_id
+        ])
       ]);
 
       $deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm', [
-        'url' => route('organizer.competition.division.round.scoring',[$competition_id,$division_id,$round_id])
+        'url' => route('organizer.competition.division.round.scoring', [
+          $competition_id,
+          $division_id,
+          $round_id
+        ])
       ]);
 
       $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm', [
-        'url' => route('organizer.competition.division.round.scoring',[$competition_id,$division_id,$round_id])
+        'url' => route('organizer.competition.division.round.scoring', [
+          $competition_id,
+          $division_id,
+          $round_id
+        ]),
+        'data' => [
+          'isMissingScores' => $roundIsMissingScores
+        ]
       ]);
 
       $reactivateScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm', [
-        'url' => route('organizer.competition.division.round.scoring',[$competition_id,$division_id,$round_id])
+        'url' => route('organizer.competition.division.round.scoring', [
+          $competition_id,
+          $division_id,
+          $round_id
+        ])
       ]);
 
 

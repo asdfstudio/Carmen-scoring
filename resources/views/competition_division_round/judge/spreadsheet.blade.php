@@ -64,6 +64,7 @@
       @endif
   	</ul>
 
+  @include('scores.spreadsheet-legend')
 
   @include('scores.judge.spreadsheet',[
     'choirs' => $round->choirs,

@@ -34,6 +34,10 @@ Route::group([
 
   Route::resource('award', 'AwardController');
 
+  Route::get('competition/{competition}/feedback-links', [
+    'as' => 'organizer.competition.comment-links.index', 'uses' => 'CompetitionFeedbackUrlController@index'
+  ]);
+
   // List competition schedules
   Route::get('competition/{competition}/schedule', [
     'as' => 'organizer.competition.schedule.index', 'uses' => 'ScheduleController@index'

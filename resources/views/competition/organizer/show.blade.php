@@ -83,6 +83,8 @@
   @include('award-schedule.organizer.table', ['schedules' => $competition->awardSchedules])
 
 
-
+  <h3>Feedback Links</h3>
+  <p>View the URLs where choir directors can view feedback from judges.</p>
+  <p>{{ link_to_route('organizer.competition.comment-links.index','View feedback links',[$competition], ['class' => 'action']) }}</p>
 
 @endsection

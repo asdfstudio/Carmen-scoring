@@ -35,6 +35,7 @@ Route::group([
       'as' => 'admin.raw-score-log.show', 'uses' => 'RawScoreLogController@show'
     ]);
 
+
     Route::get('sheet/{sheet}/manage', [
       'as' => 'admin.sheet.manage', 'uses' => 'SheetController@manage'
     ]);

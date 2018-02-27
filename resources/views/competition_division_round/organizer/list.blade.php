@@ -67,6 +67,19 @@
 				@endcan
 
 				@can('completeScoring', $round)
+
+					<?php
+
+					if ($round->isMissingScores()) {
+	          $btnAttr = ['class' => 'action disabled', 'disabled' => 'disabled'];
+	        } else {
+	          $btnAttr = ['class' => 'action'];
+	        }
+
+					$completeScoringForm->modify('submit', 'submit', [
+						'attr' => $btnAttr
+					]);
+					?>
 					<li>
 						{!! form($completeScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id]), 'class' => '']) !!}
 					</li>

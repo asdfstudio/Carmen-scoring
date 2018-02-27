@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Carmen\CountExpectedScores;
+use App\RawScore;
 
 class Round extends Model
 {
@@ -157,4 +159,23 @@ class Round extends Model
       return $this->save();
     }
 
+    public function isMissingScores()
+    {
+      if (!$this instanceof Round) {
+        return false;
+      }
+
+      $expectedScores = new CountExpectedScores($this);
+      $expectectedScoresCount = $expectedScores->run();
+
+      $actualScoresCount = RawScore::where('round_id', $this->id)->where('score','>',0)->count();
+
+      if ($actualScoresCount < $expectectedScoresCount) {
+        $roundIsMissingScores = true;
+      } else {
+        $roundIsMissingScores = false;
+      }
+
+      return $roundIsMissingScores;
+    }
 }

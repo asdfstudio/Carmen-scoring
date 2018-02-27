@@ -1,5 +1,29 @@
 //@import 'variables';
 
+table.spreadsheet-legend {
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+  font-size: 13px;
+  
+  th {
+    padding: 10px;
+    font-size: 1.1em;
+  }
+  td {
+    padding: 8px 10px;
+  }
+
+  .missing-score {
+
+  }
+  .score-in-focus {
+    background: lighten($cs-green, 20);
+  }
+  .saved-score {
+
+  }
+
+}
 
 .scorecard {
     background: #eee;

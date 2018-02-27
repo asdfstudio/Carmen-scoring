@@ -150,6 +150,21 @@ class CompetitionDivisionController extends Controller
 
 				$captions = Caption::forSheet($division->sheet);
 
+
+        $divisionRoundIsMissingScores = false;
+
+        foreach ($division->rounds as $round) {
+          //$expectedScores = new CountExpectedScores($round);
+          //$expectectedScoresCount = $expectedScores->run();
+          //$actualScoresCount = RawScore::where('round_id', $round->id)->where('score','>',0)->count();
+          //dd([$expectectedScoresCount, $actualScoresCount]);
+
+          if ($round->isMissingScores()) {
+            $divisionRoundIsMissingScores = true;
+          }
+
+        }
+
         $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
           'method' => 'POST',
           'url' => route('organizer.competition.division.scoring',[$competition,$division])
@@ -167,12 +182,21 @@ class CompetitionDivisionController extends Controller
 
         $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm', [
           'method' => 'POST',
-          'url' => route('organizer.competition.division.scoring',[$competition_id,$division_id])
+          'url' => route('organizer.competition.division.scoring', [
+            $competition_id,
+            $division_id
+          ]),
+          'data' => [
+            'isMissingScores' => $divisionRoundIsMissingScores
+          ]
         ]);
 
         $finalizeScoringForm = $formBuilder->create('Scoring\FinalizeScoringForm', [
           'method' => 'POST',
-          'url' => route('organizer.competition.division.scoring',[$competition_id,$division_id])
+          'url' => route('organizer.competition.division.scoring', [
+            $competition_id,
+            $division_id
+          ])
         ]);
 
 
@@ -245,18 +269,7 @@ class CompetitionDivisionController extends Controller
         $deletePenaltyForm->modify('submit','submit',['label' => 'Remove']);
 
 
-        $divisionRoundIsMissingScores = false;
 
-        foreach ($division->rounds as $round) {
-          $expectedScores = new CountExpectedScores($round);
-          $expectectedScoresCount = $expectedScores->run();
-          $actualScoresCount = RawScore::where('round_id', $round->id)->where('score','>',0)->count();
-          //dd([$expectectedScoresCount, $actualScoresCount]);
-
-          if ($actualScoresCount < $expectectedScoresCount) {
-            $divisionRoundIsMissingScores = true;
-          }
-        }
 
 
         //

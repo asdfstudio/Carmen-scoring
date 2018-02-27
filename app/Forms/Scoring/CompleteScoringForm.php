@@ -13,7 +13,16 @@ class CompleteScoringForm extends Form
 
     public function buildForm()
     {
+        if ($this->getData('isMissingScores')) {
+          $btnAttr = ['class' => 'action disabled', 'disabled' => 'disabled'];
+        } else {
+          $btnAttr = ['class' => 'action'];
+        }
+
         $this->add('complete','hidden',['value' => '1']);
-        $this->add('submit', 'submit', ['label' => 'Complete Scoring', 'attr' => ['class' => 'action']]);
+        $this->add('submit', 'submit', [
+          'label' => 'Complete Scoring',
+          'attr' => $btnAttr
+        ]);
     }
 }
