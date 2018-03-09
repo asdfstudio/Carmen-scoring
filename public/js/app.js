@@ -305,7 +305,7 @@ $(document).ready(function() {
 
     // scorecard comments/feedback
     $('.scorecard textarea[name="comment"]').on('change', function(e) {
-      console.log('comment changed');
+      //console.log('comment changed');
       $(this).parents('form').addClass('has-changed-data');
     });
 

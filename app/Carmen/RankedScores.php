@@ -45,6 +45,8 @@ class RankedScores {
   {
     $captionRank = collect();
 
+    //dd($this->penalties);
+
     //echo 'calculate_rank<br />';
 
     $this->choirs->each(function($choir_id, $key) use ($caption_id, $captionRank, $scoreField){
@@ -58,7 +60,7 @@ class RankedScores {
       $score = $query->sum($scoreField);
 
       // Subtract any penalties from the score
-      if($this->penalties)
+      if($this->penalties AND !$caption_id)
       {
         $choir_penalties = $this->penalties->where('choir_id', $choir_id);
 
