@@ -374,13 +374,13 @@ Route::group([
     'as' => 'organizer.competition.solo-division.results', 'uses' => 'CompetitionSoloDivisionController@results'
   ]);
 
-  Route::get('competition/{competition}/solo-division/{soloDivision}/results/female', [
+  /*Route::get('competition/{competition}/solo-division/{soloDivision}/results/female', [
     'as' => 'organizer.competition.solo-division.results.female', 'uses' => 'CompetitionSoloDivisionController@resultsFemale'
   ]);
 
   Route::get('competition/{competition}/solo-division/{soloDivision}/results/male', [
     'as' => 'organizer.competition.solo-division.results.male', 'uses' => 'CompetitionSoloDivisionController@resultsMale'
-  ]);
+  ]);*/
 
   Route::get('competition/{competition}/division/{division}/clone', [
     'as' => 'organizer.competition.division.clone', 'uses' => 'CompetitionDivisionCloneController@clone'

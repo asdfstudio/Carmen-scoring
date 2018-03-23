@@ -33,6 +33,15 @@ class CreateForm extends Form
           'attr' => ['min' => 0]
         ]);
 
+        $this->add('category_1','text', [
+          'label' => 'Category #1 Name'
+        ]);
+
+        $this->add('category_2','text', [
+          'label' => 'Category #2 Name'
+        ]);
+
+
         $judge1 = false;
         $judge2 = false;
 

@@ -151,15 +151,25 @@ class CompetitionSoloDivisionController extends Controller
      * @param  [type]      $gender      [description]
      * @return [type]                   [description]
      */
-    public function results(Competition $competition, $id, $gender = null)
+    public function results(Competition $competition, $id, Request $request)
     {
         $soloDivision = SoloDivision::with('performers', 'judges')->find($id);
 
-        if ($gender) {
-          $genderName = $gender == 'M' ? 'Male' : 'Female';
-          $soloDivision->performers = $soloDivision->performers->where('gender', $gender);
+        $category = $request->input('category');
+
+        if ($category) {
+          $soloDivision->performers = $soloDivision->performers->where('category', $category);
+
+          if ($category == 1) {
+            $categoryName = $soloDivision->category_1;
+          } elseif ($category == 2) {
+            $categoryName = $soloDivision->category_2;
+          } else {
+            $categoryName = false;
+          }
+
         } else {
-          $genderName = null;
+          $categoryName = false;
         }
 
         $rawScores = SoloRawScore::where('solo_division_id', $soloDivision->id)->get();
@@ -167,32 +177,33 @@ class CompetitionSoloDivisionController extends Controller
         $totalScores = (new SoloTotalScores($rawScores , $soloDivision->performers))->get();
         $rankedScores = (new SoloRankedScores($totalScores , $soloDivision->performers))->get();
 
-        if (!$gender) {
-          $maleRank = (new SoloRankedScores($totalScores, $soloDivision->performers->where('gender', 'M')))->get();
-          $femaleRank = (new SoloRankedScores($totalScores, $soloDivision->performers->where('gender', 'F')))->get();
+        if (!$category) {
+          $category1Rank = (new SoloRankedScores($totalScores, $soloDivision->performers->where('category', $soloDivision->category_1)))->get();
+
+          $category2Rank = (new SoloRankedScores($totalScores, $soloDivision->performers->where('category', $soloDivision->category_2)))->get();
         } else {
-          $maleRank = null;
-          $femaleRank = null;
+          $category1Rank = null;
+          $category2Rank = null;
         }
 
         $judges = $soloDivision->judges;
 
-        $soloDivision->performers->transform(function($performer, $key) use ($rawScores, $rankedScores, $maleRank, $femaleRank, $judges) {
+        $soloDivision->performers->transform(function($performer, $key) use ($rawScores, $rankedScores, $category1Rank, $category2Rank, $judges, $soloDivision) {
           $performer->rank = $rankedScores->where('performer_id', $performer->id)->pluck('rank')->first();
           $performer->score = $rawScores->where('performer_id', $performer->id)->sum('score');
 
-          if ($performer->gender == 'M') {
-            $genderRank = $maleRank;
-          } elseif ($performer->gender == 'F') {
-            $genderRank = $femaleRank;
+          if ($performer->category == $soloDivision->category_1) {
+            $categoryRank = $category1Rank;
+          } elseif ($performer->category == $soloDivision->category_2) {
+            $categoryRank = $categoryRank;
           } else {
-            $genderRank = false;
+            $categoryRank = false;
           }
 
-          if ($genderRank) {
-            $performer->gender_rank = $genderRank->where('performer_id', $performer->id)->pluck('rank')->first();
+          if ($categoryRank) {
+            $performer->category_rank = $categoryRank->where('performer_id', $performer->id)->pluck('rank')->first();
           } else {
-            $performer->gender_rank = false;
+            $performer->category_rank = false;
           }
 
           $judgeScores = [];
@@ -208,7 +219,7 @@ class CompetitionSoloDivisionController extends Controller
 
         $soloDivision->performers = $soloDivision->performers->sortBy('rank');
 
-        return view('solo-division.organizer.results', compact('competition', 'soloDivision', 'genderName'));
+        return view('solo-division.organizer.results', compact('competition', 'soloDivision', 'category', 'categoryName'));
     }
 
 

@@ -17,6 +17,8 @@
       <li class="list-group-item">Status: {{ $soloDivision->status }}</li>
       <li class="list-group-item">Max Performers: {{ $soloDivision->max_performers }}</li>
       <li class="list-group-item">Scoring Sheet: {{ $soloDivision->sheet->name }}</li>
+			<li class="list-group-item">Category #1 Name: {{ $soloDivision->category_1 }}</li>
+			<li class="list-group-item">Category #2 Name: {{ $soloDivision->category_2 }}</li>
 
 			@if ($soloDivision->status_slug == 'finalized')
 				<li class="list-group-item">Results URL: {{ link_to_route('results.solo-division.show', null, [$soloDivision, $soloDivision->access_code], ['target' => '_blank']) }}</li>

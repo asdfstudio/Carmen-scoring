@@ -4215,12 +4215,12 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
     &.place {
       background: $cs-gray-mid-3;
     }*/ }
-  .label.gender {
+  .label.category {
     background: #999;
     color: #FFF; }
-    .label.gender.male {
+    .label.category.category-1 {
       background: #7F4091; }
-    .label.gender.female {
+    .label.category.category-2 {
       background: #CA2128; }
   .label.status {
     color: #FFF;

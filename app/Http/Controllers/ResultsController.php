@@ -356,7 +356,7 @@ class ResultsController extends Controller
     }
 
 
-    public function soloDivision(FormBuilder $formBuilder, Request $request, SoloDivision $soloDivision, $access_code = NULL, $gender = null)
+    public function soloDivision(FormBuilder $formBuilder, Request $request, SoloDivision $soloDivision, $access_code = NULL)
     {
       $competition = $soloDivision->competition;
 
@@ -374,6 +374,8 @@ class ResultsController extends Controller
         return view('results.solo_division.restricted', compact('access_code', 'accessCodeForm'));
       }
 
+      $category = $request->input('category');
+
       // Division not found, check using access code to find director
       /*if($division == false AND $access_code)
       {
@@ -387,11 +389,20 @@ class ResultsController extends Controller
         }
       }*/
 
-      if ($gender) {
-        $genderName = $gender == 'M' ? 'Male' : 'Female';
-        $soloDivision->performers = $soloDivision->performers->where('gender', $gender);
+
+      if ($category) {
+        $soloDivision->performers = $soloDivision->performers->where('category', $category);
+
+        if ($category == 1) {
+          $categoryName = $soloDivision->category_1;
+        } elseif ($category == 2) {
+          $categoryName = $soloDivision->category_2;
+        } else {
+          $categoryName = 'Overall';
+        }
+
       } else {
-        $genderName = 'Overall';
+        $categoryName = 'Overall';
       }
 
       $rawScores = SoloRawScore::where('solo_division_id', $soloDivision->id)->get();
@@ -399,32 +410,33 @@ class ResultsController extends Controller
       $totalScores = (new SoloTotalScores($rawScores , $soloDivision->performers))->get();
       $rankedScores = (new SoloRankedScores($totalScores , $soloDivision->performers))->get();
 
-      if (!$gender) {
-        $maleRank = (new SoloRankedScores($totalScores, $soloDivision->performers->where('gender', 'M')))->get();
-        $femaleRank = (new SoloRankedScores($totalScores, $soloDivision->performers->where('gender', 'F')))->get();
+      if (!$category) {
+        $category1Rank = (new SoloRankedScores($totalScores, $soloDivision->performers->where('category', $soloDivision->category_1)))->get();
+
+        $category2Rank = (new SoloRankedScores($totalScores, $soloDivision->performers->where('category', $soloDivision->category_2)))->get();
       } else {
-        $maleRank = null;
-        $femaleRank = null;
+        $category1Rank = null;
+        $category2Rank = null;
       }
 
       $judges = $soloDivision->judges;
 
-      $soloDivision->performers->transform(function($performer, $key) use ($rawScores, $rankedScores, $maleRank, $femaleRank, $judges) {
+      $soloDivision->performers->transform(function($performer, $key) use ($rawScores, $rankedScores, $category1Rank, $category2Rank, $judges, $soloDivision) {
         $performer->rank = $rankedScores->where('performer_id', $performer->id)->pluck('rank')->first();
         $performer->score = $rawScores->where('performer_id', $performer->id)->sum('score');
 
-        if ($performer->gender == 'M') {
-          $genderRank = $maleRank;
-        } elseif ($performer->gender == 'F') {
-          $genderRank = $femaleRank;
+        if ($performer->category == $soloDivision->category_1) {
+          $categoryRank = $category1Rank;
+        } elseif ($performer->category == $soloDivision->category_2) {
+          $categoryRank = $categoryRank;
         } else {
-          $genderRank = false;
+          $categoryRank = false;
         }
 
-        if ($genderRank) {
-          $performer->gender_rank = $genderRank->where('performer_id', $performer->id)->pluck('rank')->first();
+        if ($categoryRank) {
+          $performer->category_rank = $categoryRank->where('performer_id', $performer->id)->pluck('rank')->first();
         } else {
-          $performer->gender_rank = false;
+          $performer->category_rank = false;
         }
 
         $judgeScores = [];
@@ -440,7 +452,7 @@ class ResultsController extends Controller
 
       $soloDivision->performers = $soloDivision->performers->sortBy('rank');
 
-      return view('results.solo_division.results', compact('competition', 'judges', 'soloDivision', 'access_code', 'genderName'));
+      return view('results.solo_division.results', compact('competition', 'judges', 'soloDivision', 'access_code', 'genderName', 'categoryName'));
     }
 
 

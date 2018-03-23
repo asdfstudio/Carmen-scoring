@@ -38,14 +38,6 @@ Route::group([
 			'as' => 'competition.solo-division.results', 'uses' => 'SoloDivisionController@results'
 		]);
 
-    Route::get('competition/{competition}/solo-division/{soloDivision}/results/female', [
-			'as' => 'competition.solo-division.results.female', 'uses' => 'SoloDivisionController@resultsFemale'
-		]);
-
-    Route::get('competition/{competition}/solo-division/{soloDivision}/results/male', [
-			'as' => 'competition.solo-division.results.male', 'uses' => 'SoloDivisionController@resultsMale'
-		]);
-
     Route::get('competition/{competition}/solo-division/{soloDivision}/performer/{performer}', [
 			'as' => 'competition.solo-division.performer.score', 'uses' => 'SoloDivisionPerformerController@score'
 		]);

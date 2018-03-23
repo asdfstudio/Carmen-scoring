@@ -23,7 +23,10 @@ class SoloDivisionPerformerController extends Controller
     {
       $form = $formBuilder->create('Performer\EditForm', [
         'url' => route('judge.competition.solo-division.performer.update', [$competition, $soloDivision, $performer]),
-        'model' => $performer
+        'model' => $performer,
+        'data' => [
+          'soloDivision' => $soloDivision
+        ]
       ]);
 
       return view('performer.judge.edit', compact('competition', 'soloDivision', 'performer', 'form'));
@@ -32,7 +35,7 @@ class SoloDivisionPerformerController extends Controller
     public function update(Competition $competition, SoloDivision $soloDivision, Performer $performer, Request $request)
     {
       $performer->name = $request->input('name');
-      $performer->gender = $request->input('gender');
+      $performer->category = $request->input('category');
       $performer->save();
 
       return redirect()->route('judge.competition.solo-division.show', [$competition, $soloDivision]);

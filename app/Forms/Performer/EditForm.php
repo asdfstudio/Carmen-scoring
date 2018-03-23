@@ -14,9 +14,11 @@ class EditForm extends Form
     {
         $this->add('name','text', ['rules' => 'required']);
 
-        $this->add('gender','choice', [
+        $soloDivision = $this->getData('soloDivision');
+
+        $this->add('category','choice', [
           'rules' => 'required',
-          'choices' => ['F' => 'Female', 'M' => 'Male'],
+          'choices' => [1 => $soloDivision->category_1, 2 => $soloDivision->category_2],
           'expanded' => false,
           'multiple' => false
         ]);

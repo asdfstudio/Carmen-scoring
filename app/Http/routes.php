@@ -81,11 +81,11 @@ Route::get('results/solo-division/{soloDivision}/performer/{performer}/{access_c
   'as' => 'results.solo-division.performer.show', 'uses' => 'ResultsController@soloDivisionPerformer'
 ]);
 
-Route::post('results/solo-division/{soloDivision}/{access_code?}/{gender?}', [
+Route::post('results/solo-division/{soloDivision}/{access_code?}/', [
   'as' => 'results.solo-division.show', 'uses' => 'ResultsController@soloDivision'
 ]);
 
-Route::get('results/solo-division/{soloDivision}/{access_code?}/{gender?}', [
+Route::get('results/solo-division/{soloDivision}/{access_code?}/', [
   'as' => 'results.solo-division.show', 'uses' => 'ResultsController@soloDivision'
 ]);
 

@@ -6,6 +6,6 @@
       @endif
 
       <span class="name">{{ $performer->name }}</span>
-      {!! $performer->gender_label('small') !!}
+      {!! $performer->category_label('small') !!}
   @endforeach
 </ul>

@@ -44,18 +44,26 @@ class SoloDivisionController extends Controller
    * @param  [type]       $gender       [description]
    * @return [type]                     [description]
    */
-  public function results(Competition $competition, SoloDivision $soloDivision, $gender = null)
+  public function results(Competition $competition, SoloDivision $soloDivision, Request $request)
   {
+    $category = $request->input('category');
+
     $soloDivision->load('performers', 'judges');
 
-    if ($gender) {
-      $genderName = $gender == 'M' ? 'Male' : 'Female';
+    if ($category) {
+      $soloDivision->performers = $soloDivision->performers->where('category', $category);
 
-      $soloDivision->performers = $soloDivision->performers->where('gender', $gender);
+      if ($category == $soloDivision->category_1) {
+        $categoryName = $soloDivision->category_1;
+      } elseif ($category == $soloDivision->category_2) {
+        $categoryName = $soloDivision->category_2;
+      } else {
+        $categoryName = false;
+      }
+
     } else {
-      $genderName = null;
+      $categoryName = false;
     }
-
 
     $rawScores = SoloRawScore::where('solo_division_id', $soloDivision->id)
                                   //->where('judge_id', Auth::user()->person_id)
@@ -83,33 +91,7 @@ class SoloDivisionController extends Controller
 
     $soloDivision->performers = $soloDivision->performers->sortBy('rank');
 
-    return view('solo-division.judge.results', compact('competition', 'soloDivision', 'rawScores', 'rankedScores', 'totalScores', 'genderName'));
-  }
-
-
-  /**
-   * [resultsFemale description]
-   * @param  Competition  $competition  [description]
-   * @param  SoloDivision $soloDivision [description]
-   * @return [type]                     [description]
-   */
-  public function resultsFemale(Competition $competition, SoloDivision $soloDivision)
-  {
-    $gender = 'F';
-    return $this->results($competition, $soloDivision, $gender);
-  }
-
-
-  /**
-   * [resultsMale description]
-   * @param  Competition  $competition  [description]
-   * @param  SoloDivision $soloDivision [description]
-   * @return [type]                     [description]
-   */
-  public function resultsMale(Competition $competition, SoloDivision $soloDivision)
-  {
-    $gender = 'M';
-    return $this->results($competition, $soloDivision, $gender);
+    return view('solo-division.judge.results', compact('competition', 'soloDivision', 'rawScores', 'rankedScores', 'totalScores', 'categoryId', 'categoryName'));
   }
 
 }

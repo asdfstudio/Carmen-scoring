@@ -55,19 +55,19 @@
     }*/
   }
 
-  &.gender {
+  &.category {
 
     background: #999;
     color: $cs-white;
 
-    &.male {
+    &.category-1 {
       background: $cs-caption-music;
     }
 
-    &.female {
+    &.category-2 {
       background: $cs-caption-combo;
     }
-  }
+  } 
 
   &.status {
     //float: right;

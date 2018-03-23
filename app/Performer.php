@@ -10,10 +10,10 @@ class Performer extends Model
   protected $fillable = [
     'choir_id',
     'name',
-    'gender',
+    'category',
     'total_score',
     'overall_place',
-    'gender_place'
+    'category_place'
   ];
 
   public function soloDivision()
@@ -32,25 +32,25 @@ class Performer extends Model
   }
 
 
-  public function getGenderNameAttribute()
+  public function getCategoryNameAttribute()
   {
-    if($this->gender == 'M')
-      return 'Male';
-    elseif($this->gender == 'F')
-      return 'Female';
+    if($this->category == 1 AND $this->soloDivision)
+      return $this->soloDivision->category_1;
+    elseif($this->category == 2 AND $this->soloDivision)
+      return $this->soloDivision->category_2;
 
     return 'Not Set';
   }
 
-  public function gender_label($class_attr = false)
+  public function category_label($class_attr = false)
   {
-    $class_array = ['label', 'gender', strtolower($this->genderName)];
+    $class_array = ['label', 'category', 'category-' . $this->category ];
 
     if($class_attr)
       $class_array[] = $class_attr;
 
     $class = implode($class_array,' ');
 
-    return '<span class="'.$class.'">'.$this->genderName.'</span>';
+    return '<span class="'.$class.'">'.$this->categoryName.'</span>';
   }
 }

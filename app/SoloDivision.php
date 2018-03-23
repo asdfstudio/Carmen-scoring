@@ -14,7 +14,9 @@ class SoloDivision extends Model
     protected $fillable = [
       'name',
       'sheet_id',
-      'max_performers'
+      'max_performers',
+      'category_1',
+      'category_2'
     ];
 
     public function competition()

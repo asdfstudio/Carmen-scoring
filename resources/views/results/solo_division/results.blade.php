@@ -7,16 +7,22 @@
   <h1>{{ $competition->name }}</h1>
 
   <h2>
-		@if ($genderName)
-			{{ $genderName }}
+		@if ($categoryName)
+			{{ $categoryName }}
 		@endif
 		{{ $soloDivision->name }} Results
 	</h2>
 
 	<ul class="actions-group mv">
 		<li>{{ link_to_route('results.solo-division.show','Overall results',[$soloDivision, $access_code],['class' => 'action']) }}</li>
-		<li>{{ link_to_route('results.solo-division.show','Female results',[$soloDivision, $access_code, 'F'],['class' => 'action']) }}</li>
-		<li>{{ link_to_route('results.solo-division.show','Male results',[$soloDivision, $access_code, 'M'],['class' => 'action']) }}</li>
+
+    @if ($soloDivision->category_1)
+			<li>{{ link_to_route('results.solo-division.show', $soloDivision->category_1 . ' results',[$soloDivision, $access_code, 'category' => 1],['class' => 'action']) }}</li>
+		@endif
+
+		@if ($soloDivision->category_2)
+			<li>{{ link_to_route('results.solo-division.show', $soloDivision->category_2 . ' results',[$soloDivision, $access_code, 'category' => 2],['class' => 'action']) }}</li>
+		@endif
 	</ul>
 
   @if ($soloDivision->performers->count() > 0)

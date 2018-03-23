@@ -18,7 +18,7 @@
     <table class="table table-striped table-bordered">
       <tr>
         <th>Choir</th>
-        <th>Gender</th>
+        <th>Category</th>
         <th>Name</th>
       </tr>
 
@@ -30,19 +30,19 @@
       if ($performer) {
         $performerId = $performer->id;
         $choirId = $performer->choir_id;
-        $gender = $performer->gender;
+        $category = $performer->category;
         $name = $performer->name;
       } else {
         $performerId = null;
         $choirId = null;
-        $gender = null;
+        $category = null;
         $name = null;
       }
       ?>
       <tr>
         {{ Form::hidden('performer['.$i.'][id]', $performerId) }}
         <td>{{ Form::select('performer['.$i.'][choir_id]', $choirs, $choirId, ['placeholder' => 'Select', 'class' => 'selectize']) }}</td>
-        <td>{{ Form::select('performer['.$i.'][gender]', ['F' => 'Female', 'M' => 'Male'], $gender, ['placeholder' => 'Select', 'class' => 'selectize']) }}</td>
+        <td>{{ Form::select('performer['.$i.'][category]', [1 => $soloDivision->category_1, 2 => $soloDivision->category_2], $category, ['placeholder' => 'Select', 'class' => 'selectize']) }}</td>
         <td>{{ Form::text('performer['.$i.'][name]', $name, ['class' => 'form-control']) }}</td>
 
       </tr>

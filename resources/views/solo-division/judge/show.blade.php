@@ -15,6 +15,8 @@
       <li class="list-group-item">Status: {{ $soloDivision->status }}</li>
       <li class="list-group-item">Max Performers: {{ $soloDivision->max_performers }}</li>
       <li class="list-group-item">Scoring Sheet: {{ $soloDivision->sheet->name }}</li>
+			<li class="list-group-item">Category #1 Name: {{ $soloDivision->category_1 }}</li>
+			<li class="list-group-item">Category #2 Name: {{ $soloDivision->category_2 }}</li>
     </ul>
 
     <h2>Judges</h2>
