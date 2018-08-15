@@ -13,24 +13,28 @@
 
 
 Route::get('/', function () {
-    return view('public.home');
-    //return redirect('login');
+    //return view('public.home');
+    return redirect('login');
 });
 
 Route::get('about', function () {
-    return view('public.about');
+    //return view('public.about');
+    return redirect('login');
 });
 
 Route::get('contact', function () {
-    return view('public.contact');
+    //return view('public.contact');
+    return redirect('login');
 });
 
 Route::get('system', function () {
-    return view('public.system_information');
+    //return view('public.system_information');
+    return redirect('login');
 });
 
 Route::get('contest', function () {
-    return view('public.contest');
+    //return view('public.contest');
+    return redirect('login');
 });
 
 /*Route::get('pdf-test', [
