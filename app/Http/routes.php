@@ -11,6 +11,9 @@
 |
 */
 
+Route::get('judge-spreadsheet', function () {
+  return view('judge.spreadsheet');
+});
 
 Route::get('/', function () {
     //return view('public.home');
