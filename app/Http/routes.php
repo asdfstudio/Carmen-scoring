@@ -12,7 +12,60 @@
 */
 
 Route::get('judge-spreadsheet', function () {
-  return view('judge.spreadsheet');
+
+  $captions = json_encode([
+    [
+      'id' => 1,
+      'name' => 'Music',
+      'color' => '#333',
+      'colorDarker' => '#222',
+      'colorLighter' => '#555'
+    ]
+  ]);
+
+  $divisions = json_encode([
+    [
+      'id' => 1,
+      'name' => 'Mixed High School'
+    ]
+  ]);
+
+  $choirs = json_encode([
+    [
+      'id' => 1,
+      'name' => 'Bloomington South'
+    ]
+  ]);
+
+  $criteria = json_encode([
+    [
+      'id' => 1,
+      'caption_id' => 1,
+      'name' => 'Tone & Technique',
+      'description' => 'This is a description of the Style criterion...',
+      'minScore' => 0,
+      'maxScore' => 8,
+      'increment' => 0.5
+    ]
+  ]);
+
+  $scores = json_encode([
+    [
+      'choir_id' => 1,
+      'criterion_id' => 1,
+      'caption_id' => 1,
+      'raw_score' => 7
+    ]
+  ]);
+
+  $comments = json_encode([
+    [
+      'choir_id' => 1,
+      'comment' => 'a fake comment'
+    ]
+  ]);
+
+  return view('judge.spreadsheet', compact('captions', 'divisions', 'choirs', 'criteria', 'scores', 'comments'));
 });
 
 Route::get('/', function () {

@@ -121,6 +121,131 @@ class CompetitionDivisionRoundController extends Controller
     }
 
 
+    //
+    // New spreadsheet, 2019
+    public function spreadsheetNew($competition_id,$division_id,$round_id)
+    {
+      $judge_id = Auth::user()->person_id;
+
+      //$competition = Competition::find($competition_id);
+      //$division = Division::find($division_id);
+
+      $round = Round::with(['division', 'division.competition'  => function($query) {
+        $query->withoutGlobalScope('organization');
+      }, 'division.judges' => function($query) use ($judge_id) {
+          $query->where('judge_id',$judge_id)->first();
+        }, 'division.judges.captions' => function($query) use ($division_id) {
+          $query->where('division_id',$division_id);
+        }, 'division.judges.captions.criteria','choirs','division.rounds', 'feedback'])->find($round_id);
+
+      $division = $round->division;
+      $competition = $division->competition;
+
+      //$judge = $division->judges->first();
+
+      $judge = Judge::with(['captions' => function($query) use ($division_id, $division) {
+        $query->where('division_id', $division_id);
+        //$query->orderBy('name')->forDivision($division);
+      }])->find($judge_id);
+      //dd($judge->captions->pluck('name', 'id')->toArray());
+      //$captions = $judge->captions;
+
+      $judgeCaptionIds = $judge->captions->pluck('id')->toArray();
+			$captions = Caption::forSheet($division->sheet);
+			$captions = $captions->whereIn('id', $judgeCaptionIds);
+
+      //dd($captions);
+
+
+      $criteria = $division->sheet->criteria->whereIn('caption_id', $judgeCaptionIds);
+      //dd($criteria);
+
+      //$before = memory_get_usage();
+      $scoreboard = new Scoreboard(['round_id' => $round_id, 'judge_id' => $judge_id]);
+      //$after = memory_get_usage();
+      //$allocatedSize = ($after - $before);
+      //dd($allocatedSize/1024/1024);
+
+      //dd($scoreboard);
+
+      //$rawScores = $scoreboard->rawScores;
+      //$weightedScores = $scoreboard->weightedScores;
+      //$rankedScores = $scoreboard->rankedScores;
+
+      $spreadsheetTitle = $division->name . ' > ' . $round->name;
+      $backUrl = route('judge.round.scores.summary', [$competition_id,$division_id,$round_id]);
+
+
+
+      /*if ($round->status == 'Active') {
+        $isSpreadsheetScoringActive = true;
+      } else {
+        $isSpreadsheetScoringActive = false;
+      }*/
+
+      $isSpreadsheetScoringActive = $round->status;
+
+      // Convert to arrays for use with new Vue spreadsheet
+      $captions = $captions->map(function ($item, $key) {
+        return [
+          'id' => $item->id,
+          'name' => $item->name,
+          'color_id' => $item->color_id
+        ];
+      })->toArray();
+
+      $divisions = ['id' => $division->id, 'name' => $division->name];
+
+      $choirs = $division->choirs->map(function ($item, $key) use ($round_id, $division_id) {
+        return [
+          'id' => $item->id,
+          'name' => $item->full_name,
+          'round_id' => $round_id,
+          'division_id' => $division_id
+        ];
+      })->toArray();
+
+      $criteria = $criteria->map(function ($item, $key) {
+        return [
+          'id' => $item->id,
+          'caption_id' => $item->caption_id,
+          'name' => $item->name,
+          'description' => $item->description,
+          'minScore' => 0,
+          'maxScore' => $item->max_score,
+          'increment' => 0.5 // needs set
+        ];
+      })->values();
+
+      $scores = $scoreboard->rawScores->map(function ($item, $key) {
+        return [
+          'choir_id' => $item->choir_id,
+          'criterion_id' => $item->criterion_id,
+          'caption_id' => $item->criterion_caption_id,
+          'raw_score' => floatval($item->score)
+        ];
+      })->toArray();
+
+
+      $comments = $round->feedback->map(function ($item, $key) {
+        return [
+          'choir_id' => $item->choir_id,
+          'comment' => $item->comments
+        ];
+      })->toArray();
+
+      // JSON encode
+      $choirs = json_encode($choirs);
+      $divisions = json_encode($divisions);
+      $criteria = json_encode($criteria);
+      $comments = json_encode($comments);
+      $scores = json_encode($scores);
+      $captions = json_encode($captions);
+
+      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'choirs', 'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl'));
+    }
+
+
 
     public function spreadsheet_sources($competition_id, $division_id, $round_id)
     {

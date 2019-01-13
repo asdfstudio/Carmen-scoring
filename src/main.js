@@ -4,6 +4,8 @@ import Vue from 'vue'
 
 import App from './App'
 import { store } from './store/index'
+// let store = window.__INITIAL_STATE__
+// console.log(store)
 
 Vue.config.productionTip = false
 

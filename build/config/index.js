@@ -13,7 +13,7 @@ module.exports = {
     proxyTable: {},
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: 'carmen.local', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
@@ -46,6 +46,7 @@ module.exports = {
   build: {
     // Template for index.html
     index: path.resolve(__dirname, '../../resources/views/judge/spreadsheet.blade.php'),
+    template: path.resolve(__dirname, '../../resources/views/judge/spreadsheet-template.html'),
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../../public'),

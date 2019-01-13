@@ -9,7 +9,7 @@
     </ModalSubheader>
     <ModalBody>
       <textarea v-model.lazy="comment"></textarea>
-
+      <button class="button" type="submit" @click="saveComment()">Save Comment</button>
     </ModalBody>
   </Modal>
 </template>
@@ -32,7 +32,19 @@ export default {
   },
   data: function () {
     return {
-      initialComment: this.$store.getters.getChoirComment(this.choir.id)
+      initialComment: this.$store.getters.getChoirComment(this.choir.id),
+      currentComment: this.$store.getters.getChoirComment(this.choir.id)
+    }
+  },
+  methods: {
+    saveComment: function (event) {
+      const payload = {
+        choir_id: this.choir.id,
+        round_id: this.choir.round_id,
+        comment: this.currentComment
+      }
+      this.$store.dispatch('setComment', payload)
+      this.$store.commit('deactivateModal')
     }
   },
   computed: {
@@ -44,11 +56,13 @@ export default {
         return this.$store.getters.getChoirComment(this.choir.id)
       },
       set: function (newValue) {
-        const payload = {
+        this.currentComment = newValue
+        /* const payload = {
           choir_id: this.choir.id,
+          round_id: this.choir.round_id,
           comment: newValue
         }
-        this.$store.dispatch('setComment', payload)
+        this.$store.dispatch('setComment', payload) */
       }
     }
   }
@@ -70,5 +84,14 @@ textarea {
   &:focus {
     border: 1px solid #56A797;
   }
+}
+
+button, .button {
+  background: #56A797;
+  color: #fff;
+  padding: 10px 15px;
+  text-align: center;
+  border: none;
+  border-radius: 5px;
 }
 </style>

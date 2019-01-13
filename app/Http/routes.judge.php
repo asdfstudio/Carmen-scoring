@@ -89,6 +89,10 @@ Route::group([
    	 'as' => 'round.scores.spreadsheet', 'uses' => 'CompetitionDivisionRoundController@spreadsheet'
 		]);
 
+    Route::get('competition/{competition}/division/{division}/round/{round}/spreadsheet-new', [
+   	 'as' => 'round.scores.spreadsheet-new', 'uses' => 'CompetitionDivisionRoundController@spreadsheetNew'
+		]);
+
     Route::get('competition/{competition}/division/{division}/round/{round}/details', [
    	 'as' => 'round.scores.details', 'uses' => 'CompetitionDivisionRoundController@details'
 		]);
@@ -189,6 +193,11 @@ Route::group([
 
 		Route::post('score/save', [
 			'as' => 'score.save', 'uses' => 'ScoreController@save'
+		]);
+
+
+    Route::any('comment/save', [
+			'as' => 'comment.save', 'uses' => 'CommentController@save'
 		]);
 
 	//});

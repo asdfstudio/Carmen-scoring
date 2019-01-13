@@ -1,7 +1,7 @@
 <template>
   <table class="criteria-scores">
 
-    <tr class="caption-header" :style="{ backgroundColor:caption.color}">
+    <tr class="caption-header" :class="['background-color-' + caption.color_id]">
       <th colspan="2" class="caption-name">{{ caption.name }}</th>
     </tr>
 
@@ -14,15 +14,16 @@
       :choir="choir"
       :criterion="criterion"
       :score="score(criterion.id)"
+      :isScoringActive="true"
     ></CriterionScore>
 
     <!-- Total score start -->
     <tr class="caption-row caption-footer">
-      <td class="caption-subtotal caption-subtotal-label" :style="{ backgroundColor:caption.colorLighter}">
+      <td class="caption-subtotal caption-subtotal-label" :class="['lighter-background-color-' + caption.color_id]">
         Subtotal
       </td>
       <td class="caption-subtotal caption-subtotal-value"
-      :style="{ backgroundColor:caption.colorLighter}">
+      :class="['lighter-background-color-' + caption.color_id]">
         {{ getChoirCaptionSubtotalScore(choir, caption) }}
       </td>
     </tr>

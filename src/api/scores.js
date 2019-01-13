@@ -5,13 +5,14 @@ export default {
     const postPayload = {
       choir_id: payload.choir_id,
       criterion_id: payload.criterion_id,
-      raw_score: payload.raw_score
+      score: payload.raw_score,
+      round_id: payload.round_id,
+      division_id: payload.division_id
     }
 
-    console.log('save score')
     console.log(postPayload)
 
-    return axios.post('https://reqres.in/api/scores', postPayload)
+    return axios.post('/judge/score/save', postPayload)
       .then(response => {
         return response.data
       })

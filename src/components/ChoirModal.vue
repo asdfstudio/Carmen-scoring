@@ -13,7 +13,7 @@
           v-for="caption in captionsList"
           :key="caption.id"
           @click="activateCaption(caption)"
-          :style="{ backgroundColor:caption.color}"
+          :class="['background-color-' + caption.color_id]"
         >
           {{ caption.name }}
         </button>

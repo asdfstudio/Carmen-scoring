@@ -78,7 +78,7 @@ export default {
     return {
       currentChoir: this.choir,
       currentCriterion: this.criterion,
-      scoringActive: true, // this.isScoringActive,
+      scoringActive: this.isScoringActive, // this.isScoringActive,
       displayType: 'inline',
       criterionScoringRangeDisplayType: 'condensed',
       scoreButtonSize: 'small'

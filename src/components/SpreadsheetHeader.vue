@@ -1,13 +1,14 @@
 <template>
   <div id="spreadsheet-header">
-    <button type="button" name="button" class="back-button">Back to Overview</button>
-    <h2> Division name here
-      <div class="scoring-status">
-        Scoring is {{ scoringStatus }}
+    <a class="button back-button" :href="backUrl">Back to previous screen</a>
+    <h2> {{ spreadsheetTitle}}
+      <div class="scoring-status" v-if="isSpreadsheetScoringActive">
+        Scoring is active
+      </div>
+      <div class="scoring-status" v-if="!isSpreadsheetScoringActive">
+        Scores can't be edited now.
       </div>
     </h2>
-
-    <button type="button" name="button" class="change-division-button">Change Division</button>
   </div>
 </template>
 
@@ -17,6 +18,15 @@ export default {
   computed: {
     scoringStatus () {
       return this.$store.state.scoringStatus
+    },
+    isSpreadsheetScoringActive () {
+      return this.$store.state.isSpreadsheetScoringActive
+    },
+    spreadsheetTitle () {
+      return this.$store.state.spreadsheetTitle
+    },
+    backUrl () {
+      return this.$store.state.backUrl
     }
   }
 }
@@ -35,7 +45,7 @@ export default {
   background: #484848;
   margin-bottom: 20px;
 }
-button {
+button, .button {
   background: #ccc;
   padding: 5px 15px;
   text-transform: lowercase;
@@ -43,6 +53,9 @@ button {
   border: 0;
   position: absolute;
   top: 12px;
+  color: #484848;
+  text-decoration: none;
+  font-size: 14px;
 }
 
 .back-button {

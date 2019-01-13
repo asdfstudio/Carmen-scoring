@@ -60,6 +60,9 @@ export default {
     }
   },
   computed: {
+    /* isScoringActive () {
+      return this.$store.state.isScoringActive
+    }, */
     isScoreChanged () {
       return this.currentScore !== this.initialScore
     },
@@ -76,6 +79,8 @@ export default {
         choir_id: this.choirId,
         criterion_id: this.criterionId,
         caption_id: this.captionId,
+        round_id: this.$store.getters.activeChoir.round_id,
+        division_id: this.$store.getters.activeChoir.division_id,
         raw_score: newValue
       }
       this.$store.dispatch('setScore', payload)

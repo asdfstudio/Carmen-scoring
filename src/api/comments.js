@@ -3,13 +3,13 @@ import axios from 'axios'
 export default {
   saveComment (payload) {
     const postPayload = {
+      round_id: payload.round_id,
       choir_id: payload.choir_id,
       comment: payload.comment
     }
-    console.log('save comment')
     console.log(payload)
 
-    return axios.post('https://reqres.in/api/comments', postPayload)
+    return axios.post('/judge/comment/save', postPayload)
       .then(response => {
         return response.data
       })

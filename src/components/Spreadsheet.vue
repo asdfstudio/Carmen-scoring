@@ -3,12 +3,12 @@
     <table>
       <thead>
         <tr class="table-header">
-          <td class="criteria-header">
+          <th class="criteria-header">
             <!--Caption / Criteria-->
-          </td>
-          <td v-for="choir in choirsList"  :choir="choir" v-bind:key="choir.id">
+          </th>
+          <th v-for="choir in choirsList"  :choir="choir" v-bind:key="choir.id">
             <span class="clickable" @click="activateChoirModal(choir)">{{ choir.name }}</span>
-          </td>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -18,17 +18,20 @@
 
         <!-- Caption header start -->
         <tr class="caption-row caption-header" v-bind:key="caption.id">
-          <td :colspan="choirsList.length+1" class="caption-name" :style="{ backgroundColor:caption.color}">
+          <th class="caption-name" :class="['background-color-' + caption.color_id]">
             {{ caption.name }}
+          </th>
+          <td :colspan="choirsList.length" :class="['background-color-' + caption.color_id]">
+
           </td>
         </tr>
         <!-- Caption header end -->
 
         <!-- Caption Criteria Start -->
         <tr class="criteria-row" v-for="criterion in criteriaList.filter(cr => cr.caption_id === caption.id)" v-bind:key="criterion.id">
-          <td  class="criterion-name">
+          <th  class="criterion-name">
             <span class="clickable" @click="activateCriterionModal(criterion)">{{ criterion.name }}</span>
-          </td>
+          </th>
 
           <td
             v-for="choir in choirsList"
@@ -42,15 +45,15 @@
 
         <!-- Caption footer start -->
         <tr class="caption-row caption-footer" v-bind:key="caption.id">
-          <td class="caption-subtotal caption-subtotal-label" :style="{ backgroundColor:caption.colorLighter}">
+          <th class="caption-subtotal caption-subtotal-label" :class="['lighter-background-color-' + caption.color_id]">
             Subtotal
-          </td>
+          </th>
           <td
             v-for="choir in choirsList"
             :choir="choir"
             v-bind:key="choir.id"
             class="caption-subtotal caption-subtotal-value"
-            :style="{ backgroundColor:caption.colorLighter}"
+            :class="['lighter-background-color-' + caption.color_id]"
             >
               {{ getChoirCaptionSubtotalScore(choir, caption) }}
             </td>
@@ -62,9 +65,9 @@
 
         <!-- Total score start -->
         <tr class="score-row">
-          <td class="score-total-label">
+          <th class="score-total-label">
             Total
-          </td>
+          </th>
           <td
             v-for="choir in choirsList"
             :choir="choir"
@@ -78,7 +81,7 @@
 
         <!-- Comments -->
         <tr class="comment-row">
-          <td class="criterion-name">Comments</td>
+          <th class="criterion-name">Comments</th>
 
           <td
             v-for="choir in choirsList"
@@ -118,6 +121,9 @@ export default {
     },
     activeModal () {
       return this.$store.state.activeModal
+    },
+    isSpreadsheetScoringActive () {
+      return this.$store.state.isSpreadsheetScoringActive
     }
   },
   watch: {
@@ -133,20 +139,39 @@ export default {
     }
   },
   methods: {
+    displayScoringInactiveMessage: function () {
+      alert('Scoring is currently inactive.')
+    },
     activateModal: function (data) {
       this.$store.commit('activateModal', data)
     },
     activateChoirModal: function (choir) {
-      this.$store.commit('activateChoirModal', choir)
+      if (this.isSpreadsheetScoringActive) {
+        this.$store.commit('activateChoirModal', choir)
+      } else {
+        this.displayScoringInactiveMessage()
+      }
     },
     activateChoirCommentModal: function (choir) {
-      this.$store.commit('activateChoirCommentModal', choir)
+      if (this.isSpreadsheetScoringActive) {
+        this.$store.commit('activateChoirCommentModal', choir)
+      } else {
+        this.displayScoringInactiveMessage()
+      }
     },
     activateCriterionModal: function (criterion) {
-      this.$store.commit('activateCriterionModal', criterion)
+      if (this.isSpreadsheetScoringActive) {
+        this.$store.commit('activateCriterionModal', criterion)
+      } else {
+        this.displayScoringInactiveMessage()
+      }
     },
     activateChoirCriterionModal: function (choir, criterion) {
-      this.$store.commit('activateChoirCriterionModal', {choir, criterion})
+      if (this.isSpreadsheetScoringActive) {
+        this.$store.commit('activateChoirCriterionModal', {choir, criterion})
+      } else {
+        this.displayScoringInactiveMessage()
+      }
     },
     activateCriterion: function (criterion) {
       // criterion.scores = this.$store.getters.getCriterionScores(criterion.id)
@@ -196,16 +221,60 @@ export default {
 #spreadsheet {
   margin: 5px;
   margin-top:50px;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+  overflow: scroll;
+  height: 700px;
 
   &.fixed {
     position: fixed;
+  }
+
+  th, td {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background: #fff;
+    vertical-align: top;
+    font-weight: normal;
+  }
+
+  th:first-child {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: #eee;
+    width: 200px;
+    border-right-width: 3px;
+  }
+
+  thead th:first-child {
+    z-index: 5;
+  }
+
+  tbody th {
+    text-align: right;
   }
 }
 
 table {
   width: 100%;
+  min-width: 1280px;
+  margin: auto;
+  border-collapse: separate;
+  border-spacing: 0;
   color: #707070;
   font-size: 14px;
+
+  thead th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    background: #ddd;
+    padding: 10px 5px;
+    color: #444;
+  }
 
   tr.table-header {
 
@@ -227,16 +296,18 @@ table {
   tbody tr.caption-row {
     &.caption-header {
 
-      & td.caption-name {
+      & .caption-name {
         color: white;
         text-align: left;
         padding: 5px 10px;
         font-size: 1.2em;
+        font-weight: normal;
+        position: sticky;
       }
     }
 
     &.caption-footer {
-      & td.caption-subtotal {
+      & td.caption-subtotal, th.caption-subtotal {
         color: white;
         padding: 5px;
 

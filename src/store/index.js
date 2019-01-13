@@ -10,6 +10,18 @@ import CommentsApi from '../api/comments'
 import ScoresApi from '../api/scores'
 import _ from 'lodash'
 
+let captionsList = window.__CAPTIONS__ ? window.__CAPTIONS__ : captions
+let divisionsList = window.__DIVISIONS__ ? window.__DIVISIONS__ : divisions
+let choirsList = window.__CHOIRS__ ? window.__CHOIRS__ : choirs
+let criteriaList = window.__CRITERIA__ ? window.__CRITERIA__ : criteria
+let scoresList = window.__SCORES__ ? window.__SCORES__ : scores
+let commentsList = window.__COMMENTS__ ? window.__COMMENTS__ : comments
+
+let spreadsheetTitle = window.__SPREADSHEET_TITLE__ ? window.__SPREADSHEET_TITLE__ : 'Spreadsheet title'
+let backUrl = window.__BACK_URL__ ? window.__BACK_URL__ : '/test-back-url'
+let isSpreadsheetScoringActive = window.__IS_SPREADSHEET_SCORING_ACTIVE__ === 'Active'
+// let isSpreadsheetScoringActive = true
+
 Vue.use(Vuex)
 
 // Debounced API calls
@@ -27,17 +39,20 @@ var saveDebouncedScore = _.wrap(_.memoize(function () {
 export const store = new Vuex.Store({
   state: {
     count: 0,
-    scoringStatus: 'Active',
-    captionsList: captions,
-    divisions: divisions,
-    choirsList: choirs,
-    criteriaList: criteria,
-    scores: scores,
-    comments: comments,
+    isSpreadsheetScoringActive: isSpreadsheetScoringActive,
+    // scoringStatus: 'Active',
+    captionsList: captionsList,
+    divisions: divisionsList,
+    choirsList: choirsList,
+    criteriaList: criteriaList,
+    scores: scoresList,
+    comments: commentsList,
     activeModal: false,
     activeCriterion: false,
     activeChoir: false,
-    activeComment: false
+    activeComment: false,
+    spreadsheetTitle: spreadsheetTitle,
+    backUrl: backUrl
   },
   mutations: {
     activateModal (state, data) {
