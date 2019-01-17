@@ -78,17 +78,16 @@ export default {
 
 <style>
 body {
-  background: #ddd;
+  background: #eee;
   margin: 0;
 }
 #app {
-  font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42;
   text-align: center;
-  color: #2c3e50;
+  color: #333333;
   padding: 0;
-  background: #ddd;
 
 }
 
