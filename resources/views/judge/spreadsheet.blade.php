@@ -20,5 +20,5 @@ window.__IS_SPREADSHEET_SCORING_ACTIVE__ = "{!! $isSpreadsheetScoringActive !!}"
 <link href=/static/css/app.55fdae95b4a3d59168d1465795edfb72.css rel=stylesheet></head>
 <body>
   <div id=app></div>
-<script type=text/javascript src=/static/js/manifest.a2583e1788f376c3c8cb.js></script><script type=text/javascript src=/static/js/vendor.048e0dc5f05fb8df4f54.js></script><script type=text/javascript src=/static/js/app.7d2244b9330f8e1963ec.js></script></body>
+<script type=text/javascript src=/static/js/manifest.e76c729c5fe4d21b451d.js></script><script type=text/javascript src=/static/js/vendor.048e0dc5f05fb8df4f54.js></script><script type=text/javascript src=/static/js/app.2ce761361e28bab40bac.js></script></body>
 </html>
