@@ -51,7 +51,7 @@ table {
 }
 
 .table-header {
-  background: #56A797;
+  background: #7F4091;
   color: #fff;
   padding: 10px;
 }

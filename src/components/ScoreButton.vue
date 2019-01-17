@@ -30,7 +30,7 @@ export default {
   color: #707070;
 
   &.active {
-    background: #56A797;
+    background: #7F4091;
     color: #fff;
   }
 

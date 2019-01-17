@@ -82,12 +82,12 @@ textarea {
   border: 1px solid #F0F0F0;
 
   &:focus {
-    border: 1px solid #56A797;
+    border: 1px solid #7F4091;
   }
 }
 
 button, .button {
-  background: #56A797;
+  background: #7F4091;
   color: #fff;
   padding: 10px 15px;
   text-align: center;

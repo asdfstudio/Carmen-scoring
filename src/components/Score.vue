@@ -129,16 +129,16 @@ export default {
       height: 40px;
       line-height: 40px;
       border-radius: 20px;
-      background: #56A797;
+      background: #7F4091;
       color: white;
       border: none;
       display: inline-block;
       font-size: 33px;
 
       &.outlined {
-        color: #56A797;
+        color: #7F4091;
         background: none;
-        border: 1px solid #56A797;
+        border: 1px solid #7F4091;
       }
     }
 
@@ -146,7 +146,7 @@ export default {
       padding: 10px;
       font-size: 36px;
       margin: 0 10px;
-      color: #56A797;
+      color: #7F4091;
       display: inline-block;
       width: 80px;
     }
