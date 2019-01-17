@@ -117,6 +117,17 @@ export const store = new Vuex.Store({
   },
   actions: {
     setScore (context, payload) {
+      // Find the matching choir
+      var matches = store.state.choirsList.filter(choir => choir.id === payload.choir_id)
+
+      var choirDetails = matches[0]
+
+      // Use the additional details of the choir in the payload
+      if (choirDetails) {
+        payload.round_id = choirDetails.round_id
+        payload.division_id = choirDetails.division_id
+      }
+
       // Send to mutation
       store.commit('setScore', payload)
 
