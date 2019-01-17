@@ -31,7 +31,7 @@ const saveComment = _.debounce(CommentsApi.saveComment, 1000)
 // Not totall working yet
 // See https://stackoverflow.com/questions/28787436/debounce-a-function-with-argument
 var saveDebouncedScore = _.wrap(_.memoize(function () {
-  return _.debounce(ScoresApi.saveScore, 1000)
+  return _.debounce(ScoresApi.saveScore, 500)
 }, _.property(['choir_id', 'criterion_id'])), function (func, obj) {
   return func(obj)(obj)
 })
