@@ -239,12 +239,16 @@ export default {
     font-weight: normal;
   }
 
+  th {
+    background: #f9f9f9;
+  }
+
   th:first-child {
     position: -webkit-sticky;
     position: sticky;
     left: 0;
     z-index: 2;
-    background: #eee;
+    background: #f9f9f9;
     width: 200px;
     border-right-width: 3px;
   }
@@ -264,16 +268,16 @@ table {
   margin: auto;
   border-collapse: separate;
   border-spacing: 0;
-  color: #707070;
+  color: #333;
   font-size: 14px;
 
   thead th {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
-    background: #ddd;
+    background: #eee;
     padding: 10px 5px;
-    color: #444;
+    color: #333333;
   }
 
   tr.table-header {
@@ -352,6 +356,10 @@ table {
       }
     }
 
+  }
+
+  tr.comment-row {
+    font-size: 13px;
   }
 }
 

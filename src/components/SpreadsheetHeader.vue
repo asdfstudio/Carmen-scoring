@@ -33,7 +33,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
 #spreadsheet-header {
   padding: 15px 0 3px;
   min-height: 30px;
@@ -42,20 +42,24 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  background: #484848;
+  background: #272B2D;
   margin-bottom: 20px;
 }
 button, .button {
-  background: #ccc;
-  padding: 5px 15px;
+  padding: 3px 15px;
   text-transform: lowercase;
-  border-radius: 20px;
-  border: 0;
+  border: 1px solid;
+  border-bottom-width: 2px;
   position: absolute;
   top: 12px;
-  color: #484848;
+  color: #fff;
   text-decoration: none;
   font-size: 14px;
+
+  &:hover, &:active, &.active {
+    background: #fff;
+    color: #333;
+  }
 }
 
 .back-button {
