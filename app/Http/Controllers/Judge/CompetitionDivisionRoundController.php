@@ -364,7 +364,7 @@ class CompetitionDivisionRoundController extends Controller
       $choirs = $source_choirs;
 
       $source_ids = $round->sources->pluck('id')->toArray();
-      $scoreboard = new Scoreboard(['round_id' => $source_ids]);
+      $scoreboard = new Scoreboard(['round_id' => $source_ids, 'judge_id' => $judge_id]);
 
       $judgeCaptionIds = $judge->captions->pluck('id')->toArray();
 			$captions = Caption::forSheet($division->sheet);
