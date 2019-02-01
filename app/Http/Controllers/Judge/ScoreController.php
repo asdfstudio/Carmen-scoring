@@ -30,6 +30,8 @@ class ScoreController extends Controller
 			$round_id = $request->input('round_id', NULL);
 			$choir_id = $request->input('choir_id', NULL);
 
+			//return response()->json([$judge_id, $request->input()]);
+
 			$scorekeeper = new Scorekeeper([
 				'division_id' => $division_id,
 				'round_id' => $round_id,
@@ -46,7 +48,9 @@ class ScoreController extends Controller
 			{
 				$response = $scorekeeper->criterion($criterion_id)->score($score)->save();
 
-				return $response;
+				if ($response) {
+					return response()->json(['success' => true]);
+				}
 			}
 
 			/*$findExistingData = $data;
