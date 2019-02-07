@@ -22,6 +22,7 @@ export default {
   border-radius: 8px;
   background: #F0F0F0;
   margin: 5px;
+  padding: 0;
   border: none;
   width: 40px;
   height: 40px;
