@@ -134,6 +134,7 @@ export default {
       border: none;
       display: inline-block;
       font-size: 33px;
+      padding: 0;
 
       &.outlined {
         color: #7F4091;
