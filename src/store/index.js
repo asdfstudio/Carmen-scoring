@@ -147,6 +147,11 @@ export const store = new Vuex.Store({
     getCount: (state) => {
       return state.count
     },
+    getChoirsList: (state) => {
+      return state.choirsList.slice(0).sort(function (a, b) {
+        return a.performance_order - b.performance_order
+      })
+    },
     getChoirScores: (state) => (choirId) => {
       return state.scores.filter(score => score.choir_id === choirId)
     },

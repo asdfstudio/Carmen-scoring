@@ -197,12 +197,13 @@ class CompetitionDivisionRoundController extends Controller
 
       $divisions = ['id' => $division->id, 'name' => $division->name];
 
-      $choirs = $division->choirs->map(function ($item, $key) use ($round_id, $division_id) {
+      $choirs = $round->choirs->map(function ($item, $key) use ($round_id, $division_id) {
         return [
           'id' => $item->id,
           'name' => $item->full_name,
           'round_id' => $round_id,
-          'division_id' => $division_id
+          'division_id' => $division_id,
+          'performance_order' => $item->pivot->performance_order
         ];
       })->toArray();
 
