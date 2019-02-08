@@ -50,7 +50,7 @@ export default {
       return this.$store.getters.activeCriterion
     },
     choirsList () {
-      return this.$store.state.choirsList
+      return this.$store.getters.getChoirsList
     },
     scores () {
       return this.$store.getters.getCriterionScores(this.criterion.id)
