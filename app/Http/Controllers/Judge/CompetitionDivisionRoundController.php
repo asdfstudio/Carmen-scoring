@@ -137,7 +137,9 @@ class CompetitionDivisionRoundController extends Controller
           $query->where('judge_id',$judge_id)->first();
         }, 'division.judges.captions' => function($query) use ($division_id) {
           $query->where('division_id',$division_id);
-        }, 'division.judges.captions.criteria','choirs','division.rounds', 'feedback'])->find($round_id);
+        }, 'division.judges.captions.criteria','choirs','division.rounds', 'feedback' => function($query) use ($judge_id) {
+            $query->where('judge_id', $judge_id);
+          }])->find($round_id);
 
       $division = $round->division;
       $competition = $division->competition;
@@ -227,7 +229,7 @@ class CompetitionDivisionRoundController extends Controller
           'raw_score' => floatval($item->score)
         ];
       })->toArray();
-
+      
 
       $comments = $round->feedback->map(function ($item, $key) {
         return [
