@@ -5455,6 +5455,24 @@ a.active {
           padding-top: 8px;
           border-top-width: 3px; }
 
+.add-rating {
+  clear: both;
+  padding: 15px; }
+  .add-rating button {
+    display: block;
+    width: 100%; }
+
+.remove-rating {
+  padding-top: 23px; }
+  .remove-rating button {
+    /*background: #f2dede;*/
+    color: #a94442;
+    border-color: #a94442;
+    font-weight: 700; }
+
+.rating-system .alert {
+  clear: both; }
+
 .round-navigation-bar {
   border: 1px solid #d8d8d8;
   padding: 15px;

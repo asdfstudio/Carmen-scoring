@@ -164,7 +164,6 @@ class CreateForm extends Form
         $this->add('rating_system', 'collection', [
           'type' => 'form',
           'label_show' => false,
-          'wrapper' => ['class' => 'form-group collection-container'],
           'prototype' => true,
           'prototype_name' => '__NAME__',
           'options' => [
@@ -174,8 +173,9 @@ class CreateForm extends Form
         ]);
 
         $this->add('add_rating', 'button', [
-          'wrapper' => ['class' => 'add-rating form-group add-rating'],
-          'label' => 'Add Rating',
+          'wrapper' => ['class' => 'add-rating form-group'],
+          'attr' => ['class' => 'action'],
+          'label' => 'Add Another Rating',
         ]);
 
 /*

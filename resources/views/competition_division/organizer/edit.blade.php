@@ -16,9 +16,9 @@
 
 		{!! form_start($form) !!}
       
-      {!! form_until($form, 'rating_system') !!}
+      {!! form_until($form, 'rating_system_heading') !!}
       
-      <div id="collection-container" data-prototype="{{ form_row($form->rating_system->prototype()) }}">
+      <div class="rating-system collection-container form-group" data-prototype="{{ form_row($form->rating_system->prototype()) }}">
         {!! form_row($form->rating_system) !!}
       </div>
       
