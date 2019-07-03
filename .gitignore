@@ -4,11 +4,13 @@
 Homestead.yaml
 Homestead.json
 .env
+.env.production
 .babelrc
 .editorconfig
 .eslintignore
 .eslintrc.js
 .gitattributes
 .postcssrc.js
+.DS_Store
 
 /resources/views/public/competitions-list.php

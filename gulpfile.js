@@ -12,7 +12,9 @@ var js_input = './resources/assets/js/app.js';
 var js_output = './public/js';
 
 gulp.task('build-js', function() {
-
+  
+  console.log(js_input);
+  
   return gulp.src(js_input)
     .pipe(concat('app.js'))
     .pipe(gulp.dest(js_output));

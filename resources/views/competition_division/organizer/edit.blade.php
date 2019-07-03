@@ -14,7 +14,15 @@
 
 @section('content')
 
-		{!! form($form) !!}
+		{!! form_start($form) !!}
+      
+      {!! form_until($form, 'rating_system') !!}
+      
+      <div id="collection-container" data-prototype="{{ form_row($form->rating_system->prototype()) }}">
+        {!! form_row($form->rating_system) !!}
+      </div>
+      
+		{!! form_end($form) !!}
 
     @can('destroy', $division)
       <hr>

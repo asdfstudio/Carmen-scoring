@@ -251,6 +251,15 @@ $(document).ready(function() {
         choir_container.find('.new_school_container').addClass('hidden');
     });
 
+    $('.add-rating button').on('click', function(e) {
+        e.preventDefault();
+        var container = $('.collection-container');
+        var count = container.children().length;
+        var proto = container.data('prototype').replace(/__NAME__/g, count);
+        container.append(proto);
+        console.log('Add Rating');
+    });
+
     /*$('.toggle-new-choir-container').on('click', function(e) {
       e.preventDefault();
       console.log('toggle choir');
