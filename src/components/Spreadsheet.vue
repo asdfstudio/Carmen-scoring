@@ -108,7 +108,7 @@ export default {
   },
   computed: {
     choirsList () {
-      return this.$store.state.choirsList
+      return this.$store.getters.getChoirsList
     },
     captionsList () {
       return this.$store.state.captionsList

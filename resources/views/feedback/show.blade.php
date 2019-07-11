@@ -32,7 +32,11 @@
                   {{ $comment->judge->full_name }}
                 </div>
                 <div class="body">
-                  {!! nl2br($comment->comments) !!}
+                  @if($comment->comments)
+                    {!! nl2br($comment->comments) !!}
+                  @else
+                    <i class="text-muted">No typed comments were entered by this judge</i>
+                  @endif
                 </div>
 
               </li>
@@ -65,7 +69,11 @@
                   {{ $comment->judge->full_name }} - Feedback for {{ $comment->recipient->name }}
                 </div>
                 <div class="body">
-                  {!! nl2br($comment->comments) !!}
+                  @if($comment->comments)
+                    {!! nl2br($comment->comments) !!}
+                  @else
+                    <i class="text-muted">No typed comments were entered by this judge</i>
+                  @endif
                 </div>
 
               </li>
