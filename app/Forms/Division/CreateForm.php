@@ -150,20 +150,39 @@ class CreateForm extends Form
           'default_value' => ''
         ]);*/
 
-
-        $i = 0;
-        $maxRatingSystemSets = 3;
-
+      
+      
         $this->add('rating_system_heading', 'static', [
           'tag' => 'h2',
           'value' => 'Rating System (optional)',
           'label_show' => false
         ]);
 
+        $i = 0;
+        $maxRatingSystemSets = 4;
+        
+        $this->add('rating_system', 'collection', [
+          'type' => 'form',
+          'label_show' => false,
+          'prototype' => true,
+          'prototype_name' => '__NAME__',
+          'options' => [
+            'class' => 'Division\RatingsForm',
+            'label_show' => false
+          ]
+        ]);
+
+        $this->add('add_rating', 'button', [
+          'wrapper' => ['class' => 'add-rating form-group'],
+          'attr' => ['class' => 'action'],
+          'label' => 'Add Another Rating',
+        ]);
+
+/*
         while($i < $maxRatingSystemSets)
         {
 
-          if($this->model)
+          if($this->model && isset($this->model->rating_system[$i]))
           {
             $nameValue = $this->model->rating_system[$i]['name'];
             $minScoreValue = $this->model->rating_system[$i]['min_score'];
@@ -195,7 +214,7 @@ class CreateForm extends Form
 
           $i++;
         }
-
+*/
 
 				$this->add('submit', 'submit', [
           'label' => 'Save Division',

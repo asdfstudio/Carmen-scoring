@@ -347,7 +347,30 @@ a.active {
   }
 }
 
+.add-rating {
+  clear: both;
+  padding: 15px;
+  
+  button {
+    display: block;
+    width: 100%;
+  }
+}
 
+.remove-rating {
+  padding-top: 23px;
+  
+  button {
+    /*background: #f2dede;*/
+    color: #a94442;
+    border-color: #a94442;
+    font-weight: 700;
+  }
+}
+
+.rating-system .alert {
+  clear: both;
+}
 
 .round-navigation-bar {
   //background: #f3f3f3;

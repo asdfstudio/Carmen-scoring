@@ -251,6 +251,27 @@ $(document).ready(function() {
         choir_container.find('.new_school_container').addClass('hidden');
     });
 
+    $('body').on('click', '.add-rating button', function(e) {
+        e.preventDefault();
+        var wrapper = $('.collection-container');
+        var container = wrapper.children().first();
+        var count = container.children().length;
+        var proto = wrapper.data('prototype').replace(/__NAME__/g, count);
+        container.append(proto);
+    });
+
+    $('body').on('click', '.remove-rating button', function(e) {
+        e.preventDefault();
+        var group = $(this).parent().parent();
+        var ratingName = group.find('input').val(); console.log(ratingName);
+        var message = '<p class="alert alert-warning">The rating "' + ratingName + '" will be removed when you save this form.</p>';
+        group.children().remove();
+        
+        if(ratingName.length){
+          group.append(message);
+        }
+    });
+
     /*$('.toggle-new-choir-container').on('click', function(e) {
       e.preventDefault();
       console.log('toggle choir');
