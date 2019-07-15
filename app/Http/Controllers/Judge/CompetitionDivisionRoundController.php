@@ -143,6 +143,7 @@ class CompetitionDivisionRoundController extends Controller
 
       $division = $round->division;
       $competition = $division->competition;
+      $rating_system = $division->rating_system;
 
       //$judge = $division->judges->first();
 
@@ -245,8 +246,9 @@ class CompetitionDivisionRoundController extends Controller
       $comments = json_encode($comments);
       $scores = json_encode($scores);
       $captions = json_encode($captions);
+      $rating_system = json_encode($rating_system);
 
-      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'choirs', 'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl'));
+      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'choirs', 'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'rating_system'));
     }
 
 

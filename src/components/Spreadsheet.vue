@@ -79,6 +79,23 @@
         </tr>
         <!-- Total score end -->
 
+        <!-- Total score start -->
+        <tr class="rank-rating-row">
+          <th class="rank-rating-label">
+            Rank <span v-if="hasRatings">&amp; Rating</span>
+          </th>
+          <td
+            v-for="choir in choirsList"
+            :choir="choir"
+            v-bind:key="choir.id"
+            class="rank-rating-value"
+            >
+            {{ choirRank(choir, 'Place') }} <span class="tied-badge" v-if="choirRankTied(choir)">Tied</span><br>
+            <span v-if="hasRatings">{{ scoreToRating(choir.total_score) }}</span>
+          </td>
+        </tr>
+        <!-- Rank / Rating end -->
+
         <!-- Comments -->
         <tr class="comment-row">
           <th class="criterion-name">Comments</th>
@@ -87,9 +104,10 @@
             v-for="choir in choirsList"
             @click="activateChoirCommentModal(choir)"
             :choir="choir"
-
             v-bind:key="choir.id"
-            >{{ comment(choir) }}</td>
+            >
+            {{ comment(choir) }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -110,6 +128,9 @@ export default {
     choirsList () {
       return this.$store.getters.getChoirsList
     },
+    choirsListByScore () {
+      return this.$store.getters.updateChoirsRanks
+    },
     captionsList () {
       return this.$store.state.captionsList
     },
@@ -118,6 +139,12 @@ export default {
     },
     scores () {
       return this.$store.state.scores
+    },
+    ratings () {
+      return this.$store.state.ratings
+    },
+    hasRatings () {
+      return this.$store.state.ratings.length !== 0
     },
     activeModal () {
       return this.$store.state.activeModal
@@ -203,8 +230,20 @@ export default {
     score: function (choir, criterion) {
       return this.$store.getters.getChoirCriterionScore(choir.id, criterion.id)
     },
+    choirRank: function (choir, rankNoun) {
+      var rank = choir.total_score ? this.toOrdinal(choir.rank) : '--'
+      return rankNoun ? rank + ' ' + rankNoun : rank
+    },
+    choirRankTied: function (choir) {
+      if (choir.total_score && choir.rank_tied) {
+        return true
+      }
+    },
     choirTotalScore: function (choir) {
       return this.$store.getters.getChoirTotalScore(choir.id)
+    },
+    scoreToRating: function (score) {
+      return this.$store.getters.getChoirRating(score)
     },
     getChoirCaptionSubtotalScore: function (choir, caption) {
       return this.$store.getters.getChoirCaptionSubtotalScore(choir.id, caption.id)
@@ -361,6 +400,14 @@ table {
   tr.comment-row {
     font-size: 13px;
   }
+}
+
+.tied-badge {
+  background: #b84660;
+  color: #ffffff;
+  font-size: 11px;
+  padding: 3px 7px 3px 6px;
+  border-radius: 12px;
 }
 
 </style>
