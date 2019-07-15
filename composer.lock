@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d37c939ed8696a2ffe53c8ff1f10254b",
+    "content-hash": "ec56c4b5fc7540f931509d1fc45e6e45",
     "packages": [
         {
             "name": "aloha/twilio",
@@ -1377,16 +1377,16 @@
         },
         {
             "name": "kris/laravel-form-builder",
-            "version": "1.20.0",
+            "version": "1.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kristijanhusak/laravel-form-builder.git",
-                "reference": "4080568ed181b0ae7fa8b0846741ca787fce5b8d"
+                "reference": "bb332d7a6e861cc9f2f1c37864a36bf7a9df1f19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kristijanhusak/laravel-form-builder/zipball/4080568ed181b0ae7fa8b0846741ca787fce5b8d",
-                "reference": "4080568ed181b0ae7fa8b0846741ca787fce5b8d",
+                "url": "https://api.github.com/repos/kristijanhusak/laravel-form-builder/zipball/bb332d7a6e861cc9f2f1c37864a36bf7a9df1f19",
+                "reference": "bb332d7a6e861cc9f2f1c37864a36bf7a9df1f19",
                 "shasum": ""
             },
             "require": {
@@ -1440,7 +1440,7 @@
                 "form",
                 "laravel"
             ],
-            "time": "2019-02-27T20:23:16+00:00"
+            "time": "2018-11-01T19:39:48+00:00"
         },
         {
             "name": "kylekatarnls/update-helper",
@@ -4212,6 +4212,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2015-10-02T06:51:40+00:00"
         },
         {
