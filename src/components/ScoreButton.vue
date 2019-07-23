@@ -41,5 +41,22 @@ export default {
     line-height: 28px;
     font-size: 15px;
   }
+
+  .doubleRow &:nth-child(odd) {
+    position: relative;
+    bottom: 25px;
+    margin-bottom: 25px;
+    margin-left: -7px;
+    margin-right: -7px;
+  }
+
+  .doubleRow &:nth-child(even) {
+    position: relative;
+    top: 25px;
+    margin-top: 25px;
+    margin-left: -7px;
+    margin-right: -7px;
+    font-size: 18px;
+  }
 }
 </style>

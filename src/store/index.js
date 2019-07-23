@@ -12,6 +12,7 @@ import ScoresApi from '../api/scores'
 import _ from 'lodash'
 
 let captionsList = window.__CAPTIONS__ ? window.__CAPTIONS__ : captions
+let captionWeightingId = window.__CAPTION_WEIGHTING_ID__ ? window.__CAPTION_WEIGHTING_ID__ : 1
 let divisionsList = window.__DIVISIONS__ ? window.__DIVISIONS__ : divisions
 let choirsList = window.__CHOIRS__ ? window.__CHOIRS__ : choirs
 let criteriaList = window.__CRITERIA__ ? window.__CRITERIA__ : criteria
@@ -44,6 +45,7 @@ export const store = new Vuex.Store({
     isSpreadsheetScoringActive: isSpreadsheetScoringActive,
     // scoringStatus: 'Active',
     captionsList: captionsList,
+    captionWeightingId: captionWeightingId,
     divisions: divisionsList,
     choirsList: choirsList,
     criteriaList: criteriaList,
@@ -51,6 +53,7 @@ export const store = new Vuex.Store({
     comments: commentsList,
     ratings: ratingSystem,
     activeModal: false,
+    protectModal: false,
     activeCriterion: false,
     activeChoir: false,
     activeComment: false,
@@ -60,7 +63,9 @@ export const store = new Vuex.Store({
   mutations: {
     activateModal (state, data) {
       state.activeModal = true
-      console.log(data)
+    },
+    startModalProtection (state, data) {
+      state.protectModal = true
     },
     activateChoirCommentModal (state, choir) {
       state.activeModal = true
@@ -88,6 +93,9 @@ export const store = new Vuex.Store({
     },
     deactivateModal (state) {
       state.activeModal = false
+    },
+    endModalProtection (state, data) {
+      state.protectModal = false
     },
     activateChoir (state, choir) {
       state.activeChoir = choir
@@ -150,6 +158,9 @@ export const store = new Vuex.Store({
     }
   },
   getters: {
+    captionWeightingId: (state) => {
+      return state.captionWeightingId
+    },
     getCount: (state) => {
       return state.count
     },
@@ -169,10 +180,14 @@ export const store = new Vuex.Store({
       var scores = getters.getChoirScores(choirId)
       return getters.sumScores(scores)
     },
+    getChoirTotalWeightedScore: (state, getters) => (choirId) => {
+      var scores = getters.getChoirScores(choirId)
+      return getters.sumWeightedScores(scores)
+    },
     updateChoirsRanks: (state, getters) => {
       var choirs = state.choirsList
       for (var i = 0; i < choirs.length; i++) {
-        choirs[i].total_score = getters.getChoirTotalScore(choirs[i].id)
+        choirs[i].total_score = getters.getChoirTotalWeightedScore(choirs[i].id)
       }
       choirs.sort(function (a, b) {
         return b.total_score - a.total_score
@@ -204,6 +219,39 @@ export const store = new Vuex.Store({
       }
       return ratingName + ' (' + percentage + '%)'
     },
+    getChoirCaptionRank: (state, getters) => (choirId, captionId) => {
+      var choirs = state.choirsList
+      var choirCaptionScores = []
+      // Loop through the choirs and get the caption score for each one.
+      for (var i = 0; i < choirs.length; i++) {
+        choirCaptionScores[i] = {
+          choir_id: choirs[i].id,
+          caption_score: getters.getChoirCaptionSubtotalScore(choirs[i].id, captionId)
+        }
+      }
+      // Sort the list of captions scores.
+      choirCaptionScores.sort(function (a, b) {
+        return b.caption_score - a.caption_score
+      })
+      // Assign a rank to each score.
+      var rank = 1
+      for (var j = 0; j < choirCaptionScores.length; j++) {
+        choirCaptionScores[j].rank = rank
+        choirCaptionScores[j].rank_tied = false
+        if ((j > 0 && choirCaptionScores[j].caption_score === choirCaptionScores[j - 1].caption_score) || (j + 1 < choirCaptionScores.length && choirCaptionScores[j].caption_score === choirCaptionScores[j + 1].caption_score)) {
+          // If the previous or following choir has the same score, note them as "Tied".
+          choirCaptionScores[j].rank_tied = true
+        }
+        // If the current item in the loop belongs the choir we're trying to look up, then go ahead and return it.
+        if (choirCaptionScores[j].choir_id === choirId) {
+          return choirCaptionScores[j]
+        }
+        if (j + 1 < choirCaptionScores.length && choirCaptionScores[j].caption_score !== choirCaptionScores[j + 1].caption_score) {
+          // If the following choir does not have the same schore, increment the rank.
+          rank++
+        }
+      }
+    },
     getChoirCaptionSubtotalScore: (state, getters) => (choirId, captionId) => {
       var scores = getters.getChoirScores(choirId)
       // Filter by caption
@@ -214,12 +262,26 @@ export const store = new Vuex.Store({
         return previousValue + item.raw_score
       }, 0)
     },
+    sumWeightedScores: (state) => (scoreItems) => {
+      return scoreItems.reduce(function (previousValue, item) {
+        var scoreToAdd = item.raw_score
+        // If this division is using weighted scores for the music caption, calculate the weighte score here.
+        if (state.captionWeightingId === 1 && item.caption_id === 1) {
+          scoreToAdd = scoreToAdd * 1.5
+        }
+        return previousValue + scoreToAdd
+      }, 0)
+    },
     maxScore: (state) => {
-      var maxPossibleScore = 0
+      var maxTotalScore = 0
       for (var i = 0; i < state.criteriaList.length; i++) {
-        maxPossibleScore += state.criteriaList[i].maxScore
+        var criteriaMaxScore = state.criteriaList[i].maxScore
+        if (state.captionWeightingId === 1 && state.criteriaList[i].caption_id === 1) {
+          criteriaMaxScore = criteriaMaxScore * 1.5
+        }
+        maxTotalScore += criteriaMaxScore
       }
-      return maxPossibleScore
+      return maxTotalScore
     },
     getCriterionScores: (state) => (criterionId) => {
       return state.scores.filter(score => score.criterion_id === criterionId)

@@ -32,8 +32,8 @@ export default {
   },
   data: function () {
     return {
-      initialComment: this.$store.getters.getChoirComment(this.choir.id),
-      currentComment: this.$store.getters.getChoirComment(this.choir.id)
+      initialComment: this.$store.getters.getChoirComment(this.$store.getters.activeChoir.id),
+      currentComment: this.$store.getters.getChoirComment(this.$store.getters.activeChoir.id)
     }
   },
   methods: {

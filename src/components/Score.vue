@@ -11,9 +11,9 @@
 
       <CriterionScoringRange v-if="showScoringRange" :min="min" :max="max" :increment="increment" />
 
-      <div v-if="showScoreChoices && isScoringActive" class="score-buttons" v-bind:class="displayType">
+      <div v-if="showScoreChoices && isScoringActive" class="score-buttons" v-bind:class="[displayType, { doubleRow: increment === .5 }]">
         <ScoreButton
-          v-for="n in max"
+          v-for="n in range"
           v-bind:key="n"
           v-bind:class="{ active: currentScore === n }"
           :score="n"
@@ -63,6 +63,13 @@ export default {
     /* isScoringActive () {
       return this.$store.state.isScoringActive
     }, */
+    range () {
+      var range = []
+      for (var i = this.min; i <= this.max; i = i + this.increment) {
+        range.push(i)
+      }
+      return range
+    },
     isScoreChanged () {
       return this.currentScore !== this.initialScore
     },

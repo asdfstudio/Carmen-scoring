@@ -1,5 +1,5 @@
 <template>
-  <div id="modal">
+  <div id="modal" @click.stop>
     <slot></slot>
   </div>
 </template>

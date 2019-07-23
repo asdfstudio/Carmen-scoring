@@ -188,6 +188,8 @@ class CompetitionDivisionRoundController extends Controller
       }*/
 
       $isSpreadsheetScoringActive = $round->status;
+      
+      $captionWeightingId = $division->caption_weighting_id;
 
       // Convert to arrays for use with new Vue spreadsheet
       $captions = $captions->map(function ($item, $key) {
@@ -248,7 +250,7 @@ class CompetitionDivisionRoundController extends Controller
       $captions = json_encode($captions);
       $rating_system = json_encode($rating_system);
 
-      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'choirs', 'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'rating_system'));
+      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'captionWeightingId', 'choirs', 'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'rating_system'));
     }
 
 
