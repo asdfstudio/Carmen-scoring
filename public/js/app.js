@@ -258,7 +258,6 @@ $(document).ready(function() {
         var count = container.children().length;
         var proto = wrapper.data('prototype').replace(/__NAME__/g, count);
         container.append(proto);
-        console.log("Adding a new rating.");
     });
 
     $('body').on('click', '.remove-rating button', function(e) {
@@ -273,9 +272,7 @@ $(document).ready(function() {
            ratingGroup.append(message);
         }
         
-        console.log(ratingsContainer.find('.remove-rating'));
         if(ratingsContainer.find('.remove-rating').length === 0){
-            console.log("Attempting to click add button.");
             // If there are no rating fields left, trigger the button to add a new one.
             $('.add-rating button').trigger('click');
         }
