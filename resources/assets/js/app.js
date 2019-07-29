@@ -258,17 +258,26 @@ $(document).ready(function() {
         var count = container.children().length;
         var proto = wrapper.data('prototype').replace(/__NAME__/g, count);
         container.append(proto);
+        console.log("Adding a new rating.");
     });
 
     $('body').on('click', '.remove-rating button', function(e) {
         e.preventDefault();
-        var group = $(this).parent().parent();
-        var ratingName = group.find('input').val(); console.log(ratingName);
+        var ratingGroup = $(this).parent().parent();
+        var ratingsContainer = $(ratingGroup).parent();
+        var ratingName = ratingGroup.find('input').val();
         var message = '<p class="alert alert-warning">The rating "' + ratingName + '" will be removed when you save this form.</p>';
-        group.children().remove();
+        ratingGroup.children().remove();
         
         if(ratingName.length){
-          group.append(message);
+           ratingGroup.append(message);
+        }
+        
+        console.log(ratingsContainer.find('.remove-rating'));
+        if(ratingsContainer.find('.remove-rating').length === 0){
+            console.log("Attempting to click add button.");
+            // If there are no rating fields left, trigger the button to add a new one.
+            $('.add-rating button').trigger('click');
         }
     });
 
