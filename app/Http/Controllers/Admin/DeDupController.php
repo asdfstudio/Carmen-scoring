@@ -8,22 +8,9 @@ use App\Http\Requests;
 
 use App\Http\Controllers\Controller;
 
-use App\Organization;
 use App\Person;
-use App\Place;
-use App\Competition;
-use App\Division;
 use App\Judge;
-use App\Director;
-use App\Choreographer;
-use App\School;
 use App\Choir;
-use App\RawScore;
-use App\User;
-
-use Auth;
-
-use Kris\LaravelFormBuilder\FormBuilder;
 
 class DeDupController extends Controller
 {
@@ -127,9 +114,6 @@ class DeDupController extends Controller
                 $judge = Judge::with('divisions')->find($person->id);
                 $divisions = $judge->divisions;
                 $info->divisions = array();
-                
-                //$org = Organization::with('competitions')->find(36); dd($org);
-                //$competitions = Competition::all(); dd($competitions);
                 
                 if($divisions){
                   foreach($divisions as $division){
