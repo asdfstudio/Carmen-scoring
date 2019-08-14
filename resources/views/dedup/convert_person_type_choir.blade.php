@@ -58,9 +58,7 @@
             <div style="padding: 20px;">
               <p>{{ $judge->intro }}</p>
               <ul>
-                @foreach($judge->divisions as $div)
-                  <li>{{ $div }}</li>
-                @endforeach
+                <li>Assigned to {{ count($judge->divisions) }} divisions</li>
               </ul>
               @if(isset($judge->run_messages) && !empty($judge->run_messages))
                 <div class="alert alert-info">

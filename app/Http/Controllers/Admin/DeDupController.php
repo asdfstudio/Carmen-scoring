@@ -109,7 +109,7 @@ class DeDupController extends Controller
 
                 $info = new \stdClass();
 
-                $info->intro = $person->getFullNameAttribute().' (ID '.$person->id.') is a judge and is assigned to the following divisions:';
+                $info->intro = $person->getFullNameAttribute().' (ID '.$person->id.') is a judge.';
 
                 $info->run_messages = array();
                 
@@ -139,8 +139,6 @@ class DeDupController extends Controller
                   $info->divisions[] = 'None';
                 }
                 
-                $info->run_messages[] = $prefix . 'Judge/division relationships are already "many-to-many" and do not need to be converted.';
-
                 $judges[] = $info;
 
               }
