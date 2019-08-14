@@ -23,4 +23,10 @@
   
   <p>On this page, you can run a script to merge duplicate person records.</p>
 
+  <hr>
+
+  <p><strong>NOTE:</strong> If you get a QueryException error when trying to use the Convert or Merge scripts above, then the following commands needs to be run:</p>
+  <p><code>php artisan migrate</code></p>
+  <p><code>php artisan db:seed --class TypesTableSeeder</code></p>
+
 @endsection

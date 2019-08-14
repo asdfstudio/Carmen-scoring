@@ -13,7 +13,6 @@ class CreateChoirDirectorTable extends Migration
     public function up()
     {
         Schema::create('choir_director', function (Blueprint $table) {
-            $table->increments('id');
             $table->integer('choir_id')->unsigned();
 					  $table->integer('director_id')->unsigned();
 
@@ -26,6 +25,8 @@ class CreateChoirDirectorTable extends Migration
                 ->references('id')
                 ->on('people')
                 ->onDelete('cascade');
+          
+            $table->primary(['choir_id', 'director_id']);
         });
     }
 

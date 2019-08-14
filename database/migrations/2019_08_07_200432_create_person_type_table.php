@@ -13,7 +13,6 @@ class CreatePersonTypeTable extends Migration
     public function up()
     {
         Schema::create('person_type', function (Blueprint $table) {
-            $table->increments('id');
 					  $table->integer('person_id')->unsigned();
             $table->integer('type_id')->unsigned();
 
@@ -26,6 +25,8 @@ class CreatePersonTypeTable extends Migration
                 ->references('id')
                 ->on('types')
                 ->onDelete('cascade');
+          
+            $table->primary(['person_id', 'type_id']);
         });
     }
 
