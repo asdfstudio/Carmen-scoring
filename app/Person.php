@@ -4,6 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Judge;
+use App\Director;
+use App\Choreographer;
 
 class Person extends Model
 {
@@ -46,9 +49,24 @@ class Person extends Model
 			return $this->first_name . ' ' . $this->last_name;
 		}
 
+    /**
+     * The types that belong to the person (App\Judge, App\Director, App\Choreographer).
+     */
+    public function types()
+    {
+        return $this->belongsToMany('App\Type');
+    }
+
+		public function getIsTypeAttribute($type)
+		{
+      return $this->types->contains('name', $type);
+		}
+
 		public function getIsJudgeAttribute()
 		{
-			return $this->person_type == 'App\Judge' ? true : false;
+      // Changed relationship to "type" (Judge, Director, Choreographer) to be many-to-many.
+			//return $this->person_type == 'App\Judge' ? true : false;
+      return $this->getIsTypeAttribute('App\Judge');
 		}
 
 		public function getIsJudgeTextAttribute()
@@ -56,10 +74,44 @@ class Person extends Model
 			return $this->getIsJudgeAttribute() ? 'Judge' : false;
 		}
 
+		public function judge()
+		{
+      return Judge::with('divisions', 'captions', 'comments')->find($this->id);
+		}
+
+		public function getIsDirectorAttribute()
+		{
+      return $this->getIsTypeAttribute('App\Director');
+		}
+
+		public function getIsDirectorTextAttribute()
+		{
+			return $this->getIsDirectorAttribute() ? 'Director' : false;
+		}
+
+		public function director()
+		{
+      return Director::with('choirs')->find($this->id);
+		}
+
+		public function getIsChoreographerAttribute()
+		{
+      return $this->getIsTypeAttribute('App\Choreographer');
+		}
+
+		public function getIsChoreographerTextAttribute()
+		{
+			return $this->getIsChoreographerAttribute() ? 'Choreographer' : false;
+		}
+
+		public function choreographer()
+		{
+      return Choreographer::with('choirs')->find($this->id);
+		}
+
 		public function user()
 		{
 			return $this->hasOne('App\User', 'person_id');
 		}
-
 
 }

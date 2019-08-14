@@ -78,6 +78,19 @@ Route::group([
     Route::get('workshop/finalize', [
       'as' => 'workshop.finalize', 'uses' => 'WorkshopController@finalize'
     ]);
+    Route::get('dedup', [
+      'as' => 'admin.dedup', 'uses' => 'DeDupController@index'
+    ]);
+    Route::get('dedup/convert_person_type_choir', [
+      'as' => 'admin.dedup.convert_person_type_choir', 'uses' => 'DeDupController@convert_person_type_choir'
+    ]);
+    Route::get('dedup/dup_list', [
+      'as' => 'admin.dedup.dup_list', 'uses' => 'DeDupController@dup_list'
+    ]);
+    Route::get('dedup/merge_dups', [
+      'as' => 'admin.dedup.merge_dups', 'uses' => 'DeDupController@merge_dups'
+    ]);
+
 });
 
 // ================

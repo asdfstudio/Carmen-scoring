@@ -11,9 +11,9 @@ class Judge extends Person
     {
         parent::boot();
 
-        static::addGlobalScope('judge', function(Builder $builder) {
-            $builder->where('person_type', '=', 'App\Judge');
-        });
+        //static::addGlobalScope('judge', function(Builder $builder) {
+        //    $builder->where('person_type', '=', 'App\Judge');
+        //});
 
 				static::addGlobalScope('orderByLastName', function(Builder $builder) {
 					$builder->orderBy('last_name', 'ASC');
@@ -28,13 +28,13 @@ class Judge extends Person
 
 		public function divisions()
     {
-        return $this->belongsToMany('App\Division');
+        return $this->belongsToMany('App\Division')->withPivot('caption_id');
     }
 
 
 		public function captions()
     {
-        return $this->belongsToMany('App\Caption','division_judge');
+        return $this->belongsToMany('App\Caption','division_judge')->withPivot('division_id');
     }
 
 		public function comments()

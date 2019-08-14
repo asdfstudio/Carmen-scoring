@@ -27,16 +27,28 @@ class Choir extends Model
 			return $this->belongsTo('App\School');
 		}
 
-
+/*
 		public function directors()
 		{
 			return $this->morphMany('App\Director','subject');
 		}
+*/
 
+		public function directors()
+		{
+			return $this->belongsToMany('App\Director');
+		}
 
+/*
 		public function choreographers()
 		{
 			return $this->morphMany('App\Choreographer','subject');
+		}
+*/
+
+		public function choreographers()
+		{
+			return $this->belongsToMany('App\Choreographer');
 		}
 
 
