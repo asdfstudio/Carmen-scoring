@@ -1,7 +1,7 @@
 @extends('layouts.simple')
 
 @section('content-header')
-  <h1>Merge Duplicates</h1>
+  <h1>Merge Duplicates Automatically</h1>
   <a href="{{ route('admin.dedup') }}" class="action">Back</a>
 @endsection
 
@@ -19,20 +19,11 @@
   <p>Use the "Dry Run" button to preview the changes without actually modifying the database. Use the "Merge" button to do the conversion.</p>
 
   <p style="margin: 20px 0;">
-    @if(!$run)
-      <script>
-        function disableButtons(){
-          var b = document.getElementsByClassName('run-button');
-          for(var i=0; i<b.length; i++){
-            b[i].setAttribute('disabled', 'disabled');
-          }
-        }
-      </script>
-      <a href="{{ url()->current() }}?run" class="run-button btn btn-primary" onClick="disableButtons(); this.innerHTML = 'Please wait...';">Merge</a>
-      <a href="{{ url()->current() }}?dryrun" class="run-button btn btn-default" onClick="disableButtons(); this.innerHTML = 'Please wait...';">Dry Run</a>
-    @endif
+    <p><form><label><input type="checkbox" id="thorough" style="margin: 4px 6px 4px 2px;"> Thorough Search (Slow! Compares names and schools instead of just email addresses)</label></form></p>
+    <a href="{{ url()->current() }}?run" class="merge run-button btn btn-primary">Merge</a>
+    <a href="{{ url()->current() }}?dryrun" class="merge run-button btn btn-default">Dry Run</a>
     @if($run || $dryrun)
-      <a href="{{ url()->current() }}" class="run-button btn btn-default" onClick="disableButtons(); this.innerHTML = 'Please wait...';">Clear</a>
+      <a href="{{ url()->current() }}" class="run-button btn btn-default">Clear</a>
     @endif
   </p>
 
@@ -45,11 +36,15 @@
       <hr>
 
       <h3>Duplicates ({{ count($people) }} records for {{ count($people_merged_info) }} individuals)</h3>
-
+      
+      <p><form><label><input type="checkbox" id="show-single" style="margin: 4px 6px 4px 2px;"> Include non-duplicate records</label></form></p>
+      
+      <style>.single{display: none;}</style>
+      
       <div style="max-height: 600px; overflow-y: scroll; padding: 20px; border: 1px #c0c0c0 solid; margin-bottom: 50px;">
         
         @foreach($people_merged_info as $person)
-          <div style="padding: 20px;">
+          <div style="padding: 20px;" class="{{ $person->single_or_multiple }}">
             <p>{{ $person->full_name }} ({{ $person->email }})</p>
             <ul>
               <li>{{ count($person->people_list) }} record(s) in the database</li>
@@ -77,9 +72,10 @@
                 @endforeach
               </div>
             @endif
+            
+            <hr>
+            
           </div>
-
-          <hr>
 
         @endforeach
         
@@ -88,4 +84,48 @@
 
   @endif
 
+@endsection
+
+@section('body-footer')
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const has_thorough = urlParams.has('thorough');
+    
+    if(has_thorough){
+      $('#thorough').prop('checked', true);
+    }
+    
+    $('.run-button').click(function(e){
+      
+      e.preventDefault();
+      
+      if(typeof $(this).prop('disabled') === 'undefined' || $(this).prop('disabled') === false){
+        
+        console.log($(this).prop('disabled'));
+        
+        var thorough = $('#thorough').prop('checked');
+        var url = $(this).attr('href');
+
+        if(thorough && $(this).hasClass('merge')){
+          url += '&thorough';
+        }
+        
+        this.innerHTML = 'Please wait...';
+
+        $('.run-button').prop('disabled', true).attr('disabled', 'disabled');
+        
+        location = url;
+
+      }
+      
+    });
+    
+    $('#show-single').change(function(){
+      if($(this).prop('checked')){
+        $('.single').show();
+      } else {
+        $('.single').hide();
+      }
+    });
+  </script>
 @endsection

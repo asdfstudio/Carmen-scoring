@@ -90,6 +90,15 @@ Route::group([
     Route::get('dedup/merge_dups', [
       'as' => 'admin.dedup.merge_dups', 'uses' => 'DeDupController@merge_dups'
     ]);
+    Route::get('dedup/merge_dups_manual', [
+      'as' => 'admin.dedup.merge_dups_manual', 'uses' => 'DeDupController@merge_dups_manual'
+    ]);
+    Route::post('dedup/merge_dups_manual', [
+      'as' => 'admin.dedup.merge_dups_manual', 'uses' => 'DeDupController@merge_dups_manual'
+    ]);
+    Route::get('dedup/delete_blanks', [
+      'as' => 'admin.dedup.delete_blanks', 'uses' => 'DeDupController@delete_blanks'
+    ]);
 
 });
 

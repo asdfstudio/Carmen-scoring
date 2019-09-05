@@ -19,9 +19,21 @@
 
   <hr>
 
-  <h4><a href="{{ route('admin.dedup.merge_dups') }}">Merge Duplicates</a></h4>
+  <h4><a href="{{ route('admin.dedup.merge_dups') }}">Merge Duplicates Automatically</a></h4>
   
-  <p>On this page, you can run a script to merge duplicate person records.</p>
+  <p>On this page, you can run a script to merge duplicate person records based on email and name/school association.</p>
+
+  <hr>
+
+  <h4><a href="{{ route('admin.dedup.merge_dups_manual') }}">Merge Duplicates Manually</a></h4>
+  
+  <p>On this page, you can review potential duplicates that have the same name, but which do not contain enough other information to confirm the duplicate.  You can then manually choose which ones to merge.</p>
+
+  <hr>
+
+  <h4><a href="{{ route('admin.dedup.delete_blanks') }}">Delete Blank Records</a></h4>
+  
+  <p>This page will go through the <code>people</code> table in the database and delete all the blank records.  (Blank records may have been added by a previous bug in certain forms.)</p>
 
   <hr>
 

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Judge;
 use App\Director;
 use App\Choreographer;
+use App\School;
 
 class Person extends Model
 {
@@ -57,6 +58,18 @@ class Person extends Model
         return $this->belongsToMany('App\Type');
     }
 
+    public function typeNames()
+    {
+      $types = $this->types;
+      $type_names = array();
+      
+      foreach($types as $type){
+        $type_names[] = $type->name;
+      }
+      
+      return $type_names;
+    }
+
 		public function getIsTypeAttribute($type)
 		{
       return $this->types->contains('name', $type);
@@ -76,7 +89,11 @@ class Person extends Model
 
 		public function judge()
 		{
-      return Judge::with('divisions', 'captions', 'comments')->find($this->id);
+      if($this->getIsJudgeAttribute()){
+        return Judge::with('divisions', 'captions', 'comments')->find($this->id);
+      } else {
+        return null;
+      }
 		}
 
 		public function getIsDirectorAttribute()
@@ -86,7 +103,11 @@ class Person extends Model
 
 		public function getIsDirectorTextAttribute()
 		{
-			return $this->getIsDirectorAttribute() ? 'Director' : false;
+      if($this->getIsDirectorAttribute()){
+        return $this->getIsDirectorAttribute() ? 'Director' : false;
+      } else {
+        return null;
+      }
 		}
 
 		public function director()
@@ -106,8 +127,77 @@ class Person extends Model
 
 		public function choreographer()
 		{
-      return Choreographer::with('choirs')->find($this->id);
+      if($this->getIsChoreographerAttribute()){
+        return Choreographer::with('choirs')->find($this->id);
+      } else {
+        return null;
+      }
 		}
+
+    public function choirs()
+    {
+      $choirs = array();
+      $director = $this->director();
+      $choreographer = $this->choreographer();
+      
+      if($director){
+        foreach($director->choirs as $choir){
+          if(!in_array($choir, $choirs)){
+            $choirs[] = $choir;
+          }
+        }
+      }
+      
+      if($choreographer){
+        foreach($choreographer->choirs as $choir){
+          if(!in_array($choir, $choirs)){
+            $choirs[] = $choir;
+          }
+        }
+      }
+      
+      return $choirs;
+    }
+
+    public function choirIds()
+    {
+      $choir_ids = array();
+      $choirs = $this->choirs();
+      
+      foreach($choirs as $choir){
+        if(!in_array($choir->id, $choir_ids)){
+          $choir_ids[] = $choir->id;
+        }
+      }
+      
+      return $choir_ids;
+    }
+
+    public function schools()
+    {
+      $schools = array();
+      $school_ids = $this->schoolIds();
+      
+      foreach($school_ids as $id){
+        $schools[] = School::find($id);
+      }
+      
+      return $schools;
+    }
+
+    public function schoolIds()
+    {
+      $school_ids = array();
+      $choirs = $this->choirs();
+      
+      foreach($choirs as $choir){
+        if(!in_array($choir->school_id, $school_ids)){
+          $school_ids[] = $choir->school_id;
+        }
+      }
+      
+      return $school_ids;
+    }
 
 		public function user()
 		{

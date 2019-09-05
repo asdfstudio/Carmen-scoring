@@ -8,44 +8,72 @@
 
 @section('content')
 
-    @if(!$has_duplicates)
-      <p>There are {{ count($items) }} people in the database with no duplicates.</p>
+    <p>
+      This page shows duplicate records, using either the primary email or the name of the person to
+      find duplicates. If you are grouping duplicates by name, the script will group names that are
+      very similar, with only 1 to 3 characters different. This helps spot records that are duplicated
+      because of a typo, but it may also result in false positives that can be ignored.
+    </p>
+
+    <p style="margin: 20px 0;">
+        <a href="{{ url()->current() }}?group_by=email" class="btn btn-primary">Group By Email</a>
+        <a href="{{ url()->current() }}?group_by=name" class="btn btn-primary">Group By Name</a>
+        <a href="{{ url()->current() }}" class="btn btn-default">Clear</a>
+    </p>
+    
+    @if($group_by && !$has_duplicates)
+      <hr>
+      <p>There are {{ count($people_grouped) }} people in the database with no duplicates based on {{ $group_by }}.</p>
     @endif
 
-    @if($has_duplicates)
-    <ul class="list-group">
-      @foreach($items as $item)
-        @if(count($item) > 1)
-          <li class="list-group-item">
-            {{ $item[0]->first_name }} {{ $item[0]->last_name }} ({{ $item[0]->email }}) appears {{ count($item) }} times:
-            <table style="width: 100%; margin-top: 10px;">
-              <thead>
-                <tr>
-                  <th style="width: 40%; padding: 2px 4px; border: 1px #c0c0c0 solid;">Person Entries</th>
-                  <th style="width: 60%; padding: 2px 4px; border: 1px #c0c0c0 solid;">Associated Info</th></tr>
-              </thead>
-              <tbody>
-                @foreach($item as $person)
+    @if($group_by && $has_duplicates)
+      <hr>
+      <p><strong>There are {{ $dup_count }} people with potential duplicates based on {{ $group_by }}.</strong></p>
+      <hr>
+      <ul class="list-group">
+        @foreach($people_grouped as $group)
+          @if(count($group) > 1)
+            <li class="list-group-item">
+              {{ $group[0]->first_name }} {{ $group[0]->last_name }} ({{ $group[0]->email }}) appears {{ count($group) }} times:
+              <table style="width: 100%; margin-top: 10px;">
+                <thead>
                   <tr>
-                    <td style="width: 40%; padding: 2px 4px; border: 1px #c0c0c0 solid;">
-                      {{ $person->id }}: {{ $person->first_name }} {{ $person->last_name }}, {{ $person->person_type }}
-                    </td>
-                    <td style="width: 60%; padding: 2px 4px; border: 1px #c0c0c0 solid;">
-                      @if(isset($person->user))
-                        <div>User: {{ $person->user->id }}, {{ $person->user->username }}, {{ $person->user->email }} (Person ID: {{ $person->user->person_id }})</div>
-                      @endif
-                      @if(!empty($person->subject))
-                        <div>Choir: {{ $person->subject->id }}, {{ $person->subject->name }} (School ID: {{ $person->subject->school_id }})</div>
-                      @endif
-                    </td>
-                </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </li>
-        @endif
-      @endforeach
-    </ul>
+                    <th style="width: 40%; padding: 2px 4px; border: 1px #c0c0c0 solid;">Person Entries</th>
+                    <th style="width: 60%; padding: 2px 4px; border: 1px #c0c0c0 solid;">Associated Info</th></tr>
+                </thead>
+                <tbody>
+                  @foreach($group as $person)
+                    <tr>
+                      <td style="width: 40%; padding: 2px 4px; border: 1px #c0c0c0 solid;">
+                        {{ $person->first_name }} {{ $person->last_name }}<br>
+                        Person ID: {{ $person->id }}
+                      </td>
+                      <td style="width: 60%; padding: 2px 4px; border: 1px #c0c0c0 solid;">
+                        <ul>
+                          <li>Email(s): {{ $person->email }}</li>
+                          <li>Type(s): {{ str_replace('App\\', '', implode(', ', $person->typeNames())) }}</li>
+                          <li>Choir(s): {{ implode(', ', $person->choirIds()) }}</li>
+                          <li>Schools(s): {{ implode(', ', $person->schoolIds()) }}</li>
+                        @if(isset($person->user))
+                          <li>User Account:
+                            <ul>
+                              <li>User ID: {{ $person->user->id }}</li>
+                              <li>Username: {{ $person->user->username }}</li>
+                              <li>User Email: {{ $person->user->email }}</li>
+                            </ul>
+                          </li>
+                        @endif
+                        </ul>
+                      </td>
+                  </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </li>
+          @endif
+        @endforeach
+      </ul>
     @endif
+
 
 @endsection
