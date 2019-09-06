@@ -585,7 +585,7 @@ class DeDupController extends Controller
 
               if($info->tel){
                 $info->run_messages[] = $prefix . 'Using '.$info->tel.' as phone number.';
-                $info->run_messages[] = $prefix . '<code>$person->emails_additional = "'.$emails_additional_list.'"</code>';
+                $info->run_messages[] = $prefix . '<code>$person->tel = '.$info->tel.'</code>';
                 $info->run_messages[] = $prefix . '<code>$person->save()</code>';
                 if($run){
                   $person->tel = $info->tel;
