@@ -45,6 +45,7 @@
                 <label style="white-space: pre"><input type="checkbox" name="duplicates[{{ $key }}][]" value="{{ $person->id }}">  {{ $person->first_name }} {{ $person->last_name }} (ID: {{ $person->id }})</label>
                 <ul>
                   <li>{{ $person->email }}</li>
+                  <li>{{ $person->tel }}</li>
                   <li>Types: {{ str_replace('App\\', '', implode(', ', $person->typeNames())) }}</li>
                   <li>Choirs: {{ implode(', ', $person->choirIds()) }}</li>
                   <li>Schools: {{ implode(', ', $person->schoolIds()) }}</li>
@@ -63,9 +64,4 @@
     <button name="merge" class="run-button btn btn-primary">Merge Selected</button>
   </form>
 
-@endsection
-
-@section('body-footer')
-  <script>
-  </script>
 @endsection

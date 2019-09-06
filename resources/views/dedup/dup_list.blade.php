@@ -50,7 +50,15 @@
                       </td>
                       <td style="width: 60%; padding: 2px 4px; border: 1px #c0c0c0 solid;">
                         <ul>
-                          <li>Email(s): {{ $person->email }}</li>
+                          <li>
+                            Email(s):
+                            @if($person->emails_additional)
+                              {{ $person->email }}, {{ $person->emails_additional }}
+                            @else
+                              {{ $person->email }}
+                            @endif
+                          </li>
+                          <li>Phone: {{ $person->tel }}</li>
                           <li>Type(s): {{ str_replace('App\\', '', implode(', ', $person->typeNames())) }}</li>
                           <li>Choir(s): {{ implode(', ', $person->choirIds()) }}</li>
                           <li>Schools(s): {{ implode(', ', $person->schoolIds()) }}</li>

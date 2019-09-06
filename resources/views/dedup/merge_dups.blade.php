@@ -45,7 +45,7 @@
         
         @foreach($people_merged_info as $person)
           <div style="padding: 20px;" class="{{ $person->single_or_multiple }}">
-            <p>{{ $person->full_name }} ({{ $person->email }})</p>
+            <p>{{ $person->full_name }} ({{ $person->email }}, {{ $person->tel }})</p>
             <ul>
               <li>{{ count($person->people_list) }} record(s) in the database</li>
               <li>Person IDs: {{ implode(', ', $person->people_list) }}</li>

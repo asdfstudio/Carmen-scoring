@@ -78,6 +78,19 @@ Route::group([
     Route::get('workshop/finalize', [
       'as' => 'workshop.finalize', 'uses' => 'WorkshopController@finalize'
     ]);
+  
+  
+    Route::get('person', [
+      'as' => 'admin.person', 'uses' => 'PersonController@index'
+    ]);
+    Route::get('person/search', [
+      'as' => 'admin.person.search', 'uses' => 'PersonController@search'
+    ]);
+    Route::post('person/search', [
+      'as' => 'admin.person.search', 'uses' => 'PersonController@search'
+    ]);
+  
+  
     Route::get('dedup', [
       'as' => 'admin.dedup', 'uses' => 'DeDupController@index'
     ]);

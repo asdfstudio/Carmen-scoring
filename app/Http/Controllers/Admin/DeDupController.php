@@ -583,6 +583,16 @@ class DeDupController extends Controller
                 }
               }
 
+              if($info->tel){
+                $info->run_messages[] = $prefix . 'Using '.$info->tel.' as phone number.';
+                $info->run_messages[] = $prefix . '<code>$person->emails_additional = "'.$emails_additional_list.'"</code>';
+                $info->run_messages[] = $prefix . '<code>$person->save()</code>';
+                if($run){
+                  $person->tel = $info->tel;
+                  $person->save();
+                }
+              }
+
               $info->run_messages[] = $prefix . 'Resetting applicable types for $person ('.implode(', ', $info->type_names).').';
               $info->run_messages[] = $prefix . '<code>$person->types()->sync([])</code> &nbsp;[First, empty the types to avoid duplicates]';
               $info->run_messages[] = $prefix . '<code>$person->types()->sync('.implode(', ', $info->types).')</code>';
@@ -840,6 +850,11 @@ class DeDupController extends Controller
           if(count($info->emails_additional)){
             $emails_additional_list = implode(', ', $info->emails_additional);
             $person->emails_additional = $emails_additional_list;
+            $person->save();
+          }
+
+          if($info->tel){
+            $person->tel = $info->tel;
             $person->save();
           }
 
