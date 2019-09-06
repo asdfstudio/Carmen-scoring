@@ -5533,8 +5533,7 @@ a.active {
   border: 1px solid #d8d8d8;
   padding: 20px;
   margin-top: -1px;
-  background: #FFF;
-  overflow: hidden; }
+  background: #FFF; }
   .content .content-header {
     display: block;
     overflow: hidden;

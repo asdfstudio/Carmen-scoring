@@ -131,7 +131,8 @@
         
       }
       
-      $('.add-new').on('click', function(){
+      $('.add-new').on('click', function(e){
+        e.preventDefault();
         $('.form-group').toggle();
       });
       
