@@ -121,14 +121,81 @@
           });
           
           $('#person-search-suggestions li').on('click', function(e){
-            $('#person-search').val($(e.target).text());
-            $('#person-id').val($(e.target).attr('data-person-id'));
+            selectPerson($(e.target).attr('data-person-id'), $(e.target).text());
             $('#person-search-suggestions').remove();
             $('.form-group').hide();
           });
           
         }
         
+      }
+      
+      $('form').on('keypress', function(e){
+        if(e.which === 13 && $('#person-search-suggestions').length){
+          $('#person-search-suggestions').remove();
+          return false;
+        }
+      });
+      
+      $('#person-search').on('keyup', function(e){
+        
+        var key = e.keyCode;
+        let up = key === 38 ? true : false;
+        let down = key === 40 ? true : false;
+        
+        if(up || down){
+
+          // Get the zero-based index of the selected item.
+          var selectIndex = $('#person-search-suggestions li.selected').index();
+
+          // If nothing is selected, make the index -1 instead of undefined.
+          if(typeof selectIndex === 'undefined'){
+            selectIndex = -1;
+          }
+
+          // We will use an index where the first value is 1 instead of zero, so increment up. 
+          selectIndex++;
+
+          if(up){
+
+            $('#person-search-suggestions li').removeClass('selected');
+
+            selectIndex--;
+
+            if(selectIndex >= 0){
+              $('#person-search-suggestions li:nth-child('+selectIndex+')').addClass('selected');
+              var id = $('#person-search-suggestions li.selected').attr('data-person-id');
+              var text = $('#person-search-suggestions li.selected').text();
+              selectPerson(id, text);
+            }
+
+          }
+
+          if(down){
+
+            $('#person-search-suggestions li').removeClass('selected');
+
+            selectIndex++;
+
+            if(selectIndex <= $('#person-search-suggestions li').length){
+              $('#person-search-suggestions li:nth-child('+selectIndex+')').addClass('selected');
+            } else {
+              $('#person-search-suggestions li:last-child').addClass('selected');
+            }
+
+            var id = $('#person-search-suggestions li.selected').attr('data-person-id');
+            var text = $('#person-search-suggestions li.selected').text();
+            selectPerson(id, text);
+
+          }
+
+        }
+        
+      });
+      
+      function selectPerson(id, text){
+        $('#person-search').val(text);
+        $('#person-id').val(id);
       }
       
       $('.add-new').on('click', function(e){

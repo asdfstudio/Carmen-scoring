@@ -5549,6 +5549,10 @@ a.active {
       display: block;
       float: right;
       padding: 25px 0 15px; }
+  .content ::after {
+    content: "";
+    clear: both;
+    display: table; }
 
 .content-subheader {
   display: block;
