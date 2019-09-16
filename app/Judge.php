@@ -19,13 +19,18 @@ class Judge extends Person
 					$builder->orderBy('last_name', 'ASC');
 				});
 
-				static::saving(function ($model)
+				static::created(function ($model)
         {
-            $model->attributes['person_type'] = get_class($model);
+            $model->types()->syncWithoutDetaching([1]);
         });
     }
 
 
+    public function types()
+    {
+        return $this->belongsToMany('App\Type', 'person_type', 'person_id', 'type_id');
+    }
+  
 		public function divisions()
     {
         return $this->belongsToMany('App\Division')->withPivot('caption_id');

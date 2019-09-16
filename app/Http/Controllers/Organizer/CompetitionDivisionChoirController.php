@@ -13,6 +13,7 @@ use App\Choir;
 use App\School;
 use App\Place;
 use App\Director;
+use App\Person;
 
 use Kris\LaravelFormBuilder\FormBuilder;
 
@@ -180,7 +181,7 @@ class CompetitionDivisionChoirController extends Controller
     {
         //$this->authorize('create','App\Choir');
 				$form = $formBuilder->create('Choir\CreateChoirForm');
-
+        
 				// Validate input
 				if (!$form->isValid()) {
            return redirect()->back()->withErrors($form->getErrors())->withInput();
@@ -189,8 +190,8 @@ class CompetitionDivisionChoirController extends Controller
 				// Get the division
 				$division = Division::with('competition','choirs')->find($division_id);
 
-        //dd($request->all());
-
+        //die(print_r($request->all(), true));
+        
         // Create school and location
 				if($request->has('school.name'))
 				{
@@ -225,8 +226,9 @@ class CompetitionDivisionChoirController extends Controller
           $choir = Choir::with('school')->find($request->input('choir_id'));
         }
 
-        //dd($choir);
-
+        //die(print_r($choir, true));
+        
+        /*
         // Create a director and attach to choir
         if($request->has('director'))
 				{
@@ -234,7 +236,39 @@ class CompetitionDivisionChoirController extends Controller
           $director->fill($request->input('director'));
 					$choir->directors()->save($director);
 				}
+        */
+        
+        // If the form is submitted with an existing person ID...
+        if($request->has('director.person_id')){
+          
+          $director_id = $request->input('director.person_id');
+          
+          // Make sure this person is recorded as a director in the database.
+          $person = Person::with('types')->find($director_id);
+          if(!$person->getIsDirectorAttribute()){
+            $person->types()->syncWithoutDetaching([2]);
+          }
+          
+          // Attach the person to this choir.
+          $choir->directors()->syncWithoutDetaching([intval($director_id)]);
 
+        } elseif($request->has('director.first_name')) {
+
+          // Otherwise, the intention is to create a new director.
+          $director = new Director();
+          $director->first_name = $request->input('director.first_name');
+          $director->last_name = $request->input('director.last_name');
+          $director->email = $request->input('director.email');
+          if($request->has('director.emails_additional')){
+            $director->emails_additional = $request->input('director.emails_additional');
+          }
+          if($request->has('director.tel')){
+            $director->tel = $request->input('director.tel');
+          }
+          $choir->directors()->save($director);
+
+        }
+      
 				// Attach choir to the division
 				if($choir)
 				{

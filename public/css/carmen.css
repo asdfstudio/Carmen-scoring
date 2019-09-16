@@ -5669,3 +5669,6 @@ a.active {
   padding: 10px 20px;
   background: #f7f75a;
   color: #000; }
+
+.selectize-dropdown [data-selectable] .highlight {
+  display: inline-block; }

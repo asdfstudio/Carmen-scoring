@@ -13,12 +13,18 @@ var js_output = './public/js';
 
 gulp.task('build-js', function() {
   
-  console.log(js_input);
+  //console.log(js_input);
   
-  return gulp.src(js_input)
+  var app_result = gulp.src(js_input)
     .pipe(concat('app.js'))
     .pipe(gulp.dest(js_output));
 
+  var director_form_result = gulp.src('./resources/assets/js/director-form.js')
+    .pipe(concat('director-form.js'))
+    .pipe(gulp.dest(js_output));
+  
+  return app_result && director_form_result;
+  
   //return gulp.src(js_input)
     //.pipe(sourcemaps.init())
       //.pipe(concat('app.js'))
@@ -28,7 +34,7 @@ gulp.task('build-js', function() {
     //.pipe(gulp.dest(js_output));
 });
 
-var resources = './resources/assets/**/**/*';
+var resources = './resources/assets/**/*';
 
 var input = './resources/assets/sass/**/*.scss';
 var output = './public/css';

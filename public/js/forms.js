@@ -5,10 +5,15 @@ var ChoirForm = (function() {
     this.form = form;
 
     choirSelectize = $('#modal').find('.choir_id').selectize();
+    
+    personId = $('#modal #person-id');
+    toggleNewDirector = $('#modal .toggle-new-director');
+    directorSearchGroup = $('#modal .director-search-group');
+    directorCreateGroup = $('#modal .director-create-group');
+    initPersonIdSelectize();
   };
 
   var showNewChoirForm = function(){
-    console.log('toggle choir');
     this.form.find('.new_choir_container').show();
     this.form.find('.new_school_container').hide();
     this.form.find('.existing_choir_container').hide();

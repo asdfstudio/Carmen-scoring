@@ -138,7 +138,7 @@
     var buildRequest = function(form) {
 
       var resourceType = form.data('resource-type');
-
+      
       var request = {
         data: form.serialize(),
         dataType: 'json',
@@ -228,6 +228,7 @@
 
     var remove = function(link) {
       var request = Form.buildRemoveRequest(link);
+      console.log(request);
       $.ajax(request);
     };
 
@@ -261,7 +262,7 @@
       save: save,
       handleSaveSuccess: handleSaveSuccess,
       handleSaveError: handleSaveError,
-      handleSaveComplete, handleSaveComplete,
+      handleSaveComplete: handleSaveComplete,
       handleRemoveSuccess: handleRemoveSuccess,
     };
   })();

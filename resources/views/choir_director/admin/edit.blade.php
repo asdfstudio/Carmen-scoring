@@ -14,7 +14,7 @@
 
   {!! form($form) !!}
 
-  <h2>Delete director</h2>
+  <h2>Remove director from choir</h2>
 
   {!! form($deleteForm) !!}
 

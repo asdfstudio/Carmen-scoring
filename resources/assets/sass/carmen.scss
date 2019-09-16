@@ -683,3 +683,8 @@ a.active {
   background: $cs-yellow;
   color: $cs-black;
 }
+
+// Tweak to the highlight class that appears in Selectize seach.
+.selectize-dropdown [data-selectable] .highlight {
+  display: inline-block;
+}

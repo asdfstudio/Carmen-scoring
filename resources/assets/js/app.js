@@ -239,6 +239,33 @@ $(document).ready(function() {
     });
 
 
+    /*$('.toggle-new-choir-container').on('click', function(e) {
+      e.preventDefault();
+      console.log('toggle choir');
+      var parent = $(this).parents('form');
+      parent.find('.new_choir_container').show();
+      parent.find('.new_school_container').hide();
+      parent.find('.existing_choir_container').hide();
+      $(this).hide();
+    });*/
+
+    /*$('.toggle-new-school-container').on('click', function(e) {
+      e.preventDefault();
+      var parent = $(this).parents('form');
+      parent.find('.new_school_container').show();
+      parent.find('.existing_school_container').hide();
+      $(this).hide();
+    });*/
+
+    $('.toggle-new-judge-container').on('click', function(e) {
+      e.preventDefault();
+      var parent = $(this).parents('form');
+      parent.find('.new_judge_container').show();
+      parent.find('.existing_judge_container').hide();
+      $(this).hide();
+    });
+
+
     $('.add-to-collection').on('click', function(e) {
         e.preventDefault();
         var container = $('.collection-container');
@@ -276,32 +303,6 @@ $(document).ready(function() {
             // If there are no rating fields left, trigger the button to add a new one.
             $('.add-rating button').trigger('click');
         }
-    });
-
-    /*$('.toggle-new-choir-container').on('click', function(e) {
-      e.preventDefault();
-      console.log('toggle choir');
-      var parent = $(this).parents('form');
-      parent.find('.new_choir_container').show();
-      parent.find('.new_school_container').hide();
-      parent.find('.existing_choir_container').hide();
-      $(this).hide();
-    });*/
-
-    /*$('.toggle-new-school-container').on('click', function(e) {
-      e.preventDefault();
-      var parent = $(this).parents('form');
-      parent.find('.new_school_container').show();
-      parent.find('.existing_school_container').hide();
-      $(this).hide();
-    });*/
-
-    $('.toggle-new-judge-container').on('click', function(e) {
-      e.preventDefault();
-      var parent = $(this).parents('form');
-      parent.find('.new_judge_container').show();
-      parent.find('.existing_judge_container').hide();
-      $(this).hide();
     });
 
 
