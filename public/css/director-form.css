@@ -1,0 +1,19 @@
+.director-search-group {
+  position: relative; }
+  .director-search-group.disabled {
+    opacity: .5;
+    cursor: not-allowed; }
+    .director-search-group.disabled label,
+    .director-search-group.disabled select,
+    .director-search-group.disabled input,
+    .director-search-group.disabled .selectize-control,
+    .director-search-group.disabled .selectize-control.single .selectize-input,
+    .director-search-group.disabled .selectize-control.single .selectize-input input {
+      cursor: not-allowed; }
+
+.toggle-new-director {
+  margin: 20px 0;
+  display: inline-block; }
+
+.director-create-group {
+  display: none; }
