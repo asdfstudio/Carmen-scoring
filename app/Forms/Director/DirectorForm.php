@@ -48,19 +48,19 @@ class DirectorForm extends Form
     $this->add('first_name','text', [
       'label' => 'First Name',
       'wrapper' => ['class' => 'form-group director-create-group'],
-      'rules' => 'required',
+      'rules' => ['required_without_all:choir_id,person_id'],
     ]);
 
     $this->add('last_name','text', [
       'label' => 'Last Name',
       'wrapper' => ['class' => 'form-group director-create-group'],
-      'rules' => 'required',
+      'rules' => ['required_without_all:choir_id,person_id'],
     ]);
 
     $this->add('email','email', [
       'label' => 'Email Address',
       'wrapper' => ['class' => 'form-group director-create-group'],
-      'rules' => ['required', 'unique:people,email', 'email'],
+      'rules' => ['required_without_all:choir_id,person_id', 'unique:people,email', 'email'],
     ]);
 
     $this->add('emails_additional','text', [
