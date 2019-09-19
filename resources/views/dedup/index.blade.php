@@ -79,4 +79,28 @@
     
   </div>
   
+  <div style="padding: 0 0 0 40px;">
+    
+    <h2>Choirs</h2>
+    
+    <div style="padding: 10px 0 10px 40px;">
+      <h4>Coming Soon...</h4>
+      <!--
+      <h4><a href="{{ route('admin.dedup.dup_list_schools') }}">Browse Duplicates</a></h4>
+      
+      <p>View a list of schools in the database with info about duplicates.</p>
+      
+      <hr>
+      -->
+      <!--
+      <h4><a href="{{ route('admin.dedup.merge_dup_schools_manual') }}">Merge Duplicates Manually</a></h4>
+      
+      <p>On this page, you can review potential duplicates that have the same name or location.  You can then manually choose which ones to merge.</p>
+      
+      <hr>
+      -->
+    </div>
+    
+  </div>
+  
 @endsection
