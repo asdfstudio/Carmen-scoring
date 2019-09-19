@@ -512,7 +512,7 @@ a.active {
   }
   
   // Clearfix
-  ::after {
+  &::after {
     content: "";
     clear: both;
     display: table;

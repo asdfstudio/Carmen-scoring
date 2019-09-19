@@ -112,6 +112,15 @@ Route::group([
     Route::get('dedup/delete_blanks', [
       'as' => 'admin.dedup.delete_blanks', 'uses' => 'DeDupController@delete_blanks'
     ]);
+    Route::get('dedup/dup_list_schools', [
+      'as' => 'admin.dedup.dup_list_schools', 'uses' => 'DeDupController@dup_list_schools'
+    ]);
+    Route::get('dedup/merge_dup_schools_manual', [
+      'as' => 'admin.dedup.merge_dup_schools_manual', 'uses' => 'DeDupController@merge_dup_schools_manual'
+    ]);
+    Route::post('dedup/merge_dup_schools_manual', [
+      'as' => 'admin.dedup.merge_dup_schools_manual', 'uses' => 'DeDupController@merge_dup_schools_manual'
+    ]);
 
 });
 
