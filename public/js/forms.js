@@ -6,11 +6,12 @@ var ChoirForm = (function() {
 
     choirSelectize = $('#modal').find('.choir_id').selectize();
     
+    schoolId = $('#modal #school_id');
     personId = $('#modal #person-id');
     toggleNewDirector = $('#modal .toggle-new-director');
     directorSearchGroup = $('#modal .director-search-group');
     directorCreateGroup = $('#modal .director-create-group');
-    initPersonIdSelectize();
+    initSelectize();
   };
 
   var showNewChoirForm = function(){

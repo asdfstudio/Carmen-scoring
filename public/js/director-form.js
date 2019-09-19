@@ -1,9 +1,10 @@
-var personId, personIdSelectize, toggleNewDirector, directorSearchGroup, initPersonIdSelectize, activateSearch, activateCreate;
+var personId, personIdSelectize, schoolId, schoolIdSelectize, toggleNewDirector, directorSearchGroup, initSelectize, activateSearch, activateCreate;
 
 // Customize the behaviour of the forms that add a director to a choir.
 jQuery(document).ready(function($){
   
   personId = $('#person-id');
+  schoolId = $('#school_id');
   toggleNewDirector = $('.toggle-new-director');
   directorSearchGroup = $('.director-search-group');
   directorCreateGroup = $('.director-create-group');
@@ -37,7 +38,13 @@ jQuery(document).ready(function($){
 
   }
 
-  initPersonIdSelectize = function(){
+  initSelectize = function(){
+    // Make the school selector a fancy Selectized field.
+    schoolIdSelectize = $(schoolId).selectize({
+      allowEmptyOption: true,
+      placeholder: 'Select a school...'
+    });
+
     // Make the person selector a fancy Selectized field.
     personIdSelectize = $(personId).selectize({
       allowEmptyOption: true,
