@@ -81,7 +81,7 @@ jQuery(document).ready(function($){
   }
   
   if(!$(personId).is(':hidden')){
-    initPersonIdSelectize();
+    initSelectize();
   }
   
 });
