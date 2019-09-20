@@ -92,6 +92,11 @@ class Choir extends Model
 			//return $this->hasMany('App\Comment');
 		}
 
+    public function standings()
+		{
+			return $this->belongsToMany('App\Standing')->withPivot('raw_rank', 'final_rank')->orderBy('pivot_final_rank', 'ASC');
+		}
+
     public function name()
     {
       return '"'.$this->name.'"';

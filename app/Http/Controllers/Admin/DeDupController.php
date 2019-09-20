@@ -1286,11 +1286,12 @@ class DeDupController extends Controller
         $info->round_ids = array();
         $info->penalty_ids = array();
         $info->comments = array();
+        $info->standing_ids = array();
         $info->updated_at = '0000-00-00 00:00:00';
 
         foreach($group as $id){
           
-          $record = Choir::with('school', 'directors', 'choreographers', 'performers', 'divisions', 'scheduleItems', 'rounds', 'penalties', 'comments')->find($id);
+          $record = Choir::with('school', 'directors', 'choreographers', 'performers', 'divisions', 'scheduleItems', 'rounds', 'penalties', 'comments', 'standings')->find($id);
           
           // Get the first person ID or else the person ID that is already associated with a user account.
           if(null === $info->id){
@@ -1341,12 +1342,19 @@ class DeDupController extends Controller
             $info->comments[] = $comment;
           }
           
+          foreach($record->standings as $standing){
+            $info->standing_ids[$standing->id] = array(
+              'raw_rank' => $standing->pivot->raw_rank,
+              'final_rank' => $standing->pivot->final_rank
+            );
+          }
+          
           // Note the timestamp of the most recent record update.
           $info->updated_at = ($record->updated_at > $info->updated_at) ? $record->updated_at : $info->updated_at;
           
         }
         
-        //dd($choir);
+        //dd($info);
         
         // Begin merging data.
         
@@ -1389,6 +1397,8 @@ class DeDupController extends Controller
           $comment->save();
         }
         
+        $choir->standings()->sync($info->standing_ids);
+        
         // Delete the duplicate choirs.
         foreach($group as $id){
           if($info->id !== intval($id)){
@@ -1400,6 +1410,7 @@ class DeDupController extends Controller
             $duplicate_choir->divisions()->sync([]);
             $duplicate_choir->rounds()->sync([]);
             $duplicate_choir->penalties()->sync([]);
+            $duplicate_choir->standings()->sync([]);
             
             $duplicate_choir->delete();
             
