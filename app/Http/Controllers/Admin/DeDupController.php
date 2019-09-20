@@ -1318,7 +1318,7 @@ class DeDupController extends Controller
           }
           
           foreach($record->performers as $performer){
-            $info->performers[] = $performer->id;
+            $info->performers[] = $performer;
           }
           
           foreach($record->divisions as $division){
@@ -1363,7 +1363,7 @@ class DeDupController extends Controller
         foreach($info->performers as $performer){
           $performer->choir_id = $choir->id;
           $performer->save();
-          foreach($performer-comments as $performer_comment){
+          foreach($performer->comments as $performer_comment){
             $performer_comment->choir_id = $choir->id;
             $performer_comment->save();
           }
