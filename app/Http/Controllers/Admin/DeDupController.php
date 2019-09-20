@@ -12,6 +12,8 @@ use App\Person;
 use App\Judge;
 use App\School;
 use App\Choir;
+use App\ScheduleItem;
+use App\Comment;
 
 class DeDupController extends Controller
 {
@@ -25,7 +27,7 @@ class DeDupController extends Controller
    */
   public function index()
   {
-    return view('dedup.index', compact('items'));
+    return view('dedup.index');
   }
 
   /**
@@ -1246,6 +1248,239 @@ class DeDupController extends Controller
     }
     
     return view('dedup.merge_dup_schools_manual', compact('schools_grouped', 'schools_merged_info', 'dup_count', 'has_duplicates'));
+  }
+
+  /**
+   * Find potential duplicate records and allow an admin to manually choose which ones to merge.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function merge_dup_choirs_manual()
+  {
+    
+    ini_set('max_execution_time', 3600);
+    
+    $group_by = isset($_GET['group_by']) ? strtolower($_GET['group_by']) : null;
+    $choirs_merged_info = array();
+    $choirs_grouped = array();
+    $dup_count = 0;
+    $has_duplicates = false;
+    
+    if(isset($_POST['duplicates'])){
+
+      $duplicates = $_POST['duplicates'];
+
+      foreach($duplicates as $group){
+
+        $info = new \stdClass();
+
+        $info->id = null;
+        $info->choir_list = array();
+        $info->name = null;
+        $info->school_id = null;
+        $info->director_ids = array();
+        $info->choreographer_ids = array();
+        $info->performers = array();
+        $info->division_ids = array();
+        $info->scheduleItems = array();
+        $info->round_ids = array();
+        $info->penalty_ids = array();
+        $info->comments = array();
+        $info->updated_at = '0000-00-00 00:00:00';
+
+        foreach($group as $id){
+          
+          $record = Choir::with('school', 'directors', 'choreographers', 'performers', 'divisions', 'scheduleItems', 'rounds', 'penalties', 'comments')->find($id);
+          
+          // Get the first person ID or else the person ID that is already associated with a user account.
+          if(null === $info->id){
+            $info->id = $record->id;
+            $choir = $record;
+          }
+          
+          $info->choir_list[] = $record->id;
+          
+          // Get the first or most recently updated name.
+          if(null === $info->name || ($record->name && $record->updated_at > $info->updated_at)){
+            $info->name = trim($record->name);
+          }
+          
+          if(null === $info->school_id || ($record->school_id && $record->updated_at > $info->updated_at)){
+            $info->school = $record->school_id;
+          }
+          
+          foreach($record->directors as $director){
+            $info->director_ids[] = $director->id;
+          }
+          
+          foreach($record->choreographers as $choreographer){
+            $info->choreographer_ids[] = $choreographer->id;
+          }
+          
+          foreach($record->performers as $performer){
+            $info->performers[] = $performer->id;
+          }
+          
+          foreach($record->divisions as $division){
+            $info->division_ids[] = $division->id;
+          }
+          
+          foreach($record->scheduleItems as $scheduleItem){
+            $info->scheduleItems[] = $scheduleItem;
+          }
+          
+          foreach($record->rounds as $round){
+            $info->round_ids[] = $round->id;
+          }
+          
+          foreach($record->penalties as $penalty){
+            $info->penalty_ids[] = $penalty->id;
+          }
+          
+          foreach($record->comments as $comment){
+            $info->comments[] = $comment;
+          }
+          
+          // Note the timestamp of the most recent record update.
+          $info->updated_at = ($record->updated_at > $info->updated_at) ? $record->updated_at : $info->updated_at;
+          
+        }
+        
+        //dd($choir);
+        
+        // Begin merging data.
+        
+        $choir->name = $info->name;
+        $choir->school_id = $info->school_id;
+        $choir->save();
+        
+        $info->director_ids = array_unique($info->director_ids);
+        $choir->directors()->sync($info->director_ids);
+        
+        $info->choreographer_ids = array_unique($info->choreographer_ids);
+        $choir->choreographers()->sync($info->choreographer_ids);
+        
+        foreach($info->performers as $performer){
+          $performer->choir_id = $choir->id;
+          $performer->save();
+          foreach($performer-comments as $performer_comment){
+            $performer_comment->choir_id = $choir->id;
+            $performer_comment->save();
+          }
+        }
+        
+        $info->division_ids = array_unique($info->division_ids);
+        $choir->divisions()->sync($info->division_ids);
+        
+        foreach($info->scheduleItems as $scheduleItem){
+          $scheduleItem->choir_id = $choir->id;
+          $scheduleItem->save();
+        }
+        
+        $info->round_ids = array_unique($info->round_ids);
+        $choir->rounds()->sync($info->round_ids);
+        
+        $info->penalty_ids = array_unique($info->penalty_ids);
+        $choir->penalties()->sync($info->penalty_ids);
+        
+        foreach($info->comments as $comment){
+          $comment->choir_id = $choir->id;
+          $comment->recipient_id = $choir->id;
+          $comment->save();
+        }
+        
+        // Delete the duplicate choirs.
+        foreach($group as $id){
+          if($info->id !== intval($id)){
+            
+            $duplicate_choir = Choir::find($id);
+            
+            $duplicate_choir->directors()->sync([]);
+            $duplicate_choir->choreographers()->sync([]);
+            $duplicate_choir->divisions()->sync([]);
+            $duplicate_choir->rounds()->sync([]);
+            $duplicate_choir->penalties()->sync([]);
+            
+            $duplicate_choir->delete();
+            
+          }
+        }
+        
+        $choirs_merged_info[] = $info;
+        
+      }
+      
+      //dd($choirs_merged_info);
+      
+    }
+    
+    if(!empty($group_by)){
+      
+      $choirs = Choir::with('school', 'directors')->orderBy('id', 'asc')->get();
+      
+      if($group_by === 'name' || $group_by === 'school' || $group_by === 'both'){
+        
+        foreach($choirs as $choir){
+          
+          if($group_by === 'name'){
+            $group_by_key = $choir->name;
+          }
+          
+          if($group_by === 'school'){
+            $school_id = is_null($choir->school_id) ? 'null' : $choir->school_id;
+            $group_by_key = $school_id;
+          }
+          
+          if($group_by === 'both'){
+            $school_id = is_null($choir->school_id) ? 'null' : $choir->school_id;
+            $group_by_key = $choir->name . $school_id;
+          }
+          
+          $key = base64_encode($group_by_key);
+          
+          foreach($choirs_grouped as $existing_key => $group){
+            foreach($group as $comp_choir){
+              
+              if($group_by === 'school' && $choir->school_id === $comp_choir->school_id){
+                $key = $existing_key;
+                break 2;
+              }
+              
+              $diff = levenshtein($choir->name, $comp_choir->name);
+              
+              if($group_by === 'name'){
+                if($diff < 3){
+                  $key = $existing_key;
+                  break 2;
+                }
+              }
+              
+              if($group_by === 'both'){
+                if($diff < 3  && $choir->school_id === $comp_choir->school_id){
+                  $key = $existing_key;
+                  break 2;
+                }
+              }
+              
+            }
+          }
+          
+          $choirs_grouped[$key][] = $choir;
+          
+        }
+        
+        foreach($choirs_grouped as $group){
+          if(count($group) > 1){
+            $has_duplicates = true;
+            $dup_count++;
+          }
+        }
+        
+      }
+      
+    }
+    
+    return view('dedup.merge_dup_choirs_manual', compact('choirs_grouped', 'choirs_merged_info', 'dup_count', 'has_duplicates'));
   }
 
 }

@@ -31,6 +31,10 @@ class Performer extends Model
     return $this->hasMany('App\SoloRawScore');
   }
 
+  public function comments()
+  {
+    return $this->morphMany('App\Comment', 'recipient');
+  }
 
   public function getCategoryNameAttribute()
   {

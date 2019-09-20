@@ -51,10 +51,15 @@ class Choir extends Model
 			return $this->belongsToMany('App\Choreographer');
 		}
 
+    public function performers()
+    {
+      return $this->hasMany('App\Performer');
+    }
 
 		public function divisions()
 		{
-			return $this->hasMany('App\Division');
+			//return $this->hasMany('App\Division');
+			return $this->belongsToMany('App\Division');
 		}
 
     public function scheduleItems()
@@ -67,12 +72,14 @@ class Choir extends Model
       return $this->belongsToMany('App\Round');
     }
 
-
+    // This doesn't actually work because the Division relationship is many-to-many.
+    /*
 		public function competitions()
 		{
 			return $this->hasManyThrough('App\Competition','App\Division');
 		}
-
+    */
+    
     public function penalties()
 		{
 			return $this->belongsToMany('App\Penalty');
@@ -80,9 +87,10 @@ class Choir extends Model
 
     public function comments()
 		{
-			return $this->belongsToMany('App\Comment');
+			//return $this->belongsToMany('App\Comment');
+			return $this->morphMany('App\Comment', 'recipient');
+			//return $this->hasMany('App\Comment');
 		}
-
 
     public function name()
     {

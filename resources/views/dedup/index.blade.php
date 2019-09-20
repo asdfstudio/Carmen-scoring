@@ -45,7 +45,7 @@
       
       <hr>
       
-      <p><strong>NOTE:</strong> If you get a QueryException error when trying to use the Convert or Merge scripts above, then the following commands needs to be run:</p>
+      <p><strong>NOTE:</strong> If you get a QueryException when using the Convert or Merge scripts above, then run the following commands:</p>
       <p><code>php artisan migrate</code></p>
       <p><code>php artisan db:seed --class TypesTableSeeder</code></p>
       
@@ -71,7 +71,7 @@
       
       <h4><a href="{{ route('admin.dedup.merge_dup_schools_manual') }}">Merge Duplicates Manually</a></h4>
       
-      <p>On this page, you can review potential duplicates that have the same name or location.  You can then manually choose which ones to merge.</p>
+      <p>Review potential duplicate schools that have the same name or location, then manually choose which ones to merge.</p>
       
       <hr>
       
@@ -84,21 +84,12 @@
     <h2>Choirs</h2>
     
     <div style="padding: 10px 0 10px 40px;">
-      <h4>Coming Soon...</h4>
-      <!--
-      <h4><a href="{{ route('admin.dedup.dup_list_schools') }}">Browse Duplicates</a></h4>
       
-      <p>View a list of schools in the database with info about duplicates.</p>
+      <h4><a href="{{ route('admin.dedup.merge_dup_choirs_manual') }}">Merge Duplicates Manually</a></h4>
       
-      <hr>
-      -->
-      <!--
-      <h4><a href="{{ route('admin.dedup.merge_dup_schools_manual') }}">Merge Duplicates Manually</a></h4>
-      
-      <p>On this page, you can review potential duplicates that have the same name or location.  You can then manually choose which ones to merge.</p>
+      <p>Review potential duplicate choirs that have the same name or school, then manually choose which ones to merge.</p>
       
       <hr>
-      -->
     </div>
     
   </div>

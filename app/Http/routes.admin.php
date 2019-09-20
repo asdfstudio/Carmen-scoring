@@ -121,6 +121,12 @@ Route::group([
     Route::post('dedup/merge_dup_schools_manual', [
       'as' => 'admin.dedup.merge_dup_schools_manual', 'uses' => 'DeDupController@merge_dup_schools_manual'
     ]);
+    Route::get('dedup/merge_dup_choirs_manual', [
+      'as' => 'admin.dedup.merge_dup_choirs_manual', 'uses' => 'DeDupController@merge_dup_choirs_manual'
+    ]);
+    Route::post('dedup/merge_dup_choirs_manual', [
+      'as' => 'admin.dedup.merge_dup_choirs_manual', 'uses' => 'DeDupController@merge_dup_choirs_manual'
+    ]);
 
 });
 
