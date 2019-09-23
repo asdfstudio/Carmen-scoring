@@ -1307,7 +1307,7 @@ class DeDupController extends Controller
           }
           
           if(null === $info->school_id || ($record->school_id && $record->updated_at > $info->updated_at)){
-            $info->school = $record->school_id;
+            $info->school_id = $record->school_id;
           }
           
           foreach($record->directors as $director){
