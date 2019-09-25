@@ -35,6 +35,22 @@ class UserController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index_new(FormBuilder $formBuilder)
+    {
+				$users = User::with('organization','person')->withoutGlobalScope('organization')->get();
+				$people = Person::with('user', 'types')->get();
+        
+        $deleteUserForm = $formBuilder->create('GenericDeleteForm', ['button_text' => 'Delete User']);
+
+				return view('user.admin.index_new', compact('users', 'people', 'deleteUserForm'));
+
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

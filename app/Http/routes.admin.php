@@ -10,6 +10,9 @@ Route::group([
   'namespace' => 'Admin'
   ], function(){
 
+    Route::get('user/index_new', [
+      'as' => 'admin.user.index_new', 'uses' => 'UserController@index_new'
+    ]);
     Route::post('user/{user}/judge', [
       'as' => 'admin.user.judge.set', 'uses' => 'UserController@makeJudge'
     ]);

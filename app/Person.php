@@ -64,7 +64,7 @@ class Person extends Model
       $type_names = array();
       
       foreach($types as $type){
-        $type_names[] = $type->name;
+        $type_names[] = str_replace('App\\', '', $type->name);
       }
       
       return $type_names;
@@ -173,13 +173,30 @@ class Person extends Model
       return $choir_ids;
     }
 
+    public function choirNames()
+    {
+      $choir_names = array();
+      $choirs = $this->choirs();
+      
+      foreach($choirs as $choir){
+        if(!in_array($choir->name, $choir_names)){
+          $choir_names[] = $choir->name;
+        }
+      }
+      
+      return $choir_names;
+    }
+
     public function schools()
     {
       $schools = array();
       $school_ids = $this->schoolIds();
       
       foreach($school_ids as $id){
-        $schools[] = School::find($id);
+        $school = School::find($id);
+        if(!empty($school)){
+          $schools[] = $school;
+        }
       }
       
       return $schools;
@@ -197,6 +214,20 @@ class Person extends Model
       }
       
       return $school_ids;
+    }
+
+    public function schoolNames()
+    {
+      $school_names = array();
+      $choirs = $this->choirs();
+      
+      foreach($choirs as $choir){
+        if($choir->school && !in_array($choir->school->name, $school_names)){
+          $school_names[] = $choir->school->name;
+        }
+      }
+      
+      return $school_names;
     }
 
 		public function user()

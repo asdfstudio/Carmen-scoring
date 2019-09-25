@@ -46,7 +46,7 @@
                 <ul>
                   <li>{{ $person->email }}</li>
                   <li>{{ $person->tel }}</li>
-                  <li>Types: {{ str_replace('App\\', '', implode(', ', $person->typeNames())) }}</li>
+                  <li>Types: {{ implode(', ', $person->typeNames()) }}</li>
                   <li>Choirs: {{ implode(', ', $person->choirIds()) }}</li>
                   <li>Schools: {{ implode(', ', $person->schoolIds()) }}</li>
                 </ul>

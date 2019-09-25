@@ -651,6 +651,152 @@ a.active {
 
 }
 
+#user-person-list {
+  border-top: 1px #ddd solid;
+  
+  &.users-only .person.non-user,
+  &.non-users-only .person.user {
+    display: none;
+  }
+  
+  .person {
+    position: relative;
+    padding: 25px 30px;
+    border: 1px #ddd solid;
+    border-top-width: 0;
+    
+    &.even {
+      background-color: #f9f9f9;
+    }
+    
+    &.search-hidden {
+      display: none;
+    }
+    
+    .user-flag {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 4px 8px;
+      width: 80px;
+      border-bottom-left-radius: 8px;
+      color: #ffffff;
+      font-size: 13px;
+      text-align: center;
+    }
+    
+    &.user .user-flag {
+      background: #60b846;
+    }
+    
+    &.non-user .user-flag {
+      background: #9f46b8;
+    }
+    
+    .name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .user-blocks {
+      display: flex;
+
+      .user-details {
+        padding: 0 30px;
+        width: 70%;
+        line-height: 2;
+
+        .detail {
+          display: flex;
+          margin: 5px 0;
+
+          .detail-label,
+          .detail-value {
+          }
+
+          .detail-label {
+            width: 30%;
+            min-width: 120px;
+            font-weight: 700;
+          }
+
+          .detail-value {
+            width: 70%;
+            min-width: 200px;
+            line-height: 1.5;
+
+            a {
+              display: inline;
+            }
+          }
+
+          &.roles .detail-value {
+            line-height: 2;
+          }
+
+          .role {
+            display: inline-block;
+            padding: 4px 8px;
+            margin: -4px 4px -4px 0;
+            color: #ffffff;
+            font-size: 13px;
+            border-radius: 6px;
+            background: #b84660;
+            line-height: 1;
+          }
+        }
+      }
+
+      .user-actions {
+        padding-left: 30px;
+        width: 30%;
+        border-left: 1px #ddd solid;
+
+        .user-actions-title {
+          font-weight: 700;
+          line-height: 2;
+          margin: 5px 0;
+        }
+
+        a.btn.action {
+          margin-top: -2px;
+        }
+        
+        form {
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
+
+#user-person-search {
+  position: relative;
+  display: inline-block;
+  margin: 20px 0;
+  
+  img {
+    position: absolute;
+    top: 11px;
+    left: 30px;
+    width: 16px;
+    height: 16px;
+    z-index: 1;
+    opacity: .5;
+  }
+  
+  input {
+    position: relative;
+    top: 2px;
+    padding: 6px 12px 6px 36px;
+    margin-left: 20px;
+    width: 300px;
+    border: 1px #ccc solid;
+    border-radius: 4px;
+  }
+}
+
 .breadcrumbs-footer {
   padding: 10px 0;
   ol.breadcrumb {

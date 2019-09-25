@@ -3660,7 +3660,7 @@ table.spreadsheet-legend {
 .caption-header {
   font-size: 1.2em;
   color: #FFF;
-  background: #898989; }
+  background: #707070; }
   .caption-header.caption-music {
     background: #7F4091 !important; }
   .caption-header.caption-show {
@@ -3672,12 +3672,12 @@ table.spreadsheet-legend {
   .caption-header.caption-visual-performance {
     background: #CA2128 !important; }
   .caption-header.caption-place {
-    background: #898989 !important; }
+    background: #707070 !important; }
 
 .caption-raw-score {
   font-size: 1em;
   color: #FFF;
-  background: #969696;
+  background: #7c7c7c;
   /*&.caption-music {
     background: lighten($cs-caption-music, 15) !important;
   }
@@ -3706,7 +3706,7 @@ table.spreadsheet-legend {
 .caption-weighted-score {
   font-size: 1em;
   color: #FFF;
-  background: #a3a3a3;
+  background: #898989;
   /*&.caption-music {
     background: lighten($cs-caption-music, 10) !important;
   }
@@ -3735,7 +3735,7 @@ table.spreadsheet-legend {
 .caption-rank {
   font-size: 1.1em;
   color: #FFF;
-  background: #969696;
+  background: #7c7c7c;
   /*&.caption-music {
     background: darken($cs-caption-music, 5) !important;
   }
@@ -3801,7 +3801,7 @@ input.score {
   .score.total {
     font-weight: bold; }
   .score.subtotal {
-    color: #898989; }
+    color: #707070; }
 
 .tab-content {
   display: none; }
@@ -3886,21 +3886,21 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
       margin-left: -1px; }
 
 .action {
-  color: #898989;
+  color: #707070;
   border: 1px solid;
   border-bottom-width: 2px;
   padding: 5px 10px;
   text-transform: lowercase;
   display: inline-block;
-  background: none;
+  background: #ffffff;
   border-radius: 0;
   box-shadow: none; }
   .action:hover {
     text-decoration: none;
     transition-duration: 300ms;
-    background: #898989;
+    background: #707070;
     color: #FFF;
-    border-color: #898989; }
+    border-color: #707070; }
   .action.danger {
     color: #CA2128; }
     .action.danger:hover {
@@ -3915,11 +3915,11 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
       color: inherit;
       border-color: inherit; }
   .action.secondary {
-    color: #898989; }
+    color: #707070; }
     .action.secondary:hover {
-      background: #898989;
+      background: #707070;
       color: #FFF;
-      border-color: #898989; }
+      border-color: #707070; }
   .action.status-inactive {
     color: #E29231; }
     .action.status-inactive:hover {
@@ -3979,10 +3979,10 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
   .list-group .list-group-item .actions-group .action.danger:hover {
     background: #CA2128; }
   .list-group .list-group-item .actions-group .action:hover {
-    background: #898989;
+    background: #707070;
     color: #FFF; }
   .list-group .list-group-item .actions-group .action:active {
-    background: #898989;
+    background: #707070;
     color: #FFF; }
 
 .list-group .list-group-item.award .name {
@@ -4027,7 +4027,7 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
   line-height: 19px;
   display: block;
   margin-bottom: 3px;
-  color: #898989; }
+  color: #707070; }
 
 .list-group .list-group-item.choir .name {
   font-size: 21px;
@@ -4154,7 +4154,7 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
     .list-group .list-group-item.standing .details .final_rank input {
       max-width: 60px; }
   .list-group .list-group-item.standing .details .raw_rank {
-    color: #898989; }
+    color: #707070; }
 
 .list-group.sortable-list .list-group-item .sort-handle:hover {
   cursor: grab; }
@@ -5232,7 +5232,7 @@ body#public-layout {
       margin: 0;
       font-size: 2em; }
     .body-header .heading-container h2.subheader {
-      color: #898989;
+      color: #707070;
       font-size: 1.4em;
       margin: 0; }
     @media only screen and (min-width: 768px) {
@@ -5564,7 +5564,7 @@ a.active {
     padding: 10px;
     border: 0;
     margin-top: 40px;
-    background: #898989;
+    background: #707070;
     /*&.overall {
       background: $cs-caption-overall;
     }
@@ -5642,6 +5642,102 @@ a.active {
     .list-group.horizontal .list-group-item .attr_value {
       margin-left: 5px;
       font-size: 2em; }
+
+#user-person-list {
+  border-top: 1px #ddd solid; }
+  #user-person-list.users-only .person.non-user,
+  #user-person-list.non-users-only .person.user {
+    display: none; }
+  #user-person-list .person {
+    position: relative;
+    padding: 25px 30px;
+    border: 1px #ddd solid;
+    border-top-width: 0; }
+    #user-person-list .person.even {
+      background-color: #f9f9f9; }
+    #user-person-list .person.search-hidden {
+      display: none; }
+    #user-person-list .person .user-flag {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 4px 8px;
+      width: 80px;
+      border-bottom-left-radius: 8px;
+      color: #ffffff;
+      font-size: 13px;
+      text-align: center; }
+    #user-person-list .person.user .user-flag {
+      background: #60b846; }
+    #user-person-list .person.non-user .user-flag {
+      background: #9f46b8; }
+    #user-person-list .person .name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px; }
+    #user-person-list .person .user-blocks {
+      display: flex; }
+      #user-person-list .person .user-blocks .user-details {
+        padding: 0 30px;
+        width: 70%;
+        line-height: 2; }
+        #user-person-list .person .user-blocks .user-details .detail {
+          display: flex;
+          margin: 5px 0; }
+          #user-person-list .person .user-blocks .user-details .detail .detail-label {
+            width: 30%;
+            min-width: 120px;
+            font-weight: 700; }
+          #user-person-list .person .user-blocks .user-details .detail .detail-value {
+            width: 70%;
+            min-width: 200px;
+            line-height: 1.5; }
+            #user-person-list .person .user-blocks .user-details .detail .detail-value a {
+              display: inline; }
+          #user-person-list .person .user-blocks .user-details .detail.roles .detail-value {
+            line-height: 2; }
+          #user-person-list .person .user-blocks .user-details .detail .role {
+            display: inline-block;
+            padding: 4px 8px;
+            margin: -4px 4px -4px 0;
+            color: #ffffff;
+            font-size: 13px;
+            border-radius: 6px;
+            background: #b84660;
+            line-height: 1; }
+      #user-person-list .person .user-blocks .user-actions {
+        padding-left: 30px;
+        width: 30%;
+        border-left: 1px #ddd solid; }
+        #user-person-list .person .user-blocks .user-actions .user-actions-title {
+          font-weight: 700;
+          line-height: 2;
+          margin: 5px 0; }
+        #user-person-list .person .user-blocks .user-actions a.btn.action {
+          margin-top: -2px; }
+        #user-person-list .person .user-blocks .user-actions form {
+          display: inline-block; }
+
+#user-person-search {
+  position: relative;
+  display: inline-block;
+  margin: 20px 0; }
+  #user-person-search img {
+    position: absolute;
+    top: 11px;
+    left: 30px;
+    width: 16px;
+    height: 16px;
+    z-index: 1;
+    opacity: .5; }
+  #user-person-search input {
+    position: relative;
+    top: 2px;
+    padding: 6px 12px 6px 36px;
+    margin-left: 20px;
+    width: 300px;
+    border: 1px #ccc solid;
+    border-radius: 4px; }
 
 .breadcrumbs-footer {
   padding: 10px 0; }

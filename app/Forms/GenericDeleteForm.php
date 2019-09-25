@@ -8,13 +8,14 @@ class GenericDeleteForm extends Form
 {
     protected $formOptions = [
       'method' => 'DELETE',
-      'class' => 'form-inline'
+      'class' => 'form-inline',
+      'button_text' => 'Delete'
     ];
 
     public function buildForm()
     {
 				$this->add('submit', 'submit', [
-          'label' => 'Delete',
+          'label' => $this->formOptions['button_text'],
           'attr' => ['class' => 'action danger'],
           //'template' => ''
         ]);

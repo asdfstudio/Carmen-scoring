@@ -18,16 +18,21 @@ class CreateUserForm extends Form
         ]);
 
         $this->add('email','email', ['rules' => 'required']);
-
-        $this->add('emails_additional','email', [
+        
+        $emails_additional_options = [
           'label' => 'Additional Email Addresses',
-          'default_value' => $this->getModel()->person->emails_additional,
           'help_block' => [
             'text' => 'One or more addition emails that should also get notifications. Separate addresses with a comma.',
             'tag' => 'p',
             'attr' => ['class' => 'help-block']
           ]
-        ]);
+        ];
+        
+        if($this->getModel()->person){
+          $emails_additional_options['default_value'] = $this->getModel()->person->emails_additional;
+        }
+        
+        $this->add('emails_additional','email', $emails_additional_options);
 
         $this->add('username','text', [
           'rules' => 'unique:users,username,'.$this->model->id
