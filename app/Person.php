@@ -70,64 +70,71 @@ class Person extends Model
       return $type_names;
     }
 
-		public function getIsTypeAttribute($type)
+		public function isType($type)
 		{
       return $this->types->contains('name', $type);
 		}
 
-		public function getIsJudgeAttribute()
+		public function isJudge()
 		{
-      // Changed relationship to "type" (Judge, Director, Choreographer) to be many-to-many.
-			//return $this->person_type == 'App\Judge' ? true : false;
-      return $this->getIsTypeAttribute('App\Judge');
+      return $this->isType('App\Judge');
 		}
+    
+    // Alias of isJudge()
+		public function getIsJudgeAttribute(){ return $this->isJudge(); }
 
 		public function getIsJudgeTextAttribute()
 		{
-			return $this->getIsJudgeAttribute() ? 'Judge' : false;
+			return $this->isJudge() ? 'Judge' : false;
 		}
 
 		public function judge()
 		{
-      if($this->getIsJudgeAttribute()){
+      if($this->isJudge()){
         return Judge::with('divisions', 'captions', 'comments')->find($this->id);
       } else {
         return null;
       }
 		}
 
-		public function getIsDirectorAttribute()
+		public function isDirector()
 		{
-      return $this->getIsTypeAttribute('App\Director');
+      return $this->isType('App\Director');
 		}
+    
+    // Alias of isDirector()
+		public function getIsDirectorAttribute(){ return $this->isDirector(); }
 
 		public function getIsDirectorTextAttribute()
 		{
-      if($this->getIsDirectorAttribute()){
-        return $this->getIsDirectorAttribute() ? 'Director' : false;
+      return $this->isDirector() ? 'Director' : false;
+		}
+
+		public function director()
+		{
+      if($this->isDirector()){
+        return Director::with('choirs')->find($this->id);
       } else {
         return null;
       }
 		}
 
-		public function director()
+		public function isChoreographer()
 		{
-      return Director::with('choirs')->find($this->id);
+      return $this->isType('App\Choreographer');
 		}
-
-		public function getIsChoreographerAttribute()
-		{
-      return $this->getIsTypeAttribute('App\Choreographer');
-		}
+    
+    // Alias of isChoreographer()
+		public function getIsChoreographerAttribute(){ return $this->isChoreographer(); }
 
 		public function getIsChoreographerTextAttribute()
 		{
-			return $this->getIsChoreographerAttribute() ? 'Choreographer' : false;
+			return $this->isChoreographer() ? 'Choreographer' : false;
 		}
 
 		public function choreographer()
 		{
-      if($this->getIsChoreographerAttribute()){
+      if($this->isChoreographer()){
         return Choreographer::with('choirs')->find($this->id);
       } else {
         return null;

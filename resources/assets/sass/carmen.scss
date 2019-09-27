@@ -651,6 +651,84 @@ a.active {
 
 }
 
+#user-person-filter-group {
+  display: flex;
+  margin: 20px 0;
+  text-align: center;
+  
+  @media (min-width: $tablet-min) {
+    display: inline-block;
+  }
+  
+  a.user-person-filter {
+    margin-bottom: 4px;
+    font-size: 13px;
+    padding: 6px;
+    border-radius: 0;
+    flex-grow: 1;
+    
+    &:first-child {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+
+    @media (min-width: 380px) {
+      font-size: 14px;
+      padding: 6px 12px;
+    }
+    
+    @media (min-width: $tablet-min) {
+      border-radius: 4px;
+    }
+    
+    &.active {
+      font-weight: 400;
+    }
+  }
+}
+
+#user-person-search {
+  position: relative;
+  margin: 20px 0;
+  
+  @media (min-width: $tablet-min) {
+    display: inline-block;
+  }
+  
+  img {
+    position: absolute;
+    top: 11px;
+    left: 10px;
+    width: 16px;
+    height: 16px;
+    z-index: 1;
+    opacity: .5;
+    
+    @media (min-width: $tablet-min) {
+      left: 30px;
+    }
+  }
+  
+  input {
+    position: relative;
+    top: 2px;
+    padding: 6px 12px 6px 36px;
+    width: 100%;
+    border: 1px #ccc solid;
+    border-radius: 4px;
+    
+    @media (min-width: $tablet-min) {
+      margin-left: 20px;
+      width: 300px;
+    }
+  }
+}
+
 #user-person-list {
   border-top: 1px #ddd solid;
   
@@ -661,9 +739,13 @@ a.active {
   
   .person {
     position: relative;
-    padding: 25px 30px;
+    padding: 25px 20px;
     border: 1px #ddd solid;
     border-top-width: 0;
+    
+    @media (min-width: $tablet-min) {
+      padding: 25px 30px;
+    }
     
     &.even {
       background-color: #f9f9f9;
@@ -686,11 +768,11 @@ a.active {
     }
     
     &.user .user-flag {
-      background: #60b846;
+      background: $cs-green;
     }
     
     &.non-user .user-flag {
-      background: #9f46b8;
+      background: $cs-purple;
     }
     
     .name {
@@ -700,32 +782,48 @@ a.active {
     }
     
     .user-blocks {
-      display: flex;
+      
+      @media (min-width: $tablet-min) {
+        display: flex;
+      }
 
       .user-details {
-        padding: 0 30px;
-        width: 70%;
         line-height: 2;
-
+        
+        @media (min-width: $tablet-min) {
+          padding: 0 30px;
+          width: 70%;
+        }
+        
         .detail {
-          display: flex;
           margin: 5px 0;
 
+          @media (min-width: $tablet-min) {
+            display: flex;
+          }
+          
           .detail-label,
           .detail-value {
+            display: block;
           }
 
           .detail-label {
-            width: 30%;
-            min-width: 120px;
             font-weight: 700;
+            
+            @media (min-width: $tablet-min) {
+              width: 30%;
+              min-width: 120px;
+            }
           }
 
           .detail-value {
-            width: 70%;
-            min-width: 200px;
             line-height: 1.5;
 
+            @media (min-width: $tablet-min) {
+              width: 70%;
+              min-width: 200px;
+            }
+            
             a {
               display: inline;
             }
@@ -744,15 +842,21 @@ a.active {
             border-radius: 6px;
             background: #b84660;
             line-height: 1;
+            
+            &.user-role {
+              background: $cs-green;
+            }
           }
         }
       }
 
       .user-actions {
-        padding-left: 30px;
-        width: 30%;
-        border-left: 1px #ddd solid;
-
+        @media (min-width: $tablet-min) {
+          padding-left: 30px;
+          width: 30%;
+          border-left: 1px #ddd solid;
+        }
+        
         .user-actions-title {
           font-weight: 700;
           line-height: 2;
@@ -768,32 +872,6 @@ a.active {
         }
       }
     }
-  }
-}
-
-#user-person-search {
-  position: relative;
-  display: inline-block;
-  margin: 20px 0;
-  
-  img {
-    position: absolute;
-    top: 11px;
-    left: 30px;
-    width: 16px;
-    height: 16px;
-    z-index: 1;
-    opacity: .5;
-  }
-  
-  input {
-    position: relative;
-    top: 2px;
-    padding: 6px 12px 6px 36px;
-    margin-left: 20px;
-    width: 300px;
-    border: 1px #ccc solid;
-    border-radius: 4px;
   }
 }
 
@@ -828,6 +906,10 @@ a.active {
   padding: 10px 20px;
   background: $cs-yellow;
   color: $cs-black;
+}
+
+.indented {
+  padding-left: 30px;
 }
 
 // Tweak to the highlight class that appears in Selectize seach.

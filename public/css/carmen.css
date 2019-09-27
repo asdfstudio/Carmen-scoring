@@ -4261,11 +4261,24 @@ label.block {
     padding: 6px 12px;
     margin-right: 0;
     background: #EFEFEF; }
+  .choice-container input {
+    display: block;
+    float: left;
+    clear: left;
+    margin-left: 10px; }
   .choice-container label {
+    display: block; }
+  .choice-container label:not(:first-child) {
+    float: left;
+    margin: 3px 0 10px 8px;
     font-size: 1.1em;
     font-weight: normal;
     line-height: 1em;
     margin-left: 8px; }
+  .choice-container::after {
+    content: "";
+    clear: both;
+    display: table; }
 
 .content h2 {
   border-bottom: 4px double #bcbcbc;
@@ -5643,6 +5656,64 @@ a.active {
       margin-left: 5px;
       font-size: 2em; }
 
+#user-person-filter-group {
+  display: flex;
+  margin: 20px 0;
+  text-align: center; }
+  @media (min-width: 768px) {
+    #user-person-filter-group {
+      display: inline-block; } }
+  #user-person-filter-group a.user-person-filter {
+    margin-bottom: 4px;
+    font-size: 13px;
+    padding: 6px;
+    border-radius: 0;
+    flex-grow: 1; }
+    #user-person-filter-group a.user-person-filter:first-child {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px; }
+    #user-person-filter-group a.user-person-filter:last-child {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px; }
+    @media (min-width: 380px) {
+      #user-person-filter-group a.user-person-filter {
+        font-size: 14px;
+        padding: 6px 12px; } }
+    @media (min-width: 768px) {
+      #user-person-filter-group a.user-person-filter {
+        border-radius: 4px; } }
+    #user-person-filter-group a.user-person-filter.active {
+      font-weight: 400; }
+
+#user-person-search {
+  position: relative;
+  margin: 20px 0; }
+  @media (min-width: 768px) {
+    #user-person-search {
+      display: inline-block; } }
+  #user-person-search img {
+    position: absolute;
+    top: 11px;
+    left: 10px;
+    width: 16px;
+    height: 16px;
+    z-index: 1;
+    opacity: .5; }
+    @media (min-width: 768px) {
+      #user-person-search img {
+        left: 30px; } }
+  #user-person-search input {
+    position: relative;
+    top: 2px;
+    padding: 6px 12px 6px 36px;
+    width: 100%;
+    border: 1px #ccc solid;
+    border-radius: 4px; }
+    @media (min-width: 768px) {
+      #user-person-search input {
+        margin-left: 20px;
+        width: 300px; } }
+
 #user-person-list {
   border-top: 1px #ddd solid; }
   #user-person-list.users-only .person.non-user,
@@ -5650,9 +5721,12 @@ a.active {
     display: none; }
   #user-person-list .person {
     position: relative;
-    padding: 25px 30px;
+    padding: 25px 20px;
     border: 1px #ddd solid;
     border-top-width: 0; }
+    @media (min-width: 768px) {
+      #user-person-list .person {
+        padding: 25px 30px; } }
     #user-person-list .person.even {
       background-color: #f9f9f9; }
     #user-person-list .person.search-hidden {
@@ -5668,76 +5742,70 @@ a.active {
       font-size: 13px;
       text-align: center; }
     #user-person-list .person.user .user-flag {
-      background: #60b846; }
+      background: #68B155; }
     #user-person-list .person.non-user .user-flag {
-      background: #9f46b8; }
+      background: #7F4091; }
     #user-person-list .person .name {
       font-size: 18px;
       font-weight: 700;
       margin-bottom: 10px; }
-    #user-person-list .person .user-blocks {
-      display: flex; }
-      #user-person-list .person .user-blocks .user-details {
-        padding: 0 30px;
-        width: 70%;
-        line-height: 2; }
-        #user-person-list .person .user-blocks .user-details .detail {
-          display: flex;
-          margin: 5px 0; }
-          #user-person-list .person .user-blocks .user-details .detail .detail-label {
-            width: 30%;
-            min-width: 120px;
-            font-weight: 700; }
-          #user-person-list .person .user-blocks .user-details .detail .detail-value {
-            width: 70%;
-            min-width: 200px;
-            line-height: 1.5; }
-            #user-person-list .person .user-blocks .user-details .detail .detail-value a {
-              display: inline; }
-          #user-person-list .person .user-blocks .user-details .detail.roles .detail-value {
-            line-height: 2; }
-          #user-person-list .person .user-blocks .user-details .detail .role {
-            display: inline-block;
-            padding: 4px 8px;
-            margin: -4px 4px -4px 0;
-            color: #ffffff;
-            font-size: 13px;
-            border-radius: 6px;
-            background: #b84660;
-            line-height: 1; }
+    @media (min-width: 768px) {
+      #user-person-list .person .user-blocks {
+        display: flex; } }
+    #user-person-list .person .user-blocks .user-details {
+      line-height: 2; }
+      @media (min-width: 768px) {
+        #user-person-list .person .user-blocks .user-details {
+          padding: 0 30px;
+          width: 70%; } }
+      #user-person-list .person .user-blocks .user-details .detail {
+        margin: 5px 0; }
+        @media (min-width: 768px) {
+          #user-person-list .person .user-blocks .user-details .detail {
+            display: flex; } }
+        #user-person-list .person .user-blocks .user-details .detail .detail-label,
+        #user-person-list .person .user-blocks .user-details .detail .detail-value {
+          display: block; }
+        #user-person-list .person .user-blocks .user-details .detail .detail-label {
+          font-weight: 700; }
+          @media (min-width: 768px) {
+            #user-person-list .person .user-blocks .user-details .detail .detail-label {
+              width: 30%;
+              min-width: 120px; } }
+        #user-person-list .person .user-blocks .user-details .detail .detail-value {
+          line-height: 1.5; }
+          @media (min-width: 768px) {
+            #user-person-list .person .user-blocks .user-details .detail .detail-value {
+              width: 70%;
+              min-width: 200px; } }
+          #user-person-list .person .user-blocks .user-details .detail .detail-value a {
+            display: inline; }
+        #user-person-list .person .user-blocks .user-details .detail.roles .detail-value {
+          line-height: 2; }
+        #user-person-list .person .user-blocks .user-details .detail .role {
+          display: inline-block;
+          padding: 4px 8px;
+          margin: -4px 4px -4px 0;
+          color: #ffffff;
+          font-size: 13px;
+          border-radius: 6px;
+          background: #b84660;
+          line-height: 1; }
+          #user-person-list .person .user-blocks .user-details .detail .role.user-role {
+            background: #68B155; }
+    @media (min-width: 768px) {
       #user-person-list .person .user-blocks .user-actions {
         padding-left: 30px;
         width: 30%;
-        border-left: 1px #ddd solid; }
-        #user-person-list .person .user-blocks .user-actions .user-actions-title {
-          font-weight: 700;
-          line-height: 2;
-          margin: 5px 0; }
-        #user-person-list .person .user-blocks .user-actions a.btn.action {
-          margin-top: -2px; }
-        #user-person-list .person .user-blocks .user-actions form {
-          display: inline-block; }
-
-#user-person-search {
-  position: relative;
-  display: inline-block;
-  margin: 20px 0; }
-  #user-person-search img {
-    position: absolute;
-    top: 11px;
-    left: 30px;
-    width: 16px;
-    height: 16px;
-    z-index: 1;
-    opacity: .5; }
-  #user-person-search input {
-    position: relative;
-    top: 2px;
-    padding: 6px 12px 6px 36px;
-    margin-left: 20px;
-    width: 300px;
-    border: 1px #ccc solid;
-    border-radius: 4px; }
+        border-left: 1px #ddd solid; } }
+    #user-person-list .person .user-blocks .user-actions .user-actions-title {
+      font-weight: 700;
+      line-height: 2;
+      margin: 5px 0; }
+    #user-person-list .person .user-blocks .user-actions a.btn.action {
+      margin-top: -2px; }
+    #user-person-list .person .user-blocks .user-actions form {
+      display: inline-block; }
 
 .breadcrumbs-footer {
   padding: 10px 0; }
@@ -5765,6 +5833,9 @@ a.active {
   padding: 10px 20px;
   background: #f7f75a;
   color: #000; }
+
+.indented {
+  padding-left: 30px; }
 
 .selectize-dropdown [data-selectable] .highlight {
   display: inline-block; }

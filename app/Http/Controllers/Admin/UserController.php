@@ -41,12 +41,13 @@ class UserController extends Controller
      */
     public function index_new(FormBuilder $formBuilder)
     {
-				$users = User::with('organization','person')->withoutGlobalScope('organization')->get();
-				$people = Person::with('user', 'types')->get();
+				//$users = User::with('organization','person')->withoutGlobalScope('organization')->get();
+				$people = Person::with('user', 'types')->orderBy('last_name')->get();
         
         $deleteUserForm = $formBuilder->create('GenericDeleteForm', ['button_text' => 'Delete User']);
-
-				return view('user.admin.index_new', compact('users', 'people', 'deleteUserForm'));
+        $deletePersonForm = $formBuilder->create('GenericDeleteForm', ['button_text' => 'Delete Person']);
+        
+				return view('user.admin.index_new', compact('people', 'deleteUserForm', 'deletePersonForm'));
 
     }
 
@@ -61,7 +62,7 @@ class UserController extends Controller
 
         $user = new User;
 
-        $form = $formBuilder->create('User\Admin\CreateUserForm', [
+        $form = $formBuilder->create('User\Admin\UserPersonForm', [
 					'method' => 'POST',
 					'url' => route('admin.user.store'),
 					'model' => $user
@@ -136,14 +137,13 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit(FormBuilder $formBuilder, User $user)
     {
-				$this->authorize('update',$user);
+				$this->authorize('update', $user);
 
-        $form = $formBuilder->create('User\Admin\CreateUserForm', [
+        $form = $formBuilder->create('User\Admin\UserPersonForm', [
 					'method' => 'PATCH',
 					'url' => route('admin.user.update', [$user]),
 					'model' => $user
@@ -170,8 +170,6 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, FormBuilder $formBuilder, User $user)

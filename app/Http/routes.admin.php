@@ -25,6 +25,7 @@ Route::group([
     Route::resource('choir.director', 'ChoirDirectorController');
   	Route::resource('competition', 'CompetitionController');
   	Route::resource('user', 'UserController');
+  	Route::resource('person', 'PersonController');
 
     Route::resource('sheet', 'SheetController');
     Route::resource('criteria', 'CriteriaController');
@@ -83,9 +84,6 @@ Route::group([
     ]);
   
   
-    Route::get('person', [
-      'as' => 'admin.person', 'uses' => 'PersonController@index'
-    ]);
     Route::get('person/search', [
       'as' => 'admin.person.search', 'uses' => 'PersonController@search'
     ]);

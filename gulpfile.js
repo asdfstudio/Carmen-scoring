@@ -23,7 +23,11 @@ gulp.task('build-js', function() {
     .pipe(concat('director-form.js'))
     .pipe(gulp.dest(js_output));
   
-  return app_result && director_form_result;
+  var user_person_form_result = gulp.src('./resources/assets/js/user-person-form.js')
+    .pipe(concat('user-person-form.js'))
+    .pipe(gulp.dest(js_output));
+  
+  return app_result && director_form_result && user_person_form_result;
   
   //return gulp.src(js_input)
     //.pipe(sourcemaps.init())
@@ -36,7 +40,7 @@ gulp.task('build-js', function() {
 
 var resources = './resources/assets/**/*';
 
-var input = './resources/assets/sass/**/*.scss';
+var input = './resources/assets/sass/*.scss';
 var output = './public/css';
 
 // source and distribution folder
@@ -75,7 +79,7 @@ function swallowError (error) {
 
 gulp.task('sass', function () {
   return gulp
-    // Find all `.scss` files from the `stylesheets/` folder
+    // Find all `.scss` files from the `sass/` folder
     .src(input)
     // Run Sass on those files
     .pipe(sass(scss.sassOpts))
