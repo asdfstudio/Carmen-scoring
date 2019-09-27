@@ -123,7 +123,7 @@
                 @endcan
               @else
                 @can('update', $person)
-                  <a href="{{ route('admin.user.edit', [$person]) }}" class="btn action">Edit Person</a>
+                  <a href="{{ route('admin.person.edit', [$person]) }}" class="btn action">Edit Person</a>
                 @endcan
                 @can('destroy', $person)
                   {!! form($deletePersonForm,['url' => route('admin.person.destroy',[$person])]) !!}
