@@ -1,18 +1,19 @@
 // Customize the behaviour of the form that creates or edits a user or person.
 jQuery(document).ready(function($){
   
-  noUser = $('form.no-user').length;
-  nameFields = $('#first_name, #last_name');
-  firstNameField = $(nameFields).filter('#first_name');
-  lastNameField = $(nameFields).filter('#last_name');
-  usernameField = $('#username');
-  userAccountSection = $('.user-account-section');
-  passwordInputs = $('.password-fields input');
-  passwordLabels = $('.password-fields label');
-  toggleNewUser = $('.toggle-new-user');
-  toggleNewPassword = $('.toggle-new-password');
-  orgSection = $('.org-section');
-  orgId = $('#organization_id');
+  var activeUsernameRequest = false;
+  var noUser = $('form.no-user').length;
+  var nameFields = $('#first_name, #last_name');
+  var firstNameField = $(nameFields).filter('#first_name');
+  var lastNameField = $(nameFields).filter('#last_name');
+  var usernameField = $('#username');
+  var userAccountSection = $('.user-account-section');
+  var passwordInputs = $('.password-fields input');
+  var passwordLabels = $('.password-fields label');
+  var toggleNewUser = $('.toggle-new-user');
+  var toggleNewPassword = $('.toggle-new-password');
+  var orgSection = $('.org-section');
+  var orgId = $('#organization_id');
   
   if(noUser){
     $(nameFields).on('input', updateUsername);
@@ -70,13 +71,17 @@ jQuery(document).ready(function($){
     
     if(noUser){
       
+      if(activeUsernameRequest){
+        activeUsernameRequest.abort();
+      }
+      
       $.ajaxSetup({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
         }
       });
 
-      $.ajax({
+      activeUsernameRequest = $.ajax({
         url: getNewUsernameURL,
         method: 'POST',
         data: {
@@ -85,6 +90,7 @@ jQuery(document).ready(function($){
         },
         success: function(result){
           $(usernameField).val(result);
+          activeUsernameRequest = false;
         }
       });
       
