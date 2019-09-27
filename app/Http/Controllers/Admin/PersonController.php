@@ -67,15 +67,6 @@ class PersonController extends Controller
       'model' => $person
     ]);
 
-    $form->modify('password','repeated', [
-      'first_options' => [
-        'rules' => 'min:4'
-      ],
-      'second_options' => [
-        'rules' => 'required_with:password'
-      ]
-    ]);
-
     return view('person.admin.edit', compact('form', 'person'));
   }
   

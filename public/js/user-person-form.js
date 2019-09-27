@@ -60,7 +60,7 @@ jQuery(document).ready(function($){
       $(passwordLabels).removeClass('hidden');
       $(this).addClass('active');
     } else {
-      $(passwordInputs).addClass('hidden').prop('disabled', true);
+      $(passwordInputs).addClass('hidden').val('').prop('disabled', true);
       $(passwordLabels).addClass('hidden');
       $(this).removeClass('active');
     }

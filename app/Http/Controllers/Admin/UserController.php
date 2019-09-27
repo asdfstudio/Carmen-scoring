@@ -148,7 +148,7 @@ class UserController extends Controller
 					'url' => route('admin.user.update', [$user]),
 					'model' => $user
 				]);
-
+/*
         $form->modify('password','repeated', [
 					'first_options' => [
 						'rules' => 'min:4'
@@ -163,8 +163,8 @@ class UserController extends Controller
 					'url' => route('admin.user.judge.set', [$user]),
 					'model' => $user
 				]);
-
-				return view('user.admin.edit', compact('form','user', 'makeJudgeForm'));
+*/
+				return view('user.admin.edit', compact('form','user'));
     }
 
     /**

@@ -180,6 +180,12 @@ class UserPersonForm extends Form
       ]);
     }
 
+    if($this->user && $this->primary_type !== 'User'){
+      $this->modify('username','text', [
+        'default_value' => $this->user->username
+      ]);
+    }
+
     $this->add('is_admin', 'choice', [
       'wrapper' => ['class' => 'form-group choice-container user-account-section '.$user_section_visibility_class],
       'label_show' => false,
@@ -199,10 +205,10 @@ class UserPersonForm extends Form
       ]);
     }
     
-    $this->add('password','repeated', [
+    $this->add('new_password','repeated', [
       'wrapper' => ['class' => 'form-group user-account-section password-fields '.$user_section_visibility_class],
       'type' => 'password',
-      'second_name' => 'password_confirmation',
+      'second_name' => 'new_password_confirmation',
       'first_options' => [
         'default_value' => '',
         'rules' => 'required|confirmed|min:4',
@@ -217,7 +223,7 @@ class UserPersonForm extends Form
     
     // When editing an existing user, hide and disable the password fields (until the toggle link is clicked).
     if($this->mode == 'Edit' && $this->user){
-      $this->modify('password','repeated', [
+      $this->modify('new_password','repeated', [
         'first_options' => [
           'attr' => ['disabled' => 'disabled', 'class' => 'form-control hidden'],
           'label_attr' => ['class' => 'control-label hidden']
