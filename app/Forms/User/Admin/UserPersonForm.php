@@ -51,6 +51,12 @@ class UserPersonForm extends Form
       $this->mode = 'Edit';
     }
     
+    $this->formOptions['class'] .= strtolower(' ' . $this->mode . '-' . $this->primary_type);
+    
+    if(!$this->user || !$this->user->id){
+      $this->formOptions['class'] .= ' no-user';
+    }
+    
   /*================================================================================
       Name and Email
     ================================================================================*/
@@ -164,7 +170,7 @@ class UserPersonForm extends Form
 
     $this->add('username','text', [
       'wrapper' => ['class' => 'form-group user-account-section '.$user_section_visibility_class],
-      'rules' => 'unique:users,username',
+      'rules' => ['unique:users,username', 'regex:/^[\w\.\-]+$/i'],
       'attr' => $user_disabled_attribute
     ]);
     

@@ -264,4 +264,38 @@ class UserController extends Controller
 
         return redirect()->route('admin.user.index')->with('success', 'User set up as a judge!');
     }
+  
+  
+    public function getNewUsername()
+    {
+        $this->authorize('create','App\User');
+        
+        if(isset($_POST['first_name']) && isset($_POST['last_name'])){
+            $first_name = htmlspecialchars($_POST['first_name']);
+            $last_name = htmlspecialchars($_POST['last_name']);
+            
+            echo $this->generateUsername($first_name, $last_name);
+        }
+    }
+    
+    
+    protected function generateUsername($first_name, $last_name, $number = 0)
+    {
+        $new_username = preg_replace('/[^a-z]/', '', strtolower($first_name).strtolower($last_name));
+        
+        if($number){
+          $new_username .= $number;
+        }
+        
+        $existing_user = User::where('username', $new_username)->first();
+        
+        if(count($existing_user)){
+          $number++;
+          $new_username = $this->generateUsername($first_name, $last_name, $number);
+        }
+        
+        return $new_username;
+    }
+
+
 }

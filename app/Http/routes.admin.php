@@ -13,6 +13,9 @@ Route::group([
     Route::get('user/index_new', [
       'as' => 'admin.user.index_new', 'uses' => 'UserController@index_new'
     ]);
+    Route::post('user/get-new-username', [
+      'as' => 'admin.user.username.new', 'uses' => 'UserController@getNewUsername'
+    ]);
     Route::post('user/{user}/judge', [
       'as' => 'admin.user.judge.set', 'uses' => 'UserController@makeJudge'
     ]);

@@ -1,6 +1,11 @@
 // Customize the behaviour of the form that creates or edits a user or person.
 jQuery(document).ready(function($){
   
+  noUser = $('form.no-user').length;
+  nameFields = $('#first_name, #last_name');
+  firstNameField = $(nameFields).filter('#first_name');
+  lastNameField = $(nameFields).filter('#last_name');
+  usernameField = $('#username');
   userAccountSection = $('.user-account-section');
   passwordInputs = $('.password-fields input');
   passwordLabels = $('.password-fields label');
@@ -8,6 +13,10 @@ jQuery(document).ready(function($){
   toggleNewPassword = $('.toggle-new-password');
   orgSection = $('.org-section');
   orgId = $('#organization_id');
+  
+  if(noUser){
+    $(nameFields).on('input', updateUsername);
+  }
   
   // Make the school selector a fancy Selectized field.
   orgIdSelectize = $(orgId).selectize({
@@ -28,6 +37,7 @@ jQuery(document).ready(function($){
     
     if($(userAccountSection).first().hasClass('hidden')){
       $(userAccountSection).removeClass('hidden').find('input, select').prop('disabled', false);
+      updateUsername();
       $(orgSection).removeClass('hidden').find('input, select').prop('disabled', false);
       orgIdSelectize[0].selectize.enable();
       $(this).addClass('active');
@@ -55,5 +65,31 @@ jQuery(document).ready(function($){
     }
     
   });
+  
+  function updateUsername(){
+    
+    if(noUser){
+      
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        }
+      });
+
+      $.ajax({
+        url: getNewUsernameURL,
+        method: 'POST',
+        data: {
+          first_name: $(firstNameField).val(),
+          last_name: $(lastNameField).val()
+        },
+        success: function(result){
+          $(usernameField).val(result);
+        }
+      });
+      
+    }
+    
+  }
   
 });
