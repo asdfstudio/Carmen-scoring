@@ -85,9 +85,6 @@ class UserController extends Controller
         $person->emails_additional = $data['emails_additional'];
         $person->tel = $data['tel'];
         $person->save();
-        if(!empty($data['is_judge'])){
-          $person->types()->attach(1);
-        }
 
 				// Create the user
         $user = new User;
@@ -214,20 +211,6 @@ class UserController extends Controller
         $person->emails_additional = $data['emails_additional'];
         $person->tel = $data['tel'];
         $person->save();
-        if(!empty($data['is_judge'])){
-          // Get a list of types for this person, making sure to include type 1 (judge).
-          $type_ids = [1];
-          foreach($person->types as $type){
-            $type_ids[] = $type->id;
-          }
-          // Only unique values to avoid duplicates.
-          $type_ids = array_unique($type_ids);
-          // Now update the person's types with all existing types, plus "judge".
-          $person->types()->sync($type_ids);
-        } else {
-          // If the judge checkbox was empty, we must remove the judge type from this person.
-          $person->types()->detach(1);
-        }
 
         $user->person()->associate($person);
         $user->save();
