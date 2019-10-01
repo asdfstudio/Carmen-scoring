@@ -61,28 +61,22 @@ class ProfileController extends Controller
         
         // Is the current user a superadmin (listed in the auth config or else are they editing their own profile)?
         $i_am_superadmin = auth()->user()->isSuperAdmin($user->id);
+        $i_am_admin = auth()->user()->isAdmin();
         
         // Update user
-        if($i_am_superadmin){
-          $user->username = $data['username'];
-          if(!empty($data['new_password'])){
-            $user->password = bcrypt($data['new_password']);
-          }
-        }
-        if($i_am_superadmin || !$user->is_admin){
-          if(!empty($data['is_admin'])){
-            $user->is_admin = 1;
-          } else {
-            $user->is_admin = 0;
-          }
+        $user->username = $data['username'];
+        if(!empty($data['new_password'])){
+          $user->password = bcrypt($data['new_password']);
         }
         $user->email = $data['email'];
-        if(!empty($data['organization_id'])){
-          $user->organization_id = $data['organization_id'];
-          $user->organization_role = $data['organization_role'];
-        } else {
-          $user->organization_id = 0;
-          $user->organization_role = '';
+        if($i_am_admin){
+          if(!empty($data['organization_id'])){
+            $user->organization_id = $data['organization_id'];
+            $user->organization_role = $data['organization_role'];
+          } else {
+            $user->organization_id = 0;
+            $user->organization_role = '';
+          }
         }
 
 				$user->save();
@@ -100,19 +94,21 @@ class ProfileController extends Controller
         $person->emails_additional = $data['emails_additional'];
         $person->tel = $data['tel'];
         $person->save();
-        if(!empty($data['is_judge'])){
-          // Get a list of types for this person, making sure to include type 1 (judge).
-          $type_ids = [1];
-          foreach($person->types as $type){
-            $type_ids[] = $type->id;
+        if($i_am_admin){
+          if(!empty($data['is_judge'])){
+            // Get a list of types for this person, making sure to include type 1 (judge).
+            $type_ids = [1];
+            foreach($person->types as $type){
+              $type_ids[] = $type->id;
+            }
+            // Only unique values to avoid duplicates.
+            $type_ids = array_unique($type_ids);
+            // Now update the person's types with all existing types, plus "judge".
+            $person->types()->sync($type_ids);
+          } else {
+            // If the judge checkbox was empty, we must remove the judge type from this person.
+            $person->types()->detach(1);
           }
-          // Only unique values to avoid duplicates.
-          $type_ids = array_unique($type_ids);
-          // Now update the person's types with all existing types, plus "judge".
-          $person->types()->sync($type_ids);
-        } else {
-          // If the judge checkbox was empty, we must remove the judge type from this person.
-          $person->types()->detach(1);
         }
 
         $user->person()->associate($person);

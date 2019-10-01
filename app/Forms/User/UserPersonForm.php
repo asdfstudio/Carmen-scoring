@@ -164,9 +164,15 @@ class UserPersonForm extends Form
       User Account
     ================================================================================*/
     
-    // Is the current user a superadmin (listed in the auth config or else are they editing their own profile)?
+    // Is the current user an admin?
+    $i_am_admin = auth()->user()->isAdmin();
+    
+    // Is the current user a superadmin (listed in the auth config or else are they an admin who is editing their own account)?
     $user_to_compare = $this->user ?  $this->user : null;
     $i_am_superadmin = auth()->user()->isSuperAdmin($user_to_compare);
+    
+    // Is the current user editing their own account?
+    $self_editing = $this->user && !empty($this->user->id) && $this->user->id === auth()->user()->id;
     
     $user_section_visibility_class = '';
     $user_disabled_attribute = [];
@@ -211,15 +217,16 @@ class UserPersonForm extends Form
       ]);
     }
     
-    // Disable username editing for non-superadmins
-    if($this->user && $this->mode === 'Edit' && !$i_am_superadmin){
+    // Disable username editing for non-superadmins and non-self-editors.
+    if($this->user && $this->mode === 'Edit' && !$i_am_superadmin && !$self_editing){
       $this->modify('username','text', [
         'attr' => ['disabled' => 'disabled']
       ]);
     }
     
-    // Superadmins can edit the "Carmen Admin" checkbox, but regular admins cannot uncheck this box for an existing admin.
-    if($i_am_superadmin || !$this->user || !$this->user->is_admin){
+    // No one can edit their own admin status.  Otherwise, superadmins can edit the "Carmen Admin" checkbox anytime.
+    // Regular admins can make someone else an admin, but cannot uncheck this box for an existing admin.
+    if(!$self_editing && ($i_am_superadmin || ($i_am_admin && (!$this->user || !$this->user->is_admin)))){
       $this->add('is_admin', 'choice', [
         'wrapper' => ['class' => 'form-group choice-container user-account-section '.$user_section_visibility_class],
         'label_show' => false,
@@ -246,7 +253,7 @@ class UserPersonForm extends Form
     }
     
     // When editing an existing user, this link will toggle the password fields.
-    if($this->mode == 'Edit' && $this->user && $i_am_superadmin){
+    if($this->mode == 'Edit' && $this->user && ($i_am_superadmin || $self_editing)){
       $this->add('update_password', 'static', [
         'wrapper' => ['class' => 'form-group user-account-section '.$user_section_visibility_class],
         'label_show' => false,
@@ -259,7 +266,7 @@ class UserPersonForm extends Form
     }
     
     // Superadmins can edit the field, but regular admins can only modify this when creating another user (not when editing).
-    if($i_am_superadmin || !$this->user || empty($this->user->id)){
+    if($i_am_superadmin || ($i_am_admin && (!$this->user || empty($this->user->id))) || $self_editing){
       
       $this->add('new_password','repeated', [
         'wrapper' => ['class' => 'form-group user-account-section password-fields '.$user_section_visibility_class],
@@ -300,18 +307,20 @@ class UserPersonForm extends Form
       Organization
     ================================================================================*/
     
+    $i_am_org_admin = !empty($this->formOptions['organization']) && auth()->user()->organization_role === 'admin' && auth()->user()->organization_id === $this->formOptions['organization'];
+    
     $this->add('heading_organization', 'static', [
       'wrapper' => ['class' => 'form-group org-section '.$user_section_visibility_class],
       'tag' => 'h2',
       'value' => 'Organization',
       'label_show' => false
     ]);
-    
+
     $selected_org_id = '';
     if($this->user && !empty($this->user->organization_id)){
       $selected_org_id = $this->user->organization_id;
     }
-    
+
     $this->add('organization_id','entity', [
       'wrapper' => ['class' => 'form-group org-section '.$user_section_visibility_class],
       'class' => 'App\Organization',
@@ -319,10 +328,10 @@ class UserPersonForm extends Form
       'selected' => $selected_org_id,
       'label' => 'Organization',
     ]);
-    
+
     // The following modification is only for organizers who are editing members of their organization. 
-    if($this->formOptions['organization']){
-      
+    if(!empty($this->formOptions['organization'])){
+
       // In a "create" situation, the value is preset to the correct organization and it cannot be changed.
       if($this->mode === 'Create'){
         $this->modify('organization_id','entity', [
@@ -330,7 +339,7 @@ class UserPersonForm extends Form
           'attr' => ['disabled' => 'disabled']
         ]);
       }
-      
+
       // In an "edit" situation, the value will already be the correct organization, but we still need to make it read-only.
       if($this->mode === 'Edit'){
         $this->modify('organization_id','entity', [
@@ -339,21 +348,44 @@ class UserPersonForm extends Form
       }
     }
     
+    // If you're not an admin or an organization admin, you can't edit the organization data. (No self-editing.)
+    if(!$i_am_admin && !$i_am_org_admin){
+      $this->modify('heading_organization', 'static', [
+        'help_block' => [
+          'text' => 'Organization assignment can only be modified by administrators.'
+        ]
+      ]);
+      $this->modify('organization_id','entity', [
+        'attr' => ['disabled' => 'disabled']
+      ]);
+    }
+    
     $selected_org_role = '';
     if($this->user && !empty($this->user->organization_role)){
       $selected_org_role = $this->user->organization_role;
     }
     
-    $this->add('organization_role', 'choice', [
-      'wrapper' => ['class' => 'form-group choice-container org-section '.$user_section_visibility_class],
-      'rules' => 'required_with:organization_id',
-      'label' => 'Organization Role',
-      'choices' => ['standard' => 'Standard User', 'admin' => 'Administrator'],
-      'selected' => $selected_org_role,
-      'expanded' => true,
-      'multiple' => false
-    ]);
-    
+    // Only admins and organization admins can edit the organization role. (Otherwise, it is read-only.)
+    if($i_am_admin || $i_am_org_admin){
+      $this->add('organization_role', 'choice', [
+        'wrapper' => ['class' => 'form-group choice-container org-section '.$user_section_visibility_class],
+        'rules' => 'required_with:organization_id',
+        'label' => 'Organization Role',
+        'choices' => ['standard' => 'Standard User', 'admin' => 'Administrator'],
+        'selected' => $selected_org_role,
+        'expanded' => true,
+        'multiple' => false
+      ]);
+    } else {
+      $standard_checked = $this->user && !empty($this->user->organization_role) && $this->user->organization_role === 'standard' ? 'checked="checked"' : '';
+      $admin_checked = $this->user && !empty($this->user->organization_role) && $this->user->organization_role === 'admin' ? 'checked="checked"' : '';
+      $this->add('organization_role_static', 'static', [
+        'wrapper' => ['class' => 'form-group choice-container org-section '.$user_section_visibility_class],
+        'label_show' => false,
+        'tag' => 'div',
+        'value' => '<label class="control-label">Organization Role</label><input type="radio" disabled="disabled" ' . $standard_checked . '> <label>Standard User</label><input type="radio" disabled="disabled" ' . $admin_checked . '> <label>Administrator</label>'
+      ]);
+    }
     
     
   /*================================================================================
@@ -373,15 +405,31 @@ class UserPersonForm extends Form
         ]
       ]);
 
+      if($i_am_admin){
+        $this->add('is_judge', 'choice', [
+          'wrapper' => ['class' => 'choice-container roles-section'],
+          'label_show' => false,
+          'choices' => ['1' => 'Judge'],
+          'selected' => ($this->person && $this->person->isJudge()) ? ['1'] : [],
+          'expanded' => true,
+          'multiple' => true
+        ]);
+      } else {
+        $this->modify('heading_roles', 'static', [
+          'help_block' => [
+            'text' => 'Roles can only be modified by administrators.'
+          ]
+        ]);
+        
+        $judge_checked = $this->person && $this->person->isJudge() ? 'checked="checked" ' : '';
 
-      $this->add('is_judge', 'choice', [
-        'wrapper' => ['class' => 'choice-container roles-section'],
-        'label_show' => false,
-        'choices' => ['1' => 'Judge'],
-        'selected' => ($this->person && $this->person->isJudge()) ? ['1'] : [],
-        'expanded' => true,
-        'multiple' => true
-      ]);
+        $this->add('is_judge_static', 'static', [
+          'wrapper' => ['class' => 'choice-container roles-section'],
+          'label_show' => false,
+          'tag' => 'div',
+          'value' => '<input type="checkbox" disabled="disabled" ' . $judge_checked . '> <label>Judge</label>'
+        ]);
+      }
 
       // Director and choreographer info are only shown in edit mode. They are also read-only.
       if($this->mode == 'Edit'){

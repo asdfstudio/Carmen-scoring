@@ -116,8 +116,7 @@ return [
 
     'superadmins' => [
         2,    // Sherman
-        3,    // Romario
-      //360     // Reed
+        3     // Romario
     ],
 
 ];

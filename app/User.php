@@ -76,7 +76,7 @@ class User extends Authenticatable
       // object or ID can be passed as an argument for comparison.  If the argument turns out
       // to be this user, then this user is a superadmin in that context.
       $user_self_id = is_object($user_self) && get_class($user_self) === 'App\User' ? $user_self->id : $user_self;
-			return in_array($this->id, config('auth.superadmins')) || $this->id === $user_self_id;
+			return in_array($this->id, config('auth.superadmins')) || ($this->isAdmin() && $this->id === $user_self_id);
 		}
 
     public function getIsAdminTextAttribute()
