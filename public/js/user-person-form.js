@@ -24,10 +24,12 @@ jQuery(document).ready(function($){
     allowEmptyOption: true,
     placeholder: 'Select an organization...'
   });
-
-  // Clear the Selectize field so that the placeholder will show
-  // and validation will detect the field as empty.
-  orgIdSelectize[0].selectize.clear();
+  
+  if(!orgIdSelectize[0].value){
+    // Clear the Selectize field so that the placeholder will show
+    // and validation will detect the field as empty.
+    orgIdSelectize[0].selectize.clear();
+  }
   
   if($(orgId).hasClass('hidden')){
     orgIdSelectize[0].selectize.disable();

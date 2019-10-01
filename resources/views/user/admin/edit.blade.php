@@ -15,15 +15,6 @@
 
 		{!! form($form) !!}
 
-<!--
-		@if($user->person->is_judge == false)
-			<hr>
-
-			<h3>Turn this user into a judge?</h3>
-			{!! form($makeJudgeForm) !!}
-		@endif
--->
-
 
 @endsection
 

@@ -10,8 +10,8 @@ Route::group([
   'namespace' => 'Admin'
   ], function(){
 
-    Route::get('user/index_new', [
-      'as' => 'admin.user.index_new', 'uses' => 'UserController@index_new'
+    Route::get('user/index_old', [
+      'as' => 'admin.user.index_old', 'uses' => 'UserController@index_old'
     ]);
     Route::post('user/get-new-username', [
       'as' => 'admin.user.username.new', 'uses' => 'UserController@getNewUsername'

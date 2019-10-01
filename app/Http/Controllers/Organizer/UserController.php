@@ -42,12 +42,13 @@ class UserController extends Controller
     {
         $user = new User();
 
-        $this->authorize('create',$user);
+        $this->authorize('create','App\User');
 
-				$form = $formBuilder->create('User\CreateUserForm', [
+				$form = $formBuilder->create('User\UserPersonForm', [
 					'method' => 'POST',
 					'url' => route('organizer.user.store'),
-					'model' => $user
+					'model' => $user,
+          'organization' => Auth::user()->organization_id
 				]);
 
 				return view('user.organizer.create', compact('form'));
@@ -61,12 +62,11 @@ class UserController extends Controller
      */
     public function store(FormBuilder $formBuilder, Request $request)
     {
-        //$this->authorize('update',$organization);
+        $this->authorize('create','App\User');
 
         $user = new User;
 
-				// Validate input
-				$form = $formBuilder->create('User\CreateUserForm', [
+        $form = $formBuilder->create('User\UserPersonForm', [
           'model' => $user
         ]);
 
@@ -75,21 +75,36 @@ class UserController extends Controller
            return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 
-				$data = $request->input();
+        $data = $request->input();
 
         // Create person
         $person = new Person;
-        $person->first_name = $data['person']['first_name'];
-        $person->last_name = $data['person']['last_name'];
+        $person->first_name = $data['first_name'];
+        $person->last_name = $data['last_name'];
         $person->email = $data['email'];
+        $person->emails_additional = $data['emails_additional'];
+        $person->tel = $data['tel'];
         $person->save();
+        if(!empty($data['is_judge'])){
+          $person->types()->attach(1);
+        }
 
-        // Create user
+				// Create the user
+        $user = new User;
         $user->username = $data['username'];
 				$user->email = $data['email'];
-				$user->password = bcrypt($data['password']);
-				$user->organization_id = Auth::user()->organization_id;
-        $user->organization_role = $data['organization_role'];
+				$user->password = bcrypt($data['new_password']);
+        if(!empty($data['is_admin'])){
+          $user->is_admin = 1;
+        } else {
+          $user->is_admin = 0;
+        }
+        $user->organization_id = Auth::user()->organization_id;
+        if(!empty($data['organization_role'])){
+          $user->organization_role = $data['organization_role'];
+        } else {
+          $user->organization_role = '';
+        }
 
         $person->user()->save($user);
 
@@ -122,11 +137,14 @@ class UserController extends Controller
     public function edit(FormBuilder $formBuilder, $id)
     {
 				$user = User::with('person')->find($id);
-
-        $form = $formBuilder->create('User\EditUserForm', [
+        
+        $this->authorize('update', $user);
+        
+        $form = $formBuilder->create('User\UserPersonForm', [
 					'method' => 'PATCH',
 					'url' => route('organizer.user.update',[$user]),
-					'model' => $user
+					'model' => $user,
+          'organization' => Auth::user()->organization_id
 				]);
 
 				return view('user.organizer.edit', compact('form','user'));
@@ -143,7 +161,10 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        $form = $formBuilder->create('User\EditUserForm', [
+				$this->authorize('update', $user);
+
+				// Validate input
+				$form = $formBuilder->create('User\UserPersonForm', [
           'model' => $user
         ]);
 
@@ -152,29 +173,64 @@ class UserController extends Controller
            return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 
-				$data = $request->input();
-
-
-
-
+        $data = $request->input();
+        
+        // Is the current user a superadmin (listed in the auth config or else are they editing their own profile)?
+        $i_am_superadmin = auth()->user()->isSuperAdmin($user->id);
+        
         // Update user
-        $user->username =  $data['username'];
-				$user->email = $data['email'];
-        $user->organization_role = $data['organization_role'];
-
-				if($data['password'])
-				{
-					$user->password = bcrypt($data['password']);
-				}
+        if($i_am_superadmin){
+          $user->username = $data['username'];
+          if(!empty($data['new_password'])){
+            $user->password = bcrypt($data['new_password']);
+          }
+        }
+        if($i_am_superadmin || !$user->is_admin){
+          if(!empty($data['is_admin'])){
+            $user->is_admin = 1;
+          } else {
+            $user->is_admin = 0;
+          }
+        }
+        $user->email = $data['email'];
+        if(!empty($data['organization_role'])){
+          $user->organization_role = $data['organization_role'];
+        } else {
+          $user->organization_role = '';
+        }
 
 				$user->save();
 
         // Update person
         $person = $user->person;
-        $person->first_name = $data['person']['first_name'];
-        $person->last_name = $data['person']['last_name'];
+
+        if($person == false){
+          $person = new Person;
+        }
+
+        $person->first_name = $data['first_name'];
+        $person->last_name = $data['last_name'];
         $person->email = $data['email'];
+        $person->emails_additional = $data['emails_additional'];
+        $person->tel = $data['tel'];
         $person->save();
+        if(!empty($data['is_judge'])){
+          // Get a list of types for this person, making sure to include type 1 (judge).
+          $type_ids = [1];
+          foreach($person->types as $type){
+            $type_ids[] = $type->id;
+          }
+          // Only unique values to avoid duplicates.
+          $type_ids = array_unique($type_ids);
+          // Now update the person's types with all existing types, plus "judge".
+          $person->types()->sync($type_ids);
+        } else {
+          // If the judge checkbox was empty, we must remove the judge type from this person.
+          $person->types()->detach(1);
+        }
+
+        $user->person()->associate($person);
+        $user->save();
 
 				return redirect()->route('organizer.user.index')->with('success', 'User updated!');
     }

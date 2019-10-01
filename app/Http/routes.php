@@ -171,7 +171,7 @@ Route::get('profile', [
   'as' => 'profile.edit', 'uses' => 'ProfileController@edit'
 ]);
 
-Route::put('profile', [
+Route::patch('profile', [
   'as' => 'profile.update', 'uses' => 'ProfileController@update'
 ]);
 
