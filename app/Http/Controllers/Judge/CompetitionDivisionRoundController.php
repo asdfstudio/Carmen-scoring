@@ -68,7 +68,7 @@ class CompetitionDivisionRoundController extends Controller
 
 
 
-    public function spreadsheet($competition_id,$division_id,$round_id)
+    public function spreadsheetOld($competition_id,$division_id,$round_id)
     {
       $judge_id = Auth::user()->person_id;
 
@@ -124,7 +124,7 @@ class CompetitionDivisionRoundController extends Controller
 
     //
     // New spreadsheet, 2019
-    public function spreadsheetNew($competition_id,$division_id,$round_id)
+    public function spreadsheet($competition_id,$division_id,$round_id)
     {
       $judge_id = Auth::user()->person_id;
 
@@ -345,6 +345,9 @@ class CompetitionDivisionRoundController extends Controller
 
       $division = $round->division;
       $competition = $division->competition;
+      $rating_system = $division->rating_system;
+
+      $captionWeightingId = $division->caption_weighting_id;
 
       $judge = $division->judges->first();
 
@@ -492,8 +495,9 @@ class CompetitionDivisionRoundController extends Controller
       $comments = json_encode($comments);
       $scores = json_encode($scores);
       $captions = json_encode($captions);
+      $rating_system = json_encode($rating_system);
 
-      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'choirs', 'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl'));
+      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'captionWeightingId', 'choirs', 'criteria', 'scores', 'rating_system', 'comments', 'spreadsheetTitle', 'backUrl'));
     }
 
 

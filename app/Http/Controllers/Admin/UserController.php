@@ -190,13 +190,11 @@ class UserController extends Controller
         $i_am_superadmin = auth()->user()->isSuperAdmin($user->id);
         
         // Update user
-        if($i_am_superadmin){
+        if($i_am_superadmin || !$user->is_admin){
           $user->username = $data['username'];
           if(!empty($data['new_password'])){
             $user->password = bcrypt($data['new_password']);
           }
-        }
-        if($i_am_superadmin || !$user->is_admin){
           if(!empty($data['is_admin'])){
             $user->is_admin = 1;
           } else {

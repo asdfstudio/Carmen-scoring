@@ -44,7 +44,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 table {
-  width: 500px;
+  width: 700px;
   max-width: 100%;
   position: relative;
   margin: auto;

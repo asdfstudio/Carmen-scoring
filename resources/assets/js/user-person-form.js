@@ -45,7 +45,8 @@ jQuery(document).ready(function($){
       orgIdSelectize[0].selectize.enable();
       $(this).addClass('active');
     } else {
-      $(userAccountSection).addClass('hidden').find('input, select').prop('disabled', true).val('').prop('checked', false);
+      $(userAccountSection).addClass('hidden').find('input, select').prop('disabled', true).prop('checked', false);
+      $(userAccountSection).find('input[type=text], select').val('');
       $(orgSection).addClass('hidden');
       orgIdSelectize[0].selectize.disable();
       orgIdSelectize[0].selectize.clear();

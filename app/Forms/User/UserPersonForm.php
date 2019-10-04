@@ -401,20 +401,20 @@ class UserPersonForm extends Form
         'value' => 'Roles',
         'label_show' => false,
         'help_block' => [
-          'text' => 'Judge status can be enabled or disabled below, but director and choreographer status can only be changed by <a href="' . route('admin.choir.index') . '">editing a choir</a> and adding this person to it.'
+          'text' => 'Judge status for users can be enabled or disabled below. Director and choreographer status can only be changed by <a href="' . route('admin.choir.index') . '">editing a choir</a> and adding this person to it.'
         ]
       ]);
 
       if($i_am_admin){
         $this->add('is_judge', 'choice', [
-          'wrapper' => ['class' => 'choice-container roles-section'],
+          'wrapper' => ['class' => 'choice-container roles-section user-account-section '.$user_section_visibility_class],
           'label_show' => false,
           'choices' => ['1' => 'Judge'],
           'selected' => ($this->person && $this->person->isJudge()) ? ['1'] : [],
           'expanded' => true,
           'multiple' => true
         ]);
-      } else {
+      } elseif(($this->user && $this->user->id) || ($this->person && $this->person->isJudge())) {
         $this->modify('heading_roles', 'static', [
           'help_block' => [
             'text' => 'Roles can only be modified by administrators.'

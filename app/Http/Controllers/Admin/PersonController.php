@@ -189,13 +189,11 @@ class PersonController extends Controller
     
     // Update user
     if($user){
-      if($i_am_superadmin){
+      if($i_am_superadmin || !$user->is_admin){
         $user->username = $data['username'];
         if(!empty($data['new_password'])){
           $user->password = bcrypt($data['new_password']);
         }
-      }
-      if($i_am_superadmin || !$user->is_admin){
         if(!empty($data['is_admin'])){
           $user->is_admin = 1;
         } else {

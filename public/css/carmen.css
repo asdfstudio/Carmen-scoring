@@ -3892,7 +3892,7 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
   padding: 5px 10px;
   text-transform: lowercase;
   display: inline-block;
-  background: #ffffff;
+  background: transparent;
   border-radius: 0;
   box-shadow: none; }
   .action:hover {
@@ -3938,6 +3938,13 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
       background: #68B155;
       border-color: #68B155;
       color: #FFF; }
+
+#user-person-list .even .action {
+  background: #ffffff; }
+  #user-person-list .even .action:hover {
+    background: #707070; }
+  #user-person-list .even .action.danger:hover {
+    background: #CA2128; }
 
 .list-group .list-group-item:hover {
   background: #EFEFEF; }

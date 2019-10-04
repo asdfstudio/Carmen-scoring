@@ -89,12 +89,12 @@ Route::group([
       'as' => 'round.scores.sources-new', 'uses' => 'CompetitionDivisionRoundController@spreadsheet_sources_new'
   	]);
 
-    Route::get('competition/{competition}/division/{division}/round/{round}/spreadsheet', [
-   	 'as' => 'round.scores.spreadsheet', 'uses' => 'CompetitionDivisionRoundController@spreadsheet'
+    Route::get('competition/{competition}/division/{division}/round/{round}/spreadsheet-old', [
+   	 'as' => 'round.scores.spreadsheet', 'uses' => 'CompetitionDivisionRoundController@spreadsheetOld'
 		]);
 
-    Route::get('competition/{competition}/division/{division}/round/{round}/spreadsheet-new', [
-   	 'as' => 'round.scores.spreadsheet-new', 'uses' => 'CompetitionDivisionRoundController@spreadsheetNew'
+    Route::get('competition/{competition}/division/{division}/round/{round}/spreadsheet', [
+   	 'as' => 'round.scores.spreadsheet-new', 'uses' => 'CompetitionDivisionRoundController@spreadsheet'
 		]);
 
     Route::get('competition/{competition}/division/{division}/round/{round}/details', [

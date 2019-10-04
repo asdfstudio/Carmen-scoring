@@ -125,10 +125,9 @@ export default {
     display: block;
 
     &.inline {
-      display: inline-block;
-      float: left;
-      width: 150px;
-      margin: 15px 20px;
+      display: block;
+      width: auto;
+      margin: 15px 20px 5px;
     }
 
     button.score-increment {
@@ -151,7 +150,7 @@ export default {
     }
 
     .current-score {
-      padding: 10px;
+      padding: 0 10px;
       font-size: 36px;
       margin: 0 10px;
       color: #7F4091;
@@ -180,12 +179,12 @@ export default {
   .score-buttons {
     background: #fff;
     margin: 5px;
+    padding: 10px 5px;
+    min-width: 340px;
     border-radius: 8px;
 
     &.inline {
-      display: inline-block;
-      float: right;
-      width: 200px;
+      display: block;
     }
   }
 }

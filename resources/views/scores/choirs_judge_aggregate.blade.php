@@ -1,5 +1,4 @@
-
-
+<?php $judge_id = $judge ? $judge->id : null; ?>
 @if(!$choirs->isEmpty())
 <table class="table scoreboard last-col-right">
   <tr>
@@ -23,20 +22,20 @@
     </td>
 
     <td>
-			<?php $aggregateScore = $rawScores->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('score');?>
+			<?php $aggregateScore = $rawScores->where('choir_id',$choir->id)->where('judge_id', $judge_id)->sum('score');?>
       <span class="score raw">{{ $aggregateScore }}</span>
     </td>
 
     @if($division->captionWeighting->slug == '60-40')
       <td>
-        <?php $aggregateScore = $weightedScores->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('weightedScore');?>
+        <?php $aggregateScore = $weightedScores->where('choir_id',$choir->id)->where('judge_id', $judge_id)->sum('weightedScore');?>
         <span class="score weighted">{{ $aggregateScore }}</span>
       </td>
     @endif
 
     <td>
 
-      @if($round->is_scoring_active AND $judge->id == Auth::user()->person_id)
+      @if($round->is_scoring_active AND $judge_id == Auth::user()->person_id)
 
         <?php
         $anchor_text = 'Enter My Scores';
@@ -53,7 +52,7 @@
       @endif
 
 
-      @if($round->is_scoring_active == false AND $judge->id == Auth::user()->person_id)
+      @if($round->is_scoring_active == false AND $judge_id == Auth::user()->person_id)
 
         {{ link_to_route('judge.competition.division.round.choir.show', 'View My Scores', [$round->division->competition,$round->division,$round,$choir],
         ['class' => 'action'])}}
