@@ -17,7 +17,9 @@
   @foreach($choirs as $choir)
   <tr>
   	<td>
-      <span class="subheading">{{ $choir->school->name }}</span>
+      @if( $choir->school && $choir->school->name )
+        <span class="subheading">{{ $choir->school->name }}</span>
+      @endif
       {{ $choir->name }}
     </td>
 
