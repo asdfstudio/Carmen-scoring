@@ -14,7 +14,7 @@
   <ul class="schedule-list announcer-view">
     @foreach($schedule->items as $item)
 
-      <?php
+      @php
       $awardWinner = false;
       $sponsor = false;
 
@@ -44,7 +44,7 @@
         }
       }
 
-      ?>
+      @endphp
 
       <li class="schedule-item award">
 
@@ -72,7 +72,7 @@
 
 
         @if($item->round)
-          <?php $roundRatings = $ratings->where('round_id', $item->round->id)->first();?>
+          @php $roundRatings = $ratings->where('round_id', $item->round->id)->first();@endphp
 
           @if($roundRatings)
             <ul class="list-group">

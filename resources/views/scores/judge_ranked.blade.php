@@ -13,8 +13,8 @@
     
     @foreach($division->choirs as $choir)
     <th data-choir-id="{{ $choir->id }}">
-    	@if($round->is_completed OR $judge->id == Auth::user()->person_id)
-				<?php $score = $rankedScores->where('choir_id',$choir->id)->pluck('rank')->sum();?>
+    	@if($round->is_completed ?? $judge->id == Auth::user()->person_id)
+				@php $score = $rankedScores->where('choir_id',$choir->id)->pluck('rank')->sum();@endphp
         {{ $score }}
       @else
       	-
@@ -30,9 +30,9 @@
       
       @foreach($division->choirs as $choir)
       <td data-choir-id="{{ $choir->id }}" data-criterion-id="{{ $criterion->id }}">
-        @if($round->is_completed OR $judge->id == Auth::user()->person_id)
-          <?php $rankedScore = $rankedScores->where('criterion_id', $criterion->id)->where('choir_id',$choir->id)->pluck('rank');?>
-          <?php $score = $rankedScore->first(); ?>
+        @if($round->is_completed ?? $judge->id == Auth::user()->person_id)
+          @php $rankedScore = $rankedScores->where('criterion_id', $criterion->id)->where('choir_id',$choir->id)->pluck('rank');@endphp
+          @php $score = $rankedScore->first(); @endphp
           {{ $score }}
         @else
          -
@@ -51,8 +51,8 @@
     
     @foreach($division->choirs as $choir)
     <th data-choir-id="{{ $choir->id }}">
-    	@if($round->is_completed OR $judge->id == Auth::user()->person_id)
-				<?php $score = $rankedScores->where('choir_id',$choir->id)->pluck('rank')->sum();?>
+    	@if($round->is_completed ?? $judge->id == Auth::user()->person_id)
+				@php $score = $rankedScores->where('choir_id',$choir->id)->pluck('rank')->sum();@endphp
         {{ $score }}
       @else
        -

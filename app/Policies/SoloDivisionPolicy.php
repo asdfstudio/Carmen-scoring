@@ -40,7 +40,7 @@ class SoloDivisionPolicy extends BasePolicy
 		}
 
 
-		public function create(User $user, $soloSoloDivision, $extra = false)
+		public function create(User $user)
 		{
       if($this->isOrgAdmin)
       {

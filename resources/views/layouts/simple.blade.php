@@ -4,7 +4,7 @@
   @include('navigation/header')
 
   @if(empty($competition) AND isset($division->competition))
-    <?php $competition = $division->competition;?>
+    @php $competition = $division->competition;@endphp
   @endif
 
   @if (isset($competition))
@@ -49,48 +49,48 @@
       <div class="division-navigation-bar body-width">
         <ul class="division-navigation">
           <li>
-            <?php $link_class = in_array(Request::segment(6),['overview']) ? 'active' : false; ?>
+            @php $link_class = in_array(Request::segment(6),['overview']) ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.show', [$competition, $division]) }}" class="{{ $link_class }}">Overview</a>
           </li>
           <li>
-            <?php $link_class = in_array(Request::segment(6),['settings','edit']) ? 'active' : false; ?>
+            @php $link_class = in_array(Request::segment(6),['settings','edit']) ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.settings', [$competition, $division]) }}" class="{{ $link_class }}">Settings</a>
           </li>
           <li>
-            <?php $link_class = Request::segment(6) == 'choir' ? 'active' : false; ?>
+            @php $link_class = Request::segment(6) == 'choir' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.choir.index', [$competition, $division]) }}" class="{{ $link_class }}">Choirs
               <span class="count">{{ $division->choirs->count() }}</span>
             </a>
           </li>
           <li>
-            <?php $link_class = Request::segment(6) == 'judge' ? 'active' : false; ?>
+            @php $link_class = Request::segment(6) == 'judge' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.judge.index', [$competition, $division]) }}" class="{{ $link_class }}">Judges
               <span class="count">{{ $division->judges->unique('id')->count() }}</span></a>
           </li>
           <li>
-            <?php $link_class = Request::segment(6) == 'round' ? 'active' : false; ?>
+            @php $link_class = Request::segment(6) == 'round' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.round.index', [$competition, $division]) }}" class="{{ $link_class }}">Rounds
             <span class="count">{{ $division->rounds->count() }}</span>
             </a>
           </li>
           <li>
-            <?php $link_class = Request::segment(6) == 'penalty' ? 'active' : false; ?>
+            @php $link_class = Request::segment(6) == 'penalty' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.penalty.index', [$competition, $division]) }}" class="{{ $link_class }}">Penalties
             <span class="count">{{ $division->penalties->count() }}</span>
             </a>
           </li>
           <li>
-            <?php $link_class = Request::segment(6) == 'award' ? 'active' : false; ?>
+            @php $link_class = Request::segment(6) == 'award' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.award.index', [$competition, $division]) }}" class="{{ $link_class }}">Awards
               <span class="count">{{ $division->awards->count() }}</span>
             </a>
           </li>
           <li>
-            <?php $link_class = Request::segment(6) == 'standing' ? 'active' : false; ?>
+            @php $link_class = Request::segment(6) == 'standing' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.standing.show', [$competition, $division]) }}" class="{{ $link_class }}">Final Standings</a>
           </li>
           <li>
-            <?php $link_class = Request::segment(6) == 'ceremony' ? 'active' : false; ?>
+            @php $link_class = Request::segment(6) == 'ceremony' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.ceremony.show', [$competition, $division]) }}" class="{{ $link_class }}">Award Ceremony</a>
           </li>
 

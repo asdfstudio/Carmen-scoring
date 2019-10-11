@@ -95,7 +95,7 @@ class CompetitionController extends Controller
     {
 				$competition = Competition::with('place','organization','divisions', 'soloDivisions')->find($id);
 
-        $this->authorize($competition);
+        $this->authorize('show', $competition);
 
         $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
           'method' => 'POST',

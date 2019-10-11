@@ -15,10 +15,10 @@
     <tr>
     	<td>{{ $criterion->name }}</td>
       <td>
-      	<?php
+      	@php
         $rawScore = $rawScores->where('criterion_id', $criterion->id)->pluck('score');
         $score = $rawScore->first();
-        ?>
+        @endphp
         <span class="score raw">{{ $score }}</span>
       </td>
     </tr>
@@ -29,7 +29,7 @@
         Total {{ $caption->name }} Score
       </th>
       <th>
-        <?php $rawTotal = $rawScores->where('criterion_caption_id', $caption->id)->sum('score');?>
+        @php $rawTotal = $rawScores->where('criterion_caption_id', $caption->id)->sum('score');@endphp
         {{ $rawTotal }}
       </th>
     </tr>
@@ -39,7 +39,7 @@
   	<th>Total Score</th>
 
     <th>
-      <?php $rawTotal = $rawScores->sum('score');?>
+      @php $rawTotal = $rawScores->sum('score');@endphp
       {{ $rawTotal }}
     </th>
 

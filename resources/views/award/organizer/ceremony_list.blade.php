@@ -15,7 +15,7 @@
 			<span class="owner">{{ $award->owner() }}</span>
 
 			@if($award->pivot)
-				@if($award->pivot->recipient OR $award->choir)
+				@if($award->pivot->recipient ?? $award->choir)
 					<span class="recipient">
 						<span class="heading">Recipient:</span>
 						@if($award->pivot->recipient)

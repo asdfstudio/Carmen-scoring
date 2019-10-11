@@ -12,8 +12,8 @@
       <td data-criterion-id="{{ $criterion->id }}">{{ $criterion->caption->name }} - {{ $criterion->name }}</td>
 
       <td data-criterion-id="{{ $criterion->id }}">
-        <?php $rawScore = $rawScores->where('criterion_id', $criterion->id)->pluck('score');?>
-        <?php $score = $rawScore->first(); ?>
+        @php $rawScore = $rawScores->where('criterion_id', $criterion->id)->pluck('score');@endphp
+        @php $score = $rawScore->first(); @endphp
         {{ Form::number("scores[$criterion->id]", $score,['min' => 0, 'max' => 10, 'step' => '0.5']) }}
       </td>
 

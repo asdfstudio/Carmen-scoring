@@ -13,7 +13,7 @@ class ChooseChoirForm extends Form
         $choirs = Choir::get();
 
 				$this->add('choir_id','select', [
-					'choices' => $choirs->lists('name','id')->toArray(),
+					'choices' => $choirs->pluck('name','id')->toArray(),
 					'empty_value' => 'Choose choir...',
 					'label' => 'Choir'
 				]);

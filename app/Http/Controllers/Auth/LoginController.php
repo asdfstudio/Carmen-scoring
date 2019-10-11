@@ -1,50 +1,48 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
-
 use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-
-class AuthController extends Controller
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+class LoginController extends Controller
 {
-
     /*
     |--------------------------------------------------------------------------
-    | Registration & Login Controller
+    | Login Controller
     |--------------------------------------------------------------------------
     |
-    | This controller handles the registration of new users, as well as the
-    | authentication of existing users. By default, this controller uses
-    | a simple trait to add these behaviors. Why don't you explore it?
+    | This controller handles authenticating users for the application and
+    | redirecting them to your home screen. The controller uses a trait
+    | to conveniently provide its functionality to your applications.
     |
     */
-
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
-
+    use AuthenticatesUsers;
     /**
-     * Where to redirect users after login / registration.
+     * Where to redirect users after login.
      *
      * @var string
      */
     protected $redirectTo = '/';
 
-    // JK$
     protected $username = 'username';
 
+    
+    public function username()
+    {
+        return 'username';
+    }
     /**
-     * Create a new authentication controller instance.
+     * Create a new controller instance.
      *
      * @return void
      */
     public function __construct()
     {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        $this->middleware('guest', ['except' => 'logout']);
     }
 
-    /**
+     /**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
@@ -74,7 +72,6 @@ class AuthController extends Controller
         ]);
     }
 
-
     protected function authenticated($request, $user)
     {
       if($user->isAdmin())
@@ -95,11 +92,11 @@ class AuthController extends Controller
 
 
     // Override AuthenticatesUsers method to allow logging in via username or email address
-    protected function getCredentials($request)
+    protected function credentials(Request $request)
     {
-        $field = filter_var($request->input('username'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-        $request->merge([$field => $request->input('username')]);
-
+     
+        $field = filter_var($request->input($this->username()), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $request->merge([$field => $request->input($this->username())]);
         return $request->only($field, 'password');
     }
 }

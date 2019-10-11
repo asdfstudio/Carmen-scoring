@@ -15,7 +15,7 @@
     <div class="round-navigation-bar body-width">
       <ul class="round-navigation">
         @foreach ($division->rounds as $rd)
-          <?php $active_class = $rd->id == $round->id ? 'active' : '';?>
+          @php $active_class = $rd->id == $round->id ? 'active' : '';@endphp
           <li class="round-{{ $rd->status_slug }}">
             <a href="{{ route('judge.round.scores.summary', [$competition, $division, $rd]) }}" class="{{ $active_class }}">
               {{ $rd->name }}
@@ -37,7 +37,7 @@
 
       @if($division->captionWeighting->slug == '60-40')
     		<li class="list-group-item">
-    			<?php $active = $division->captionWeighting->slug == '60-40' ? 'active division-scoring-method' : false; ?>
+    			@php $active = $division->captionWeighting->slug == '60-40' ? 'active division-scoring-method' : false; @endphp
     			<a class="score-view-toggle {{ $active }}" href="#weighted" data-score-view="weighted">Weighted</a>
 
     			@if($active)
@@ -50,7 +50,7 @@
       @endif
 
 
-      <?php $active = $division->captionWeighting->slug == '50-50' ? 'active division-scoring-method' : false; ?>
+      @php $active = $division->captionWeighting->slug == '50-50' ? 'active division-scoring-method' : false; @endphp
   		<li class="list-group-item">
   			<a class="score-view-toggle {{ $active }}" href="#raw" data-score-view="raw">Raw</a>
   		</li>
@@ -76,8 +76,8 @@
 
 @section('body-footer')
     <!--  Decide if we want to split the spreadsheet table  -->
-    <?php //$splitTheTable = $round->choirs->count() > 1 ? 'true' : 'false'; ?>
-    <?php $splitTheTable = 'true'; ?>
+    @php //$splitTheTable = $round->choirs->count() > 1 ? 'true' : 'false'; @endphp
+    @php $splitTheTable = 'true'; @endphp
     <script type="text/javascript">
       splitTheTable = {{ $splitTheTable }}
     </script>

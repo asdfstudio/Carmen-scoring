@@ -71,13 +71,13 @@
         <li class="division">
           <span class="division-heading">Placeholders / Non-Performances</span>
           <ul class="choirs non-performance-items">
-            <?php $i = 0; ?>
+            @php $i = 0; @endphp
             @while ($i < 10)
               <li class="schedule-item">
                 <input type="text" class="scheduled_time" value="">
                 <input type="text" class="item_name" value="" placeholder="Lunch, Break, etc.">
               </li>
-              <?php $i++; ?>
+              @php $i++; @endphp
             @endwhile
 
           </ul>
@@ -92,11 +92,11 @@
                   <span class="round-heading">{{ $round->name }}</span>
                   <ul class="choirs">
                     @foreach($round->choirs as $choir)
-                      <?php
+                      @php
                       $isInSchedule = $schedule->items->where('round_id', $round->id)->where('choir_id', $choir->id)->count();
 
                       $isInAnotherSchedule = $excludedScheduleItems->where('round_id', $round->id)->where('choir_id', $choir->id)->count();
-                      ?>
+                      @endphp
                       @if(!$isInSchedule AND !$isInAnotherSchedule)
                         <li class="schedule-item choir" id="item_{{ $round->id }}_{{ $choir->id }}" data-round-id="{{ $round->id }}" data-choir-id="{{ $choir->id }}">
                           <input type="text" class="scheduled_time" value="">
@@ -107,7 +107,7 @@
                       @endif
                     @endforeach
 
-                    <?php
+                    @php
                     if($round->max_choirs > 0 AND $round->max_choirs != $round->choirs->count())
                     {
                       $tbdChoirsCount = $round->max_choirs - $round->choirs->count();
@@ -119,17 +119,17 @@
                     else {
                       $tbdChoirsCount = 0;
                     }
-                    ?>
+                    @endphp
 
                     @if($tbdChoirsCount > 0)
-                      <?php $i = 0; ?>
+                      @php $i = 0; @endphp
                       @while ($i < $tbdChoirsCount)
                         <li class="schedule-item choir" data-round-id="{{ $round->id }}" data-choir-id="">
                           <span class="division-name">{{ $div->name }}</span>
                           <span class="round-name">{{ $round->name }} </span>
                           <span class="choir-name choir-tbd">TBD</span>
                         </li>
-                        <?php $i++; ?>
+                        @php $i++; @endphp
                       @endwhile
                     @endif
                   </ul>

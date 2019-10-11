@@ -19,7 +19,7 @@
       </td>
 			<td>
         @if($award->pivot)
-      		@if($award->pivot->recipient OR $award->choir)
+      		@if($award->pivot->recipient ?? $award->choir)
 						@if($award->pivot->recipient)
 							{{ $award->pivot->recipient }}
 						@endif

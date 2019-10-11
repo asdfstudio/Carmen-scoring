@@ -17,7 +17,7 @@
     <div class="round-navigation-bar body-width">
       <ul class="round-navigation">
         @foreach ($division->rounds as $rd)
-          <?php $active_class = $rd->id == $round->id ? 'active' : '';?>
+          @php $active_class = $rd->id == $round->id ? 'active' : '';@endphp
           <li class="round-{{ $rd->status_slug }}">
             <a href="{{ route('judge.round.scores.summary', [$competition, $division, $rd]) }}" class="{{ $active_class }}">
               {{ $rd->name }}

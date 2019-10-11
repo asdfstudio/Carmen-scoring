@@ -110,7 +110,7 @@ class UserController extends Controller
     {
 				//$user = User::find($id);
 
-        $this->authorize($user);
+        $this->authorize('show', $user);
 
         $deleteUserForm = $formBuilder->create('GenericDeleteForm');
 

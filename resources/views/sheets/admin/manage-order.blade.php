@@ -12,7 +12,7 @@
 
     @foreach ($captions as $caption)
       <h2>{{ $caption->name }}</h2>
-      <?php $filteredCriteria = $sheet->criteria->where('caption_id', $caption->id); ?>
+      @php $filteredCriteria = $sheet->criteria->where('caption_id', $caption->id); @endphp
 
       @if ($filteredCriteria->count() > 0)
         @include('criteria.admin.order-choices', ['criteria' => $filteredCriteria])

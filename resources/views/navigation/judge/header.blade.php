@@ -6,7 +6,7 @@
       <li class="title">{{ Auth::user()->display_name }}</li>
 
       <li>
-        <?php $link_class = Request::segment(1) == 'judge' AND Request::segment(2) == 'competitions' ? 'active' : false; ?>
+        @php $link_class = Request::segment(1) == 'judge' AND Request::segment(2) == 'competitions' ? 'active' : false; @endphp
         <a href="{{ route('judge.competition.index') }}" class="{{ $link_class }}">My Competitions</a>
       </li>
 

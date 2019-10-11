@@ -42,7 +42,7 @@ class UserPolicy
 		}
 
 
-		public function create($user)
+		public function create(User $user)
 		{
         if($user->isOrganizer() AND $user->organization_role == 'admin')
         {

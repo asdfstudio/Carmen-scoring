@@ -4,14 +4,14 @@
 
   <ul class="list-group">
     @foreach($divisions as $div)
-        <?php
+        @php
         $active_class = false;
         if(isset($division) AND $division->id == $div->id)
         {
           $active_class = 'active';
         }
-        ?>
-        <?php $anchor = $div->name;?>
+        @endphp
+        @php $anchor = $div->name;@endphp
         {!! link_to_route('judge.competition.division.show', $anchor, [$div->competition_id,$div],['class' => 'list-group-item '.$active_class]) !!}
     @endforeach
 

@@ -80,7 +80,7 @@ class ChoirController extends Controller
     {
 				//$choir = Choir::find($id);
 
-        $this->authorize($choir);
+        $this->authorize('show', $choir);
 
 				return view('choir.admin.show', ['choir' => $choir]);
     }

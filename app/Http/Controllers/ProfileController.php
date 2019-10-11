@@ -60,7 +60,7 @@ class ProfileController extends Controller
 
 
         // Get the input
-				$input = $request->only('first_name','last_name','email');
+				$input = $request->all('first_name','last_name','email');
 
         // Update/Insert person attributes
         $person->fill($input)->save();

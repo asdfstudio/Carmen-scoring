@@ -13,7 +13,7 @@ class ChoirForm extends Form
 				$schools = School::get();
 
 				$this->add('school_id','select', [
-					'choices' => $schools->lists('name','id')->toArray(),
+					'choices' => $schools->pluck('name','id')->toArray(),
 					'empty_value' => 'Choose school...'
 				]);
         $this->add('name','text', ['rules' => 'required']);

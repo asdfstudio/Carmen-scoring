@@ -4,10 +4,10 @@
   <tr>
   	<th>Criteria</th>
 
-    <?php $columnsCount = 1;?>
+    @php $columnsCount = 1;@endphp
     @foreach($division->choirs as $choir)
     <th data-choir-id="{{ $choir->id }}">{{ link_to_route('judge.competition.division.round.choir.show',$choir->name, [$division->competition, $division, $round, $choir]) }}</th>
-    <?php $columnsCount++;?>
+    @php $columnsCount++;@endphp
     @endforeach
   </tr>
 
@@ -19,8 +19,8 @@
 
       @foreach($division->choirs as $choir)
       <td data-choir-id="{{ $choir->id }}" data-criterion-id="{{ $criterion->id }}" class="row">
-        <?php $rawScore = $rawScores->where('criterion_id', $criterion->id)->where('choir_id',$choir->id)->pluck('score');?>
-        <?php $score = $rawScore->first(); ?>
+        @php $rawScore = $rawScores->where('criterion_id', $criterion->id)->where('choir_id',$choir->id)->pluck('score');@endphp
+        @php $score = $rawScore->first(); @endphp
         {{ Form::number("scores[$choir->id][$criterion->id]", $score,['min' => 0, 'max' => 10, 'step' => '0.5', 'class' => 'col-xs-12']) }}
       </td>
       @endforeach

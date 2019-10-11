@@ -12,29 +12,29 @@
 
 
       <li>
-        <?php $link_class = Request::segment(1) == 'organizer' AND Request::segment(2) == 'competition' ? 'active' : false; ?>
+        @php $link_class = Request::segment(1) == 'organizer' AND Request::segment(2) == 'competition' ? 'active' : false; @endphp
         <a href="{{ route('organizer.competition.index') }}" class="{{ $link_class }}">Competitions</a>
       </li>
       @can('showAll','App\User')
         <li>
-          <?php $link_class = Request::segment(1) == 'organizer' AND Request::segment(2) == 'user' ? 'active' : false; ?>
+          @php $link_class = Request::segment(1) == 'organizer' AND Request::segment(2) == 'user' ? 'active' : false; @endphp
           <a href="{{ route('organizer.user.index') }}" class="{{ $link_class }}">Users</a>
         </li>
       @endcan
       @can('showAll','App\Penalty')
         <li>
-          <?php $link_class = Request::segment(1) == 'organizer' AND Request::segment(2) == 'penalty' ? 'active' : false; ?>
+          @php $link_class = Request::segment(1) == 'organizer' AND Request::segment(2) == 'penalty' ? 'active' : false; @endphp
           <a href="{{ route('organizer.penalty.index') }}" class="{{ $link_class }}">Penalties</a>
         </li>
       @endcan
       @can('showAll','App\Award')
         <li>
-          <?php $link_class = Request::segment(1) == 'organizer' AND Request::segment(2) == 'award' ? 'active' : false; ?>
+          @php $link_class = Request::segment(1) == 'organizer' AND Request::segment(2) == 'award' ? 'active' : false; @endphp
           <a href="{{ route('organizer.award.index') }}" class="{{ $link_class }}">Awards</a>
         </li>
       @endcan
       <li>
-        <?php $link_class = Request::segment(1) == 'organizer' AND Request::segment(2) == 'organization' ? 'active' : false; ?>
+        @php $link_class = Request::segment(1) == 'organizer' AND Request::segment(2) == 'organization' ? 'active' : false; @endphp
         <a href="{{ route('organizer.organization.show') }}" class="{{ $link_class }}">Organization</a>
       </li>
 
@@ -43,7 +43,7 @@
     @if (Auth::user()->isAdmin() == false)
       <ul class="user-actions navigation">
         <li>
-          <?php $link_class = Request::segment(1) == 'profile' ? 'active' : false; ?>
+          @php $link_class = Request::segment(1) == 'profile' ? 'active' : false; @endphp
           <a href="{{ route('profile.edit') }}" class="{{ $link_class }}">My Profile</a>
         </li>
         <li>

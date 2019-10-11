@@ -124,7 +124,7 @@ class OrganizationController extends Controller
 
         return redirect()->route('organizer.competition.index');
 
-        $this->authorize($organization);
+        $this->authorize('show', $organization);
 
 				return view('organization.show', ['organization' => $organization]);
     }

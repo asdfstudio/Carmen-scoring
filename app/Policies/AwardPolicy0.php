@@ -41,7 +41,7 @@ class AwardPolicy
 		}
 
 
-		public function create(User $user, $award)
+		public function create(User $user)
 		{
         if($user->isOrganizer() AND $user->organization_role == 'admin')
         {

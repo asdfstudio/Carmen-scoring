@@ -52,7 +52,7 @@
 </head>
 <body class="division-dashboard">
 
-  <?php
+  @php
   $choirs = [
     [
       'id' => 1,
@@ -70,7 +70,7 @@
 
   $judges = [];
 
-  ?>
+  @endphp
 
 
   <h1>Test page</h1>
@@ -557,7 +557,7 @@
     //var choirItems = itemClass;
 
     //var choirListClass = listClass;
-    //choirListClass.init(itemClass, <?php echo json_encode($choirs);?>);
+    //choirListClass.init(itemClass, @php echo json_encode($choirs);@endphp);
 
     //console.log(choirListClass.itemClass.countItems());
 

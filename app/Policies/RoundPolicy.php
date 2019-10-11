@@ -40,7 +40,7 @@ class RoundPolicy extends BasePolicy
 		}
 
 
-		public function create(User $user, $round, $division=false)
+		public function create(User $user, $division=false)
 		{
       if($this->isOrgAdmin AND $division->status_slug == 'active')
       {

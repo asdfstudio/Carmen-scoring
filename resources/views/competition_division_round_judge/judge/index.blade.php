@@ -17,7 +17,7 @@
     <div class="round-navigation-bar body-width">
       <ul class="round-navigation">
         @foreach ($division->rounds as $rd)
-          <?php $active_class = $rd->id == $round->id ? 'active' : '';?>
+          @php $active_class = $rd->id == $round->id ? 'active' : '';@endphp
           <li class="round-{{ $rd->status_slug }}">
             <a href="{{ route('judge.round.scores.summary', [$competition, $division, $rd]) }}" class="{{ $active_class }}">
               {{ $rd->name }}
@@ -36,7 +36,7 @@
 
   <ul class="list-group horizontal">
 		<li class="list-group-item">
-			<?php $active = $division->scoringMethod->slug == 'ranked' ? 'active division-scoring-method' : false; ?>
+			@php $active = $division->scoringMethod->slug == 'ranked' ? 'active division-scoring-method' : false; @endphp
 			<a class="score-view-toggle {{ $active }}" href="#rankings" data-score-view="rank">Rankings</a>
 
 			@if($active)
@@ -44,7 +44,7 @@
 			@endif
 		</li>
 		<li class="list-group-item">
-			<?php $active = $division->scoringMethod->slug == 'raw' ? 'active division-scoring-method' : false; ?>
+			@php $active = $division->scoringMethod->slug == 'raw' ? 'active division-scoring-method' : false; @endphp
 			<a class="score-view-toggle {{ $active }}" href="#weighted" data-score-view="weighted">Weighted</a>
 
 			@if($active)

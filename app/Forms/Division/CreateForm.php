@@ -15,12 +15,12 @@ class CreateForm extends Form
 					'class' => 'App\CaptionWeighting',
 					'empty_value' => 'Choose caption weighting...',
 					'label' => 'Caption Weighting',
-          'label_attr' => ['class' => 'block'],
           //'property' => 'full_name',
           'expanded' => true,
           'multiple' => false,
           'choice_options' => [
-            'wrapper' => ['class' => 'choice-container']
+            'wrapper' => ['class' => 'choice-container'],
+            'labelAttrs' => 'block'
           ],
           'help_block' => [
             'text' => ''
@@ -30,12 +30,13 @@ class CreateForm extends Form
 				$this->add('scoring_method_id','entity', [
 					'class' => 'App\ScoringMethod',
 					'empty_value' => 'Choose scoring method...',
-					'label' => 'Scoring Method',
-          'label_attr' => ['class' => 'block'],
+          'label' => 'Scoring Method',
+          'label_attr' => ['class' => 'blockds'],
           'expanded' => true,
           'multiple' => false,
           'choice_options' => [
-            'wrapper' => ['class' => 'choice-container']
+            'wrapper' => ['class' => 'choice-container'],
+            'labelAttrs' => 'block'
           ],
           'help_block' => [
             'text' => 'The Ranked scoring method should be used only if at least one of the following is true: 1) The Caption Weighting is 50/50. 2) All judges are scoring both the Music and Show captions. 3) There are 50% more judges scoring the Music caption than the Show caption.'
@@ -51,7 +52,8 @@ class CreateForm extends Form
           'multiple' => false,
           //'wrapper' => ['class' => 'wrap'],
           'choice_options' => [
-            'wrapper' => ['class' => 'choice-container']
+            'wrapper' => ['class' => 'choice-container'],
+            'labelAttrs' => 'label-attr'
           ]
 				]);
 

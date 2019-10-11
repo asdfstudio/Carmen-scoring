@@ -23,18 +23,18 @@
     <tr>
     	<td>{{ $criterion->name }}</td>
       <td>
-      	<?php
+      	@php
         $score = $rawScores->where('criterion_id', $criterion->id)->sum('score');
-        ?>
+        @endphp
         <span class="score raw">{{ $score }}</span>
       </td>
 
       @foreach ($soloDivision->judges as $judge)
         <td>
-          <?php
+          @php
           $rawScore = $rawScores->where('criterion_id', $criterion->id)->where('judge_id', $judge->id)->pluck('score');
           $score = $rawScore->first();
-          ?>
+          @endphp
           <span class="score raw">{{ $score }}</span>
         </td>
       @endforeach
@@ -46,15 +46,15 @@
         Total {{ $caption->name }} Score
       </th>
       <th>
-        <?php $rawTotal = $rawScores->where('criterion.caption_id', $caption->id)->sum('score');?>
+        @php $rawTotal = $rawScores->where('criterion.caption_id', $caption->id)->sum('score');@endphp
         {{ $rawTotal }}
       </th>
 
       @foreach ($soloDivision->judges as $judge)
         <th class="score">
-          <?php
+          @php
           $score = $rawScores->where('judge_id', $judge->id)->sum('score');
-          ?>
+          @endphp
           {{ $score }}
         </th>
       @endforeach
@@ -65,15 +65,15 @@
   	<th>Total Score</th>
 
     <th>
-      <?php $rawTotal = $rawScores->sum('score');?>
+      @php $rawTotal = $rawScores->sum('score');@endphp
       {{ $rawTotal }}
     </th>
 
     @foreach ($soloDivision->judges as $judge)
       <th>
-        <?php
+        @php
         $score = $rawScores->where('judge_id', $judge->id)->sum('score');
-        ?>
+        @endphp
         {{ $score }}
       </th>
     @endforeach
