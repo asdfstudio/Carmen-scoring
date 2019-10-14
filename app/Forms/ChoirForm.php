@@ -14,9 +14,9 @@ class ChoirForm extends Form
 
 				$this->add('school_id','select', [
           'label' => 'School That the Choir Belongs To',
-					'choices' => $schools->lists('name','id')->toArray(),
+					'choices' => $schools->pluck('name','id')->toArray(),
 					'empty_value' => 'Choose school...',
-          'attr' => ['class' => 'selectize'],
+          'attr' => ['class' => 'selectize']
 				]);
         $this->add('name','text', [
           'label' => 'Choir Name',

@@ -228,9 +228,11 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        $this->authorize('dstroy',$user);
-
-				$user->delete();
+        $this->authorize('destroy',$user);
+        
+        if(!$user->isSuperAdmin()){
+          $user->delete();
+        }
 
 				// Set flash data and redirect
 				return redirect()->route('organizer.user.index');

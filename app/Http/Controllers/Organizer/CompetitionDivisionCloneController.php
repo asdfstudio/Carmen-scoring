@@ -38,7 +38,7 @@ class CompetitionDivisionCloneController extends Controller
       $division_clone = $division->replicate();
 
       // Set the new division name
-      if($request->has('division_name'))
+      if($request->filled('division_name'))
       {
         $division_clone->name = $request->input('division_name');
       }
@@ -49,7 +49,7 @@ class CompetitionDivisionCloneController extends Controller
       $division_clone->save();
 
       // Clone rounds
-      if($request->has('clone_rounds'))
+      if($request->filled('clone_rounds'))
       {
         foreach($division->rounds as $round)
         {
@@ -61,7 +61,7 @@ class CompetitionDivisionCloneController extends Controller
       }
 
       // Clone judges
-      if($request->has('clone_judges'))
+      if($request->filled('clone_judges'))
       {
         foreach($division->judges as $judge)
         {

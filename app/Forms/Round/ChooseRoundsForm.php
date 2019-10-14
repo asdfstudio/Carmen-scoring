@@ -16,7 +16,8 @@ class ChooseRoundsForm extends Form
           'expanded' => true,
           'multiple' => true,
           'choice_options' => [
-            'wrapper' => ['class' => 'choice-container']
+            'wrapper' => ['class' => 'choice-container'],
+            'labelAttrs' => 'label-class',
           ]
         ]);
     }

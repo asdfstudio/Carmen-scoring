@@ -153,10 +153,10 @@ class CompetitionDivisionChoirController extends Controller
         $this->authorize('addChoir', $division);
 
         // Division choirs
-        $choirs = $division->choirs->lists('full_name', 'id')->toArray();
+        $choirs = $division->choirs->pluck('full_name', 'id')->toArray();
 
         // All choirs
-        $choirs = Choir::all()->lists('full_name', 'id')->toArray();
+        $choirs = Choir::all()->pluck('full_name', 'id')->toArray();
         //dd($choirs);
 
         $form = $formBuilder->create('Choir\CreateChoirForm', [
@@ -193,14 +193,14 @@ class CompetitionDivisionChoirController extends Controller
         //die(print_r($request->all(), true));
         
         // Create school and location
-				if($request->has('school.name'))
+				if($request->filled('school.name'))
 				{
           $school = new School();
           $school->name = $request->input('school.name');
 					$school->save();
 
           // Create a school location
-          if($request->has('school.place'))
+          if($request->filled('school.place'))
   				{
             $place = new Place($request->input('school.place'));
             $school->place()->save($place);
@@ -215,13 +215,13 @@ class CompetitionDivisionChoirController extends Controller
         }
 
         // Create or retrieve choir
-				if($school AND $request->has('name'))
+				if($school AND $request->filled('name'))
 				{
 					$choir = new Choir();
           $choir->name = $request->input('name');
           $school->choirs()->save($choir);
 				}
-        elseif($request->has('choir_id'))
+        elseif($request->filled('choir_id'))
         {
           $choir = Choir::with('school')->find($request->input('choir_id'));
         }
@@ -230,7 +230,7 @@ class CompetitionDivisionChoirController extends Controller
         
         /*
         // Create a director and attach to choir
-        if($request->has('director'))
+        if($request->filled('director'))
 				{
           $director = new Director();
           $director->fill($request->input('director'));

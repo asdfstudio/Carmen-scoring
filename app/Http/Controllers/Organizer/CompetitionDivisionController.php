@@ -201,7 +201,7 @@ class CompetitionDivisionController extends Controller
 
 
         // Support for new board view
-        $choirs = Choir::all()->lists('full_name', 'id')->toArray();
+        $choirs = Choir::all()->pluck('full_name', 'id')->toArray();
 
         //dd($choirs);
 
@@ -215,7 +215,7 @@ class CompetitionDivisionController extends Controller
           $query->where('sheet_id', $division->sheet_id);
         })->get();
 
-        $choices = $competition_rounds->lists('full_name', 'id')->toArray();
+        $choices = $competition_rounds->pluck('full_name', 'id')->toArray();
         $selected = [];
 
 
@@ -238,7 +238,7 @@ class CompetitionDivisionController extends Controller
 
 
         $judges = Judge::get();
-        $judges = $judges->lists('full_name', 'id')->toArray();
+        $judges = $judges->pluck('full_name', 'id')->toArray();
 
         $newJudgeForm = $formBuilder->create('Judge\ChooseJudgeForm', [
 					'method' => 'POST',
@@ -325,7 +325,7 @@ class CompetitionDivisionController extends Controller
 
 
         // Support for new board view
-        $choirs = Choir::all()->lists('full_name', 'id')->toArray();
+        $choirs = Choir::all()->pluck('full_name', 'id')->toArray();
 
         //dd($choirs);
 
@@ -339,7 +339,7 @@ class CompetitionDivisionController extends Controller
           $query->where('sheet_id', $division->sheet_id);
         })->get();
 
-        $choices = $competition_rounds->lists('full_name', 'id')->toArray();
+        $choices = $competition_rounds->pluck('full_name', 'id')->toArray();
         $selected = [];
 
 
@@ -362,7 +362,7 @@ class CompetitionDivisionController extends Controller
 
 
         $judges = Judge::get();
-        $judges = $judges->lists('full_name', 'id')->toArray();
+        $judges = $judges->pluck('full_name', 'id')->toArray();
 
         $newJudgeForm = $formBuilder->create('Judge\ChooseJudgeForm', [
 					'method' => 'POST',

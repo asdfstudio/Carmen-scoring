@@ -85,7 +85,7 @@ class SchoolController extends Controller
     {
 				$school = School::with('choirs','place')->find($id);
 
-        $this->authorize($school);
+        $this->authorize('show', $school);
 
 				return view('school.show', ['school' => $school]);
     }

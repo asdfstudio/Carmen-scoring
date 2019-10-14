@@ -255,7 +255,7 @@ class CompetitionDivisionRoundController extends Controller
 
 
 
-    public function spreadsheet_sources($competition_id, $division_id, $round_id)
+    public function spreadsheet_sources_old($competition_id, $division_id, $round_id)
     {
       $judge_id = Auth::user()->person_id;
 
@@ -321,14 +321,14 @@ class CompetitionDivisionRoundController extends Controller
       //$weightedScores = $scoreboard->weightedScores;
       //$rankedScores = $scoreboard->rankedScores;
 
-      return view('competition_division_round.judge.spreadsheet_sources',compact('scoreboard', 'round', 'competition', 'division', 'judge', 'choirs', 'captions', 'isScoringActive'));
+      return view('competition_division_round.judge.spreadsheet_sources_old',compact('scoreboard', 'round', 'competition', 'division', 'judge', 'choirs', 'captions', 'isScoringActive'));
     }
 
 
 
 
 
-    public function spreadsheet_sources_new($competition_id, $division_id, $round_id)
+    public function spreadsheet_sources($competition_id, $division_id, $round_id)
     {
       $judge_id = Auth::user()->person_id;
 

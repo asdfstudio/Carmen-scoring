@@ -103,7 +103,7 @@ class CompetitionDivisionRoundController extends Controller
     {
 				$division = Division::with('competition','rounds')->find($division_id);
 
-        $this->authorize('create', ['App\Round', $division]);
+        $this->authorize('create','App\Round',$division);
 
         $competition_rounds = Competition::find($competition_id)->rounds()->get();
 
@@ -111,7 +111,7 @@ class CompetitionDivisionRoundController extends Controller
           $query->where('sheet_id', $division->sheet_id);
         })->get();
 
-        $choices = $competition_rounds->lists('full_name', 'id')->toArray();
+        $choices = $competition_rounds->pluck('full_name', 'id')->toArray();
         $selected = [];
 
         $form = $formBuilder->create('Round\CreateRoundForm', [
@@ -452,7 +452,7 @@ class CompetitionDivisionRoundController extends Controller
 
         //dd($competition_rounds);
 
-        $choices = $competition_rounds->lists('full_name', 'id')->toArray();
+        $choices = $competition_rounds->pluck('full_name', 'id')->toArray();
         $selected = $round->sources->pluck('id')->toArray();
 
         //dd($choices);

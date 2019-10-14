@@ -140,7 +140,7 @@ class UserController extends Controller
     {
 				//$user = User::find($id);
 
-        $this->authorize($user);
+        $this->authorize('show', $user);
 
         $deleteUserForm = $formBuilder->create('GenericDeleteForm');
 
@@ -255,8 +255,11 @@ class UserController extends Controller
     public function destroy(User $user)
     {
 				$this->authorize('destroy',$user);
-				$user->delete();
-
+        
+        if(!$user->isSuperAdmin()){
+          $user->delete();
+        }
+        
         return redirect()->route('admin.user.index')->with('success', 'User deleted!');
     }
 

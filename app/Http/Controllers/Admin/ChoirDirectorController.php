@@ -107,7 +107,8 @@ class ChoirDirectorController extends Controller
     $deleteForm = $formBuilder->create('GenericDeleteForm', [
       'method' => 'DELETE',
       'url' => route('admin.choir.director.destroy', [$choir, $director]),
-      'model' => $director
+      'model' => $director,
+      'button_text' => 'Remove'
     ]);
 
     return view('choir_director.admin.edit', compact('form', 'choir', 'director', 'deleteForm'));
@@ -151,9 +152,9 @@ class ChoirDirectorController extends Controller
   {
     $this->authorize('destroy',$choir);
 
-    $director->delete();
+    $choir->directors()->detach($director->id);
 
     // Set flash data and redirect
-    return redirect()->route('admin.choir.show', [$choir])->with('success','Choir director successfully deleted.');
+    return redirect()->route('admin.choir.show', [$choir])->with('success','Choir director successfully removed.');
   }
 }

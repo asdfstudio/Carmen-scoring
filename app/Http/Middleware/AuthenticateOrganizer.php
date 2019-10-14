@@ -22,7 +22,7 @@ class AuthenticateOrganizer
           		return response('Unauthorized.', 401);
           }
 
-          return redirect()->guest('login');
+          return redirect()->guest(route('login'));
 				}
 				
         return $next($request);

@@ -1,0 +1,20 @@
+<?php if($division->rounds->isEmpty()): ?>
+	<p>There are no rounds. <?php echo e(link_to_route('organizer.competition.division.round.create','Add one',[$division->competition,$division])); ?></p>
+<?php endif; ?>
+
+<?php if(!$division->rounds->isEmpty()): ?>
+<table class="table table-striped table-bordered">
+  <tr>
+    <th>Name</th>
+		<th>Status</th>
+  </tr>
+
+  <?php foreach($division->rounds as $round): ?>
+  <tr>
+
+    <td><?php echo e(link_to_route('organizer.competition.division.round.show',$round->name,[$division->competition,$division,$round])); ?></td>
+		<td><?php echo e($round->status()); ?></td>
+  </tr>
+  <?php endforeach; ?>
+</table>
+<?php endif; ?>

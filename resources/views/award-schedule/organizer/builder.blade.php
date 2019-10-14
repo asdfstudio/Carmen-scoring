@@ -64,7 +64,7 @@
 
               @foreach ($div->awardSettings as $awardSetting)
                 @if($awardSetting->award_count > 0)
-                  <?php
+                  @php
                   $i = 1;
 
                   if ($awardSetting->caption) {
@@ -76,20 +76,20 @@
                     $captionSlug = 'overall';
                     $captionCss = false;
                   }
-                  ?>
+                  @endphp
                   @while($i <= $awardSetting->award_count)
-                    <?php
+                    @php
                     $isInSchedule = $schedule->items->where('division_id', $div->id)->where('caption_id', $awardSetting->caption_id)->where('rank', $i)->count();
 
                     $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('caption_id', $awardSetting->caption_id)->where('rank', $i)->count();
-                    ?>
+                    @endphp
                     @if(!$isInSchedule AND !$isInAnotherSchedule)
                       <li class="schedule-item award" data-division-id="{{ $div->id }}" data-caption-id="{{ $awardSetting->caption_id }}" data-rank="{{ $i }}">
                         <span class="division-name">{{ $div->name }}</span>
                         <span class="caption-name {{ $captionCss }}">{{ $captionName}} {{ ordinal($i) }} Place</span>
                       </li>
                     @endif
-                    <?php $i++; ?>
+                    @php $i++; @endphp
                   @endwhile
                 @endif
               @endforeach
@@ -99,11 +99,11 @@
 
               <!-- Begin Round Ratings -->
               @foreach ($div->rounds as $round)
-                <?php
+                @php
                 $isInSchedule = $schedule->items->where('division_id', $div->id)->where('round_id', $round->id)->count();
 
                 $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('round_id', $round->id)->count();
-                ?>
+                @endphp
                 @if(!$isInSchedule AND !$isInAnotherSchedule)
                   <li class="schedule-item award" data-division-id="{{ $div->id }}" data-round-id="{{ $round->id }}">
                     <span class="division-name">{{ $div->name }}</span>
@@ -115,11 +115,11 @@
 
 
               @foreach($div->awards as $award)
-                <?php
+                @php
                 $isInSchedule = $schedule->items->where('division_id', $div->id)->where('award_id', $award->id)->count();
 
                 $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('award_id', $award->id)->count();
-                ?>
+                @endphp
                 @if(!$isInSchedule AND !$isInAnotherSchedule)
                   <li class="schedule-item award" id="item_{{ $award->pivot_division_id }}_{{ $award->id }}" data-division-id="{{ $div->id }}" data-award-id="{{ $award->id }}">
                     <span class="division-name">{{ $div->name }}</span>

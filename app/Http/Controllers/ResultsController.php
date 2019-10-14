@@ -360,7 +360,7 @@ class ResultsController extends Controller
     {
       $competition = $soloDivision->competition;
 
-      if($request->has('access_code'))
+      if($request->filled('access_code'))
       {
         return redirect()->route('results.solo-division.show', [$soloDivision, 'access_code' => $request->input('access_code')]);
       }
@@ -467,9 +467,9 @@ class ResultsController extends Controller
       }
 
       if (!$director_email) {
-        if($request->has('director_email') OR $request->session()->has('director_email'))
+        if($request->filled('director_email') OR $request->session()->has('director_email'))
         {
-          if ($request->has('director_email')) {
+          if ($request->filled('director_email')) {
             $email = $request->input('director_email');
             $request->session()->put('director_email', $email);
           } elseif ($request->session()->has('director_email')) {

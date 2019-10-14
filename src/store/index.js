@@ -166,11 +166,15 @@ export const store = new Vuex.Store({
     },
     getChoirsList: (state) => {
       return state.choirsList.slice(0).sort(function (a, b) {
-        var performanceOrderDifference = a.performance_order - b.performance_order
-        if (performanceOrderDifference === 0) {
+        if (typeof a.performance_order === 'undefined' || typeof a.performance_order === 'undefined') {
           return a.name.localeCompare(b.name)
+        } else {
+          var performanceOrderDifference = a.performance_order - b.performance_order
+          if (performanceOrderDifference === 0) {
+            return a.name.localeCompare(b.name)
+          }
+          return performanceOrderDifference
         }
-        return performanceOrderDifference
       })
     },
     getChoirScores: (state) => (choirId) => {
@@ -205,7 +209,17 @@ export const store = new Vuex.Store({
           rank++
         }
       }
-      return choirs
+      return choirs.sort(function (a, b) {
+        if (typeof a.performance_order === 'undefined' || typeof a.performance_order === 'undefined') {
+          return a.name.localeCompare(b.name)
+        } else {
+          var performanceOrderDifference = a.performance_order - b.performance_order
+          if (performanceOrderDifference === 0) {
+            return a.name.localeCompare(b.name)
+          }
+          return performanceOrderDifference
+        }
+      })
     },
     getChoirRating: (state, getters) => (score) => {
       var percentage = Math.round(score / getters.maxScore * 100)

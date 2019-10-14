@@ -19,43 +19,43 @@
 <body id="public-layout">
   <nav>
 
-    <?php $active_page = Request::segment(1); ?>
+    @php $active_page = Request::segment(1); @endphp
 
     <ul>
       <li>
 
-        <a href="/" class="logo <?php if($active_page == '') echo 'active'; ?>"><img src="/images/flower.png" alt="Carmen Scoring System" width="24px"></a>
+        <a href="/" class="logo @php if($active_page == '') echo 'active'; @endphp"><img src="/images/flower.png" alt="Carmen Scoring System" width="24px"></a>
       </li>
       <!--<li>
 
-        <a href="/" class="<?php if($active_page == '') echo 'active'; ?>">Home</a>
+        <a href="/" class="@php if($active_page == '') echo 'active'; @endphp">Home</a>
       </li>-->
       <li>
-        <a href="/system" class="<?php if($active_page == 'system') echo 'active'; ?>">Information</a>
+        <a href="/system" class="@php if($active_page == 'system') echo 'active'; @endphp">Information</a>
       </li>
       <li>
-        <a href="/about" class="<?php if($active_page == 'about') echo 'active'; ?>">About</a>
+        <a href="/about" class="@php if($active_page == 'about') echo 'active'; @endphp">About</a>
       </li>
       <li>
-        <a href="/contact" class="<?php if($active_page == 'contact') echo 'active'; ?>">Contact</a>
+        <a href="/contact" class="@php if($active_page == 'contact') echo 'active'; @endphp">Contact</a>
       </li>
       <li>
-        <a href="/contest" class="<?php if($active_page == 'contest') echo 'active'; ?>">Contest</a>
+        <a href="/contest" class="@php if($active_page == 'contest') echo 'active'; @endphp">Contest</a>
       </li>
       <li>
-        <a href="{{ route('results.index') }}" class="<?php if($active_page == 'results') echo 'active'; ?>">Results</a>
+        <a href="{{ route('results.index') }}" class="@php if($active_page == 'results') echo 'active'; @endphp">Results</a>
       </li>
 
 
       @if(Auth::guest())
         <li>
-          <a href="/login" class="<?php if($active_page == 'login') echo 'active'; ?>">Login</a>
+          <a href="/login" class="@php if($active_page == 'login') echo 'active'; @endphp">Login</a>
         </li>
       @endif
 
       @if(Auth::check())
 
-        <?php
+        @php
         if(Auth::user()->isAdmin())
         {
           $route = 'admin.dashboard';
@@ -71,7 +71,7 @@
         else {
           $route = false;
         }
-        ?>
+        @endphp
 
         @if($route)
           <li>

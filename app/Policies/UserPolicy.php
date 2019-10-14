@@ -71,7 +71,7 @@ class UserPolicy
 
 		public function destroy(User $user, User $subject)
 		{
-      if($user->isOrganizer() AND $user->organization_role == 'admin' AND $user->organization_id == $subject->organization_id)
+      if($user->isOrganizer() AND $user->organization_role == 'admin' AND $user->organization_id == $subject->organization_id AND !$subject->isSuperAdmin())
       {
         return true;
       }

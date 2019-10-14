@@ -22,9 +22,9 @@
         <th>Name</th>
       </tr>
 
-    <?php $i = 0; ?>
+    @php $i = 0; @endphp
     @while ($i < $soloDivision->max_performers)
-      <?php
+      @php
       $performer = $soloDivision->performers->slice($i, 1)->first();
 
       if ($performer) {
@@ -38,7 +38,7 @@
         $category = null;
         $name = null;
       }
-      ?>
+      @endphp
       <tr>
         {{ Form::hidden('performer['.$i.'][id]', $performerId) }}
         <td>{{ Form::select('performer['.$i.'][choir_id]', $choirs, $choirId, ['placeholder' => 'Select', 'class' => 'selectize']) }}</td>
@@ -46,7 +46,7 @@
         <td>{{ Form::text('performer['.$i.'][name]', $name, ['class' => 'form-control']) }}</td>
 
       </tr>
-      <?php $i++; ?>
+      @php $i++; @endphp
     @endwhile
 
     </table>

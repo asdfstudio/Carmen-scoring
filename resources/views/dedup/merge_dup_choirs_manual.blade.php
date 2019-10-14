@@ -2,7 +2,7 @@
 
 @section('content-header')
   <h1>Merge Duplicates Manually</h1>
-  <a href="{{ route('admin.dedup') }}" class="action">Back</a>
+  <a href="{{ route('dedup') }}" class="action">Back</a>
 @endsection
 
 

@@ -78,7 +78,7 @@ class JudgeController extends Controller
     {
 				//$judge = Judge::find($id);
 
-        $this->authorize($judge);
+        $this->authorize('show', $judge);
 
 				return view('judge.show', compact('judge') );
     }

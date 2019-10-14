@@ -38,7 +38,7 @@ class OrganizationController extends Controller
 				$organization = $request->user()->organization;
         $organization->load('place');
 
-        $this->authorize($organization);
+        $this->authorize('show', $organization);
 
 				return view('organization.organizer.show', ['organization' => $organization]);
     }

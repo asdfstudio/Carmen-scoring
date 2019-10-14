@@ -128,7 +128,9 @@
                   <a href="{{ route('admin.user.edit', [$person->user]) }}" class="btn action">Edit User</a>
                 @endcan
                 @can('destroy', $person->user)
-                  {!! form($deleteUserForm,['url' => route('admin.user.destroy',[$person->user])]) !!}
+                  @if(!$person->user->isSuperAdmin())
+                    {!! form($deleteUserForm,['url' => route('admin.user.destroy',[$person->user])]) !!}
+                  @endif
                 @endcan
               @else
                 @can('update', $person)

@@ -31,6 +31,10 @@ class CreatePenaltyForm extends Form
 
         $this->add('apply_per_judge', 'choice', [
           'choices' => [0 => 'No', 1 => 'Yes'],
+          'choice_options' => [
+            'wrapper' => ['class' => 'choice-wrapper'],
+            'labelAttrs' => 'label-attr',
+        ],
           'expanded' => true,
           'multiple' => false
         ]);

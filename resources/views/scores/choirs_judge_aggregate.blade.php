@@ -24,13 +24,13 @@
     </td>
 
     <td>
-			<?php $aggregateScore = $rawScores->where('choir_id',$choir->id)->where('judge_id', $judge_id)->sum('score');?>
+			@php $aggregateScore = $rawScores->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('score');@endphp
       <span class="score raw">{{ $aggregateScore }}</span>
     </td>
 
     @if($division->captionWeighting->slug == '60-40')
       <td>
-        <?php $aggregateScore = $weightedScores->where('choir_id',$choir->id)->where('judge_id', $judge_id)->sum('weightedScore');?>
+        @php $aggregateScore = $weightedScores->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('weightedScore');@endphp
         <span class="score weighted">{{ $aggregateScore }}</span>
       </td>
     @endif
@@ -39,7 +39,7 @@
 
       @if($round->is_scoring_active AND $judge_id == Auth::user()->person_id)
 
-        <?php
+        @php
         $anchor_text = 'Enter My Scores';
 
         if($aggregateScore > 0)
@@ -47,7 +47,7 @@
           $anchor_text = 'Update My Scores';
         }
 
-        ?>
+        @endphp
 
         {{ link_to_route('judge.competition.division.round.choir.show', $anchor_text, [$round->division->competition,$round->division,$round,$choir],
         ['class' => 'action'])}}

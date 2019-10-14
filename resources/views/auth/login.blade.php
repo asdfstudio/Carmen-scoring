@@ -5,7 +5,7 @@
 @endsection
 
 @section('body-content')
-  <div class="login-container">
+<div class="login-container">
     <div class="logo-container">
       <img src="/images/Carmen-Logo-185x54.png" alt="Carmen Scoring System"  />
     </div>
@@ -59,6 +59,4 @@
         </div>
     </form>
   </div>
-
-
 @endsection

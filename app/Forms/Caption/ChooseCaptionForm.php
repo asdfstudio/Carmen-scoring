@@ -17,6 +17,7 @@ class ChooseCaptionForm extends Form
 					'multiple' => true,
           'choice_options' => [
             'wrapper' => ['class' => 'choice-container'],
+            'labelAttrs' => 'label-attr',
           ],
           'selected' => function($data) {
             //dd($this->model->pluck('id')->toArray());

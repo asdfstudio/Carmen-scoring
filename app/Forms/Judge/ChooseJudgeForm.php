@@ -52,6 +52,7 @@ class ChooseJudgeForm extends Form
           'rules' => ['required'],
           'choice_options' => [
             'wrapper' => ['class' => 'choice-container'],
+            'labelAttrs' => 'label-attr'
           ],
 					'expanded' => true,
 					'multiple' => true

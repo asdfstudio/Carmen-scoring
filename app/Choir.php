@@ -69,7 +69,14 @@ class Choir extends Model
 
     public function rounds()
     {
-      return $this->belongsToMany('App\Round');
+      return $this->belongsToMany('App\Round')->withPivot('performance_order');
+    }
+
+    public function performance_order($round)
+    {
+      $round_id = is_object($round) && is_a($round, 'App\Round') ? $round->id : $round;
+      $round = $this->rounds->where('id', $round_id);
+      return count($round) ? $round->pivot->performance_order : null;
     }
 
     // This doesn't actually work because the Division relationship is many-to-many.

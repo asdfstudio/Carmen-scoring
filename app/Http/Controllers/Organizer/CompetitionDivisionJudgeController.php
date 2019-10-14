@@ -118,7 +118,7 @@ class CompetitionDivisionJudgeController extends Controller
         $this->authorize('createJudge', $division);
 
         $judges = Judge::get();
-        $judges = $judges->lists('full_name', 'id')->toArray();
+        $judges = $judges->pluck('full_name', 'id')->toArray();
 
         $form = $formBuilder->create('Judge\ChooseJudgeForm', [
           'class' => '',
@@ -150,7 +150,7 @@ class CompetitionDivisionJudgeController extends Controller
 				$division = Division::with('competition','judges')->find($division_id);
 
         // Create the judge
-        if($request->has('judge.first_name'))
+        if($request->filled('judge.first_name'))
 				{
 					$judge = new Judge($request->input('judge'));
           $judge->save();
@@ -165,7 +165,7 @@ class CompetitionDivisionJudgeController extends Controller
           //dd($judge);
 
 				}
-        elseif($request->has('judge_id'))
+        elseif($request->filled('judge_id'))
         {
           $judge = Judge::find($request->input('judge_id'));
         }
@@ -361,7 +361,7 @@ class CompetitionDivisionJudgeController extends Controller
       $data = [
         'choices' => $competition->divisions->reject(function($value,$key) use ($division_id) {
           return $value->id == $division_id;
-        })->lists('name', 'id')->toArray()
+        })->pluck('name', 'id')->toArray()
       ];
 
       $form = $formBuilder->create('Division\ChooseDivisionForm', [

@@ -5,9 +5,9 @@
 @endif
 
 
-<?php
+@php
 $captionId = $standing->caption_id ? $standing->caption_id : 0;
-?>
+@endphp
 
 @if($standing->choirs)
 <ul class="list-group">
@@ -15,7 +15,7 @@ $captionId = $standing->caption_id ? $standing->caption_id : 0;
     <li class="list-group-item standing">
       <span class="choir">{{ $choir->full_name }}</span>
 
-      <?php
+      @php
       $rank_name = false;
       $final_rank = $choir->pivot->final_rank;
       //$index = $final_rank - 1;
@@ -46,7 +46,7 @@ $captionId = $standing->caption_id ? $standing->caption_id : 0;
       else {
         $rank_name = ordinal($final_rank);
       }
-      ?>
+      @endphp
 
       @if($sponsor AND $showSponsor)
         <span>Sponsored by: {{ $sponsor }}</span>

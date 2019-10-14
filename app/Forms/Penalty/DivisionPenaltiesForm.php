@@ -22,8 +22,13 @@ class DivisionPenaltiesForm extends Form
         $this->add('penalties', 'entity', [
           'class' => 'App\Penalty',
           'property' => 'name',
+          'choice_options' => [
+            'wrapper' => ['class' => 'choice-wrapper'],
+            'labelAttrs' => 'label-attr'
+        ],
           'expanded' => true,
           'multiple' => true,
+         
           'query_builder' => function (\App\Penalty $query) {
             return $query->where('organization_id', Auth::user()->organization_id);
           }

@@ -21,7 +21,7 @@
   <ul class="schedule-list">
     @foreach($schedule->items as $item)
 
-      <?php
+      @php
       $awardWinner = false;
 
       if($item->division AND $item->award)
@@ -47,7 +47,7 @@
       }
 
 
-      ?>
+      @endphp
 
       <li class="schedule-item award">
         @if($item->division)

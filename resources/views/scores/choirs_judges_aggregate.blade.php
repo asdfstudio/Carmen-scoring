@@ -22,15 +22,15 @@
     	@foreach($judges as $judge)
       <td data-choir-id="{{ $choir->id }}" data-judge-id="{{ $judge->id }}">
       
-      @if($round->is_completed OR $judge->id == Auth::user()->person_id)
-				<?php 
+      @if($round->is_completed ?? $judge->id == Auth::user()->person_id)
+				@php 
         $rawScore = $rawScores->where('judge_id', $judge->id)->where('choir_id',$choir->id)->sum('score');
         $rawScoreLink = NULL;
         
         if($rawScore) :
           $rawScoreLink = link_to_route('round.scores.choir.judge.show',$rawScore,[$round->division->competition,$round->division,$round,$choir,$judge]);
         endif;
-        ?>
+        @endphp
         @if($rawScoreLink) {{ $rawScoreLink }} @endif
       @else
       	-
@@ -41,7 +41,7 @@
     
     <td>
     	@if($round->is_completed)
-				<?php $aggregateScore = $rawScores->where('choir_id',$choir->id)->sum('score');?>
+				@php $aggregateScore = $rawScores->where('choir_id',$choir->id)->sum('score');@endphp
         {{ $aggregateScore }}
       @else
       	-

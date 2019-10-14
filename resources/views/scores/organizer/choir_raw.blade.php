@@ -28,8 +28,8 @@
 
       @foreach($division->judges as $judge)
      	<td data-judge-id="{{ $judge->id }}" data-criterion-id="{{ $criterion->id }}">
-      	<?php $rawScore = $rawScores->where('criterion_id', $criterion->id)->where('judge_id',$judge->id)->where('choir_id', $choir->id)->pluck('score');?>
-        <?php $score = $rawScore->first(); ?>
+      	@php $rawScore = $rawScores->where('criterion_id', $criterion->id)->where('judge_id',$judge->id)->where('choir_id', $choir->id)->pluck('score');@endphp
+        @php $score = $rawScore->first(); @endphp
         {{ $score }}
       </td>
       @endforeach
@@ -44,7 +44,7 @@
       </th>
       @foreach($division->judges as $judge)
         <th>
-          <?php $rawTotal = $rawScores->where('criterion_caption_id', $caption->id)->where('judge_id',$judge->id)->where('choir_id', $choir->id)->sum('score');?>
+          @php $rawTotal = $rawScores->where('criterion_caption_id', $caption->id)->where('judge_id',$judge->id)->where('choir_id', $choir->id)->sum('score');@endphp
           {{ $rawTotal }}
         </th>
       @endforeach
@@ -57,7 +57,7 @@
         </th>
         @foreach($division->judges as $judge)
           <th>
-            <?php $weightedTotal = $weightedScores->where('criterion_caption_id', $caption->id)->where('judge_id',$judge->id)->where('choir_id', $choir->id)->sum('weightedScore');?>
+            @php $weightedTotal = $weightedScores->where('criterion_caption_id', $caption->id)->where('judge_id',$judge->id)->where('choir_id', $choir->id)->sum('weightedScore');@endphp
             {{ $weightedTotal }}
           </th>
         @endforeach
@@ -70,7 +70,7 @@
       </th>
       @foreach($division->judges as $judge)
         <th>
-          <?php $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();?>
+          @php $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
           {{ $rank }}
         </th>
       @endforeach
@@ -83,7 +83,7 @@
 
     @foreach($division->judges as $judge)
     	<th>
-      <?php $weightedTotal = $rawScores->where('judge_id',$judge->id)->where('choir_id',$choir->id)->sum('weightedScore');?>
+      @php $weightedTotal = $rawScores->where('judge_id',$judge->id)->where('choir_id',$choir->id)->sum('weightedScore');@endphp
       {{ $weightedTotal }}
       </th>
     @endforeach
@@ -95,7 +95,7 @@
 
     @foreach($division->judges as $judge)
     	<th>
-        <?php $rank = $rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('rank')->first();?>
+        @php $rank = $rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
         {{ $rank }}
       </th>
     @endforeach

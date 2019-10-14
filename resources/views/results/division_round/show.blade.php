@@ -17,7 +17,7 @@
 
 				<ul class="list-group horizontal">
 					<li class="list-group-item">
-						<?php $active = $division->scoringMethod->slug == 'ranked' ? 'active division-scoring-method' : false; ?>
+						@php $active = $division->scoringMethod->slug == 'ranked' ? 'active division-scoring-method' : false; @endphp
 						<a class="score-view-toggle {{ $active }}" href="#rankings" data-score-view="rank">Rankings</a>
 
 						@if($active)
@@ -25,7 +25,7 @@
 						@endif
 					</li>
 					<li class="list-group-item">
-						<?php $active = $division->scoringMethod->slug == 'raw' ? 'active division-scoring-method' : false; ?>
+						@php $active = $division->scoringMethod->slug == 'raw' ? 'active division-scoring-method' : false; @endphp
 						<a class="score-view-toggle {{ $active }}" href="#weighted" data-score-view="weighted">Weighted</a>
 
 						@if($active)

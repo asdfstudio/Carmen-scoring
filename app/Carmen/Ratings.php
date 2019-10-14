@@ -15,7 +15,7 @@ class Ratings
     $this->round = $round;
   }
 
-  public function all()
+  public function all($keys = null)
   {
     $scores = $this->getScores();
     //dd($scores);

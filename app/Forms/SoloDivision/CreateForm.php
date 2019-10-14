@@ -23,7 +23,8 @@ class CreateForm extends Form
           'multiple' => false,
           //'wrapper' => ['class' => 'wrap'],
           'choice_options' => [
-            'wrapper' => ['class' => 'choice-container']
+            'wrapper' => ['class' => 'choice-container'],
+            'labelAttrs' => 'label-attr'
           ]
 				]);
 

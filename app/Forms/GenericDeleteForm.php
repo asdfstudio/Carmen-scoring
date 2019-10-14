@@ -16,8 +16,7 @@ class GenericDeleteForm extends Form
     {
 				$this->add('submit', 'submit', [
           'label' => $this->formOptions['button_text'],
-          'attr' => ['class' => 'action danger'],
-          //'template' => ''
+          'attr' => ['class' => 'action danger']
         ]);
     }
 }
