@@ -74,6 +74,7 @@ export default {
   methods: {
     deactivateModal: function (e) {
       if (this.activeModal && !this.protectModal) {
+        // console.log(this.activeModalType)
         this.$store.commit('deactivateModal')
       }
       this.$store.commit('endModalProtection')

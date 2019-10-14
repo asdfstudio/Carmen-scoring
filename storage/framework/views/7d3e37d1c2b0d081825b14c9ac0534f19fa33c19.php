@@ -19,8 +19,8 @@ window.__IS_SPREADSHEET_SCORING_ACTIVE__ = "<?php echo $isSpreadsheetScoringActi
 </script>
 
 <link href=/css/dynamic-colors.css rel=stylesheet>
-<link href=/static/css/app.caeaa64192686c962d25bf1856e46144.css rel=stylesheet></head>
+<link href=/static/css/app.36936ae59732bd86936a51d99e8f59c5.css rel=stylesheet></head>
 <body>
   <div id=app></div>
-<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.6260c94a32d2f1699064.js></script><script type=text/javascript src=/static/js/app.0aa19cd6845f212336e8.js></script></body>
+<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.6260c94a32d2f1699064.js></script><script type=text/javascript src=/static/js/app.687825c51759900058cf.js></script></body>
 </html>

@@ -31,7 +31,7 @@ Vue.use(Vuex)
 const saveComment = _.debounce(CommentsApi.saveComment, 1000)
 // const saveScore = _.debounce(ScoresApi.saveScore, 1000)
 
-// Not totall working yet
+// Not totally working yet
 // See https://stackoverflow.com/questions/28787436/debounce-a-function-with-argument
 var saveDebouncedScore = _.wrap(_.memoize(function () {
   return _.debounce(ScoresApi.saveScore, 500)
@@ -118,7 +118,7 @@ export const store = new Vuex.Store({
       // Otherwise append it to the array
     },
     setComment (state, payload) {
-      // Find the matching score and update it
+      // Find the matching comment and update it
       var matches = state.comments.filter(comment => comment.choir_id === payload.choir_id)
 
       if (matches.length === 1) {

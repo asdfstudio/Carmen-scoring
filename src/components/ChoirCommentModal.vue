@@ -10,6 +10,7 @@
     <ModalBody>
       <textarea v-model.lazy="comment"></textarea>
       <button class="button" type="submit" @click="saveComment()">Save Comment</button>
+      <button class="button cancel" type="submit" @click="cancelComment()">Cancel</button>
     </ModalBody>
   </Modal>
 </template>
@@ -37,11 +38,28 @@ export default {
     }
   },
   methods: {
+    autosaveComment: function (event) {
+      const payload = {
+        choir_id: this.choir.id,
+        round_id: this.choir.round_id,
+        comment: event.target.value
+      }
+      this.$store.dispatch('setComment', payload)
+    },
     saveComment: function (event) {
       const payload = {
         choir_id: this.choir.id,
         round_id: this.choir.round_id,
         comment: this.currentComment
+      }
+      this.$store.dispatch('setComment', payload)
+      this.$store.commit('deactivateModal')
+    },
+    cancelComment: function (event) {
+      const payload = {
+        choir_id: this.choir.id,
+        round_id: this.choir.round_id,
+        comment: this.initialComment
       }
       this.$store.dispatch('setComment', payload)
       this.$store.commit('deactivateModal')
@@ -65,6 +83,12 @@ export default {
         this.$store.dispatch('setComment', payload) */
       }
     }
+  },
+  mounted: function () {
+    var self = this
+    document.getElementsByTagName('textarea')[0].addEventListener('input', function (event) {
+      self.autosaveComment(event)
+    })
   }
 }
 
@@ -90,8 +114,16 @@ button, .button {
   background: #7F4091;
   color: #fff;
   padding: 10px 15px;
+  margin: 0 5px;
   text-align: center;
   border: none;
   border-radius: 5px;
+
+  &.cancel {
+    background: #ffffff;
+    padding: 9px 14px;
+    border: 1px solid #CA2128;
+    color: #CA2128;
+  }
 }
 </style>
