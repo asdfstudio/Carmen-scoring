@@ -58,9 +58,6 @@
 		<p class="alert alert-warning">This round is currently missing scores. Do not complete the scoring until you have received scores from all judges.</p>
 	<?php endif; ?>
   
-  Scoring Method: <?php echo $division->scoring_method_id; ?><br>
-  Weighting: <?php echo $division->caption_weighting_id; ?><br>
-  
   
   <?php if($division->scoring_method_id === 1 && $division->caption_weighting_id === 2): ?>
     <ul class="list-group horizontal">
@@ -113,13 +110,12 @@
     </ul>
   <?php endif; ?>
   
+  
   <?php if($division->scoring_method_id === 3 || $division->scoring_method_id === 4): ?>
-    
-  	<?php echo $__env->make('scores.organizer.composite_condorcet',['choirs' => $choirs, 'judges' => $division->judges], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-  <?php else: ?>
-    
-  	<?php echo $__env->make('scores.organizer.composite',['choirs' => $choirs, 'judges' => $division->judges], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+  	<?php echo $__env->make('scores.organizer.ranked_condorcet',['choirs' => $choirs, 'judges' => $division->judges], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
   <?php endif; ?>
+
+	<?php echo $__env->make('scores.organizer.composite',['choirs' => $choirs, 'judges' => $division->judges], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
   </div>
 

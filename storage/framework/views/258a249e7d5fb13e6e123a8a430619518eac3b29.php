@@ -1,10 +1,20 @@
-
-<table class="table table-striped table-bordered scoreboard toggle-scores">
+<?php if($division->scoring_method_id !== 5): ?>
+  <?php
+    $composite_table_class = 'weighted raw';
+    if($division->scoring_method_id !== 3 && $division->scoring_method_id !== 4){
+      $composite_table_class = $composite_table_class . ' rank';
+    }
+  ?>
+<?php endif; ?>
+<table class="table table-striped table-bordered scoreboard toggle-scores <?php echo e($composite_table_class); ?>">
   <?php $__currentLoopData = $captions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $caption): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-    <?php $captionTotalRank = $rankedScores->total_rank($caption->id);?>
-    <?php $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id); ?>
-    <?php $totalRawRank = $rankedScores->total_raw_rank($caption->id); ?>
+    <?php
+      $captionTotalRank = $rankedScores->total_rank($caption->id); //dd($captionTotalRank);
+      $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id); //dd($totalWeightedRank);
+      $totalRawRank = $rankedScores->total_raw_rank($caption->id); //dd($totalRawRank);
+      //dd($rankedScores);
+    ?>
 
     <tr class="caption-header <?php echo e($caption->background_css); ?>">
       <th colspan="30">

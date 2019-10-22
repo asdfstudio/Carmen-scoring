@@ -1,0 +1,130 @@
+
+<table class="table table-striped table-bordered scoreboard toggle-scores rank">
+  @foreach($captions as $caption)
+
+    @php $captionTotalRank = $rankedScores->total_rank($caption->id);@endphp
+    @php $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id); @endphp
+    @php $totalRawRank = $rankedScores->total_raw_rank($caption->id); @endphp
+
+    <tr class="caption-header {{ $caption->background_css }}">
+      <th colspan="30">
+        {{ $caption->name }}
+      </th>
+    </tr>
+
+    <tr>
+      <th></th>
+
+      @foreach($choirs as $choir)
+        <th>
+          {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
+        </th>
+      @endforeach
+      
+      <th>Sum</th>
+      
+      <th>Rank</th>
+
+      @if(!empty($ratings))
+        <th>Rating</th>
+      @endif
+    </tr>
+
+    @foreach($choirs as $choir)
+      <tr>
+        <th>
+          {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
+        </th>
+        @foreach($choirs as $choir_comp)
+
+          @if($choir->id === $choir_comp->id)
+            <td>0</td>
+          @endif
+
+          @if($choir->id !== $choir_comp->id)
+            <td>
+              ?
+            </td>
+          @endif
+
+        @endforeach
+        
+        <td>
+          sum?
+        </td>
+        
+        <td>
+          @php $rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();@endphp
+          <span class="rank score">{{ $rank }}</span>
+        </td>
+
+        @if(!empty($ratings))
+          <td></td>
+        @endif
+      </tr>
+    @endforeach
+  @endforeach
+
+
+  <tr class="caption-header caption-place">
+    <th colspan="30">
+      Place
+    </th>
+  </tr>
+
+  <tr>
+    <th></th>
+
+    @foreach($choirs as $choir)
+      <th>
+        {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
+      </th>
+    @endforeach
+
+    <th>Sum</th>
+
+    <th>Rank</th>
+
+    @if(!empty($ratings))
+      <th>Rating</th>
+    @endif
+  </tr>
+
+  @php $totalWeightedRank = $rankedScores->total_weighted_rank(); @endphp
+  @php $totalRawRank = $rankedScores->total_raw_rank(); @endphp
+
+  @foreach($choirs as $choir)
+    <tr>
+      <th>
+        {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
+      </th>
+      @foreach($choirs as $choir_comp)
+
+        @if($choir->id === $choir_comp->id)
+          <td>0</td>
+        @endif
+
+        @if($choir->id !== $choir_comp->id)
+          <td>
+            ?
+          </td>
+        @endif
+
+      @endforeach
+
+      <td>
+        sum?
+      </td>
+
+      <td>
+        @php $rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();@endphp
+        <span class="rank score">{{ $rank }}</span>
+      </td>
+
+      @if(!empty($ratings))
+        <td>{{ $ratings->where('choir.id', $choir->id)->pluck('rating.name')->first() }}</td>
+      @endif
+    </tr>
+  @endforeach
+
+</table>

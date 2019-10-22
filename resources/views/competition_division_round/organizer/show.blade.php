@@ -54,9 +54,6 @@
 		<p class="alert alert-warning">This round is currently missing scores. Do not complete the scoring until you have received scores from all judges.</p>
 	@endif
   
-  Scoring Method: @php echo $division->scoring_method_id; @endphp<br>
-  Weighting: @php echo $division->caption_weighting_id; @endphp<br>
-  
   {{-- Raw Scoring, 50/50 --}}
   @if ($division->scoring_method_id === 1 && $division->caption_weighting_id === 2)
     <ul class="list-group horizontal">
@@ -109,13 +106,12 @@
     </ul>
   @endif
   
+  {{-- Condorcet methods have an extra table that is formatted a little differently to show rankings. --}}
   @if($division->scoring_method_id === 3 || $division->scoring_method_id === 4)
-    {{-- Condorcet methods --}}
-  	@include('scores.organizer.composite_condorcet',['choirs' => $choirs, 'judges' => $division->judges])
-  @else
-    {{-- Non-Condorcet methods --}}
-  	@include('scores.organizer.composite',['choirs' => $choirs, 'judges' => $division->judges])
+  	@include('scores.organizer.ranked_condorcet',['choirs' => $choirs, 'judges' => $division->judges])
   @endif
+
+	@include('scores.organizer.composite',['choirs' => $choirs, 'judges' => $division->judges])
 
   </div>
 

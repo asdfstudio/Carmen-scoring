@@ -262,7 +262,7 @@ class CompetitionDivisionRoundController extends Controller
           $rankedScores = $scoreboard->consensusOrdinalRankScores;
           break;
       }
-
+      
       /*$expectedScores = new CountExpectedScores($round);
       $expectectedScoresCount = $expectedScores->run();
       $actualScoresCount = RawScore::where('round_id', $round_id)->where('score','>',0)->count();

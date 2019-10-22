@@ -7,9 +7,6 @@ use App\RawScore;
 class ConsensusOrdinalRankScores {
   protected $weightedScores;
   protected $penalties;
-  //protected $choirId;
-  //protected $judgeId;
-  //protected $captionId;
 
   protected $judges = [];
   protected $choirs = [];
@@ -18,7 +15,8 @@ class ConsensusOrdinalRankScores {
   protected $ranked = [];
   protected $total_ranked = [];
   protected $totaled = [];
-
+  
+  
   public function __construct($weightedScores, $penalties = false)
   {
     $this->weightedScores = $weightedScores;
@@ -27,20 +25,25 @@ class ConsensusOrdinalRankScores {
     $this->judges = $this->weightedScores->unique('judge_id')->pluck('judge_id');
     $this->choirs = $this->weightedScores->unique('choir_id')->pluck('choir_id');
     //return $this->weightedScores;
+    
+    //dd($this->total_weighted_rank());
   }
-
+  
+  
   public function total_raw_rank($caption_id = false)
   {
     //echo 'total_raw_rank<br />';
     return $this->calculate_rank('score', $caption_id);
   }
-
+  
+  
   public function total_weighted_rank($caption_id = false)
   {
     //echo 'total_weighted_rank<br />';
     return $this->calculate_rank('weightedScore', $caption_id);
   }
-
+  
+  
   public function calculate_rank($scoreField = 'score', $caption_id = false)
   {
     $captionRank = collect();
@@ -86,8 +89,8 @@ class ConsensusOrdinalRankScores {
     // Assign rank and return
     return $rank = $this->assign_rank($sorted);
   }
-
-
+  
+  
   public function total_rank($caption_id = false)
   {
     $key = $caption_id ? $caption_id : 0;
@@ -118,7 +121,8 @@ class ConsensusOrdinalRankScores {
     $this->total_ranked[$key] = $rank;
     return $rank;
   }
-
+  
+  
   public function total($choir_id, $caption_id = false)
   {
     $key = $choir_id.'x'.$caption_id;
@@ -154,7 +158,8 @@ class ConsensusOrdinalRankScores {
     $this->totaled[$key] = $total;
     return $total;
   }
-
+  
+  
   public function rank($judge_id = false, $caption_id = false)
   {
     if(array_key_exists($judge_id."x".$caption_id, $this->ranked))
@@ -173,8 +178,8 @@ class ConsensusOrdinalRankScores {
 
     return $rank = $this->assign_rank($sorted, $judge_id.'x'.$caption_id);
   }
-
-
+  
+  
   protected function calculate_scores($judge_id, $caption_id)
   {
     if(array_key_exists($judge_id."x".$caption_id, $this->calculated_scores))
@@ -231,8 +236,8 @@ class ConsensusOrdinalRankScores {
 
     return $scores;
   }
-
-
+  
+  
   protected function assign_rank($sortedTotals, $key = false)
   {
     // Assign number rank
@@ -268,5 +273,6 @@ class ConsensusOrdinalRankScores {
 
     return $rank;
   }
-
+  
+  
 }

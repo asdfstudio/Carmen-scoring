@@ -431,15 +431,16 @@ $(document).ready(function() {
 
       if(active_view == false) return false;
 
-      var table = $('table.scoreboard.toggle-scores');
-      var scores = table.find('span.score, input.score');
-      //var scores = table.find('span.score:not(".penalty")');
+      var tables = $('table.scoreboard.toggle-scores');
+      var scores = tables.find('span.score, input.score');
 
-      // Hide all scores
+      // Hide all scores and tables
+      tables.hide();
       scores.hide();
 
-      // Show the active scores
+      // Show the active scores and table
       scores.filter('.' + active_view).show();
+      tables.filter('.' + active_view).show();
 
       // Remove highlight from other links
       $('a.score-view-toggle').removeClass('active');

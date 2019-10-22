@@ -1,10 +1,20 @@
-
-<table class="table table-striped table-bordered scoreboard toggle-scores">
+@if($division->scoring_method_id !== 5)
+  @php
+    $composite_table_class = 'weighted raw';
+    if($division->scoring_method_id !== 3 && $division->scoring_method_id !== 4){
+      $composite_table_class = $composite_table_class . ' rank';
+    }
+  @endphp
+@endif
+<table class="table table-striped table-bordered scoreboard toggle-scores {{ $composite_table_class }}">
   @foreach($captions as $caption)
 
-    @php $captionTotalRank = $rankedScores->total_rank($caption->id);@endphp
-    @php $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id); @endphp
-    @php $totalRawRank = $rankedScores->total_raw_rank($caption->id); @endphp
+    @php
+      $captionTotalRank = $rankedScores->total_rank($caption->id); //dd($captionTotalRank);
+      $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id); //dd($totalWeightedRank);
+      $totalRawRank = $rankedScores->total_raw_rank($caption->id); //dd($totalRawRank);
+      //dd($rankedScores);
+    @endphp
 
     <tr class="caption-header {{ $caption->background_css }}">
       <th colspan="30">

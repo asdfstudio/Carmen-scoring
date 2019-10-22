@@ -17,6 +17,12 @@ class CondorcetScores {
   
   protected $judges = [];
   protected $choirs = [];
+  protected $captions = [];
+  
+  protected $calculated_scores = [];
+  protected $ranked = [];
+  protected $total_ranked = [];
+  protected $totaled = [];
   
   protected $score_by_judge_and_caption = [];
   protected $weightedScore_by_judge_and_caption = [];
@@ -258,6 +264,63 @@ class CondorcetScores {
     $this->{$store_property}[$judge_id."x".$caption_id] = $scores;
 
     return $scores;
+  }
+  
+  
+  public function total_rank($caption_id = false)
+  {
+    $key = $caption_id ? $caption_id : 0;
+    if(array_key_exists($key, $this->total_ranked)){
+      return $this->total_ranked[$key];
+    }
+
+    $captionRank = collect();
+
+    $this->choirs->each(function($choir_id, $key) use ($caption_id, $captionRank){
+      $score = $this->total($choir_id, $caption_id);
+      $captionRank->put($choir_id,['choir_id' => $choir_id, 'score' => $score]);
+    });
+
+    // Sort
+    $sorted = $captionRank->sortBy('score');
+
+    // Assign rank and return
+    $rank = $this->assign_rank($sorted);
+    $this->total_ranked[$key] = $rank;
+    return $rank;
+  }
+  
+  
+  public function total($choir_id, $caption_id = false)
+  {
+    $key = $choir_id.'x'.$caption_id;
+    if(array_key_exists($key, $this->totaled)){
+      return $this->totaled[$key];
+    }
+
+    $total = 0;
+
+    $this->judges->each(function($judge_id, $key) use ($choir_id, $caption_id, &$total) {
+      $rank = $this->rank($judge_id, $caption_id)->where('choir_id', $choir_id)->pluck('rank')->first();
+      $total = $total + $rank;
+    });
+
+    $this->totaled[$key] = $total;
+    return $total;
+  }
+  
+  
+  public function rank($judge_id = false, $caption_id = false)
+  {
+    if($judge_id && $caption_id){
+      return $this->vote_rank_by_judge_and_caption($judge_id, $caption_id, 'weightedScore');
+    }
+    
+    if($judge_id && !$caption_id){
+      return $this->vote_rank_by_judge_overall($judge_id, 'weightedScore');
+    }
+    
+    return $this->total_weighted_rank($caption_id);
   }
   
   
