@@ -2,7 +2,7 @@
 <table class="table table-striped table-bordered scoreboard toggle-scores">
   @foreach($captions as $caption)
 
-    @php $captionTotalRank = $rankedScores->total_rank($caption->id);@endphp
+    @php //$captionTotalRank = $rankedScores->total_rank($caption->id);@endphp
     @php $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id); @endphp
     @php $totalRawRank = $rankedScores->total_raw_rank($caption->id); @endphp
 
@@ -45,8 +45,8 @@
 
           @if($judge->captions->where('id',$caption->id)->count() > 0)
             <td>
-              @php $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
-              <span class="rank score">{{ $rank }}</span>
+              @php //$rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
+              <span class="rank score">{{-- $rank --}}</span>
 
               @php $weighted = $weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_caption_id', $caption->id)->sum('weightedScore');@endphp
               <span class="weighted score">{{ $weighted }}</span>
@@ -61,8 +61,8 @@
         
         @if($division->scoring_method_id !== 5)
         <td>
-          @php $rank = $rankedScores->total($choir->id, $caption->id);@endphp
-          <span class="rank score">{{ $rank }}</span>
+          @php //$rank = $rankedScores->total($choir->id, $caption->id);@endphp
+          <span class="rank score">{{-- $rank --}}</span>
 
           @php $weighted = $weightedScores->where('choir_id', $choir->id)->where('criterion_caption_id', $caption->id)->sum('weightedScore');@endphp
           <span class="weighted score">{{ $weighted }}</span>
@@ -73,9 +73,9 @@
         @endif
         
         <td>
-          @php $rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();@endphp
-          <span class="rank score">{{ $rank }}</span>
-
+          @php //$rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();@endphp
+          <span class="rank score">{{-- $rank --}}</span>
+          
           @php $rank = $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
           <span class="weighted score">{{ $rank }}</span>
 
@@ -127,8 +127,8 @@
       </th>
       @foreach($judges as $judge)
         <td>
-          @php $rank = $rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
-          <span class="rank score">{{ $rank }}</span>
+          @php //$rank = $rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
+          <span class="rank score">{{-- $rank --}}</span>
 
           @php $weightedSubtotal = $weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->sum('weightedScore');@endphp
           <span class="weighted subtotal score">{{ $weightedSubtotal }}</span>
@@ -146,8 +146,8 @@
       
       @if($division->scoring_method_id !== 5)
       <td>
-        @php $rank = $rankedScores->total($choir->id);@endphp
-        <span class="rank score">{{ $rank }}</span>
+        @php //$rank = $rankedScores->total($choir->id);@endphp
+        <span class="rank score">{{-- $rank --}}</span>
 
         @php $weightedSubtotal = $weightedScores->where('choir_id', $choir->id)->sum('weightedScore');@endphp
         @php //$weighted = $weightedScores->total($choir->id);@endphp
@@ -169,8 +169,8 @@
       @endif
       
       <td>
-        @php $rank = $rankedScores->total_rank()->where('choir_id' , $choir->id)->pluck('rank')->first();@endphp
-        <span class="rank score">{{ $rank }}</span>
+        @php //$rank = $rankedScores->total_rank()->where('choir_id' , $choir->id)->pluck('rank')->first();@endphp
+        <span class="rank score">{{-- $rank --}}</span>
 
         @php $rank = $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
         <span class="weighted score">{{ $rank }}</span>

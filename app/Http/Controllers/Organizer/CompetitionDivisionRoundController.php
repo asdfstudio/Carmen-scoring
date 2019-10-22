@@ -17,6 +17,8 @@ use App\Judge;
 
 use App\Carmen\WeightedScores;
 use App\Carmen\RankedScores;
+use App\Carmen\CondorcetScores;
+use App\Carmen\ConsensusOrdinalRankScores;
 use App\Carmen\Scoreboard;
 use App\Carmen\Test;
 use App\Carmen\Ratings;
@@ -244,7 +246,22 @@ class CompetitionDivisionRoundController extends Controller
 
       $rawScores = $scoreboard->extendedRawScores;
       $weightedScores = $scoreboard->extendedRawScores;
-      $rankedScores = $scoreboard->rankedScores;
+      switch($division->scoring_method_id){
+        case 1:
+        case 2:
+          // Borda Count
+          $rankedScores = $scoreboard->rankedScores;
+          break;
+        case 3:
+          $rankedScores = $scoreboard->condorcetScoresRankedPairs;
+          break;
+        case 4:
+          $rankedScores = $scoreboard->condorcetScoresSchulze;
+          break;
+        case 5:
+          $rankedScores = $scoreboard->consensusOrdinalRankScores;
+          break;
+      }
 
       /*$expectedScores = new CountExpectedScores($round);
       $expectectedScoresCount = $expectedScores->run();
@@ -297,7 +314,7 @@ class CompetitionDivisionRoundController extends Controller
 
 
 
-      return view('competition_division_round.organizer.show', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round','competition','division','divisions','rounds','activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard', 'judges', 'choirs', 'ratings', 'roundIsMissingScores'));
+      return view('competition_division_round.organizer.show', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round', 'competition', 'division', 'divisions', 'rounds', 'activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard', 'judges', 'choirs', 'ratings', 'roundIsMissingScores'));
 		}
 
 

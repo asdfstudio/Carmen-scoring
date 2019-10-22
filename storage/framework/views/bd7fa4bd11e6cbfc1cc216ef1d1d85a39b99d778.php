@@ -4,7 +4,7 @@
 
 <?php if(!$awards->isEmpty()): ?>
 <ul class="list-group">
-  <?php foreach($awards as $award): ?>
+  <?php $__currentLoopData = $awards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $award): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 	  <li class="award list-group-item">
 			<span class="name"><?php echo e($award->name); ?></span>
 
@@ -15,7 +15,7 @@
 			<span class="owner"><?php echo e($award->owner()); ?></span>
 
 			<?php if($award->pivot): ?>
-				<?php if($award->pivot->recipient OR $award->choir): ?>
+				<?php if($award->pivot->recipient ?? $award->choir): ?>
 					<span class="recipient">
 						<span class="heading">Recipient:</span>
 						<?php if($award->pivot->recipient): ?>
@@ -36,7 +36,7 @@
 			<?php endif; ?>
 
 			<ul class="actions-group">
-				<?php if (app('Illuminate\Contracts\Auth\Access\Gate')->check('update',$award)): ?>
+				<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('update',$award)): ?>
 					<li>
 						<a class="action" href="<?php echo e(route('organizer.award.edit',[$award])); ?>">Edit</a>
 					</li>
@@ -44,6 +44,6 @@
 			</ul>
 
 		</li>
-  <?php endforeach; ?>
+  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 </ul>
 <?php endif; ?>

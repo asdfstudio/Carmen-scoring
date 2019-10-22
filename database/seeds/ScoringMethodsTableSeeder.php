@@ -13,7 +13,9 @@ class ScoringMethodsTableSeeder extends Seeder
     {
         DB::table('scoring_methods')->insert([
             ['name' => 'Raw'],
-						['name' => 'Ranked']
+						['name' => 'Ranked'],
+						['name' => 'Condorcet'],
+						['name' => 'ConsensusOrdinalRank']
         ]);
     }
 }

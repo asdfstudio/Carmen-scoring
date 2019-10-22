@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "381f41f710d59238850c9c769ca1b599",
+    "content-hash": "cbc97a104f8a99c47f87403ed8c9224b",
     "packages": [
         {
             "name": "aloha/twilio",
@@ -1476,6 +1476,59 @@
             ],
             "description": "Highlight PHP code in terminal",
             "time": "2018-09-29T18:48:56+00:00"
+        },
+        {
+            "name": "julien-boudry/condorcet",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/julien-boudry/Condorcet.git",
+                "reference": "edea1a0c11071dffef5a9c605ec56177d816075c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/julien-boudry/Condorcet/zipball/edea1a0c11071dffef5a9c605ec56177d816075c",
+                "reference": "edea1a0c11071dffef5a9c605ec56177d816075c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "codacy/coverage": "dev-master",
+                "condorcetphp/condorcet-doc-generator": "dev-master",
+                "ext-pdo": "*",
+                "ext-pdo_sqlite": "*",
+                "phpbench/phpbench": "dev-master",
+                "phpunit/phpunit": "^8 || ^7"
+            },
+            "suggest": {
+                "ext-pdo": "Allow to use database for very large elections.",
+                "ext-pdo_sqlite": "Use sqlite3 bases for very large elections."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CondorcetPHP\\Condorcet\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Julien Boudry",
+                    "email": "julien.boudry@gmail.com",
+                    "homepage": "http://www.julien-boudry.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Complete election manager, providing natively many methods of Condorcet : Condorcet basic / Copeland / Dodgson / Kemeny–Young / Minimax / Ranked Pairs / Schulze",
+            "homepage": "https://github.com/julien-boudry/Condorcet",
+            "time": "2019-09-06T22:14:49+00:00"
         },
         {
             "name": "kris/laravel-form-builder",

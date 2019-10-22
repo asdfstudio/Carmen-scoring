@@ -10,6 +10,8 @@ use App\Penalty;
 use App\ChoirRoundPenalty;
 use App\Carmen\WeightedScores;
 use App\Carmen\RankedScores;
+use App\Carmen\CondorcetScores;
+use App\Carmen\ConsensusOrdinalRankScores;
 
 class Scoreboard {
 
@@ -27,6 +29,9 @@ class Scoreboard {
 	public $rawScores;
 	public $weightedScores;
 	public $rankedScores;
+	public $condorcetScoresSchulze;
+	public $condorcetScoresRankedPairs;
+	public $consensusOrdinalRankScores;
 	public $extendedRawScores;
 	//protected $judgeScores;
 	//protected $criteriaScores;
@@ -43,6 +48,9 @@ class Scoreboard {
 		$this->getWeightedScores();
 		$this->getPenalties();
 		$this->getRankedScores();
+		$this->getCondorcetScoresSchulze();
+		$this->getCondorcetScoresRankedPairs();
+		$this->getConsensusOrdinalRankScores();
 	}
 
 	protected function getRawScores()
@@ -160,6 +168,21 @@ class Scoreboard {
 	protected function getRankedScores()
 	{
 		return $this->rankedScores = new RankedScores($this->extendedRawScores, $this->penalties);
+	}
+
+	protected function getCondorcetScoresSchulze()
+	{
+		return $this->condorcetScoresSchulze = new CondorcetScoresSchulze($this->extendedRawScores, $this->penalties);
+	}
+
+	protected function getCondorcetScoresRankedPairs()
+	{
+		return $this->condorcetScoresRankedPairs = new CondorcetScoresRankedPairs($this->extendedRawScores, $this->penalties);
+	}
+
+	protected function getConsensusOrdinalRankScores()
+	{
+		return $this->consensusOrdinalRankScores = new ConsensusOrdinalRankScores($this->extendedRawScores, $this->penalties);
 	}
 
 

@@ -4,7 +4,7 @@ namespace App\Carmen;
 
 use App\RawScore;
 
-class RankedScores {
+class ConsensusOrdinalRankScores {
   protected $weightedScores;
   protected $penalties;
   //protected $choirId;
@@ -27,8 +27,6 @@ class RankedScores {
     $this->judges = $this->weightedScores->unique('judge_id')->pluck('judge_id');
     $this->choirs = $this->weightedScores->unique('choir_id')->pluck('choir_id');
     //return $this->weightedScores;
-    
-    //dd($this->total_weighted_rank());
   }
 
   public function total_raw_rank($caption_id = false)
