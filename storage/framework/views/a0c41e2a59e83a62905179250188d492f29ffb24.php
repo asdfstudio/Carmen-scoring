@@ -57,8 +57,11 @@
         </td>
         
         <td>
-          <?php $rank = $captionTotalRank->where('choir_id', $choir->id)->pluck('rank')->first();?>
-          <span class="rank score"><?php echo e($rank); ?></span>
+          <?php
+            $rank = $captionTotalRank->where('choir_id', $choir->id)->pluck('rank')->first();
+            $tied = $captionTotalRank->where('choir_id', $choir->id)->pluck('tied')->first() ? 'tied' : '';
+          ?>
+          <span class="rank score <?php echo e($tied); ?>"><?php echo e($rank); ?></span>
         </td>
 
         <?php if(!empty($ratings)): ?>

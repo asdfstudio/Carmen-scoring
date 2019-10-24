@@ -226,4 +226,16 @@ input.score {
   &.subtotal {
     color: $cs-gray-mid-3;
   }
+  
+  &.tied:after {
+    content: 'tied';
+    display: inline-block;
+    padding: 0 4px;
+    margin-left: 5px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #ffffff;
+    border-radius: 4px;
+    background: #7F4091;
+  }
 }

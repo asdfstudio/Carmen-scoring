@@ -89,7 +89,8 @@ class CondorcetScores {
     foreach($election_results as $rank => $candidates){
       foreach($candidates as $candidate){
         $choir_id = intval($candidate->getName());
-        $results->put($choir_id,['choir_id' => $choir_id, 'rank' => $rank]);
+        $tied = count($candidates) > 1 ? 1 : 0;
+        $results->put($choir_id,['choir_id' => $choir_id, 'rank' => $rank, 'tied' => $tied]);
       }
     }
     
@@ -350,8 +351,10 @@ class CondorcetScores {
 
       if($item['score'] == $previous_score){
         $item['rank'] = $previous_rank;
+        $item['tied'] = 1;
       } else {
         $item['rank'] = $loops;
+        $item['tied'] = 0;
         $previous_rank = $loops;
       }
 
