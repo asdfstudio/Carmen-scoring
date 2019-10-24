@@ -54,8 +54,11 @@
 
           @if($judge->captions->where('id',$caption->id)->count() > 0)
             <td>
-              @php $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
-              <span class="rank score">{{ $rank }}</span>
+              @php
+                $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();
+                $tied = !empty($rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+              @endphp
+              <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
               @php $weighted = $weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_caption_id', $caption->id)->sum('weightedScore');@endphp
               <span class="weighted score">{{ $weighted }}</span>
@@ -82,8 +85,11 @@
         @endif
         
         <td>
-          @php $rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();@endphp
-          <span class="rank score">{{ $rank }}</span>
+          @php
+            $rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();
+            $tied = !empty($captionTotalRank->where('choir_id' , $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+          @endphp
+          <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
           @php $rank = $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
           <span class="weighted score">{{ $rank }}</span>
@@ -136,8 +142,11 @@
       </th>
       @foreach($judges as $judge)
         <td>
-          @php $rank = $rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
-          <span class="rank score">{{ $rank }}</span>
+          @php
+            $rank = $rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('rank')->first();
+            $tied = !empty($rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+          @endphp
+          <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
           @php $weightedSubtotal = $weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->sum('weightedScore');@endphp
           <span class="weighted subtotal score">{{ $weightedSubtotal }}</span>
@@ -178,8 +187,11 @@
       @endif
       
       <td>
-        @php $rank = $rankedScores->total_rank()->where('choir_id' , $choir->id)->pluck('rank')->first();@endphp
-        <span class="rank score">{{ $rank }}</span>
+        @php
+          $rank = $rankedScores->total_rank()->where('choir_id' , $choir->id)->pluck('rank')->first();
+          $tied = !empty($rankedScores->total_rank()->where('choir_id' , $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+        @endphp
+        <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
         @php $rank = $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
         <span class="weighted score">{{ $rank }}</span>
