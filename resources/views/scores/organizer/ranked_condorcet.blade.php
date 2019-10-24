@@ -2,9 +2,12 @@
 <table class="table table-striped table-bordered scoreboard toggle-scores rank">
   @foreach($captions as $caption)
 
-    @php $captionTotalRank = $rankedScores->total_rank($caption->id);@endphp
-    @php $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id); @endphp
-    @php $totalRawRank = $rankedScores->total_raw_rank($caption->id); @endphp
+    @php
+      $captionTotalRank = $rankedScores->total_rank($caption->id); //dd($captionTotalRank);
+      $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id); //dd($totalWeightedRank);
+      $totalRawRank = $rankedScores->total_raw_rank($caption->id); //dd($totalRawRank);
+      $election_key = $division->caption_weighting_id === 1 ? 'caption_'.$caption->id.'_weighted' : 'caption_'.$caption->id;
+    @endphp
 
     <tr class="caption-header {{ $caption->background_css }}">
       <th colspan="30">
@@ -35,26 +38,19 @@
         <th>
           {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
         </th>
+        
         @foreach($choirs as $choir_comp)
-
-          @if($choir->id === $choir_comp->id)
-            <td>0</td>
-          @endif
-
-          @if($choir->id !== $choir_comp->id)
-            <td>
-              ?
-            </td>
-          @endif
-
+          <td>
+            {{ $rankedScores->pairwise_bit($election_key, $choir->id, $choir_comp->id) }}
+          </td>
         @endforeach
         
         <td>
-          sum?
+          {{ $rankedScores->pairwise_bit_sum($election_key, $choir->id) }}
         </td>
         
         <td>
-          @php $rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();@endphp
+          @php $rank = $captionTotalRank->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
           <span class="rank score">{{ $rank }}</span>
         </td>
 

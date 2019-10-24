@@ -360,4 +360,60 @@ class CondorcetScores {
   }
   
   
+  public function pairwise($election_key = 'overall_weighted')
+  {
+    if(isset($this->elections[$election_key])){
+      return $this->elections[$election_key]->getPairwise()->getExplicitPairwise();
+    }
+    
+    return null;
+  }
+  
+  
+  public function pairwise_bit($election_key, $choir_id, $choir_comp_id)
+  {
+    
+    if($choir_id === $choir_comp_id){
+      return 0;
+    }
+    
+    $pairwise = $this->pairwise($election_key);
+    
+    if($pairwise && $choir_id && $choir_comp_id){
+      
+      $judge_count = $this->elections[$election_key]->countVotes();
+      $half_count = $judge_count / 2;
+      
+      $value = $pairwise[$choir_id]['win'][$choir_comp_id];
+      return $value >= $half_count ? 1 : 0;
+      
+    }
+    
+    return null;
+  }
+  
+  
+  public function pairwise_bit_sum($election_key, $choir_id)
+  {
+    $pairwise = $this->pairwise($election_key);
+    $sum = 0;
+    
+    if($pairwise && $choir_id){
+      
+      $judge_count = $this->elections[$election_key]->countVotes();
+      $half_count = $judge_count / 2;
+      
+      foreach($pairwise[$choir_id]['win'] as $choir_comp_id => $value){
+        $bit = $value >= $half_count ? 1 : 0;
+        $sum += $bit;
+      }
+      
+      return $sum;
+      
+    }
+    
+    return null;
+  }
+  
+  
 }

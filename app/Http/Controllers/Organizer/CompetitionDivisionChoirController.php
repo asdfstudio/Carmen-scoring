@@ -239,7 +239,7 @@ class CompetitionDivisionChoirController extends Controller
         */
         
         // If the form is submitted with an existing person ID...
-        if($request->has('director.person_id')){
+        if($request->has('director.person_id') && !empty($request->input('director.person_id'))){
           
           $director_id = $request->input('director.person_id');
           

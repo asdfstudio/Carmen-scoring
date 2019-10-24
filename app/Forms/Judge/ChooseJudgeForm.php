@@ -49,7 +49,7 @@ class ChooseJudgeForm extends Form
 					'class' => 'App\Caption',
 					'empty_value' => 'Choose caption ...',
 					'label' => 'Captions to Score',
-          'rules' => ['required'],
+          'rules' => ['filled'],
           'choice_options' => [
             'wrapper' => ['class' => 'choice-container'],
             'labelAttrs' => 'label-attr'

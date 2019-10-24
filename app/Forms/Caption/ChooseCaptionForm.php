@@ -20,10 +20,9 @@ class ChooseCaptionForm extends Form
             'labelAttrs' => 'label-attr',
           ],
           'selected' => function($data) {
-            //dd($this->model->pluck('id')->toArray());
             return $this->model->pluck('id')->toArray();
           },
-          'rules' => ['required']
+          'rules' => ['filled']
 				]);
 
 				$this->add('submit', 'submit', ['label' => 'Update Captions', 'attr' => ['class' => 'btn btn-primary']]);
