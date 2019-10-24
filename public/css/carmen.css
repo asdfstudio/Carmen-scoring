@@ -3674,6 +3674,15 @@ table.spreadsheet-legend {
   .caption-header.caption-place {
     background: #707070 !important; }
 
+.sideways-header a {
+  writing-mode: vertical-rl;
+  max-height: 150px;
+  transform: rotate(180deg); }
+
+.table > tbody > tr.align-bottom th,
+.table > tbody > tr.align-bottom td {
+  vertical-align: bottom; }
+
 .caption-raw-score {
   font-size: 1em;
   color: #FFF;

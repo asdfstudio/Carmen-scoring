@@ -16,11 +16,11 @@
       </th>
     </tr>
 
-    <tr>
+    <tr class="align-bottom">
       <th></th>
 
       <?php $__currentLoopData = $choirs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $choir): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <th>
+        <th class="sideways-header">
           <?php echo e(link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir])); ?>
 
         </th>
@@ -67,17 +67,23 @@
   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 
+  <?php
+    $totalWeightedRank = $rankedScores->total_weighted_rank();
+    $totalRawRank = $rankedScores->total_raw_rank();
+    $election_key = $division->caption_weighting_id === 1 ? 'overall_weighted' : 'overall';
+  ?>
+
   <tr class="caption-header caption-place">
     <th colspan="30">
       Place
     </th>
   </tr>
 
-  <tr>
+  <tr class="align-bottom">
     <th></th>
 
     <?php $__currentLoopData = $choirs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $choir): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-      <th>
+      <th class="sideways-header">
         <?php echo e(link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir])); ?>
 
       </th>
@@ -92,9 +98,6 @@
     <?php endif; ?>
   </tr>
 
-  <?php $totalWeightedRank = $rankedScores->total_weighted_rank(); ?>
-  <?php $totalRawRank = $rankedScores->total_raw_rank(); ?>
-
   <?php $__currentLoopData = $choirs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $choir): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
     <tr>
       <th>
@@ -102,21 +105,12 @@
 
       </th>
       <?php $__currentLoopData = $choirs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $choir_comp): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
-        <?php if($choir->id === $choir_comp->id): ?>
-          <td>0</td>
-        <?php endif; ?>
-
-        <?php if($choir->id !== $choir_comp->id): ?>
-          <td>
-            ?
-          </td>
-        <?php endif; ?>
-
+        <td><?php echo e($rankedScores->pairwise_bit($election_key, $choir->id, $choir_comp->id)); ?></td>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
       <td>
-        sum?
+        <?php echo e($rankedScores->pairwise_bit_sum($election_key, $choir->id)); ?>
+
       </td>
 
       <td>

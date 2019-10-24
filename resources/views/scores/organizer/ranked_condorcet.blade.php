@@ -15,11 +15,11 @@
       </th>
     </tr>
 
-    <tr>
+    <tr class="align-bottom">
       <th></th>
 
       @foreach($choirs as $choir)
-        <th>
+        <th class="sideways-header">
           {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
         </th>
       @endforeach
@@ -62,17 +62,23 @@
   @endforeach
 
 
+  @php
+    $totalWeightedRank = $rankedScores->total_weighted_rank();
+    $totalRawRank = $rankedScores->total_raw_rank();
+    $election_key = $division->caption_weighting_id === 1 ? 'overall_weighted' : 'overall';
+  @endphp
+
   <tr class="caption-header caption-place">
     <th colspan="30">
       Place
     </th>
   </tr>
 
-  <tr>
+  <tr class="align-bottom">
     <th></th>
 
     @foreach($choirs as $choir)
-      <th>
+      <th class="sideways-header">
         {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
       </th>
     @endforeach
@@ -86,30 +92,17 @@
     @endif
   </tr>
 
-  @php $totalWeightedRank = $rankedScores->total_weighted_rank(); @endphp
-  @php $totalRawRank = $rankedScores->total_raw_rank(); @endphp
-
   @foreach($choirs as $choir)
     <tr>
       <th>
         {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
       </th>
       @foreach($choirs as $choir_comp)
-
-        @if($choir->id === $choir_comp->id)
-          <td>0</td>
-        @endif
-
-        @if($choir->id !== $choir_comp->id)
-          <td>
-            ?
-          </td>
-        @endif
-
+        <td>{{ $rankedScores->pairwise_bit($election_key, $choir->id, $choir_comp->id) }}</td>
       @endforeach
 
       <td>
-        sum?
+        {{ $rankedScores->pairwise_bit_sum($election_key, $choir->id) }}
       </td>
 
       <td>
