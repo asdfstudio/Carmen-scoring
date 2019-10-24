@@ -7,11 +7,12 @@
       $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id); //dd($totalWeightedRank);
       $totalRawRank = $rankedScores->total_raw_rank($caption->id); //dd($totalRawRank);
       $election_key = $division->caption_weighting_id === 1 ? 'caption_'.$caption->id.'_weighted' : 'caption_'.$caption->id;
+      //dd($rankedScores->score_by_judge_and_caption);
     ?>
 
     <tr class="caption-header <?php echo e($caption->background_css); ?>">
       <th colspan="30">
-        <?php echo e($caption->name); ?>
+        <?php echo e($caption->name); ?> <?php echo e($election_key); ?>
 
       </th>
     </tr>
@@ -75,7 +76,8 @@
 
   <tr class="caption-header caption-place">
     <th colspan="30">
-      Place
+      Place <?php echo e($election_key); ?>
+
     </th>
   </tr>
 
@@ -84,7 +86,7 @@
 
     <?php $__currentLoopData = $choirs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $choir): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
       <th class="sideways-header">
-        <?php echo e(link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir])); ?>
+        <?php echo e(link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$round->division->competition,$round->division,$round,$choir])); ?>
 
       </th>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

@@ -7,11 +7,12 @@
       $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id); //dd($totalWeightedRank);
       $totalRawRank = $rankedScores->total_raw_rank($caption->id); //dd($totalRawRank);
       $election_key = $division->caption_weighting_id === 1 ? 'caption_'.$caption->id.'_weighted' : 'caption_'.$caption->id;
+      //dd($rankedScores->score_by_judge_and_caption);
     @endphp
 
     <tr class="caption-header {{ $caption->background_css }}">
       <th colspan="30">
-        {{ $caption->name }}
+        {{ $caption->name }} {{ $election_key }}
       </th>
     </tr>
 
@@ -70,7 +71,7 @@
 
   <tr class="caption-header caption-place">
     <th colspan="30">
-      Place
+      Place {{ $election_key }}
     </th>
   </tr>
 
