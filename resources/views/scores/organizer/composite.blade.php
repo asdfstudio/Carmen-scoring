@@ -10,10 +10,9 @@
   @foreach($captions as $caption)
 
     @php
-      $captionTotalRank = $rankedScores->total_rank($caption->id); //dd($captionTotalRank);
-      $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id); //dd($totalWeightedRank);
-      $totalRawRank = $rankedScores->total_raw_rank($caption->id); //dd($totalRawRank);
-      //dd($rankedScores);
+      $captionTotalRank = $rankedScores->total_rank($caption->id);
+      $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id);
+      $totalRawRank = $rankedScores->total_raw_rank($caption->id);
     @endphp
 
     <tr class="caption-header {{ $caption->background_css }}">

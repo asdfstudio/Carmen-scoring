@@ -3,11 +3,12 @@
   @foreach($captions as $caption)
 
     @php
-      $captionTotalRank = $rankedScores->total_rank($caption->id); //dd($captionTotalRank);
-      $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id); //dd($totalWeightedRank);
-      $totalRawRank = $rankedScores->total_raw_rank($caption->id); //dd($totalRawRank);
+      if($division->caption_weighting_id === 1){
+        $captionTotalRank = $rankedScores->total_weighted_rank($caption->id);
+      } else {
+        $captionTotalRank = $rankedScores->total_raw_rank($caption->id);
+      }
       $election_key = $division->caption_weighting_id === 1 ? 'caption_'.$caption->id.'_weighted' : 'caption_'.$caption->id;
-      //dd($rankedScores->score_by_judge_and_caption);
     @endphp
 
     <tr class="caption-header {{ $caption->background_css }}">
@@ -64,8 +65,11 @@
 
 
   @php
-    $totalWeightedRank = $rankedScores->total_weighted_rank();
-    $totalRawRank = $rankedScores->total_raw_rank();
+    if($division->caption_weighting_id === 1){
+      $captionTotalRank = $rankedScores->total_weighted_rank();
+    } else {
+      $captionTotalRank = $rankedScores->total_raw_rank();
+    }
     $election_key = $division->caption_weighting_id === 1 ? 'overall_weighted' : 'overall';
   @endphp
 

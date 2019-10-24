@@ -294,13 +294,14 @@ class CondorcetScores {
       $score = $this->total($choir_id, $caption_id);
       $captionRank->put($choir_id,['choir_id' => $choir_id, 'score' => $score]);
     });
-
+    
     // Sort
     $sorted = $captionRank->sortBy('score');
 
     // Assign rank and return
     $rank = $this->assign_rank($sorted);
     $this->total_ranked[$key] = $rank;
+    
     return $rank;
   }
   

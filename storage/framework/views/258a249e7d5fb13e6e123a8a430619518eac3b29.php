@@ -10,10 +10,9 @@
   <?php $__currentLoopData = $captions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $caption): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
     <?php
-      $captionTotalRank = $rankedScores->total_rank($caption->id); //dd($captionTotalRank);
-      $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id); //dd($totalWeightedRank);
-      $totalRawRank = $rankedScores->total_raw_rank($caption->id); //dd($totalRawRank);
-      //dd($rankedScores);
+      $captionTotalRank = $rankedScores->total_rank($caption->id);
+      $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id);
+      $totalRawRank = $rankedScores->total_raw_rank($caption->id);
     ?>
 
     <tr class="caption-header <?php echo e($caption->background_css); ?>">
