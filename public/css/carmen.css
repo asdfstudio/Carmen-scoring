@@ -3674,10 +3674,16 @@ table.spreadsheet-legend {
   .caption-header.caption-place {
     background: #707070 !important; }
 
-.sideways-header a {
-  writing-mode: vertical-rl;
-  max-height: 150px;
-  transform: rotate(180deg); }
+.sideways-header {
+  display: flex;
+  flex-grow: 1;
+  max-height: 150px; }
+  .sideways-header a {
+    display: inline;
+    transform: rotate(180deg);
+    writing-mode: vertical-rl; }
+    .sideways-header a:hover {
+      text-decoration: none; }
 
 .table > tbody > tr.align-bottom th,
 .table > tbody > tr.align-bottom td {

@@ -21,8 +21,10 @@
       <th></th>
 
       @foreach($choirs as $choir)
-        <th class="sideways-header">
-          {{ link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$round->division->competition,$round->division,$round,$choir]) }}
+        <th>
+          <div class="sideways-header">
+            {{ link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$round->division->competition,$round->division,$round,$choir]) }}
+          </div>
         </th>
       @endforeach
       
@@ -86,8 +88,10 @@
     <th></th>
 
     @foreach($choirs as $choir)
-      <th class="sideways-header">
-        {{ link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$round->division->competition,$round->division,$round,$choir]) }}
+      <th>
+        <div class="sideways-header">
+          {{ link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$round->division->competition,$round->division,$round,$choir]) }}
+        </div>
       </th>
     @endforeach
 

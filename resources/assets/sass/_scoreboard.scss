@@ -34,10 +34,20 @@
   }
 }
 
-.sideways-header a {
-  writing-mode: vertical-rl;
+.sideways-header {
+  display: flex;
+  flex-grow: 1;
   max-height: 150px;
-  transform: rotate(180deg);
+  
+  & a {
+    display: inline;
+    transform: rotate(180deg);
+    writing-mode: vertical-rl;
+    
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }
 
 .table > tbody > tr.align-bottom th,

@@ -22,9 +22,11 @@
       <th></th>
 
       <?php $__currentLoopData = $choirs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $choir): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <th class="sideways-header">
-          <?php echo e(link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$round->division->competition,$round->division,$round,$choir])); ?>
+        <th>
+          <div class="sideways-header">
+            <?php echo e(link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$round->division->competition,$round->division,$round,$choir])); ?>
 
+          </div>
         </th>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
       
@@ -92,9 +94,11 @@
     <th></th>
 
     <?php $__currentLoopData = $choirs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $choir): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-      <th class="sideways-header">
-        <?php echo e(link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$round->division->competition,$round->division,$round,$choir])); ?>
+      <th>
+        <div class="sideways-header">
+          <?php echo e(link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$round->division->competition,$round->division,$round,$choir])); ?>
 
+        </div>
       </th>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
