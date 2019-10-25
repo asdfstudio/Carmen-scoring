@@ -30,6 +30,7 @@
         </th>
       @endforeach
       
+      {{-- Skip this column for Consensus Ordinal Rank (scoring method 5) --}}
       @if($division->scoring_method_id !== 5)
       <th>Total</th>
       @endif
@@ -71,6 +72,7 @@
 
         @endforeach
         
+        {{-- Skip this column for Consensus Ordinal Rank (scoring method 5) --}}
         @if($division->scoring_method_id !== 5)
         <td>
           @php $rank = $rankedScores->total($choir->id, $caption->id);@endphp
@@ -132,8 +134,10 @@
     @endif
   </tr>
 
-  @php $totalWeightedRank = $rankedScores->total_weighted_rank(); @endphp
-  @php $totalRawRank = $rankedScores->total_raw_rank(); @endphp
+  @php
+    $totalWeightedRank = $rankedScores->total_weighted_rank();
+    $totalRawRank = $rankedScores->total_raw_rank();
+  @endphp
 
   @foreach($choirs as $choir)
     <tr>
@@ -162,6 +166,7 @@
         </td>
       @endforeach
       
+      {{-- Skip this column for Consensus Ordinal Rank (scoring method 5) --}}
       @if($division->scoring_method_id !== 5)
       <td>
         @php $rank = $rankedScores->total($choir->id);@endphp

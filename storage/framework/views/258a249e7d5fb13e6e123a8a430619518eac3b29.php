@@ -32,6 +32,7 @@
         </th>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
       
+      
       <?php if($division->scoring_method_id !== 5): ?>
       <th>Total</th>
       <?php endif; ?>
@@ -57,8 +58,11 @@
 
           <?php if($judge->captions->where('id',$caption->id)->count() > 0): ?>
             <td>
-              <?php $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();?>
-              <span class="rank score"><?php echo e($rank); ?></span>
+              <?php
+                $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();
+                $tied = !empty($rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+              ?>
+              <span class="rank score <?php echo e($tied); ?>"><?php echo e($rank); ?></span>
 
               <?php $weighted = $weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_caption_id', $caption->id)->sum('weightedScore');?>
               <span class="weighted score"><?php echo e($weighted); ?></span>
@@ -70,6 +74,7 @@
           <?php endif; ?>
 
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        
         
         <?php if($division->scoring_method_id !== 5): ?>
         <td>
@@ -85,8 +90,11 @@
         <?php endif; ?>
         
         <td>
-          <?php $rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();?>
-          <span class="rank score"><?php echo e($rank); ?></span>
+          <?php
+            $rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();
+            $tied = !empty($captionTotalRank->where('choir_id' , $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+          ?>
+          <span class="rank score <?php echo e($tied); ?>"><?php echo e($rank); ?></span>
 
           <?php $rank = $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); ?>
           <span class="weighted score"><?php echo e($rank); ?></span>
@@ -130,8 +138,10 @@
     <?php endif; ?>
   </tr>
 
-  <?php $totalWeightedRank = $rankedScores->total_weighted_rank(); ?>
-  <?php $totalRawRank = $rankedScores->total_raw_rank(); ?>
+  <?php
+    $totalWeightedRank = $rankedScores->total_weighted_rank();
+    $totalRawRank = $rankedScores->total_raw_rank();
+  ?>
 
   <?php $__currentLoopData = $choirs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $choir): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
     <tr>
@@ -141,8 +151,11 @@
       </th>
       <?php $__currentLoopData = $judges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $judge): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <td>
-          <?php $rank = $rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('rank')->first();?>
-          <span class="rank score"><?php echo e($rank); ?></span>
+          <?php
+            $rank = $rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('rank')->first();
+            $tied = !empty($rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+          ?>
+          <span class="rank score <?php echo e($tied); ?>"><?php echo e($rank); ?></span>
 
           <?php $weightedSubtotal = $weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->sum('weightedScore');?>
           <span class="weighted subtotal score"><?php echo e($weightedSubtotal); ?></span>
@@ -157,6 +170,7 @@
           <span class="weighted total score"><?php echo e($weightedTotal); ?></span>
         </td>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+      
       
       <?php if($division->scoring_method_id !== 5): ?>
       <td>
@@ -183,8 +197,11 @@
       <?php endif; ?>
       
       <td>
-        <?php $rank = $rankedScores->total_rank()->where('choir_id' , $choir->id)->pluck('rank')->first();?>
-        <span class="rank score"><?php echo e($rank); ?></span>
+        <?php
+          $rank = $rankedScores->total_rank()->where('choir_id' , $choir->id)->pluck('rank')->first();
+          $tied = !empty($rankedScores->total_rank()->where('choir_id' , $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+        ?>
+        <span class="rank score <?php echo e($tied); ?>"><?php echo e($rank); ?></span>
 
         <?php $rank = $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); ?>
         <span class="weighted score"><?php echo e($rank); ?></span>

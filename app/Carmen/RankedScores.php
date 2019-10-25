@@ -128,20 +128,7 @@ class RankedScores {
       $rank = $this->rank($judge_id, $caption_id)->where('choir_id', $choir_id)->pluck('rank')->first();
       $total = $total + $rank;
     });
-
-    // Subtract any penalties from the score
-    /*if($this->penalties)
-    {
-      $choir_penalties = $this->penalties->where('choir_id', $choir_id);
-
-      if(!$choir_penalties->isEmpty())
-      {
-        // Get all judge penalties
-        $overall_penalty_amount = $choir_penalties->where('apply_per_judge', 1)->sum('amount');
-        $total = $total - $overall_penalty_amount;
-      }
-
-    }*/
+    
     $this->totaled[$key] = $total;
     return $total;
   }
@@ -222,30 +209,37 @@ class RankedScores {
     $loops = 1;
     $previous_rank = 1;
     $previous_score = false;
+    $tied_ranks = [];
 
-    //echo 'assign_rank<br />';
+    $rank = $sortedTotals->map(function($item, $key) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks) {
 
-    $rank = $sortedTotals->map(function($item, $key) use (&$loops, &$previous_rank,  &$previous_score) {
-
-      //echo 'assign_rank-loop<br />';
-
-      if($item['score'] == $previous_score)
-      {
+      if($item['score'] == $previous_score){
         $item['rank'] = $previous_rank;
-      }
-      else {
+        $tied_ranks[] = $item['rank'];
+      } else {
         $item['rank'] = $loops;
         $previous_rank = $loops;
       }
 
       $previous_score = $item['score'];
-      $loops++;
+      $loops = $previous_rank + 1;
+      
+      return $item;
+    });
+    
+    // Go back through and flag any results that are a tie.
+    $rank = $rank->map(function($item, $key) use ($tied_ranks) {
 
+      if(in_array($item['rank'], $tied_ranks)){
+        $item['tied'] = 1;
+      } else {
+        $item['tied'] = 0;
+      }
+      
       return $item;
     });
 
-    if($key)
-    {
+    if($key){
       $this->ranked[$key] = $rank;
     }
 
