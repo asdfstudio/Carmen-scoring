@@ -1,11 +1,16 @@
-<?php if($division->scoring_method_id !== 5): ?>
-  <?php
-    $composite_table_class = 'weighted raw';
-    if($division->scoring_method_id !== 3 && $division->scoring_method_id !== 4){
-      $composite_table_class = $composite_table_class . ' rank';
-    }
-  ?>
-<?php endif; ?>
+<?php
+  // The composite table gets a different class for Condorcet methods (3 & 4) to hide it when showing Condorcet ranks.
+  $composite_table_class = 'weighted raw';
+  if($division->scoring_method_id !== 3 && $division->scoring_method_id !== 4){
+    $composite_table_class = $composite_table_class . ' rank';
+  }
+
+  // Hide the "Total" column for Consensus Ordinal Rank (scoring method 5)
+  $total_col_class = 'total_column weighted raw rank';
+  if($division->scoring_method_id == 5){
+    $total_col_class = 'total_column weighted raw';
+  }
+?>
 <table class="table table-striped table-bordered scoreboard toggle-scores <?php echo e($composite_table_class); ?>">
   <?php $__currentLoopData = $captions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $caption): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
@@ -32,10 +37,7 @@
         </th>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
       
-      
-      <?php if($division->scoring_method_id !== 5): ?>
-      <th>Total</th>
-      <?php endif; ?>
+      <th class="<?php echo e($total_col_class); ?>">Total</th>
       
       <th>Place</th>
 
@@ -75,9 +77,7 @@
 
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         
-        
-        <?php if($division->scoring_method_id !== 5): ?>
-        <td>
+        <td class="<?php echo e($total_col_class); ?>">
           <?php $rank = $rankedScores->total($choir->id, $caption->id);?>
           <span class="rank score"><?php echo e($rank); ?></span>
 
@@ -87,7 +87,6 @@
           <?php $raw = $rawScores->where('choir_id', $choir->id)->where('criterion_caption_id', $caption->id)->sum('score');?>
           <span class="raw score"><?php echo e($raw); ?></span>
         </td>
-        <?php endif; ?>
         
         <td>
           <?php
@@ -171,9 +170,7 @@
         </td>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
       
-      
-      <?php if($division->scoring_method_id !== 5): ?>
-      <td>
+      <td class="<?php echo e($total_col_class); ?>">
         <?php $rank = $rankedScores->total($choir->id);?>
         <span class="rank score"><?php echo e($rank); ?></span>
 
@@ -194,7 +191,6 @@
         <span class="weighted total score"><?php echo e($weightedTotal); ?></span>
 
       </td>
-      <?php endif; ?>
       
       <td>
         <?php

@@ -13,7 +13,7 @@
 
     <tr class="caption-header <?php echo e($caption->background_css); ?>">
       <th colspan="30">
-        <?php echo e($caption->name); ?> <?php echo e($election_key); ?>
+        <?php echo e($caption->name); ?>
 
       </th>
     </tr>
@@ -85,8 +85,7 @@
 
   <tr class="caption-header caption-place">
     <th colspan="30">
-      Place <?php echo e($election_key); ?>
-
+      Place
     </th>
   </tr>
 

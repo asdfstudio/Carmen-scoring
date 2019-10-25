@@ -1,11 +1,16 @@
-@if($division->scoring_method_id !== 5)
-  @php
-    $composite_table_class = 'weighted raw';
-    if($division->scoring_method_id !== 3 && $division->scoring_method_id !== 4){
-      $composite_table_class = $composite_table_class . ' rank';
-    }
-  @endphp
-@endif
+@php
+  // The composite table gets a different class for Condorcet methods (3 & 4) to hide it when showing Condorcet ranks.
+  $composite_table_class = 'weighted raw';
+  if($division->scoring_method_id !== 3 && $division->scoring_method_id !== 4){
+    $composite_table_class = $composite_table_class . ' rank';
+  }
+
+  // Hide the "Total" column for Consensus Ordinal Rank (scoring method 5)
+  $total_col_class = 'total_column weighted raw rank';
+  if($division->scoring_method_id == 5){
+    $total_col_class = 'total_column weighted raw';
+  }
+@endphp
 <table class="table table-striped table-bordered scoreboard toggle-scores {{ $composite_table_class }}">
   @foreach($captions as $caption)
 
@@ -30,10 +35,7 @@
         </th>
       @endforeach
       
-      {{-- Skip this column for Consensus Ordinal Rank (scoring method 5) --}}
-      @if($division->scoring_method_id !== 5)
-      <th>Total</th>
-      @endif
+      <th class="{{ $total_col_class }}">Total</th>
       
       <th>Place</th>
 
@@ -72,9 +74,7 @@
 
         @endforeach
         
-        {{-- Skip this column for Consensus Ordinal Rank (scoring method 5) --}}
-        @if($division->scoring_method_id !== 5)
-        <td>
+        <td class="{{ $total_col_class }}">
           @php $rank = $rankedScores->total($choir->id, $caption->id);@endphp
           <span class="rank score">{{ $rank }}</span>
 
@@ -84,7 +84,6 @@
           @php $raw = $rawScores->where('choir_id', $choir->id)->where('criterion_caption_id', $caption->id)->sum('score');@endphp
           <span class="raw score">{{ $raw }}</span>
         </td>
-        @endif
         
         <td>
           @php
@@ -166,9 +165,7 @@
         </td>
       @endforeach
       
-      {{-- Skip this column for Consensus Ordinal Rank (scoring method 5) --}}
-      @if($division->scoring_method_id !== 5)
-      <td>
+      <td class="{{ $total_col_class }}">
         @php $rank = $rankedScores->total($choir->id);@endphp
         <span class="rank score">{{ $rank }}</span>
 
@@ -189,7 +186,6 @@
         <span class="weighted total score">{{ $weightedTotal }}</span>
 
       </td>
-      @endif
       
       <td>
         @php
