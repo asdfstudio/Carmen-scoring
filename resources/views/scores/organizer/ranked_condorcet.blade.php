@@ -13,7 +13,7 @@
 
     <tr class="caption-header {{ $caption->background_css }}">
       <th colspan="30">
-        {{ $caption->name }} {{ $election_key }}
+        {{ $caption->name }}
       </th>
     </tr>
 
@@ -80,7 +80,7 @@
 
   <tr class="caption-header caption-place">
     <th colspan="30">
-      Place {{ $election_key }}
+      Place
     </th>
   </tr>
 
