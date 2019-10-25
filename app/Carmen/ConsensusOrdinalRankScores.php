@@ -75,22 +75,65 @@ class ConsensusOrdinalRankScores {
   }
   
   
-  public function sort_and_assign_rank($rankings, $starting_rank = 1)
+  public function sort_and_assign_rank($rankings)
   {
     $sorted = collect();
-    $rank_last = count($rankings) + $starting_rank - 1;
-    //echo '<pre>';
-    for($i = $starting_rank; $i <= $rank_last; $i++){
-      //echo "Evaluating rank $i\n\n";
+    $rank_to_assign = 1;
+    $rank_to_sort = count($rankings);
+
+    // Sort rankings.
+    while($rank_to_sort){
+      $rankings = $rankings->sortByDesc($rank_to_sort);
+      $rank_to_sort--;
+    }
+    
+    // Convert to array with zero-based index.
+    $rankings = array_values($rankings->toArray());
+    
+    // Loop through all the ranking data (grouped by choir).
+    for($i = 0; $i < count($rankings); $i++){
       
-      // Sort rankings based on current level.
-      $rankings = $rankings->sortByDesc($i);
+      $current = $rankings[$i];
+      $next = !empty($rankings[$i+1]) ? $rankings[$i+1] : null;
       
-      // The highest value for the current level.
-      $highest_value = $rankings->first()[$i];
+      for($j = 1; $j <= count($rankings); $j++){
+        
+        $current['rank'] = $rank_to_assign;
+        
+        if(!$next || $current[$j] > $next[$j]){
+          $current['tied'] = 0;
+          $rank_to_assign++;
+          break;
+        }
+        
+        if($next && $current[$j] == $next[$j]){
+          $current['tied'] = 1;
+          $next['tied'] = 1;
+        }
+        
+      }
       
+      $rankings[$i] = $current;
+      if(!empty($next)){
+        $rankings[$i+1] = $next;
+      }
+      
+    }
+    
+    foreach($rankings as $choir){
+      $sorted->put($choir['choir_id'], $choir);
+    }
+    
+    return $sorted;
+    
+    //dd($sorted);
+      /*
       // Get all the choirs who have the highest value for the level.
       $choirs_in_rank = $rankings->where($i, $highest_value);
+      
+      //if(count($choirs_in_rank) == 2){
+        dd($rankings);
+      //}
       
       // Remove these choirs from the rankings list so that they don't get evaluated for lower ranks.
       foreach($choirs_in_rank as $choir_id => $choir){
@@ -145,6 +188,7 @@ class ConsensusOrdinalRankScores {
     //echo '</pre>';
     
     return $sorted;
+    */
   }
   
   
