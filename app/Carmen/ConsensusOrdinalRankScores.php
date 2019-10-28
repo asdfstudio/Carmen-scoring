@@ -75,120 +75,71 @@ class ConsensusOrdinalRankScores {
   }
   
   
-  public function sort_and_assign_rank($rankings)
+  public function sort_and_assign_rank($choirs_with_ranks)
   {
     $sorted = collect();
+    $choirs_in_rank_order = [];
+    $choir_count = $choirs_with_ranks->count();
     $rank_to_assign = 1;
-    $rank_to_sort = count($rankings);
-
-    // Sort rankings.
-    while($rank_to_sort){
-      $rankings = $rankings->sortByDesc($rank_to_sort);
-      $rank_to_sort--;
-    }
     
-    // Convert to array with zero-based index.
-    $rankings = array_values($rankings->toArray());
-    
-    // Loop through all the ranking data (grouped by choir).
-    for($i = 0; $i < count($rankings); $i++){
+    for($i = 0; $i < $choir_count; $i++){
       
-      $current = $rankings[$i];
-      $next = !empty($rankings[$i+1]) ? $rankings[$i+1] : null;
+      $top_choir = $this->get_top_choir($choirs_with_ranks);
       
-      for($j = 1; $j <= count($rankings); $j++){
-        
-        $current['rank'] = $rank_to_assign;
-        
-        if(!$next || $current[$j] > $next[$j]){
-          $current['tied'] = 0;
-          $rank_to_assign++;
-          break;
-        }
-        
-        if($next && $current[$j] == $next[$j]){
-          $current['tied'] = 1;
-          $next['tied'] = 1;
-        }
-        
+      foreach($top_choir as $choir_id => $choir){
+        $choir['tied'] = count($top_choir) > 1 ? 1 : 0;
+        $choir['rank'] = $rank_to_assign;
+        $choirs_in_rank_order[$choir_id] = $choir;
+        $choirs_with_ranks->forget($choir_id);
       }
       
-      $rankings[$i] = $current;
-      if(!empty($next)){
-        $rankings[$i+1] = $next;
-      }
+      $rank_to_assign++;
       
     }
     
-    foreach($rankings as $choir){
-      $sorted->put($choir['choir_id'], $choir);
+    foreach($choirs_in_rank_order as $choir_id => $choir){
+      $sorted->put($choir_id, $choir);
     }
-    
-    return $sorted;
     
     //dd($sorted);
-      /*
-      // Get all the choirs who have the highest value for the level.
-      $choirs_in_rank = $rankings->where($i, $highest_value);
-      
-      //if(count($choirs_in_rank) == 2){
-        dd($rankings);
-      //}
-      
-      // Remove these choirs from the rankings list so that they don't get evaluated for lower ranks.
-      foreach($choirs_in_rank as $choir_id => $choir){
-        $rankings->forget($choir_id);
-      }
-      
-      //echo print_r($choirs_in_rank, true)."\n\n";
-      
-      // If more than one choir shares the highest value for this rank, we evaluate subsequent
-      // ranks recursively to see if we can break the tie.
-      if(count($choirs_in_rank) > 1 && $i < $rank_last){
-        // This is not the last rank, so we can recursively evaluate the next rank to break the tie.
-        $choirs_in_rank = $this->sort_and_assign_rank($choirs_in_rank, $i+1);
-      } elseif(count($choirs_in_rank) > 1 && $i == $rank_last){
-        // This is the last rank and we still have a tie.
-        $choirs_in_rank->each(function($item, $key){
-          $item['tied'] = 1;
-        });
-      }
-      
-      $rank_to_assign = $i;
-      $previous_value = null;
-      
-      foreach($choirs_in_rank as $choir_id => $choir){
-        // If this is not the first loop (null previous value) and not a tie,
-        // then increment the $rank_to_assign.
-        if(!is_null($previous_value) && (empty($choir['tied']) || $choir[$i] !== $previous_value)){
-          $rank_to_assign++;
-        }
-        
-        $choir['rank'] = $rank_to_assign;
-        $previous_value = $choir[$i];
-        
-        if(empty($choir['tied'])){
-          $choir['tied'] = 0;
-        }
-        
-        $choirs_in_rank->put($choir_id, $choir);
-      }
-      
-      // If we handled more than one choir in this loop, we need to fastforward the incrementer.
-      $i = $rank_to_assign;
-      
-      // Sort by the rank we just assinged.
-      $choirs_in_rank = $choirs_in_rank->sortBy('rank');
-      
-      foreach($choirs_in_rank as $choir_id => $choir){
-        $sorted->put($choir_id, $choir);
-      }
-      
-    }
-    //echo '</pre>';
     
     return $sorted;
-    */
+  }
+  
+  
+  public function get_top_choir($choirs, $level = 1){
+    
+    $choirs = $choirs->sortByDesc($level);
+    
+    $level_is_set = isset($choirs->first()[$level]);
+    $level_is_empty = empty($choirs->first()[$level]);
+    
+    if($level_is_set && $level_is_empty){
+      // This level is worthless because no choir being evaluated has attained it.
+      // Try the next level.
+      $level++;
+      return $this->get_top_choir($choirs, $level);
+    }
+    
+    if(!$level_is_set){
+      // We have exceeded the number of levels.  We should only end up here if we are trying
+      // to break a tie.  That means that whoever is in this $choirs collection is tied for last.
+      return $choirs->toArray();
+    }
+    
+    $highest_value = $choirs->first()[$level];
+    $top_choir = $choirs->where($level, $highest_value);
+    
+    if($top_choir->count() == 1){
+      // We have a single top choir at this level, so return that one.
+      return $top_choir->toArray();
+    }
+    
+    // If we are still here, then there must be a tie at the given level.  Run this function
+    // again on the $top_choir set, evaluating the next level.
+    $level++;
+    return $this->get_top_choir($top_choir, $level);
+    
   }
   
   
