@@ -52,7 +52,7 @@ class ConsensusOrdinalRankScores {
       return $this->total_ranked[$key];
     }
     
-    $rank_by_judge = $this->totals();
+    $rank_by_judge = $this->totals($caption_id);
     
     // Sort
     $rank = $this->sort_and_assign_rank($rank_by_judge);
@@ -81,6 +81,9 @@ class ConsensusOrdinalRankScores {
         $choirs_in_rank_order[$choir_id] = $choir;
       }
       
+      //if(count($rank_by_judge) == 2 && count($choirs_in_rank_order) > 9)
+        //dd($choirs_in_rank_order);
+      
       $rank_to_assign++;
       
     }
@@ -93,22 +96,17 @@ class ConsensusOrdinalRankScores {
   }
   
   
-  public function get_top_choir(&$rank_by_judge, $level = 1, $filter = []){
+  public function get_top_choir(&$rank_by_judge, $level = 1, $choirs = [], $tie_breaker = false){
     
-    $index = $level-1;
-    $choir_tally = array_combine($this->choirs->toArray(), array_fill(0, $this->choirs->count(), 0));
-    $filter = empty($filter) ? $this->choirs->toArray() : $filter;
+    $choirs = empty($choirs) ? $this->choirs->toArray() : $choirs;
+    $choir_tally = array_combine($choirs, array_fill(0, count($choirs), 0));
     
-    // Get the top ranking choir from each judge and give it a tally mark.
+    // Give a tally mark to each choir for every time a judge ranked it at $level or better.
     foreach($rank_by_judge as $judge_id => $rankings){
-      $top_rank = array_slice($rankings, $index, 1)[0]['rank'];
-      
-      $judge_top_choir = array_filter($rankings, function($choir, $choir_id) use ($top_rank, $filter){
-        return $choir['rank'] === $top_rank && in_array($choir_id, $filter);
-      }, ARRAY_FILTER_USE_BOTH);
-      
-      foreach($judge_top_choir as $choir_id => $choir){
-        $choir_tally[$choir_id]++;
+      foreach($rankings as $choir_id => $choir){
+        if($choir['rank'] <= $level){
+          $choir_tally[$choir_id]++;
+        }
       }
     }
     
@@ -130,13 +128,26 @@ class ConsensusOrdinalRankScores {
     // examine the next level until we find a unique winner or else we run out of levels
     // to evaluate.  If we run out of levels, then it is a true tie.  All tied choir IDs
     // will be returned.
-    if(count($top_choir) > 1 && count(reset($rank_by_judge)) > $level){
-      $top_choir = $this->get_top_choir($rank_by_judge, $level+1, $top_choir);
+    if(count($top_choir) > 1){
+      
+      // Make a copy of $rank_by_judge and modify it.
+      $rbj_tied = $rank_by_judge;
+      foreach($rbj_tied as &$rankings){
+        // Filter the rankings to only contain data about the tied choirs.
+        $rankings = array_filter($rankings, function($choir, $choir_id) use ($top_choir){
+          return in_array($choir_id, $top_choir);
+        }, ARRAY_FILTER_USE_BOTH);
+      }
+      
+      // If we have any data left to examine, recurse.
+      if(count(current($rbj_tied))){
+        $top_choir = $this->get_top_choir($rbj_tied, $level+1, $top_choir, true);
+      }
     }
     
     // Remove the winning choir from the rankings that still need to be considered,
-    // but only if this is a "level 1" run through (not a recursive tie-breaker run).
-    if($level == 1){
+    // but don't do this during a recursive tie-breaker run.
+    if(!$tie_breaker){
       foreach($rank_by_judge as $judge_id => &$rankings){
         foreach($rankings as $choir_id => $choir){
           if(in_array($choir_id, $top_choir)){
@@ -147,7 +158,6 @@ class ConsensusOrdinalRankScores {
     }
     
     return $top_choir;
-    
   }
   
   
@@ -171,7 +181,9 @@ class ConsensusOrdinalRankScores {
     // Build an array that shows how many times the choir has been given each rank.
     $this->judges->each(function($judge_id, $key) use ($caption_id, &$totals, $scoreField) {
       $rank = $this->rank($judge_id, $caption_id, $scoreField);
-      $totals->put($judge_id, $rank);
+      if($rank->count()){
+        $totals->put($judge_id, $rank);
+      }
     });
 
     $this->totals[$key] = $totals;
