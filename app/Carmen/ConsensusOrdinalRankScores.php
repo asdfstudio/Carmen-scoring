@@ -10,11 +10,13 @@ class ConsensusOrdinalRankScores {
 
   protected $judges = [];
   protected $choirs = [];
+  protected $choirs_remaining = [];
 
   protected $calculated_scores = [];
   protected $ranked = [];
   protected $total_ranked = [];
   protected $totals = [];
+  protected $levels_to_skip = [];
   
   
   public function __construct($weightedScores, $penalties = false)
@@ -69,7 +71,10 @@ class ConsensusOrdinalRankScores {
     $choirs_in_rank_order = [];
     $rank_to_assign = 1;
     
-    while(count($choirs_in_rank_order) < count($this->choirs)){
+    $this->choirs_remaining = $this->choirs->toArray();
+    $this->levels_to_skip = [];
+    
+    while(count($this->choirs_remaining)){
       
       $top_choir = $this->get_top_choir($rank_by_judge);
       
@@ -81,10 +86,7 @@ class ConsensusOrdinalRankScores {
         $choirs_in_rank_order[$choir_id] = $choir;
       }
       
-      //if(count($rank_by_judge) == 2 && count($choirs_in_rank_order) > 9)
-        //dd($choirs_in_rank_order);
-      
-      $rank_to_assign++;
+      $rank_to_assign = $rank_to_assign + count($top_choir);
       
     }
     
@@ -98,13 +100,27 @@ class ConsensusOrdinalRankScores {
   
   public function get_top_choir(&$rank_by_judge, $level = 1, $choirs = [], $tie_breaker = false){
     
-    $choirs = empty($choirs) ? $this->choirs->toArray() : $choirs;
+    //echo '<pre>';
+    
+    if(in_array($level, $this->levels_to_skip)){
+      $level = end($this->levels_to_skip) + 1;
+    }
+    
+    $choirs = empty($choirs) ? $this->choirs_remaining : $choirs;
+    
     $choir_tally = array_combine($choirs, array_fill(0, count($choirs), 0));
+    
+    //echo 'Choirs: ';
+    //print_r($choirs);
+    //echo "\n\n";
+    
+    //echo "Level: $level\n\n";
+    //echo "Tie Breaker: ".intval($tie_breaker)."\n\n";
     
     // Give a tally mark to each choir for every time a judge ranked it at $level or better.
     foreach($rank_by_judge as $judge_id => $rankings){
       foreach($rankings as $choir_id => $choir){
-        if($choir['rank'] <= $level){
+        if(isset($choir_tally[$choir_id]) && $choir['rank'] <= $level){
           $choir_tally[$choir_id]++;
         }
       }
@@ -113,8 +129,18 @@ class ConsensusOrdinalRankScores {
     // Sort by tally marks.
     arsort($choir_tally);
     
+    //echo "Choir Tallies: ";
+    //print_r($choir_tally);
+    //echo "\n\n";
+    
     // The number of tally marks for the top spot.
     $top_tally = array_values($choir_tally)[0];
+    
+    if($top_tally === 0){
+      $this->levels_to_skip[] = $level;
+    }
+    
+    //echo "Top Tally: $top_tally\n\n";
     
     // Get the choirs that have the top number of tally marks.  (Could be more than one.)
     $top_choir = array_filter($choir_tally, function($tally, $choir_id) use ($top_tally){
@@ -123,6 +149,10 @@ class ConsensusOrdinalRankScores {
     
     // We just need the choir IDs, which are the array keys.
     $top_choir = array_keys($top_choir);
+    
+    //echo "Top Choir: ";
+    //print_r($top_choir);
+    //echo "\n\n";
     
     // Try to only return one top choir. If there is a tie at this level, recurse and
     // examine the next level until we find a unique winner or else we run out of levels
@@ -139,6 +169,10 @@ class ConsensusOrdinalRankScores {
         }, ARRAY_FILTER_USE_BOTH);
       }
       
+      //echo "Tie-breaker Rankings: ";
+      //print_r($rbj_tied);
+      //echo "\n\n";
+      
       // If we have any data left to examine, recurse.
       if(count(current($rbj_tied))){
         $top_choir = $this->get_top_choir($rbj_tied, $level+1, $top_choir, true);
@@ -151,11 +185,15 @@ class ConsensusOrdinalRankScores {
       foreach($rank_by_judge as $judge_id => &$rankings){
         foreach($rankings as $choir_id => $choir){
           if(in_array($choir_id, $top_choir)){
+            $this->choirs_remaining = array_diff($this->choirs_remaining, [$choir_id]);
             unset($rankings[$choir_id]);
+            break;
           }
         }
       }
     }
+    
+    //echo '</pre>';
     
     return $top_choir;
   }
