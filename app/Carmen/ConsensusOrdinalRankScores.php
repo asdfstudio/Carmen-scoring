@@ -100,7 +100,7 @@ class ConsensusOrdinalRankScores {
   
   public function get_top_choir(&$rank_by_judge, $level = 1, $choirs = [], $tie_breaker = false){
     
-    //echo '<pre>';
+    echo '<pre>';
     
     if(in_array($level, $this->levels_to_skip)){
       $level = end($this->levels_to_skip) + 1;
@@ -110,12 +110,12 @@ class ConsensusOrdinalRankScores {
     
     $choir_tally = array_combine($choirs, array_fill(0, count($choirs), 0));
     
-    //echo 'Choirs: ';
-    //print_r($choirs);
-    //echo "\n\n";
+    echo 'Choirs: ';
+    print_r($choirs);
+    echo "\n\n";
     
-    //echo "Level: $level\n\n";
-    //echo "Tie Breaker: ".intval($tie_breaker)."\n\n";
+    echo "Level: $level\n\n";
+    echo "Tie Breaker: ".intval($tie_breaker)."\n\n";
     
     // Give a tally mark to each choir for every time a judge ranked it at $level or better.
     foreach($rank_by_judge as $judge_id => $rankings){
@@ -129,9 +129,9 @@ class ConsensusOrdinalRankScores {
     // Sort by tally marks.
     arsort($choir_tally);
     
-    //echo "Choir Tallies: ";
-    //print_r($choir_tally);
-    //echo "\n\n";
+    echo "Choir Tallies: ";
+    print_r($choir_tally);
+    echo "\n\n";
     
     // The number of tally marks for the top spot.
     $top_tally = array_values($choir_tally)[0];
@@ -140,7 +140,7 @@ class ConsensusOrdinalRankScores {
       $this->levels_to_skip[] = $level;
     }
     
-    //echo "Top Tally: $top_tally\n\n";
+    echo "Top Tally: $top_tally\n\n";
     
     // Get the choirs that have the top number of tally marks.  (Could be more than one.)
     $top_choir = array_filter($choir_tally, function($tally, $choir_id) use ($top_tally){
@@ -150,9 +150,9 @@ class ConsensusOrdinalRankScores {
     // We just need the choir IDs, which are the array keys.
     $top_choir = array_keys($top_choir);
     
-    //echo "Top Choir: ";
-    //print_r($top_choir);
-    //echo "\n\n";
+    echo "Top Choir: ";
+    print_r($top_choir);
+    echo "\n\n";
     
     // Try to only return one top choir. If there is a tie at this level, recurse and
     // examine the next level until we find a unique winner or else we run out of levels
@@ -193,7 +193,7 @@ class ConsensusOrdinalRankScores {
       }
     }
     
-    //echo '</pre>';
+    echo '</pre>';
     
     return $top_choir;
   }
