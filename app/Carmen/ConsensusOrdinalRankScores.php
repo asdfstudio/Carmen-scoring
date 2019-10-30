@@ -88,6 +88,8 @@ class ConsensusOrdinalRankScores {
       
       $rank_to_assign = $rank_to_assign + count($top_choir);
       
+      if(memory_get_usage() > 1000000000) die();
+      
     }
     
     foreach($choirs_in_rank_order as $choir_id => $choir){
