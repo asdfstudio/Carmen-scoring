@@ -38,12 +38,12 @@ class UserPersonForm extends Form
       $this->user = $this->primary;
       $this->person = $this->primary->person;
       $this->secondary = $this->person;
-      $this->secondary_type = str_replace('App\\', '', get_class($this->secondary));
+      $this->secondary_type = $this->secondary ? str_replace('App\\', '', get_class($this->secondary)) : null;
     } elseif($this->primary_type === 'Person'){
       $this->user = $this->primary->user;
       $this->person = $this->primary;
       $this->secondary = $this->user;
-      $this->secondary_type = str_replace('App\\', '', get_class($this->secondary));
+      $this->secondary_type = $this->secondary ? str_replace('App\\', '', get_class($this->secondary)) : null;
     }
     
     // Create or Edit? By default we assume create, but if the primary model already has

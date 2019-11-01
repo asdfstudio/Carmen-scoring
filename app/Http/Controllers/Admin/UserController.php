@@ -184,14 +184,12 @@ class UserController extends Controller
            return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 
-        $data = $request->input();
-        
         // Is the current user a superadmin (listed in the auth config or else are they editing their own profile)?
         $i_am_superadmin = auth()->user()->isSuperAdmin($user->id);
         
         // Update user
         if($i_am_superadmin || !$user->is_admin){
-          $user->username = $data['username'];
+          $user->username = isset($data['username']) ? $data['username'] : $user->username;
           if(!empty($data['new_password'])){
             $user->password = bcrypt($data['new_password']);
           }
@@ -285,22 +283,23 @@ class UserController extends Controller
     }
   
   
-    public function getNewUsername()
+    public static function getNewUsername($first_name = '', $last_name = '')
     {
-        $this->authorize('create','App\User');
-        
-        if(isset($_POST['first_name']) && isset($_POST['last_name'])){
-            $first_name = htmlspecialchars($_POST['first_name']);
-            $last_name = htmlspecialchars($_POST['last_name']);
-            
-            echo $this->generateUsername($first_name, $last_name);
+        if(empty($first_name) && isset($_POST['first_name'])){
+          $first_name = htmlspecialchars($_POST['first_name']);
         }
+        
+        if(empty($last_name) && isset($_POST['last_name'])){
+          $last_name = htmlspecialchars($_POST['last_name']);
+        }
+        
+        echo self::generateUsername($first_name, $last_name);
     }
     
     
-    protected function generateUsername($first_name, $last_name, $number = 0)
+    public static function generateUsername($first_name, $last_name, $number = 0)
     {
-        $new_username = preg_replace('/[^a-z]/', '', strtolower($first_name).strtolower($last_name));
+        $new_username = preg_replace('/[^a-z0-9]/', '', strtolower($first_name).strtolower($last_name));
         
         if($number){
           $new_username .= $number;
@@ -308,7 +307,7 @@ class UserController extends Controller
         
         $existing_user = User::where('username', $new_username)->first();
         
-        if(count($existing_user)){
+        if(!empty($existing_user)){
           $number++;
           $new_username = $this->generateUsername($first_name, $last_name, $number);
         }

@@ -11,9 +11,10 @@ class Judge extends Person
     {
         parent::boot();
 
-        //static::addGlobalScope('judge', function(Builder $builder) {
-        //    $builder->where('person_type', '=', 'App\Judge');
-        //});
+        static::addGlobalScope('judge', function(Builder $builder) {
+          //$builder->where('person_type', '=', 'App\Judge');
+          $builder->join('person_type', 'people.id', '=', 'person_type.person_id')->where('type_id', '=', 1);
+        });
 
 				static::addGlobalScope('orderByLastName', function(Builder $builder) {
 					$builder->orderBy('last_name', 'ASC');
@@ -21,7 +22,7 @@ class Judge extends Person
 
 				static::created(function ($model)
         {
-            $model->types()->syncWithoutDetaching([1]);
+          $model->types()->syncWithoutDetaching([1]);
         });
     }
 

@@ -12,3 +12,14 @@
 @section('content')
 		{!! form($form) !!}
 @endsection
+
+@section('body-footer')
+	<script>
+    jQuery(document).ready(function($){
+      var judgeSelectize = $('.judge_id').selectize({
+        allowEmptyOption: true,
+        placeholder: 'Select a judge...'
+      });
+    });
+  </script>
+@endsection

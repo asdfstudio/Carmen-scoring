@@ -11,9 +11,10 @@ class Director extends Person
     {
         parent::boot();
 
-        //static::addGlobalScope('director', function(Builder $builder) {
-        //    $builder->where('person_type', '=', 'App\Director');
-        //});
+        static::addGlobalScope('director', function(Builder $builder) {
+          //$builder->where('person_type', '=', 'App\Director');
+          $builder->join('person_type', 'people.id', '=', 'person_type.person_id')->where('type_id', '=', 2);
+        });
 				
 				static::created(function ($model)
         {

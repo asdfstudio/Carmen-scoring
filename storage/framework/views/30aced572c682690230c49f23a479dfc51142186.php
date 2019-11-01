@@ -13,4 +13,14 @@
 
 <?php $__env->stopSection(); ?>
 
+<?php $__env->startSection('body-footer'); ?>
+	<script>
+    jQuery(document).ready(function($){
+      var judgeSelectize = $('.judge_id').selectize({
+        allowEmptyOption: true,
+        placeholder: 'Select a judge...'
+      });
+    });
+  </script>
+<?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.simple', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
