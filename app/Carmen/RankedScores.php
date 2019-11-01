@@ -87,7 +87,7 @@ class RankedScores {
     $sorted = $captionRank->sortByDesc('score');
 
     // Assign rank and return
-    return $rank = $this->assign_rank($sorted);
+    return $rank = $this->assign_rank_skippy($sorted);
   }
   
   
@@ -109,7 +109,7 @@ class RankedScores {
     $sorted = $captionRank->sortBy('score');
 
     // Assign rank and return
-    $rank = $this->assign_rank($sorted);
+    $rank = $this->assign_rank_skippy($sorted);
     $this->total_ranked[$key] = $rank;
     return $rank;
   }
@@ -227,6 +227,7 @@ class RankedScores {
       return $item;
     });
     
+    /*
     // Go back through and flag any results that are a tie.
     $rank = $rank->map(function($item, $key) use ($tied_ranks) {
 
@@ -238,11 +239,54 @@ class RankedScores {
       
       return $item;
     });
-
+    */
+    
     if($key){
       $this->ranked[$key] = $rank;
     }
 
+    return $rank;
+  }
+  
+  
+  protected function assign_rank_skippy($sortedTotals)
+  {
+    // Assign number rank
+    $loops = 1;
+    $previous_rank = 1;
+    $previous_score = false;
+    $tied_ranks = [];
+
+    $rank = $sortedTotals->map(function($item, $key) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks) {
+
+      if($item['score'] == $previous_score){
+        $item['rank'] = $previous_rank;
+        $tied_ranks[] = $item['rank'];
+      } else {
+        $item['rank'] = $loops;
+        $previous_rank = $loops;
+      }
+
+      $previous_score = $item['score'];
+      $loops++;
+      
+      return $item;
+    });
+    
+    /*
+    // Go back through and flag any results that are a tie.
+    $rank = $rank->map(function($item, $key) use ($tied_ranks) {
+
+      if(in_array($item['rank'], $tied_ranks)){
+        $item['tied'] = 1;
+      } else {
+        $item['tied'] = 0;
+      }
+      
+      return $item;
+    });
+    */
+    
     return $rank;
   }
   
