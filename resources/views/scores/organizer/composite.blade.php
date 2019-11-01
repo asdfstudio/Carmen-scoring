@@ -93,10 +93,10 @@
           <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
           @php $rank = $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
-          <span class="weighted score">{{ $rank }}</span>
+          <span class="weighted score {{ $tied }}">{{ $rank }}</span>
 
           @php $rank = $totalRawRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
-          <span class="raw score">{{ $rank }}</span>
+          <span class="raw score {{ $tied }}">{{ $rank }}</span>
         </td>
 
         @if(!empty($ratings))
@@ -195,10 +195,10 @@
         <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
         @php $rank = $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
-        <span class="weighted score">{{ $rank }}</span>
+        <span class="weighted score {{ $tied }}">{{ $rank }}</span>
 
         @php $rank = $totalRawRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
-        <span class="raw score">{{ $rank }}</span>
+        <span class="raw score {{ $tied }}">{{ $rank }}</span>
 
 
       </td>

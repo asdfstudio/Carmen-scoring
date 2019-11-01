@@ -29,6 +29,7 @@ class Scoreboard {
 	public $rawScores;
 	public $weightedScores;
 	public $rankedScores;
+  public $bordaCountScores;
 	public $condorcetScoresSchulze;
 	public $condorcetScoresRankedPairs;
 	public $consensusOrdinalRankScores;
@@ -48,6 +49,7 @@ class Scoreboard {
 		$this->getWeightedScores();
 		$this->getPenalties();
 		$this->getRankedScores();
+    $this->getBordaCountScores();
 		$this->getCondorcetScoresSchulze();
 		$this->getCondorcetScoresRankedPairs();
 		$this->getConsensusOrdinalRankScores();
@@ -168,6 +170,11 @@ class Scoreboard {
 	protected function getRankedScores()
 	{
 		return $this->rankedScores = new RankedScores($this->extendedRawScores, $this->penalties);
+	}
+
+	protected function getBordaCountScores()
+	{
+		return $this->bordaCountScores = new BordaCountScores($this->extendedRawScores, $this->penalties);
 	}
 
 	protected function getCondorcetScoresSchulze()

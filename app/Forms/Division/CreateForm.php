@@ -26,9 +26,21 @@ class CreateForm extends Form
             'text' => ''
           ]
 				]);
-
-				$this->add('scoring_method_id','entity', [
-					'class' => 'App\ScoringMethod',
+        
+        // When listing scoring methods, leave out ID 2 (Ranked Scores) unless it is already chosen for this division.
+        $selected_scoring_method = !empty($this->model) && !empty($this->model->scoring_method_id) ? $this->model->scoring_method_id : '';
+        if($selected_scoring_method !== 2){
+          $scoring_methods = \App\ScoringMethod::where('id', '!=', 2)->orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
+        } else {
+          $scoring_methods = \App\ScoringMethod::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
+        }
+        //dd($scoring_methods);
+        //dd($this->model->scoring_method_id);
+        
+				$this->add('scoring_method_id','choice', [
+          //'class' => 'App\ScoringMethod',
+          'choices' => $scoring_methods,
+          'selected' => $selected_scoring_method,
 					'empty_value' => 'Choose scoring method...',
 					'label' => 'Scoring Method',
           'label_attr' => ['class' => 'block'],

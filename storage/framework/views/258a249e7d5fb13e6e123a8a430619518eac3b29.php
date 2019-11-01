@@ -96,10 +96,10 @@
           <span class="rank score <?php echo e($tied); ?>"><?php echo e($rank); ?></span>
 
           <?php $rank = $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); ?>
-          <span class="weighted score"><?php echo e($rank); ?></span>
+          <span class="weighted score <?php echo e($tied); ?>"><?php echo e($rank); ?></span>
 
           <?php $rank = $totalRawRank->where('choir_id' , $choir->id)->pluck('rank')->first(); ?>
-          <span class="raw score"><?php echo e($rank); ?></span>
+          <span class="raw score <?php echo e($tied); ?>"><?php echo e($rank); ?></span>
         </td>
 
         <?php if(!empty($ratings)): ?>
@@ -200,10 +200,10 @@
         <span class="rank score <?php echo e($tied); ?>"><?php echo e($rank); ?></span>
 
         <?php $rank = $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); ?>
-        <span class="weighted score"><?php echo e($rank); ?></span>
+        <span class="weighted score <?php echo e($tied); ?>"><?php echo e($rank); ?></span>
 
         <?php $rank = $totalRawRank->where('choir_id' , $choir->id)->pluck('rank')->first(); ?>
-        <span class="raw score"><?php echo e($rank); ?></span>
+        <span class="raw score <?php echo e($tied); ?>"><?php echo e($rank); ?></span>
 
 
       </td>

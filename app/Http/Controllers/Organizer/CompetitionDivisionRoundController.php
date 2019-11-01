@@ -232,13 +232,13 @@ class CompetitionDivisionRoundController extends Controller
       //$weightedScoresClass = new WeightedScores($rawScores,        $division->caption_weighting_id);
       //$weightedScores = $weightedScoresClass->all();
       //$rankedScores = new RankedScores($weightedScores);
-
-
+      
+      
       //$scoreboard = new Scoreboard(['round_id' => [65, 68]]);
       //$rawScores = $scoreboard->rawScores;
       //dd($rawScores);
       //
-
+      
       //
       $ratings = (new Ratings($round))->all();
 
@@ -260,6 +260,9 @@ class CompetitionDivisionRoundController extends Controller
           break;
         case 5:
           $rankedScores = $scoreboard->consensusOrdinalRankScores;
+          break;
+        case 6:
+          $rankedScores = $scoreboard->bordaCountScores;
           break;
       }
       
