@@ -61,7 +61,7 @@ class User extends Authenticatable
 		{
       if($this->person)
       {
-        return $this->person->person_type == 'App\Judge';
+        return $this->person->isJudge();
       }
 
       return false;

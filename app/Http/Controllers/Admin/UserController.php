@@ -275,7 +275,7 @@ class UserController extends Controller
         // create person/judge if they dont exist
         if($user->person)
         {
-          $user->person->person_type = 'App\Judge';
+          $user->person->types()->attach(1);
           $user->person->save();
         }
 
