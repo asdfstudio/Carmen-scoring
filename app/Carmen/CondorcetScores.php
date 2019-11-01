@@ -86,11 +86,23 @@ class CondorcetScores {
     
     $election_results = $this->elections[$election_key]->getResult($this->advanced_method);
     
-    foreach($election_results as $rank => $candidates){
+    $carmen_rank = 0;
+    $previous_condorcet_rank = null;
+    $loop = 0;
+    
+    foreach($election_results as $condorcet_rank => $candidates){
       foreach($candidates as $candidate){
+        $loop++;
+        
+        if($condorcet_rank !== $previous_condorcet_rank){
+          $carmen_rank = $loop;
+          $previous_condorcet_rank = $condorcet_rank;
+        }
+        
         $choir_id = intval($candidate->getName());
         $tied = count($candidates) > 1 ? 1 : 0;
-        $results->put($choir_id,['choir_id' => $choir_id, 'rank' => $rank, 'tied' => $tied]);
+        $results->put($choir_id,['choir_id' => $choir_id, 'rank' => $carmen_rank, 'tied' => $tied]);
+        
       }
     }
     
@@ -288,9 +300,9 @@ class CondorcetScores {
     if(array_key_exists($key, $this->total_ranked)){
       return $this->total_ranked[$key];
     }
-
+    
     $captionRank = collect();
-
+    
     $this->choirs->each(function($choir_id, $key) use ($caption_id, $captionRank){
       $score = $this->total($choir_id, $caption_id);
       $captionRank->put($choir_id,['choir_id' => $choir_id, 'score' => $score]);
@@ -298,9 +310,9 @@ class CondorcetScores {
     
     // Sort
     $sorted = $captionRank->sortBy('score');
-
+    
     // Assign rank and return
-    $rank = $this->assign_rank($sorted);
+    $rank = $this->assign_rank_skippy($sorted);
     $this->total_ranked[$key] = $rank;
     
     return $rank;
@@ -360,6 +372,46 @@ class CondorcetScores {
 
       $previous_score = $item['score'];
       $loops = $previous_rank + 1;
+      
+      return $item;
+    });
+    
+    // Go back through and flag any results that are a tie.
+    $rank = $rank->map(function($item, $key) use ($tied_ranks) {
+
+      if(in_array($item['rank'], $tied_ranks)){
+        $item['tied'] = 1;
+      } else {
+        $item['tied'] = 0;
+      }
+      
+      return $item;
+    });
+
+    return $rank;
+  }
+  
+  
+  protected function assign_rank_skippy($sortedTotals)
+  {
+    // Assign number rank
+    $loops = 1;
+    $previous_rank = 1;
+    $previous_score = false;
+    $tied_ranks = [];
+
+    $rank = $sortedTotals->map(function($item, $key) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks) {
+
+      if($item['score'] == $previous_score){
+        $item['rank'] = $previous_rank;
+        $tied_ranks[] = $item['rank'];
+      } else {
+        $item['rank'] = $loops;
+        $previous_rank = $loops;
+      }
+
+      $previous_score = $item['score'];
+      $loops++;
       
       return $item;
     });
