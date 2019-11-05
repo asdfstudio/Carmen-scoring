@@ -16,10 +16,12 @@
       <?php
       $awardWinner = false;
       $sponsor = false;
+      $tied = false;
 
       if($item->division AND $item->award)
       {
-        $awardWinner = $awardWinners->where('division_id', $item->division->id)->where('award_id', $item->award->id)->first();
+        $awardWinner = $awardWinners->where('division_id', $item->division->id)->where('award_id', $item->award->id);
+        $tied = $awardWinner->count() > 1 ? true : false;
         $sponsor = $awardWinner->sponsor;
       }
       elseif($item->division)
@@ -39,73 +41,76 @@
 
         if($standing AND $standing->choirs)
         {
-          $awardWinner = $standing->choirs()->wherePivot('final_rank', $item->rank)->first();
+          $awardWinner = $standing->choirs->where('pivot.final_rank', $item->rank);
+          $tied = $awardWinner->count() > 1 ? true : false;
         }
       }
-
+      
       ?>
 
-      <li class="schedule-item award">
+      <?php if($awardWinner->count()): ?>
+        <li class="schedule-item award">
 
-        <div class="award-heading">
+          <div class="award-heading">
 
-          <?php if($item->division): ?>
-            <span class="division-name" data-division-id="<?php echo e($item->division->id); ?>"><?php echo e($item->division->name); ?></span>
-          <?php endif; ?>
+            <?php if($item->division): ?>
+              <span class="division-name" data-division-id="<?php echo e($item->division->id); ?>"><?php echo e($item->division->name); ?></span>
+            <?php endif; ?>
+
+            <?php if($item->round): ?>
+              <span class="award-name"><?php echo e($item->round->name); ?> Ratings</span>
+            <?php endif; ?>
+
+            <?php if($item->award): ?>
+              <span class="award-name"><?php echo e($item->award->name); ?> <?php if($tied): ?> <span class="tied">tied</span> <?php endif; ?> </span>
+            <?php endif; ?>
+
+            <?php if($item->caption): ?>
+              <span class="caption-name <?php echo e($item->caption->text_css); ?>"><?php echo e($item->caption->name); ?> <?php echo e($item->named_rank); ?> <?php if($tied): ?> <span class="tied">tied</span> <?php endif; ?> </span>
+            <?php elseif($item->rank): ?>
+              <span class="caption-name caption-overall">Overall <?php echo e($item->named_rank); ?> <?php if($tied): ?> <span class="tied">tied</span> <?php endif; ?> </span>
+            <?php endif; ?>
+
+          </div> <!-- end award heading-->
+
 
           <?php if($item->round): ?>
-            <span class="award-name"><?php echo e($item->round->name); ?> Ratings</span>
-          <?php endif; ?>
+            <?php $roundRatings = $ratings->where('round_id', $item->round->id)->first();?>
 
-          <?php if($item->award): ?>
-            <span class="award-name"><?php echo e($item->award->name); ?></span>
-          <?php endif; ?>
-
-          <?php if($item->caption): ?>
-            <span class="caption-name <?php echo e($item->caption->text_css); ?>"><?php echo e($item->caption->name); ?> <?php echo e($item->named_rank); ?></span>
-          <?php elseif($item->rank): ?>
-            <span class="caption-name caption-overall">Overall <?php echo e($item->named_rank); ?></span>
-          <?php endif; ?>
-
-        </div> <!-- end award heading-->
-
-
-        <?php if($item->round): ?>
-          <?php $roundRatings = $ratings->where('round_id', $item->round->id)->first();?>
-
-          <?php if($roundRatings): ?>
-            <ul class="list-group">
-              <?php $__currentLoopData = $roundRatings['ratings']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rating): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <li class="list-group-item"><?php echo e($rating['choir']->full_name); ?>: <?php echo e($rating['rating']['name']); ?></li>
-              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </ul>
-          <?php endif; ?>
-
-        <?php endif; ?>
-
-        <?php if($awardWinner): ?>
-          <span class="award-winner">
-            <?php if($awardWinner->recipient): ?>
-              <span class="award-winner-recipient"><?php echo e($awardWinner->recipient); ?></span>
+            <?php if($roundRatings): ?>
+              <ul class="list-group">
+                <?php $__currentLoopData = $roundRatings['ratings']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rating): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                  <li class="list-group-item"><?php echo e($rating['choir']->full_name); ?>: <?php echo e($rating['rating']['name']); ?></li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+              </ul>
             <?php endif; ?>
 
-            <?php if($awardWinner->choir): ?>
-              <span class="award-winner-choir"><?php echo e($awardWinner->choir->full_name); ?></span>
-            <?php endif; ?>
+          <?php endif; ?>
 
-            <?php if($awardWinner->full_name): ?>
-              <span class="award-winner-choir"><?php echo e($awardWinner->full_name); ?></span>
-            <?php endif; ?>
+          <?php $__currentLoopData = $awardWinner; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $theWinner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <span class="award-winner">
+              <?php if(!empty($theWinner->recipient)): ?>
+                <span class="award-winner-recipient"><?php echo e($theWinner->recipient); ?></span>
+              <?php endif; ?>
 
-          </span>
-        <?php endif; ?>
+              <?php if(!empty($theWinner->choir)): ?>
+                <span class="award-winner-choir"><?php echo e($theWinner->choir->full_name); ?></span>
+              <?php endif; ?>
 
-        <?php if($sponsor): ?>
-          <span class="award-sponsor">Sponsor: <?php echo e($sponsor); ?></span>
-        <?php endif; ?>
+              <?php if(!empty($theWinner->full_name)): ?>
+                <span class="award-winner-choir"><?php echo e($theWinner->full_name); ?></span>
+              <?php endif; ?>
+
+            </span>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+          <?php if($sponsor): ?>
+            <span class="award-sponsor">Sponsor: <?php echo e($sponsor); ?></span>
+          <?php endif; ?>
 
 
-      </li>
+        </li>
+      <?php endif; ?>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
   </ul>
 
