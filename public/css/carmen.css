@@ -4171,6 +4171,17 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
 
 .list-group .list-group-item.standing .details {
   float: right; }
+  .list-group .list-group-item.standing .details .tied {
+    display: inline-block;
+    position: relative;
+    top: -10px;
+    margin: 0 -10px 0 -4px;
+    padding: 0 4px 1px;
+    border-radius: 4px;
+    background: #7F4091;
+    color: #ffffff;
+    font-size: 11px;
+    letter-spacing: .5px; }
   .list-group .list-group-item.standing .details .final_rank {
     font-weight: bold;
     color: #7F4091;
