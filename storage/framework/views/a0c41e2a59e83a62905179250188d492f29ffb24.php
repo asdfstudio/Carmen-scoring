@@ -76,9 +76,9 @@
 
   <?php
     if($division->caption_weighting_id === 1){
-      $captionTotalRank = $rankedScores->total_weighted_rank();
+      $totalRank = $rankedScores->total_weighted_rank();
     } else {
-      $captionTotalRank = $rankedScores->total_raw_rank();
+      $totalRank = $rankedScores->total_raw_rank();
     }
     $election_key = $division->caption_weighting_id === 1 ? 'overall_weighted' : 'overall';
   ?>
@@ -127,8 +127,8 @@
 
       <td>
         <?php
-          $rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();
-          $tied = !empty($captionTotalRank->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+          $rank = $totalRank->where('choir_id' , $choir->id)->pluck('rank')->first();
+          $tied = !empty($totalRank->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
         ?>
         <span class="rank score <?php echo e($tied); ?>"><?php echo e($rank); ?></span>
       </td>
