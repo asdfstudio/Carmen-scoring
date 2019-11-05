@@ -22,5 +22,5 @@ window.__IS_SPREADSHEET_SCORING_ACTIVE__ = "<?php echo $isSpreadsheetScoringActi
 <link href=/static/css/app.36936ae59732bd86936a51d99e8f59c5.css rel=stylesheet></head>
 <body>
   <div id=app></div>
-<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.6260c94a32d2f1699064.js></script><script type=text/javascript src=/static/js/app.687825c51759900058cf.js></script></body>
+<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.6260c94a32d2f1699064.js></script><script type=text/javascript src=/static/js/app.b54a6a1a1bd6ab01cbcd.js></script></body>
 </html>
