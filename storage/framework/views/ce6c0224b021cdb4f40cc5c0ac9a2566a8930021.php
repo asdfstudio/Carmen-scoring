@@ -5,6 +5,10 @@
 
 <?php $__env->startSection('content'); ?>
 
+
+
+		<?php echo $__env->make('results/division/access_code_form', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
 		<h2 id="awards">Awards</h2>
 
 		<div class="individual-awards-container">
@@ -13,8 +17,8 @@
 		  <?php echo $__env->make('award.organizer.ceremony_list', ['awards' => $division->awards], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 		</div>
 
-		<?php $__currentLoopData = $division->standings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $standing): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
+		<?php $__currentLoopData = $division->standings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $standing): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 			<?php if($standing): ?>
 				<?php
 				if($standing->caption_id == NULL)
@@ -38,17 +42,17 @@
 
 			<?php if($standing->choirs->count() > 0): ?>
 				<div class="standing-container">
-
 					<?php if($standing->caption_id == NULL): ?>
 						<div class="content-subheader caption">
-							<h3>Overall Standings</h3>
+						<h3>Overall Standings</h3>
+						</div>
 					<?php else: ?>
 						<div class="content-subheader caption <?php echo e($standing->caption->background_css); ?>">
-							<h3><?php echo e($standing->caption->name); ?> Standings</h3>
+						<h3><?php echo e($standing->caption->name); ?> Standings</h3>
+						</div>
 					<?php endif; ?>
-					</div>
 
-					<?php echo $__env->make('standing.public_list', ['standing' => $standing, 'showSponsor' => true], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+					<?php echo $__env->make('standing.public_list', ['standing' => $standing ,'showSponsor' => true], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
 				</div>
 			<?php endif; ?>

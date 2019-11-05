@@ -14,33 +14,64 @@
 		</div>
 	<?php endif; ?>
 
-				<ul class="list-group horizontal">
-					<li class="list-group-item">
-						<?php $active = $division->scoringMethod->slug == 'ranked' ? 'active division-scoring-method' : false; ?>
-						<a class="score-view-toggle <?php echo e($active); ?>" href="#rankings" data-score-view="rank">Rankings</a>
+  
+  <?php if($division->scoring_method_id === 1 && $division->caption_weighting_id === 2): ?>
+    <ul class="list-group horizontal">
+      <li class="list-group-item">
+        <a class="score-view-toggle active" href="#raw" data-score-view="raw">Raw</a>
+      </li>
+    </ul>
+  <?php endif; ?>
+  
+  
+  <?php if($division->scoring_method_id === 1 && $division->caption_weighting_id === 1): ?>
+    <ul class="list-group horizontal">
+      <li class="list-group-item">
+        <a class="score-view-toggle active division-scoring-method" href="#weighted" data-score-view="weighted">Weighted</a>
+        <span>(division scoring method, <?php echo e($division->captionWeighting->name); ?>)</span>
+      </li>
+      <li class="list-group-item">
+        <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
+      </li>
+    </ul>
+  <?php endif; ?>
+  
+  
+  <?php if($division->scoring_method_id > 1 && $division->caption_weighting_id === 2): ?>
+    <ul class="list-group horizontal">
+      <li class="list-group-item">
+        <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="rank">Rankings</a>
+        <span>(division scoring method)</span>
+      </li>
+      <li class="list-group-item">
+        <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
+      </li>
+    </ul>
+  <?php endif; ?>
 
-						<?php if($active): ?>
-							<span>(division scoring method)</span>
-						<?php endif; ?>
-					</li>
-					<li class="list-group-item">
-						<?php $active = $division->scoringMethod->slug == 'raw' ? 'active division-scoring-method' : false; ?>
-						<a class="score-view-toggle <?php echo e($active); ?>" href="#weighted" data-score-view="weighted">Weighted</a>
+  
+  <?php if($division->scoring_method_id > 1 && $division->caption_weighting_id === 1): ?>
+    <ul class="list-group horizontal">
+      <li class="list-group-item">
+        <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="rank">Rankings</a>
+        <span>(division scoring method)</span>
+      </li>
+      <li class="list-group-item">
+        <a class="score-view-toggle" href="#weighted" data-score-view="weighted">Weighted</a>
+        <span>(<?php echo e($division->captionWeighting->name); ?>)</span>
+      </li>
+      <li class="list-group-item">
+        <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
+      </li>
+    </ul>
+  <?php endif; ?>
+  
+  
+  <?php if($division->scoring_method_id === 3 || $division->scoring_method_id === 4): ?>
+  	<?php echo $__env->make('scores.organizer.ranked_condorcet',['choirs' => $choirs, 'judges' => $division->judges], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+  <?php endif; ?>
 
-						<?php if($active): ?>
-							<span>(division scoring method, <?php echo e($division->captionWeighting->name); ?>)</span>
-						<?php else: ?>
-							<span>(<?php echo e($division->captionWeighting->name); ?>)</span>
-						<?php endif; ?>
-
-					</li>
-					<li class="list-group-item">
-						<a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
-					</li>
-				</ul>
-
-				<?php echo $__env->make('scores.public.composite',['choirs' => $choirs, 'judges' => $judges, 'scoreboard' => $scoreboard], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-			</div>
+  <?php echo $__env->make('scores.public.composite',['choirs' => $choirs, 'judges' => $judges, 'scoreboard' => $scoreboard], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
 <?php $__env->stopSection(); ?>
 

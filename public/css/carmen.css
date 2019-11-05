@@ -3817,6 +3817,8 @@ input.score {
     font-weight: bold; }
   .score.subtotal {
     color: #707070; }
+  .score.tied {
+    white-space: nowrap; }
   .score.tied:after {
     content: 'tied';
     display: inline-block;

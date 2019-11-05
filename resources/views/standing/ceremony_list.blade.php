@@ -30,10 +30,6 @@ else {
 
 $sponsors = explode(PHP_EOL, $sponsors);
 
-//dd($sponsors);
-
-//dd($standing->choirs);
-
 @endphp
 
 @if($standing->choirs)

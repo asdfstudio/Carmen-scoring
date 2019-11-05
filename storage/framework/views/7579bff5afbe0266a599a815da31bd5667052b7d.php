@@ -19,6 +19,7 @@ $captionId = $standing->caption_id ? $standing->caption_id : 0;
       $rank_name = false;
       $final_rank = $choir->pivot->final_rank;
       //$index = $final_rank - 1;
+      $tied = $standing->choirs->where('pivot.final_rank', $choir->pivot->final_rank)->count() > 1 ? true : false;
 
       //$sponsor = array_key_exists($index, $sponsors) ? $sponsors[$index] : false;
 
@@ -58,6 +59,9 @@ $captionId = $standing->caption_id ? $standing->caption_id : 0;
           <?php echo e($rank_name); ?>
 
         </span>
+        <?php if($tied): ?>
+          <span class="tied">tied</span>
+        <?php endif; ?>
 
       </div>
 

@@ -236,7 +236,9 @@ input.score {
   &.subtotal {
     color: $cs-gray-mid-3;
   }
-  
+  &.tied {
+    white-space: nowrap;
+  }
   &.tied:after {
     content: 'tied';
     display: inline-block;

@@ -274,9 +274,31 @@ class ResultsController extends Controller
       //$allocatedSize = ($after - $before);
       //dd($allocatedSize/1024/1024);
 
+      $rawScores = $scoreboard->extendedRawScores;
+      $weightedScores = $scoreboard->extendedRawScores;
+      switch($division->scoring_method_id){
+        case 1:
+        case 2:
+          // Borda Count
+          $rankedScores = $scoreboard->rankedScores;
+          break;
+        case 3:
+          $rankedScores = $scoreboard->condorcetScoresRankedPairs;
+          break;
+        case 4:
+          $rankedScores = $scoreboard->condorcetScoresSchulze;
+          break;
+        case 5:
+          $rankedScores = $scoreboard->consensusOrdinalRankScores;
+          break;
+        case 6:
+          $rankedScores = $scoreboard->bordaCountScores;
+          break;
+      }
+      
       $show_links = true;
 
-      return view('results.division_round.show', compact('division', 'round', 'scoreboard', 'captions', 'access_code', 'choirs', 'judges', 'show_links', 'ratings'));
+      return view('results.division_round.show', compact('division', 'round', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'captions', 'access_code', 'choirs', 'judges', 'show_links', 'ratings'));
     }
 
 
