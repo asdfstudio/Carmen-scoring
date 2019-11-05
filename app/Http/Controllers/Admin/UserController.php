@@ -183,7 +183,9 @@ class UserController extends Controller
 				if (!$form->isValid()) {
            return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
-
+        
+        $data = $request->input();
+        
         // Is the current user a superadmin (listed in the auth config or else are they editing their own profile)?
         $i_am_superadmin = auth()->user()->isSuperAdmin($user->id);
         
@@ -213,7 +215,7 @@ class UserController extends Controller
         // Update person
         $person = $user->person;
 
-        if($person == false){
+        if(empty($person)){
           $person = new Person;
         }
 
