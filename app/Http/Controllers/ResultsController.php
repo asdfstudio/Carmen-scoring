@@ -211,7 +211,8 @@ class ResultsController extends Controller
       }, 'awards.choirs' => function($query) use ($division_id) {
         $query->where('division_id',$division_id);
       }])->where('is_published', 1)->find($division_id);
-
+      
+      dd($division);
       $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::forSheet($division->sheet);
 

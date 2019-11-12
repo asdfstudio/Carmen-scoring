@@ -44,11 +44,6 @@
 		  <?php endif; ?>
 
 			<?php if($standing): ?>
-		    <?php if($standing->is_consensus_scoring): ?>
-		      <p class="alert alert-warning">
-		        Consensus scoring is used for this division.
-		      </p>
-		    <?php endif; ?>
 
 		  	<?php echo $__env->make('standing.list', ['standing' => $standing], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
