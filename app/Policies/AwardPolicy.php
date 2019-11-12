@@ -69,7 +69,7 @@ class AwardPolicy extends BasePolicy
 
     public function manage(User $user, $award, Division $division)
 		{
-        if($this->isOrgAdmin AND $this->orgId === $award->organization_id AND $division->status_slug == 'active')
+        if($this->isOrgAdmin AND $this->orgId === $award->organization_id)
         {
           return true;
         }
