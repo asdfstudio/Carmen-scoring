@@ -36,7 +36,7 @@ $captionId = $standing->caption_id ? $standing->caption_id : 0;
       {
         if($final_rank == 1)
         {
-          $rank_name = 'Champion';
+          $rank_name = 'Grand Champion';
         }
         else
         {

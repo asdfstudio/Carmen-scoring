@@ -50,7 +50,7 @@ $sponsors = explode(PHP_EOL, $sponsors);
       {
         if($final_rank == 1)
         {
-          $rank_name = 'Champion';
+          $rank_name = 'Grand Champion';
         }
         else
         {

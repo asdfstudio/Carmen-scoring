@@ -46,7 +46,7 @@ class AwardScheduleItem extends Model
 			
 			if ($this->division->competition->use_runner_up_names) {
 				if ($this->rank == 1) {
-          $rank_name = 'Champion';
+          $rank_name = 'Grand Champion';
 				} else {
           $rank_name = ordinal($this->rank - 1) . ' Runner Up';
         }

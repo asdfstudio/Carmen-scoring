@@ -38,7 +38,7 @@
       {
         if($final_rank == 1)
         {
-          $rank_name = 'Champion';
+          $rank_name = 'Grand Champion';
         }
         else
         {

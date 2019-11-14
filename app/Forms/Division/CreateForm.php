@@ -124,7 +124,7 @@ class CreateForm extends Form
 
         $this->add('overall_award_sponsors','textarea', [
           'help_block' => [
-            'text' => 'Enter 1 sponsor per line, with Champion sponsor on line 1, 1st runner up on line 2 and so on...'
+            'text' => 'Enter 1 sponsor per line, with Grand Champion sponsor on line 1, 1st runner up on line 2 and so on...'
           ],
           'wrapper' => [
             'class' => 'form-group col-md-3 col-xs-12'
@@ -134,7 +134,7 @@ class CreateForm extends Form
 
         $this->add('music_award_sponsors','textarea', [
           'help_block' => [
-            'text' => 'Enter 1 sponsor per line, with Champion sponsor on line 1, 1st runner up on line 2 and so on...'
+            'text' => 'Enter 1 sponsor per line, with Grand Champion sponsor on line 1, 1st runner up on line 2 and so on...'
           ],
           'wrapper' => [
             'class' => 'form-group col-md-3 col-xs-12'
@@ -144,7 +144,7 @@ class CreateForm extends Form
 
         $this->add('show_award_sponsors','textarea', [
           'help_block' => [
-            'text' => 'Enter 1 sponsor per line, with Champion sponsor on line 1, 1st runner up on line 2 and so on...'
+            'text' => 'Enter 1 sponsor per line, with Grand Champion sponsor on line 1, 1st runner up on line 2 and so on...'
           ],
           'wrapper' => [
             'class' => 'form-group col-md-3 col-xs-12'
@@ -154,7 +154,7 @@ class CreateForm extends Form
 
         $this->add('combo_award_sponsors','textarea', [
           'help_block' => [
-            'text' => 'Enter 1 sponsor per line, with Champion sponsor on line 1, 1st runner up on line 2 and so on...'
+            'text' => 'Enter 1 sponsor per line, with Grand Champion sponsor on line 1, 1st runner up on line 2 and so on...'
           ],
           'wrapper' => [
             'class' => 'form-group col-md-3 col-xs-12'

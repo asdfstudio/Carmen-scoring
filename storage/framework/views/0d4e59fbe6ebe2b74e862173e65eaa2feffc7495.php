@@ -9,7 +9,7 @@
 		<th>Actions</th>
   </tr>
 
-  <?php foreach($competition->awardSchedules as $schedule): ?>
+  <?php $__currentLoopData = $competition->awardSchedules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $schedule): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
   <tr>
   	<td>
 			<?php echo e($schedule->name); ?>
@@ -31,6 +31,6 @@
 
 		</td>
   </tr>
-  <?php endforeach; ?>
+  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 </table>
 <?php endif; ?>

@@ -4,15 +4,15 @@
 
 <?php if(!$penalties->isEmpty()): ?>
 <ul class="list-group">
-  <?php foreach($penalties as $penalty): ?>
+  <?php $__currentLoopData = $penalties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $penalty): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 	  <li class="penalty list-group-item">
 			<div class="group pull-left">
 
-				<?php if (app('Illuminate\Contracts\Auth\Access\Gate')->check('update',$penalty)): ?>
+				<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('update',$penalty)): ?>
 					<a class="name" href="<?php echo e(route('organizer.penalty.edit',[$penalty])); ?>"><?php echo e($penalty->name); ?></a>
 				<?php endif; ?>
 
-				<?php if (app('Illuminate\Contracts\Auth\Access\Gate')->denies('update',$penalty)): ?>
+				<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->denies('update',$penalty)): ?>
 					<span class="name"><?php echo e($penalty->name); ?></span>
 				<?php endif; ?>
 
@@ -29,7 +29,7 @@
 			</span>
 
 			<ul class="actions-group">
-				<?php if (app('Illuminate\Contracts\Auth\Access\Gate')->check('update',$penalty)): ?>
+				<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('update',$penalty)): ?>
 					<li>
 						<a class="action secondary" href="<?php echo e(route('organizer.penalty.edit',[$penalty])); ?>">Edit</a>
 					</li>
@@ -38,6 +38,6 @@
 
 
 		</li>
-  <?php endforeach; ?>
+  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 </ul>
 <?php endif; ?>

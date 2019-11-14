@@ -6,21 +6,21 @@
 <?php $__env->startSection('content'); ?>
 
 	<ul class="actions-group mv">
-		<?php if (app('Illuminate\Contracts\Auth\Access\Gate')->check('activateScoring', $division)): ?>
+		<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('activateScoring', $division)): ?>
 			<li><?php echo form($activateScoringForm); ?></li>
 		<?php endif; ?>
 
-		<?php if (app('Illuminate\Contracts\Auth\Access\Gate')->check('completeScoring', $division)): ?>
+		<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('completeScoring', $division)): ?>
 			<li><?php echo form($completeScoringForm); ?></li>
 
 		<?php endif; ?>
 
-		<?php if (app('Illuminate\Contracts\Auth\Access\Gate')->check('finalizeScoring', $division)): ?>
+		<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('finalizeScoring', $division)): ?>
 			<li><?php echo form($finalizeScoringForm); ?></li>
 
 		<?php endif; ?>
 
-		<?php if (app('Illuminate\Contracts\Auth\Access\Gate')->check('update', $division)): ?>
+		<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('update', $division)): ?>
 			<li><?php echo e(link_to_route('organizer.competition.division.edit', 'Edit Division', [$competition,$division],['class' => 'action'])); ?></li>
 			<li><?php echo e(link_to_route('organizer.competition.division.board', 'Enter Set Up Mode', [$competition,$division],['class' => 'action'])); ?></li>
 
@@ -69,7 +69,7 @@
 	</ul>
 
 	<div data-tab-id="scoring" class="tab-content">
-		<?php echo $__env->make('division.partial.single', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+		<?php echo $__env->make('division.partial.single', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 	</div>
 
 
@@ -81,7 +81,7 @@
 
       <h3><?php echo e(link_to_route('organizer.competition.division.round.index','Rounds',[$competition,$division])); ?> (<?php echo e($division->rounds->count()); ?>)</h3>
 
-      <?php echo $__env->make('competition_division_round.organizer.table', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+      <?php echo $__env->make('competition_division_round.organizer.table', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
 			<?php echo e(link_to_route('organizer.competition.division.round.create','Add a round',[$competition,$division],['class' => 'btn btn-primary'])); ?>
 
@@ -96,7 +96,7 @@
 
       <h3><?php echo e(link_to_route('organizer.competition.division.choir.index','Choirs',[$competition,$division])); ?> (<?php echo e($division->choirs->count()); ?>)</h3>
 
-      <?php echo $__env->make('competition_division_choir.organizer.table', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+      <?php echo $__env->make('competition_division_choir.organizer.table', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
       <?php echo e(link_to_route('organizer.competition.division.choir.create','Add a choir',[$competition,$division],['class' => 'btn btn-primary'])); ?>
 
@@ -110,7 +110,7 @@
 
     	<h3><?php echo e(link_to_route('organizer.competition.division.judge.index','Judges',[$competition,$division])); ?> (<?php echo e($division->judges->count()); ?>)</h3>
 
-    	<?php echo $__env->make('competition_division_judge.organizer.table',['judges' => $division->judges], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+    	<?php echo $__env->make('competition_division_judge.organizer.table',['judges' => $division->judges], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
       <?php echo e(link_to_route('organizer.competition.division.judge.create','Add a judge',[$competition,$division],['class' => 'btn btn-primary'])); ?>
 
@@ -125,7 +125,7 @@
 
     	<h3><?php echo e(link_to_route('organizer.competition.division.award.index', 'Awards', [$competition,$division])); ?> (<?php echo e($division->awards->count()); ?>)</h3>
 
-    	<?php echo $__env->make('award.organizer.list', ['awards' => $division->awards], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+    	<?php echo $__env->make('award.organizer.list', ['awards' => $division->awards], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
     </div>
 
@@ -133,7 +133,7 @@
 
     	<h3><?php echo e(link_to_route('organizer.competition.division.penalty.index','Penalties', [$competition,$division])); ?> (<?php echo e($division->penalties->count()); ?>)</h3>
 
-    	<?php echo $__env->make('penalty.organizer.list', ['penalties' => $division->penalties], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+    	<?php echo $__env->make('penalty.organizer.list', ['penalties' => $division->penalties], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
     </div>
 
@@ -141,4 +141,4 @@
 
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.simple', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+<?php echo $__env->make('layouts.simple', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>

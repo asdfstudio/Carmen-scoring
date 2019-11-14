@@ -11,7 +11,7 @@
     <th>State</th>
   </tr>
 
-  <?php foreach($division->choirs as $choir): ?>
+  <?php $__currentLoopData = $division->choirs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $choir): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
   <tr>
 
     <td><?php if($choir->school): ?> <?php echo e($choir->school->name); ?> <?php endif; ?></td>
@@ -19,6 +19,6 @@
     <td><?php if($choir->school AND $choir->school->place): ?> <?php echo e($choir->school->place->city); ?> <?php endif; ?></td>
     <td><?php if($choir->school AND $choir->school->place): ?> <?php echo e($choir->school->place->state); ?> <?php endif; ?></td>
   </tr>
-  <?php endforeach; ?>
+  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 </table>
 <?php endif; ?>
