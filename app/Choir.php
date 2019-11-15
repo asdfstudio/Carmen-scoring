@@ -122,4 +122,9 @@ class Choir extends Model
       return $h;
     }
 
+    public function recordings()
+		{
+			return $this->hasMany('App\Recording');
+		}
+
 }

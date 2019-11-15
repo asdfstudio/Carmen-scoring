@@ -1,245 +1,220 @@
-$(document).ready(function() {
+$(document).ready(function () {
+  // $(document).on('click', function(e){
 
-    //$(document).on('click', function(e){
+  // if($('body').hasClass('input-popup-active') == false) return;
 
-      //if($('body').hasClass('input-popup-active') == false) return;
+  // console.log($(e.target).parents('score-input-popup'));
+  // if(e.target.id == 'score-input-popup' || $(e.target).parent() == 'aaa')
+  // console.log(e.target);
+  // $('body').removeClass('input-popup-active');
+  // });
 
-      //console.log($(e.target).parents('score-input-popup'));
-      //if(e.target.id == 'score-input-popup' || $(e.target).parent() == 'aaa')
-      //console.log(e.target);
-      //$('body').removeClass('input-popup-active');
-    //});
-
-    /*$('div.popup-input-container').on('blur',function(){
+  /* $('div.popup-input-container').on('blur',function(){
         $(this).removeClass('active');
         $('.toggle-score-input-popup').removeClass('focus');
-    });*/
+    }); */
 
-    $('.toggle-score-input-popup').on('focus', function(e){
-      e.preventDefault();
-      var field = $(this);
-      var field_name = field.attr('name');
-      var max_score = field.attr('max') * 10;
-      var score = field.val() * 10;
-      var popup = $('div.popup-input-container');
+  $('.toggle-score-input-popup').on('focus', function (e) {
+    e.preventDefault()
+    var field = $(this)
+    var field_name = field.attr('name')
+    var max_score = field.attr('max') * 10
+    var score = field.val() * 10
+    var popup = $('div.popup-input-container')
 
-      $('.toggle-score-input-popup').removeClass('focus');
-      field.addClass('focus');
-      field.blur();
-      popup.focus();
+    $('.toggle-score-input-popup').removeClass('focus')
+    field.addClass('focus')
+    field.blur()
+    popup.focus()
 
-      popup.data('field', field_name);
+    popup.data('field', field_name)
 
-      // Show the popup
-      popup.addClass('active');
+    // Show the popup
+    popup.addClass('active')
 
-      // Set the selected value
-      popup.find('a').removeClass('current');
-      popup.find('a[data-number="'+score+'"]').addClass('current');
+    // Set the selected value
+    popup.find('a').removeClass('current')
+    popup.find('a[data-number="' + score + '"]').addClass('current')
 
-      // Show all the score options
-      popup.find('a').show();
+    // Show all the score options
+    popup.find('a').show()
 
-      // Then hide those that are greater than max allowed score
-      if(max_score < 100) {
-        popup.find('a').each(function(index) {
-          if($(this).data('number') > max_score) {
-            $(this).hide();
-          }
-        });
-      }
-
-    });
-
-
-    $.fn.autoSave = function() {
-      //console.log('attempt autosave');
-
-      var form = $('form.autosave');
-
-      if(form.hasClass('has-changed-data') == false)
-      {
-        //console.log('No data to save');
-        return false;
-      }
-
-      var url = form.attr('action');
-      var data = form.serialize();
-
-      alertBox = $('div#autosave-alert-box');
-      alertBox.removeClass('hide');
-      //var alertBoxHTML = '<div id="autosave-alert-box" class="">Autosaving scores...</div>';
-
-      //$('body').append(alertBoxHTML);
-
-      //alertBox.html('Saved!');
-
-      $.post(url, data, function(returnData, status){
-        //console.log(status);
-
-        if(status == 'success')
-        {
-          alertBox.addClass('hide');
-          form.removeClass('has-changed-data');
+    // Then hide those that are greater than max allowed score
+    if (max_score < 100) {
+      popup.find('a').each(function (index) {
+        if ($(this).data('number') > max_score) {
+          $(this).hide()
         }
-        else {
-          alert('There was an error saving your score.');
-        }
-      });
+      })
+    }
+  })
+
+  $.fn.autoSave = function () {
+    // console.log('attempt autosave');
+
+    var form = $('form.autosave')
+
+    if (form.hasClass('has-changed-data') == false) {
+      // console.log('No data to save');
+      return false
     }
 
-    $('form.autosave').ready(function() {
-      //form = $('form.autosave');
-      setInterval(function(){
-        $(this).autoSave();
-      }, 5000);
-    });
+    var url = form.attr('action')
+    var data = form.serialize()
 
+    alertBox = $('div#autosave-alert-box')
+    alertBox.removeClass('hide')
+    // var alertBoxHTML = '<div id="autosave-alert-box" class="">Autosaving scores...</div>';
 
+    // $('body').append(alertBoxHTML);
 
+    // alertBox.html('Saved!');
 
+    $.post(url, data, function (returnData, status) {
+      // console.log(status);
 
-    $('input.ajax-scoring').on('blur', function(){
-      var input = $(this);
-      var newScore = input.val();
-      var originalScore = input.data('original-score');
-      var form = input.parents('form');
-      var url = form.attr('action');
-      var newScore = input.val();
-      var scoreDifference = newScore - originalScore;
+      if (status == 'success') {
+        alertBox.addClass('hide')
+        form.removeClass('has-changed-data')
+      } else {
+        alert('There was an error saving your score.')
+      }
+    })
+  }
 
-      var scoreWeighting = input.data('score-weighting');
-      var newScoreWeighted = newScore * scoreWeighting;
-      var weightedScoreDifference = scoreDifference * scoreWeighting;
-      //console.log(newScoreWeighted);
+  $('form.autosave').ready(function () {
+    // form = $('form.autosave');
+    setInterval(function () {
+      $(this).autoSave()
+    }, 5000)
+  })
 
-      var captionId = input.data('caption-id');
-      var choirId = input.data('choir-id');
-      var criterionId = input.data('criterion-id');
+  $('input.ajax-scoring').on('blur', function () {
+    var input = $(this)
+    var newScore = input.val()
+    var originalScore = input.data('original-score')
+    var form = input.parents('form')
+    var url = form.attr('action')
+    var newScore = input.val()
+    var scoreDifference = newScore - originalScore
 
-      // caption score
-      var captionScore = $('.caption-total-score[data-caption-id="'+captionId+'"][data-choir-id="'+choirId+'"]');
-      var captionOriginalScore = captionScore.data('original-score');
-      var newCaptionScore = captionOriginalScore + scoreDifference;
+    var scoreWeighting = input.data('score-weighting')
+    var newScoreWeighted = newScore * scoreWeighting
+    var weightedScoreDifference = scoreDifference * scoreWeighting
+    // console.log(newScoreWeighted);
 
-      // total score
-      var totalScore = $('.sum-score[data-choir-id="'+choirId+'"]');
-      var originalTotalScore = totalScore.data('original-score');
+    var captionId = input.data('caption-id')
+    var choirId = input.data('choir-id')
+    var criterionId = input.data('criterion-id')
 
-      if(originalTotalScore == false)
-        originalTotalScore = 0;
+    // caption score
+    var captionScore = $('.caption-total-score[data-caption-id="' + captionId + '"][data-choir-id="' + choirId + '"]')
+    var captionOriginalScore = captionScore.data('original-score')
+    var newCaptionScore = captionOriginalScore + scoreDifference
 
-      var newTotalScore = originalTotalScore + scoreDifference;
+    // total score
+    var totalScore = $('.sum-score[data-choir-id="' + choirId + '"]')
+    var originalTotalScore = totalScore.data('original-score')
 
-      //console.log(originalTotalScore + ' // ' + newTotalScore);
+    if (originalTotalScore == false) { originalTotalScore = 0 }
 
-      // caption-total-weighted-score
-      var captionWeightedScore = $('.caption-total-weighted-score[data-caption-id="'+captionId+'"][data-choir-id="'+choirId+'"]');
-      var captionOriginalWeightedScore = captionWeightedScore.data('original-score');
-      var newCaptionWeightedScore = captionOriginalWeightedScore + weightedScoreDifference;
+    var newTotalScore = originalTotalScore + scoreDifference
 
-      //console.log(newCaptionWeightedScore);
+    // console.log(originalTotalScore + ' // ' + newTotalScore);
 
-      // total weighted score
-      var totalWeightedScore = $('.sum-weighted-score[data-choir-id="'+choirId+'"]');
-      var originalTotalWeightedScore = totalWeightedScore.data('original-score');
+    // caption-total-weighted-score
+    var captionWeightedScore = $('.caption-total-weighted-score[data-caption-id="' + captionId + '"][data-choir-id="' + choirId + '"]')
+    var captionOriginalWeightedScore = captionWeightedScore.data('original-score')
+    var newCaptionWeightedScore = captionOriginalWeightedScore + weightedScoreDifference
 
-      if(originalTotalWeightedScore == false)
-        originalTotalWeightedScore = 0;
+    // console.log(newCaptionWeightedScore);
 
-      var newTotalWeightedScore = originalTotalWeightedScore + weightedScoreDifference;
+    // total weighted score
+    var totalWeightedScore = $('.sum-weighted-score[data-choir-id="' + choirId + '"]')
+    var originalTotalWeightedScore = totalWeightedScore.data('original-score')
 
+    if (originalTotalWeightedScore == false) { originalTotalWeightedScore = 0 }
 
+    var newTotalWeightedScore = originalTotalWeightedScore + weightedScoreDifference
 
+    if (originalScore == newScore) return false
 
-      if(originalScore == newScore) return false;
+    input.addClass('saving')
+    input.removeClass('saved')
 
-      input.addClass('saving');
-      input.removeClass('saved');
+    data = form.serialize()
 
-      data = form.serialize();
+    // console.log(url);
+    // console.log(data);
 
-      //console.log(url);
-      //console.log(data);
+    // return;
 
-      //return;
+    $.post(url, data, function (returnData, status) {
+      // console.log(status);
+      // console.log(returnData);
+      if (status == 'success') {
+        input.removeClass('saving')
+        input.addClass('saved')
+        input.data('original-score', newScore)
 
-      $.post(url, data, function(returnData, status){
-        //console.log(status);
-        //console.log(returnData);
-        if(status == 'success')
-        {
-          input.removeClass('saving');
-          input.addClass('saved');
-          input.data('original-score', newScore);
-
-          // highlight blank scores in spreadsheet
-          /*var cell = $('.highlight-zeros[data-choir-id="'+choirId+'"]');
+        // highlight blank scores in spreadsheet
+        /* var cell = $('.highlight-zeros[data-choir-id="'+choirId+'"]');
 
           if (cell) {
             console.log(cell);
             cell.data('raw-score', newScore);
-          }*/
+          } */
 
-          captionScore.html(newCaptionScore);
-          captionScore.data('original-score', newCaptionScore);
+        captionScore.html(newCaptionScore)
+        captionScore.data('original-score', newCaptionScore)
 
-          captionWeightedScore.html(newCaptionWeightedScore);
-          captionWeightedScore.data('original-score', newCaptionWeightedScore);
+        captionWeightedScore.html(newCaptionWeightedScore)
+        captionWeightedScore.data('original-score', newCaptionWeightedScore)
 
+        totalScore.html(newTotalScore)
+        totalScore.data('original-score', newTotalScore)
 
-
-          totalScore.html(newTotalScore);
-          totalScore.data('original-score', newTotalScore);
-
-          totalWeightedScore.html(newTotalWeightedScore);
-          totalWeightedScore.data('original-score', newTotalWeightedScore);
-
-
-
-        }
-        else {
-          input.removeClass('saving');
-          input.addClass('error');
-          alert('There was an error saving your score.');
-        }
-      });
-    });
-
-    $('button.danger, a.danger, submit.danger').on('click', function(e) {
-        if(confirm('Are you sure you want to do this?') == false) {
-          e.preventDefault();
-          //console.log('cancel');
-        }
-    });
-
-    $.fn.toggleChoirSource = function(choir_source) {
-      var form = $('form.create-round-form');
-      if(choir_source == 'all') {
-        form.find('input[name="max_choirs"]').val(0);
-        form.find('div.max-choirs-container').hide();
-        form.find('div.rounds-container').hide();
+        totalWeightedScore.html(newTotalWeightedScore)
+        totalWeightedScore.data('original-score', newTotalWeightedScore)
       } else {
-        //form.find('input[name="max_choirs"]').val('');
-        form.find('div.max-choirs-container').show();
-        form.find('div.rounds-container').show();
+        input.removeClass('saving')
+        input.addClass('error')
+        alert('There was an error saving your score.')
       }
+    })
+  })
+
+  $('button.danger, a.danger, submit.danger').on('click', function (e) {
+    if (confirm('Are you sure you want to do this?') == false) {
+      e.preventDefault()
+      // console.log('cancel');
     }
+  })
 
-    $('form.create-round-form').ready(function() {
-      var choir_source = $(this).find('input[name="choir_source"]:checked').val();
-      $(this).toggleChoirSource(choir_source);
+  $.fn.toggleChoirSource = function (choir_source) {
+    var form = $('form.create-round-form')
+    if (choir_source == 'all') {
+      form.find('input[name="max_choirs"]').val(0)
+      form.find('div.max-choirs-container').hide()
+      form.find('div.rounds-container').hide()
+    } else {
+      // form.find('input[name="max_choirs"]').val('');
+      form.find('div.max-choirs-container').show()
+      form.find('div.rounds-container').show()
+    }
+  }
 
-    });
+  $('form.create-round-form').ready(function () {
+    var choir_source = $(this).find('input[name="choir_source"]:checked').val()
+    $(this).toggleChoirSource(choir_source)
+  })
 
+  $('form.create-round-form input[name="choir_source"]').on('change', function (e) {
+    var choir_source = $(this).val()
+    $(this).toggleChoirSource(choir_source)
+  })
 
-    $('form.create-round-form input[name="choir_source"]').on('change', function(e) {
-      var choir_source = $(this).val();
-      $(this).toggleChoirSource(choir_source);
-    });
-
-
-    /*$('.toggle-new-choir-container').on('click', function(e) {
+  /* $('.toggle-new-choir-container').on('click', function(e) {
       e.preventDefault();
       console.log('toggle choir');
       var parent = $(this).parents('form');
@@ -247,178 +222,170 @@ $(document).ready(function() {
       parent.find('.new_school_container').hide();
       parent.find('.existing_choir_container').hide();
       $(this).hide();
-    });*/
+    }); */
 
-    /*$('.toggle-new-school-container').on('click', function(e) {
+  /* $('.toggle-new-school-container').on('click', function(e) {
       e.preventDefault();
       var parent = $(this).parents('form');
       parent.find('.new_school_container').show();
       parent.find('.existing_school_container').hide();
       $(this).hide();
-    });*/
+    }); */
 
-    $('.toggle-new-judge-container').on('click', function(e) {
-      e.preventDefault();
-      var parent = $(this).parents('form');
-      parent.find('.new_judge_container').show();
-      parent.find('.existing_judge_container').hide();
-      $(this).hide();
-    });
+  $('.toggle-new-judge-container').on('click', function (e) {
+    e.preventDefault()
+    var parent = $(this).parents('form')
+    parent.find('.new_judge_container').show()
+    parent.find('.existing_judge_container').hide()
+    $(this).hide()
+  })
 
+  $('.add-to-collection').on('click', function (e) {
+    e.preventDefault()
+    var container = $('.collection-container')
+    var count = container.children().length
+    var proto = container.data('prototype').replace(/__NAME__/g, count)
+    container.append(proto)
 
-    $('.add-to-collection').on('click', function(e) {
-        e.preventDefault();
-        var container = $('.collection-container');
-        var count = container.children().length;
-        var proto = container.data('prototype').replace(/__NAME__/g, count);
-        container.append(proto);
+    var choir_container = container.find('.choir_container:last')
+    choir_container.find('.new_choir_container').addClass('hidden')
+    choir_container.find('.new_school_container').addClass('hidden')
+  })
 
-        var choir_container = container.find('.choir_container:last');
-        choir_container.find('.new_choir_container').addClass('hidden');
-        choir_container.find('.new_school_container').addClass('hidden');
-    });
+  $('body').on('click', '.add-rating button', function (e) {
+    e.preventDefault()
+    var wrapper = $('.collection-container')
+    var container = wrapper.children().first()
+    var count = container.children().length
+    var proto = wrapper.data('prototype').replace(/__NAME__/g, count)
+    container.append(proto)
+  })
 
-    $('body').on('click', '.add-rating button', function(e) {
-        e.preventDefault();
-        var wrapper = $('.collection-container');
-        var container = wrapper.children().first();
-        var count = container.children().length;
-        var proto = wrapper.data('prototype').replace(/__NAME__/g, count);
-        container.append(proto);
-    });
+  $('body').on('click', '.remove-rating button', function (e) {
+    e.preventDefault()
+    var ratingGroup = $(this).parent().parent()
+    var ratingsContainer = $(ratingGroup).parent()
+    var ratingName = ratingGroup.find('input').val()
+    var message = '<p class="alert alert-warning">The rating "' + ratingName + '" will be removed when you save this form.</p>'
+    ratingGroup.children().remove()
 
-    $('body').on('click', '.remove-rating button', function(e) {
-        e.preventDefault();
-        var ratingGroup = $(this).parent().parent();
-        var ratingsContainer = $(ratingGroup).parent();
-        var ratingName = ratingGroup.find('input').val();
-        var message = '<p class="alert alert-warning">The rating "' + ratingName + '" will be removed when you save this form.</p>';
-        ratingGroup.children().remove();
-        
-        if(ratingName.length){
-           ratingGroup.append(message);
-        }
-        
-        if(ratingsContainer.find('.remove-rating').length === 0){
-            // If there are no rating fields left, trigger the button to add a new one.
-            $('.add-rating button').trigger('click');
-        }
-    });
+    if (ratingName.length) {
+      ratingGroup.append(message)
+    }
 
+    if (ratingsContainer.find('.remove-rating').length === 0) {
+      // If there are no rating fields left, trigger the button to add a new one.
+      $('.add-rating button').trigger('click')
+    }
+  })
 
-    $('.check-all').on('click', function(e) {
-      e.preventDefault();
-      var checkboxes = $(this).data('checkbox');
-      $(document).find("input."+checkboxes).prop('checked', true);
-    });
+  $('.check-all').on('click', function (e) {
+    e.preventDefault()
+    var checkboxes = $(this).data('checkbox')
+    $(document).find('input.' + checkboxes).prop('checked', true)
+  })
 
-    $('.uncheck-all').on('click', function(e) {
-      e.preventDefault();
-      var checkboxes = $(this).data('checkbox');
-      $(document).find("input."+checkboxes).prop('checked', false);
-    });
+  $('.uncheck-all').on('click', function (e) {
+    e.preventDefault()
+    var checkboxes = $(this).data('checkbox')
+    $(document).find('input.' + checkboxes).prop('checked', false)
+  })
 
+  // $('.new_choir_container').addClass('hidden');
+  // $('.new_school_container').addClass('hidden');
+  // $('.new_judge_container').addClass('hidden');
 
-    //$('.new_choir_container').addClass('hidden');
-    //$('.new_school_container').addClass('hidden');
-    //$('.new_judge_container').addClass('hidden');
-
-    // Turned of 2017-11-02 to support new division boards functionality
-    /*$('.choir_id').selectize({
+  // Turned of 2017-11-02 to support new division boards functionality
+  /* $('.choir_id').selectize({
       //persist: false,
       //createOnBlur: true,
       create: true
-    });*/
+    }); */
 
+  // scorecard comments/feedback
+  $('.scorecard textarea[name="comment"]').on('change', function (e) {
+    // console.log('comment changed');
+    $(this).parents('form').addClass('has-changed-data')
+  })
 
-    // scorecard comments/feedback
-    $('.scorecard textarea[name="comment"]').on('change', function(e) {
-      //console.log('comment changed');
-      $(this).parents('form').addClass('has-changed-data');
-    });
+  // scorecard
+  $('.scorecard ul.number-selector a').on('click', function (e) {
+    e.preventDefault()
+    var form = $(this).parents('form')
+    form.addClass('has-changed-data')
 
-    // scorecard
-    $('.scorecard ul.number-selector a').on('click', function(e) {
-    e.preventDefault();
-    var form = $(this).parents('form');
-    form.addClass('has-changed-data');
-
-    var criterion_id = $(this).data('criterion-id');
-    var number = $(this).data('number') / 10;
-    var input = $('.score input[data-criterion-id="'+criterion_id+'"]');
+    var criterion_id = $(this).data('criterion-id')
+    var number = $(this).data('number') / 10
+    var input = $('.score input[data-criterion-id="' + criterion_id + '"]')
     // Update the input value
-    //input.addClass('updating');
-    input.val(number.toFixed(1));
-    input.removeClass('missing-score');
-    //input.removeClass('updating');
+    // input.addClass('updating');
+    input.val(number.toFixed(1))
+    input.removeClass('missing-score')
+    // input.removeClass('updating');
 
     // Highlight the current selection
-    $(this).parents('.criterion-container').find('li a').removeClass('current');
-    $(this).addClass('current');
+    $(this).parents('.criterion-container').find('li a').removeClass('current')
+    $(this).addClass('current')
 
-    //console.log(criterion_id + ':' + number);
-    });
+    // console.log(criterion_id + ':' + number);
+  })
 
+  // scoreboard popup keyboard
+  $('.popup-input-container ul.number-selector a').on('click', function (e) {
+    e.preventDefault()
 
+    var popup = $(this).parents('div.popup-input-container')
+    var field = popup.data('field')
+    var number = $(this).data('number') / 10
+    var input = $('input[name="' + field + '"]')
+    var choir_id = input.data('choir-id')
+    var criterion_id = input.data('criterion-id')
+    var scoreWeighting = input.data('score-weighting')
+    var numberWeighted = number * scoreWeighting
 
-    // scoreboard popup keyboard
-    $('.popup-input-container ul.number-selector a').on('click', function(e) {
-      e.preventDefault();
+    // console.log(numberWeighted);
 
-      var popup = $(this).parents('div.popup-input-container');
-      var field = popup.data('field');
-      var number = $(this).data('number') / 10;
-      var input = $('input[name="'+field+'"]');
-      var choir_id = input.data('choir-id');
-      var criterion_id = input.data('criterion-id');
-      var scoreWeighting = input.data('score-weighting');
-      var numberWeighted = number * scoreWeighting;
+    var td = $('td[data-choir-id="' + choir_id + '"][data-criterion-id="' + criterion_id + '"]')
 
-      //console.log(numberWeighted);
+    td.find('span.raw').html(number.toFixed(1))
+    td.find('span.weighted').html(numberWeighted.toFixed(1))
 
-      var td = $('td[data-choir-id="'+choir_id+'"][data-criterion-id="'+criterion_id+'"]');
+    if (number.toFixed(1) <= 0) {
+      td.addClass('missing-score')
+    } else {
+      td.removeClass('missing-score')
+    }
+    // td.data('raw-score', number.toFixed(1));
 
-      td.find('span.raw').html(number.toFixed(1));
-      td.find('span.weighted').html(numberWeighted.toFixed(1));
+    input.val(number.toFixed(1)).trigger('blur')
 
-      if (number.toFixed(1) <= 0) {
-        td.addClass('missing-score');
-      } else {
-        td.removeClass('missing-score');
-      }
-      //td.data('raw-score', number.toFixed(1));
+    popup.find('li a').removeClass('current')
 
-      input.val(number.toFixed(1)).trigger('blur');
+    $(this).addClass('current')
 
-      popup.find('li a').removeClass('current');
+    popup.removeClass('active')
+    input.removeClass('focus')
+  })
 
-      $(this).addClass('current');
+  // tabs
 
-      popup.removeClass('active');
-      input.removeClass('focus');
-
-    });
-
-
-    // tabs
-
-    $('.tab-link').on('click', function(e) {
-    e.preventDefault();
+  $('.tab-link').on('click', function (e) {
+    e.preventDefault()
 
     // Get the tab ID
-    var tab_id = $(this).data('tab-id');
+    var tab_id = $(this).data('tab-id')
 
     // Stop if no tab ID
-    if(tab_id == false) return false;
+    if (tab_id == false) return false
 
     // Hide all tabs
-    $('.tab-content[data-tab-id!='+tab_id+']').removeClass('active');
+    $('.tab-content[data-tab-id!=' + tab_id + ']').removeClass('active')
 
     // Show current tabs
-    $('.tab-content[data-tab-id='+tab_id+']').addClass('active');
+    $('.tab-content[data-tab-id=' + tab_id + ']').addClass('active')
 
     // Unhighlight the active tab link
-    $(this).parents('.tab-links').find('.tab-link').removeClass('active');
+    $(this).parents('.tab-links').find('.tab-link').removeClass('active')
 
     // Highlight the active tab link
     $(this).addClass('active');
@@ -495,15 +462,19 @@ $(document).ready(function() {
         }
 
       }
+    })
 
-    });
+    if (inputs_missing_scores_count > 0) {
+      if (confirm('Some of your scoring criteria are missing values. Choose "OK" to submit your scores as-is. Choose "Cancel" to stop submission and continue entering your scores.') == false) {
+        e.preventDefault()
+      }
+    }
+  })
 
-    $('body').popover({
-      container: 'body',
-      selector: '[data-toggle="popover"]'
-    });
+  $('body').popover({
+    container: 'body',
+    selector: '[data-toggle="popover"]'
+  })
 
-    $('.selectize').selectize();
-
-
-});
+  $('.selectize').selectize()
+})

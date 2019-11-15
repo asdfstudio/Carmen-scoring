@@ -30,4 +30,10 @@ class Comment extends Model
 			return $this->morphTo();
 		}
 
+		public function recordings()
+		{
+			
+			return $this->hasMany('App\Recording','judge_id','judge_id');
+		}
+
 }

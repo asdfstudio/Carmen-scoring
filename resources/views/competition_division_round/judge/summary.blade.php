@@ -50,7 +50,7 @@
   @include('scores.choirs_judge_aggregate',[
     'choirs' => $round->choirs,
     'division' => $round->division,
-    'judge' => $round->division->judges->first()
+    'judge' => $round->division->judges->first(),
   ])
 
 @endsection

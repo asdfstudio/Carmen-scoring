@@ -22,6 +22,13 @@
 
 	@include('penalty.organizer.list', ['penalties' => $choir->penalties])
 
+
+	<h2>Upload Comments</h2>
+
+	@include('recordings.list', ['choir_id' => $choir->id, 'judgeList' =>$judgeList, 'division_id'=>$division->id,'round_id'=> $round->id, 'judge_id' => $judge_id ])
+	
+	<hr>
+
 	<h2>Scores</h2>
 	
   @include('scores.organizer.choir_raw',['division' => $division, 'judge' => $round->division->judges->first()])

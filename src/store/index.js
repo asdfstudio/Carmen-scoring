@@ -8,6 +8,7 @@ import {scores} from './scores'
 import {comments} from './comments'
 import {ratings} from './ratings'
 import CommentsApi from '../api/comments'
+import RecordingApi from '../api/recordings'
 import ScoresApi from '../api/scores'
 import _ from 'lodash'
 
@@ -19,7 +20,7 @@ let criteriaList = window.__CRITERIA__ ? window.__CRITERIA__ : criteria
 let scoresList = window.__SCORES__ ? window.__SCORES__ : scores
 let commentsList = window.__COMMENTS__ ? window.__COMMENTS__ : comments
 let ratingSystem = window.__RATINGS__ ? _.values(window.__RATINGS__) : ratings
-
+let recordedComments = window.__RECORDED_COMMENTS__ || []
 let spreadsheetTitle = window.__SPREADSHEET_TITLE__ ? window.__SPREADSHEET_TITLE__ : 'Spreadsheet title'
 let backUrl = window.__BACK_URL__ ? window.__BACK_URL__ : '/test-back-url'
 let isSpreadsheetScoringActive = window.__IS_SPREADSHEET_SCORING_ACTIVE__ === 'Active'
@@ -29,6 +30,7 @@ Vue.use(Vuex)
 
 // Debounced API calls
 const saveComment = _.debounce(CommentsApi.saveComment, 1000)
+const saveRecording = RecordingApi.saveRecording
 // const saveScore = _.debounce(ScoresApi.saveScore, 1000)
 
 // Not totally working yet
@@ -47,6 +49,7 @@ export const store = new Vuex.Store({
     captionsList: captionsList,
     captionWeightingId: captionWeightingId,
     divisions: divisionsList,
+    recordings: recordedComments,
     choirsList: choirsList,
     criteriaList: criteriaList,
     scores: scoresList,
@@ -155,6 +158,13 @@ export const store = new Vuex.Store({
 
       // Send ajax request, use debounce
       saveComment(payload)
+    },
+    saveRecording (context, payload) {
+      // Send to mutation
+      // store.commit('saveRecording', payload)
+
+      // Send ajax request
+      saveRecording(payload)
     }
   },
   getters: {

@@ -3,6 +3,7 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=_token content={{csrf_token()}}>
 <title>Carmen - Judge Spreadsheet</title>
 <script>
 window.__DIVISIONS__ = {!! $divisions !!};
@@ -16,11 +17,12 @@ window.__RATINGS__ = {!! $rating_system !!};
 window.__SPREADSHEET_TITLE__ = "{!! $spreadsheetTitle !!}";
 window.__BACK_URL__ = "{!! $backUrl !!}";
 window.__IS_SPREADSHEET_SCORING_ACTIVE__ = "{!! $isSpreadsheetScoringActive !!}";
+window. __RECORDED_COMMENTS__ = {!! $recordedComments !!}; 
 </script>
 
 <link href=/css/dynamic-colors.css rel=stylesheet>
-<link href=/static/css/app.36936ae59732bd86936a51d99e8f59c5.css rel=stylesheet></head>
+<link href=/static/css/app.b74f201eeee6eb6ba324d3b921fd7ed0.css rel=stylesheet></head>
 <body>
   <div id=app></div>
-<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.6260c94a32d2f1699064.js></script><script type=text/javascript src=/static/js/app.b54a6a1a1bd6ab01cbcd.js></script></body>
+<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.2bdb1616a0fef26ce4e0.js></script><script type=text/javascript src=/static/js/app.ffcfd68e18e4aec5001c.js></script></body>
 </html>
