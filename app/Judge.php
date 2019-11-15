@@ -45,6 +45,10 @@ class Judge extends Person
 		public function comments()
 		{
 			return $this->hasMany('App\Comment');
+    }
+    public function recordings()
+		{
+			return $this->hasMany('App\Recording');
 		}
 
 }

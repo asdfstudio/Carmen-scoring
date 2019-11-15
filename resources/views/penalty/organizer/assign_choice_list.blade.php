@@ -3,7 +3,7 @@
 @endif
 
 @if(!$penalties->isEmpty())
-{!! Form::open(array('route' => array('organizer.competition.division.round.choir.penalty.update_assign',$division->competition,$division, $round, $choir), 'method' => 'post')) !!}
+{!! Form::open(array('route' => array('organizer.competition.division.round.choir.penalty.update_assign',$division->competition_id,$division,$round,$choir), 'method' => 'post')) !!}
 <ul class="list-group">
   @foreach($penalties as $penalty)
 		<li class="penalty list-group-item">

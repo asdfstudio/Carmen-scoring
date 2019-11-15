@@ -29,16 +29,31 @@
             @foreach($comments->where('subject_id', $round->id)->where('subject_type', 'App\Round') as $comment)
               <li class="list-group-item unpadded">
                 <div class="header">
+                {{$comment->choir_id}}
                   {{ $comment->judge->full_name }}
                 </div>
                 <div class="body">
-                  @if($comment->comments)
-                    {!! nl2br($comment->comments) !!}
-                  @else
-                    <i class="text-muted">No typed comments were entered by this judge</i>
-                  @endif
+                <div class="container">
+                  <div class="row">
+                    @if($comment->comments)
+                      {!! nl2br($comment->comments) !!}
+                    @else
+                      <i class="text-muted">No typed comments were entered by this judge</i>
+                    @endif
+                  </div>
+               
+                  <div class="row wrap record-row">
+                  @foreach($comment->recordings as $key => $recording)
+                    <div class="col-sm-6 record-item">
+                      <span class="record-span">{{$key + 1}}.</span>
+                      <div class="record-item-audio">
+                        <audio controls> <source src="{{$recording->url}}"> </audio>
+                        <span> {{$recording->created_at}} (UTC)</span>
+                      </div>
+                    </div>
+                  @endforeach
+                  </div>               
                 </div>
-
               </li>
             @endforeach
           </ul>
@@ -47,7 +62,6 @@
       @endif
     @endforeach
   @endforeach
-
 
   <h3>Solo Divisions</h3>
 
@@ -69,11 +83,21 @@
                   {{ $comment->judge->full_name }} - Feedback for {{ $comment->recipient->name }}
                 </div>
                 <div class="body">
-                  @if($comment->comments)
-                    {!! nl2br($comment->comments) !!}
-                  @else
-                    <i class="text-muted">No typed comments were entered by this judge</i>
-                  @endif
+                  <div class="container">
+                    <div class="row">
+                    @if($comment->comments)
+                      {!! nl2br($comment->comments) !!}
+                    @else
+                      <i class="text-muted">No typed comments were entered by this judge</i>
+                    @endif
+                    </div>
+                    <div class="row wrap record-row">
+                    @foreach($comment->recordings as $recording)
+                      <div class="col-sm-6 record-item">
+                        <audio controls> <source src="{{$recording->url}}"> </audio>
+                      </div>
+                    @endforeach
+                    </div>  
                 </div>
 
               </li>

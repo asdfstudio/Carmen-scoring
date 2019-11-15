@@ -1,4 +1,4 @@
-@extends('layouts.simple')
+@extends('layouts.recording_simple')
 
 @section('content-header')
   <h1>My Scores - Summary View</h1>
@@ -50,7 +50,12 @@
   @include('scores.choirs_judge_aggregate',[
     'choirs' => $round->choirs,
     'division' => $round->division,
-    'judge' => $round->division->judges->first(),
+    'judge' => $round->division->judges->first()
   ])
-
+  @include('scores.record_file',[
+    'choirs' => $round->choirs,
+    'division' => $round->division,
+    'judge' => $round->division->judges->first()
+  ])
 @endsection
+

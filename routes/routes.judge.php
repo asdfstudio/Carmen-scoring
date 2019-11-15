@@ -200,13 +200,21 @@ Route::group([
 		]);
 
 
-    Route::any('comment/save', [
+        Route::any('comment/save', [
 			'as' => 'comment.save', 'uses' => 'CommentController@save'
 		]);
 
+		Route::post('recording/save', [
+			'as' => 'recording.save', 'uses' => 'RecordingController@postRecording',
+			
+		]);
+
+		Route::get('recording', [
+			'as' => 'recordings.list', 'uses' => 'RecordingController@show'
+		  ]);
+
 	//});
 });
-
 
 
 // ======================

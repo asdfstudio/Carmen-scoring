@@ -17,7 +17,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.3/css/selectize.bootstrap3.min.css">
 
     <link rel="stylesheet" href="/css/carmen.css">
-
+    <link rel="stylesheet" href="/css/dropzone.css">
+    @yield('style')
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
 
     <style>
@@ -52,8 +53,9 @@
     </script>-->
 
     <script src="/js/jquery-ui/jquery-ui.min.js"></script>
-
     <script src="/js/app.js"></script>
+    <script src="/js/dropzone.js"></script>
+    <script src="/js/recording.js"></script>
 
     @yield('body-footer')
 

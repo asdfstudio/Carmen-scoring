@@ -6,6 +6,7 @@
           <th class="criteria-header">
             <!--Caption / Criteria-->
           </th>
+
           <th v-for="choir in choirsList" class="choir-header"  :choir="choir" v-bind:key="choir.id">
             <span class="clickable" @click="activateChoirModal(choir)">{{ choir.name }}</span>
           </th>
@@ -129,19 +130,45 @@
             {{ comment(choir) }}
           </td>
         </tr>
+         <!-- Record -->
+        <tr class="comment-row">
+          <th class="criterion-name">Record Comments</th>
+          <td  v-for="choir in choirsList" :key="choir.id">
+            <Record
+              :recordsList:="recordsList"
+              :choir="choir"
+              :recordings ="recordings"
+              @start-recording="currentRecordingId = choir.id"
+              @stop-recording="currentRecordingId = null"
+            />
+          </td>
+        </tr>
+        <!-- DropZone -->
+        <tr class="comment-row">
+          <th class="criterion-name">Upload Recorded File</th>
+          <td v-for="choir in choirsList" :key="choir.id">
+            <DropZone :choir="choir"/>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
 </template>
 
 <script>
+import Record from './Record'
+import DropZone from './DropZone'
 
 export default {
   name: 'Spreadsheet',
+  components: { Record, DropZone },
   data: function () {
     return {
       activeChoir: null,
-      activeCriterion: null
+      activeCriterion: null,
+      audioRecorder: null,
+      recordingData: [],
+      currentRecordingId: null
     }
   },
   computed: {
@@ -149,7 +176,11 @@ export default {
       return this.$store.getters.captionWeightingId
     },
     choirsList () {
-      return this.$store.getters.getChoirsList
+      return this.$store.getters.getChoirsList.map(choir => ({
+        ...choir,
+        isRecording: choir.id === this.currentRecordingId,
+        isDisabled: this.currentRecordingId && this.currentRecordingId !== choir.id
+      }))
     },
     captionsList () {
       return this.$store.state.captionsList
@@ -171,6 +202,12 @@ export default {
     },
     isSpreadsheetScoringActive () {
       return this.$store.state.isSpreadsheetScoringActive
+    },
+    division () {
+      return this.$store.state.divisions
+    },
+    recordings () {
+      return this.$store.state.recordings
     }
   },
   watch: {

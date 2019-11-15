@@ -437,6 +437,10 @@ Route::group([
 	Route::get('competition/{competition}/division/{division}/round/{round}/choir/{choir}', [
     'as' => 'competition.division.round.choir.show', 'uses' => 'CompetitionDivisionRoundChoirController@show'
 	]);
+	Route::post('competition/{competition}/division/{division}/round/{round}/choir/{choir}', [
+    'as' => 'competition.division.round.choir.recordings', 'uses' => 'CompetitionDivisionRoundChoirController@show'
+	]);
+  
 
 	Route::get('competition/{competition}/division/{division}/round/{round}/judge/{judge}', [
     'as' => 'competition.division.round.judge.show', 'uses' => 'CompetitionDivisionRoundJudgeController@show'
@@ -458,6 +462,10 @@ Route::group([
   Route::get('competition/{competition}/division/{division}/round/{round}/scores/choir/{choir}/judge/{judge}', [
    'as' => 'round.scores.choir.judge.show', 'uses' => 'CompetitionDivisionRoundChoirJudgeController@show'
   ]);
+
+  Route::delete('recording/delete/{recording_id}', [
+    'as' => 'recording.delete', 'uses' => 'RecordingController@destroy'
+    ]);
 
 	//Route::resource('competition.division.round', 'CompetitionDivisionRoundController');
 });
