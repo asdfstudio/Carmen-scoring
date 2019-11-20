@@ -10,32 +10,63 @@
 
 
 
-				<ul class="list-group horizontal">
-					<li class="list-group-item">
-						@php $active = $division->scoringMethod->slug == 'ranked' ? 'active division-scoring-method' : false; @endphp
-						<a class="score-view-toggle {{ $active }}" href="#rankings" data-score-view="rank">Rankings</a>
+  {{-- Raw Scoring, 50/50 --}}
+  @if ($division->scoring_method_id === 1 && $division->caption_weighting_id === 2)
+    <ul class="list-group horizontal">
+      <li class="list-group-item">
+        <a class="score-view-toggle active" href="#raw" data-score-view="raw">Raw</a>
+      </li>
+    </ul>
+  @endif
+  
+  {{-- Raw Scoring, 60/40 --}}
+  @if ($division->scoring_method_id === 1 && $division->caption_weighting_id === 1)
+    <ul class="list-group horizontal">
+      <li class="list-group-item">
+        <a class="score-view-toggle active division-scoring-method" href="#weighted" data-score-view="weighted">Weighted</a>
+        <span>(division scoring method, {{ $division->captionWeighting->name }})</span>
+      </li>
+      <li class="list-group-item">
+        <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
+      </li>
+    </ul>
+  @endif
+  
+  {{-- Ranked Scoring, 50/50 --}}
+  @if ($division->scoring_method_id > 1 && $division->caption_weighting_id === 2)
+    <ul class="list-group horizontal">
+      <li class="list-group-item">
+        <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="rank">Rankings</a>
+        <span>(division scoring method)</span>
+      </li>
+      <li class="list-group-item">
+        <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
+      </li>
+    </ul>
+  @endif
 
-						@if($active)
-							<span>(division scoring method)</span>
-						@endif
-					</li>
-					<li class="list-group-item">
-						@php $active = $division->scoringMethod->slug == 'raw' ? 'active division-scoring-method' : false; @endphp
-						<a class="score-view-toggle {{ $active }}" href="#weighted" data-score-view="weighted">Weighted</a>
+  {{-- Ranked Scoring, 60/40 --}}
+  @if ($division->scoring_method_id > 1 && $division->caption_weighting_id === 1)
+    <ul class="list-group horizontal">
+      <li class="list-group-item">
+        <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="rank">Rankings</a>
+        <span>(division scoring method)</span>
+      </li>
+      <li class="list-group-item">
+        <a class="score-view-toggle" href="#weighted" data-score-view="weighted">Weighted</a>
+        <span>({{ $division->captionWeighting->name }})</span>
+      </li>
+      <li class="list-group-item">
+        <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
+      </li>
+    </ul>
+  @endif
+  
+  {{-- Condorcet methods have an extra table that is formatted a little differently to show rankings. --}}
+  @if($division->scoring_method_id === 3 || $division->scoring_method_id === 4)
+  	@include('scores.organizer.ranked_condorcet',['choirs' => $choirs, 'judges' => $division->judges])
+  @endif
 
-						@if($active)
-							<span>(division scoring method, {{ $division->captionWeighting->name }})</span>
-						@else
-							<span>({{ $division->captionWeighting->name }})</span>
-						@endif
-
-					</li>
-					<li class="list-group-item">
-						<a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
-					</li>
-				</ul>
-
-				@include('scores.public.composite',['choirs' => $choirs, 'judges' => $judges, 'scoreboard' => $scoreboard])
-			</div>
+  @include('scores.public.composite',['choirs' => $choirs, 'judges' => $judges, 'scoreboard' => $scoreboard])
 
 @endsection

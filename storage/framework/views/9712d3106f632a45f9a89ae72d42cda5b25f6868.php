@@ -9,12 +9,12 @@
 		<th>Status</th>
   </tr>
 
-  <?php foreach($division->rounds as $round): ?>
+  <?php $__currentLoopData = $division->rounds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $round): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
   <tr>
 
     <td><?php echo e(link_to_route('organizer.competition.division.round.show',$round->name,[$division->competition,$division,$round])); ?></td>
 		<td><?php echo e($round->status()); ?></td>
   </tr>
-  <?php endforeach; ?>
+  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 </table>
 <?php endif; ?>

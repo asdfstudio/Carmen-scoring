@@ -232,13 +232,13 @@ class CompetitionDivisionRoundController extends Controller
       //$weightedScoresClass = new WeightedScores($rawScores,        $division->caption_weighting_id);
       //$weightedScores = $weightedScoresClass->all();
       //$rankedScores = new RankedScores($weightedScores);
-
-
+      
+      
       //$scoreboard = new Scoreboard(['round_id' => [65, 68]]);
       //$rawScores = $scoreboard->rawScores;
       //dd($rawScores);
       //
-
+      
       //
       $ratings = (new Ratings($round))->all();
 
@@ -261,8 +261,11 @@ class CompetitionDivisionRoundController extends Controller
         case 5:
           $rankedScores = $scoreboard->consensusOrdinalRankScores;
           break;
+        case 6:
+          $rankedScores = $scoreboard->bordaCountScores;
+          break;
       }
-
+      
       /*$expectedScores = new CountExpectedScores($round);
       $expectectedScoresCount = $expectedScores->run();
       $actualScoresCount = RawScore::where('round_id', $round_id)->where('score','>',0)->count();
@@ -314,7 +317,7 @@ class CompetitionDivisionRoundController extends Controller
 
 
 
-      return view('competition_division_round.organizer.show', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round', 'competition', 'division', 'divisions', 'rounds', 'activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard', 'judges', 'choirs', 'ratings', 'roundIsMissingScores'));
+      return view('competition_division_round.organizer.show', compact('captions', 'rawScores', 'weightedScores', 'rankedScores', 'round', 'competition', 'division', 'divisions', 'rounds', 'activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard', 'judges', 'choirs', 'ratings', 'roundIsMissingScores'));
 		}
 
 
@@ -392,7 +395,22 @@ class CompetitionDivisionRoundController extends Controller
 
       $rawScores = $scoreboard->extendedRawScores;
       $weightedScores = $scoreboard->extendedRawScores;
-      $rankedScores = $scoreboard->rankedScores;
+      switch($division->scoring_method_id){
+        case 1:
+        case 2:
+          // Borda Count
+          $rankedScores = $scoreboard->rankedScores;
+          break;
+        case 3:
+          $rankedScores = $scoreboard->condorcetScoresRankedPairs;
+          break;
+        case 4:
+          $rankedScores = $scoreboard->condorcetScoresSchulze;
+          break;
+        case 5:
+          $rankedScores = $scoreboard->consensusOrdinalRankScores;
+          break;
+      }
 
       return view('competition_division_round.organizer.show_sources', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round','competition','division', 'divisions','rounds', 'scoreboard', 'choirs', 'judges'));
 		}

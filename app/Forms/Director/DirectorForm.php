@@ -48,7 +48,7 @@ class DirectorForm extends Form
     $this->add('first_name','text', [
       'label' => 'First Name',
       'wrapper' => ['class' => 'form-group director-create-group'],
-      'rules' => 'required_without:director.person_id',
+      'rules' => 'required_without_all:choir_id,person_id,director.person_id',
       'error_messages' => [
         'first_name.required_without' => 'Director first name is required unless selecting an existing director.'
       ]
@@ -57,7 +57,7 @@ class DirectorForm extends Form
     $this->add('last_name','text', [
       'label' => 'Last Name',
       'wrapper' => ['class' => 'form-group director-create-group'],
-      'rules' => 'required_without:director.person_id',
+      'rules' => 'required_without_all:choir_id,person_id,director.person_id',
       'error_messages' => [
         'last_name.required_without' => 'Director last name is required unless selecting an existing director.'
       ]
@@ -66,7 +66,7 @@ class DirectorForm extends Form
     $this->add('email','email', [
       'label' => 'Email Address',
       'wrapper' => ['class' => 'form-group director-create-group'],
-      'rules' => ['required_without:director.person_id', 'unique:people,email', 'email'],
+      'rules' => ['required_without_all:choir_id,person_id,director.person_id', 'unique:people,email', 'email'],
       'error_messages' => [
         'email.required_without' => 'Director email is required unless selecting an existing director.',
         'email.unique' => 'That email address already belongs to a person in the system.'

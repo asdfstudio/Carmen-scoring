@@ -37,7 +37,7 @@
 					$limit = 0;
 				}
 
-				$standing->choirs = $standing->choirs->take($limit)->reverse();
+				$standing->choirs = $standing->choirs->where('pivot.final_rank', '<=', $limit)->reverse();
 				@endphp
 			@endif
 

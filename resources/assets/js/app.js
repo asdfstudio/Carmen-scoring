@@ -431,15 +431,19 @@ $(document).ready(function() {
 
       if(active_view == false) return false;
 
-      var table = $('table.scoreboard.toggle-scores');
-      var scores = table.find('span.score, input.score');
-      //var scores = table.find('span.score:not(".penalty")');
+      var tables = $('table.scoreboard.toggle-scores');
+      var scores = tables.find('span.score, input.score');
+      var total_column = tables.find('th.total_column, td.total_column');
 
-      // Hide all scores
+      // Hide all scores and tables
+      tables.hide();
       scores.hide();
+      total_column.hide();
 
-      // Show the active scores
+      // Show the active scores and table
       scores.filter('.' + active_view).show();
+      tables.filter('.' + active_view).show();
+      total_column.filter('.' + active_view).show();
 
       // Remove highlight from other links
       $('a.score-view-toggle').removeClass('active');
@@ -451,7 +455,6 @@ $(document).ready(function() {
 
     $('table.scoreboard.toggle-scores').ready(function() {
       var active_view = $('.score-view-toggle.active').data('score-view');
-      //console.log(active_view);
       $('.score-view-toggle.active').toggleScoreView(active_view);
     });
 

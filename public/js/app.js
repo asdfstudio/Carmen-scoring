@@ -388,56 +388,79 @@ $(document).ready(function () {
     $(this).parents('.tab-links').find('.tab-link').removeClass('active')
 
     // Highlight the active tab link
-    $(this).addClass('active')
-  })
+    $(this).addClass('active');
 
-  $.fn.toggleScoreView = function (active_view) {
-    if (active_view == false) return false
+    });
 
-    var table = $('table.scoreboard.toggle-scores')
-    var scores = table.find('span.score, input.score')
-    // var scores = table.find('span.score:not(".penalty")');
 
-    // Hide all scores
-    scores.hide()
 
-    // Show the active scores
-    scores.filter('.' + active_view).show()
+    $.fn.toggleScoreView = function(active_view) {
 
-    // Remove highlight from other links
-    $('a.score-view-toggle').removeClass('active')
+      if(active_view == false) return false;
 
-    // Highlight the link that was clicked
-    $(this).addClass('active')
-  }
+      var tables = $('table.scoreboard.toggle-scores');
+      var scores = tables.find('span.score, input.score');
+      var total_column = tables.find('th.total_column, td.total_column');
 
-  $('table.scoreboard.toggle-scores').ready(function () {
-    var active_view = $('.score-view-toggle.active').data('score-view')
-    // console.log(active_view);
-    $('.score-view-toggle.active').toggleScoreView(active_view)
-  })
+      // Hide all scores and tables
+      tables.hide();
+      scores.hide();
+      total_column.hide();
 
-  $('.score-view-toggle').on('click', function (e) {
-    e.preventDefault()
-    var active_view = $(this).data('score-view')
-    $(this).toggleScoreView(active_view)
-  })
+      // Show the active scores and table
+      scores.filter('.' + active_view).show();
+      tables.filter('.' + active_view).show();
+      total_column.filter('.' + active_view).show();
 
-  // Check for missing scores on individual scorecards
-  // Give the judge an opportunity to submit as-is or
-  // Return to scorecard to fill in missing values
-  $('form.scorecard').on('submit', function (e) {
-    var score_inputs = $('input.criterion-score-input')
-    var score_inputs_count = score_inputs.length
-    var inputs_missing_scores_count = 0
+      // Remove highlight from other links
+      $('a.score-view-toggle').removeClass('active');
 
-    score_inputs.each(function (index, element) {
-      current_value = $(this).val()
-      if (current_value == 0) {
-        $(this).addClass('missing-score')
-        inputs_missing_scores_count++
-      } else {
-        $(this).removeClass('missing-score')
+      // Highlight the link that was clicked
+      $(this).addClass('active');
+
+    }
+
+    $('table.scoreboard.toggle-scores').ready(function() {
+      var active_view = $('.score-view-toggle.active').data('score-view');
+      $('.score-view-toggle.active').toggleScoreView(active_view);
+    });
+
+
+    $('.score-view-toggle').on('click', function(e) {
+      e.preventDefault();
+      var active_view = $(this).data('score-view');
+      $(this).toggleScoreView(active_view);
+    });
+
+
+
+    // Check for missing scores on individual scorecards
+    // Give the judge an opportunity to submit as-is or
+    // Return to scorecard to fill in missing values
+    $('form.scorecard').on('submit', function(e) {
+
+      var score_inputs = $('input.criterion-score-input');
+      var score_inputs_count = score_inputs.length;
+      var inputs_missing_scores_count = 0;
+
+      score_inputs.each(function(index, element) {
+        current_value = $(this).val();
+        if(current_value == 0){
+          $(this).addClass('missing-score');
+          inputs_missing_scores_count++;
+        }
+        else {
+          $(this).removeClass('missing-score');
+        }
+      });
+
+      if(inputs_missing_scores_count > 0)
+      {
+        if(confirm('Some of your scoring criteria are missing values. Choose "OK" to submit your scores as-is. Choose "Cancel" to stop submission and continue entering your scores.') == false)
+        {
+          e.preventDefault();
+        }
+
       }
     })
 

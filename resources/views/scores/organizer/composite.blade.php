@@ -1,10 +1,28 @@
+@php
+  // The composite table gets a different class for Condorcet methods (3 & 4) to hide it when showing Condorcet ranks.
+  $composite_table_class = 'weighted raw';
+  if($division->scoring_method_id !== 3 && $division->scoring_method_id !== 4){
+    $composite_table_class = $composite_table_class . ' rank';
+  }
 
-<table class="table table-striped table-bordered scoreboard toggle-scores">
+  // Hide the "Total" column for Consensus Ordinal Rank (scoring method 5)
+  $total_col_class = 'total_column weighted raw rank';
+  if($division->scoring_method_id == 5){
+    $total_col_class = 'total_column weighted raw';
+  }
+@endphp
+<table class="table table-striped table-bordered scoreboard toggle-scores {{ $composite_table_class }}">
   @foreach($captions as $caption)
 
-    @php $captionTotalRank = $rankedScores->total_rank($caption->id);@endphp
-    @php $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id); @endphp
-    @php $totalRawRank = $rankedScores->total_raw_rank($caption->id); @endphp
+    @php
+      if($division->caption_weighting_id === 1){
+        $captionTotalRank = $rankedScores->total_weighted_rank($caption->id);
+      } else {
+        $captionTotalRank = $rankedScores->total_raw_rank($caption->id);
+      }
+      $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id);
+      $totalRawRank = $rankedScores->total_raw_rank($caption->id);
+    @endphp
 
     <tr class="caption-header {{ $caption->background_css }}">
       <th colspan="30">
@@ -21,9 +39,7 @@
         </th>
       @endforeach
       
-      @if($division->scoring_method_id !== 5)
-      <th>Total</th>
-      @endif
+      <th class="{{ $total_col_class }}">Total</th>
       
       <th>Place</th>
 
@@ -45,22 +61,24 @@
 
           @if($judge->captions->where('id',$caption->id)->count() > 0)
             <td>
-              @php $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
-              <span class="rank score">{{ $rank }}</span>
+              @php
+                $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();
+                $tied = $division->scoring_method_id !== 1 && !empty($rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+              @endphp
+              <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
               @php $weighted = $weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_caption_id', $caption->id)->sum('weightedScore');@endphp
-              <span class="weighted score">{{ $weighted }}</span>
+              <span class="weighted score {{ $tied }}">{{ $weighted }}</span>
 
               @php $raw = $rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_caption_id', $caption->id)->sum('score');@endphp
-              <span class="raw score">{{ $raw }}</span>
+              <span class="raw score {{ $tied }}">{{ $raw }}</span>
 
             </td>
           @endif
 
         @endforeach
         
-        @if($division->scoring_method_id !== 5)
-        <td>
+        <td class="{{ $total_col_class }}">
           @php $rank = $rankedScores->total($choir->id, $caption->id);@endphp
           <span class="rank score">{{ $rank }}</span>
 
@@ -70,17 +88,19 @@
           @php $raw = $rawScores->where('choir_id', $choir->id)->where('criterion_caption_id', $caption->id)->sum('score');@endphp
           <span class="raw score">{{ $raw }}</span>
         </td>
-        @endif
         
         <td>
-          @php $rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();@endphp
-          <span class="rank score">{{ $rank }}</span>
+          @php
+            $rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();
+            $tied = $division->scoring_method_id !== 1 && !empty($captionTotalRank->where('choir_id' , $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+          @endphp
+          <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
           @php $rank = $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
-          <span class="weighted score">{{ $rank }}</span>
+          <span class="weighted score {{ $tied }}">{{ $rank }}</span>
 
           @php $rank = $totalRawRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
-          <span class="raw score">{{ $rank }}</span>
+          <span class="raw score {{ $tied }}">{{ $rank }}</span>
         </td>
 
         @if(!empty($ratings))
@@ -117,8 +137,15 @@
     @endif
   </tr>
 
-  @php $totalWeightedRank = $rankedScores->total_weighted_rank(); @endphp
-  @php $totalRawRank = $rankedScores->total_raw_rank(); @endphp
+  @php
+    if($division->caption_weighting_id === 1){
+      $totalRank = $rankedScores->total_weighted_rank();
+    } else {
+      $totalRank = $rankedScores->total_raw_rank();
+    }
+    $totalWeightedRank = $rankedScores->total_weighted_rank();
+    $totalRawRank = $rankedScores->total_raw_rank();
+  @endphp
 
   @foreach($choirs as $choir)
     <tr>
@@ -127,8 +154,11 @@
       </th>
       @foreach($judges as $judge)
         <td>
-          @php $rank = $rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
-          <span class="rank score">{{ $rank }}</span>
+          @php
+            $rank = $rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('rank')->first();
+            $tied = !empty($rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+          @endphp
+          <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
           @php $weightedSubtotal = $weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->sum('weightedScore');@endphp
           <span class="weighted subtotal score">{{ $weightedSubtotal }}</span>
@@ -144,8 +174,7 @@
         </td>
       @endforeach
       
-      @if($division->scoring_method_id !== 5)
-      <td>
+      <td class="{{ $total_col_class }}">
         @php $rank = $rankedScores->total($choir->id);@endphp
         <span class="rank score">{{ $rank }}</span>
 
@@ -166,17 +195,19 @@
         <span class="weighted total score">{{ $weightedTotal }}</span>
 
       </td>
-      @endif
       
       <td>
-        @php $rank = $rankedScores->total_rank()->where('choir_id' , $choir->id)->pluck('rank')->first();@endphp
-        <span class="rank score">{{ $rank }}</span>
+        @php
+          $rank = $totalRank->where('choir_id' , $choir->id)->pluck('rank')->first();
+          $tied = !empty($totalRank->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+        @endphp
+        <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
         @php $rank = $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
-        <span class="weighted score">{{ $rank }}</span>
+        <span class="weighted score {{ $tied }}">{{ $rank }}</span>
 
         @php $rank = $totalRawRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
-        <span class="raw score">{{ $rank }}</span>
+        <span class="raw score {{ $tied }}">{{ $rank }}</span>
 
 
       </td>

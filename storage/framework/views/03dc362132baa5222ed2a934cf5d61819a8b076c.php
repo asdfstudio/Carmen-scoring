@@ -14,7 +14,7 @@
 		<th>Delete</th>
   </tr>
 
-  <?php foreach($competitions as $competition): ?>
+  <?php $__currentLoopData = $competitions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $competition): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
   <tr>
 		<td><?php echo $competition->status_label(); ?></td>
   	<td><?php echo e(link_to_route('organizer.competition.show', $competition->name, [$competition])); ?></td>
@@ -25,7 +25,7 @@
 
 
     	<?php if(!$competition->is_archived): ?>
-				<?php if (app('Illuminate\Contracts\Auth\Access\Gate')->check('update', $competition)): ?>
+				<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('update', $competition)): ?>
 					<?php echo e(link_to_route('organizer.competition.edit', 'Edit', [$competition], ['class' => 'action'])); ?>
 
 				<?php endif; ?>
@@ -33,18 +33,18 @@
 				<!--Archived, no editing allowed-->
 			<?php endif; ?>
 
-			<?php if (app('Illuminate\Contracts\Auth\Access\Gate')->check('replicate', $competition)): ?>
+			<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('replicate', $competition)): ?>
 				<?php echo e(link_to_route('organizer.competition.clone', 'Duplicate', [$competition], ['class' => 'action'])); ?>
 
 			<?php endif; ?>
     </td>
 		<td>
-			<?php if (app('Illuminate\Contracts\Auth\Access\Gate')->check('destroy',$competition)): ?>
+			<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('destroy',$competition)): ?>
 				<?php echo form($deleteCompetitionForm,['url' => route('organizer.competition.destroy',[$competition])]); ?>
 
 			<?php endif; ?>
 		</td>
   </tr>
-  <?php endforeach; ?>
+  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 </table>
 <?php endif; ?>

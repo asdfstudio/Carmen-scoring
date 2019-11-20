@@ -23,7 +23,7 @@
   </div>
 
 	<div class="caption-awards-container">
-
+    @php //dd($division->standings); @endphp
 		@foreach($division->standings as $standing)
 
 			@if($standing)
@@ -45,7 +45,7 @@
 
 				if($limit == 0) continue;
 
-				$standing->choirs = $standing->choirs->take($limit)->reverse();
+				$standing->choirs = $standing->choirs->where('pivot.final_rank', '<=', $limit)->reverse();
 				@endphp
 
 			@endif

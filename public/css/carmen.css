@@ -3674,6 +3674,21 @@ table.spreadsheet-legend {
   .caption-header.caption-place {
     background: #707070 !important; }
 
+.sideways-header {
+  display: flex;
+  flex-grow: 1;
+  max-height: 150px; }
+  .sideways-header a {
+    display: inline;
+    transform: rotate(180deg);
+    writing-mode: vertical-rl; }
+    .sideways-header a:hover {
+      text-decoration: none; }
+
+.table > tbody > tr.align-bottom th,
+.table > tbody > tr.align-bottom td {
+  vertical-align: bottom; }
+
 .caption-raw-score {
   font-size: 1em;
   color: #FFF;
@@ -3802,6 +3817,18 @@ input.score {
     font-weight: bold; }
   .score.subtotal {
     color: #707070; }
+  .score.tied {
+    white-space: nowrap; }
+  .score.tied:after {
+    content: 'tied';
+    display: inline-block;
+    padding: 0 4px;
+    margin-left: 5px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #ffffff;
+    border-radius: 4px;
+    background: #7F4091; }
 
 .tab-content {
   display: none; }
@@ -4146,6 +4173,17 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
 
 .list-group .list-group-item.standing .details {
   float: right; }
+  .list-group .list-group-item.standing .details .tied {
+    display: inline-block;
+    position: relative;
+    top: -10px;
+    margin: 0 -10px 0 -4px;
+    padding: 0 4px 1px;
+    border-radius: 4px;
+    background: #7F4091;
+    color: #ffffff;
+    font-size: 11px;
+    letter-spacing: .5px; }
   .list-group .list-group-item.standing .details .final_rank {
     font-weight: bold;
     color: #7F4091;
@@ -4467,6 +4505,14 @@ ul.schedule-list {
         color: #888;
         font-size: 0.9em;
         margin-left: 3px; }
+        ul.schedule-list li.schedule-item.award .award-name .tied, ul.schedule-list li.schedule-item.award .caption-name .tied {
+          display: inline-block;
+          padding: 0 5px;
+          margin-left: 5px;
+          background: #7F4091;
+          border-radius: 5px;
+          font-size: 12px;
+          color: #ffffff; }
         ul.schedule-list li.schedule-item.award .award-name.caption-music, ul.schedule-list li.schedule-item.award .caption-name.caption-music {
           color: #7F4091; }
         ul.schedule-list li.schedule-item.award .award-name.caption-show, ul.schedule-list li.schedule-item.award .caption-name.caption-show {
@@ -4488,9 +4534,11 @@ ul.schedule-list {
         background: #eee;
         padding: 7px 17px;
         border-radius: 10px;
-        display: block; }
+        display: block;
+        margin: 2px; }
         ul.schedule-list li.schedule-item.award .award-winner.pull-right {
-          padding: 0 12px; }
+          padding: 0 12px;
+          clear: both; }
         ul.schedule-list li.schedule-item.award .award-winner .award-winner-recipient {
           font-weight: bold;
           margin-right: 5px; }

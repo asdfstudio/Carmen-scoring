@@ -39,7 +39,7 @@ class AwardSetting extends Form
       $this->add('award_sponsors','textarea', [
         'default_value' => $awardSponsors,
         'help_block' => [
-          'text' => 'Enter 1 sponsor per line, with Champion sponsor on line 1, 1st runner up on line 2 and so on...'
+          'text' => 'Enter 1 sponsor per line, with Grand Champion sponsor on line 1, 1st runner up on line 2 and so on...'
         ]
       ]);
 

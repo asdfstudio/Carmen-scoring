@@ -23,7 +23,7 @@ let ratingSystem = window.__RATINGS__ ? _.values(window.__RATINGS__) : ratings
 let recordedComments = window.__RECORDED_COMMENTS__ || []
 let spreadsheetTitle = window.__SPREADSHEET_TITLE__ ? window.__SPREADSHEET_TITLE__ : 'Spreadsheet title'
 let backUrl = window.__BACK_URL__ ? window.__BACK_URL__ : '/test-back-url'
-let isSpreadsheetScoringActive = true // window.__IS_SPREADSHEET_SCORING_ACTIVE__ === 'Active'
+let isSpreadsheetScoringActive = window.__IS_SPREADSHEET_SCORING_ACTIVE__ === 'Active'
 // let isSpreadsheetScoringActive = true
 
 Vue.use(Vuex)

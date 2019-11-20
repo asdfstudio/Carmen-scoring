@@ -7,7 +7,7 @@
 	<h1>Competitions</h1>
 
 	<ul class="actions-group">
-		<?php if (app('Illuminate\Contracts\Auth\Access\Gate')->check('create','App\Competition')): ?>
+		<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('create','App\Competition')): ?>
 			<li><?php echo e(link_to_route('organizer.competition.create','Add a competition',NULL,['class' => 'action'])); ?></li>
 		<?php endif; ?>
 	</ul>
@@ -28,12 +28,12 @@
 
 
 
-  <?php echo $__env->make('competition.organizer.table', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+  <?php echo $__env->make('competition.organizer.table', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
 
   <h2>Archived Competitions</h2>
-  <?php echo $__env->make('competition.organizer.table',['competitions' => $archivedCompetitions], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+  <?php echo $__env->make('competition.organizer.table',['competitions' => $archivedCompetitions], \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.simple', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+<?php echo $__env->make('layouts.simple', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>

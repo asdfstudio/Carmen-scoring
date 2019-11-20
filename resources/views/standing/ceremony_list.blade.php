@@ -30,8 +30,6 @@ else {
 
 $sponsors = explode(PHP_EOL, $sponsors);
 
-//dd($sponsors);
-
 @endphp
 
 @if($standing->choirs)
@@ -44,6 +42,7 @@ $sponsors = explode(PHP_EOL, $sponsors);
       $rank_name = false;
       $final_rank = $choir->pivot->final_rank;
       $index = $final_rank - 1;
+      $tied = $standing->choirs->where('pivot.final_rank', $choir->pivot->final_rank)->count() > 1 ? true : false;
 
       $sponsor = array_key_exists($index, $sponsors) ? $sponsors[$index] : false;
 
@@ -51,7 +50,7 @@ $sponsors = explode(PHP_EOL, $sponsors);
       {
         if($final_rank == 1)
         {
-          $rank_name = 'Champion';
+          $rank_name = 'Grand Champion';
         }
         else
         {
@@ -72,6 +71,9 @@ $sponsors = explode(PHP_EOL, $sponsors);
         <span class="final_rank ceremony rank-{{ $choir->pivot->final_rank }}">
           {{ $rank_name }}
         </span>
+        @if($tied)
+          <span class="tied">tied</span>
+        @endif
 
       </div>
 

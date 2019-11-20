@@ -157,12 +157,12 @@ class CompetitionDivisionJudgeController extends Controller
 
           // Create the judge user login
           $user = new User;
+          $user->username = \App\Http\Controllers\Admin\UserController::generateUsername($request->input('judge.first_name'), $request->input('judge.last_name'));
           $user->email = $request->input('judge.email');
           $user->password = bcrypt('test');
-
+          
           $person = Person::find($judge->id);
           $person->user()->save($user);
-          //dd($judge);
 
 				}
         elseif($request->filled('judge_id'))

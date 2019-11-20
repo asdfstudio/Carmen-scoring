@@ -17,8 +17,16 @@ class CondorcetScores {
   
   protected $judges = [];
   protected $choirs = [];
+  protected $captions = [];
   
-  protected $score_by_judge_and_caption = [];
+  protected $judges_per_election = [];
+  
+  protected $calculated_scores = [];
+  protected $ranked = [];
+  protected $total_ranked = [];
+  protected $totaled = [];
+  
+  public $score_by_judge_and_caption = [];
   protected $weightedScore_by_judge_and_caption = [];
   
   protected $score_vote_rank_by_judge_and_caption = [];
@@ -78,10 +86,23 @@ class CondorcetScores {
     
     $election_results = $this->elections[$election_key]->getResult($this->advanced_method);
     
-    foreach($election_results as $rank => $candidates){
+    $carmen_rank = 0;
+    $previous_condorcet_rank = null;
+    $loop = 0;
+    
+    foreach($election_results as $condorcet_rank => $candidates){
       foreach($candidates as $candidate){
+        $loop++;
+        
+        if($condorcet_rank !== $previous_condorcet_rank){
+          $carmen_rank = $loop;
+          $previous_condorcet_rank = $condorcet_rank;
+        }
+        
         $choir_id = intval($candidate->getName());
-        $results->put($choir_id,['choir_id' => $choir_id, 'rank' => $rank]);
+        $tied = count($candidates) > 1 ? 1 : 0;
+        $results->put($choir_id,['choir_id' => $choir_id, 'rank' => $carmen_rank, 'tied' => $tied]);
+        
       }
     }
     
@@ -100,36 +121,42 @@ class CondorcetScores {
 
     $scores = $this->scores_by_judge_overall($judge_id, $score_field);
 
-    // Sort by sum descending
-    $sorted = $scores->sortByDesc($score_field);
+    if($scores->count()){
+      
+      // Sort by sum descending
+      $sorted = $scores->sortByDesc('score');
 
-    $this->{$store_property}[$judge_id] = $this->assign_rank($sorted);
-    
-    $vote_array = [];
-    
-    foreach($this->{$store_property}[$judge_id] as $choir_id => $vote_rank){
-      $rank = $vote_rank['rank'];
-      if(!array_key_exists($rank, $vote_array)){
-        $vote_array[$rank] = [];
+      $this->{$store_property}[$judge_id] = $this->assign_rank($sorted);
+
+      $vote_array = [];
+
+      foreach($this->{$store_property}[$judge_id] as $choir_id => $vote_rank){
+        $rank = $vote_rank['rank'];
+        if(!array_key_exists($rank, $vote_array)){
+          $vote_array[$rank] = [];
+        }
+        $vote_array[$rank][] = "$choir_id";
       }
-      $vote_array[$rank][] = "$choir_id";
-    }
-    
-    $vote = new Vote($vote_array);
-    
-    if($score_field === 'weightedScore'){
-      if(empty($this->elections['overall_weighted'])){
-        $this->make_election('overall_weighted');
+
+      $vote = new Vote($vote_array);
+
+      if($score_field === 'weightedScore'){
+        $election_key = 'overall_weighted';
+      } else {
+        $election_key = 'overall';
       }
-      $this->elections['overall_weighted']->addVote($vote, "$judge_id");
+
+      if(empty($this->elections[$election_key])){
+        $this->make_election($election_key);
+      }
+      $this->elections[$election_key]->addVote($vote, "$judge_id");
+      $this->judges_per_election[$election_key]++;
+
+      return $this->{$store_property}[$judge_id];
+      
     } else {
-      if(empty($this->elections['overall'])){
-        $this->make_election('overall');
-      }
-      $this->elections['overall']->addVote($vote, "$judge_id");
+      return collect();
     }
-    
-    return $this->{$store_property}[$judge_id];
   }
   
   
@@ -192,38 +219,44 @@ class CondorcetScores {
     }
 
     $scores = $this->scores_by_judge_and_caption($judge_id, $caption_id, $score_field);
+    
+    if($scores->count()){
 
-    // Sort by sum descending
-    $sorted = $scores->sortByDesc($score_field);
+      // Sort by sum descending
+      $sorted = $scores->sortByDesc('score');
 
-    $this->{$store_property}[$judge_id.'x'.$caption_id] = $this->assign_rank($sorted);
-    
-    $vote_array = [];
-    
-    foreach($this->{$store_property}[$judge_id.'x'.$caption_id] as $vote_rank){
-      $choir_id = $vote_rank['choir_id'];
-      $rank = $vote_rank['rank'];
-      if(!array_key_exists($rank, $vote_array)){
-        $vote_array[$rank] = [];
+      $this->{$store_property}[$judge_id.'x'.$caption_id] = $this->assign_rank($sorted);
+
+      $vote_array = [];
+
+      foreach($this->{$store_property}[$judge_id.'x'.$caption_id] as $vote_rank){
+        $choir_id = $vote_rank['choir_id'];
+        $rank = $vote_rank['rank'];
+        if(!array_key_exists($rank, $vote_array)){
+          $vote_array[$rank] = [];
+        }
+        $vote_array[$rank][] = "$choir_id";
       }
-      $vote_array[$rank][] = "$choir_id";
-    }
-    $vote = new Vote($vote_array);
-    
-    
-    if($score_field === 'weightedScore'){
-      if(empty($this->elections['caption_'.$caption_id.'_weighted'])){
-        $this->make_election('caption_'.$caption_id.'_weighted');
+      $vote = new Vote($vote_array);
+
+
+      if($score_field === 'weightedScore'){
+        $election_key = 'caption_'.$caption_id.'_weighted';
+      } else {
+        $election_key = 'caption_'.$caption_id;
       }
-      $this->elections['caption_'.$caption_id.'_weighted']->addVote($vote, "$judge_id");
+
+      if(empty($this->elections[$election_key])){
+        $this->make_election($election_key);
+      }
+      $this->elections[$election_key]->addVote($vote, "$judge_id");
+      $this->judges_per_election[$election_key]++;
+
+      return $this->{$store_property}[$judge_id.'x'.$caption_id];
+      
     } else {
-      if(empty($this->elections["caption_$caption_id"])){
-        $this->make_election("caption_$caption_id");
-      }
-      $this->elections["caption_$caption_id"]->addVote($vote, "$judge_id");
+      return collect();
     }
-    
-    return $this->{$store_property}[$judge_id.'x'.$caption_id];
   }
   
   
@@ -245,7 +278,7 @@ class CondorcetScores {
         ->where('choir_id', $choir_id)
         ->where('judge_id', $judge_id)
         ->where('criterion_caption_id', $caption_id);
-
+      
       // Get the sum
       $score = $query->sum($score_field);
 
@@ -261,17 +294,117 @@ class CondorcetScores {
   }
   
   
+  public function total_rank($caption_id = false)
+  {
+    $key = $caption_id ? $caption_id : 0;
+    if(array_key_exists($key, $this->total_ranked)){
+      return $this->total_ranked[$key];
+    }
+    
+    $captionRank = collect();
+    
+    $this->choirs->each(function($choir_id, $key) use ($caption_id, $captionRank){
+      $score = $this->total($choir_id, $caption_id);
+      $captionRank->put($choir_id,['choir_id' => $choir_id, 'score' => $score]);
+    });
+    
+    // Sort
+    $sorted = $captionRank->sortBy('score');
+    
+    // Assign rank and return
+    $rank = $this->assign_rank_skippy($sorted);
+    $this->total_ranked[$key] = $rank;
+    
+    return $rank;
+  }
+  
+  
+  public function total($choir_id, $caption_id = false)
+  {
+    $key = $choir_id.'x'.$caption_id;
+    if(array_key_exists($key, $this->totaled)){
+      return $this->totaled[$key];
+    }
+
+    $total = 0;
+
+    $this->judges->each(function($judge_id, $key) use ($choir_id, $caption_id, &$total) {
+      $rank = $this->rank($judge_id, $caption_id)->where('choir_id', $choir_id)->pluck('rank')->first();
+      $total = $total + $rank;
+    });
+
+    $this->totaled[$key] = $total;
+    return $total;
+  }
+  
+  
+  public function rank($judge_id = false, $caption_id = false)
+  {
+    if($judge_id && $caption_id){
+      $rank = $this->vote_rank_by_judge_and_caption($judge_id, $caption_id, 'weightedScore');
+    } elseif($judge_id && !$caption_id){
+      $rank = $this->vote_rank_by_judge_overall($judge_id, 'weightedScore');
+    } else {
+      $rank = $this->total_weighted_rank($caption_id);
+    }
+    
+    return $rank;
+  }
+  
+  
   protected function assign_rank($sortedTotals)
   {
     // Assign number rank
     $loops = 1;
     $previous_rank = 1;
     $previous_score = false;
+    $tied_ranks = [];
 
-    $rank = $sortedTotals->map(function($item, $key) use (&$loops, &$previous_rank,  &$previous_score) {
+    $rank = $sortedTotals->map(function($item, $key) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks) {
 
       if($item['score'] == $previous_score){
         $item['rank'] = $previous_rank;
+        $tied_ranks[] = $item['rank'];
+      } else {
+        $item['rank'] = $loops;
+        $previous_rank = $loops;
+      }
+
+      $previous_score = $item['score'];
+      $loops = $previous_rank + 1;
+      
+      return $item;
+    });
+    
+    // Go back through and flag any results that are a tie.
+    $rank = $rank->map(function($item, $key) use ($tied_ranks) {
+
+      if(in_array($item['rank'], $tied_ranks)){
+        $item['tied'] = 1;
+      } else {
+        $item['tied'] = 0;
+      }
+      
+      return $item;
+    });
+
+    return $rank;
+  }
+  
+  
+  protected function assign_rank_skippy($sortedTotals)
+  {
+    // Assign number rank
+    $loops = 1;
+    $previous_rank = 1;
+    $previous_score = false;
+    $tied_ranks = [];
+
+    $rank = $sortedTotals->map(function($item, $key) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks) {
+
+      if($item['score'] == $previous_score){
+        $item['rank'] = $previous_rank;
+        $tied_ranks[] = $item['rank'];
       } else {
         $item['rank'] = $loops;
         $previous_rank = $loops;
@@ -279,7 +412,19 @@ class CondorcetScores {
 
       $previous_score = $item['score'];
       $loops++;
+      
+      return $item;
+    });
+    
+    // Go back through and flag any results that are a tie.
+    $rank = $rank->map(function($item, $key) use ($tied_ranks) {
 
+      if(in_array($item['rank'], $tied_ranks)){
+        $item['tied'] = 1;
+      } else {
+        $item['tied'] = 0;
+      }
+      
       return $item;
     });
 
@@ -294,6 +439,64 @@ class CondorcetScores {
     foreach($this->choirs as $choir_id){
       $this->elections[$name]->addCandidate("$choir_id");
     }
+    
+    $this->judges_per_election[$name] = 0;
+  }
+  
+  
+  public function pairwise($election_key = 'overall_weighted')
+  {
+    if(isset($this->elections[$election_key])){
+      return $this->elections[$election_key]->getPairwise()->getExplicitPairwise();
+    }
+    
+    return null;
+  }
+  
+  
+  public function pairwise_bit($election_key, $choir_id, $choir_comp_id)
+  {
+    
+    if($choir_id === $choir_comp_id){
+      return 0;
+    }
+    
+    $pairwise = $this->pairwise($election_key);
+    
+    if($pairwise && $choir_id && $choir_comp_id){
+      
+      $judge_count = $this->judges_per_election[$election_key];
+      $half_count = $judge_count / 2;
+      
+      $value = $pairwise[$choir_id]['win'][$choir_comp_id];
+      return $value >= $half_count ? 1 : 0;
+      
+    }
+    
+    return null;
+  }
+  
+  
+  public function pairwise_bit_sum($election_key, $choir_id)
+  {
+    $pairwise = $this->pairwise($election_key);
+    $sum = 0;
+    
+    if($pairwise && $choir_id){
+      
+      $judge_count = $this->judges_per_election[$election_key];
+      $half_count = $judge_count / 2;
+      
+      foreach($pairwise[$choir_id]['win'] as $choir_comp_id => $value){
+        $bit = $value >= $half_count ? 1 : 0;
+        $sum += $bit;
+      }
+      
+      return $sum;
+      
+    }
+    
+    return null;
   }
   
   

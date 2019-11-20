@@ -7,29 +7,29 @@
   <tr>
   	<th>Judge Name</th>
 
-    <?php foreach($captions as $caption): ?>
+    <?php $__currentLoopData = $captions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $caption): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
     <th><?php echo e($caption->name); ?></th>
-    <?php endforeach; ?>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     <th>Edit</th>
   </tr>
 
-  <?php foreach($judges as $judge): ?>
+  <?php $__currentLoopData = $judges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $judge): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
   <tr>
 
     <td><?php echo e(link_to_route('organizer.competition.division.judge.show',$judge->full_name, [$division->competition, $division, $judge])); ?></td>
 
-    <?php foreach($captions as $caption): ?>
+    <?php $__currentLoopData = $captions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $caption): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
     <td>
     	<?php if(in_array($caption->id, $judge->captions->pluck('id')->toArray() )): ?>
     		<?php echo e($caption->name); ?>
 
       <?php endif; ?>
     </td>
-    <?php endforeach; ?>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     <td><?php echo e(link_to_route('organizer.competition.division.judge.edit','Edit', [$division->competition, $division, $judge])); ?></td>
   </tr>
-  <?php endforeach; ?>
+  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 </table>
 <?php endif; ?>
