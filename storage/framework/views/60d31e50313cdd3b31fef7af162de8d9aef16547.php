@@ -51,7 +51,7 @@
       });
     });
     </script>-->
-
+    <script src="/js/recorder.js"></script>
     <script src="/js/jquery-ui/jquery-ui.min.js"></script>
     <script src="/js/app.js"></script>
     <script src="/js/dropzone.js"></script>

@@ -21,8 +21,9 @@ window. __RECORDED_COMMENTS__ = {!! $recordedComments !!};
 </script>
 <script type=text/javascript src=/js/recorder.js></script>
 <link href=/css/dynamic-colors.css rel=stylesheet>
-<link href=/static/css/app.ae352aac4c86a50ae1478c0985b9366d.css rel=stylesheet></head>
+<link href=/static/css/app.82559d5e89001557a122872de290793c.css rel=stylesheet></head>
 <body>
   <div id=app></div>
-<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.2bdb1616a0fef26ce4e0.js></script><script type=text/javascript src=/static/js/app.ffcfd68e18e4aec5001c.js></script></body>
+
+<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.996f63d88a639d7355e3.js></script><script type=text/javascript src=/static/js/app.25da2677d2ff1c8f2b0e.js></script></body>
 </html>
