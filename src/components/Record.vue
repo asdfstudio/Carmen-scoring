@@ -15,9 +15,9 @@
         <span class="record-span">{{ index + 1 }}.</span>
         <div class="record-item-audio">
           <audio controls class="record-item">
-            <source :src="recording.url">
+            <source :src="recording.url" controls=true>
           </audio>
-           <span>{{recording.created_at}} (UTC)</span>
+           <span>{{recording.created_at}}.wav (UTC)</span>
         </div>
       </li>
       </template>
@@ -62,14 +62,15 @@ export default {
           .then(function (stream) {
             // shim for AudioContext when it's not avb.
             /* use the stream */
-            that.stream = stream
-            that.audioRecorder = new MediaRecorder(stream, {
-              audioBitsPerSecond: 96000
-            })
-            that.audioRecorder.start()
+            that.gumstream = stream
+            const audioContext = new AudioContext()
+            const input = audioContext.createMediaStreamSource(stream)
+            that.audioRecorder = new Recorder(input, { numChannels: 1 })
+            that.audioRecorder.record()
             console.log('Media recorder started')
           })
-          .catch(function () {
+          .catch(function (err) {
+            console.log(err)
             /* handle the error */
             alert('Please plugin your earphone')
           })
@@ -77,21 +78,12 @@ export default {
         // stop recording
         console.log('stopping...', this.choir.id)
         this.$emit('stop-recording')
-        this.audioRecorder.stop()
-        this.audioRecorder.ondataavailable = function (event) {
-          that.recordingData = []
-          that.recordingData.push(event.data)
-        }
-        this.audioRecorder.onstop = function (event) {
-          console.log('Media recorder stopped')
-          // stop microphone access
-          that.stream.getAudioTracks()[0].stop()
-          const blob = new Blob(that.recordingData, { type: 'audio/wav' })
-          that.createDownloadLink(blob, this.choir)
-        }
+        that.audioRecorder.stop()
+        that.gumstream.getAudioTracks()[0].stop()
+        that.audioRecorder.exportWAV(that.createDownloadLink)
       }
     },
-    createDownloadLink (blob, choir) {
+    createDownloadLink (blob) {
       const URL = window.URL || window.webkitURL
       var currentdate = new Date()
       var datetime = currentdate.getUTCFullYear() +
@@ -128,7 +120,7 @@ button,
   text-align: center;
   border: none;
   border-radius: 5px;
-
+  cursor:pointer;
   &.cancel {
     background-color: #cccccc;
     color: #666666;

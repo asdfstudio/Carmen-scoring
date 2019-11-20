@@ -3,8 +3,8 @@
 // webkitURL is deprecated but nevertheless
 URL = window.URL || window.webkitURL
 
-var gumStream 						// stream from getUserMedia()
-var rec 							// Recorder.js object
+var gumStream					// stream from getUserMedia()
+var rec					// Recorder.js object
 var audioRecorder
 // shim for AudioContext when it's not avb.
 var AudioContext = window.AudioContext || window.webkitAudioContext
@@ -12,7 +12,7 @@ var audioContext // audio context to help us record
 
 var recordButton = document.getElementById('recordButton')
 var stopButton = document.getElementById('stopButton')
-
+var recordData = []
 // eslint-disable-next-line no-unused-vars
 function deleteRecording (id) {
   if (confirm('Are you sure you want to delete the record?') == true) {
@@ -32,14 +32,15 @@ function deleteRecording (id) {
 }
 
 function startRecording (choirId, roundId, divisionId) {
-  console.log(choirId)
   console.log('recordButton clicked')
   var button = $('#recordButton-' + choirId)
   var isRecording = parseInt(button.attr('data-recording')) || 0
   console.log('isRecording', isRecording)
   var count = parseInt(button.attr('data-count')) || 0
   console.log('count', count)
-
+  recordData.choirId = choirId
+  recordData.roundId = roundId
+  recordData.divisionId = divisionId
   if (isRecording === 0) {
     /*
       Simple constraints object, for more advanced audio features see
@@ -63,20 +64,19 @@ function startRecording (choirId, roundId, divisionId) {
         audioContext = new AudioContext()
         /*  assign to gumStream for later use  */
         gumStream = stream
-
+        var input = audioContext.createMediaStreamSource(stream)
         /* use the stream */
-        audioRecorder = new MediaRecorder(stream, {
-          audioBitsPerSecond: 96000
-        })
+        audioRecorder = new Recorder(input, {numChannels: 1})
         // start the recording process
-        audioRecorder.start()
+        audioRecorder.record()
         $('.rbutton').addClass('cancel')
         button.removeClass('cancel')
         button.text('Stop Recording')
         button.attr('data-recording', 1)
         button.attr('data-count', count + 1)
         console.log('Recording started')
-      }).catch(function () {
+      }).catch(function (err) {
+        console.log(err)
         /* handle the error */
         alert('Please plugin your earphone')
       })
@@ -84,30 +84,21 @@ function startRecording (choirId, roundId, divisionId) {
     $('.rbutton').removeClass('cancel')
     button.text('Start Recording (' + count + ')')
     button.attr('data-recording', 0)
-    var recordingData = []
-    audioRecorder.ondataavailable = function (event) {
-      recordingData = []
-      recordingData.push(event.data)
-    }
-    audioRecorder.onstop = function (event) {
-      console.log('Media recorder stopped')
-      // stop microphone access
-      gumStream.getAudioTracks()[0].stop()
-      var blob = new Blob(recordingData, { type: 'audio/wav' })
-      uploadRecording(blob, choirId, roundId, divisionId)
-    }
+    audioRecorder.exportWAV(uploadRecording)
     // tell the recorder to stop the recording
     audioRecorder.stop()
+    // stop microphone access
+    gumStream.getAudioTracks()[0].stop()
+    // tell the recorder to stop the recording
     console.log('Recording stopped')
   }
 }
-function uploadRecording (blob, choirId, roundId, divisionId) {
+function uploadRecording (blob) {
   var formData = new FormData()
-  formData.append('division_id', divisionId)
-  formData.append('round_id', roundId)
+  formData.append('division_id', recordData.divisionId)
+  formData.append('round_id', recordData.roundId)
   formData.append('file', blob)
-  formData.append('choir_id', choirId)
-
+  formData.append('choir_id', recordData.choirId)
   $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
