@@ -5894,3 +5894,30 @@ a.active {
 
 .selectize-dropdown [data-selectable] .highlight {
   display: inline-block; }
+
+  .record-row {
+    margin-top: 20px;
+   }
+   
+   .record-item {
+     display: flex;
+     align-items: center;
+     padding: 10px 0px 10px 0px;
+   }
+   
+   .record-item .delete {
+     padding: 0px 10px;
+   }
+   
+   .record-item .record-span {
+     margin-right: 10px;
+     margin-bottom: 23px;
+   }
+   
+   .record-item-audio {
+     align-items: center; display:flex; flex-direction: column;
+   }
+   
+   .record-item-audio span {
+     padding-top: 10px;
+   }
