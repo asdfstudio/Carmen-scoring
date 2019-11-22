@@ -63,13 +63,16 @@ export default {
             // shim for AudioContext when it's not avb.
             /* use the stream */
             that.gumstream = stream
+            const AudioContext = window.AudioContext || window.webkitAudioContext
             const audioContext = new AudioContext()
+
             const input = audioContext.createMediaStreamSource(stream)
             that.audioRecorder = new Recorder(input, { numChannels: 1 })
             that.audioRecorder.record()
             console.log('Media recorder started')
           })
           .catch(function (err) {
+            this.$emit('stop-recording')
             console.log(err)
             /* handle the error */
             alert('Please plugin your earphone')
