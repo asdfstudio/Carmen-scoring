@@ -41,7 +41,7 @@
                       <i class="text-muted">No typed comments were entered by this judge</i>
                     @endif
                   </div>
-               
+                  @if($competition->organization->is_premium == 1)
                   <div class="row wrap record-row">
                   @foreach($comment->recordings as $key => $recording)
                     <div class="col-sm-6 record-item">
@@ -52,7 +52,8 @@
                       </div>
                     </div>
                   @endforeach
-                  </div>               
+                  </div>   
+                  @endif            
                 </div>
               </li>
             @endforeach
@@ -92,11 +93,13 @@
                     @endif
                     </div>
                     <div class="row wrap record-row">
+                      @if($competition->organization->is_premium == 1)
                     @foreach($comment->recordings as $recording)
                       <div class="col-sm-6 record-item">
                         <audio controls> <source src="{{$recording->url}}"> </audio>
                       </div>
                     @endforeach
+                    @endif
                     </div>  
                 </div>
 

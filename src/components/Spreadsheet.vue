@@ -131,7 +131,7 @@
           </td>
         </tr>
          <!-- Record -->
-        <tr class="comment-row">
+        <tr class="comment-row" v-if="hasPremium">
           <th class="criterion-name">Record Comments</th>
           <td  v-for="choir in choirsList" :key="choir.id">
             <Record
@@ -144,7 +144,7 @@
           </td>
         </tr>
         <!-- DropZone -->
-        <tr class="comment-row">
+        <tr class="comment-row" v-if="hasPremium">
           <th class="criterion-name">Upload Recorded File</th>
           <td v-for="choir in choirsList" :key="choir.id">
             <DropZone :choir="choir"/>
@@ -196,6 +196,9 @@ export default {
     },
     hasRatings () {
       return this.$store.state.ratings.length !== 0
+    },
+    hasPremium () {
+      return this.$store.state.competition.is_premium
     },
     activeModal () {
       return this.$store.state.activeModal

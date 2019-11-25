@@ -146,7 +146,7 @@ class CompetitionDivisionRoundController extends Controller
 
       $division = $round->division;
       $recordings = $round->division->judges;
-      $competition = $division->competition;
+      $competition = $division->competition->organization;
       $rating_system = $division->rating_system;
 
       //$judge = $division->judges->first();
@@ -248,7 +248,7 @@ class CompetitionDivisionRoundController extends Controller
       $recordedComments = $recordings->map(function ($item, $key) {
         return $item->recordings;
       });
-
+      
       // JSON encode
       $choirs = json_encode($choirs);
       $divisions = json_encode($divisions);
@@ -258,8 +258,9 @@ class CompetitionDivisionRoundController extends Controller
       $scores = json_encode($scores);
       $captions = json_encode($captions);
       $rating_system = json_encode($rating_system);
+      $competition = json_encode($competition);
 
-      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'captionWeightingId', 'choirs', 'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'rating_system','recordedComments'));
+      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'captionWeightingId', 'choirs', 'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'rating_system','recordedComments','competition'));
     }
 
 
@@ -330,7 +331,7 @@ class CompetitionDivisionRoundController extends Controller
       //$weightedScores = $scoreboard->weightedScores;
       //$rankedScores = $scoreboard->rankedScores;
 
-      return view('competition_division_round.judge.spreadsheet_sources_old',compact('scoreboard', 'round', 'competition', 'division', 'judge', 'choirs', 'captions', 'isScoringActive'));
+      return view('competition_division_round.judge.spreadsheet_sources_old',compact('scoreboard', 'round', 'competition', 'division', 'judge', 'choirs', 'captions', 'isScoringActive','competition'));
     }
 
 
@@ -496,7 +497,6 @@ class CompetitionDivisionRoundController extends Controller
 
       // dd($comments);
 
-
       // JSON encode
       $choirs = json_encode($choirs);
       $divisions = json_encode($divisions);
@@ -506,7 +506,7 @@ class CompetitionDivisionRoundController extends Controller
       $captions = json_encode($captions);
       $rating_system = json_encode($rating_system);
 
-      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'captionWeightingId', 'choirs', 'criteria', 'scores', 'rating_system', 'comments', 'spreadsheetTitle', 'backUrl'));
+      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'captionWeightingId', 'choirs', 'criteria', 'scores', 'rating_system', 'comments', 'spreadsheetTitle', 'backUrl','competition'));
     }
 
 

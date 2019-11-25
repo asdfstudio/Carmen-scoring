@@ -38,8 +38,8 @@
     @endif
 
     <td>
-   
-      @if($round->is_scoring_active AND $judge_id == Auth::user()->person_id)
+      
+      @if($round->is_scoring_active && $judge_id == Auth::user()->person_id && $competition->organization->is_premium == 1)
       <div id="controls">
 
         <button id="{{'recordButton-'.$choir->id }}" data-count="{{(count($choir->recordings) > 0)?$choir->recordings->first()->total:'0'}}" data-recording="0" class="rbutton" onClick="startRecording({{$choir->id}}, {{$round->id}}, {{$round->division_id}})">Start Recording({{(count($choir->recordings) > 0)?$choir->recordings->first()->total:'0'}})</button>
