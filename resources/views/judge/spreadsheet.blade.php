@@ -25,5 +25,5 @@ window. __RECORDED_COMMENTS__ = {!! $recordedComments !!};
 <body>
   <div id=app></div>
 
-<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.996f63d88a639d7355e3.js></script><script type=text/javascript src=/static/js/app.30e8e1187e96420e3bbd.js></script></body>
+<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.996f63d88a639d7355e3.js></script><script type=text/javascript src=/static/js/app.e34dd3fcbab2336bbe03.js></script></body>
 </html>

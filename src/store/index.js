@@ -232,7 +232,7 @@ export const store = new Vuex.Store({
       })
     },
     getChoirRating: (state, getters) => (score) => {
-      var percentage = Math.round(score / getters.maxScore * 100)
+      var percentage = score === 0 ? 0 : Math.round(score / getters.maxScore * 100)
       var highestRatingMinScore = 0
       var ratingName = 'No Rating'
       for (let rating of state.ratings) {
