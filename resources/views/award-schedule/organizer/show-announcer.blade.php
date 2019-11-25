@@ -49,7 +49,7 @@
       
       @endphp
 
-      @if($awardWinner->count())
+      @if($awardWinner !== false && $awardWinner->count())
         <li class="schedule-item award">
 
           <div class="award-heading">
