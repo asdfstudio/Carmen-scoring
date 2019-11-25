@@ -107,9 +107,7 @@ class CompetitionDivisionRoundController extends Controller
 
         $this->authorize('create','App\Round',$division);
 
-        $competition_rounds = Competition::find($competition_id)->rounds()->get();
-
-        $competition_rounds = Competition::find($competition_id )->rounds()->whereHas('division', function ($query) use ($division) {
+        $competition_rounds = Competition::find($competition_id)->rounds()->whereHas('division', function ($query) use ($division) {
           $query->where('sheet_id', $division->sheet_id);
         })->get();
 

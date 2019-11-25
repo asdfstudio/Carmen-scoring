@@ -104,6 +104,7 @@ textarea {
   margin: 15px;
   padding: 10px;
   border: 1px solid #F0F0F0;
+  font-size: 15px;
 
   &:focus {
     border: 1px solid #7F4091;

@@ -122,6 +122,7 @@
           <th class="criterion-name">Comments</th>
 
           <td
+            class="comment-text"
             v-for="choir in choirsList"
             @click="activateChoirCommentModal(choir)"
             :choir="choir"
@@ -131,7 +132,7 @@
           </td>
         </tr>
          <!-- Record -->
-        <tr class="comment-row">
+        <tr class="record-row">
           <th class="criterion-name">Record Comments</th>
           <td  v-for="choir in choirsList" :key="choir.id">
             <Record
@@ -144,7 +145,7 @@
           </td>
         </tr>
         <!-- DropZone -->
-        <tr class="comment-row">
+        <tr class="record-row">
           <th class="criterion-name">Upload Recorded File</th>
           <td v-for="choir in choirsList" :key="choir.id">
             <DropZone :choir="choir"/>
@@ -545,6 +546,14 @@ table {
   }
 
   tr.comment-row {
+    font-size: 13px;
+
+    .comment-text {
+      font-size: 15px;
+    }
+  }
+
+  tr.record-row {
     font-size: 13px;
   }
 

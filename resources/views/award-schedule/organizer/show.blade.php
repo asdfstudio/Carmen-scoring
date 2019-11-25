@@ -51,7 +51,7 @@
 
       @endphp
       
-      @if($awardWinner->count())
+      @if($awardWinner !== false && $awardWinner->count())
         <li class="schedule-item award">
           @if($item->division)
             <span class="division-name" data-division-id="{{ $item->division->id }}">{{ $item->division->name }}</span>

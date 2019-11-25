@@ -24,7 +24,7 @@ class ChooseJudgeForm extends Form
 
         $this->add('judge_id','choice', [
 					'choices' => $this->data,
-					'empty_value' => 'Choose judge...',
+					//'empty_value' => 'Choose judge...',
 					'label' => 'Choose from existing judges',
           'attr' => ['class' => 'judge_id', 'id' => ''],
 					//'property' => 'first_name',

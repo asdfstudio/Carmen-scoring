@@ -353,6 +353,7 @@ class CompetitionDivisionRoundController extends Controller
         }, 'division.judges.captions.criteria','choirs','division.rounds', 'sources'])->find($round_id);
 
       $division = $round->division;
+      $recordings = $round->division->judges;
       $competition = $division->competition;
       $rating_system = $division->rating_system;
 
@@ -496,17 +497,22 @@ class CompetitionDivisionRoundController extends Controller
 
       // dd($comments);
 
+      $recordedComments = $recordings->map(function ($item, $key) {
+        return $item->recordings;
+      });
+
 
       // JSON encode
       $choirs = json_encode($choirs);
       $divisions = json_encode($divisions);
       $criteria = json_encode($criteria);
       $comments = json_encode($comments);
+      $recordedComments = json_encode($recordedComments->first());
       $scores = json_encode($scores);
       $captions = json_encode($captions);
       $rating_system = json_encode($rating_system);
 
-      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'captionWeightingId', 'choirs', 'criteria', 'scores', 'rating_system', 'comments', 'spreadsheetTitle', 'backUrl'));
+      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'captionWeightingId', 'choirs', 'criteria', 'scores', 'rating_system', 'comments', 'spreadsheetTitle', 'backUrl', 'recordedComments'));
     }
 
 
