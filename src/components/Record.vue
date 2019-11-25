@@ -71,11 +71,11 @@ export default {
             that.audioRecorder.record()
             console.log('Media recorder started')
           })
-          .catch(function (err) {
-            this.$emit('stop-recording')
-            console.log(err)
+          .catch(function (err) {   
             /* handle the error */
             alert('Please plugin your earphone')
+            this.$emit('stop-recording')
+            console.log(err)
           })
       } else {
         // stop recording
