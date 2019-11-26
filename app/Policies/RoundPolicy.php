@@ -31,10 +31,7 @@ class RoundPolicy extends BasePolicy
 
     public function before($user, $ability)
 		{
-      if($this->isAdmin)
-      {
-        return true;
-      }
+      
 		}
 
     public function show(User $user, $round)
