@@ -53,8 +53,8 @@ class CompetitionDivisionRoundController extends Controller
           $query->where('division_id',$division_id);
         },
          'division.judges.captions.criteria','choirs',
-         'choirs.recordings' => function($query) use ($division_id) {
-          $query->select('*', DB::raw('count(*) as total'))->where('division_id',$division_id)->groupBy('choir_id');
+         'choirs.recordings' => function($query) use ($division_id, $judge_id) {
+          $query->select('*', DB::raw('count(*) as total'))->where('division_id',$division_id)->where('judge_id',$judge_id)->groupBy('choir_id');
         },
          'division.rounds', 'targets', 'targets.sources' => function($query) use ($round_id) {
           $query->where('id', '!=', $round_id);
@@ -349,12 +349,15 @@ class CompetitionDivisionRoundController extends Controller
         $query->withoutGlobalScope('organization');
       }, 'division.judges' => function($query) use ($judge_id) {
           $query->where('judge_id',$judge_id)->first();
-        }, 'division.judges.captions' => function($query) use ($division_id) {
+        }, 'division.judges.recordings' => function($query) use ($round_id, $division_id) {
+          $query->where('round_id', $round_id)->where('division_id', $division_id);
+        },'division.judges.captions' => function($query) use ($division_id) {
           $query->where('division_id',$division_id);
         }, 'division.judges.captions.criteria','choirs','division.rounds', 'sources'])->find($round_id);
 
       $division = $round->division;
-      $competition = $division->competition;
+      $recordings = $round->division->judges;
+      $competition = $division->competition->organization;
       $rating_system = $division->rating_system;
 
       $captionWeightingId = $division->caption_weighting_id;
@@ -495,6 +498,10 @@ class CompetitionDivisionRoundController extends Controller
         ];
       })->toArray();
 
+      $recordedComments = $recordings->map(function ($item, $key) {
+        return $item->recordings;
+      });
+
       // dd($comments);
 
       // JSON encode
@@ -504,9 +511,10 @@ class CompetitionDivisionRoundController extends Controller
       $comments = json_encode($comments);
       $scores = json_encode($scores);
       $captions = json_encode($captions);
+      $recordedComments = json_encode($recordedComments->first());
       $rating_system = json_encode($rating_system);
-
-      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'captionWeightingId', 'choirs', 'criteria', 'scores', 'rating_system', 'comments', 'spreadsheetTitle', 'backUrl','competition'));
+      $competition = json_encode($competition);
+      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'captionWeightingId', 'choirs', 'criteria', 'scores', 'rating_system', 'comments', 'spreadsheetTitle', 'backUrl','competition', 'recordedComments'));
     }
 
 

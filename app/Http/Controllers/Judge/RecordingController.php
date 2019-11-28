@@ -27,6 +27,9 @@ class RecordingController extends Controller
             $pathUrl = $storagePath . $storageFileName;    
             $filePath= uploadToS3($pathUrl, $url); 
             $recording->url = $filePath;
+        //   $destinationPath = public_path().'/recordings/' ;
+        //   $url->move($destinationPath,$storageFileName);
+           
         }
         // save modal
         $recording->save();

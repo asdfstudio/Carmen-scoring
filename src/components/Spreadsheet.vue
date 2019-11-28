@@ -135,11 +135,13 @@
           <th class="criterion-name">Record Comments</th>
           <td  v-for="choir in choirsList" :key="choir.id">
             <Record
-              :recordsList:="recordsList"
+              :recordsList="recordsList"
               :choir="choir"
               :recordings ="recordings"
               @start-recording="currentRecordingId = choir.id"
               @stop-recording="currentRecordingId = null"
+              @upload-start="changeInProgressRecValue(1)"
+              @upload-complete="changeInProgressRecValue(-1)"
             />
           </td>
         </tr>
@@ -349,6 +351,12 @@ export default {
     },
     comment: function (choir) {
       return this.$store.getters.getChoirComment(choir.id)
+    },
+    changeInProgressRecValue: function (value) {
+      const input = document.getElementById('recordingsInProgress')
+      console.log('before', input.value)
+      input.value = parseInt(input.value) + value
+      console.log('after', input.value)
     }
   },
   mounted () {

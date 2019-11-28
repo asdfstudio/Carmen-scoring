@@ -22,9 +22,18 @@ window. __Competition__ = {!! $competition !!};
 </script>
 <script type=text/javascript src=/js/recorder.js></script>
 <link href=/css/dynamic-colors.css rel=stylesheet>
-<link href=/static/css/app.8a7ba5299ab27e06272f1e7358698aca.css rel=stylesheet></head>
+<link href=/static/css/app.0ee42757624aa1d9862597c91e833bcc.css rel=stylesheet></head>
 <body>
+  <input type=hidden id=recordingsInProgress value=0>
   <div id=app></div>
-
-<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.2bdb1616a0fef26ce4e0.js></script><script type=text/javascript src=/static/js/app.bee1c115f4334e3bfa61.js></script></body>
+  <script>
+    const input = document.getElementById('recordingsInProgress');
+    window.onbeforeunload = function() {
+      if (input.value > 0) {
+        return 'Upload in progress, navigating away from the page will lose recording. Are you sure you want to continue?'
+      }
+      return;
+    };
+  </script>
+<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.2bdb1616a0fef26ce4e0.js></script><script type=text/javascript src=/static/js/app.48925a17f4ec5da4dd52.js></script></body>
 </html>

@@ -17,8 +17,14 @@
           <audio controls class="record-item">
             <source :src="recording.url" controls=true>
           </audio>
-           <span>{{recording.created_at}}.wav (UTC)</span>
+           <span>{{recording.created_at}}.mp3 (UTC)</span>
+          <progress v-if="recording.isUnsaved" max="100" :value="uploadPercentage">
+            <div class="progress-bar">
+              <span :style="{ 'width': `${uploadPercentage}%;`}">Progress: {{ uploadPercentage }}%</span>
+            </div>
+          </progress>
         </div>
+      
       </li>
       </template>
     </ul>
@@ -26,6 +32,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'Record',
   props: {
@@ -38,7 +46,8 @@ export default {
   },
   data () {
     return {
-      unsavedRecordings: []
+      unsavedRecordings: [],
+      uploadPercentage: 0
     }
   },
   computed: {
@@ -71,11 +80,12 @@ export default {
             that.audioRecorder.record()
             console.log('Media recorder started')
           })
-          .catch(function (err) {   
-            /* handle the error */
+          .catch(function (err) {
+             /* handle the error */
+            console.log(err)
             alert('Please plugin your earphone')
             this.$emit('stop-recording')
-            console.log(err)
+           
           })
       } else {
         // stop recording
@@ -99,7 +109,8 @@ export default {
       this.unsavedRecordings.push({
         choir_id: this.choir.id,
         url: url,
-        created_at: datetime
+        created_at: datetime,
+        isUnsaved: true
       })
       // upload link
       let formData = new FormData()
@@ -107,7 +118,28 @@ export default {
       formData.append('round_id', this.choir.round_id)
       formData.append('file', blob)
       formData.append('choir_id', this.choir.id)
-      this.$store.dispatch('saveRecording', formData)
+      formData.append('uploadPercentage', this.uploadPercentage)
+      this.uploadFile(formData)
+      // this.$store.dispatch('saveRecording', formData)
+    },
+
+    uploadFile (payload) {
+      let that = this
+      
+      that.$emit('upload-start')
+         let config = {
+            onUploadProgress: function(progressEvent) {
+              var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+               that.$set(that.$data, 'uploadPercentage', percentCompleted)
+            }
+          };
+      axios.post('/judge/recording/save', payload, config ).then(response => {
+      })
+      .catch(function (err) {
+      })
+      .finally(function () {
+        that.$emit('upload-complete')
+      })
     }
   }
 }
@@ -154,5 +186,25 @@ button,
 
 .record-item {
   padding: 10px;
+}
+
+.progress-bar {
+  background-color: whiteSmoke;
+  border-radius: 2px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25) inset;
+
+  width: 250px;
+  height: 20px;
+  
+  position: relative;
+  display: block;
+}
+  
+.progress-bar > span {
+  background-color: #7f4091;
+  border-radius: 2px;
+
+  display: block;
+  text-indent: -9999px;
 }
 </style>

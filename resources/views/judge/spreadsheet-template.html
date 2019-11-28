@@ -24,7 +24,16 @@ window. __Competition__ = {!! $competition !!};
 <link href="/css/dynamic-colors.css" rel=stylesheet>
 </head>
 <body>
+  <input type="hidden" id="recordingsInProgress" value="0"/>
   <div id=app></div>
-
+  <script>
+    const input = document.getElementById('recordingsInProgress');
+    window.onbeforeunload = function() {
+      if (input.value > 0) {
+        return 'Upload in progress, navigating away from the page will lose recording. Are you sure you want to continue?'
+      }
+      return;
+    };
+  </script>
 </body>
 </html>
