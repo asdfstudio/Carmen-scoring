@@ -18,11 +18,11 @@
               <source :src="recording.url" controls="true" />
             </audio>
             <span>{{recording.created_at}}.mp3 (UTC)</span>
-            <progress v-if="recording.isUnsaved" max="100" :value="uploadPercentage">
-              <div class="progress-bar">
-                <span :style="{ 'width': `${uploadPercentage}%;`}">Progress: {{ uploadPercentage }}%</span>
-              </div>
-            </progress>
+            <div v-if="recording.isUnsaved && isUploading" class="slider">
+              <div class="line"></div>
+              <div class="subline inc"></div>
+              <div class="subline dec"></div>
+            </div>
           </div>
         </li>
       </template>
@@ -49,7 +49,7 @@ export default {
   data () {
     return {
       unsavedRecordings: [],
-      uploadPercentage: 0
+      isUploading: false
     }
   },
   computed: {
@@ -64,7 +64,6 @@ export default {
     toggleRecording () {
       // start recording
       if (!this.choir.isRecording) {
-        console.log('starting...', this.choir.id)
         recorder.start()
           .then(() => {
             this.$emit('start-recording')
@@ -76,7 +75,6 @@ export default {
           })
       } else {
         // stop recording
-        console.log('stopping...', this.choir.id)
         this.$emit('stop-recording')
 
         recorder.stop()
@@ -109,29 +107,24 @@ export default {
             formData.append('file', file)
             formData.append('file_name', file)
             formData.append('choir_id', this.choir.id)
-            this.uploadFile(formData)
+            this.uploadFile(formData, this.unsavedRecordings.length - 1)
           })
           .catch(e => {
             console.error(e)
           })
       }
     },
-    uploadFile (payload) {
-      let that = this
-      that.$emit('upload-start')
-      let config = {
-        onUploadProgress: function (progressEvent) {
-          var percentCompleted = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
-          )
-          that.$set(that.$data, 'uploadPercentage', percentCompleted)
-        }
-      }
+    uploadFile (payload, index) {
+      this.$emit('upload-start')
+      this.isUploading = true
       axios
-        .post('/judge/recording/save', payload, config)
-        .then(response => {})
-        .finally(function () {
-          that.$emit('upload-complete')
+        .post('/judge/recording/save', payload)
+        .then(response => {
+          this.unsavedRecordings[index].isUnsaved = false
+        })
+        .finally(() => {
+          this.$emit('upload-complete')
+          this.isUploading = false
         })
     }
   }
@@ -183,22 +176,41 @@ button,
   padding: 10px;
 }
 
-.progress-bar {
-  background-color: whiteSmoke;
-  border-radius: 2px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25) inset;
-
-  width: 250px;
-  height: 20px;
-
+.slider{
   position: relative;
-  display: block;
+  width: 200px;
+  height: 5px;
+  padding: 5px 0px 10px 0px;
+  overflow-x: hidden;
 }
-.progress-bar > span {
-  background-color: #7f4091;
-  border-radius: 2px;
 
-  display: block;
-  text-indent: -9999px;
+.line{
+  position: absolute;
+  opacity: 0.4;
+  background: #7f4091;
+  width: 150%;
+  height: 5px;
 }
+
+.subline{
+  position: absolute;
+  background: #7f4091;
+  height: 5px; 
+}
+.inc{
+animation: increase 2s infinite;
+}
+.dec{
+animation: decrease 2s 0.5s infinite;
+}
+
+@keyframes increase {
+ from { left: -5%; width: 5%; }
+ to { left: 130%; width: 100%;}
+}
+@keyframes decrease {
+ from { left: -80%; width: 80%; }
+ to { left: 110%; width: 10%;}
+}
+
 </style>

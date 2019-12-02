@@ -355,9 +355,7 @@ export default {
     },
     changeInProgressRecValue: function (value) {
       const input = document.getElementById('recordingsInProgress')
-      console.log('before', input.value)
       input.value = parseInt(input.value) + value
-      console.log('after', input.value)
     }
   },
   mounted () {
