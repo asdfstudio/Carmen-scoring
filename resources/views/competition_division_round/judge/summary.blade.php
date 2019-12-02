@@ -14,6 +14,7 @@
 
 @section('round_navigation_bar')
   @if (isset($round) AND isset($division->rounds))
+
     <div class="round-navigation-bar body-width">
       <ul class="round-navigation">
         @foreach ($division->rounds as $rd)
@@ -51,6 +52,7 @@
     'choirs' => $round->choirs,
     'division' => $round->division,
     'judge' => $round->division->judges->first(),
+    'competition' => $competition,
   ])
 
 @endsection

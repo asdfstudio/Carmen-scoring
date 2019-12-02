@@ -22,6 +22,12 @@ Route::group([
     ]);
 
     //Route::singularResourceParameters();
+
+    Route::get('organization/{user}/update-premium', [
+      'as' => 'organization.premium-status', 'uses' => 'OrganizationController@updatePremiumStatus'
+    ]);
+    
+
   	Route::resource('organization', 'OrganizationController');
   	Route::resource('judge', 'JudgeController');
   	Route::resource('school', 'SchoolController');

@@ -28,6 +28,7 @@
                 <i class="text-muted">No Recordings</i>
             @endif
         </div>
+
         <div class="row wrap record-row">
             @foreach($division->judges[0]->recordings  as $key=>$recording)
             <div class="col-sm-6 record-item">

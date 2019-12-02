@@ -132,20 +132,22 @@
           </td>
         </tr>
          <!-- Record -->
-        <tr class="record-row">
+        <tr class="comment-row" v-if="hasPremium">
           <th class="criterion-name">Record Comments</th>
           <td  v-for="choir in choirsList" :key="choir.id">
             <Record
-              :recordsList:="recordsList"
+              :recordsList="recordsList"
               :choir="choir"
               :recordings ="recordings"
               @start-recording="currentRecordingId = choir.id"
               @stop-recording="currentRecordingId = null"
+              @upload-start="changeInProgressRecValue(1)"
+              @upload-complete="changeInProgressRecValue(-1)"
             />
           </td>
         </tr>
         <!-- DropZone -->
-        <tr class="record-row">
+        <tr class="comment-row" v-if="hasPremium">
           <th class="criterion-name">Upload Recorded File</th>
           <td v-for="choir in choirsList" :key="choir.id">
             <DropZone :choir="choir"/>
@@ -197,6 +199,9 @@ export default {
     },
     hasRatings () {
       return this.$store.state.ratings.length !== 0
+    },
+    hasPremium () {
+      return this.$store.state.competition.is_premium
     },
     activeModal () {
       return this.$store.state.activeModal
@@ -347,6 +352,12 @@ export default {
     },
     comment: function (choir) {
       return this.$store.getters.getChoirComment(choir.id)
+    },
+    changeInProgressRecValue: function (value) {
+      const input = document.getElementById('recordingsInProgress')
+      console.log('before', input.value)
+      input.value = parseInt(input.value) + value
+      console.log('after', input.value)
     }
   },
   mounted () {
@@ -545,7 +556,7 @@ table {
     }
   }
 
-  tr.comment-row {
+   tr.comment-row {
     font-size: 13px;
 
     .comment-text {
