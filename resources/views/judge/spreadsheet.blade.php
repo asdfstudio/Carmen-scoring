@@ -20,9 +20,9 @@ window.__IS_SPREADSHEET_SCORING_ACTIVE__ = "{!! $isSpreadsheetScoringActive !!}"
 window. __RECORDED_COMMENTS__ = {!! $recordedComments !!}; 
 window. __Competition__ = {!! $competition !!}; 
 </script>
-<script type=text/javascript src=/js/recorder.js></script>
+<script type=text/javascript src=/js/mic-recorder.js></script>
 <link href=/css/dynamic-colors.css rel=stylesheet>
-<link href=/static/css/app.0ee42757624aa1d9862597c91e833bcc.css rel=stylesheet></head>
+<link href=/static/css/app.8b652e0b713277931386f96c5f599af8.css rel=stylesheet></head>
 <body>
   <input type=hidden id=recordingsInProgress value=0>
   <div id=app></div>
@@ -35,5 +35,5 @@ window. __Competition__ = {!! $competition !!};
       return;
     };
   </script>
-<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.2bdb1616a0fef26ce4e0.js></script><script type=text/javascript src=/static/js/app.48925a17f4ec5da4dd52.js></script></body>
+<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.647af71e7979100d9049.js></script><script type=text/javascript src=/static/js/app.46680bfee91ecc5aaa5d.js></script></body>
 </html>

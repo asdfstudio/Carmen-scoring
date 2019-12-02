@@ -6,10 +6,7 @@ URL = window.URL || window.webkitURL
 var gumStream					// stream from getUserMedia()
 var rec					// Recorder.js object
 var audioRecorder
-// shim for AudioContext when it's not avb.
-var AudioContext = window.AudioContext || window.webkitAudioContext
-var audioContext // audio context to help us record
-
+var recorder
 var recordButton = document.getElementById('recordButton')
 var stopButton = document.getElementById('stopButton')
 var recordData = []
@@ -42,57 +39,45 @@ function startRecording (choirId, roundId, divisionId) {
   recordData.roundId = roundId
   recordData.divisionId = divisionId
   if (isRecording === 0) {
-    /*
-      Simple constraints object, for more advanced audio features see
-      https://addpipe.com/blog/audio-constraints-getusermedia/
-    */
-
-    var constraints = { audio: true, video: false }
-
+    recorder = new MicRecorder({
+      bitRate: 128
+    })
     /*
         Disable the record button until we get a success or fail from getUserMedia()
     */
-
-    navigator.mediaDevices.getUserMedia(constraints)
-      .then(function (stream) {
-        console.log('getUserMedia() success, stream created, initializing Recorder.js ...')
-        /*
-          create an audio context after getUserMedia is called
-          sampleRate might change after getUserMedia is called, like it does on macOS when recording through AirPods
-          the sampleRate defaults to the one set in your OS for your playback device
-        */
-        audioContext = new AudioContext()
-        /*  assign to gumStream for later use  */
-        gumStream = stream
-        var input = audioContext.createMediaStreamSource(stream)
-        /* use the stream */
-        audioRecorder = new Recorder(input, {numChannels: 1})
-        // start the recording process
-        audioRecorder.record()
+    recorder
+      .start()
+      .then(() => {
         $('.rbutton').addClass('cancel')
         button.removeClass('cancel')
         button.text('Stop Recording')
         button.attr('data-recording', 1)
         button.attr('data-count', count + 1)
         console.log('Recording started')
-      }).catch(function (err) {
-        console.log(err)
-        /* handle the error */
-        alert('Please plugin your earphone')
+      // something else
+      })
+      .catch(e => {
+        alert('Please plugin your microphone')
+        return false
       })
   } else {
-    $('.rbutton').removeClass('cancel')
-    button.text('Start Recording (' + count + ')')
-    button.attr('data-recording', 0)
-    audioRecorder.exportWAV(uploadRecording)
-    // tell the recorder to stop the recording
-    audioRecorder.stop()
-    // stop microphone access
-    gumStream.getAudioTracks()[0].stop()
-    // tell the recorder to stop the recording
-    console.log('Recording stopped')
+    // stop recording
+    console.log('stopping...')
+    recorder.stop().getMp3().then(([buffer, blob]) => {
+      const file = new File(buffer, 'music.mp3', {
+        type: blob.type,
+        lastModified: Date.now()
+      })
+      $('.rbutton').removeClass('cancel')
+      button.text('Start Recording (' + count + ')')
+      button.attr('data-recording', 0)
+      uploadRecording(blob)
+    }).catch((e) => {
+      console.error(e)
+    })
   }
 }
+
 function uploadRecording (blob) {
   var formData = new FormData()
   formData.append('division_id', recordData.divisionId)

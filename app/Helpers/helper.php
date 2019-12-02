@@ -15,7 +15,7 @@ function ordinal($number) {
 function uploadToS3($pathUrl, $file) {
     $storageDriver = Storage::disk("s3");
 
-    if($storageDriver->put($pathUrl,  $file->get())){
+    if($storageDriver->put($pathUrl, file_get_contents($file))){
         $storedFilePath = $storageDriver->path($pathUrl);
     }
     return $storedFilePath;

@@ -24,12 +24,12 @@ class RecordingController extends Controller
             $storagePath = 'recordings/';
             $url = $request->file;
             $storageFileName = uniqid();
+            // $filePath = public_path().'/recordings/' ;
+            // $url->move($filePath,$storageFileName);
             $pathUrl = $storagePath . $storageFileName;    
             $filePath= uploadToS3($pathUrl, $url); 
             $recording->url = $filePath;
-        //   $destinationPath = public_path().'/recordings/' ;
-        //   $url->move($destinationPath,$storageFileName);
-           
+      
         }
         // save modal
         $recording->save();
