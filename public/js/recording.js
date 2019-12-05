@@ -119,7 +119,7 @@ $(document).ready(function () {
   Dropzone.autoDiscover = false
   $('#myAwesomeDropzone').dropzone({
     paramName: 'file', // The name that will be used to transfer the file
-    maxFilesize: 20, // MB
+    maxFilesize: 500, // MB
     acceptedFiles: 'audio/*',
     addRemoveLinks: false
   })

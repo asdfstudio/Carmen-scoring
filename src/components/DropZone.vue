@@ -20,7 +20,7 @@ export default {
         url: window.origin + '/judge/recording/save',
         acceptedFiles: 'audio/*',
         addRemoveLinks: true,
-        maxFilesize: 2000,
+        maxFilesize: 500,
         headers: {'X-CSRF-TOKEN': document.querySelector('meta[name="_token"]').getAttribute('content')}
       }
     }
