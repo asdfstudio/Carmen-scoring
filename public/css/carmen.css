@@ -5921,3 +5921,47 @@ a.active {
    .record-item-audio span {
      padding-top: 10px;
    }
+
+   #controls {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-end;
+   }
+
+   #controls .slider{
+    position: relative;
+    width: 160px;
+    height: 5px;
+    padding: 5px 0px 10px 0px;
+    overflow-x: hidden;
+  }
+
+  #controls .line{
+    position: absolute;
+    opacity: 0.4;
+    background: #7f4091;
+    width: 150%;
+    height: 5px;
+  }
+
+  #controls .subline{
+    position: absolute;
+    background: #7f4091;
+    height: 5px; 
+  }
+  #controls .inc{
+  animation: increase 2s infinite;
+  }
+  #controls .dec{
+  animation: decrease 2s 0.5s infinite;
+  }
+
+  @keyframes increase {
+  from { left: -5%; width: 5%; }
+  to { left: 130%; width: 100%;}
+  }
+  @keyframes decrease {
+  from { left: -80%; width: 80%; }
+  to { left: 110%; width: 10%;}
+}

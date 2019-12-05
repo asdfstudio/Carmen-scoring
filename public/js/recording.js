@@ -10,6 +10,8 @@ var recorder
 var recordButton = document.getElementById('recordButton')
 var stopButton = document.getElementById('stopButton')
 var recordData = []
+var recordingsInProgress = 0
+
 // eslint-disable-next-line no-unused-vars
 function deleteRecording (id) {
   if (confirm('Are you sure you want to delete the record?') == true) {
@@ -79,6 +81,7 @@ function startRecording (choirId, roundId, divisionId) {
 }
 
 function uploadRecording (blob) {
+  var input = document.getElementById('recordingInProgress')
   var formData = new FormData()
   formData.append('division_id', recordData.divisionId)
   formData.append('round_id', recordData.roundId)
@@ -89,6 +92,9 @@ function uploadRecording (blob) {
       'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
     }
   })
+  $('#sliderId-' + recordData.choirId).show()
+
+  input.value = parseInt(input.value) + 1
   $.ajax({
     url: '/judge/recording/save',
     method: 'POST',
@@ -97,12 +103,19 @@ function uploadRecording (blob) {
     contentType: false, // must, tell jQuery not to process the data
     processData: false,
     success: function (result) {
-
+      input.value = parseInt(input.value) - 1
+      $('#sliderId-' + recordData.choirId).hide()
     }
   })
 }
 
 $(document).ready(function () {
+  window.onbeforeunload = function () {
+    if (parseInt(document.getElementById('recordingInProgress').value) > 0) {
+      return 'Upload in progress, navigating away from the page will lose recording. Are you sure you want to continue?'
+    }
+  }
+  // eslint-disable-next-line no-undef
   Dropzone.autoDiscover = false
   $('#myAwesomeDropzone').dropzone({
     paramName: 'file', // The name that will be used to transfer the file

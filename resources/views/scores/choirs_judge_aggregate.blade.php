@@ -10,8 +10,11 @@
         My Weighted Score
       </th>
     @endif
-
+    @if($round->is_scoring_active == true && $judge_id == Auth::user()->person_id && $competition->organization->is_premium == 1)
+      
     <th>Record</th>
+
+    @endif
   </tr>
 
   <div id=record-app>
@@ -39,12 +42,18 @@
 
     <td>
       
-      @if($round->is_scoring_active && $judge_id == Auth::user()->person_id && $competition->organization->is_premium == 1)
+      @if($round->is_scoring_active == true && $judge_id == Auth::user()->person_id && $competition->organization->is_premium == 1)
       <div id="controls">
-
+        <input type="hidden" name="recordinginprogress" id="recordingInProgress" value=0 >
         <button id="{{'recordButton-'.$choir->id }}" data-count="{{(count($choir->recordings) > 0)?$choir->recordings->first()->total:'0'}}" data-recording="0" class="rbutton" onClick="startRecording({{$choir->id}}, {{$round->id}}, {{$round->division_id}})">Start Recording({{(count($choir->recordings) > 0)?$choir->recordings->first()->total:'0'}})</button>
+        <div class="slider" id="{{'sliderId-'.$choir->id }}" style="display:none">
+              <div class="line"></div>
+              <div class="subline inc"></div>
+              <div class="subline dec"></div>
       </div>
-      <ol id="recordingsList"></ol>
+      </div>
+   
+      
       @endif
       @if($round->is_scoring_active == false AND $judge_id == Auth::user()->person_id)
 
