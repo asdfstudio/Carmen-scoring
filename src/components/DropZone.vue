@@ -30,9 +30,6 @@ export default {
       formData.append('division_id', this.choir.division_id)
       formData.append('round_id', this.choir.round_id)
       formData.append('choir_id', this.choir.id)
-      const URL = window.URL || window.webkitURL
-      formData.append('url', URL.createObjectURL(file))
-      this.$store.dispatch('saveRecording', formData)
     }
   }
 }

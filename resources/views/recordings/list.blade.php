@@ -19,10 +19,12 @@
         {{ Form::hidden('division_id', $division_id) }}
         {{ Form::hidden('choir_id', $choir_id) }}
         {{ Form::hidden('round_id', $round_id) }}
+        {{ Form::hidden('judge_id', $judge_id) }}
         {!! Form::close() !!}
     @endif
 
    <div class="container">
+ 
         <div class="row">
             @if(!$division->judges[0]->recordings)
                 <i class="text-muted">No Recordings</i>

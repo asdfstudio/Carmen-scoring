@@ -14,7 +14,7 @@ class RecordingController extends Controller
     public function postRecording(Request $request)
     {
         $recording = new Recording;
-        $recording->judge_id = Auth::user()->person_id;
+        $recording->judge_id = isset($request->judge_id)?$request->judge_id:Auth::user()->person_id;
         $recording->choir_id = $request->choir_id;
         $recording->division_id = $request->division_id;
         $recording->round_id = $request->round_id;
