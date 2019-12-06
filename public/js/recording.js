@@ -31,6 +31,7 @@ function deleteRecording (id) {
 }
 
 function startRecording (choirId, roundId, divisionId) {
+  var input = document.getElementById('recordingInProgress')
   console.log('recordButton clicked')
   var button = $('#recordButton-' + choirId)
   var isRecording = parseInt(button.attr('data-recording')) || 0
@@ -55,6 +56,7 @@ function startRecording (choirId, roundId, divisionId) {
         button.text('Stop Recording')
         button.attr('data-recording', 1)
         button.attr('data-count', count + 1)
+        input.value = parseInt(input.value) + 1
         console.log('Recording started')
       // something else
       })
@@ -94,7 +96,6 @@ function uploadRecording (blob) {
   })
   $('#sliderId-' + recordData.choirId).show()
 
-  input.value = parseInt(input.value) + 1
   $.ajax({
     url: '/judge/recording/save',
     method: 'POST',
@@ -121,6 +122,11 @@ $(document).ready(function () {
     paramName: 'file', // The name that will be used to transfer the file
     maxFilesize: 500, // MB
     acceptedFiles: 'audio/*',
-    addRemoveLinks: false
+    addRemoveLinks: false,
+    uploadprogress: function (file, response) {
+      window.onbeforeunload = function () {
+        return 'Upload in progress, navigating away from the page will lose recording. Are you sure you want to continue?'
+      }
+    }
   })
 })

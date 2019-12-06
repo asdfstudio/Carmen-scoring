@@ -24,13 +24,8 @@
     @endif
 
    <div class="container">
- 
-        <div class="row">
-            @if(!$division->judges[0]->recordings)
-                <i class="text-muted">No Recordings</i>
-            @endif
-        </div>
 
+   @if(count($division->judges)>0)
         <div class="row wrap record-row">
             @foreach($division->judges[0]->recordings  as $key=>$recording)
             <div class="col-sm-6 record-item">
@@ -44,7 +39,7 @@
            
             @endforeach
         </div>  
-       
+      @endif 
     </div>
 
 @endif

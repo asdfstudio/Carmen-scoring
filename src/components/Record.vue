@@ -115,7 +115,6 @@ export default {
       }
     },
     uploadFile (payload, index) {
-      this.$emit('upload-start')
       this.isUploading = true
       axios
         .post('/judge/recording/save', payload)
@@ -195,7 +194,7 @@ button,
 .subline{
   position: absolute;
   background: #7f4091;
-  height: 5px; 
+  height: 5px;
 }
 .inc{
 animation: increase 2s infinite;

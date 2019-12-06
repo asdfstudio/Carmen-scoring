@@ -22,7 +22,7 @@ window. __Competition__ = {!! $competition !!};
 </script>
 <script type=text/javascript src=/js/mic-recorder.js></script>
 <link href=/css/dynamic-colors.css rel=stylesheet>
-<link href=/static/css/app.cf18d31010fc776802b9d18749e1b854.css rel=stylesheet></head>
+<link href=/static/css/app.0ff0b83fb88159f3ba93cb656c1afa03.css rel=stylesheet></head>
 <body>
   <input type=hidden id=recordingsInProgress value=0>
   <div id=app></div>
@@ -35,5 +35,5 @@ window. __Competition__ = {!! $competition !!};
       return;
     };
   </script>
-<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.647af71e7979100d9049.js></script><script type=text/javascript src=/static/js/app.47516e070918bdcc195a.js></script></body>
+<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.647af71e7979100d9049.js></script><script type=text/javascript src=/static/js/app.41fa0bfbb97df8f568a0.js></script></body>
 </html>

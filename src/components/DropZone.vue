@@ -1,5 +1,5 @@
 <template>
-  <vue2-dropzone :options="dropzoneOptions" @vdropzone-sending="uploadFile" />
+  <vue2-dropzone ref="dropzone" :options="dropzoneOptions" @vdropzone-sending="uploadFile"  @vdropzone-file-added="uploadprogress" />
 </template>
 
 <script>
@@ -26,11 +26,20 @@ export default {
     }
   },
   methods: {
+    uploadprogress: function (file) {
+      this.$emit('upload-start')
+    },
     uploadFile: function (file, xhr, formData) {
       formData.append('division_id', this.choir.division_id)
       formData.append('round_id', this.choir.round_id)
       formData.append('choir_id', this.choir.id)
+    },
+    success: function () {
+      this.$emit('upload-complete')
     }
+  },
+  beforeDestroy () {
+    this.$refs.dropzone.removeAllFiles(true)
   }
 }
 </script>

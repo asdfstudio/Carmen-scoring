@@ -139,9 +139,8 @@
               :recordsList="recordsList"
               :choir="choir"
               :recordings ="recordings"
-              @start-recording="currentRecordingId = choir.id"
+              @start-recording="onRecordingStart(choir.id)"
               @stop-recording="currentRecordingId = null"
-              @upload-start="changeInProgressRecValue(1)"
               @upload-complete="changeInProgressRecValue(-1)"
             />
           </td>
@@ -150,7 +149,10 @@
         <tr class="comment-row" v-if="hasPremium">
           <th class="criterion-name">Upload Recorded File</th>
           <td v-for="choir in choirsList" :key="choir.id">
-            <DropZone :choir="choir"/>
+            <DropZone :choir="choir"
+            @upload-start="changeInProgressRecValue(1)"
+            @upload-complete="changeInProgressRecValue(-1)"
+            />
           </td>
         </tr>
       </tbody>
@@ -352,6 +354,10 @@ export default {
     },
     comment: function (choir) {
       return this.$store.getters.getChoirComment(choir.id)
+    },
+    onRecordingStart: function (choirId) {
+      this.currentRecordingId = choirId
+      this.changeInProgressRecValue(1)
     },
     changeInProgressRecValue: function (value) {
       const input = document.getElementById('recordingsInProgress')
