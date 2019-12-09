@@ -70,7 +70,8 @@ export default {
             // something else
           })
           .catch(e => {
-            alert('Please plugin your microphone')
+            console.log("sdasasd", e)
+            alert(e)
             return false
           })
       } else {
@@ -110,7 +111,7 @@ export default {
             this.uploadFile(formData, this.unsavedRecordings.length - 1)
           })
           .catch(e => {
-            console.error(e)
+            console.log(e)
           })
       }
     },
