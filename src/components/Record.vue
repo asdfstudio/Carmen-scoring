@@ -68,10 +68,16 @@ export default {
           .then(() => {
             this.$emit('start-recording')
             // something else
-          })
-          .catch(e => {
-            console.log("sdasasd", e)
-            alert(e)
+          }).catch(e => {
+            if(e.name === 'NotFoundError')
+            {
+               alert('Please plugin your microphone')
+            }else if(e.name === 'TypeError')
+            {
+               alert('Your browser does not support recording')
+            }else{
+               alert('something went wrong')
+            }
             return false
           })
       } else {
@@ -111,7 +117,7 @@ export default {
             this.uploadFile(formData, this.unsavedRecordings.length - 1)
           })
           .catch(e => {
-            console.log(e)
+            console.error(e)
           })
       }
     },

@@ -61,7 +61,13 @@ function startRecording (choirId, roundId, divisionId) {
       // something else
       })
       .catch(e => {
-        alert('Please plugin your microphone')
+        if (e.name === 'NotFoundError') {
+          alert('Please plugin your microphone')
+        } else if (e.name === 'TypeError') {
+          alert('Your browser does not support recording')
+        } else {
+          alert('something went wrong')
+        }
         return false
       })
   } else {
