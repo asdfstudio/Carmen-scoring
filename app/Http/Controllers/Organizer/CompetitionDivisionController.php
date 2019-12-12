@@ -397,7 +397,7 @@ class CompetitionDivisionController extends Controller
 
 
 
-        return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'activateScoringForm', 'publishScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
+        return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
     }
 
 

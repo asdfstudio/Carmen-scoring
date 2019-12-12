@@ -267,13 +267,8 @@ class ResultsController extends Controller
       $choirs = $round->choirs;
       $judges = $division->judges;
 
-      //$before = memory_get_usage();
       $scoreboard = new Scoreboard(['round_id' => $round_id]);
       $ratings = (new Ratings($round))->all();
-      //$after = memory_get_usage();
-      //$allocatedSize = ($after - $before);
-      //dd($allocatedSize/1024/1024);
-
       $rawScores = $scoreboard->extendedRawScores;
       $weightedScores = $scoreboard->extendedRawScores;
       switch($division->scoring_method_id){
@@ -307,7 +302,7 @@ class ResultsController extends Controller
       $this->loadDivision($division_id, $access_code);
       $division = $this->division;
       $captions = $this->captions;
-
+      
       $round = $division->rounds()->find($round_id)->targets()->find($target_round_id);
 
       $source_rounds = $round->sources;
@@ -336,12 +331,32 @@ class ResultsController extends Controller
       $judges = Judge::whereIn('id', $judge_ids)->get();
 
       $scoreboard = new Scoreboard(['round_id' => $source_rounds->pluck('id')->toArray()]);
-
-      //dd($scoreboard->rawScores);
+      $ratings = (new Ratings($round))->all();
+      $rawScores = $scoreboard->extendedRawScores;
+      $weightedScores = $scoreboard->extendedRawScores;
+      switch($division->scoring_method_id){
+        case 1:
+        case 2:
+          // Borda Count
+          $rankedScores = $scoreboard->rankedScores;
+          break;
+        case 3:
+          $rankedScores = $scoreboard->condorcetScoresRankedPairs;
+          break;
+        case 4:
+          $rankedScores = $scoreboard->condorcetScoresSchulze;
+          break;
+        case 5:
+          $rankedScores = $scoreboard->consensusOrdinalRankScores;
+          break;
+        case 6:
+          $rankedScores = $scoreboard->bordaCountScores;
+          break;
+      }
 
       $show_links = false;
 
-      return view('results.division_round.show_shared', compact('division', 'round', 'scoreboard', 'captions', 'access_code', 'choirs', 'judges', 'show_links'));
+      return view('results.division_round.show_shared', compact('division', 'round', 'scoreboard', 'rankedScores', 'captions', 'access_code', 'choirs', 'judges', 'show_links'));
     }
 
 
