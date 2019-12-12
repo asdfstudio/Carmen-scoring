@@ -38,7 +38,7 @@ class AwardScheduleController extends Controller
         'method' => 'post',
         'url' => route('organizer.competition.award-schedule.store', [$competition]),
       ]);
-      return view('award-schedule.organizer.create', compact('competition', 'schedule', 'form'));
+      return view('award-schedule.organizer.create', compact('competition', 'form'));
     }
 
 

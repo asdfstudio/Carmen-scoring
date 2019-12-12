@@ -23,7 +23,9 @@
       {
         $awardWinner = $awardWinners->where('division_id', $item->division->id)->where('award_id', $item->award->id);
         $tied = $awardWinner->count() > 1 ? true : false;
-        $sponsor = $awardWinner->sponsor;
+        if(!empty($awardWinner->first()->sponsor)){
+          $sponsor = $awardWinner->first()->sponsor;
+        }
       }
       elseif($item->division)
       {
