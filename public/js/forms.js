@@ -39,7 +39,11 @@ var JudgeForm = (function () {
 
   var init = function (form) {
     this.form = form
-    judgeSelectize = $('#modal').find('.judge_id').selectize()
+    judgeSelectize = $('#modal').find('.judge_id').selectize({
+      allowEmptyOption: true,
+      placeholder: 'Select a judge...'
+    })
+    judgeSelectize[0].selectize.clear();
   }
 
   var showNewJudgeForm = function () {

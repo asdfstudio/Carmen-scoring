@@ -36,7 +36,7 @@ class CompetitionDivisionController extends Controller
 
         //$division = new Division;
 
-				return view('competition_division.organizer.index', compact('competition', 'division'));
+				return view('competition_division.organizer.index', compact('competition'));
     }
 
 
@@ -141,7 +141,7 @@ class CompetitionDivisionController extends Controller
     public function show($competition_id, $division_id, FormBuilder $formBuilder)
     {
         $competition = Competition::with('organization','place','divisions')->find($competition_id);
-
+        
 				$division = Division::with(['choirs','rounds','judges' => function ($query) {
 					$query->groupBy('judge_id');
 				}, 'judges.captions' => function ($query) use ($division_id) {

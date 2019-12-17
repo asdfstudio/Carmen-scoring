@@ -345,8 +345,6 @@ class CompetitionDivisionRoundController extends Controller
 
       $this->authorize('show', $round);
 
-      //dd($round);
-
       $division = $round->division;
       $competition = $division->competition;
       $rounds = $division->rounds;
@@ -396,6 +394,7 @@ class CompetitionDivisionRoundController extends Controller
       switch($division->scoring_method_id){
         case 1:
         case 2:
+        case 6:
           // Borda Count
           $rankedScores = $scoreboard->rankedScores;
           break;

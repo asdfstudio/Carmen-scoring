@@ -187,6 +187,9 @@ var Resource = (function () {
     } else if (type == 'judge') {
       JudgeForm.init(Form.theForm)
     }
+
+    var eventName = 'resourceadd' + type
+    $(document.body).trigger(eventName)
   }
 
   var edit = function (type, id, resource) {
