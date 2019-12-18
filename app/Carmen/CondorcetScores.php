@@ -84,25 +84,27 @@ class CondorcetScores {
       
     }
     
-    $election_results = $this->elections[$election_key]->getResult($this->advanced_method);
-    
-    $carmen_rank = 0;
-    $previous_condorcet_rank = null;
-    $loop = 0;
-    
-    foreach($election_results as $condorcet_rank => $candidates){
-      foreach($candidates as $candidate){
-        $loop++;
-        
-        if($condorcet_rank !== $previous_condorcet_rank){
-          $carmen_rank = $loop;
-          $previous_condorcet_rank = $condorcet_rank;
+    if(isset($this->elections[$election_key])){
+      $election_results = $this->elections[$election_key]->getResult($this->advanced_method);
+
+      $carmen_rank = 0;
+      $previous_condorcet_rank = null;
+      $loop = 0;
+
+      foreach($election_results as $condorcet_rank => $candidates){
+        foreach($candidates as $candidate){
+          $loop++;
+
+          if($condorcet_rank !== $previous_condorcet_rank){
+            $carmen_rank = $loop;
+            $previous_condorcet_rank = $condorcet_rank;
+          }
+
+          $choir_id = intval($candidate->getName());
+          $tied = count($candidates) > 1 ? 1 : 0;
+          $results->put($choir_id,['choir_id' => $choir_id, 'rank' => $carmen_rank, 'tied' => $tied]);
+
         }
-        
-        $choir_id = intval($candidate->getName());
-        $tied = count($candidates) > 1 ? 1 : 0;
-        $results->put($choir_id,['choir_id' => $choir_id, 'rank' => $carmen_rank, 'tied' => $tied]);
-        
       }
     }
     
