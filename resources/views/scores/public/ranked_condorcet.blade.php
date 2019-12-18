@@ -23,7 +23,7 @@
       @foreach($choirs as $choir)
         <th>
           <div class="sideways-header">
-            {{ link_to_route('results.division.round.choir.show',$choir->name,[$round->division->competition,$round->division,$round,$choir]) }}
+            {{ link_to_route('results.division.round.choir.show', $choir->name, [$division, $round, $choir, $access_code]) }}
           </div>
         </th>
       @endforeach
@@ -40,7 +40,7 @@
     @foreach($choirs as $choir)
       <tr>
         <th>
-          {{ link_to_route('results.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
+          {{ link_to_route('results.division.round.choir.show', $choir->name, [$division, $round, $choir, $access_code]) }}
         </th>
         
         @foreach($choirs as $choir_comp)
@@ -90,7 +90,7 @@
     @foreach($choirs as $choir)
       <th>
         <div class="sideways-header">
-          {{ link_to_route('results.division.round.choir.show',$choir->name,[$round->division->competition,$round->division,$round,$choir]) }}
+          {{ link_to_route('results.division.round.choir.show', $choir->name, [$division, $round, $choir, $access_code]) }}
         </div>
       </th>
     @endforeach
@@ -107,7 +107,7 @@
   @foreach($choirs as $choir)
     <tr>
       <th>
-        {{ link_to_route('results.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
+        {{ link_to_route('results.division.round.choir.show', $choir->name, [$division, $round, $choir, $access_code]) }}
       </th>
       @foreach($choirs as $choir_comp)
         <td>{{ $rankedScores->pairwise_bit($election_key, $choir->id, $choir_comp->id) }}</td>
