@@ -33,6 +33,7 @@ class Scoreboard {
 	public $condorcetScoresSchulze;
 	public $condorcetScoresRankedPairs;
 	public $consensusOrdinalRankScores;
+  public $rankedScoresForCurrentMethod;
 	public $extendedRawScores;
 	//protected $judgeScores;
 	//protected $criteriaScores;
@@ -53,6 +54,7 @@ class Scoreboard {
 		$this->getCondorcetScoresSchulze();
 		$this->getCondorcetScoresRankedPairs();
 		$this->getConsensusOrdinalRankScores();
+    $this->getRankedScoresForCurrentMethod();
 	}
 
 	protected function getRawScores()
@@ -192,5 +194,27 @@ class Scoreboard {
 		return $this->consensusOrdinalRankScores = new ConsensusOrdinalRankScores($this->extendedRawScores, $this->penalties);
 	}
 
-
+  public function getRankedScoresForCurrentMethod()
+  {
+    switch($this->division->scoring_method_id){
+      case 1:
+      case 2:
+        $this->rankedScoresForCurrentMethod = $this->rankedScores;
+        break;
+      case 3:
+        $this->rankedScoresForCurrentMethod = $this->condorcetScoresRankedPairs;
+        break;
+      case 4:
+        $this->rankedScoresForCurrentMethod = $this->condorcetScoresSchulze;
+        break;
+      case 5:
+        $this->rankedScoresForCurrentMethod = $this->consensusOrdinalRankScores;
+        break;
+      case 6:
+        $this->rankedScoresForCurrentMethod = $this->bordaCountScores;
+        break;
+      default:
+        $this->rankedScoresForCurrentMethod = null;
+    }
+  }
 }

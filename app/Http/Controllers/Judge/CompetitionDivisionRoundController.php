@@ -40,7 +40,8 @@ class CompetitionDivisionRoundController extends Controller
 
       $rawScores = $scoreboard->rawScores;
       $weightedScores = $scoreboard->weightedScores;
-      //$rankedScores = $scoreboard->rankedScores;
+      //$rankedScores = $scoreboard->rankedScoresForCurrentMethod;
+
 
 
       //$competition = Competition::find($competition_id);
@@ -110,7 +111,7 @@ class CompetitionDivisionRoundController extends Controller
 
       //$rawScores = $scoreboard->rawScores;
       //$weightedScores = $scoreboard->weightedScores;
-      //$rankedScores = $scoreboard->rankedScores;
+      //$rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
       if ($round->status_slug == 'active') {
         $isScoringActive = true;
@@ -178,7 +179,7 @@ class CompetitionDivisionRoundController extends Controller
 
       //$rawScores = $scoreboard->rawScores;
       //$weightedScores = $scoreboard->weightedScores;
-      //$rankedScores = $scoreboard->rankedScores;
+      //$rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
       $spreadsheetTitle = $division->name . ' > ' . $round->name;
       $backUrl = route('judge.round.scores.summary', [$competition_id,$division_id,$round_id]);
@@ -329,7 +330,7 @@ class CompetitionDivisionRoundController extends Controller
 
       //$rawScores = $scoreboard->rawScores;
       //$weightedScores = $scoreboard->weightedScores;
-      //$rankedScores = $scoreboard->rankedScores;
+      //$rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
       return view('competition_division_round.judge.spreadsheet_sources_old',compact('scoreboard', 'round', 'competition', 'division', 'judge', 'choirs', 'captions', 'isScoringActive','competition'));
     }
@@ -410,7 +411,7 @@ class CompetitionDivisionRoundController extends Controller
 
       //$rawScores = $scoreboard->rawScores;
       //$weightedScores = $scoreboard->weightedScores;
-      //$rankedScores = $scoreboard->rankedScores;
+      //$rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
       $spreadsheetTitle = $division->name . ' > Source Rounds';
       $backUrl = route('judge.competition.division.show', [$competition_id,$division_id]);

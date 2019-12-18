@@ -64,7 +64,7 @@ class CompetitionDivisionRoundChoirController extends Controller
 
 	    $rawScores = $scoreboard->rawScores;
 	    $weightedScores = $scoreboard->weightedScores;
-			$rankedScores = $scoreboard->rankedScores;
+      $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
 			$comment = Comment::where('judge_id', $judge_id)
 									->where('choir_id', $choir_id)

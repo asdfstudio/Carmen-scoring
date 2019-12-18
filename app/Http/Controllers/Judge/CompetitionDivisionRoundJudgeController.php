@@ -47,23 +47,7 @@ class CompetitionDivisionRoundJudgeController extends Controller
 
       $rawScores = $scoreboard->rawScores;
       $weightedScores = $scoreboard->weightedScores;
-      switch($division->scoring_method_id){
-        case 1:
-        case 2:
-        case 6:
-          // Borda Count
-          $rankedScores = $scoreboard->rankedScores;
-          break;
-        case 3:
-          $rankedScores = $scoreboard->condorcetScoresRankedPairs;
-          break;
-        case 4:
-          $rankedScores = $scoreboard->condorcetScoresSchulze;
-          break;
-        case 5:
-          $rankedScores = $scoreboard->consensusOrdinalRankScores;
-          break;
-      }
+      $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
       $ratings = (new Ratings($round))->all();
 
