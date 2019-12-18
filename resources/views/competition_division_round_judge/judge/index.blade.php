@@ -88,7 +88,7 @@
   
   {{-- Condorcet methods have an extra table that is formatted a little differently to show rankings. --}}
   @if($division->scoring_method_id === 3 || $division->scoring_method_id === 4)
-  	@include('scores.organizer.ranked_condorcet',['choirs' => $division->choirs, 'judges' => $division->judges])
+  	@include('scores.judge.ranked_condorcet',['choirs' => $division->choirs, 'judges' => $division->judges])
   @endif
 
   @include('scores.judge.composite',['choirs' => $division->choirs])
