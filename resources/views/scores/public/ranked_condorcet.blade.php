@@ -40,7 +40,7 @@
     @foreach($choirs as $choir)
       <tr>
         <th>
-          {{ link_to_route('results.division.round.choir.show'$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
+          {{ link_to_route('results.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
         </th>
         
         @foreach($choirs as $choir_comp)
