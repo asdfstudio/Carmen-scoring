@@ -1,3 +1,8 @@
+@if($rawScores->count() === 0)
+
+<p class="alert alert-warning">Scores have not been entered. Please try again after judges have entered scores.</p>
+
+@else
 
 <table class="table table-striped table-bordered scoreboard toggle-scores rank">
   @foreach($captions as $caption)
@@ -132,3 +137,5 @@
   @endforeach
 
 </table>
+
+@endif
