@@ -11,7 +11,7 @@ use CondorcetPHP\Condorcet\Vote;
 class CondorcetScores {
   protected $elections = [];
   
-  protected $weightedScores;
+  public $weightedScores;
   protected $penalties;
   protected $advanced_method = false;
   
@@ -27,16 +27,16 @@ class CondorcetScores {
   protected $totaled = [];
   
   public $score_by_judge_and_caption = [];
-  protected $weightedScore_by_judge_and_caption = [];
+  public $weightedScore_by_judge_and_caption = [];
   
-  protected $score_vote_rank_by_judge_and_caption = [];
-  protected $weightedScore_vote_rank_by_judge_and_caption = [];
+  public $score_vote_rank_by_judge_and_caption = [];
+  public $weightedScore_vote_rank_by_judge_and_caption = [];
   
-  protected $score_by_judge_overall = [];
-  protected $weightedScore_by_judge_overall = [];
+  public $score_by_judge_overall = [];
+  public $weightedScore_by_judge_overall = [];
   
-  protected $score_vote_rank_by_judge_overall = [];
-  protected $weightedScore_vote_rank_by_judge_overall = [];
+  public $score_vote_rank_by_judge_overall = [];
+  public $weightedScore_vote_rank_by_judge_overall = [];
   
   
   public function __construct($weightedScores, $penalties = false)
@@ -190,8 +190,8 @@ class CondorcetScores {
         if(!$choir_penalties->isEmpty())
         {
           // Get all overall penalties
-          $overall_penalty_amount = $choir_penalties->where('apply_per_judge', 0)->sum('amount');
-          $score = $score - $overall_penalty_amount;
+          //$overall_penalty_amount = $choir_penalties->where('apply_per_judge', 0)->sum('amount');
+          //$score = $score - $overall_penalty_amount;
 
           // Get all judge penalties
           $judge_penalty_amount = $this->judges->count() * $choir_penalties->where('apply_per_judge', 1)->sum('amount');

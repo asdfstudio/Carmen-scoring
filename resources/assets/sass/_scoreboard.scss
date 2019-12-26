@@ -39,7 +39,7 @@
   flex-grow: 1;
   max-height: 150px;
   
-  & a {
+  & a, & span {
     display: inline;
     transform: rotate(180deg);
     writing-mode: vertical-rl;

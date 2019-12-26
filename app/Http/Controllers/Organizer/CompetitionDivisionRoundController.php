@@ -245,6 +245,9 @@ class CompetitionDivisionRoundController extends Controller
       $rawScores = $scoreboard->extendedRawScores;
       $weightedScores = $scoreboard->extendedRawScores;
       $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
+      $rankedScores->total_weighted_rank();
+      $query = $rankedScores->weightedScores->where('choir_id', 77)->where('judge_id', 1859);
+      //dd($rankedScores->weightedScores->where('choir_id', 77)->where('judge_id', 1859)->sum('weightedScore'), $query->sum('weightedScore'), $rankedScores->weightedScore_by_judge_overall[1859], $rankedScores->weightedScore_vote_rank_by_judge_overall[1859]);
       
       /*$expectedScores = new CountExpectedScores($round);
       $expectectedScoresCount = $expectedScores->run();

@@ -3678,11 +3678,11 @@ table.spreadsheet-legend {
   display: flex;
   flex-grow: 1;
   max-height: 150px; }
-  .sideways-header a {
+  .sideways-header a, .sideways-header span {
     display: inline;
     transform: rotate(180deg);
     writing-mode: vertical-rl; }
-    .sideways-header a:hover {
+    .sideways-header a:hover, .sideways-header span:hover {
       text-decoration: none; }
 
 .table > tbody > tr.align-bottom th,
