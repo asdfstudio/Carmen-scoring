@@ -170,6 +170,7 @@ class UserPersonForm extends Form
     // Is the current user a superadmin (listed in the auth config or else are they an admin who is editing their own account)?
     $user_to_compare = $this->user ?  $this->user : null;
     $i_am_superadmin = auth()->user()->isSuperAdmin($user_to_compare);
+    $target_is_superadmin = $this->user ? $this->user->isSuperAdmin() : false;
     
     // Is the current user editing their own account?
     $self_editing = $this->user && !empty($this->user->id) && $this->user->id === auth()->user()->id;
@@ -217,8 +218,8 @@ class UserPersonForm extends Form
       ]);
     }
     
-    // Disable username editing for non-superadmins and non-self-editors.
-    if($this->user && $this->mode === 'Edit' && !$i_am_superadmin && !$self_editing){
+    // Disable username editing for non-admins and non-self-editors.
+    if($this->user && $this->mode === 'Edit' && !$self_editing && (!$i_am_admin || ($target_is_superadmin && !$i_am_superadmin))){
       $this->modify('username','text', [
         'attr' => ['disabled' => 'disabled']
       ]);
@@ -253,7 +254,7 @@ class UserPersonForm extends Form
     }
     
     // When editing an existing user, this link will toggle the password fields.
-    if($this->mode == 'Edit' && $this->user && ($i_am_superadmin || $self_editing)){
+    if($this->mode == 'Edit' && $this->user && ($i_am_superadmin || ($i_am_admin && !$target_is_superadmin) || $self_editing)){
       $this->add('update_password', 'static', [
         'wrapper' => ['class' => 'form-group user-account-section '.$user_section_visibility_class],
         'label_show' => false,
@@ -266,7 +267,7 @@ class UserPersonForm extends Form
     }
     
     // Superadmins can edit the field, but regular admins can only modify this when creating another user (not when editing).
-    if($i_am_superadmin || ($i_am_admin && (!$this->user || empty($this->user->id))) || $self_editing){
+    if($i_am_superadmin || $self_editing || ($i_am_admin && (!$target_is_superadmin || !$this->user || empty($this->user->id)))){
       
       $this->add('new_password','repeated', [
         'wrapper' => ['class' => 'form-group user-account-section password-fields '.$user_section_visibility_class],

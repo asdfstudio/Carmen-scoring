@@ -4045,7 +4045,9 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
     font-size: 18px;
     display: inline; }
   .list-group .list-group-item.award .recipient .choir {
-    padding: 0 5px; }
+    padding: 0 5px;
+    font-size: 18px;
+    display: inline; }
 
 .list-group .list-group-item.award .sponsor {
   display: block;
