@@ -103,12 +103,13 @@
           background: $cs-green;
           color: $cs-white;
           padding: 5px;
-          display: block;
+          //display: block;
           margin-bottom: 5px;
         }
         .name {
           padding: 0 5px;
           font-size: 18px;
+          display: inline;;
           //line-height: 22px;
         }
         .choir {
