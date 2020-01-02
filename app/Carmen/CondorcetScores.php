@@ -50,6 +50,12 @@ class CondorcetScores {
   }
   
   
+  public function weighted_scores()
+  {
+    return $this->weightedScores;
+  }
+  
+  
   public function total_raw_rank($caption_id = false)
   {
     return $this->calculate_rank($caption_id, 'score');
