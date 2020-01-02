@@ -8,12 +8,14 @@ class SchoolForm extends Form
 {
     public function buildForm()
     {
+        /*
         $this->add('heading', 'static', [
           'tag' => 'h2',
           'value' => 'School',
           'label_show' => false
         ]);
-
+        */
+        
         $this->add('name','text', [
           'rules' => '',
           'label' => 'School Name',

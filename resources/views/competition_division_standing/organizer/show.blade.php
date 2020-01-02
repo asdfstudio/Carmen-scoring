@@ -44,11 +44,6 @@
 		  @endif
 
 			@if($standing)
-		    @if($standing->is_consensus_scoring)
-		      <p class="alert alert-warning">
-		        Consensus scoring is used for this division.
-		      </p>
-		    @endif
 
 		  	@include('standing.list', ['standing' => $standing])
 

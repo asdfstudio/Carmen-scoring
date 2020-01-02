@@ -6,7 +6,8 @@
           <th class="criteria-header">
             <!--Caption / Criteria-->
           </th>
-          <th v-for="choir in choirsList"  :choir="choir" v-bind:key="choir.id">
+
+          <th v-for="choir in choirsList" class="choir-header"  :choir="choir" v-bind:key="choir.id">
             <span class="clickable" @click="activateChoirModal(choir)">{{ choir.name }}</span>
           </th>
         </tr>
@@ -35,10 +36,12 @@
 
           <td
             v-for="choir in choirsList"
+            class="caption-value"
             @click="activateChoirCriterionModal(choir, criterion)"
             :choir="choir"
             :criterion="criterion"
             v-bind:key="choir.id"
+            v-bind:class="{editing: isEditing(choir, criterion)}"
             >{{ score(choir, criterion) }}</td>
         </tr>
         <!-- Caption Criteria End -->
@@ -46,7 +49,8 @@
         <!-- Caption footer start -->
         <tr class="caption-row caption-footer" v-bind:key="caption.id">
           <th class="caption-subtotal caption-subtotal-label" :class="['lighter-background-color-' + caption.color_id]">
-            Subtotal
+            {{ caption.name }} <span v-if="caption.id === 1 && captionWeightingId === 1">Raw</span> Subtotal
+            <div v-if="caption.id === 1 && captionWeightingId === 1">{{ caption.name }} Weighted Subtotal</div>
           </th>
           <td
             v-for="choir in choirsList"
@@ -56,6 +60,21 @@
             :class="['lighter-background-color-' + caption.color_id]"
             >
               {{ getChoirCaptionSubtotalScore(choir, caption) }}
+              <div v-if="caption.id === 1 && captionWeightingId === 1">{{ getChoirCaptionSubtotalScore(choir, caption) * 1.5 }}</div>
+            </td>
+        </tr>
+        <tr class="caption-row caption-footer" v-bind:key="caption.id">
+          <th class="caption-rank caption-rank-label" :class="['lighter-background-color-' + caption.color_id]">
+            {{ caption.name }} Rank
+          </th>
+          <td
+            v-for="choir in choirsList"
+            :choir="choir"
+            v-bind:key="choir.id"
+            class="caption-rank caption-rank-value"
+            :class="['lighter-background-color-' + caption.color_id]"
+            >
+              {{ choirCaptionRank(choir, caption, 'Place') }} <span class="tied-badge" v-if="choirCaptionRankTied(choir, caption)">Tied</span>
             </td>
         </tr>
         <!-- Caption footer end -->
@@ -66,7 +85,8 @@
         <!-- Total score start -->
         <tr class="score-row">
           <th class="score-total-label">
-            Total
+            <span v-if="captionWeightingId === 1">Raw</span> Total
+            <div v-if="captionWeightingId === 1">Weighted Total</div>
           </th>
           <td
             v-for="choir in choirsList"
@@ -75,21 +95,65 @@
             class="score-total-value"
             >
             {{ choirTotalScore(choir) }}
+            <div v-if="captionWeightingId === 1">{{ choirTotalWeightedScore(choir) }}</div>
           </td>
         </tr>
         <!-- Total score end -->
+
+        <!-- Total score start -->
+        <tr class="rank-rating-row">
+          <th class="rank-rating-label">
+            Rank <span v-if="hasRatings">&amp; Rating</span>
+          </th>
+          <td
+            v-for="choir in choirsList"
+            :choir="choir"
+            v-bind:key="choir.id"
+            class="rank-rating-value"
+            >
+            {{ choirRank(choir, 'Place') }} <span class="tied-badge" v-if="choirRankTied(choir)">Tied</span><br>
+            <span v-if="hasRatings">{{ scoreToRating(choir.total_score) }}</span>
+          </td>
+        </tr>
+        <!-- Rank / Rating end -->
 
         <!-- Comments -->
         <tr class="comment-row">
           <th class="criterion-name">Comments</th>
 
           <td
+            class="comment-text"
             v-for="choir in choirsList"
             @click="activateChoirCommentModal(choir)"
             :choir="choir"
-
             v-bind:key="choir.id"
-            >{{ comment(choir) }}</td>
+            >
+            {{ comment(choir) }}
+          </td>
+        </tr>
+         <!-- Record -->
+        <tr class="comment-row" v-if="hasPremium">
+          <th class="criterion-name">Record Comments</th>
+          <td  v-for="choir in choirsList" :key="choir.id">
+            <Record
+              :recordsList="recordsList"
+              :choir="choir"
+              :recordings ="recordings"
+              @start-recording="onRecordingStart(choir.id)"
+              @stop-recording="currentRecordingId = null"
+              @upload-complete="changeInProgressRecValue(-1)"
+            />
+          </td>
+        </tr>
+        <!-- DropZone -->
+        <tr class="comment-row" v-if="hasPremium">
+          <th class="criterion-name">Upload Recorded File</th>
+          <td v-for="choir in choirsList" :key="choir.id">
+            <DropZone :choir="choir"
+            @upload-start="changeInProgressRecValue(1)"
+            @upload-complete="changeInProgressRecValue(-1)"
+            />
+          </td>
         </tr>
       </tbody>
     </table>
@@ -97,18 +161,31 @@
 </template>
 
 <script>
+import Record from './Record'
+import DropZone from './DropZone'
 
 export default {
   name: 'Spreadsheet',
+  components: { Record, DropZone },
   data: function () {
     return {
       activeChoir: null,
-      activeCriterion: null
+      activeCriterion: null,
+      audioRecorder: null,
+      recordingData: [],
+      currentRecordingId: null
     }
   },
   computed: {
+    captionWeightingId () {
+      return this.$store.getters.captionWeightingId
+    },
     choirsList () {
-      return this.$store.getters.getChoirsList
+      return this.$store.getters.getChoirsList.map(choir => ({
+        ...choir,
+        isRecording: choir.id === this.currentRecordingId,
+        isDisabled: this.currentRecordingId && this.currentRecordingId !== choir.id
+      }))
     },
     captionsList () {
       return this.$store.state.captionsList
@@ -119,11 +196,26 @@ export default {
     scores () {
       return this.$store.state.scores
     },
+    ratings () {
+      return this.$store.state.ratings
+    },
+    hasRatings () {
+      return this.$store.state.ratings.length !== 0
+    },
+    hasPremium () {
+      return this.$store.state.competition.is_premium
+    },
     activeModal () {
       return this.$store.state.activeModal
     },
     isSpreadsheetScoringActive () {
       return this.$store.state.isSpreadsheetScoringActive
+    },
+    division () {
+      return this.$store.state.divisions
+    },
+    recordings () {
+      return this.$store.state.recordings
     }
   },
   watch: {
@@ -139,13 +231,22 @@ export default {
     }
   },
   methods: {
+    isEditing: function (choir, criterion) {
+      var activeChoir = this.$store.getters.activeChoir
+      var activeCriterion = this.$store.getters.activeCriterion
+      var activeChoirId = (activeChoir) ? activeChoir.id : null
+      var activeCriterionId = (activeCriterion) ? activeCriterion.id : null
+      return (choir.id === activeChoirId && criterion.id === activeCriterionId && this.activeModal)
+    },
     displayScoringInactiveMessage: function () {
       alert('Scoring is currently inactive.')
     },
     activateModal: function (data) {
+      this.$store.commit('startModalProtection')
       this.$store.commit('activateModal', data)
     },
     activateChoirModal: function (choir) {
+      this.$store.commit('startModalProtection')
       if (this.isSpreadsheetScoringActive) {
         this.$store.commit('activateChoirModal', choir)
       } else {
@@ -153,6 +254,7 @@ export default {
       }
     },
     activateChoirCommentModal: function (choir) {
+      this.$store.commit('startModalProtection')
       if (this.isSpreadsheetScoringActive) {
         this.$store.commit('activateChoirCommentModal', choir)
       } else {
@@ -160,6 +262,7 @@ export default {
       }
     },
     activateCriterionModal: function (criterion) {
+      this.$store.commit('startModalProtection')
       if (this.isSpreadsheetScoringActive) {
         this.$store.commit('activateCriterionModal', criterion)
       } else {
@@ -167,8 +270,13 @@ export default {
       }
     },
     activateChoirCriterionModal: function (choir, criterion) {
+      this.$store.commit('startModalProtection')
       if (this.isSpreadsheetScoringActive) {
-        this.$store.commit('activateChoirCriterionModal', {choir, criterion})
+        if (!this.activeModal) {
+          this.$store.commit('activateChoirCriterionModal', {choir, criterion})
+        } else {
+          this.deactivateModal()
+        }
       } else {
         this.displayScoringInactiveMessage()
       }
@@ -194,6 +302,9 @@ export default {
     deactiveChoir: function () {
       this.activeChoir = null
     },
+    deactivateModal: function () {
+      this.$store.commit('deactivateModal')
+    },
     incrementCount: function () {
       this.$store.commit('increment')
     },
@@ -203,32 +314,85 @@ export default {
     score: function (choir, criterion) {
       return this.$store.getters.getChoirCriterionScore(choir.id, criterion.id)
     },
+    choirRank: function (choir, rankNoun = '') {
+      var rank = choir.total_score ? this.toOrdinal(choir.rank) : '--'
+      return rankNoun ? rank + ' ' + rankNoun : rank
+    },
+    choirRankTied: function (choir) {
+      if (choir.total_score && choir.rank_tied) {
+        return true
+      }
+    },
+    updateChoirsRanks () {
+      return this.$store.getters.updateChoirsRanks
+    },
     choirTotalScore: function (choir) {
       return this.$store.getters.getChoirTotalScore(choir.id)
+    },
+    choirTotalWeightedScore: function (choir) {
+      return this.$store.getters.getChoirTotalWeightedScore(choir.id)
+    },
+    scoreToRating: function (score) {
+      return this.$store.getters.getChoirRating(score)
     },
     getChoirCaptionSubtotalScore: function (choir, caption) {
       return this.$store.getters.getChoirCaptionSubtotalScore(choir.id, caption.id)
     },
+    getChoirCaptionRank: function (choir, caption, rankNoun = '') {
+      return this.$store.getters.getChoirCaptionRank(choir.id, caption.id)
+    },
+    choirCaptionRank: function (choir, caption, rankNoun = '') {
+      var captionRank = this.getChoirCaptionRank(choir, caption)
+      var rank = captionRank.caption_score ? this.toOrdinal(captionRank.rank) : '--'
+      return rankNoun ? rank + ' ' + rankNoun : rank
+    },
+    choirCaptionRankTied: function (choir, caption) {
+      var captionRank = this.getChoirCaptionRank(choir, caption)
+      if (captionRank.caption_score && captionRank.rank_tied) {
+        return true
+      }
+    },
     comment: function (choir) {
       return this.$store.getters.getChoirComment(choir.id)
+    },
+    onRecordingStart: function (choirId) {
+      this.currentRecordingId = choirId
+      this.changeInProgressRecValue(1)
+    },
+    changeInProgressRecValue: function (value) {
+      const input = document.getElementById('recordingsInProgress')
+      input.value = parseInt(input.value) + value
     }
+  },
+  mounted () {
+    this.updateChoirsRanks()
+  },
+  beforeUpdate () {
+    this.updateChoirsRanks()
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+
+/* @import url('https://showchoir.carmenscoring.com/css/dynamic-colors.css'); */
+
 #spreadsheet {
   margin: 5px;
-  margin-top:50px;
+  margin-top:5px;
+  margin-bottom: 300px;
   position: relative;
   width: 100%;
   z-index: 1;
   overflow: scroll;
-  height: 700px;
 
   &.fixed {
     position: fixed;
+  }
+
+  &.spaceBelow {
+    margin-bottom: 300px;
   }
 
   th, td {
@@ -237,6 +401,14 @@ export default {
     background: #fff;
     vertical-align: top;
     font-weight: normal;
+  }
+
+  td.editing {
+    outline: 4px #7F4091 solid;
+    border: 1px #7F4091 solid;
+    background-color: #7F4091;
+    color: #ffffff;
+    font-weight: 700;
   }
 
   th {
@@ -249,7 +421,8 @@ export default {
     left: 0;
     z-index: 2;
     background: #f9f9f9;
-    width: 200px;
+    max-width: 200px;
+    min-width: 150px;
     border-right-width: 3px;
   }
 
@@ -263,9 +436,10 @@ export default {
 }
 
 table {
-  width: 100%;
-  min-width: 1280px;
+  width: auto;
+  min-width: 100%;
   margin: auto;
+  table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
   color: #333;
@@ -278,6 +452,17 @@ table {
     background: #eee;
     padding: 10px 5px;
     color: #333333;
+  }
+
+  .tied-badge {
+    font-size: 11px;
+    padding: 3px 7px 3px 6px;
+    border-radius: 12px;
+  }
+
+  .choir-header,
+  .caption-value {
+    min-width: 150px;
   }
 
   tr.table-header {
@@ -311,16 +496,16 @@ table {
     }
 
     &.caption-footer {
-      & td.caption-subtotal, th.caption-subtotal {
+      td.caption-subtotal, th.caption-subtotal, td.caption-rank, th.caption-rank {
         color: white;
         padding: 5px;
 
-        &.caption-subtotal-label {
+        &.caption-subtotal-label, &.caption-rank-label {
           text-align: right;
           padding-right: 10px;
         }
 
-        &.caption-subtotal-value {
+        &.caption-subtotal-value, &.caption-rank-value {
           text-align: center;
         }
       }
@@ -358,9 +543,37 @@ table {
 
   }
 
-  tr.comment-row {
+  tr.caption-footer {
+    .tied-badge {
+      padding: 2px 6px 2px 5px;
+      background: transparent;
+      color: #ffffff;
+      font-weight: 900 !important;
+      border: 2px solid #ffffff;
+    }
+  }
+
+  tr.rank-rating-row {
+    .tied-badge {
+      background: #b84660;
+      color: #ffffff;
+    }
+  }
+
+   tr.comment-row {
+    font-size: 13px;
+
+    .comment-text {
+      font-size: 15px;
+    }
+  }
+
+  tr.record-row {
     font-size: 13px;
   }
-}
 
+  tr.criteria-row.active {
+    height: 100px;
+  }
+}
 </style>

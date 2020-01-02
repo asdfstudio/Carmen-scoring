@@ -12,13 +12,26 @@ class Director extends Person
         parent::boot();
 
         static::addGlobalScope('director', function(Builder $builder) {
-            $builder->where('person_type', '=', 'App\Director');
+          //$builder->where('person_type', '=', 'App\Director');
+          $builder->join('person_type', 'people.id', '=', 'person_type.person_id')->where('type_id', '=', 2);
         });
 				
-				static::saving(function ($model)
+				static::created(function ($model)
         {
-            $model->attributes['person_type'] = get_class($model);
+            $model->types()->syncWithoutDetaching([2]);
         });
     }
-		
+
+
+    public function types()
+    {
+        return $this->belongsToMany('App\Type', 'person_type', 'person_id', 'type_id');
+    }
+  
+		public function choirs()
+		{
+			return $this->belongsToMany('App\Choir');
+		}
+
+
 }

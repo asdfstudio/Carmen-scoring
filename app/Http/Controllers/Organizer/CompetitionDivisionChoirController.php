@@ -13,6 +13,7 @@ use App\Choir;
 use App\School;
 use App\Place;
 use App\Director;
+use App\Person;
 
 use Kris\LaravelFormBuilder\FormBuilder;
 
@@ -152,10 +153,10 @@ class CompetitionDivisionChoirController extends Controller
         $this->authorize('addChoir', $division);
 
         // Division choirs
-        $choirs = $division->choirs->lists('full_name', 'id')->toArray();
+        $choirs = $division->choirs->pluck('full_name', 'id')->toArray();
 
         // All choirs
-        $choirs = Choir::all()->lists('full_name', 'id')->toArray();
+        $choirs = Choir::all()->pluck('full_name', 'id')->toArray();
         //dd($choirs);
 
         $form = $formBuilder->create('Choir\CreateChoirForm', [
@@ -180,7 +181,7 @@ class CompetitionDivisionChoirController extends Controller
     {
         //$this->authorize('create','App\Choir');
 				$form = $formBuilder->create('Choir\CreateChoirForm');
-
+        
 				// Validate input
 				if (!$form->isValid()) {
            return redirect()->back()->withErrors($form->getErrors())->withInput();
@@ -189,17 +190,17 @@ class CompetitionDivisionChoirController extends Controller
 				// Get the division
 				$division = Division::with('competition','choirs')->find($division_id);
 
-        //dd($request->all());
-
+        //die(print_r($request->all(), true));
+        
         // Create school and location
-				if($request->has('school.name'))
+				if($request->filled('school.name'))
 				{
           $school = new School();
           $school->name = $request->input('school.name');
 					$school->save();
 
           // Create a school location
-          if($request->has('school.place'))
+          if($request->filled('school.place'))
   				{
             $place = new Place($request->input('school.place'));
             $school->place()->save($place);
@@ -214,27 +215,60 @@ class CompetitionDivisionChoirController extends Controller
         }
 
         // Create or retrieve choir
-				if($school AND $request->has('name'))
+				if($school AND $request->filled('name'))
 				{
 					$choir = new Choir();
           $choir->name = $request->input('name');
           $school->choirs()->save($choir);
 				}
-        elseif($request->has('choir_id'))
+        elseif($request->filled('choir_id'))
         {
           $choir = Choir::with('school')->find($request->input('choir_id'));
         }
 
-        //dd($choir);
-
+        //die(print_r($choir, true));
+        
+        /*
         // Create a director and attach to choir
-        if($request->has('director'))
+        if($request->filled('director'))
 				{
           $director = new Director();
           $director->fill($request->input('director'));
 					$choir->directors()->save($director);
 				}
+        */
+        
+        // If the form is submitted with an existing person ID...
+        if($request->has('director.person_id') && !empty($request->input('director.person_id'))){
+          
+          $director_id = $request->input('director.person_id');
+          
+          // Make sure this person is recorded as a director in the database.
+          $person = Person::with('types')->find($director_id);
+          if(!$person->getIsDirectorAttribute()){
+            $person->types()->syncWithoutDetaching([2]);
+          }
+          
+          // Attach the person to this choir.
+          $choir->directors()->syncWithoutDetaching([intval($director_id)]);
 
+        } elseif($request->has('director.first_name')) {
+
+          // Otherwise, the intention is to create a new director.
+          $director = new Director();
+          $director->first_name = $request->input('director.first_name');
+          $director->last_name = $request->input('director.last_name');
+          $director->email = $request->input('director.email');
+          if($request->has('director.emails_additional')){
+            $director->emails_additional = $request->input('director.emails_additional');
+          }
+          if($request->has('director.tel')){
+            $director->tel = $request->input('director.tel');
+          }
+          $choir->directors()->save($director);
+
+        }
+      
 				// Attach choir to the division
 				if($choir)
 				{

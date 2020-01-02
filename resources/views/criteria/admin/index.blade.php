@@ -10,7 +10,7 @@
 
   @foreach ($captions as $caption)
     <h2>{{ $caption->name }}</h2>
-    <?php $filteredCriteria = $criteria->where('caption_id', $caption->id); ?>
+    @php $filteredCriteria = $criteria->where('caption_id', $caption->id); @endphp
     @include('criteria.admin.list', ['criteria' => $filteredCriteria])
   @endforeach
 

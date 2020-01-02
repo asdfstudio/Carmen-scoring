@@ -1,11 +1,6 @@
 <template>
   <Modal>
-    <ModalHeader>
-      <h2>{{ choir.name }}</h2>
-      <h1>{{ criterion.name }}</h1>
-    </ModalHeader>
     <ModalBody>
-
       <Score
         :min="criterion.minScore"
         :max="criterion.maxScore"
@@ -72,5 +67,20 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+#modal.choirCriterion {
+  width: auto;
+  max-width: 100%;
+  background: #ffffff;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 0;
+  z-index: 100;
+  position: fixed;
+  top: auto;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 0 50px rgba(0,0,0,.5);
+}
 </style>

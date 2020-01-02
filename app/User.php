@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+
+    use Notifiable;
     //use RestrictsOrganization;
 
     /**
@@ -58,7 +61,7 @@ class User extends Authenticatable
 		{
       if($this->person)
       {
-        return $this->person->person_type == 'App\Judge';
+        return $this->person->isJudge();
       }
 
       return false;
@@ -67,6 +70,16 @@ class User extends Authenticatable
 		public function isAdmin()
 		{
 			return $this->is_admin;
+		}
+
+		public function isSuperAdmin($user_self = null)
+		{
+      // A user is a superadmin if they are listed as such in /config/auth.php.  They can also
+      // be considered a superadmin in the context editing their own information, so a user
+      // object or ID can be passed as an argument for comparison.  If the argument turns out
+      // to be this user, then this user is a superadmin in that context.
+      $user_self_id = is_object($user_self) && get_class($user_self) === 'App\User' ? $user_self->id : $user_self;
+			return in_array($this->id, config('auth.superadmins')) || ($this->isAdmin() && $this->id === $user_self_id);
 		}
 
     public function getIsAdminTextAttribute()

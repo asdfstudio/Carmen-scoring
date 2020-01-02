@@ -3,17 +3,17 @@
 
     <SpreadsheetHeader></SpreadsheetHeader>
 
-    <Spreadsheet v-bind:class="{fixed: activeModal}"/>
+    <Spreadsheet v-bind:class="[{fixed: activeModal && activeModalType !== 'choirCriterion'}, {spaceBelow: activeModal && activeModalType === 'choirCriterion'}]"/>
 
-    <div @click="deactivateModal" v-if="activeModal" id="modal-cover"></div>
+    <div v-if="activeModal && activeModalType !== 'choirCriterion'" id="modal-cover" v-bind:class="activeModalType"></div>
 
-    <CriterionModal v-if="activeModalType === 'criterion'"/>
+    <CriterionModal v-if="activeModalType === 'criterion'" v-bind:class="activeModalType"/>
 
-    <ChoirModal v-if="activeModalType === 'choir'"/>
+    <ChoirModal v-if="activeModalType === 'choir'" v-bind:class="activeModalType"/>
 
-    <ChoirCommentModal v-if="activeModalType === 'choirComment'"/>
+    <ChoirCommentModal v-if="activeModalType === 'choirComment'" v-bind:class="activeModalType"/>
 
-    <ChoirCriterionModal v-if="activeModalType === 'choirCriterion'"/>
+    <ChoirCriterionModal v-if="activeModalType === 'choirCriterion'" v-bind:class="activeModalType"/>
 
   </div>
 </template>
@@ -49,6 +49,9 @@ export default {
     activeModal () {
       return this.$store.state.activeModal
     },
+    protectModal () {
+      return this.$store.state.protectModal
+    },
     activeComment () {
       return this.$store.state.activeComment
     },
@@ -69,9 +72,16 @@ export default {
     }
   },
   methods: {
-    deactivateModal: function () {
-      this.$store.commit('deactivateModal')
+    deactivateModal: function (e) {
+      if (this.activeModal && !this.protectModal) {
+        // console.log(this.activeModalType)
+        this.$store.commit('deactivateModal')
+      }
+      this.$store.commit('endModalProtection')
     }
+  },
+  mounted: function () {
+    document.addEventListener('click', this.deactivateModal)
   }
 }
 </script>
@@ -100,6 +110,10 @@ body {
   bottom: 0;
   right: 0;
   z-index: 10;
+}
+
+#modal-cover.choirCriterion {
+  opacity: .25;
 }
 
 .clickable {

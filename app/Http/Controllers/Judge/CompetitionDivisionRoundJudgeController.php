@@ -47,7 +47,7 @@ class CompetitionDivisionRoundJudgeController extends Controller
 
       $rawScores = $scoreboard->rawScores;
       $weightedScores = $scoreboard->weightedScores;
-      $rankedScores = $scoreboard->rankedScores;
+      $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
       $ratings = (new Ratings($round))->all();
 

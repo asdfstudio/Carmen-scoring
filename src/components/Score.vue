@@ -10,10 +10,20 @@
       </div>
 
       <CriterionScoringRange v-if="showScoringRange" :min="min" :max="max" :increment="increment" />
-
-      <div v-if="showScoreChoices && isScoringActive" class="score-buttons" v-bind:class="displayType">
+      
+      <div v-if="showScoreChoices && isScoringActive" class="score-buttons" v-bind:class="[displayType, { doubleRow: increment === .5 }]">
+        <select class="score-select" v-model="currentScore">
+          <option class="score-option" v-bind:value="initialScore">Select Score...</option>
+          <ScoreOption
+            v-for="n in range"
+            v-bind:key="n"
+            :score="n"
+            :currentScore="currentScore"
+            @score-changed="change(n)"
+          />
+        </select>
         <ScoreButton
-          v-for="n in max"
+          v-for="n in range"
           v-bind:key="n"
           v-bind:class="{ active: currentScore === n }"
           :score="n"
@@ -29,12 +39,14 @@
 <script>
 import CriterionScoringRange from './CriterionScoringRange'
 import ScoreButton from './ScoreButton'
+import ScoreOption from './ScoreOption'
 
 export default {
   name: 'Score',
   components: {
     CriterionScoringRange,
-    ScoreButton
+    ScoreButton,
+    ScoreOption
   },
   props: {
     min: Number,
@@ -63,6 +75,13 @@ export default {
     /* isScoringActive () {
       return this.$store.state.isScoringActive
     }, */
+    range () {
+      var range = []
+      for (var i = this.min; i <= this.max; i = i + this.increment) {
+        range.push(i)
+      }
+      return range
+    },
     isScoreChanged () {
       return this.currentScore !== this.initialScore
     },
@@ -118,10 +137,9 @@ export default {
     display: block;
 
     &.inline {
-      display: inline-block;
-      float: left;
-      width: 150px;
-      margin: 15px 20px;
+      display: block;
+      width: auto;
+      margin: 15px 20px 5px;
     }
 
     button.score-increment {
@@ -144,7 +162,7 @@ export default {
     }
 
     .current-score {
-      padding: 10px;
+      padding: 0 10px;
       font-size: 36px;
       margin: 0 10px;
       color: #7F4091;
@@ -160,12 +178,31 @@ export default {
         height: 30px;
         line-height: 30px;
         font-size: 24px;
+
+        @media (max-width: 359px) {
+          & {
+            width: 25px;
+            height: 25px;
+            line-height: 25px;
+            font-size: 20px;
+          }
+        }
       }
 
       .current-score {
         font-size: 24px;
         width: 40px;
-        color: #707070
+        color: #707070;
+
+        @media (max-width: 359px) {
+          & {
+            position: relative;
+            top: -2px;
+            font-size: 20px;
+            margin: 0;
+            width: auto;
+          }
+        }
       }
     }
   }
@@ -173,14 +210,40 @@ export default {
   .score-buttons {
     background: #fff;
     margin: 5px;
+    padding: 10px 5px;
     border-radius: 8px;
 
     &.inline {
-      display: inline-block;
-      float: right;
-      width: 200px;
+      display: block;
+    }
+    
+    @media (min-width: 640px) {
+      & {
+        min-width: 340px;
+      }
     }
   }
+
+  .score-select {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #7f4091;
+    color: #7f4091;
+
+    @media (min-width: 640px) {
+      & {
+        display: none;
+      }
+    }
+
+    @media (max-width: 359px) {
+      & {
+        padding: 8px;
+        font-size: 12px;
+      }
+    }
+  }
+
 }
 
 </style>

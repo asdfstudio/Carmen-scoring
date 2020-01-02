@@ -16,35 +16,50 @@ label {
   }
 }
 
-
 .choice-container {
-    padding: 6px 3px;
+  padding: 6px 3px;
 
-    &:first-of-type {
-      clear: both;
-    }
+  &:first-of-type {
+    clear: both;
+  }
 
-    &.inline {
-      display: inline-block;
-      margin-right: 25px;
-    }
+  &.inline {
+    display: inline-block;
+    margin-right: 25px;
+  }
 
-    &.bordered {
-      border: 1px solid $cs-gray-mid-1;
-      border-radius: 5px;
-      padding: 6px 12px;
-      margin-right: 0;
-      background: $cs-gray-light;
-    }
+  &.bordered {
+    border: 1px solid $cs-gray-mid-1;
+    border-radius: 5px;
+    padding: 6px 12px;
+    margin-right: 0;
+    background: $cs-gray-light;
+  }
 
-    input {
+  input {
+    display: block;
+    float: left;
+    clear: left;
+    margin-left: 10px;
+  }
 
-    }
+  label {
+    display: block;
+  }
 
-    label {
-        font-size: 1.1em;
-        font-weight: normal;
-        line-height: 1em;
-        margin-left: 8px;
-    }
+  label:not(:first-child) {
+    float: left;
+    margin: 3px 0 10px 8px;
+    font-size: 1.1em;
+    font-weight: normal;
+    line-height: 1em;
+    margin-left: 8px;
+  }
+
+  // Clearfix
+  &::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
 }

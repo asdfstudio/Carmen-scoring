@@ -21,7 +21,7 @@ class WorkshopController extends Controller
 {
     public function __construct()
     {
-        if(env('IS_WORKSHOP_ENABLED') == false)
+        if(env('IS_WORKSHOP_ENABLED') === false)
         {
           echo 'Workshop Mode is currently not enabled.';
           exit;

@@ -211,7 +211,7 @@ class ResultsController extends Controller
       }, 'awards.choirs' => function($query) use ($division_id) {
         $query->where('division_id',$division_id);
       }])->where('is_published', 1)->find($division_id);
-
+      
       $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::forSheet($division->sheet);
 
@@ -267,16 +267,15 @@ class ResultsController extends Controller
       $choirs = $round->choirs;
       $judges = $division->judges;
 
-      //$before = memory_get_usage();
       $scoreboard = new Scoreboard(['round_id' => $round_id]);
       $ratings = (new Ratings($round))->all();
-      //$after = memory_get_usage();
-      //$allocatedSize = ($after - $before);
-      //dd($allocatedSize/1024/1024);
-
+      $rawScores = $scoreboard->extendedRawScores;
+      $weightedScores = $scoreboard->extendedRawScores;
+      $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
+      
       $show_links = true;
 
-      return view('results.division_round.show', compact('division', 'round', 'scoreboard', 'captions', 'access_code', 'choirs', 'judges', 'show_links', 'ratings'));
+      return view('results.division_round.show', compact('division', 'round', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'captions', 'access_code', 'choirs', 'judges', 'show_links', 'ratings'));
     }
 
 
@@ -285,7 +284,7 @@ class ResultsController extends Controller
       $this->loadDivision($division_id, $access_code);
       $division = $this->division;
       $captions = $this->captions;
-
+      
       $round = $division->rounds()->find($round_id)->targets()->find($target_round_id);
 
       $source_rounds = $round->sources;
@@ -314,12 +313,14 @@ class ResultsController extends Controller
       $judges = Judge::whereIn('id', $judge_ids)->get();
 
       $scoreboard = new Scoreboard(['round_id' => $source_rounds->pluck('id')->toArray()]);
-
-      //dd($scoreboard->rawScores);
+      $ratings = (new Ratings($round))->all();
+      $rawScores = $scoreboard->extendedRawScores;
+      $weightedScores = $scoreboard->extendedRawScores;
+      $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
       $show_links = false;
 
-      return view('results.division_round.show_shared', compact('division', 'round', 'scoreboard', 'captions', 'access_code', 'choirs', 'judges', 'show_links'));
+      return view('results.division_round.show_shared', compact('division', 'round', 'scoreboard', 'rankedScores', 'captions', 'access_code', 'choirs', 'judges', 'show_links'));
     }
 
 
@@ -360,7 +361,7 @@ class ResultsController extends Controller
     {
       $competition = $soloDivision->competition;
 
-      if($request->has('access_code'))
+      if($request->filled('access_code'))
       {
         return redirect()->route('results.solo-division.show', [$soloDivision, 'access_code' => $request->input('access_code')]);
       }
@@ -467,9 +468,9 @@ class ResultsController extends Controller
       }
 
       if (!$director_email) {
-        if($request->has('director_email') OR $request->session()->has('director_email'))
+        if($request->filled('director_email') OR $request->session()->has('director_email'))
         {
-          if ($request->has('director_email')) {
+          if ($request->filled('director_email')) {
             $email = $request->input('director_email');
             $request->session()->put('director_email', $email);
           } elseif ($request->session()->has('director_email')) {

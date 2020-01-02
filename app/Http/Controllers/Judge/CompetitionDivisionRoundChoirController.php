@@ -64,7 +64,7 @@ class CompetitionDivisionRoundChoirController extends Controller
 
 	    $rawScores = $scoreboard->rawScores;
 	    $weightedScores = $scoreboard->weightedScores;
-			$rankedScores = $scoreboard->rankedScores;
+      $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
 			$comment = Comment::where('judge_id', $judge_id)
 									->where('choir_id', $choir_id)
@@ -105,10 +105,11 @@ class CompetitionDivisionRoundChoirController extends Controller
       $competition = $division->competition;
 
 			//$captions = $division->judges->first()->captions;
-			$judgeCaptionIds = $division->judges->first()->captions->pluck('id')->toArray();
-			$captions = Caption::forSheet($division->sheet);
-			$captions = $captions->whereIn('id', $judgeCaptionIds);
-
+      $captions = Caption::forSheet($division->sheet);
+      if(!empty($division->judges->first())){
+        $judgeCaptionIds = $division->judges->first()->captions->pluck('id')->toArray();
+        $captions = $captions->whereIn('id', $judgeCaptionIds);
+      }
 
 			return view('competition_division_round_choir.judge.show',compact('scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'captions','round','choir','judge','competition','division', 'comment'));
 		}

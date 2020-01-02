@@ -12,13 +12,26 @@ class Choreographer extends Person
         parent::boot();
 
         static::addGlobalScope('choreographer', function(Builder $builder) {
-            $builder->where('person_type', '=', 'App\Choreographer');
+          //$builder->where('person_type', '=', 'App\Choreographer');
+          $builder->join('person_type', 'people.id', '=', 'person_type.person_id')->where('type_id', '=', 3);
         });
 				
-				static::saving(function ($model)
+				static::created(function ($model)
         {
-            $model->attributes['person_type'] = get_class($model);
+            $model->types()->syncWithoutDetaching([3]);
         });
     }
-		
+
+
+    public function types()
+    {
+        return $this->belongsToMany('App\Type', 'person_type', 'person_id', 'type_id');
+    }
+  
+		public function choirs()
+		{
+			return $this->belongsToMany('App\Choir');
+		}
+
+
 }

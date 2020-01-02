@@ -34,6 +34,27 @@
   }
 }
 
+.sideways-header {
+  display: flex;
+  flex-grow: 1;
+  max-height: 150px;
+  
+  & a, & span {
+    display: inline;
+    transform: rotate(180deg);
+    writing-mode: vertical-rl;
+    
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.table > tbody > tr.align-bottom th,
+.table > tbody > tr.align-bottom td {
+  vertical-align: bottom;
+}
+
 .caption-raw-score {
   font-size: 1em;
   color: $cs-white;
@@ -214,5 +235,19 @@ input.score {
   }
   &.subtotal {
     color: $cs-gray-mid-3;
+  }
+  &.tied {
+    white-space: nowrap;
+  }
+  &.tied:after {
+    content: 'tied';
+    display: inline-block;
+    padding: 0 4px;
+    margin-left: 5px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #ffffff;
+    border-radius: 4px;
+    background: #7F4091;
   }
 }

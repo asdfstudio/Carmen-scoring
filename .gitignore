@@ -1,14 +1,19 @@
 /vendor
 /node_modules
 /public/storage
+/storage/framework/views/*
+/storage/framework/sessions/*
 Homestead.yaml
 Homestead.json
+composer.lock
 .env
+.env.production
 .babelrc
 .editorconfig
 .eslintignore
 .eslintrc.js
 .gitattributes
 .postcssrc.js
+.DS_Store
 
 /resources/views/public/competitions-list.php

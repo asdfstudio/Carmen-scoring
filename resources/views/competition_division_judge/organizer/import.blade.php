@@ -18,10 +18,10 @@
     <label for="id" class="control-label">Choose a division to import judges from</label>
 
     @foreach($divisions as $division)
-      <?php
+      @php
       $judges = $division->judges->unique('id')->pluck('full_name');
       $judges_list = implode(', ',$judges->toArray());
-      ?>
+      @endphp
       <div class="choice-container">
         {{ Form::radio('id', $division->id, NULL, ['id' => 'id_'.$division->id]) }}
 

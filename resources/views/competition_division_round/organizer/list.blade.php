@@ -68,7 +68,7 @@
 
 				@can('completeScoring', $round)
 
-					<?php
+					@php
 
 					if ($round->isMissingScores()) {
 	          $btnAttr = ['class' => 'action disabled', 'disabled' => 'disabled'];
@@ -79,7 +79,7 @@
 					$completeScoringForm->modify('submit', 'submit', [
 						'attr' => $btnAttr
 					]);
-					?>
+					@endphp
 					<li>
 						{!! form($completeScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id]), 'class' => '']) !!}
 					</li>

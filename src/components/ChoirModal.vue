@@ -107,8 +107,8 @@ export default {
 }
 
 table {
-  width: 700px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 700px;
   position: relative;
   margin: auto;
 

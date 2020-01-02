@@ -10,6 +10,8 @@ use App\Penalty;
 use App\ChoirRoundPenalty;
 use App\Carmen\WeightedScores;
 use App\Carmen\RankedScores;
+use App\Carmen\CondorcetScores;
+use App\Carmen\ConsensusOrdinalRankScores;
 
 class Scoreboard {
 
@@ -27,6 +29,11 @@ class Scoreboard {
 	public $rawScores;
 	public $weightedScores;
 	public $rankedScores;
+  public $bordaCountScores;
+	public $condorcetScoresSchulze;
+	public $condorcetScoresRankedPairs;
+	public $consensusOrdinalRankScores;
+  public $rankedScoresForCurrentMethod;
 	public $extendedRawScores;
 	//protected $judgeScores;
 	//protected $criteriaScores;
@@ -43,6 +50,11 @@ class Scoreboard {
 		$this->getWeightedScores();
 		$this->getPenalties();
 		$this->getRankedScores();
+    $this->getBordaCountScores();
+		$this->getCondorcetScoresSchulze();
+		$this->getCondorcetScoresRankedPairs();
+		$this->getConsensusOrdinalRankScores();
+    $this->getRankedScoresForCurrentMethod();
 	}
 
 	protected function getRawScores()
@@ -162,5 +174,47 @@ class Scoreboard {
 		return $this->rankedScores = new RankedScores($this->extendedRawScores, $this->penalties);
 	}
 
+	protected function getBordaCountScores()
+	{
+		return $this->bordaCountScores = new BordaCountScores($this->extendedRawScores, $this->penalties);
+	}
 
+	protected function getCondorcetScoresSchulze()
+	{
+		return $this->condorcetScoresSchulze = new CondorcetScoresSchulze($this->extendedRawScores, $this->penalties);
+	}
+
+	protected function getCondorcetScoresRankedPairs()
+	{
+		return $this->condorcetScoresRankedPairs = new CondorcetScoresRankedPairs($this->extendedRawScores, $this->penalties);
+	}
+
+	protected function getConsensusOrdinalRankScores()
+	{
+		return $this->consensusOrdinalRankScores = new ConsensusOrdinalRankScores($this->extendedRawScores, $this->penalties);
+	}
+
+  public function getRankedScoresForCurrentMethod()
+  {
+    switch($this->division->scoring_method_id){
+      case 1:
+      case 2:
+        $this->rankedScoresForCurrentMethod = $this->rankedScores;
+        break;
+      case 3:
+        $this->rankedScoresForCurrentMethod = $this->condorcetScoresRankedPairs;
+        break;
+      case 4:
+        $this->rankedScoresForCurrentMethod = $this->condorcetScoresSchulze;
+        break;
+      case 5:
+        $this->rankedScoresForCurrentMethod = $this->consensusOrdinalRankScores;
+        break;
+      case 6:
+        $this->rankedScoresForCurrentMethod = $this->bordaCountScores;
+        break;
+      default:
+        $this->rankedScoresForCurrentMethod = null;
+    }
+  }
 }

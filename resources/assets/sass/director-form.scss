@@ -1,0 +1,28 @@
+// CSS customization for the form that adds a director to a choir.
+
+.director-search-group {
+  position: relative;
+  
+  &.disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    
+    label,
+    select,
+    input,
+    .selectize-control,
+    .selectize-control.single .selectize-input,
+    .selectize-control.single .selectize-input input {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.toggle-new-director {
+  margin: 20px 0;
+  display: inline-block;
+}
+
+.director-create-group{
+  display: none;
+}

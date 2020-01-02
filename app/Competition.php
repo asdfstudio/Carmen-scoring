@@ -22,7 +22,9 @@ class Competition extends Model
       'end_date' => 'date'
     ];*/
 
-    protected $casts = [];
+    protected $casts = [
+      'use_runner_up_names' => 'array'
+    ];
 
 
 		protected static function boot()

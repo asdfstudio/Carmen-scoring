@@ -3,7 +3,6 @@
 @import 'bootstrap-custom';
 @import "color-swatches";
 @import "media-queries";
-
 @import "scorecard";
 @import "scoreboard";
 @import "tabs";
@@ -20,7 +19,6 @@
 @import "jquery.timepicker";
 @import "board";
 @import "public";
-
 
 
 
@@ -347,7 +345,30 @@ a.active {
   }
 }
 
+.add-rating {
+  clear: both;
+  padding: 15px;
+  
+  button {
+    display: block;
+    width: 100%;
+  }
+}
 
+.remove-rating {
+  padding-top: 23px;
+  
+  button {
+    /*background: #f2dede;*/
+    color: #a94442;
+    border-color: #a94442;
+    font-weight: 700;
+  }
+}
+
+.rating-system .alert {
+  clear: both;
+}
 
 .round-navigation-bar {
   //background: #f3f3f3;
@@ -457,7 +478,6 @@ a.active {
   margin-top: -1px;
   background: $cs-white;
   //box-shadow: 0 3px 3px rgba(0,0,0,0.3);
-  overflow: hidden;
 
   &.collapse {
     //margin-top: -1px;
@@ -487,6 +507,13 @@ a.active {
       float: right;
       padding: 25px 0 15px;
     }
+  }
+  
+  // Clearfix
+  &::after {
+    content: "";
+    clear: both;
+    display: table;
   }
 
 }
@@ -622,6 +649,230 @@ a.active {
 
 }
 
+#user-person-filter-group {
+  display: flex;
+  margin: 20px 0;
+  text-align: center;
+  
+  @media (min-width: $tablet-min) {
+    display: inline-block;
+  }
+  
+  a.user-person-filter {
+    margin-bottom: 4px;
+    font-size: 13px;
+    padding: 6px;
+    border-radius: 0;
+    flex-grow: 1;
+    
+    &:first-child {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+
+    @media (min-width: 380px) {
+      font-size: 14px;
+      padding: 6px 12px;
+    }
+    
+    @media (min-width: $tablet-min) {
+      border-radius: 4px;
+    }
+    
+    &.active {
+      font-weight: 400;
+    }
+  }
+}
+
+#user-person-search {
+  position: relative;
+  margin: 20px 0;
+  
+  @media (min-width: $tablet-min) {
+    display: inline-block;
+  }
+  
+  img {
+    position: absolute;
+    top: 11px;
+    left: 10px;
+    width: 16px;
+    height: 16px;
+    z-index: 1;
+    opacity: .5;
+    
+    @media (min-width: $tablet-min) {
+      left: 30px;
+    }
+  }
+  
+  input {
+    position: relative;
+    top: 2px;
+    padding: 6px 12px 6px 36px;
+    width: 100%;
+    border: 1px #ccc solid;
+    border-radius: 4px;
+    
+    @media (min-width: $tablet-min) {
+      margin-left: 20px;
+      width: 300px;
+    }
+  }
+}
+
+#user-person-list {
+  border-top: 1px #ddd solid;
+  
+  &.users-only .person.non-user,
+  &.non-users-only .person.user {
+    display: none;
+  }
+  
+  .person {
+    position: relative;
+    padding: 25px 20px;
+    border: 1px #ddd solid;
+    border-top-width: 0;
+    
+    @media (min-width: $tablet-min) {
+      padding: 25px 30px;
+    }
+    
+    &.even {
+      background-color: #f9f9f9;
+    }
+    
+    &.search-hidden {
+      display: none;
+    }
+    
+    .user-flag {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 4px 8px;
+      width: 80px;
+      border-bottom-left-radius: 8px;
+      color: #ffffff;
+      font-size: 13px;
+      text-align: center;
+    }
+    
+    &.user .user-flag {
+      background: $cs-green;
+    }
+    
+    &.non-user .user-flag {
+      background: $cs-purple;
+    }
+    
+    .name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .user-blocks {
+      
+      @media (min-width: $tablet-min) {
+        display: flex;
+      }
+
+      .user-details {
+        line-height: 2;
+        
+        @media (min-width: $tablet-min) {
+          padding: 0 30px;
+          width: 70%;
+        }
+        
+        .detail {
+          margin: 5px 0;
+
+          @media (min-width: $tablet-min) {
+            display: flex;
+          }
+          
+          .detail-label,
+          .detail-value {
+            display: block;
+          }
+
+          .detail-label {
+            font-weight: 700;
+            
+            @media (min-width: $tablet-min) {
+              width: 30%;
+              min-width: 120px;
+            }
+          }
+
+          .detail-value {
+            line-height: 1.5;
+
+            @media (min-width: $tablet-min) {
+              width: 70%;
+              min-width: 200px;
+            }
+            
+            a {
+              display: inline;
+            }
+          }
+
+          &.roles .detail-value {
+            line-height: 2;
+          }
+
+          .role {
+            display: inline-block;
+            padding: 4px 8px;
+            margin: -4px 4px -4px 0;
+            color: #ffffff;
+            font-size: 13px;
+            border-radius: 6px;
+            background: #b84660;
+            line-height: 1;
+            
+            &.user-role {
+              background: $cs-green;
+            }
+          }
+        }
+      }
+
+      .user-actions {
+        @media (min-width: $tablet-min) {
+          padding-left: 30px;
+          width: 30%;
+          border-left: 1px #ddd solid;
+        }
+        
+        .user-actions-title {
+          font-weight: 700;
+          line-height: 2;
+          margin: 5px 0;
+        }
+
+        a.btn.action {
+          margin-top: -2px;
+        }
+        
+        form {
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
+
 .breadcrumbs-footer {
   padding: 10px 0;
   ol.breadcrumb {
@@ -653,4 +904,13 @@ a.active {
   padding: 10px 20px;
   background: $cs-yellow;
   color: $cs-black;
+}
+
+.indented {
+  padding-left: 30px;
+}
+
+// Tweak to the highlight class that appears in Selectize seach.
+.selectize-dropdown [data-selectable] .highlight {
+  display: inline-block;
 }

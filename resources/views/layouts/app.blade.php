@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="_token" content="{{csrf_token()}}" />
+    
     <title>@section('title') Carmen Scoring System @show</title>
 
     <!-- Fonts -->
@@ -16,7 +17,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.3/css/selectize.bootstrap3.min.css">
 
     <link rel="stylesheet" href="/css/carmen.css">
-
+    <link rel="stylesheet" href="/css/dropzone.css">
+    @yield('style')
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
 
     <style>
@@ -49,10 +51,11 @@
       });
     });
     </script>-->
-
+    <script src="/js/mic-recorder.js"></script>
     <script src="/js/jquery-ui/jquery-ui.min.js"></script>
-
     <script src="/js/app.js"></script>
+    <script src="/js/dropzone.js"></script>
+    <script src="/js/recording.js"></script>
 
     @yield('body-footer')
 

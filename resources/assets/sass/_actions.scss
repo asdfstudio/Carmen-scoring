@@ -30,11 +30,11 @@
   padding: 5px 10px;
   text-transform: lowercase;
   display:  inline-block;
-  background: none;
+  background: transparent;
   border-radius: 0;
   box-shadow: none;
   //border-radius: 3px;
-
+  
   &:hover {
     text-decoration: none;
     transition-duration: 300ms;
@@ -102,5 +102,17 @@
       border-color: $cs-status-completed;
       color: $cs-white;
     }
+  }
+}
+
+#user-person-list .even .action {
+  background: #ffffff;
+
+  &:hover {
+    background: #707070;
+  }
+  
+  &.danger:hover {
+    background: #CA2128;
   }
 }

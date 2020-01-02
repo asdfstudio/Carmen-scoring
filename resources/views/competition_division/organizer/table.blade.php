@@ -38,18 +38,18 @@
     <td>@if ($division->sheet){{ $division->sheet->name }} @endif</td>
 
 		<!--<td>
-			<?php $anchor = $division->rounds->count() > 0 ? $division->rounds->count() : 'Set Up';?>
+			@php $anchor = $division->rounds->count() > 0 ? $division->rounds->count() : 'Set Up';@endphp
 			{{ link_to_route('organizer.competition.division.round.index', $anchor, [$competition,$division]) }}
 
 		</td>
     <td>
-			<?php $anchor = $division->choirs->count() > 0 ? $division->choirs->count() : 'Set Up';?>
+			@php $anchor = $division->choirs->count() > 0 ? $division->choirs->count() : 'Set Up';@endphp
 
 			{{ link_to_route('organizer.competition.division.choir.index', $anchor, [$competition,$division]) }}
 
 		</td>
     <td>
-			<?php $anchor = $division->judges->count() > 0 ? $division->judges->count() : 'Set Up';?>
+			@php $anchor = $division->judges->count() > 0 ? $division->judges->count() : 'Set Up';@endphp
 
 			{{ link_to_route('organizer.competition.division.judge.index', $anchor, [$competition,$division]) }}
 

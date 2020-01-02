@@ -24,7 +24,7 @@ class ChooseJudgeForm extends Form
 
         $this->add('judge_id','choice', [
 					'choices' => $this->data,
-					'empty_value' => 'Choose judge...',
+					//'empty_value' => 'Choose judge...',
 					'label' => 'Choose from existing judges',
           'attr' => ['class' => 'judge_id', 'id' => ''],
 					//'property' => 'first_name',
@@ -49,9 +49,10 @@ class ChooseJudgeForm extends Form
 					'class' => 'App\Caption',
 					'empty_value' => 'Choose caption ...',
 					'label' => 'Captions to Score',
-          'rules' => ['required'],
+          'rules' => ['filled'],
           'choice_options' => [
             'wrapper' => ['class' => 'choice-container'],
+            'labelAttrs' => 'label-attr'
           ],
 					'expanded' => true,
 					'multiple' => true

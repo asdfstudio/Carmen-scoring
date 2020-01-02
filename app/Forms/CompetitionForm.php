@@ -13,7 +13,7 @@ class CompetitionForm extends Form
         $organizations = Organization::get();
 
 				$this->add('organization_id','select', [
-					'choices' => $organizations->lists('name','id')->toArray(),
+					'choices' => $organizations->pluck('name','id')->toArray(),
 					'empty_value' => 'Choose organization...'
 				]);
         $this->add('name','text', ['rules' => 'required']);

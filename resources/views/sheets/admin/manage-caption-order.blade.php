@@ -15,7 +15,7 @@
       @foreach($captions as $caption)
         <li class="school list-group-item choice">
 
-          <?php
+          @php
           if (is_array($sheet->caption_sort_order)) {
             $index = array_search($caption->id, $sheet->caption_sort_order);
           } else {
@@ -29,7 +29,7 @@
             $position = false;
           }
 
-          ?>
+          @endphp
           <div class="input-container">
             {{ Form::text('captions['.$caption->id.']', $position) }}
           </div>

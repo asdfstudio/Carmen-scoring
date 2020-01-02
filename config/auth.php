@@ -104,4 +104,19 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Superadmins
+    |--------------------------------------------------------------------------
+    |
+    | An array of user IDs that are considered "superadmins".  Only a super-
+    | admin can change the password of another admin.
+    |
+    */
+
+    'superadmins' => [
+        2,    // Sherman
+        3     // Romario
+    ],
+
 ];

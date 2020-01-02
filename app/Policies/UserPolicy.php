@@ -42,7 +42,7 @@ class UserPolicy
 		}
 
 
-		public function create($user)
+		public function create(User $user)
 		{
         if($user->isOrganizer() AND $user->organization_role == 'admin')
         {
@@ -53,9 +53,9 @@ class UserPolicy
 		}
 
 
-    public function update(User $user, User $subject )
+    public function update(User $user, User $subject)
 		{
-      if($user->isOrganizer() AND $user->organization_role == 'admin')
+      if($user->isOrganizer() AND $user->organization_role == 'admin' AND $user->organization_id == $subject->organization_id)
       {
         return true;
       }
@@ -69,9 +69,9 @@ class UserPolicy
 		}
 
 
-		public function destroy(User $user)
+		public function destroy(User $user, User $subject)
 		{
-      if($user->isOrganizer() AND $user->organization_role == 'admin')
+      if($user->isOrganizer() AND $user->organization_role == 'admin' AND $user->organization_id == $subject->organization_id AND !$subject->isSuperAdmin())
       {
         return true;
       }

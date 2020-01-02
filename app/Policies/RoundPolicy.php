@@ -31,7 +31,7 @@ class RoundPolicy extends BasePolicy
 
     public function before($user, $ability)
 		{
-
+      
 		}
 
     public function show(User $user, $round)
@@ -40,9 +40,9 @@ class RoundPolicy extends BasePolicy
 		}
 
 
-		public function create(User $user, $round, $division=false)
+		public function create(User $user, $division=false)
 		{
-      if($this->isOrgAdmin AND $division->status_slug == 'active')
+      if($this->isOrgAdmin AND $division)
       {
         return true;
       }

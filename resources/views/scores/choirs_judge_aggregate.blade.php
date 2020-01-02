@@ -1,5 +1,4 @@
-
-
+<?php $judge_id = $judge ? $judge->id : null; ?>
 @if(!$choirs->isEmpty())
 <table class="table scoreboard last-col-right">
   <tr>
@@ -11,56 +10,83 @@
         My Weighted Score
       </th>
     @endif
+    @if($round->is_scoring_active == true && $judge_id == Auth::user()->person_id && $competition->organization->is_premium == 1)
+      
+    <th>Record</th>
 
-    <th>Actions</th>
+    @endif
   </tr>
 
+  <div id=record-app>
   @foreach($choirs as $choir)
   <tr>
+  
   	<td>
-      <span class="subheading">{{ $choir->school->name }}</span>
+      @if( $choir->school && $choir->school->name )
+        <span class="subheading">{{ $choir->school->name }}</span>
+      @endif
       {{ $choir->name }}
     </td>
 
     <td>
-			<?php $aggregateScore = $rawScores->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('score');?>
+			@php $aggregateScore = $rawScores->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('score');@endphp
       <span class="score raw">{{ $aggregateScore }}</span>
     </td>
 
     @if($division->captionWeighting->slug == '60-40')
       <td>
-        <?php $aggregateScore = $weightedScores->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('weightedScore');?>
+        @php $aggregateScore = $weightedScores->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('weightedScore');@endphp
         <span class="score weighted">{{ $aggregateScore }}</span>
       </td>
     @endif
 
     <td>
-
-      @if($round->is_scoring_active AND $judge->id == Auth::user()->person_id)
-
-        <?php
-        $anchor_text = 'Enter My Scores';
-
-        if($aggregateScore > 0)
-        {
-          $anchor_text = 'Update My Scores';
-        }
-
-        ?>
-
-        {{ link_to_route('judge.competition.division.round.choir.show', $anchor_text, [$round->division->competition,$round->division,$round,$choir],
-        ['class' => 'action'])}}
+      
+      @if($round->is_scoring_active == true && $judge_id == Auth::user()->person_id && $competition->organization->is_premium == 1)
+      <div id="controls">
+        <input type="hidden" name="recordinginprogress" id="recordingInProgress" value=0 >
+        <button id="{{'recordButton-'.$choir->id }}" data-count="{{(count($choir->recordings) > 0)?$choir->recordings->first()->total:'0'}}" data-recording="0" class="rbutton" onClick="startRecording({{$choir->id}}, {{$round->id}}, {{$round->division_id}})">Start Recording({{(count($choir->recordings) > 0)?$choir->recordings->first()->total:'0'}})</button>
+        <div class="slider" id="{{'sliderId-'.$choir->id }}" style="display:none">
+              <div class="line"></div>
+              <div class="subline inc"></div>
+              <div class="subline dec"></div>
+      </div>
+      </div>
+   
+      
       @endif
-
-
-      @if($round->is_scoring_active == false AND $judge->id == Auth::user()->person_id)
+      @if($round->is_scoring_active == false AND $judge_id == Auth::user()->person_id)
 
         {{ link_to_route('judge.competition.division.round.choir.show', 'View My Scores', [$round->division->competition,$round->division,$round,$choir],
         ['class' => 'action'])}}
 
       @endif
+
     </td>
+
   </tr>
   @endforeach
+      </div>    
 </table>
+ 
 @endif
+
+@section('style')
+<style lang="scss">
+button,
+.rbutton {
+  background: #7f4091;
+  color: #fff;
+  padding: 10px 15px;
+  margin: 0 5px;
+  text-align: center;
+  border: none;
+  border-radius: 5px;
+}
+.cancel {
+    background-color: #cccccc;
+    color: #666666;
+    padding: 9px 14px;
+  }
+</style>
+@endsection

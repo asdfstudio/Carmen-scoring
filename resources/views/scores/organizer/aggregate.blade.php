@@ -21,8 +21,8 @@
     	@foreach($judges as $judge)
       <td data-choir-id="{{ $choir->id }}" data-judge-id="{{ $judge->id }}">
 
-      @if($round->is_completed OR $judge->id == Auth::user()->person_id OR Auth::user()->isAdmin())
-				<?php
+      @if($round->is_completed ?? $judge->id == Auth::user()->person_id ?? Auth::user()->isAdmin())
+				@php
         // Raw scores
         $rawScore = $rawScores->where('judge_id', $judge->id)->where('choir_id',$choir->id)->sum('score');
         $rawScoreLink = NULL;
@@ -45,7 +45,7 @@
         // Raw rankings
 
         // Weighted rankings
-        ?>
+        @endphp
         @if($rawScoreLink) {{ $rawScoreLink }} @endif
 
         <span class="raw-score-music">{{ $rawScoreMusic }}</span>
@@ -62,8 +62,8 @@
     @endif
 
     <td>
-    	@if($round->is_completed OR Auth::user()->isAdmin())
-				<?php $aggregateScore = $rawScores->where('choir_id',$choir->id)->sum('score');?>
+    	@if($round->is_completed ?? Auth::user()->isAdmin())
+				@php $aggregateScore = $rawScores->where('choir_id',$choir->id)->sum('score');@endphp
         {{ $aggregateScore }}
       @else
       	-

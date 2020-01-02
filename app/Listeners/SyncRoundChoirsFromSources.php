@@ -36,7 +36,7 @@ class SyncRoundChoirsFromSources
         // No sources, use all division choirs
         if($round->sources->isEmpty())
         {
-          $choirs = $round->division->choirs->lists('id')->toArray();
+          $choirs = $round->division->choirs->pluck('id')->toArray();
           return $round->choirs()->sync($choirs);
         }
         else

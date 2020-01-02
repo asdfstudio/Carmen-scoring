@@ -9,9 +9,6 @@ export default {
       round_id: payload.round_id,
       division_id: payload.division_id
     }
-
-    console.log(postPayload)
-
     return axios.post('/judge/score/save', postPayload)
       .then(response => {
         return response.data

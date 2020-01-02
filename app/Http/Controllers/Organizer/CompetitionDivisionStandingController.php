@@ -16,14 +16,15 @@ class CompetitionDivisionStandingController extends Controller
     public function ceremony($competition_id, $division_id)
     {
       $division = Division::with(['standings' => function($query) {
-        $query->orderBy('caption_id', 'DESC');
+        $query->with('choirs')->orderBy('caption_id', 'DESC');
       }, 'awards' => function($query) {
         $query->withoutGlobalScope('organization');
       }, 'awards.choirs' => function($query) use ($division_id) {
         $query->where('division_id',$division_id);
       }])->find($division_id);
-
-
+      
+      //dd($division);
+      
       return view('competition_division_ceremony.organizer.show', compact('division'));
     }
 

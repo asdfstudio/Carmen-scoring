@@ -17,6 +17,8 @@ use App\Judge;
 
 use App\Carmen\WeightedScores;
 use App\Carmen\RankedScores;
+use App\Carmen\CondorcetScores;
+use App\Carmen\ConsensusOrdinalRankScores;
 use App\Carmen\Scoreboard;
 use App\Carmen\Test;
 use App\Carmen\Ratings;
@@ -103,15 +105,13 @@ class CompetitionDivisionRoundController extends Controller
     {
 				$division = Division::with('competition','rounds')->find($division_id);
 
-        $this->authorize('create', ['App\Round', $division]);
+        $this->authorize('create','App\Round',$division);
 
-        $competition_rounds = Competition::find($competition_id)->rounds()->get();
-
-        $competition_rounds = Competition::find($competition_id )->rounds()->whereHas('division', function ($query) use ($division) {
+        $competition_rounds = Competition::find($competition_id)->rounds()->whereHas('division', function ($query) use ($division) {
           $query->where('sheet_id', $division->sheet_id);
         })->get();
 
-        $choices = $competition_rounds->lists('full_name', 'id')->toArray();
+        $choices = $competition_rounds->pluck('full_name', 'id')->toArray();
         $selected = [];
 
         $form = $formBuilder->create('Round\CreateRoundForm', [
@@ -230,13 +230,13 @@ class CompetitionDivisionRoundController extends Controller
       //$weightedScoresClass = new WeightedScores($rawScores,        $division->caption_weighting_id);
       //$weightedScores = $weightedScoresClass->all();
       //$rankedScores = new RankedScores($weightedScores);
-
-
+      
+      
       //$scoreboard = new Scoreboard(['round_id' => [65, 68]]);
       //$rawScores = $scoreboard->rawScores;
       //dd($rawScores);
       //
-
+      
       //
       $ratings = (new Ratings($round))->all();
 
@@ -244,8 +244,11 @@ class CompetitionDivisionRoundController extends Controller
 
       $rawScores = $scoreboard->extendedRawScores;
       $weightedScores = $scoreboard->extendedRawScores;
-      $rankedScores = $scoreboard->rankedScores;
-
+      $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
+      $rankedScores->total_weighted_rank();
+      $query = $rankedScores->weighted_scores()->where('choir_id', 77)->where('judge_id', 1859);
+      //dd($rankedScores->weightedScores->where('choir_id', 77)->where('judge_id', 1859)->sum('weightedScore'), $query->sum('weightedScore'), $rankedScores->weightedScore_by_judge_overall[1859], $rankedScores->weightedScore_vote_rank_by_judge_overall[1859]);
+      
       /*$expectedScores = new CountExpectedScores($round);
       $expectectedScoresCount = $expectedScores->run();
       $actualScoresCount = RawScore::where('round_id', $round_id)->where('score','>',0)->count();
@@ -297,7 +300,7 @@ class CompetitionDivisionRoundController extends Controller
 
 
 
-      return view('competition_division_round.organizer.show', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round','competition','division','divisions','rounds','activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard', 'judges', 'choirs', 'ratings', 'roundIsMissingScores'));
+      return view('competition_division_round.organizer.show', compact('captions', 'rawScores', 'weightedScores', 'rankedScores', 'round', 'competition', 'division', 'divisions', 'rounds', 'activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard', 'judges', 'choirs', 'ratings', 'roundIsMissingScores'));
 		}
 
 
@@ -326,8 +329,6 @@ class CompetitionDivisionRoundController extends Controller
       ])->find($round_id);
 
       $this->authorize('show', $round);
-
-      //dd($round);
 
       $division = $round->division;
       $competition = $division->competition;
@@ -375,7 +376,7 @@ class CompetitionDivisionRoundController extends Controller
 
       $rawScores = $scoreboard->extendedRawScores;
       $weightedScores = $scoreboard->extendedRawScores;
-      $rankedScores = $scoreboard->rankedScores;
+      $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
       return view('competition_division_round.organizer.show_sources', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round','competition','division', 'divisions','rounds', 'scoreboard', 'choirs', 'judges'));
 		}
@@ -452,7 +453,7 @@ class CompetitionDivisionRoundController extends Controller
 
         //dd($competition_rounds);
 
-        $choices = $competition_rounds->lists('full_name', 'id')->toArray();
+        $choices = $competition_rounds->pluck('full_name', 'id')->toArray();
         $selected = $round->sources->pluck('id')->toArray();
 
         //dd($choices);

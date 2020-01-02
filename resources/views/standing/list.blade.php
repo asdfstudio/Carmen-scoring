@@ -4,7 +4,6 @@
   </p>
 @endif
 
-
 @if($standing->choirs)
 <ul class="list-group">
   @foreach($standing->choirs as $choir)
@@ -20,6 +19,9 @@
         <span class="final_rank">
           <span class="text">Final Rank:</span>
           {{ $choir->pivot->final_rank }}
+          @if($standing->choirs->where('pivot.final_rank', $choir->pivot->final_rank)->count() > 1)
+            <span class="tied">tied</span>
+          @endif
         </span>
         
       </div>

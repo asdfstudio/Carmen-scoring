@@ -4,7 +4,7 @@
     <li class="school list-group-item choice">
 
       <div class="checkbox">
-        <?php $selected = $selectedCriteria->where('id', $criterion->id)->count(); ?>
+        @php $selected = $selectedCriteria->where('id', $criterion->id)->count(); @endphp
         {{ Form::checkbox('criteria['.$criterion->id.']', $criterion->id, $selected) }}
       </div>
 

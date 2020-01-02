@@ -52,7 +52,7 @@
 </head>
 <body class="division-dashboard">
 
-  <?php
+  @php
   $choirs = [
     [
       'id' => 1,
@@ -70,7 +70,7 @@
 
   $judges = [];
 
-  ?>
+  @endphp
 
 
   <h1>Test page</h1>
