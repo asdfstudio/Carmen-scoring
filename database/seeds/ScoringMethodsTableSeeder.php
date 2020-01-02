@@ -12,10 +12,12 @@ class ScoringMethodsTableSeeder extends Seeder
     public function run()
     {
         DB::table('scoring_methods')->insert([
-            ['name' => 'Raw'],
-						['name' => 'Ranked'],
-						['name' => 'Condorcet'],
-						['name' => 'ConsensusOrdinalRank']
+            ['name' => 'Raw Scores'],
+						['name' => 'Ranked Scores'],
+						['name' => 'Condorcet - Ranked Pairs Winning'],
+						['name' => 'Condorcet - Schultze Winning'],
+						['name' => 'Consensus Ordinal Rank'],
+						['name' => 'Borda Count']
         ]);
     }
 }
