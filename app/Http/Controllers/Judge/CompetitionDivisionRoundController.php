@@ -15,6 +15,7 @@ use App\RawScore;
 use App\Caption;
 use App\Judge;
 use App\Comment;
+use App\Recording;
 use App\Carmen\Scorekeeper;
 use App\Carmen\Scoreboard;
 
@@ -350,14 +351,12 @@ class CompetitionDivisionRoundController extends Controller
         $query->withoutGlobalScope('organization');
       }, 'division.judges' => function($query) use ($judge_id) {
           $query->where('judge_id',$judge_id)->first();
-        }, 'division.judges.recordings' => function($query) use ($round_id, $division_id) {
-          $query->where('round_id', $round_id)->where('division_id', $division_id);
         },'division.judges.captions' => function($query) use ($division_id) {
           $query->where('division_id',$division_id);
         }, 'division.judges.captions.criteria','choirs','division.rounds', 'sources'])->find($round_id);
 
       $division = $round->division;
-      $recordings = $round->division->judges;
+      //$recordings = $round->division->judges;
       $competition = $division->competition->organization;
       $rating_system = $division->rating_system;
 
@@ -384,7 +383,7 @@ class CompetitionDivisionRoundController extends Controller
           });
         }
       });
-
+      
       $choirs = $source_choirs;
 
       $source_ids = $round->sources->pluck('id')->toArray();
@@ -499,11 +498,9 @@ class CompetitionDivisionRoundController extends Controller
         ];
       })->toArray();
 
-      $recordedComments = $recordings->map(function ($item, $key) {
-        return $item->recordings;
-      });
-
-      // dd($comments);
+      $recordings = Recording::all()->where('judge_id', $judge_id)->whereIn('round_id', array_merge([$round_id], $source_ids))->whereIn('division_id', array_merge([$division_id], $source_division_ids));
+      $recordedComments = array_values($recordings->toArray());
+      //dd($recordedComments);
 
       // JSON encode
       $choirs = json_encode($choirs);
@@ -512,7 +509,7 @@ class CompetitionDivisionRoundController extends Controller
       $comments = json_encode($comments);
       $scores = json_encode($scores);
       $captions = json_encode($captions);
-      $recordedComments = json_encode($recordedComments->first());
+      $recordedComments = json_encode($recordedComments);
       $rating_system = json_encode($rating_system);
       $competition = json_encode($competition);
       return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'captionWeightingId', 'choirs', 'criteria', 'scores', 'rating_system', 'comments', 'spreadsheetTitle', 'backUrl','competition', 'recordedComments'));

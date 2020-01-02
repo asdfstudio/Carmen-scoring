@@ -97,14 +97,15 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 textarea {
-  width: 600px;
+  width: 100%;
   height: 200px;
   max-height: 100%;
-  max-width: 100%;
-  margin: 15px;
+  max-width: 600px;
+  margin: 15px 0;
   padding: 10px;
   border: 1px solid #F0F0F0;
   font-size: 15px;
+  box-sizing: border-box;
 
   &:focus {
     border: 1px solid #7F4091;
