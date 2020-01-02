@@ -15,7 +15,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #modal {
-  width: 750px;
   max-width: 100%;
   background: #F0F0F0;
   padding: 10px;
@@ -27,5 +26,11 @@ export default {
   top: 20px;
   left: 0;
   right: 0;
+}
+
+@media (min-width: 750px) {
+  #modal {
+    width: 750px;
+  }
 }
 </style>

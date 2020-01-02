@@ -30,6 +30,12 @@ class RankedScores {
   }
   
   
+  public function weighted_scores()
+  {
+    return $this->weightedScores;
+  }
+  
+  
   public function total_raw_rank($caption_id = false)
   {
     //echo 'total_raw_rank<br />';

@@ -71,5 +71,10 @@ export default {
     top: 27px;
   }
 
+  @media (max-width: 639px) {
+    & {
+      display: none;
+    }
+  }
 }
 </style>

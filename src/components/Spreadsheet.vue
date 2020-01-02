@@ -380,7 +380,7 @@ export default {
 
 #spreadsheet {
   margin: 5px;
-  margin-top:50px;
+  margin-top:5px;
   margin-bottom: 300px;
   position: relative;
   width: 100%;
@@ -421,8 +421,8 @@ export default {
     left: 0;
     z-index: 2;
     background: #f9f9f9;
-    width: 200px;
-    min-width: 200px;
+    max-width: 200px;
+    min-width: 150px;
     border-right-width: 3px;
   }
 

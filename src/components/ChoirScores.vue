@@ -44,8 +44,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 table {
-  width: 700px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 700px;
   position: relative;
   margin: auto;
 }
@@ -62,6 +62,6 @@ table {
 }
 
 .score-column {
-  width: 200px;
+  max-width: 200px;
 }
 </style>

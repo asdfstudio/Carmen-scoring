@@ -29,7 +29,6 @@
     </ul>
   </div>
 </template>
-
 <script>
 import axios from 'axios'
 const recorder = new MicRecorder({
