@@ -11,7 +11,7 @@ class ChoirDirectorTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('choir_person')->insert([
+        DB::table('choir_director')->insert([
             ['choir_id' => 1, 'director_id' => 3]
         ]);
     }
