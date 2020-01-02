@@ -11,7 +11,7 @@ class ChoirChoreographerTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('choir_person')->insert([
+        DB::table('choir_choreographer')->insert([
             ['choir_id' => 1, 'choreographer_id' => 2]
         ]);
     }
