@@ -33,8 +33,7 @@
                   {{ $comment->judge->full_name }}
                 </div>
                 <div class="body">
-                <div class="container">
-                  <div class="row">
+                  <div>
                     @if($comment->comments)
                       {!! nl2br($comment->comments) !!}
                     @else
@@ -42,16 +41,17 @@
                     @endif
                   </div>
                   @if($competition->organization->is_premium == 1)
-                  <div class="row wrap record-row">
-                  @foreach($comment->recordings as $key => $recording)
-                    <div class="col-sm-6 record-item">
-                      <span class="record-span">{{$key + 1}}.</span>
-                      <div class="record-item-audio">
-                        <audio controls> <source src="{{$recording->url}}"> </audio>
-                        <span> {{$recording->created_at}} (UTC)</span>
-                      </div>
-                    </div>
-                  @endforeach
+                  <div class="record-row">
+                    <ol>
+                    @foreach($recordings->where('round_id', $round->id)->where('choir_id', $comment->choir_id)->where('judge_id', $comment->judge_id) as $recording)
+                      <li class="record-item">
+                        <div class="record-item-audio">
+                          <audio controls> <source src="{{$recording->url}}"> </audio>
+                          <span> {{$recording->created_at}} (UTC)</span>
+                        </div>
+                      </li>
+                    @endforeach
+                    </ol>
                   </div>   
                   @endif            
                 </div>

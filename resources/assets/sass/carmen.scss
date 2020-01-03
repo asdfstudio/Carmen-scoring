@@ -914,3 +914,24 @@ a.active {
 .selectize-dropdown [data-selectable] .highlight {
   display: inline-block;
 }
+
+.record-row {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.record-item {
+  padding: 10px 0 10px 20px;
+  margin-bottom: 10px;
+
+  .record-item-audio {
+    vertical-align: middle;
+    display: inline-block;
+    text-align: center;
+
+    audio {
+      display: block;
+    }
+  }
+}
