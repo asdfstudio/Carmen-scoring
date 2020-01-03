@@ -44,13 +44,11 @@
                 $judge_recordings = $round_recordings->where('judge_id', $judge->id);
                 $judges = collect();
                 $comments_not_empty = false;
-                @foreach($judge_comments as $comment)
-                  @if(!empty($comment->comments))
-                    @php
-                      $comments_not_empty = true;
-                    @endphp
-                  @endif
-                @endforeach
+                foreach($judge_comments as $comment){
+                  if(!empty($comment->comments)){
+                    $comments_not_empty = true;
+                  }
+                }
               @endphp
               @if($comments_not_empty || ($competition->organization->is_premium == 1 && $judge_recordings->count()))
                 <li class="list-group-item unpadded">
