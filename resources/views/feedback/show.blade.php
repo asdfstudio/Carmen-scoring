@@ -43,6 +43,7 @@
                 $judge_comments = $round_comments->where('judge_id', $judge->id);
                 $judge_recordings = $round_recordings->where('judge_id', $judge->id);
                 $judges = collect();
+                $comments_were_empty = true;
               @endphp
               <li class="list-group-item unpadded">
                 <div class="header">
@@ -50,13 +51,19 @@
                 </div>
                 <div class="body">
                   <div>
-                    @if($judge_comments->count())
-                      @foreach($judge_comments as $comment)
+                  @if($judge_comments->count())
+                    @foreach($judge_comments as $comment)
+                      @if(!empty($comment->comments))
                         {!! nl2br($comment->comments) !!}
-                      @endforeach
-                    @else
-                      <i class="text-muted">No typed comments were entered by this judge</i>
-                    @endif
+                        @php
+                          $comments_were_empty = false
+                        @endphp
+                      @endif
+                    @endforeach
+                  @endif
+                  @if($comments_were_empty)
+                    <i class="text-muted">No typed comments were entered by this judge</i>
+                  @endif
                   </div>
                   @if($competition->organization->is_premium == 1 && $judge_recordings->count())
                   <div class="record-row">
