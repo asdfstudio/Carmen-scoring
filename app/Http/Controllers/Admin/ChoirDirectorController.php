@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Choir;
 use App\Place;
+use App\Person;
 use App\Director;
 
 use Auth;
@@ -47,16 +48,33 @@ class ChoirDirectorController extends Controller
 
     $form = $formBuilder->create('Director\CreateDirectorForm');
 
-    // Validate input
-    if (!$form->isValid()) {
-       return redirect()->back()->withErrors($form->getErrors())->withInput();
+    // If the form is submitted with an existing person ID...
+    if($request->has('person_id')){
+      
+      $director_id = $request->input('person_id');
+      
+      // Make sure this person is recorded as a director in the database.
+      $director = Person::find($director_id)->types()->syncWithoutDetaching([2]);
+      
+      // Attach the person to this choir.
+      $choir->directors()->syncWithoutDetaching([intval($director_id)]);
+      
+    } else {
+      
+      // Otherwise, the intention is to create a new director.
+      
+      // Validate input
+      if (!$form->isValid()) {
+         return redirect()->back()->withErrors($form->getErrors())->withInput();
+      }
+      
+      // Create the director
+      $director = $choir->directors()->create($request->input());
+      
     }
 
-    // Create the organization
-    $director = $choir->directors()->create($request->input());
-
-    // Set flash data and redirect
-    return redirect()->route('admin.choir.index')->with('success','Choir director successfully created.');
+      // Set flash data and redirect
+      return redirect()->route('admin.choir.index')->with('success','Choir director successfully added.');
   }
 
   /**
@@ -89,7 +107,8 @@ class ChoirDirectorController extends Controller
     $deleteForm = $formBuilder->create('GenericDeleteForm', [
       'method' => 'DELETE',
       'url' => route('admin.choir.director.destroy', [$choir, $director]),
-      'model' => $director
+      'model' => $director,
+      'button_text' => 'Remove'
     ]);
 
     return view('choir_director.admin.edit', compact('form', 'choir', 'director', 'deleteForm'));
@@ -133,9 +152,9 @@ class ChoirDirectorController extends Controller
   {
     $this->authorize('destroy',$choir);
 
-    $director->delete();
+    $choir->directors()->detach($director->id);
 
     // Set flash data and redirect
-    return redirect()->route('admin.choir.show', [$choir])->with('success','Choir director successfully deleted.');
+    return redirect()->route('admin.choir.show', [$choir])->with('success','Choir director successfully removed.');
   }
 }

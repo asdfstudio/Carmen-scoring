@@ -19,12 +19,12 @@
       </td>
 			<td>
         @if($award->pivot)
-      		@if($award->pivot->recipient OR $award->choir)
+      		@if($award->pivot->recipient || $award->choirs->first())
 						@if($award->pivot->recipient)
 							{{ $award->pivot->recipient }}
 						@endif
-						@if($award->choir)
-							{{ $award->choir->full_name }}
+						@if($award->choirs->first())
+							{{ $award->choirs->first()->name }}
 						@endif
           @endif
         @endif

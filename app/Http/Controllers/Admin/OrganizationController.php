@@ -34,11 +34,13 @@ class OrganizationController extends Controller
      */
     public function index()
     {
-				$organizations = Organization::with('people')->orderBy('name', 'asc')->get();
+                $organizations = Organization::with('people')->orderBy('name', 'asc')->get();
 
-				//$this->authorize('showAll',$organizations);
+                // dd($organizations);
 
-				return view('organization.admin.index', compact('organizations'));
+                //$this->authorize('showAll',$organizations);
+
+                return view('organization.admin.index', compact('organizations'));
     }
 
     /**
@@ -50,12 +52,12 @@ class OrganizationController extends Controller
     {
         $this->authorize('create','App\Organization');
 
-				$form = $formBuilder->create('OrganizationForm', [
-					'method' => 'POST',
-					'url' => route('admin.organization.store')
-				]);
+                $form = $formBuilder->create('OrganizationForm', [
+                    'method' => 'POST',
+                    'url' => route('admin.organization.store')
+                ]);
 
-				return view('organization.admin.create', compact('form'));
+                return view('organization.admin.create', compact('form'));
     }
 
     /**
@@ -68,41 +70,41 @@ class OrganizationController extends Controller
     {
         $this->authorize('create','App\Organization');
 
-				$form = $formBuilder->create('OrganizationForm');
+                $form = $formBuilder->create('OrganizationForm');
 
-				// Validate input
-				if (!$form->isValid()) {
+                // Validate input
+                if (!$form->isValid()) {
            return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 
-				// Get the input
-				$input = $request->input();
+                // Get the input
+                $input = $request->input();
 
-				//dd($input);
+                //dd($input);
 
 
-				// Create the organization
-				$organization = new Organization;
-				$organization->name = $input['name'];
-				$organization->save();
+                // Create the organization
+                $organization = new Organization;
+                $organization->name = $input['name'];
+                $organization->save();
 
         // Create organization place
         $place = new Place($input['place']);
         $organization->place()->save($place);
 
-				// Create the organization person
-				//$person_input = $request->input('person');
+                // Create the organization person
+                //$person_input = $request->input('person');
 
-				//dd($person_input);
+                //dd($person_input);
 
-				/*$person = new Person;
-				$person->first_name = $person_input['first_name'];
-				$person->last_name = $person_input['last_name'];
-				$person->email = $person_input['email'];
-				$organization->people()->save($person);*/
+                /*$person = new Person;
+                $person->first_name = $person_input['first_name'];
+                $person->last_name = $person_input['last_name'];
+                $person->email = $person_input['email'];
+                $organization->people()->save($person);*/
 
-				// Set flash data and redirect
-				return redirect()->route('admin.organization.index')->with('success',"$organization->name has been created.");
+                // Set flash data and redirect
+                return redirect()->route('admin.organization.index')->with('success',"$organization->name has been created.");
     }
 
     /**
@@ -113,7 +115,7 @@ class OrganizationController extends Controller
      */
     public function show($id)
     {
-				$organization = Organization::find($id);
+                $organization = Organization::find($id);
 
         //dd(Auth::user());
 
@@ -124,9 +126,9 @@ class OrganizationController extends Controller
 
         return redirect()->route('organizer.competition.index');
 
-        $this->authorize($organization);
+        $this->authorize('show', $organization);
 
-				return view('organization.show', ['organization' => $organization]);
+                return view('organization.show', ['organization' => $organization]);
     }
 
     /**
@@ -138,21 +140,21 @@ class OrganizationController extends Controller
     public function edit(FormBuilder $formBuilder, $id)
     {
         //
-				$organization = Organization::find($id);
+                $organization = Organization::find($id);
 
-				// method 1
-				$this->authorize('update',$organization);
+                // method 1
+                $this->authorize('update',$organization);
 
 
-				$form = $formBuilder->create('OrganizationForm', [
-					'method' => 'PATCH',
-					'url' => route('admin.organization.update', [$organization]),
-					'model' => $organization
-				]);
+                $form = $formBuilder->create('OrganizationForm', [
+                    'method' => 'PATCH',
+                    'url' => route('admin.organization.update', [$organization]),
+                    'model' => $organization
+                ]);
 
-				return view('organization.edit', compact('form','organization'));
+                return view('organization.edit', compact('form','organization'));
 
-				//return view('organization.edit', ['organization' => $organization]);
+                //return view('organization.edit', ['organization' => $organization]);
     }
 
     /**
@@ -164,31 +166,31 @@ class OrganizationController extends Controller
      */
     public function update(Request $request, FormBuilder $formBuilder, $id)
     {
-				$organization = Organization::find($id);
+                $organization = Organization::find($id);
 
-				// method 1
-				$this->authorize('update',$organization);
+                // method 1
+                $this->authorize('update',$organization);
 
-				// Validate input
-				$form = $formBuilder->create('OrganizationForm');
+                // Validate input
+                $form = $formBuilder->create('OrganizationForm');
 
-				// Validate input
-				if (!$form->isValid()) {
+                // Validate input
+                if (!$form->isValid()) {
            return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 
         // Get the input
-				$input = $request->input();
+                $input = $request->input();
 
-				// Update the organization
-				$organization->name = $input['name'];
-				$organization->save();
+                // Update the organization
+                $organization->name = $input['name'];
+                $organization->save();
 
 
-				// Set flash data
+                // Set flash data
 
-				// Redirect
-				return redirect()->route('admin.organization.show',[$organization]);
+                // Redirect
+                return redirect()->route('admin.organization.show',[$organization]);
     }
 
     /**
@@ -201,9 +203,28 @@ class OrganizationController extends Controller
     {
         $organization = Organization::find($id);
 
-				// method 1
-				$this->authorize('destroy',$organization);
+                // method 1
+                $this->authorize('destroy',$organization);
 
-				dd($organization);
+                dd($organization);
+    }
+
+    public function updatePremiumStatus($orgId){
+
+        $organization = Organization::find($orgId);
+
+        if($organization->is_premium == 1){
+            $organization->is_premium = 0;
+            $organization->save();
+
+            $data['message'] = $organization->name.' has premium access removed.';
+
+        }else{
+            $organization->is_premium = 1;
+            $organization->save();
+
+            $data['message'] = $organization->name.' has been granted premium access.';
+        }
+        return response()->json($data, $status = 200, $headers = [], $options = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 }

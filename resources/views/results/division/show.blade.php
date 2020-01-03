@@ -17,7 +17,7 @@
 		@foreach($division->standings as $standing)
 
 			@if($standing)
-				<?php
+				@php
 				if($standing->caption_id == NULL)
 				{
 					$awardSetting = $division->awardSettings->where('caption_id', 0)->first();
@@ -33,8 +33,8 @@
 					$limit = 0;
 				}
 
-				$standing->choirs = $standing->choirs->take($limit)->reverse();
-				?>
+				$standing->choirs = $standing->choirs->where('pivot.final_rank', '<=', $limit)->reverse();
+				@endphp
 			@endif
 
 			@if($standing->choirs->count() > 0)

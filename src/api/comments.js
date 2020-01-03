@@ -7,8 +7,6 @@ export default {
       choir_id: payload.choir_id,
       comment: payload.comment
     }
-    console.log(payload)
-
     return axios.post('/judge/comment/save', postPayload)
       .then(response => {
         return response.data

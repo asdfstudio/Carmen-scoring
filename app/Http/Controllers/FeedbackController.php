@@ -8,6 +8,8 @@ use App\Http\Requests;
 
 use App\CommentUrl;
 use App\Comment;
+use App\Recording;
+use DB;
 
 class FeedbackController extends Controller
 {
@@ -41,10 +43,13 @@ class FeedbackController extends Controller
       }*/
 
       $choir = $commentUrl->choir;
+      $comment_recipient_id = $commentUrl->recipient_id;
 
 
-      $comments = Comment::with(['judge'])->where('choir_id', $commentUrl->recipient_id)->get();
-
-      return view('feedback.show', ['comments' => $comments, 'competition' => $commentUrl->competition, 'choir' => $choir]);
+      $comments = Comment::with(['judge'])->where('choir_id', $comment_recipient_id)->where('subject_type', 'App\Round')->get();
+      
+      $recordings = Recording::where('choir_id', $comment_recipient_id)->whereIn('division_id', $commentUrl->competition->divisions->pluck('id')->toArray())->get();
+      //dd($recordings);
+      return view('feedback.show', ['comments' => $comments, 'recordings' => $recordings, 'competition' => $commentUrl->competition, 'choir' => $choir, 'comment_recipient_id' => $comment_recipient_id]);
     }
 }

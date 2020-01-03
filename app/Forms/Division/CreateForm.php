@@ -26,9 +26,21 @@ class CreateForm extends Form
             'text' => ''
           ]
 				]);
-
-				$this->add('scoring_method_id','entity', [
-					'class' => 'App\ScoringMethod',
+        
+        // When listing scoring methods, leave out ID 2 (Ranked Scores) unless it is already chosen for this division.
+        $selected_scoring_method = !empty($this->model) && !empty($this->model->scoring_method_id) ? $this->model->scoring_method_id : '';
+        if($selected_scoring_method !== 2){
+          $scoring_methods = \App\ScoringMethod::where('id', '!=', 2)->orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
+        } else {
+          $scoring_methods = \App\ScoringMethod::orderBy('name', 'asc')->get()->pluck('name', 'id')->toArray();
+        }
+        //dd($scoring_methods);
+        //dd($this->model->scoring_method_id);
+        
+				$this->add('scoring_method_id','choice', [
+          //'class' => 'App\ScoringMethod',
+          'choices' => $scoring_methods,
+          'selected' => $selected_scoring_method,
 					'empty_value' => 'Choose scoring method...',
 					'label' => 'Scoring Method',
           'label_attr' => ['class' => 'block'],
@@ -112,7 +124,7 @@ class CreateForm extends Form
 
         $this->add('overall_award_sponsors','textarea', [
           'help_block' => [
-            'text' => 'Enter 1 sponsor per line, with Champion sponsor on line 1, 1st runner up on line 2 and so on...'
+            'text' => 'Enter 1 sponsor per line, with Grand Champion sponsor on line 1, 1st runner up on line 2 and so on...'
           ],
           'wrapper' => [
             'class' => 'form-group col-md-3 col-xs-12'
@@ -122,7 +134,7 @@ class CreateForm extends Form
 
         $this->add('music_award_sponsors','textarea', [
           'help_block' => [
-            'text' => 'Enter 1 sponsor per line, with Champion sponsor on line 1, 1st runner up on line 2 and so on...'
+            'text' => 'Enter 1 sponsor per line, with Grand Champion sponsor on line 1, 1st runner up on line 2 and so on...'
           ],
           'wrapper' => [
             'class' => 'form-group col-md-3 col-xs-12'
@@ -132,7 +144,7 @@ class CreateForm extends Form
 
         $this->add('show_award_sponsors','textarea', [
           'help_block' => [
-            'text' => 'Enter 1 sponsor per line, with Champion sponsor on line 1, 1st runner up on line 2 and so on...'
+            'text' => 'Enter 1 sponsor per line, with Grand Champion sponsor on line 1, 1st runner up on line 2 and so on...'
           ],
           'wrapper' => [
             'class' => 'form-group col-md-3 col-xs-12'
@@ -142,7 +154,7 @@ class CreateForm extends Form
 
         $this->add('combo_award_sponsors','textarea', [
           'help_block' => [
-            'text' => 'Enter 1 sponsor per line, with Champion sponsor on line 1, 1st runner up on line 2 and so on...'
+            'text' => 'Enter 1 sponsor per line, with Grand Champion sponsor on line 1, 1st runner up on line 2 and so on...'
           ],
           'wrapper' => [
             'class' => 'form-group col-md-3 col-xs-12'
@@ -150,20 +162,39 @@ class CreateForm extends Form
           'default_value' => ''
         ]);*/
 
-
-        $i = 0;
-        $maxRatingSystemSets = 3;
-
+      
+      
         $this->add('rating_system_heading', 'static', [
           'tag' => 'h2',
           'value' => 'Rating System (optional)',
           'label_show' => false
         ]);
 
+        $i = 0;
+        $maxRatingSystemSets = 4;
+        
+        $this->add('rating_system', 'collection', [
+          'type' => 'form',
+          'label_show' => false,
+          'prototype' => true,
+          'prototype_name' => '__NAME__',
+          'options' => [
+            'class' => 'Division\RatingsForm',
+            'label_show' => false
+          ]
+        ]);
+
+        $this->add('add_rating', 'button', [
+          'wrapper' => ['class' => 'add-rating form-group'],
+          'attr' => ['class' => 'action'],
+          'label' => 'Add Another Rating',
+        ]);
+
+/*
         while($i < $maxRatingSystemSets)
         {
 
-          if($this->model)
+          if($this->model && isset($this->model->rating_system[$i]))
           {
             $nameValue = $this->model->rating_system[$i]['name'];
             $minScoreValue = $this->model->rating_system[$i]['min_score'];
@@ -195,7 +226,7 @@ class CreateForm extends Form
 
           $i++;
         }
-
+*/
 
 				$this->add('submit', 'submit', [
           'label' => 'Save Division',

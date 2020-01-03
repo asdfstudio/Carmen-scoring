@@ -95,7 +95,7 @@ class CompetitionController extends Controller
     {
 				$competition = Competition::with('place','organization','divisions', 'soloDivisions')->find($id);
 
-        $this->authorize($competition);
+        $this->authorize('show', $competition);
 
         $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
           'method' => 'POST',
@@ -168,12 +168,11 @@ class CompetitionController extends Controller
 				$input = $request->input();
 
 
-
 				// Update the record
 				$competition->name = $input['name'];
         $competition->slug = $input['slug'];
         $competition->access_code = $input['access_code'];
-        $competition->use_runner_up_names = $input['use_runner_up_names'];
+        $competition->use_runner_up_names = intval($input['use_runner_up_names']);
         //$competition->rating_system = array_filter($input['rating_system']);
 
         //dd($input['rating_system']);

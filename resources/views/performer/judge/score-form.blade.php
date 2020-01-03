@@ -25,8 +25,8 @@
 
 
         <div class="score" data-criterion-id="{{ $criterion->id }}">
-          <?php $rawScore = $rawScores->where('criterion_id', $criterion->id)->pluck('score');?>
-          <?php $score = $rawScore->first(); ?>
+          @php $rawScore = $rawScores->where('criterion_id', $criterion->id)->pluck('score');@endphp
+          @php $score = $rawScore->first(); @endphp
           {{ Form::text("scores[$criterion->id]", $score, ['data-criterion-id' => $criterion->id, 'readonly' => 'readonly', 'required' => 'required', 'data-original-score' => $rawScore, 'class' => 'criterion-score-input']) }}
         </div>
 

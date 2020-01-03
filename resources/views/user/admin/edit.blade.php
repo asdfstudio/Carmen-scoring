@@ -5,7 +5,7 @@
 @endsection
 
 @section('content-header')
-	<h1>Edit user</h1>
+	<h1>Edit User</h1>
 
 	{{ link_to_route('admin.user.index', 'Back to users', [], ['class' => 'action']) }}
 @endsection
@@ -16,13 +16,9 @@
 		{!! form($form) !!}
 
 
-		@if($user->person->is_judge == false)
-			<hr>
+@endsection
 
-			<h3>Turn this user into a judge?</h3>
-			{!! form($makeJudgeForm) !!}
-		@endif
-
-
-
+@section('body-footer')
+  <script>let getNewUsernameURL = '{{ route('admin.user.username.new') }}'</script>
+  <script src="/js/user-person-form.js"></script>
 @endsection

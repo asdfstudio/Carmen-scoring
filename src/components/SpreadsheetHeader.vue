@@ -38,12 +38,18 @@ export default {
   padding: 15px 0 3px;
   min-height: 30px;
   color: #fff;
-  position: fixed;
+  position: relative;
   top: 0;
   left: 0;
   right: 0;
   background: #272B2D;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
+  text-align: left;
+  
+  h2 {
+    margin-top: 0;
+    margin-left: 240px;
+  }
 }
 button, .button {
   padding: 3px 15px;
@@ -63,7 +69,16 @@ button, .button {
 }
 
 .back-button {
+  position: relative;
+  top: 5px;
   left: 15px;
+}
+
+@media (max-width: 600px) {
+  #spreadsheet-header h2 {
+    margin-top: 20px;
+    margin-left: 15px;
+  }
 }
 
 .change-division-button {

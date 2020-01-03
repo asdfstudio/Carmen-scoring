@@ -103,16 +103,19 @@
           background: $cs-green;
           color: $cs-white;
           padding: 5px;
-          display: block;
+          //display: block;
           margin-bottom: 5px;
         }
         .name {
           padding: 0 5px;
           font-size: 18px;
+          display: inline;;
           //line-height: 22px;
         }
         .choir {
           padding: 0 5px;
+          font-size: 18px;
+          display: inline;;
         }
       }
       .sponsor {
@@ -306,6 +309,19 @@
       .details {
         float: right;
 
+        .tied {
+          display: inline-block;
+          position: relative;
+          top: -10px;
+          margin: 0 -10px 0 -4px;
+          padding: 0 4px 1px;
+          border-radius: 4px;
+          background: $cs-purple;
+          color: #ffffff;
+          font-size: 11px;
+          letter-spacing: .5px;
+        }
+        
         .final_rank {
           font-weight: bold;
           color: $cs-purple;
@@ -321,10 +337,6 @@
             }
           }
 
-
-
-
-
           & .text {
             font-size: 0.5em;
           }
@@ -332,7 +344,9 @@
           & input {
             max-width: 60px;
           }
+          
         }
+        
         .raw_rank {
           color: $cs-gray-mid-3;
         }

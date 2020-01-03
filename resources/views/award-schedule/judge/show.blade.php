@@ -9,9 +9,9 @@
   <ul class="schedule-list">
     @foreach($schedule->items as $item)
 
-      <?php
+      @php
       $isDivisionJudge = $judge->divisions()->where('division_id', $item->round->division_id)->count();
-      ?>
+      @endphp
       <li class="schedule-item choir" id="item_{{ $item->round_id }}_{{ $item->choir_id }}" data-round-id="{{ $item->round_id }}" data-choir-id="{{ $item->choir_id }}">
 
         @if($isDivisionJudge)

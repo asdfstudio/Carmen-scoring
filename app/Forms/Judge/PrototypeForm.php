@@ -36,7 +36,11 @@ class PrototypeForm extends Form
         'empty_value' => 'Choose caption ...',
         'label' => 'Caption',
         'expanded' => true,
-        'multiple' => true
+        'multiple' => true,
+        'choice_options' => [
+          'wrapper' => ['class' => 'choice-wrapper'],
+          'labelAttrs' => 'label-attr'
+      ],
       ]);
     }
 }

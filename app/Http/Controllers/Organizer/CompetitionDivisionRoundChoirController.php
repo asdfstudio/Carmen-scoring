@@ -13,6 +13,7 @@ use App\Choir;
 use App\Round;
 use App\RawScore;
 use App\Caption;
+use App\Judge;
 
 use App\Carmen\WeightedScores;
 use App\Carmen\RankedScores;
@@ -22,22 +23,37 @@ use Kris\LaravelFormBuilder\FormBuilder;
 class CompetitionDivisionRoundChoirController extends Controller
 {
 
-    public function show($competition_id,$division_id,$round_id,$choir_id)
+    public function show(Request $request, $competition_id,$division_id,$round_id,$choir_id)
 		{
+   
       $competition = Competition::with('divisions')->find($competition_id);
       $divisions = $competition->divisions;
 			$choir = Choir::with(['penalties' => function($query) use ($round_id){
         $query->where('round_id', $round_id);
       }])->find($choir_id);
 			$round = Round::find($round_id);
-			$division = Division::with(['choirs','rounds','sheet','sheet.criteria','sheet.criteria.caption','competition','judges' => function ($query) {
-					$query->groupBy('judge_id');
+			$division = Division::with(['choirs','rounds','sheet','sheet.criteria','sheet.criteria.caption','competition','judges' => function ($query) use($request) {
+        if($request->judge_id){
+          $query->where('judge_id', $request->judge_id);
+        }else{
+          $query->where('judge_id', null);
+        }
+        $query->groupBy('judge_id');
           //$query->distinct();
-				}])->find($division_id);
+				},'judges.recordings' => function($query) use ($choir_id, $round_id, $request){
+          if($request->judge_id){
+            $query->where('judge_id', $request->judge_id);
+          }else{
+            $query->where('judge_id', null);
+          }
+          $query->where('choir_id', $choir_id)->where('round_id', $round_id);
+        }])->find($division_id);
 
-      //dd($division->judges);
       //
+      // $judgeList = [];
+      // foreach($division->judges as $judge){
 
+      // }
       $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::forSheet($division->sheet);
       $rounds = $division->rounds;
@@ -47,8 +63,10 @@ class CompetitionDivisionRoundChoirController extends Controller
       $weightedScores = $weightedScoresClass->all();
 
       $rankedScores = new RankedScores($weightedScores);
-
-			return view('competition_division_round_choir.organizer.show',compact('competition', 'rawScores', 'weightedScores', 'rankedScores', 'choir', 'round', 'division', 'rounds', 'divisions', 'captions'));
+      $judgeList = Division::with(['judges'])->find($division_id)->judges->pluck('full_name','id');
+      $judgeList->prepend('Please select a judge', 'null');
+      $judge_id= ($request->judge_id)?$request->judge_id:'';
+			return view('competition_division_round_choir.organizer.show',compact('competition', 'rawScores', 'weightedScores', 'rankedScores', 'choir', 'round', 'division', 'rounds', 'divisions', 'captions', 'judgeList','judge_id'));
 
 		}
 

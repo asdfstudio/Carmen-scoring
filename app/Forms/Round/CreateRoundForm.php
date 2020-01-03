@@ -55,7 +55,8 @@ class CreateRoundForm extends Form
           'some' => 'Some choirs from other rounds'
         ],
         'choice_options' => [
-          'wrapper' => ['class' => 'choice-container']
+          'wrapper' => ['class' => 'choice-container'],
+          'labelAttrs' => 'label-attr'
         ],
         'expanded' => true,
         'multiple' => false

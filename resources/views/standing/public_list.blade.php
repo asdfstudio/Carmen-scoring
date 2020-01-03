@@ -5,9 +5,9 @@
 @endif
 
 
-<?php
+@php
 $captionId = $standing->caption_id ? $standing->caption_id : 0;
-?>
+@endphp
 
 @if($standing->choirs)
 <ul class="list-group">
@@ -15,10 +15,11 @@ $captionId = $standing->caption_id ? $standing->caption_id : 0;
     <li class="list-group-item standing">
       <span class="choir">{{ $choir->full_name }}</span>
 
-      <?php
+      @php
       $rank_name = false;
       $final_rank = $choir->pivot->final_rank;
       //$index = $final_rank - 1;
+      $tied = $standing->choirs->where('pivot.final_rank', $choir->pivot->final_rank)->count() > 1 ? true : false;
 
       //$sponsor = array_key_exists($index, $sponsors) ? $sponsors[$index] : false;
 
@@ -35,7 +36,7 @@ $captionId = $standing->caption_id ? $standing->caption_id : 0;
       {
         if($final_rank == 1)
         {
-          $rank_name = 'Champion';
+          $rank_name = 'Grand Champion';
         }
         else
         {
@@ -46,7 +47,7 @@ $captionId = $standing->caption_id ? $standing->caption_id : 0;
       else {
         $rank_name = ordinal($final_rank);
       }
-      ?>
+      @endphp
 
       @if($sponsor AND $showSponsor)
         <span>Sponsored by: {{ $sponsor }}</span>
@@ -57,6 +58,9 @@ $captionId = $standing->caption_id ? $standing->caption_id : 0;
         <span class="final_rank ceremony rank-{{ $choir->pivot->final_rank }}">
           {{ $rank_name }}
         </span>
+        @if($tied)
+          <span class="tied">tied</span>
+        @endif
 
       </div>
 

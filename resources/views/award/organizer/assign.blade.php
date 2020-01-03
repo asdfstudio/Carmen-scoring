@@ -17,16 +17,16 @@
 
 
 			<div class="form-group">
-				<?php
+				@php
 				if($award->choir)
 				{
 					$selected = $award->choir->id;
 				} else {
 					$selected = false;
 				}
-				?>
+				@endphp
 				{{ Form::label('Choir') }}
-				{{ Form::select("awards[".$award->id."][choir_id]", $division->choirs->lists('name','id'), $selected, ['placeholder' => 'Select Choir', 'class' => 'form-control']) }}
+				{{ Form::select("awards[".$award->id."][choir_id]", $division->choirs->pluck('name','id'), $selected, ['placeholder' => 'Select Choir', 'class' => 'form-control']) }}
 			</div>
 
 		</li>

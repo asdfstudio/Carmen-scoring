@@ -1,27 +1,27 @@
-<?php if ($showLabel && $showField): ?>
-    <?php if ($options['wrapper'] !== false): ?>
-    <div <?= $options['wrapperAttrs'] ?> >
-    <?php endif; ?>
-<?php endif; ?>
+@php if ($showLabel && $showField): @endphp
+    @php if ($options['wrapper'] !== false): @endphp
+    <div @php $options['wrapperAttrs'] @endphp >
+    @php endif; @endphp
+@php endif; @endphp
 
-<?php if ($showField): ?>
-    <?= Form::checkbox($name, $options['value'], $options['checked'], $options['attr']) ?>
+@php if ($showField): @endphp
+    @php Form::checkbox($name, $options['value'], $options['checked'], $options['attr']) @endphp
 
-    <?php include 'help_block.php' ?>
-<?php endif; ?>
+    @php include 'help_block.php' @endphp
+@php endif; @endphp
 
-<?php if ($showLabel && $options['label'] !== false && $options['label_show']): ?>
-    <?php if ($options['is_child']): ?>
-        <label <?= $options['labelAttrs'] ?>><?= $options['label'] ?></label>
-    <?php else: ?>
-        <?= Form::label($name, $options['label'], $options['label_attr']) ?>
-    <?php endif; ?>
-<?php endif; ?>
+@php if ($showLabel && $options['label'] !== false && $options['label_show']): @endphp
+    @php if ($options['is_child']): @endphp
+        <label @php $options['labelAttrs'] @endphp>@php $options['label'] @endphp</label>
+    @php else: @endphp
+        @php Form::label($name, $options['label'], $options['label_attr']) @endphp
+    @php endif; @endphp
+@php endif; @endphp
 
-<?php include 'errors.php' ?>
+@php include 'errors.php' @endphp
 
-<?php if ($showLabel && $showField): ?>
-    <?php if ($options['wrapper'] !== false): ?>
+@php if ($showLabel && $showField): @endphp
+    @php if ($options['wrapper'] !== false): @endphp
     </div>
-    <?php endif; ?>
-<?php endif; ?>
+    @php endif; @endphp
+@php endif; @endphp

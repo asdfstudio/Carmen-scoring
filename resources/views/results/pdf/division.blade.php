@@ -10,7 +10,7 @@
   @include('award.public_table', ['awards' => $division->awards])
 
   <h4>Overall & Caption Awards</h4>
-  <?php $xDivisionStandings = $division->standings;?>
+  @php $xDivisionStandings = $division->standings;@endphp
   @include('standing.public_awards_table', ['standings' => $xDivisionStandings, 'awardSettings' => $division->awardSettings])
 
   <h3>Standings</h3>

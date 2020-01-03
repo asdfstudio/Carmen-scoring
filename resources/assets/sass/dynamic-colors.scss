@@ -1,37 +1,374 @@
 @import 'variables'; 
 
-$i: 1;
-$max-dynamic-colors: 12;
+// Color 1
 
-@while $i <= $max-dynamic-colors {
-  $rotation: ($i - 1) * 30;
-  $color: adjust-hue($dynamic-color-base, $rotation);
-  $lighter-color: lighten($color, 10);
-  $darker-color: darken($color, 10);
+$color-1: #8d4198;
+$lighter-color-1: lighten($color-1, 10);
+$darker-color-1: darken($color-1, 10);
 
-  .background-color-#{$i} {
-    background: $color !important;
-  }
-
-  .lighter-background-color-#{$i} {
-    background: $lighter-color !important;
-  }
-
-  .darker-background-color-#{$i} {
-    background: $darker-color !important;
-  }
-
-  .text-color-#{$i} {
-    color: $color !important;
-  }
-
-  .border-color-#{$i} {
-    border-color: $color !important;
-  }
-
-  .border-left-color-#{$i} {
-    border-left: 8px solid $color !important;
-  }
-
-  $i: $i + 1;
+.background-color-1 {
+  background: $color-1 !important;
 }
+
+.lighter-background-color-1 {
+  background: $lighter-color-1 !important;
+}
+
+.darker-background-color-1 {
+  background: $darker-color-1 !important;
+}
+
+.text-color-1 {
+  color: $color-1 !important;
+}
+
+.border-color-1 {
+  border-color: $color-1 !important;
+}
+
+.border-left-color-1 {
+  border-left: 8px solid $color-1 !important;
+}
+
+
+// Color 2
+
+$color-2: #33b24d;
+$lighter-color-2: lighten($color-2, 10);
+$darker-color-2: darken($color-2, 10);
+
+.background-color-2 {
+  background: $color-2 !important;
+}
+
+.lighter-background-color-2 {
+  background: $lighter-color-2 !important;
+}
+
+.darker-background-color-2 {
+  background: $darker-color-2 !important;
+}
+
+.text-color-2 {
+  color: $color-2 !important;
+}
+
+.border-color-2 {
+  border-color: $color-2 !important;
+}
+
+.border-left-color-2 {
+  border-left: 8px solid $color-2 !important;
+}
+
+
+// Color 3
+
+$color-3: #f79523;
+$lighter-color-3: lighten($color-3, 10);
+$darker-color-3: darken($color-3, 10);
+
+.background-color-3 {
+  background: $color-3 !important;
+}
+
+.lighter-background-color-3 {
+  background: $lighter-color-3 !important;
+}
+
+.darker-background-color-3 {
+  background: $darker-color-3 !important;
+}
+
+.text-color-3 {
+  color: $color-3 !important;
+}
+
+.border-color-3 {
+  border-color: $color-3 !important;
+}
+
+.border-left-color-3 {
+  border-left: 8px solid $color-3 !important;
+}
+
+
+// Color 4
+
+$color-4: #0985eb;
+$lighter-color-4: lighten($color-4, 10);
+$darker-color-4: darken($color-4, 10);
+
+.background-color-4 {
+  background: $color-4 !important;
+}
+
+.lighter-background-color-4 {
+  background: $lighter-color-4 !important;
+}
+
+.darker-background-color-4 {
+  background: $darker-color-4 !important;
+}
+
+.text-color-4 {
+  color: $color-4 !important;
+}
+
+.border-color-4 {
+  border-color: $color-4 !important;
+}
+
+.border-left-color-4 {
+  border-left: 8px solid $color-4 !important;
+}
+
+
+// Color 5
+
+$color-5: #80506e;
+$lighter-color-5: lighten($color-5, 10);
+$darker-color-5: darken($color-5, 10);
+
+.background-color-5 {
+  background: $color-5 !important;
+}
+
+.lighter-background-color-5 {
+  background: $lighter-color-5 !important;
+}
+
+.darker-background-color-5 {
+  background: $darker-color-5 !important;
+}
+
+.text-color-5 {
+  color: $color-5 !important;
+}
+
+.border-color-5 {
+  border-color: $color-5 !important;
+}
+
+.border-left-color-5 {
+  border-left: 8px solid $color-5 !important;
+}
+
+
+// Color 6
+
+$color-6: #4c9982;
+$lighter-color-6: lighten($color-6, 10);
+$darker-color-6: darken($color-6, 10);
+
+.background-color-6 {
+  background: $color-6 !important;
+}
+
+.lighter-background-color-6 {
+  background: $lighter-color-6 !important;
+}
+
+.darker-background-color-6 {
+  background: $darker-color-6 !important;
+}
+
+.text-color-6 {
+  color: $color-6 !important;
+}
+
+.border-color-6 {
+  border-color: $color-6 !important;
+}
+
+.border-left-color-6 {
+  border-left: 8px solid $color-6 !important;
+}
+
+
+// Color 7
+
+$color-7: #e5a817;
+$lighter-color-7: lighten($color-7, 10);
+$darker-color-7: darken($color-7, 10);
+
+.background-color-7 {
+  background: $color-7 !important;
+}
+
+.lighter-background-color-7 {
+  background: $lighter-color-7 !important;
+}
+
+.darker-background-color-7 {
+  background: $darker-color-7 !important;
+}
+
+.text-color-7 {
+  color: $color-7 !important;
+}
+
+.border-color-7 {
+  border-color: $color-7 !important;
+}
+
+.border-left-color-7 {
+  border-left: 8px solid $color-7 !important;
+}
+
+
+// Color 8
+
+$color-8: #5189b8;
+$lighter-color-8: lighten($color-8, 10);
+$darker-color-8: darken($color-8, 10);
+
+.background-color-8 {
+  background: $color-8 !important;
+}
+
+.lighter-background-color-8 {
+  background: $lighter-color-8 !important;
+}
+
+.darker-background-color-8 {
+  background: $darker-color-8 !important;
+}
+
+.text-color-8 {
+  color: $color-8 !important;
+}
+
+.border-color-8 {
+  border-color: $color-8 !important;
+}
+
+.border-left-color-8 {
+  border-left: 8px solid $color-8 !important;
+}
+
+
+// Color 9
+
+$color-9: #724db2;
+$lighter-color-9: lighten($color-9, 10);
+$darker-color-9: darken($color-9, 10);
+
+.background-color-9 {
+  background: $color-9 !important;
+}
+
+.lighter-background-color-9 {
+  background: $lighter-color-9 !important;
+}
+
+.darker-background-color-9 {
+  background: $darker-color-9 !important;
+}
+
+.text-color-9 {
+  color: $color-9 !important;
+}
+
+.border-color-9 {
+  border-color: $color-9 !important;
+}
+
+.border-left-color-9 {
+  border-left: 8px solid $color-9 !important;
+}
+
+
+// Color 10
+
+$color-10: #59993d;
+$lighter-color-10: lighten($color-10, 10);
+$darker-color-10: darken($color-10, 10);
+
+.background-color-10 {
+  background: $color-10 !important;
+}
+
+.lighter-background-color-10 {
+  background: $lighter-color-10 !important;
+}
+
+.darker-background-color-10 {
+  background: $darker-color-10 !important;
+}
+
+.text-color-10 {
+  color: $color-10 !important;
+}
+
+.border-color-10 {
+  border-color: $color-10 !important;
+}
+
+.border-left-color-10 {
+  border-left: 8px solid $color-10 !important;
+}
+
+
+// Color 11
+
+$color-11: #eb6315;
+$lighter-color-11: lighten($color-11, 10);
+$darker-color-11: darken($color-11, 10);
+
+.background-color-11 {
+  background: $color-11 !important;
+}
+
+.lighter-background-color-11 {
+  background: $lighter-color-11 !important;
+}
+
+.darker-background-color-11 {
+  background: $darker-color-11 !important;
+}
+
+.text-color-11 {
+  color: $color-11 !important;
+}
+
+.border-color-11 {
+  border-color: $color-11 !important;
+}
+
+.border-left-color-11 {
+  border-left: 8px solid $color-11 !important;
+}
+
+
+// Color 12
+
+$color-12: #366f9e;
+$lighter-color-12: lighten($color-12, 10);
+$darker-color-12: darken($color-12, 10);
+
+.background-color-12 {
+  background: $color-12 !important;
+}
+
+.lighter-background-color-12 {
+  background: $lighter-color-12 !important;
+}
+
+.darker-background-color-12 {
+  background: $darker-color-12 !important;
+}
+
+.text-color-12 {
+  color: $color-12 !important;
+}
+
+.border-color-12 {
+  border-color: $color-12 !important;
+}
+
+.border-left-color-12 {
+  border-left: 8px solid $color-12 !important;
+}
+
+

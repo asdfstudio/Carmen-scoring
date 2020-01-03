@@ -35,11 +35,46 @@ export default {
     color: #fff;
   }
 
-  &.small {
-    width: 28px;
-    height: 28px;
-    line-height: 28px;
-    font-size: 15px;
+  .doubleRow & {
+    margin-bottom: 25px;
+    margin-left: -7px;
+    margin-right: -7px;
+  }
+
+  .doubleRow &:nth-child(odd) {
+    position: relative;
+    bottom: 25px;
+  }
+
+  .doubleRow &:nth-child(even) {
+    position: relative;
+    top: 25px;
+    font-size: 18px;
+  }
+
+  &.small,
+  .doubleRow &.small {
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    font-size: 14px;
+    margin-bottom: 30px;
+    margin-left: -5px;
+    margin-right: -5px;
+  }
+
+  .doubleRow &.small:nth-child(odd) {
+    bottom: 6px;
+  }
+
+  .doubleRow &.small:nth-child(even) {
+    top: 27px;
+  }
+
+  @media (max-width: 639px) {
+    & {
+      display: none;
+    }
   }
 }
 </style>

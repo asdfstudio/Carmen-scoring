@@ -36,7 +36,7 @@ class CompetitionDivisionController extends Controller
 
         //$division = new Division;
 
-				return view('competition_division.organizer.index', compact('competition', 'division'));
+				return view('competition_division.organizer.index', compact('competition'));
     }
 
 
@@ -141,7 +141,7 @@ class CompetitionDivisionController extends Controller
     public function show($competition_id, $division_id, FormBuilder $formBuilder)
     {
         $competition = Competition::with('organization','place','divisions')->find($competition_id);
-
+        
 				$division = Division::with(['choirs','rounds','judges' => function ($query) {
 					$query->groupBy('judge_id');
 				}, 'judges.captions' => function ($query) use ($division_id) {
@@ -201,7 +201,7 @@ class CompetitionDivisionController extends Controller
 
 
         // Support for new board view
-        $choirs = Choir::all()->lists('full_name', 'id')->toArray();
+        $choirs = Choir::all()->pluck('full_name', 'id')->toArray();
 
         //dd($choirs);
 
@@ -215,7 +215,7 @@ class CompetitionDivisionController extends Controller
           $query->where('sheet_id', $division->sheet_id);
         })->get();
 
-        $choices = $competition_rounds->lists('full_name', 'id')->toArray();
+        $choices = $competition_rounds->pluck('full_name', 'id')->toArray();
         $selected = [];
 
 
@@ -238,7 +238,7 @@ class CompetitionDivisionController extends Controller
 
 
         $judges = Judge::get();
-        $judges = $judges->lists('full_name', 'id')->toArray();
+        $judges = $judges->pluck('full_name', 'id')->toArray();
 
         $newJudgeForm = $formBuilder->create('Judge\ChooseJudgeForm', [
 					'method' => 'POST',
@@ -277,7 +277,7 @@ class CompetitionDivisionController extends Controller
 
 
 
-        return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'publishScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm', 'divisionRoundIsMissingScores'));
+        return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm', 'divisionRoundIsMissingScores'));
     }
 
     /**
@@ -325,7 +325,7 @@ class CompetitionDivisionController extends Controller
 
 
         // Support for new board view
-        $choirs = Choir::all()->lists('full_name', 'id')->toArray();
+        $choirs = Choir::all()->pluck('full_name', 'id')->toArray();
 
         //dd($choirs);
 
@@ -339,7 +339,7 @@ class CompetitionDivisionController extends Controller
           $query->where('sheet_id', $division->sheet_id);
         })->get();
 
-        $choices = $competition_rounds->lists('full_name', 'id')->toArray();
+        $choices = $competition_rounds->pluck('full_name', 'id')->toArray();
         $selected = [];
 
 
@@ -362,7 +362,7 @@ class CompetitionDivisionController extends Controller
 
 
         $judges = Judge::get();
-        $judges = $judges->lists('full_name', 'id')->toArray();
+        $judges = $judges->pluck('full_name', 'id')->toArray();
 
         $newJudgeForm = $formBuilder->create('Judge\ChooseJudgeForm', [
 					'method' => 'POST',
@@ -397,7 +397,7 @@ class CompetitionDivisionController extends Controller
 
 
 
-        return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'activateScoringForm', 'publishScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
+        return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
     }
 
 

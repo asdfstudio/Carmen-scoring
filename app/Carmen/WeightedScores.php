@@ -26,7 +26,7 @@ class WeightedScores {
       $this->assign_weighting();
     }
 
-    public function all()
+    public function all($keys = null)
     {
       return $this->weightedScores;
     }

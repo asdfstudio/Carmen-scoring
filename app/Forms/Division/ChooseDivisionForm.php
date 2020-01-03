@@ -17,7 +17,8 @@ class ChooseDivisionForm extends Form
         'expanded' => true,
         'multiple' => false,
         'choice_options' => [
-          'wrapper' => ['class' => 'choice-container']
+          'wrapper' => ['class' => 'choice-container'],
+          'labelAttrs' => 'label-attr'
         ]
       ]);
 

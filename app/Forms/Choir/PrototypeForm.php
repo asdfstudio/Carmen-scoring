@@ -40,6 +40,7 @@ class PrototypeForm extends Form
           'class' => 'App\School',
           'empty_value' => 'Choose school...',
           'label' => 'School',
+          //'attr' => ['class' => 'selectize'],
           'wrapper' => ['class' => 'new_choir_container existing_school_container']
         ]);
 

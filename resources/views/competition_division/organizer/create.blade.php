@@ -13,5 +13,15 @@
 @endsection
 
 @section('content')
-		{!! form($form) !!}
+
+		{!! form_start($form) !!}
+      
+      {!! form_until($form, 'rating_system_heading') !!}
+      
+      <div class="rating-system collection-container form-group" data-prototype="{{ form_row($form->rating_system->prototype()) }}">
+        {!! form_row($form->rating_system) !!}
+      </div>
+      
+		{!! form_end($form) !!}
+
 @endsection

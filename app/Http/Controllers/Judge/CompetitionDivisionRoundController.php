@@ -15,10 +15,11 @@ use App\RawScore;
 use App\Caption;
 use App\Judge;
 use App\Comment;
-
+use App\Recording;
 use App\Carmen\Scorekeeper;
 use App\Carmen\Scoreboard;
 
+use  DB;
 use Auth;
 
 class CompetitionDivisionRoundController extends Controller
@@ -40,7 +41,8 @@ class CompetitionDivisionRoundController extends Controller
 
       $rawScores = $scoreboard->rawScores;
       $weightedScores = $scoreboard->weightedScores;
-      //$rankedScores = $scoreboard->rankedScores;
+      //$rankedScores = $scoreboard->rankedScoresForCurrentMethod;
+
 
 
       //$competition = Competition::find($competition_id);
@@ -51,24 +53,25 @@ class CompetitionDivisionRoundController extends Controller
           $query->where('judge_id',$judge_id)->first();
         }, 'division.judges.captions' => function($query) use ($division_id) {
           $query->where('division_id',$division_id);
-        }, 'division.judges.captions.criteria','choirs','division.rounds', 'targets', 'targets.sources' => function($query) use ($round_id) {
+        },
+         'division.judges.captions.criteria','choirs',
+         'choirs.recordings' => function($query) use ($division_id, $judge_id) {
+          $query->select('*', DB::raw('count(*) as total'))->where('division_id',$division_id)->where('judge_id',$judge_id)->groupBy('choir_id');
+        },
+         'division.rounds', 'targets', 'targets.sources' => function($query) use ($round_id) {
           $query->where('id', '!=', $round_id);
         }])->find($round_id);
 
-      //dd($round->targets);
       $division = $round->division;
       $competition = $division->competition;
 
       $captions = Caption::forSheet($division->sheet);
-
-
-
       return view('competition_division_round.judge.summary',compact('rawScores', 'weightedScores', 'captions', 'round', 'competition', 'division'));
     }
 
 
 
-    public function spreadsheet($competition_id,$division_id,$round_id)
+    public function spreadsheetOld($competition_id,$division_id,$round_id)
     {
       $judge_id = Auth::user()->person_id;
 
@@ -109,7 +112,7 @@ class CompetitionDivisionRoundController extends Controller
 
       //$rawScores = $scoreboard->rawScores;
       //$weightedScores = $scoreboard->weightedScores;
-      //$rankedScores = $scoreboard->rankedScores;
+      //$rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
       if ($round->status_slug == 'active') {
         $isScoringActive = true;
@@ -124,7 +127,7 @@ class CompetitionDivisionRoundController extends Controller
 
     //
     // New spreadsheet, 2019
-    public function spreadsheetNew($competition_id,$division_id,$round_id)
+    public function spreadsheet($competition_id,$division_id,$round_id)
     {
       $judge_id = Auth::user()->person_id;
 
@@ -135,14 +138,18 @@ class CompetitionDivisionRoundController extends Controller
         $query->withoutGlobalScope('organization');
       }, 'division.judges' => function($query) use ($judge_id) {
           $query->where('judge_id',$judge_id)->first();
-        }, 'division.judges.captions' => function($query) use ($division_id) {
+        }, 'division.judges.recordings' => function($query) use ($round_id, $division_id) {
+          $query->where('round_id', $round_id)->where('division_id', $division_id);
+        },'division.judges.captions' => function($query) use ($division_id) {
           $query->where('division_id',$division_id);
         }, 'division.judges.captions.criteria','choirs','division.rounds', 'feedback' => function($query) use ($judge_id) {
             $query->where('judge_id', $judge_id);
           }])->find($round_id);
 
       $division = $round->division;
-      $competition = $division->competition;
+      $recordings = $round->division->judges;
+      $competition = $division->competition->organization;
+      $rating_system = $division->rating_system;
 
       //$judge = $division->judges->first();
 
@@ -173,7 +180,7 @@ class CompetitionDivisionRoundController extends Controller
 
       //$rawScores = $scoreboard->rawScores;
       //$weightedScores = $scoreboard->weightedScores;
-      //$rankedScores = $scoreboard->rankedScores;
+      //$rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
       $spreadsheetTitle = $division->name . ' > ' . $round->name;
       $backUrl = route('judge.round.scores.summary', [$competition_id,$division_id,$round_id]);
@@ -187,6 +194,8 @@ class CompetitionDivisionRoundController extends Controller
       }*/
 
       $isSpreadsheetScoringActive = $round->status;
+      
+      $captionWeightingId = $division->caption_weighting_id;
 
       // Convert to arrays for use with new Vue spreadsheet
       $captions = $captions->map(function ($item, $key) {
@@ -238,20 +247,27 @@ class CompetitionDivisionRoundController extends Controller
         ];
       })->toArray();
 
+      $recordedComments = $recordings->map(function ($item, $key) {
+        return $item->recordings;
+      });
+      
       // JSON encode
       $choirs = json_encode($choirs);
       $divisions = json_encode($divisions);
       $criteria = json_encode($criteria);
       $comments = json_encode($comments);
+      $recordedComments = json_encode($recordedComments->first());
       $scores = json_encode($scores);
       $captions = json_encode($captions);
+      $rating_system = json_encode($rating_system);
+      $competition = json_encode($competition);
 
-      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'choirs', 'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl'));
+      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'captionWeightingId', 'choirs', 'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'rating_system','recordedComments','competition'));
     }
 
 
 
-    public function spreadsheet_sources($competition_id, $division_id, $round_id)
+    public function spreadsheet_sources_old($competition_id, $division_id, $round_id)
     {
       $judge_id = Auth::user()->person_id;
 
@@ -315,16 +331,16 @@ class CompetitionDivisionRoundController extends Controller
 
       //$rawScores = $scoreboard->rawScores;
       //$weightedScores = $scoreboard->weightedScores;
-      //$rankedScores = $scoreboard->rankedScores;
+      //$rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
-      return view('competition_division_round.judge.spreadsheet_sources',compact('scoreboard', 'round', 'competition', 'division', 'judge', 'choirs', 'captions', 'isScoringActive'));
+      return view('competition_division_round.judge.spreadsheet_sources_old',compact('scoreboard', 'round', 'competition', 'division', 'judge', 'choirs', 'captions', 'isScoringActive','competition'));
     }
 
 
 
 
 
-    public function spreadsheet_sources_new($competition_id, $division_id, $round_id)
+    public function spreadsheet_sources($competition_id, $division_id, $round_id)
     {
       $judge_id = Auth::user()->person_id;
 
@@ -335,12 +351,16 @@ class CompetitionDivisionRoundController extends Controller
         $query->withoutGlobalScope('organization');
       }, 'division.judges' => function($query) use ($judge_id) {
           $query->where('judge_id',$judge_id)->first();
-        }, 'division.judges.captions' => function($query) use ($division_id) {
+        },'division.judges.captions' => function($query) use ($division_id) {
           $query->where('division_id',$division_id);
         }, 'division.judges.captions.criteria','choirs','division.rounds', 'sources'])->find($round_id);
 
       $division = $round->division;
-      $competition = $division->competition;
+      //$recordings = $round->division->judges;
+      $competition = $division->competition->organization;
+      $rating_system = $division->rating_system;
+
+      $captionWeightingId = $division->caption_weighting_id;
 
       $judge = $division->judges->first();
 
@@ -363,7 +383,7 @@ class CompetitionDivisionRoundController extends Controller
           });
         }
       });
-
+      
       $choirs = $source_choirs;
 
       $source_ids = $round->sources->pluck('id')->toArray();
@@ -390,7 +410,7 @@ class CompetitionDivisionRoundController extends Controller
 
       //$rawScores = $scoreboard->rawScores;
       //$weightedScores = $scoreboard->weightedScores;
-      //$rankedScores = $scoreboard->rankedScores;
+      //$rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
       $spreadsheetTitle = $division->name . ' > Source Rounds';
       $backUrl = route('judge.competition.division.show', [$competition_id,$division_id]);
@@ -478,8 +498,9 @@ class CompetitionDivisionRoundController extends Controller
         ];
       })->toArray();
 
-      // dd($comments);
-
+      $recordings = Recording::all()->where('judge_id', $judge_id)->whereIn('round_id', array_merge([$round_id], $source_ids))->whereIn('division_id', array_merge([$division_id], $source_division_ids));
+      $recordedComments = array_values($recordings->toArray());
+      //dd($recordedComments);
 
       // JSON encode
       $choirs = json_encode($choirs);
@@ -488,8 +509,10 @@ class CompetitionDivisionRoundController extends Controller
       $comments = json_encode($comments);
       $scores = json_encode($scores);
       $captions = json_encode($captions);
-
-      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'choirs', 'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl'));
+      $recordedComments = json_encode($recordedComments);
+      $rating_system = json_encode($rating_system);
+      $competition = json_encode($competition);
+      return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'captionWeightingId', 'choirs', 'criteria', 'scores', 'rating_system', 'comments', 'spreadsheetTitle', 'backUrl','competition', 'recordedComments'));
     }
 
 

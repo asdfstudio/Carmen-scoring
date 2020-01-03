@@ -239,18 +239,6 @@ $(document).ready(function() {
     });
 
 
-    $('.add-to-collection').on('click', function(e) {
-        e.preventDefault();
-        var container = $('.collection-container');
-        var count = container.children().length;
-        var proto = container.data('prototype').replace(/__NAME__/g, count);
-        container.append(proto);
-
-        var choir_container = container.find('.choir_container:last');
-        choir_container.find('.new_choir_container').addClass('hidden');
-        choir_container.find('.new_school_container').addClass('hidden');
-    });
-
     /*$('.toggle-new-choir-container').on('click', function(e) {
       e.preventDefault();
       console.log('toggle choir');
@@ -275,6 +263,46 @@ $(document).ready(function() {
       parent.find('.new_judge_container').show();
       parent.find('.existing_judge_container').hide();
       $(this).hide();
+    });
+
+
+    $('.add-to-collection').on('click', function(e) {
+        e.preventDefault();
+        var container = $('.collection-container');
+        var count = container.children().length;
+        var proto = container.data('prototype').replace(/__NAME__/g, count);
+        container.append(proto);
+
+        var choir_container = container.find('.choir_container:last');
+        choir_container.find('.new_choir_container').addClass('hidden');
+        choir_container.find('.new_school_container').addClass('hidden');
+    });
+
+    $('body').on('click', '.add-rating button', function(e) {
+        e.preventDefault();
+        var wrapper = $('.collection-container');
+        var container = wrapper.children().first();
+        var count = container.children().length;
+        var proto = wrapper.data('prototype').replace(/__NAME__/g, count);
+        container.append(proto);
+    });
+
+    $('body').on('click', '.remove-rating button', function(e) {
+        e.preventDefault();
+        var ratingGroup = $(this).parent().parent();
+        var ratingsContainer = $(ratingGroup).parent();
+        var ratingName = ratingGroup.find('input').val();
+        var message = '<p class="alert alert-warning">The rating "' + ratingName + '" will be removed when you save this form.</p>';
+        ratingGroup.children().remove();
+        
+        if(ratingName.length){
+           ratingGroup.append(message);
+        }
+        
+        if(ratingsContainer.find('.remove-rating').length === 0){
+            // If there are no rating fields left, trigger the button to add a new one.
+            $('.add-rating button').trigger('click');
+        }
     });
 
 
@@ -403,15 +431,19 @@ $(document).ready(function() {
 
       if(active_view == false) return false;
 
-      var table = $('table.scoreboard.toggle-scores');
-      var scores = table.find('span.score, input.score');
-      //var scores = table.find('span.score:not(".penalty")');
+      var tables = $('table.scoreboard.toggle-scores');
+      var scores = tables.find('span.score, input.score');
+      var total_column = tables.find('th.total_column, td.total_column');
 
-      // Hide all scores
+      // Hide all scores and tables
+      tables.hide();
       scores.hide();
+      total_column.hide();
 
-      // Show the active scores
+      // Show the active scores and table
       scores.filter('.' + active_view).show();
+      tables.filter('.' + active_view).show();
+      total_column.filter('.' + active_view).show();
 
       // Remove highlight from other links
       $('a.score-view-toggle').removeClass('active');
@@ -423,7 +455,6 @@ $(document).ready(function() {
 
     $('table.scoreboard.toggle-scores').ready(function() {
       var active_view = $('.score-view-toggle.active').data('score-view');
-      //console.log(active_view);
       $('.score-view-toggle.active').toggleScoreView(active_view);
     });
 
@@ -473,6 +504,5 @@ $(document).ready(function() {
     });
 
     $('.selectize').selectize();
-
 
 });

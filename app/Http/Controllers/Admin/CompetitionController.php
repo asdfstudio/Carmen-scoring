@@ -94,7 +94,7 @@ class CompetitionController extends Controller
     {
 				//$competition = Competition::find($id);
 
-        $this->authorize($competition);
+        $this->authorize('show', $competition);
 
 				return view('competition.show', ['competition' => $competition]);
     }

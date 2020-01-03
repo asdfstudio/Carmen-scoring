@@ -10,15 +10,15 @@
     </th>
   </tr>
 
-  <?php
+  @php
   $captionId = $standing->caption_id ? $standing->caption_id : 0;
-  ?>
+  @endphp
 
   @foreach($standing->choirs as $choir)
     <tr>
       <td>{{ $choir->full_name }}</td>
 
-      <?php
+      @php
       $rank_name = false;
       $final_rank = $choir->pivot->final_rank;
       //$index = $final_rank - 1;
@@ -38,7 +38,7 @@
       {
         if($final_rank == 1)
         {
-          $rank_name = 'Champion';
+          $rank_name = 'Grand Champion';
         }
         else
         {
@@ -49,7 +49,7 @@
       else {
         $rank_name = ordinal($final_rank);
       }
-      ?>
+      @endphp
 
       @if($sponsor AND $showSponsor)
         <td>Sponsored by: {{ $sponsor }}</td>

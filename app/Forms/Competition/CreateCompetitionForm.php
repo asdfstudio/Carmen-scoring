@@ -22,27 +22,26 @@ class CreateCompetitionForm extends Form
 
         $this->add('begin_date','text', [
           'rules' => '',
-          'label' => 'Begin Date (YYYY-MM-DD)'
+          'label' => 'Begin Date (YYYY-MM-DD)',
         ]);
 
         $this->add('end_date','text', [
           'rules' => '',
           'label' => 'End Date (YYYY-MM-DD)'
         ]);
-
         $this->add('use_runner_up_names', 'choice', [
           'choices' => [
             0 => '1st, 2nd, 3rd...',
             1 => 'Grand Champion, 1st Runner Up, 2nd Runner Up...'
           ],
           'choice_options' => [
-            'wrapper' => ['class' => 'choice-container']
+            'wrapper' => ['class' => 'choice-container'],
+              'labelAttrs' => 'label-attr'
           ],
+          'label' => 'Results Naming',
           'expanded' => true,
           'multiple' => false,
-          'label' => 'Results Naming'
-        ]);
-
+      ]);
 
         $this->add('place_heading', 'static', [
           'tag' => 'h2',

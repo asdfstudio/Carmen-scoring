@@ -12,11 +12,23 @@ var js_input = './resources/assets/js/app.js';
 var js_output = './public/js';
 
 gulp.task('build-js', function() {
-
-  return gulp.src(js_input)
+  
+  //console.log(js_input);
+  
+  var app_result = gulp.src(js_input)
     .pipe(concat('app.js'))
     .pipe(gulp.dest(js_output));
 
+  var director_form_result = gulp.src('./resources/assets/js/director-form.js')
+    .pipe(concat('director-form.js'))
+    .pipe(gulp.dest(js_output));
+  
+  var user_person_form_result = gulp.src('./resources/assets/js/user-person-form.js')
+    .pipe(concat('user-person-form.js'))
+    .pipe(gulp.dest(js_output));
+  
+  return app_result && director_form_result && user_person_form_result;
+  
   //return gulp.src(js_input)
     //.pipe(sourcemaps.init())
       //.pipe(concat('app.js'))
@@ -26,9 +38,9 @@ gulp.task('build-js', function() {
     //.pipe(gulp.dest(js_output));
 });
 
-var resources = './resources/assets/**/**/*';
+var resources = './resources/assets/**/*';
 
-var input = './resources/assets/sass/**/*.scss';
+var input = './resources/assets/sass/*.scss';
 var output = './public/css';
 
 // source and distribution folder
@@ -67,7 +79,7 @@ function swallowError (error) {
 
 gulp.task('sass', function () {
   return gulp
-    // Find all `.scss` files from the `stylesheets/` folder
+    // Find all `.scss` files from the `sass/` folder
     .src(input)
     // Run Sass on those files
     .pipe(sass(scss.sassOpts))
@@ -78,7 +90,7 @@ gulp.task('sass', function () {
 
 gulp.task('watch', function() {
   return gulp
-    .watch(resources,['sass', 'build-js'])
+    .watch(resources, gulp.series('sass', 'build-js'))
     .on('change', function(event) {
       console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
     });

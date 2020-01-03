@@ -52,7 +52,7 @@
 @foreach($division->standings as $standing)
 
   @if($standing)
-    <?php
+    @php
     if($standing->caption_id == NULL)
     {
       $awardSetting = $division->awardSettings->where('caption_id', 0)->first();
@@ -69,7 +69,7 @@
     }
 
     $standing->choirs = $standing->choirs->take($limit)->reverse();
-    ?>
+    @endphp
   @endif
 
   @if($standing->choirs->count() > 0)

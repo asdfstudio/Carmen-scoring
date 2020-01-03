@@ -40,7 +40,7 @@ class DivisionPolicy extends BasePolicy
 		}
 
 
-		public function create(User $user, $division, $extra = false)
+		public function create(User $user)
 		{
       if($this->isOrgAdmin)
       {

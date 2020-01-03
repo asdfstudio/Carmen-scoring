@@ -17,9 +17,9 @@
     @foreach($division->judges as $judge)
    	<td data-judge-id="{{ $judge->id }}" data-criterion-id="{{ $criterion->id }}">
     	
-      @if($round->is_completed OR $judge->id == Auth::user()->person_id)
-				<?php $rankedScore = $rankedScores->where('criterion_id', $criterion->id)->where('judge_id',$judge->id)->where('choir_id',$choir->id)->pluck('rank');?>
-        <?php $score = $rankedScore->first(); ?>
+      @if($round->is_completed ?? $judge->id == Auth::user()->person_id)
+				@php $rankedScore = $rankedScores->where('criterion_id', $criterion->id)->where('judge_id',$judge->id)->where('choir_id',$choir->id)->pluck('rank');@endphp
+        @php $score = $rankedScore->first(); @endphp
         {{ $score }}
       @else
       	-
@@ -29,7 +29,7 @@
     
     <td>
     	@if($round->is_completed)
-    	<?php $aggregateScore = $rankedScores->where('criterion_id',$criterion->id)->where('choir_id',$choir->id)->sum('rank');?>
+    	@php $aggregateScore = $rankedScores->where('criterion_id',$criterion->id)->where('choir_id',$choir->id)->sum('rank');@endphp
       {{ $aggregateScore }}
       @else
       	-
@@ -44,8 +44,8 @@
     
     @foreach($division->judges as $judge)
     <th>
-    	@if($round->is_completed OR $judge->id == Auth::user()->person_id)
-				<?php $aggregateScore = $rankedScores->where('judge_id',$judge->id)->where('choir_id',$choir->id)->sum('rank');?>
+    	@if($round->is_completed ?? $judge->id == Auth::user()->person_id)
+				@php $aggregateScore = $rankedScores->where('judge_id',$judge->id)->where('choir_id',$choir->id)->sum('rank');@endphp
         {{ $aggregateScore }}
       @else
       	-
