@@ -1,5 +1,6 @@
 <?php $judge_id = $judge ? $judge->id : null; ?>
 @if(!$choirs->isEmpty())
+<div class="table-wrapper-responsive">
 <table class="table scoreboard last-col-right">
   <tr>
   	<th>Choir</th>
@@ -68,7 +69,7 @@
   @endforeach
       </div>    
 </table>
- 
+</div>
 @endif
 
 @section('style')

@@ -5,6 +5,7 @@
 @endif
 
 @if(!$organizations->isEmpty())
+<div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered">
   <tr>
   	<th>Organization Name</th>
@@ -22,4 +23,5 @@
   </tr>
   @endforeach
 </table>
+</div>
 @endif

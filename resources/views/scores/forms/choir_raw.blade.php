@@ -1,5 +1,6 @@
 @if(!$division->sheet->criteria->isEmpty())
 {!! Form::open(array('route' => array('judge.competition.division.round.choir.save_scores',$division->competition,$division,$round,$choir), 'method' => 'post')) !!}
+<div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered">
   <tr>
   	<th>Criteria</th>
@@ -27,5 +28,6 @@
   </tr>
 
 </table>
+</div>
 {!! Form::close() !!}
 @endif

@@ -14,7 +14,7 @@ else :
 endif;
 
 @endphp
-
+<div class="table-wrapper-responsive">
 <table class="table {{ $responsive_table_class }} table-striped table-bordered toggle-scores scoreboard spreadsheet {{ $is_weighted_class }}">
 
 
@@ -50,8 +50,8 @@ endif;
       <td>{{ $caption->name }}</td>
 
       @foreach($choirs as $choir)
-        <td>
-          &nbsp;
+        <td>&nbsp;
+          
         </td>
       @endforeach
     </tr>
@@ -202,7 +202,7 @@ endif;
     @endforeach
   </tr>
 </table>
-
+</div>
 
 <div id="score-input-popup" class="popup-input-container" data-field="" tabindex="-1">
   <div class="number-selector-container">

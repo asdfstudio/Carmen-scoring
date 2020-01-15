@@ -20,6 +20,61 @@
 
 }
 
+.table-wrapper-responsive {
+  overflow-x: scroll;
+  
+  table {
+    border-collapse: separate;
+  }
+  
+  .table-striped > tbody > tr > th {
+    background-color: #ffffff;
+  }
+
+  .table-striped > tbody > tr:nth-of-type(odd) > th {
+    background-color: #f9f9f9;
+  }
+
+  .table-striped > tbody > tr.caption-header > th {
+    background-color: transparent;
+  }
+  
+  .table-striped > tbody > tr.caption-header > th:first-child {
+    border-right: 0;
+  }
+  
+  .table-striped > tbody > tr.caption-header > th:last-child {
+    border-left: 0;
+  }
+  
+  tbody th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+  }
+}
+
+.sideways-header {
+  display: flex;
+  flex-grow: 1;
+  max-height: 150px;
+  
+  & a, & span {
+    display: inline;
+    transform: rotate(180deg);
+    writing-mode: vertical-rl;
+    
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.table > tbody > tr.align-bottom th,
+.table > tbody > tr.align-bottom td {
+  vertical-align: bottom;
+}
+
 // ZURB Responsive Tables
 // https://github.com/zurb/responsive-tables
 

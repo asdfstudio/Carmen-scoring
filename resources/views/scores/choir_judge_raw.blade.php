@@ -8,6 +8,7 @@ else :
 endif;
 @endphp
 
+<div class="table-wrapper-responsive">
 <table class="table table-bordered scoreboard last-col-right">
   <!--<tr>
   	<th>Criteria</th>
@@ -124,4 +125,5 @@ endif;
 
 
 </table>
+</div>
 @endif

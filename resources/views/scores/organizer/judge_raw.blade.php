@@ -1,4 +1,5 @@
 @if(!$division->sheet->criteria->isEmpty())
+<div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered">
   <tr>
   	<th>Criteria</th>
@@ -13,9 +14,10 @@
   @foreach($judge->captions as $caption)
 
     <tr class="caption-header {{ $caption->background_css }}">
-      <th colspan="30">
+      <th colspan="3">
         {{ $caption->name }}
       </th>
+      <th colspan="30"></th>
     </tr>
 
     @foreach($division->sheet->criteria->where('caption_id', $caption->id) as $criterion)
@@ -96,4 +98,5 @@
 
   </tr>
 </table>
+</div>
 @endif

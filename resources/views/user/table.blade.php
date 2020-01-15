@@ -5,6 +5,7 @@
 @endif
 
 @if(!$users->isEmpty())
+<div class="table-wrapper-responsive">
 <table class="table table-striped">
   <tr>
   	<th>ID</th>
@@ -26,4 +27,5 @@
   </tr>
   @endforeach
 </table>
+</div>
 @endif

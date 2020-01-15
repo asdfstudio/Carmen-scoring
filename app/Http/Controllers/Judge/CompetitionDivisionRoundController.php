@@ -501,7 +501,7 @@ class CompetitionDivisionRoundController extends Controller
       $recordings = Recording::all()->where('judge_id', $judge_id)->whereIn('round_id', array_merge([$round_id], $source_ids))->whereIn('division_id', array_merge([$division_id], $source_division_ids));
       $recordedComments = array_values($recordings->toArray());
       //dd($recordedComments);
-
+      
       // JSON encode
       $choirs = json_encode($choirs);
       $divisions = json_encode($divisions);

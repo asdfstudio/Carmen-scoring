@@ -1,3 +1,4 @@
+<div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered">
   <tr>
     <th>Category</th>
@@ -37,3 +38,4 @@
     </tr>
   @endforeach
 </table>
+</div>
