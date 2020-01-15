@@ -18,6 +18,13 @@ class SheetForm extends Form
         'label' => 'Name'
       ]);
 
+      $this->add('is_retired','choice', [
+        'label_show' => false,
+        'choices' => ['1' => '"Retired" from use'],
+        'expanded' => true,
+        'multiple' => true
+      ]);
+
       /*$this->add('caption_sort_order','textarea', [
         'help_block' => [
           'text' => 'Enter 1 caption per line'

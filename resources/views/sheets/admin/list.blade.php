@@ -5,7 +5,7 @@
 @if(!$sheets->isEmpty())
 <ul class="list-group">
   @foreach($sheets as $sheet)
-    <li class="school list-group-item">
+    <li class="school list-group-item {{ $sheet->is_retired ? 'retired-sheet' : '' }}">
 
       <span class="name">{{ $sheet->name }}</span>
 			<ul class="list-group">

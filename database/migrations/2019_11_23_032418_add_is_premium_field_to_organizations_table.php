@@ -25,7 +25,7 @@ class AddIsPremiumFieldToOrganizationsTable extends Migration
      */
     public function down()
     {
-        if(Schema::hasTabel('organizations')){
+        if(Schema::hasTable('organizations')){
             Schema::table('organizations', function (Blueprint $table) {
                 $table->dropColumn('is_premium');
             });

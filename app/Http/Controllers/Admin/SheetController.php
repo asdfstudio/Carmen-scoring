@@ -20,7 +20,7 @@ class SheetController extends Controller
     public function index()
     {
       $sheets = Sheet::with('criteria')->get();
-
+      
       return view('sheets.admin.index', compact('sheets'));
     }
 
@@ -111,10 +111,17 @@ class SheetController extends Controller
       if (!$form->isValid()) {
          return redirect()->back()->withErrors($form->getErrors())->withInput();
       }
-
+      
+      $input = $request->input();
+      if(empty($input['is_retired'])){
+        $input['is_retired'] = 0;
+      } else {
+        $input['is_retired'] = 1;
+      }
+      
       // Create it
       $sheet = Sheet::find($id);
-      $sheet->fill($request->input());
+      $sheet->fill($input);
       $sheet->save();
 
       // Set flash data and redirect

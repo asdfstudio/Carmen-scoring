@@ -56,6 +56,10 @@ class CreateForm extends Form
 
 				$this->add('sheet_id','entity', [
 					'class' => 'App\Sheet',
+          'query_builder' => function(\App\Sheet $sheet) {
+            // If query builder option is not provided, all data is fetched
+            return $sheet->where('is_retired', 0);
+          },
 					'empty_value' => 'Choose scoring sheet...',
 					'label' => 'Scoring Sheet',
           'label_attr' => ['class' => 'block'],

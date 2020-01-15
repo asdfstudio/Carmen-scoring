@@ -5883,6 +5883,9 @@ a.active {
     #user-person-list .person .user-blocks .user-actions form {
       display: inline-block; }
 
+.retired-sheet {
+  opacity: 0.5; }
+
 .breadcrumbs-footer {
   padding: 10px 0; }
   .breadcrumbs-footer ol.breadcrumb {
