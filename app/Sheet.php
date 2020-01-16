@@ -12,7 +12,7 @@ class Sheet extends Model
 
 		protected $dates = ['deleted_at'];
 
-		protected $fillable = ['name', 'caption_sort_order'];
+		protected $fillable = ['name', 'caption_sort_order', 'is_retired'];
 
     protected $casts = [
       'caption_sort_order' => 'array'

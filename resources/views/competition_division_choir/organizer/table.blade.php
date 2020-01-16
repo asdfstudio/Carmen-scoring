@@ -3,6 +3,7 @@
 @endif
 
 @if(!$division->choirs->isEmpty())
+<div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered">
   <tr>
   	<th>School</th>
@@ -21,4 +22,5 @@
   </tr>
   @endforeach
 </table>
+</div>
 @endif

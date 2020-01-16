@@ -3,7 +3,7 @@
 <p class="alert alert-warning">Scores have not been entered. Please try again after judges have entered scores.</p>
 
 @else
-
+<div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered scoreboard toggle-scores rank">
   @foreach($captions as $caption)
 
@@ -17,9 +17,10 @@
     @endphp
 
     <tr class="caption-header {{ $caption->background_css }}">
-      <th colspan="30">
+      <th colspan="3">
         {{ $caption->name }}
       </th>
+      <th colspan="30"></th>
     </tr>
 
     <tr class="align-bottom">
@@ -84,9 +85,10 @@
   @endphp
 
   <tr class="caption-header caption-place">
-    <th colspan="30">
+    <th colspan="3">
       Place
     </th>
+    <th colspan="30"></th>
   </tr>
 
   <tr class="align-bottom">
@@ -137,5 +139,5 @@
   @endforeach
 
 </table>
-
+</div>
 @endif

@@ -1,4 +1,5 @@
 @if(!$division->sheet->criteria->isEmpty())
+<div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered">
   <tr>
   	<th>Criteria</th>
@@ -46,4 +47,5 @@
 
   </tr>
 </table>
+</div>
 @endif

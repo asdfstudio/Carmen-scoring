@@ -12,6 +12,7 @@
   }
   
 @endphp
+<div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered scoreboard toggle-scores {{ $composite_table_class }}">
   @foreach($captions as $caption)
 
@@ -26,9 +27,10 @@
     @endphp
 
     <tr class="caption-header {{ $caption->background_css }}">
-      <th colspan="30">
+      <th colspan="3">
         {{ $caption->name }}
       </th>
+      <th colspan="30"></th>
     </tr>
 
     <tr>
@@ -119,9 +121,10 @@
 
 
   <tr class="caption-header caption-place">
-    <th colspan="30">
+    <th colspan="3">
       Place
     </th>
+    <th colspan="30"></th>
   </tr>
 
   <tr>
@@ -231,3 +234,4 @@
   @endforeach
 
 </table>
+</div>

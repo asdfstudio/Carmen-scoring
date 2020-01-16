@@ -34,27 +34,6 @@
   }
 }
 
-.sideways-header {
-  display: flex;
-  flex-grow: 1;
-  max-height: 150px;
-  
-  & a, & span {
-    display: inline;
-    transform: rotate(180deg);
-    writing-mode: vertical-rl;
-    
-    &:hover {
-      text-decoration: none;
-    }
-  }
-}
-
-.table > tbody > tr.align-bottom th,
-.table > tbody > tr.align-bottom td {
-  vertical-align: bottom;
-}
-
 .caption-raw-score {
   font-size: 1em;
   color: $cs-white;
