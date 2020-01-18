@@ -4,7 +4,7 @@
 
 @else
 <div class="table-wrapper-responsive">
-<table class="table table-striped table-bordered scoreboard toggle-scores rank">
+<table class="table table-striped table-bordered scoreboard toggle-scores condorcet">
   @foreach($captions as $caption)
 
     @php

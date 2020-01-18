@@ -1,10 +1,4 @@
 @php
-  // The composite table gets a different class for Condorcet methods (3 & 4) to hide it when showing Condorcet ranks.
-  $composite_table_class = 'weighted raw';
-  if($division->scoring_method_id !== 3 && $division->scoring_method_id !== 4){
-    $composite_table_class = $composite_table_class . ' rank';
-  }
-
   // Hide the "Total" column for Consensus Ordinal Rank (scoring method 5)
   $total_col_class = 'total_column weighted raw rank';
   if($division->scoring_method_id == 5){
@@ -13,7 +7,7 @@
   
 @endphp
 <div class="table-wrapper-responsive">
-<table class="table table-striped table-bordered scoreboard toggle-scores {{ $composite_table_class }}">
+<table class="table table-striped table-bordered scoreboard toggle-scores weighted raw rank">
   @foreach($captions as $caption)
 
     @php
