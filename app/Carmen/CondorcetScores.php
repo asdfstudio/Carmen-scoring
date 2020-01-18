@@ -476,8 +476,12 @@ class CondorcetScores {
       $judge_count = $this->judges_per_election[$election_key];
       $half_count = $judge_count / 2;
       
-      $value = $pairwise[$choir_id]['win'][$choir_comp_id];
-      return $value >= $half_count ? 1 : 0;
+      if(!empty($pairwise[$choir_id]['win'][$choir_comp_id])){
+        $value = $pairwise[$choir_id]['win'][$choir_comp_id];
+        return $value >= $half_count ? 1 : 0;
+      } else {
+        return '';
+      }
       
     }
     

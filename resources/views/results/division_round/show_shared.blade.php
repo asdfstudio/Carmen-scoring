@@ -7,9 +7,9 @@
 @section('content')
 
 	<h2>{{ $round->name}} > Combined Source Rounds</h2>
-
-
-
+  
+  <p class="scoring-method-note">This division uses the <strong>{{ $division->scoringMethod->name }}</strong> method of scoring. <a href="https://carmenscoring.com/scoring-methods" target="blank">View scoring method explanations</a>.</p>
+  
   {{-- Raw Scoring, 50/50 --}}
   @if ($division->scoring_method_id === 1 && $division->caption_weighting_id === 2)
     <ul class="list-group horizontal">
