@@ -494,7 +494,7 @@ class CondorcetScores {
     $pairwise = $this->pairwise($election_key);
     $sum = 0;
     
-    if($pairwise && $choir_id){
+    if($pairwise && $choir_id && !empty($pairwise[$choir_id]['win'])){
       
       $judge_count = $this->judges_per_election[$election_key];
       $half_count = $judge_count / 2;
