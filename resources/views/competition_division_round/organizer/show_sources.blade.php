@@ -18,6 +18,20 @@
 
 @section('content')
 
+  @php
+    if($division->scoring_method_id === 3 || $division->scoring_method_id === 4){
+      $rankings_tab_name = "Condorcet";
+      $rankings_class = "condorcet";
+      $is_condorcet = true;
+      $show_borda = true;
+    } else {
+      $rankings_tab_name = "Rankings";
+      $rankings_class = "rank";
+      $is_condorcet = false;
+      $show_borda = false;
+    }
+  @endphp
+  
 	@parent
 
   {{-- Raw Scoring, 50/50 --}}
@@ -46,9 +60,14 @@
   @if ($division->scoring_method_id > 1 && $division->caption_weighting_id === 2)
     <ul class="list-group horizontal">
       <li class="list-group-item">
-        <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="rank">Rankings</a>
+        <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>
         <span>(division scoring method)</span>
       </li>
+    @if ($show_borda)
+      <li class="list-group-item">
+        <a class="score-view-toggle" href="#rankings" data-score-view="rank">Borda Count</a>
+      </li>
+    @endif
       <li class="list-group-item">
         <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
       </li>
@@ -59,9 +78,14 @@
   @if ($division->scoring_method_id > 1 && $division->caption_weighting_id === 1)
     <ul class="list-group horizontal">
       <li class="list-group-item">
-        <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="rank">Rankings</a>
+        <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>
         <span>(division scoring method)</span>
       </li>
+    @if ($show_borda)
+      <li class="list-group-item">
+        <a class="score-view-toggle" href="#rankings" data-score-view="rank">Borda Count</a>
+      </li>
+    @endif
       <li class="list-group-item">
         <a class="score-view-toggle" href="#weighted" data-score-view="weighted">Weighted</a>
         <span>({{ $division->captionWeighting->name }})</span>
