@@ -58,6 +58,19 @@ class UserPersonForm extends Form
       $this->formOptions['class'] .= ' no-user';
     }
     
+    // Is the current user an admin?
+    $i_am_admin = auth()->user()->isAdmin();
+    $i_am_org_admin = !empty($this->formOptions['organization']) && auth()->user()->organization_role === 'admin' && auth()->user()->organization_id === $this->formOptions['organization'];
+    
+    // Is the current user a superadmin (listed in the auth config or else are they an admin who is editing their own account)?
+    $user_to_compare = $this->user ?  $this->user : null;
+    $i_am_superadmin = auth()->user()->isSuperAdmin($user_to_compare);
+    $target_is_superadmin = $this->user ? $this->user->isSuperAdmin() : false;
+    
+    // Is the current user editing their own account?
+    $self_editing = $this->user && !empty($this->user->id) && $this->user->id === auth()->user()->id;
+    
+    
   /*================================================================================
       Name and Email
     ================================================================================*/
@@ -164,17 +177,6 @@ class UserPersonForm extends Form
       User Account
     ================================================================================*/
     
-    // Is the current user an admin?
-    $i_am_admin = auth()->user()->isAdmin();
-    
-    // Is the current user a superadmin (listed in the auth config or else are they an admin who is editing their own account)?
-    $user_to_compare = $this->user ?  $this->user : null;
-    $i_am_superadmin = auth()->user()->isSuperAdmin($user_to_compare);
-    $target_is_superadmin = $this->user ? $this->user->isSuperAdmin() : false;
-    
-    // Is the current user editing their own account?
-    $self_editing = $this->user && !empty($this->user->id) && $this->user->id === auth()->user()->id;
-    
     $user_section_visibility_class = '';
     $user_disabled_attribute = [];
     $password_disabled_attribute = [];
@@ -208,7 +210,14 @@ class UserPersonForm extends Form
     
     if($this->user){
       $this->modify('username','text', [
-        'rules' => 'unique:users,username,'.$this->user->id
+        'rules' => ['unique:users,username,'.$this->user->id]
+      ]);
+    }
+    
+    if(!empty($this->formOptions['organization'])){
+      // In the context of creating an organization user, the username is required.
+      $this->modify('username','text', [
+        'rules' => ['required']
       ]);
     }
 
@@ -267,7 +276,7 @@ class UserPersonForm extends Form
     }
     
     // Superadmins can edit the field, but regular admins can only modify this when creating another user (not when editing).
-    if($i_am_superadmin || $self_editing || ($i_am_admin && (!$target_is_superadmin || !$this->user || empty($this->user->id)))){
+    if($i_am_superadmin || $self_editing || (($i_am_admin || $i_am_org_admin) && (!$target_is_superadmin || !$this->user || empty($this->user->id)))){
       
       $this->add('new_password','repeated', [
         'wrapper' => ['class' => 'form-group user-account-section password-fields '.$user_section_visibility_class],
@@ -275,15 +284,27 @@ class UserPersonForm extends Form
         'second_name' => 'new_password_confirmation',
         'first_options' => [
           'default_value' => '',
-          'rules' => 'required_with:username|confirmed|min:4',
+          'rules' => ['required_with:username', 'confirmed', 'min:4'],
           'attr' => $password_disabled_attribute
         ],
         'second_options' => [
           'default_value' => '',
-          'rules' => 'required_with:username',
+          'rules' => ['required_with:username'],
           'attr' => $password_disabled_attribute
         ]
       ]);
+      
+      // When creating a new user, the password fields are required
+      if($this->mode == 'Create' && $this->primary_type === 'User'){
+        $this->modify('new_password','repeated', [
+          'first_options' => [
+            'rules' => ['required', 'confirmed', 'min:4']
+          ],
+          'second_options' => [
+            'rules' => ['required']
+          ]
+        ]);
+      }
       
       // When editing an existing user, hide and disable the password fields (until the toggle link is clicked).
       // Also set the validation rule to "filled" instead of "required" so that it can be ommitted.
@@ -307,8 +328,6 @@ class UserPersonForm extends Form
   /*================================================================================
       Organization
     ================================================================================*/
-    
-    $i_am_org_admin = !empty($this->formOptions['organization']) && auth()->user()->organization_role === 'admin' && auth()->user()->organization_id === $this->formOptions['organization'];
     
     $this->add('heading_organization', 'static', [
       'wrapper' => ['class' => 'form-group org-section '.$user_section_visibility_class],

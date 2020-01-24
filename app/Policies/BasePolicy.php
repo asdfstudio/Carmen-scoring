@@ -66,7 +66,7 @@ class BasePolicy
 		}
 
 
-		public function create(User $user)
+		public function create($model)
 		{
       if($this->isOrgAdmin)
       {

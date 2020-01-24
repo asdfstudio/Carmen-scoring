@@ -31,6 +31,10 @@ Route::group([
 
   Route::resource('user', 'UserController');
 
+  Route::post('user/get-new-username', [
+    'as' => 'user.username.new', 'uses' => 'UserController@getNewUsername'
+  ]);
+  
   Route::resource('penalty', 'PenaltyController');
 
   Route::resource('award', 'AwardController');

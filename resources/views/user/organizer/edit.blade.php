@@ -18,6 +18,6 @@
 @endsection
 
 @section('body-footer')
-  <script>let getNewUsernameURL = '{{ route('admin.user.username.new') }}'</script>
+  <script>let getNewUsernameURL = '{{ route('organizer.user.username.new') }}'</script>
   <script src="/js/user-person-form.js"></script>
 @endsection
