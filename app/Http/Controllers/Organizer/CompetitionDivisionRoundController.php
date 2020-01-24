@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Organizer;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -30,6 +31,7 @@ use Event;
 use App\Events\RoundScoringActivated;
 use App\Events\RoundScoringCompleted;
 use App\Events\RoundSaved;
+use App\Events\StandingRefreshNeeded;
 
 class CompetitionDivisionRoundController extends Controller
 {
@@ -206,7 +208,11 @@ class CompetitionDivisionRoundController extends Controller
       ])->find($round_id);
 
       $this->authorize('show', $round);
-
+      
+      if(Auth::user()->isAdmin() && isset($_GET['refresh_standings'])){
+        Event::fire(new StandingRefreshNeeded($round));
+      }
+      
       $division = $round->division;
 
       //dd($division->judges);
@@ -329,7 +335,11 @@ class CompetitionDivisionRoundController extends Controller
       ])->find($round_id);
 
       $this->authorize('show', $round);
-
+      
+      if(Auth::user()->isAdmin() && isset($_GET['refresh_standings'])){
+        Event::fire(new StandingRefreshNeeded($round));
+      }
+      
       $division = $round->division;
       $competition = $division->competition;
       $rounds = $division->rounds;

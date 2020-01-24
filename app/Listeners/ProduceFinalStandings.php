@@ -34,7 +34,7 @@ class ProduceFinalStandings
      * @param  RoundScoringActivated  $event
      * @return void
      */
-    public function handle(RoundScoringCompleted $event)
+    public function handle($event)
     {
       $this->round = $event->round;
 
