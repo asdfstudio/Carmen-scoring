@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Choir;
 use App\CommentUrl;
 use Illuminate\Contracts\Mail\Mailer;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class EmailSoloDivisionFeedbackLink
 {

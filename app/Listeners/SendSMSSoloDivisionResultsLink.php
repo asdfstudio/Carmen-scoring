@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 use App\SoloDivision;
 use Twilio;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class SendSMSSoloDivisionResultsLink
 {

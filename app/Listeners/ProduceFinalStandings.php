@@ -11,7 +11,7 @@ use App\Standing;
 use App\Caption;
 use App\Carmen\Scoreboard;
 
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class ProduceFinalStandings
 {
@@ -90,12 +90,12 @@ class ProduceFinalStandings
       // Raw
       if($this->round->division->scoring_method_id == 1)
       {
-        $choirPositions = $this->scoreboard->rankedScores->total_weighted_rank($caption_id);
+        $choirPositions = $this->scoreboard->rankedScoresForCurrentMethod->total_weighted_rank($caption_id);
       }
       // Ranked
       else
       {
-        $choirPositions = $this->scoreboard->rankedScores->total_rank($caption_id);
+        $choirPositions = $this->scoreboard->rankedScoresForCurrentMethod->total_rank($caption_id);
       }
 
       //Log::debug($choirPositions);

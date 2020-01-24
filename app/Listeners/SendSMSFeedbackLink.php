@@ -11,7 +11,7 @@ use App\CommentUrl;
 use App\Division;
 
 use Twilio;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class SendSMSFeedbackLink
 {

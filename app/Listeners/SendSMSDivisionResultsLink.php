@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Division;
 
 use Twilio;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class SendSMSDivisionResultsLink
 {
