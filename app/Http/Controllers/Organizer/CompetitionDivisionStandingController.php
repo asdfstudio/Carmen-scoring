@@ -31,7 +31,7 @@ class CompetitionDivisionStandingController extends Controller
     public function show($competition_id, $division_id)
     {
       $division = Division::with(['standings','standings.choirs'])->find($division_id);
-
+      
       return view('competition_division_standing.organizer.show', compact('division'));
     }
 

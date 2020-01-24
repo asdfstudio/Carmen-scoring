@@ -7,7 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 use App\Round;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class RoundScoringCompleted extends Event
 {

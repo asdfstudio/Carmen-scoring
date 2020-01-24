@@ -50,12 +50,12 @@ class SyncRoundChoirsToTarget
         // Raw
         if($targetRound->division->scoring_method_id == 1)
         {
-          $choirPositions = $scoreboard->rankedScores->total_weighted_rank();
+          $choirPositions = $scoreboard->rankedScoresForCurrentMethod->total_weighted_rank();
         }
         // Ranked
         else
         {
-          $choirPositions = $scoreboard->rankedScores->total_rank();
+          $choirPositions = $scoreboard->rankedScoresForCurrentMethod->total_rank();
         }
 
         //dd($choirPositions);

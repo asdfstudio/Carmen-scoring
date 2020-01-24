@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Carmen\CountExpectedScores;
 use App\RawScore;
+use App\Carmen\Scoreboard;
 
 class Round extends Model
 {

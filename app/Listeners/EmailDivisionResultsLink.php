@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Division;
 
 use Illuminate\Contracts\Mail\Mailer;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class EmailDivisionResultsLink
 {
