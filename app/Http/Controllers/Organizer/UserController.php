@@ -237,4 +237,39 @@ class UserController extends Controller
 				// Set flash data and redirect
 				return redirect()->route('organizer.user.index');
     }
+
+
+    public static function getNewUsername($first_name = '', $last_name = '')
+    {
+        if(empty($first_name) && isset($_POST['first_name'])){
+          $first_name = htmlspecialchars($_POST['first_name']);
+        }
+        
+        if(empty($last_name) && isset($_POST['last_name'])){
+          $last_name = htmlspecialchars($_POST['last_name']);
+        }
+        
+        echo self::generateUsername($first_name, $last_name);
+    }
+    
+    
+    public static function generateUsername($first_name, $last_name, $number = 0)
+    {
+        $new_username = preg_replace('/[^a-z0-9]/', '', strtolower($first_name).strtolower($last_name));
+        
+        if($number){
+          $new_username .= $number;
+        }
+        
+        $existing_user = User::where('username', $new_username)->first();
+        
+        if(!empty($existing_user)){
+          $number++;
+          $new_username = $this->generateUsername($first_name, $last_name, $number);
+        }
+        
+        return $new_username;
+    }
+
+
 }

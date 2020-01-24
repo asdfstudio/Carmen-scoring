@@ -4,7 +4,7 @@
 @section('content-header')
 	<h1>Awards</h1>
 	<ul class="actions-group">
-		@can('createAward' , $division)
+		@can('createAward', $division)
 			<li>
 				{{ link_to_route('organizer.competition.division.award.create','Create new award', [$division->competition->id, $division->id], ['class' => 'action']) }}
 			</li>

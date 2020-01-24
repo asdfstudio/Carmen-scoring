@@ -25,13 +25,15 @@ class AwardPolicy extends BasePolicy
 
 
 
-		public function create(User $user)
+		public function create($division)
 		{
       if($division)
       {
-        if($this->isOrgAdmin AND $division->competition->organization_id === $this->orgId)
+        if($this->isOrgAdmin AND !empty($division->competition->organization_id) AND $division->competition->organization_id === $this->orgId)
         {
           return true;
+        } else {
+          return false;
         }
       }
       else
