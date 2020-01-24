@@ -25,6 +25,10 @@ class EventServiceProvider extends ServiceProvider
           'App\Listeners\EmailFeedbackLink',
           'App\Listeners\SendSMSFeedbackLink',
         ],
+        'App\Events\StandingRefreshNeeded' => [
+          'App\Listeners\SyncRoundChoirsToTarget',
+          'App\Listeners\ProduceFinalStandings',
+        ],
         'App\Events\DivisionChoirCreated' => [
           'App\Listeners\AddChoirToRound'
         ],

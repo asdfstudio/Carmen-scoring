@@ -27,7 +27,7 @@ class SyncRoundChoirsToTarget
      * @param  RoundScoringCompleted  $event
      * @return void
      */
-    public function handle(RoundScoringCompleted $event)
+    public function handle($event)
     {
         $round = $event->round;
 
