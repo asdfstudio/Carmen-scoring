@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Organizer;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Url;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -15,6 +16,7 @@ use App\Round;
 use App\RawScore;
 use App\Caption;
 use App\Judge;
+use App\CommentUrl;
 
 use App\Carmen\WeightedScores;
 use App\Carmen\RankedScores;
@@ -211,6 +213,56 @@ class CompetitionDivisionRoundController extends Controller
       
       if(Auth::user()->isAdmin() && isset($_GET['refresh_standings'])){
         Event::fire(new StandingRefreshNeeded($round));
+      }
+      
+      if(Auth::user()->isAdmin() && isset($_GET['feedback_urls'])){
+        $round->load('feedback');
+        $competition = $round->division->competition;
+
+        $choirIds = $round->feedback->unique('choir_id')->pluck('choir_id')->toArray();
+
+        if(!$choirIds) return;
+
+        $commentUrls = CommentUrl::with('choir', 'choir.directors')->where('competition_id', $competition->id)->whereIn('choir_id', $choirIds)->get();
+
+        //dd($commentUrls);
+        
+        echo '<pre>';
+        foreach($commentUrls as $commentUrl){
+          $directors = collect();
+
+          $commentUrl->choir->directors->each(function($director,$key) use ($directors) {
+            if($director->email)
+            {
+              $directors->push($director);
+            }
+          });
+
+          // Get unique directors
+          $directors = $directors->unique('id');
+
+          if ($directors->count() < 1) return;
+          
+          echo "========================================\n\n";
+          echo "Feedback URL for ".$commentUrl->choir->getFullNameAttribute().":\n\n";
+          echo URL::to('/') . '/feedback/' . $commentUrl->access_code . "\n\n\n";
+          
+          echo "Director Emails:\n\n";
+          echo implode("\n", $directors->pluck('email')->toArray());
+          echo "\n\n\n";
+          /*
+          $this->mailer->send('email.feedback_available',
+  					['commentUrl' => $commentUrl, 'competition' => $competition],
+  					function ($m) use ($competition, $directors) {
+              $m->to($directors->pluck('email')->toArray());
+  						$m->subject($competition->name." Feedback Available");
+          	}
+  				);
+          */
+        }
+        echo '</pre>';
+        
+        exit;
       }
       
       $division = $round->division;
