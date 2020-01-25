@@ -26,7 +26,7 @@ class CompetitionDivisionAwardController extends Controller
       }, 'awards.choirs' => function($query) use ($division_id) {
         $query->where('division_id',$division_id);
       }])->find($division_id);
-      dd($division);
+      
       $this->authorize('showAll', 'App\Award');
 
       //dd($division->awards);
