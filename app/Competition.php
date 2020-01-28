@@ -30,7 +30,7 @@ class Competition extends Model
       'use_runner_up_names' => 'array'
     ];
     
-    protected function __construct(){
+    public function __construct(){
       // Automatically change an admin's "organization_id" to the current organization.
       // This avoids errors when admins jump from one org to another via direct URL
       // instead of navigating through the web interface.
