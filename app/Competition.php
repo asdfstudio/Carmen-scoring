@@ -30,19 +30,10 @@ class Competition extends Model
       'use_runner_up_names' => 'array'
     ];
     
-    public function __construct(){
-      // Automatically change an admin's "organization_id" to the current organization.
-      // This avoids errors when admins jump from one org to another via direct URL
-      // instead of navigating through the web interface.
-      if(Auth::user()->isAdmin()){
-        Auth::user()->organization_id = $this->getKey();
-      }
-    }
-
 		protected static function boot()
     {
         parent::boot();
-
+        
         static::addGlobalScope(new OrderByNameScope);
     }
 

@@ -78,7 +78,7 @@ class SoloDivision extends Model
       if($class_attr)
         $class_array[] = $class_attr;
 
-      $class = implode($class_array,' ');
+      $class = implode(' ', $class_array);
 
       return '<span class="'.$class.'">'.$this->status.'</span>';
     }
