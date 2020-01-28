@@ -3,6 +3,10 @@
 namespace App;
 
 use App\Scopes\OrderByNameScope;
+use App\User;
+use Auth;
+
+use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,7 +29,15 @@ class Competition extends Model
     protected $casts = [
       'use_runner_up_names' => 'array'
     ];
-
+    
+    protected function __construct(){
+      // Automatically change an admin's "organization_id" to the current organization.
+      // This avoids errors when admins jump from one org to another via direct URL
+      // instead of navigating through the web interface.
+      if(Auth::user()->isAdmin()){
+        Auth::user()->organization_id = $this->getKey();
+      }
+    }
 
 		protected static function boot()
     {
@@ -162,7 +174,7 @@ class Competition extends Model
       if($class_attr)
         $class_array[] = $class_attr;
 
-      $class = implode($class_array,' ');
+      $class = implode(' ', $class_array);
 
       return '<span class="'.$class.'">'.$this->status.'</span>';
     }

@@ -245,7 +245,7 @@ class CompetitionDivisionRoundController extends Controller
           
           echo "========================================\n\n";
           echo "Feedback URL for ".$commentUrl->choir->getFullNameAttribute().":\n\n";
-          echo URL::to('/') . '/feedback/' . $commentUrl->access_code . "\n\n\n";
+          echo 'https://showchoir.carmenscoring.com/feedback/' . $commentUrl->access_code . "\n\n\n";
           
           echo "Director Emails:\n\n";
           echo implode("\n", $directors->pluck('email')->toArray());
