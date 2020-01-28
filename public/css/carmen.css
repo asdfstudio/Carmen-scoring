@@ -3676,7 +3676,6 @@ table.spreadsheet-legend {
 
 .caption-raw-score {
   font-size: 1em;
-  color: #FFF;
   background: #7c7c7c;
   /*&.caption-music {
     background: lighten($cs-caption-music, 15) !important;
@@ -3705,7 +3704,6 @@ table.spreadsheet-legend {
 
 .caption-weighted-score {
   font-size: 1em;
-  color: #FFF;
   background: #898989;
   /*&.caption-music {
     background: lighten($cs-caption-music, 10) !important;
@@ -3734,7 +3732,6 @@ table.spreadsheet-legend {
 
 .caption-rank {
   font-size: 1.1em;
-  color: #FFF;
   background: #7c7c7c;
   /*&.caption-music {
     background: darken($cs-caption-music, 5) !important;
