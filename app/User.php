@@ -43,6 +43,16 @@ class User extends Authenticatable
 
 		public function organization()
 		{
+      //if(!empty(1)){
+      //  $current_url = url()->current();
+      //}
+      
+      // Automatically change an admin's "organization_id" to the current organization.
+      // This avoids errors when admins jump from one org to another via direct URL
+      // instead of navigating through the web interface.
+      //if(Auth::user()->isAdmin()){
+        //Auth::user()->organization_id = $this->getKey();
+      //}
 			return $this->belongsTo('App\Organization');
 		}
 

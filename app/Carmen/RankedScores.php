@@ -233,7 +233,7 @@ class RankedScores {
       return $item;
     });
     
-    /*
+    
     // Go back through and flag any results that are a tie.
     $rank = $rank->map(function($item, $key) use ($tied_ranks) {
 
@@ -245,7 +245,7 @@ class RankedScores {
       
       return $item;
     });
-    */
+    
     
     if($key){
       $this->ranked[$key] = $rank;
@@ -279,7 +279,7 @@ class RankedScores {
       return $item;
     });
     
-    /*
+    
     // Go back through and flag any results that are a tie.
     $rank = $rank->map(function($item, $key) use ($tied_ranks) {
 
@@ -291,7 +291,7 @@ class RankedScores {
       
       return $item;
     });
-    */
+    
     
     return $rank;
   }
