@@ -88,7 +88,7 @@
         <td>
           @php
             $rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();
-            $tied = $division->scoring_method_id !== 1 && !empty($captionTotalRank->where('choir_id' , $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+            $tied = !empty($captionTotalRank->where('choir_id' , $choir->id)->pluck('tied')->first()) ? 'tied' : '';
           @endphp
           <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
