@@ -38,7 +38,7 @@
               @php
               $active = $current_page == 'round_'.$round->id ? 'active' : false;
               @endphp
-        			<a href="{{ route('results.division.round.show', [$division, $round, $access_code]) }}" class="{{ $active }} action">{{ $round->name }}</a>
+        			<a href="{{ route('results.division.round.show', [$division, $round, $access_code]) }}" class="{{ $active }} action">Division Scores</a>
         		</li>
 
             @foreach($round->targets as $target)
@@ -47,7 +47,7 @@
                   @php
                   $active = $current_page == 'round_shared_'.$round->id ? 'active' : false;
                   @endphp
-            			<a href="{{ route('results.division.round-shared.show', [$division, $round, $target->id, $access_code]) }}" class="{{ $active }} action">{{ $target->name }} > Source Rounds</a>
+            			<a href="{{ route('results.division.round-shared.show', [$division, $round, $target->id, $access_code]) }}" class="{{ $active }} action">Scores for All Divisions</a>
             		</li>
               @endif
             @endforeach
