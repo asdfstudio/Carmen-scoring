@@ -100,7 +100,10 @@ class ResultsController extends Controller
 
     public function indexYear($year)
     {
-      $competitions = Competition::withoutGlobalScope('organization')->completed()->year($year)->orderBy('name', 'asc')->get();
+      //$competitions = Competition::withoutGlobalScope('organization')->completed()->year($year)->orderBy('name', 'asc')->get();
+      $competitions = Competition::withoutGlobalScope('organization')->year($year)->whereHas('divisions', function($query){
+        $query->where('is_published', 1);
+      })->orderBy('name', 'asc')->get();
 
       return view('results.index', compact('competitions', 'year'));
     }
