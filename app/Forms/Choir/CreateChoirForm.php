@@ -91,10 +91,12 @@ class CreateChoirForm extends Form
           'value' => 'submit',
           'attr' => ['class' => 'btn btn-primary', 'name' => 'submit']
         ]);
-
+        
+        /*
         $this->add('submit_create_another', 'submit', [
           'label' => 'Save & Add Another',
           'attr' => ['class' => 'btn btn-secondary', 'name' => 'submit_create_another']
         ]);
+        */
     }
 }
