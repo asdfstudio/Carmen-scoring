@@ -205,6 +205,8 @@ class CompetitionDivisionRoundController extends Controller
           'color_id' => $item->color_id
         ];
       })->toArray();
+      $captions = array_values($captions);
+      
 
       $divisions = ['id' => $division->id, 'name' => $division->name];
 
@@ -258,7 +260,7 @@ class CompetitionDivisionRoundController extends Controller
       $comments = json_encode($comments);
       $recordedComments = json_encode($recordedComments->first());
       $scores = json_encode($scores);
-      $captions = json_encode($captions);
+      $captions = json_encode($captions);//dd($captions);
       $rating_system = json_encode($rating_system);
       $competition = json_encode($competition);
 
