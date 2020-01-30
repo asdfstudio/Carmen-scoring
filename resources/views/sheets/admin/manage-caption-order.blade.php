@@ -26,7 +26,7 @@
           if ($index !== false) {
             $position = $index + 1;
           } else {
-            $position = false;
+            $position = '';
           }
 
           @endphp
