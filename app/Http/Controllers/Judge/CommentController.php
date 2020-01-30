@@ -45,8 +45,10 @@ class CommentController extends Controller
 				'subject_type' => 'App\Round',
 				'subject_id' => $round_id
 			]);
-
-			$comment->comments = $request->input('comment');
+      
+      $comment_text = $request->input('comment');
+      
+			$comment->comments = $comment_text ? $comment_text : '';
 			$comment->save();
 
 			Event::fire(new CommentSaved($comment, $competition));

@@ -50,38 +50,36 @@
                   }
                 }
               @endphp
-              @if($comments_not_empty || ($competition->organization->is_premium == 1 && $judge_recordings->count()))
-                <li class="list-group-item unpadded">
-                  <div class="header">
-                    {{ $judge->full_name }}
+              <li class="list-group-item unpadded">
+                <div class="header">
+                  {{ $judge->full_name }}
+                </div>
+                <div class="body">
+                  <div>
+                  @if($comments_not_empty)
+                    @foreach($judge_comments as $comment)
+                      {!! nl2br($comment->comments) !!}
+                    @endforeach
+                  @else
+                    <i class="text-muted">No typed comments were entered by this judge.</i>
+                  @endif
                   </div>
-                  <div class="body">
-                    <div>
-                    @if($comments_not_empty)
-                      @foreach($judge_comments as $comment)
-                        {!! nl2br($comment->comments) !!}
-                      @endforeach
-                    @else
-                      <i class="text-muted">No typed comments were entered by this judge</i>
-                    @endif
-                    </div>
-                    @if($competition->organization->is_premium == 1 && $judge_recordings->count())
-                    <div class="record-row">
-                      <ol>
-                      @foreach($judge_recordings as $recording)
-                        <li class="record-item">
-                          <div class="record-item-audio">
-                            <audio controls> <source src="{{$recording->url}}"> </audio>
-                            <span> {{$recording->created_at}} (UTC)</span>
-                          </div>
-                        </li>
-                      @endforeach
-                      </ol>
-                    </div>   
-                    @endif            
-                  </div>
-                </li>
-              @endif
+                  @if($competition->organization->is_premium == 1 && $judge_recordings->count())
+                  <div class="record-row">
+                    <ol>
+                    @foreach($judge_recordings as $recording)
+                      <li class="record-item">
+                        <div class="record-item-audio">
+                          <audio controls> <source src="{{$recording->url}}"> </audio>
+                          <span> {{$recording->created_at}} (UTC)</span>
+                        </div>
+                      </li>
+                    @endforeach
+                    </ol>
+                  </div>   
+                  @endif            
+                </div>
+              </li>
             @endforeach
           </ul>
         @endif

@@ -18,8 +18,9 @@ use App\Comment;
 use App\Recording;
 use App\Carmen\Scorekeeper;
 use App\Carmen\Scoreboard;
+use App\Events\CommentSaved;
 
-use  DB;
+use DB;
 use Auth;
 
 class CompetitionDivisionRoundController extends Controller
@@ -125,7 +126,6 @@ class CompetitionDivisionRoundController extends Controller
     }
 
 
-    //
     // New spreadsheet, 2019
     public function spreadsheet($competition_id,$division_id,$round_id)
     {
@@ -241,14 +241,31 @@ class CompetitionDivisionRoundController extends Controller
         ];
       })->toArray();
       
-
+      // Make sure there is at least a placeholder comment for this judge targeting each choir.
+      foreach($choirs as $choir){
+        $placeholder_comment = Comment::firstOrNew([
+          'judge_id' => $judge_id,
+          'choir_id' => $choir['id'],
+          'recipient_type' => 'App\Choir',
+          'recipient_id' => $choir['id'],
+          'subject_type' => 'App\Round',
+          'subject_id' => $round_id
+        ]);
+        if(!$placeholder_comment->exists){
+          $placeholder_comment->save();
+          event(new CommentSaved($placeholder_comment, $division->competition));
+        }
+      }
+      
+      $round->refresh();
+            
       $comments = $round->feedback->map(function ($item, $key) {
         return [
           'choir_id' => $item->choir_id,
           'comment' => $item->comments
         ];
       })->toArray();
-
+      
       $recordedComments = $recordings->map(function ($item, $key) {
         return $item->recordings;
       });
@@ -484,6 +501,22 @@ class CompetitionDivisionRoundController extends Controller
       //dd($scores);
 
 
+      // Make sure there is at least a placeholder comment for this judge targeting each choir.
+      foreach($choirs as $choir){
+        $placeholder_comment = Comment::firstOrNew([
+          'judge_id' => $judge_id,
+          'choir_id' => $choir['id'],
+          'recipient_type' => 'App\Choir',
+          'recipient_id' => $choir['id'],
+          'subject_type' => 'App\Round',
+          'subject_id' => $round_id
+        ]);
+        if(!$placeholder_comment->exists){
+          $placeholder_comment->save();
+          event(new CommentSaved($placeholder_comment, $division->competition));
+        }
+      }
+      
       $feedback = Comment::where('judge_id', $judge_id)
         ->whereIn('choir_id', $source_choirs->pluck('id')->toArray())
         ->where('subject_type', 'App\Round')
