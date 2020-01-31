@@ -353,10 +353,7 @@ class CompetitionDivisionRoundController extends Controller
           $round_id
         ])
       ]);
-
-
-
-
+      
       return view('competition_division_round.organizer.show', compact('captions', 'rawScores', 'weightedScores', 'rankedScores', 'round', 'competition', 'division', 'divisions', 'rounds', 'activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard', 'judges', 'choirs', 'ratings', 'roundIsMissingScores'));
 		}
 
