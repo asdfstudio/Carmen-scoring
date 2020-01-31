@@ -88,6 +88,9 @@ class ConsensusOrdinalRankScores {
     
     while(count($this->choirs_remaining)){
       $top_choir = $this->get_top_choir($rank_by_judge);
+      if(!$this->recursions){
+        $this->level_pointer++;
+      }
       
       foreach($top_choir as $choir_id){
         $choir = [];
@@ -109,16 +112,15 @@ class ConsensusOrdinalRankScores {
   }
   
   
-  public function get_top_choir(&$rank_by_judge, $level_start = null, $level_bump = 0, $choirs = [], $tie_breaker = false){
-    if(is_null($level_start)){
-      $level_start = $this->level_pointer;
+  public function get_top_choir(&$rank_by_judge, $level_bump = 0, $choirs = [], $tie_breaker = false){
+    $level = $this->level_pointer + $level_bump;
+    
+    if($tie_breaker == false){
+      $this->recursions = 0;
     }
-    $level = $level_start + $level_bump;
     
     //echo '<h3>========================================</h3>';
-    
     //echo '<pre>';
-    if($tie_breaker == false) $this->recursions = 0;
     //echo 'Recursions: '.$this->recursions."\n\n";
     
     //if(in_array($level, $this->levels_to_skip)){
@@ -133,6 +135,7 @@ class ConsensusOrdinalRankScores {
     //print_r($choirs);
     //echo "\n\n";
     
+    //echo "Base Level: $this->level_pointer\n\n";
     //echo "Level: $level\n\n";
     //echo "Tie Breaker: ".intval($tie_breaker)."\n\n";
     
@@ -155,9 +158,9 @@ class ConsensusOrdinalRankScores {
     // The number of tally marks for the top spot.
     $top_tally = array_values($choir_tally)[0];
     
-    if($top_tally === 0){
+    //if($top_tally === 0){
       //$this->levels_to_skip[] = $level;
-    }
+    //}
     
     //echo "Top Tally: $top_tally\n\n";
     
@@ -190,8 +193,7 @@ class ConsensusOrdinalRankScores {
       
       // Recurse to break the tie.
       $this->recursions++;
-      if($this->recursions < 100)
-      $top_choir = $this->get_top_choir($rbj_tied, $level, 1, $top_choir, true);
+      $top_choir = $this->get_top_choir($rbj_tied, $this->recursions, $top_choir, true);
     }
     
     // Remove the winning choir from the rankings that still need to be considered,
@@ -210,7 +212,7 @@ class ConsensusOrdinalRankScores {
     
     //echo '</pre>';
     
-    $this->level_pointer++;
+    
     
     return $top_choir;
   }
