@@ -19,6 +19,7 @@ class ConsensusOrdinalRankScores {
   protected $max_level = null;
   protected $levels_to_skip = [];
   protected $level_pointer = 1;
+  protected $recursions = 0;
   
   
   public function __construct($weightedScores, $penalties = false)
@@ -86,7 +87,6 @@ class ConsensusOrdinalRankScores {
     $this->level_pointer = 1;
     
     while(count($this->choirs_remaining)){
-      
       $top_choir = $this->get_top_choir($rank_by_judge);
       
       foreach($top_choir as $choir_id){
@@ -109,31 +109,32 @@ class ConsensusOrdinalRankScores {
   }
   
   
-  public function get_top_choir(&$rank_by_judge, $level_bump = 0, $choirs = [], $tie_breaker = false){
-    $level = $this->level_pointer + $level_bump;
-    
-    $debug_output = '';
-    
-    if($level === 1){
-      $debug_output .= '<h3>========================================</h3>';
+  public function get_top_choir(&$rank_by_judge, $level_start = null, $level_bump = 0, $choirs = [], $tie_breaker = false){
+    if(is_null($level_start)){
+      $level_start = $this->level_pointer;
     }
+    $level = $level_start + $level_bump;
     
-    $debug_output .= '<pre>';
+    //echo '<h3>========================================</h3>';
     
-    if(in_array($level, $this->levels_to_skip)){
+    //echo '<pre>';
+    if($tie_breaker == false) $this->recursions = 0;
+    //echo 'Recursions: '.$this->recursions."\n\n";
+    
+    //if(in_array($level, $this->levels_to_skip)){
       //$level = end($this->levels_to_skip) + 1;
-    }
+    //}
     
     $choirs = empty($choirs) ? $this->choirs_remaining : $choirs;
     
     $choir_tally = array_combine($choirs, array_fill(0, count($choirs), 0));
     
-    $debug_output .= 'Choirs: ';
-    $debug_output .=print_r($choirs, true);
-    $debug_output .= "\n\n";
+    //echo 'Choirs: ';
+    //print_r($choirs);
+    //echo "\n\n";
     
-    $debug_output .= "Level: $level\n\n";
-    $debug_output .= "Tie Breaker: ".intval($tie_breaker)."\n\n";
+    //echo "Level: $level\n\n";
+    //echo "Tie Breaker: ".intval($tie_breaker)."\n\n";
     
     // Give a tally mark to each choir for every time a judge ranked it at $level or better.
     foreach($rank_by_judge as $judge_id => $rankings){
@@ -147,9 +148,9 @@ class ConsensusOrdinalRankScores {
     // Sort by tally marks.
     arsort($choir_tally);
     
-    $debug_output .= "Choir Tallies: ";
-    $debug_output .=print_r($choir_tally, true);
-    $debug_output .= "\n\n";
+    //echo "Choir Tallies: ";
+    //print_r($choir_tally);
+    //echo "\n\n";
     
     // The number of tally marks for the top spot.
     $top_tally = array_values($choir_tally)[0];
@@ -158,7 +159,7 @@ class ConsensusOrdinalRankScores {
       //$this->levels_to_skip[] = $level;
     }
     
-    $debug_output .= "Top Tally: $top_tally\n\n";
+    //echo "Top Tally: $top_tally\n\n";
     
     // Get the choirs that have the top number of tally marks.  (Could be more than one.)
     $top_choir = array_filter($choir_tally, function($tally, $choir_id) use ($top_tally){
@@ -168,9 +169,9 @@ class ConsensusOrdinalRankScores {
     // We just need the choir IDs, which are the array keys.
     $top_choir = array_keys($top_choir);
     
-    $debug_output .= "Top Choir: ";
-    $debug_output .=print_r($top_choir, true);
-    $debug_output .= "\n\n";
+    //echo "Top Choir: ";
+    //print_r($top_choir);
+    //echo "\n\n";
     
     // Try to only return one top choir. If there is a tie at this level, recurse and
     // examine the next level until we find a unique winner or else we run out of levels
@@ -188,7 +189,9 @@ class ConsensusOrdinalRankScores {
       }
       
       // Recurse to break the tie.
-      $top_choir = $this->get_top_choir($rbj_tied, 1, $top_choir, true);
+      $this->recursions++;
+      if($this->recursions < 100)
+      $top_choir = $this->get_top_choir($rbj_tied, $level, 1, $top_choir, true);
     }
     
     // Remove the winning choir from the rankings that still need to be considered,
@@ -205,15 +208,14 @@ class ConsensusOrdinalRankScores {
       }
     }
     
-    $debug_output .= '</pre>';
-    //echo $debug_output;
+    //echo '</pre>';
     
     $this->level_pointer++;
     
     return $top_choir;
   }
   
-  
+  /*
   public function get_top_choir_backup(&$rank_by_judge, $level = 1, $choirs = [], $tie_breaker = false){
     $debug_output = '';
     
@@ -309,11 +311,11 @@ class ConsensusOrdinalRankScores {
     }
     
     $debug_output .= '</pre>';
-    echo $debug_output;
+    //echo $debug_output;
     
     return $top_choir;
   }
-  
+  */
   
   public function total($choir_id, $caption_id = false)
   {
