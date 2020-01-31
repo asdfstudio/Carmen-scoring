@@ -282,7 +282,6 @@ class CompetitionDivisionRoundController extends Controller
       $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::forSheet($division->sheet);
 
-
 			//$rawScores = RawScore::with('judge','choir','criterion')->where('division_id',$division_id)->where('round_id',$round_id)->get();
 
       //$weightedScoresClass = new WeightedScores($rawScores,        $division->caption_weighting_id);
@@ -354,10 +353,7 @@ class CompetitionDivisionRoundController extends Controller
           $round_id
         ])
       ]);
-
-
-
-
+      
       return view('competition_division_round.organizer.show', compact('captions', 'rawScores', 'weightedScores', 'rankedScores', 'round', 'competition', 'division', 'divisions', 'rounds', 'activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard', 'judges', 'choirs', 'ratings', 'roundIsMissingScores'));
 		}
 

@@ -185,10 +185,25 @@ class SheetController extends Controller
     public function syncCaptionOrder($id, FormBuilder $formBuilder, Request $request)
     {
       $input = $request->input('captions', []);
-      $flipped = array_flip($input);
-      ksort($flipped);
-      $reKeyed = array_values($flipped);
-      //dd([$input, $flipped, $reKeyed]);
+      
+      $keys_to_unset = array();
+      
+      // Go through the input and make sure there are no holes.
+      foreach($input as $caption_id => $sort_value){
+        if($input[$caption_id] !== '0' && empty($input[$caption_id])){
+          // If the input is empty, sink it to the bottom with a 'z' prefix
+          // and let all empty items sort by caption_id.
+          //$input[$caption_id] = 'z'.str_pad($caption_id, 10, '0', STR_PAD_LEFT);
+          $keys_to_unset[$caption_id] = $caption_id;
+        }
+      }
+      
+      $input = array_diff_key($input, $keys_to_unset);
+      
+      // Sort the input according to the values given by the user (with unassigned items sorted by caption_id at the end).
+      asort($input);
+      $reKeyed = array_keys($input);
+      
       $sheet = Sheet::find($id);
       $sheet->caption_sort_order = $reKeyed;
       $sheet->save();

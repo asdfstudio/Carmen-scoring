@@ -35,7 +35,11 @@ class CompetitionDivisionJudgeController extends Controller
         //dd($division->judges);
 
 				$captions = Caption::forSheet($division->sheet);
-
+        
+        if(!$captions){
+          $captions = Collect();
+        }
+        
 				return view('competition_division_judge.organizer.index', compact('division','captions'));
     }
 

@@ -13,8 +13,8 @@ class CompetitionFeedbackUrlController extends Controller
 {
     public function index($competition_id)
     {
-      $competition = Competition::with('organization','place', 'commentUrls')->find($competition_id);
-
+      $competition = Competition::with('organization', 'place', 'commentUrls')->find($competition_id);
+      
       return view('competition_division_feedback_url.organizer.index', compact('competition'));
     }
 }

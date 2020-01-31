@@ -47,7 +47,7 @@ class FeedbackController extends Controller
 
 
       $comments = Comment::with(['judge'])->where('choir_id', $comment_recipient_id)->where('subject_type', 'App\Round')->get();
-      
+      //dd($comments);
       $recordings = Recording::where('choir_id', $comment_recipient_id)->whereIn('division_id', $commentUrl->competition->divisions->pluck('id')->toArray())->get();
       //dd($recordings);
       return view('feedback.show', ['comments' => $comments, 'recordings' => $recordings, 'competition' => $commentUrl->competition, 'choir' => $choir, 'comment_recipient_id' => $comment_recipient_id]);
