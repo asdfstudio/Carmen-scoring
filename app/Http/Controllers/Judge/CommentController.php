@@ -48,7 +48,7 @@ class CommentController extends Controller
       
       $comment_text = $request->input('comment');
       
-			$comment->comments = $comment_text ? $comment_text : '';
+      $comment->comments = $request->input('comment');
 			$comment->save();
 
 			Event::fire(new CommentSaved($comment, $competition));

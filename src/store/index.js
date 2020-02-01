@@ -124,14 +124,21 @@ export const store = new Vuex.Store({
     },
     setComment (state, payload) {
       // Find the matching comment and update it
-      var matches = state.comments.filter(comment => comment.choir_id === payload.choir_id)
-
-      if (matches.length === 1) {
-        matches[0].comment = payload.comment
-      } else {
-        state.comments.push(payload)
+      //var matches = state.comments.filter(comment => comment.choir_id === payload.choir_id)
+      console.log('Payload', payload)
+      for(var c in state.comments){
+        console.log('State comment', state.comments[c])
+        console.log(state.comments[c].choir_id == payload.choir_id)
+        if(state.comments[c].choir_id == payload.choir_id){
+          console.log('Matched comment')
+          state.comments[c].comment = payload.comment
+          return
+        }
       }
+      
       // Otherwise append it to the array
+      console.log('No matched comment')
+      state.comments.push(payload)
     }
   },
   actions: {
@@ -332,9 +339,17 @@ export const store = new Vuex.Store({
       return null
     },
     getChoirComment: (state) => (choirId) => {
-      var matches = state.comments.filter(comment => comment.choir_id === choirId)
+      //var matches = state.comments.filter(comment => comment.choir_id === choirId)
+      for(var c in state.comments){
+        console.log('State comment', state.comments[c])
+        console.log(state.comments[c].choir_id == choirId)
+        if(state.comments[c].choir_id == choirId){
+          console.log('Matched comment')
+          return state.comments[c].comment
+        }
+      }
 
-      if (matches.length === 1) return matches[0].comment
+      //if (matches.length === 1) return matches[0].comment
 
       return null
     }

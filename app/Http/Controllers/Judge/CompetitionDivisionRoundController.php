@@ -259,13 +259,13 @@ class CompetitionDivisionRoundController extends Controller
       
       $round->refresh();
             
-      $comments = $round->feedback->map(function ($item, $key) {
+      $comments = $round->feedback->where('judge_id', $judge_id)->map(function ($item, $key) {
         return [
           'choir_id' => $item->choir_id,
           'comment' => $item->comments
         ];
       })->toArray();
-      
+      //dd($comments);
       $recordedComments = $recordings->map(function ($item, $key) {
         return $item->recordings;
       });
