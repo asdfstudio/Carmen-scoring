@@ -69,13 +69,25 @@ class EmailSoloDivisionFeedbackLink
 
         if ($directors->count() < 1) return;
 
-        $this->mailer->send('email.feedback_available',
-          ['commentUrl' => $commentUrl, 'competition' => $competition],
-          function ($m) use ($competition, $directors) {
-            $m->to($directors->pluck('email')->toArray());
-            $m->subject($competition->name." Feedback Available");
+        foreach($directors as $director){
+          try {
+            $email_addresses = [$director->email];
+            if($director->emails_additional){
+              $emails_additional = array_map('trim', explode(',', $director->emails_additional));
+              $email_addresses = array_merge($email_addresses, $emails_additional);
+            }
+            $this->mailer->send('email.feedback_available',
+            ['commentUrl' => $commentUrl, 'competition' => $competition],
+              function ($m) use ($competition, $email_addresses) {
+                $m->to($email_addresses);
+                $m->subject($competition->name." Feedback Available");
+              }
+            );
+          } catch(\Swift_TransportException $e){
+            Log::error('Email Error: Failed to deliver message "'.$competition->name.' Feedback Available" to director at "'.$email_addresses.'"');
+            report($e);
           }
-        );
+        }
       }
     }
 }

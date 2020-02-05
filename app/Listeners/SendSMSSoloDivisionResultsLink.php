@@ -75,6 +75,7 @@ class SendSMSSoloDivisionResultsLink
         } catch(\Services_Twilio_RestException $e)
         {
           Log::error('Twilio SMS Error: Failed to deliver message "'.$message.'" to phone number "'.$director['tel'].'"');
+          report($e);
         }
       }
     }

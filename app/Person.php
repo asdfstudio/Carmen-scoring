@@ -17,7 +17,7 @@ class Person extends Model
 
 		protected $dates = ['deleted_at'];
 
-		protected $fillable = ['first_name', 'last_name', 'email', 'tel'];
+		protected $fillable = ['first_name', 'last_name', 'email', 'emails_additional', 'tel'];
 
     //
 		public function subject()
