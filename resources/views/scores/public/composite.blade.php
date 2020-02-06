@@ -187,10 +187,10 @@
         @php $rank = $scoreboard->rankedScores->total($choir->id);@endphp
         <span class="rank score">{{ $rank }}</span>
 
-        @php $weightedSubtotal = $weightedScores->where('choir_id', $choir->id)->sum('weightedScore');@endphp
+        @php $weightedSubtotal = $scoreboard->weightedScores->where('choir_id', $choir->id)->sum('weightedScore');@endphp
         <span class="weighted subtotal score">{{ $weightedSubtotal }}</span>
 
-        @php $rawSubtotal = $rawScores->where('choir_id', $choir->id)->sum('score');@endphp
+        @php $rawSubtotal = $scoreboard->rawScores->where('choir_id', $choir->id)->sum('score');@endphp
         <span class="raw score">{{ $rawSubtotal }}</span>
 
         @php $penalty = $scoreboard->penalties->where('choir_id', $choir->id)->where('apply_per_judge', 0)->sum('amount');@endphp
