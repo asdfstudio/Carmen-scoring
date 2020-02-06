@@ -21,50 +21,31 @@ class WeightedScores {
       $this->rawScores = $rawScores;
       $this->captionWeightingId = $captionWeightingId;
 
-      $this->set_caption_weighting();
+      if($this->captionWeightingId == 1){
+        $this->musicWeighting = 1.5;
+      }
 
-      $this->assign_weighting();
+      $this->rawScores->map(function ($item, $key){
+        // The caption ID comes through in different ways for different contexts.
+        $caption_id = isset($item->criterion_caption_id) ? $item->criterion_caption_id : $item->criterion->caption_id;
+        
+        if($caption_id == 1){
+          $item->weightedScore = $item->score * $this->musicWeighting;
+        } elseif($caption_id == 2){
+          $item->weightedScore = $item->score * $this->showWeighting;
+        } else {
+          $item->weightedScore = $item->score;
+        }
+        
+        return $item;
+      });
+      
+      $this->weightedScores = $this->rawScores;
     }
 
     public function all($keys = null)
     {
       return $this->weightedScores;
-    }
-
-    protected function assign_weighting()
-    {
-      $this->weightedScores = $this->rawScores->map(function ($item, $key) {
-
-        if($item->criterion_caption_id == 1)
-        {
-          $weightedScore = $item->score * $this->musicWeighting;
-        }
-        elseif($item->criterion_caption_id == 2)
-        {
-          $weightedScore = $item->score * $this->showWeighting;
-        }
-        else
-        {
-          $weightedScore = $item->score;
-        }
-
-        $item->weightedScore = $weightedScore;
-
-        return $item;
-
-      });
-
-      return $this->weightedScores;
-    }
-
-    protected function set_caption_weighting()
-    {
-      if($this->captionWeightingId == 1)
-      {
-        $this->musicWeighting = 1.5;
-      }
-
-      return $this->musicWeighting;
     }
 
 }

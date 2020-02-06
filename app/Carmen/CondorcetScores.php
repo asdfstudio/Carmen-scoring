@@ -30,7 +30,7 @@ class CondorcetScores extends ScoringMethod {
   }
   
   
-  public function calculate_rank($caption_id = false, $score_field = 'score')
+  public function calculate_rank($score_field = 'score', $caption_id = false)
   {
     $results = collect();
     

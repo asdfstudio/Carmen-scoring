@@ -33,28 +33,23 @@ class CompetitionDivisionRoundChoirController extends Controller
         $query->where('round_id', $round_id);
       }])->find($choir_id);
 			$round = Round::find($round_id);
-			$division = Division::with(['choirs','rounds','sheet','sheet.criteria','sheet.criteria.caption','competition','judges' => function ($query) use($request) {
-        if($request->judge_id){
-          $query->where('judge_id', $request->judge_id);
-        }else{
-          //$query->where('judge_id', null);
-        }
-        $query->groupBy('judge_id');
-          //$query->distinct();
-				},'judges.recordings' => function($query) use ($choir_id, $round_id, $request){
+			$division = Division::with(['choirs', 'rounds', 'sheet', 'sheet.criteria', 'sheet.criteria.caption', 'competition',
+        'judges' => function ($query) use($request) {
+          if($request->judge_id){
+            $query->where('judge_id', $request->judge_id);
+          }
+          $query->groupBy('judge_id');
+		    },
+        'judges.recordings' => function($query) use ($choir_id, $round_id, $request){
           if($request->judge_id){
             $query->where('judge_id', $request->judge_id);
           }else{
             $query->where('judge_id', null);
           }
           $query->where('choir_id', $choir_id)->where('round_id', $round_id);
-        }])->find($division_id);
+        }
+      ])->find($division_id);
 
-      //
-      // $judgeList = [];
-      // foreach($division->judges as $judge){
-
-      // }
       $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::forSheet($division->sheet);
       $rounds = $division->rounds;
@@ -67,8 +62,6 @@ class CompetitionDivisionRoundChoirController extends Controller
       $judgeList = Division::with(['judges'])->find($division_id)->judges->pluck('full_name','id');
       $judgeList->prepend('Please select a judge', 'null');
       $judge_id= ($request->judge_id)?$request->judge_id:'';
-      
-      //dd($division);
       
       $query = ChoirRoundPenalty::with('penalty');
 
@@ -91,6 +84,8 @@ class CompetitionDivisionRoundChoirController extends Controller
           ]);
         }
       });
+      
+      //dd($weightedScoresClass);
       
 			return view('competition_division_round_choir.organizer.show',compact('competition', 'rawScores', 'weightedScores', 'rankedScores', 'choir', 'round', 'division', 'rounds', 'divisions', 'captions', 'judgeList','judge_id'));
 
