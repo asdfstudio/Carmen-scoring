@@ -40,6 +40,8 @@ class EmailSoloDivisionFeedbackLink
         Log::info('EmailSoloDivisionFeedbackLink listener fired but stopped because of SEND_FEEDBACK_URL_EMAIL ENV variable.');
         return true;
       }
+      
+      Log::info('EmailSoloDivisionFeedbackLink listener fired. Preparing to send email.');
 
       $soloDivision = $event->soloDivision;
       $soloDivision->load('competition', 'performers', 'performers.choir');
@@ -84,7 +86,7 @@ class EmailSoloDivisionFeedbackLink
               }
             );
           } catch(\Swift_TransportException $e){
-            Log::error('Email Error: Failed to deliver message "'.$competition->name.' Feedback Available" to director at "'.$email_addresses.'"');
+            Log::error('Email Error: Failed to deliver message "'.$competition->name.' Feedback Available" to director at "'.implode(', ', $email_addresses).'"');
             report($e);
           }
         }

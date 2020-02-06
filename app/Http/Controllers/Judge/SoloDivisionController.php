@@ -34,7 +34,7 @@ class SoloDivisionController extends Controller
       return $performer;
     });
 
-    return view('solo-division.judge.show', compact('competition', 'soloDivision', 'rawScores', 'totalScores'));
+    return view('solo-division.judge.show', compact('competition', 'soloDivision', 'rawScores'));
   }
 
   /**
