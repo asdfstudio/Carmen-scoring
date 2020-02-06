@@ -24,7 +24,7 @@ use Kris\LaravelFormBuilder\FormBuilder;
 class CompetitionDivisionRoundChoirController extends Controller
 {
 
-    public function show(Request $request, $competition_id,$division_id,$round_id,$choir_id)
+    public function show(Request $request, $competition_id, $division_id, $round_id, $choir_id)
 		{
       
       $competition = Competition::with('divisions')->find($competition_id);
@@ -58,9 +58,9 @@ class CompetitionDivisionRoundChoirController extends Controller
       $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::forSheet($division->sheet);
       $rounds = $division->rounds;
-			$rawScores = RawScore::with('judge', 'criterion', 'criterion.caption')->where('division_id', $division_id)->where('round_id', $round_id)->get();
+			$rawScores = RawScore::with('judge', 'criterion', 'criterion.caption')->where('division_id', $division_id)->where('choir_id', $choir_id)->where('round_id', $round_id)->get();
 
-      $weightedScoresClass = new WeightedScores($rawScores,        $division->caption_weighting_id);
+      $weightedScoresClass = new WeightedScores($rawScores, $division->caption_weighting_id);
       $weightedScores = $weightedScoresClass->all();
 
       $rankedScores = new RankedScores($weightedScores);
@@ -91,8 +91,6 @@ class CompetitionDivisionRoundChoirController extends Controller
           ]);
         }
       });
-      
-      //dd($choir->penalties);
       
 			return view('competition_division_round_choir.organizer.show',compact('competition', 'rawScores', 'weightedScores', 'rankedScores', 'choir', 'round', 'division', 'rounds', 'divisions', 'captions', 'judgeList','judge_id'));
 

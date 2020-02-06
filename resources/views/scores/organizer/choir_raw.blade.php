@@ -46,7 +46,7 @@
       </th>
       @foreach($division->judges as $judge)
         <th>
-          @php $rawTotal = $rawScores->where('criterion_caption_id', $caption->id)->where('judge_id',$judge->id)->where('choir_id', $choir->id)->sum('score');@endphp
+          @php $rawTotal = $rawScores->where('criterion.caption_id', $caption->id)->where('judge_id',$judge->id)->where('choir_id', $choir->id)->sum('score');@endphp
           {{ $rawTotal }}
         </th>
       @endforeach
@@ -59,7 +59,7 @@
         </th>
         @foreach($division->judges as $judge)
           <th>
-            @php $weightedTotal = $weightedScores->where('criterion_caption_id', $caption->id)->where('judge_id',$judge->id)->where('choir_id', $choir->id)->sum('weightedScore');@endphp
+            @php $weightedTotal = $weightedScores->where('criterion.caption_id', $caption->id)->where('judge_id',$judge->id)->where('choir_id', $choir->id)->sum('weightedScore');@endphp
             {{ $weightedTotal }}
           </th>
         @endforeach
