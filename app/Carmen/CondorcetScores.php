@@ -3,68 +3,30 @@
 namespace App\Carmen;
 
 use App\RawScore;
+use App\Carmen\ScoringMethod;
 use CondorcetPHP\Condorcet\Condorcet;
 use CondorcetPHP\Condorcet\Election;
 use CondorcetPHP\Condorcet\Candidate;
 use CondorcetPHP\Condorcet\Vote;
 
-class CondorcetScores {
+class CondorcetScores extends ScoringMethod {
+  
   protected $elections = [];
-  
-  public $weightedScores;
-  protected $penalties;
   protected $advanced_method = false;
-  
-  protected $judges = [];
-  protected $choirs = [];
-  protected $captions = [];
-  
   protected $judges_per_election = [];
-  
-  protected $calculated_scores = [];
-  protected $ranked = [];
-  protected $total_ranked = [];
-  protected $totaled = [];
-  
   protected $score_by_judge_and_caption = [];
   protected $weightedScore_by_judge_and_caption = [];
-  
   protected $score_vote_rank_by_judge_and_caption = [];
   protected $weightedScore_vote_rank_by_judge_and_caption = [];
-  
   protected $score_by_judge_overall = [];
   protected $weightedScore_by_judge_overall = [];
-  
   protected $score_vote_rank_by_judge_overall = [];
   protected $weightedScore_vote_rank_by_judge_overall = [];
   
   
   public function __construct($weightedScores, $penalties = false)
   {
-    $this->weightedScores = $weightedScores;
-    $this->penalties = $penalties;
-
-    $this->judges = $this->weightedScores->unique('judge_id')->pluck('judge_id');
-    $this->choirs = $this->weightedScores->unique('choir_id')->pluck('choir_id');
-    $this->captions = $this->weightedScores->unique('criterion_caption_id')->pluck('criterion_caption_id');
-  }
-  
-  
-  public function weighted_scores()
-  {
-    return $this->weightedScores;
-  }
-  
-  
-  public function total_raw_rank($caption_id = false)
-  {
-    return $this->calculate_rank($caption_id, 'score');
-  }
-  
-  
-  public function total_weighted_rank($caption_id = false)
-  {
-    return $this->calculate_rank($caption_id, 'weightedScore');
+    parent::__construct($weightedScores, $penalties);
   }
   
   
@@ -302,52 +264,13 @@ class CondorcetScores {
   }
   
   
-  public function total_rank($caption_id = false)
-  {
-    $key = $caption_id ? $caption_id : 0;
-    if(array_key_exists($key, $this->total_ranked)){
-      return $this->total_ranked[$key];
-    }
-    
-    $captionRank = collect();
-    
-    $this->choirs->each(function($choir_id, $key) use ($caption_id, $captionRank){
-      $score = $this->total($choir_id, $caption_id);
-      $captionRank->put($choir_id,['choir_id' => $choir_id, 'score' => $score]);
-    });
-    
-    // Sort
-    $sorted = $captionRank->sortBy('score');
-    
-    // Assign rank and return
-    $rank = $this->assign_rank_skippy($sorted);
-    $this->total_ranked[$key] = $rank;
-    
-    return $rank;
-  }
-  
-  
-  public function total($choir_id, $caption_id = false)
-  {
-    $key = $choir_id.'x'.$caption_id;
-    if(array_key_exists($key, $this->totaled)){
-      return $this->totaled[$key];
-    }
-
-    $total = 0;
-
-    $this->judges->each(function($judge_id, $key) use ($choir_id, $caption_id, &$total) {
-      $rank = $this->rank($judge_id, $caption_id)->where('choir_id', $choir_id)->pluck('rank')->first();
-      $total = $total + $rank;
-    });
-
-    $this->totaled[$key] = $total;
-    return $total;
-  }
-  
-  
   public function rank($judge_id = false, $caption_id = false)
   {
+    $key = $judge_id."x".$caption_id;
+    if(array_key_exists($key, $this->ranked)){
+      return $this->ranked[$key];
+    }
+
     if($judge_id && $caption_id){
       $rank = $this->vote_rank_by_judge_and_caption($judge_id, $caption_id, 'weightedScore');
     } elseif($judge_id && !$caption_id){
@@ -356,87 +279,7 @@ class CondorcetScores {
       $rank = $this->total_weighted_rank($caption_id);
     }
     
-    return $rank;
-  }
-  
-  
-  protected function assign_rank($sortedTotals)
-  {
-    // Assign number rank
-    $loops = 1;
-    $previous_rank = 1;
-    $previous_score = false;
-    $tied_ranks = [];
-
-    $rank = $sortedTotals->map(function($item) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks) {
-
-      if($item['score'] == $previous_score){
-        $item['rank'] = $previous_rank;
-        $tied_ranks[] = $item['rank'];
-      } else {
-        $item['rank'] = $loops;
-        $previous_rank = $loops;
-      }
-
-      $previous_score = $item['score'];
-      $loops = $previous_rank + 1;
-      
-      return $item;
-    });
-    
-    // Go back through and flag any results that are a tie.
-    $rank = $rank->map(function($item) use ($tied_ranks) {
-
-      if(in_array($item['rank'], $tied_ranks)){
-        $item['tied'] = 1;
-      } else {
-        $item['tied'] = 0;
-      }
-      
-      return $item;
-    });
-
-    return $rank;
-  }
-  
-  
-  protected function assign_rank_skippy($sortedTotals)
-  {
-    // Assign number rank
-    $loops = 1;
-    $previous_rank = 1;
-    $previous_score = false;
-    $tied_ranks = [];
-
-    $rank = $sortedTotals->map(function($item) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks) {
-
-      if($item['score'] == $previous_score){
-        $item['rank'] = $previous_rank;
-        $tied_ranks[] = $item['rank'];
-      } else {
-        $item['rank'] = $loops;
-        $previous_rank = $loops;
-      }
-
-      $previous_score = $item['score'];
-      $loops++;
-      
-      return $item;
-    });
-    
-    // Go back through and flag any results that are a tie.
-    $rank = $rank->map(function($item) use ($tied_ranks) {
-
-      if(in_array($item['rank'], $tied_ranks)){
-        $item['tied'] = 1;
-      } else {
-        $item['tied'] = 0;
-      }
-      
-      return $item;
-    });
-
-    return $rank;
+    return $this->ranked[$key] = $rank;
   }
   
   
