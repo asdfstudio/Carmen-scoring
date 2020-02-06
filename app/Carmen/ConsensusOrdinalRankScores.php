@@ -427,7 +427,7 @@ class ConsensusOrdinalRankScores {
     $previous_score = false;
     $tied_ranks = [];
 
-    $rank = $sortedTotals->map(function($item, $key) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks) {
+    $rank = $sortedTotals->map(function($item) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks) {
 
       if($item['score'] == $previous_score){
         $item['rank'] = $previous_rank;
@@ -444,7 +444,7 @@ class ConsensusOrdinalRankScores {
     });
     
     // Go back through and flag any results that are a tie.
-    $rank = $rank->map(function($item, $key) use ($tied_ranks) {
+    $rank = $rank->map(function($item) use ($tied_ranks) {
 
       if(in_array($item['rank'], $tied_ranks)){
         $item['tied'] = 1;

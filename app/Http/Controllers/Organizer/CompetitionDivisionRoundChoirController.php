@@ -14,6 +14,7 @@ use App\Round;
 use App\RawScore;
 use App\Caption;
 use App\Judge;
+use App\ChoirRoundPenalty;
 
 use App\Carmen\WeightedScores;
 use App\Carmen\RankedScores;
@@ -68,6 +69,30 @@ class CompetitionDivisionRoundChoirController extends Controller
       $judge_id= ($request->judge_id)?$request->judge_id:'';
       
       //dd($division);
+      
+      $query = ChoirRoundPenalty::with('penalty');
+
+      if(is_array($round_id)){
+        $query->whereIn('round_id', $round_id);
+      } else {
+        $query->where('round_id', $round_id);
+      }
+
+      $penalties_raw = $query->get();
+
+      $penalties = collect();
+
+      $penalties_raw->each(function($item, $key) use ($penalties){
+        if ($item->penalty) {
+          $penalties->put($key, [
+            'choir_id' => $item->choir_id,
+            'amount' => $item->penalty->amount,
+            'apply_per_judge' => $item->penalty->apply_per_judge
+          ]);
+        }
+      });
+      
+      //dd($choir->penalties);
       
 			return view('competition_division_round_choir.organizer.show',compact('competition', 'rawScores', 'weightedScores', 'rankedScores', 'choir', 'round', 'division', 'rounds', 'divisions', 'captions', 'judgeList','judge_id'));
 

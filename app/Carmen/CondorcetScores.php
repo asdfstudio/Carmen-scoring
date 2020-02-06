@@ -26,17 +26,17 @@ class CondorcetScores {
   protected $total_ranked = [];
   protected $totaled = [];
   
-  public $score_by_judge_and_caption = [];
-  public $weightedScore_by_judge_and_caption = [];
+  protected $score_by_judge_and_caption = [];
+  protected $weightedScore_by_judge_and_caption = [];
   
-  public $score_vote_rank_by_judge_and_caption = [];
-  public $weightedScore_vote_rank_by_judge_and_caption = [];
+  protected $score_vote_rank_by_judge_and_caption = [];
+  protected $weightedScore_vote_rank_by_judge_and_caption = [];
   
-  public $score_by_judge_overall = [];
-  public $weightedScore_by_judge_overall = [];
+  protected $score_by_judge_overall = [];
+  protected $weightedScore_by_judge_overall = [];
   
-  public $score_vote_rank_by_judge_overall = [];
-  public $weightedScore_vote_rank_by_judge_overall = [];
+  protected $score_vote_rank_by_judge_overall = [];
+  protected $weightedScore_vote_rank_by_judge_overall = [];
   
   
   public function __construct($weightedScores, $penalties = false)
@@ -368,7 +368,7 @@ class CondorcetScores {
     $previous_score = false;
     $tied_ranks = [];
 
-    $rank = $sortedTotals->map(function($item, $key) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks) {
+    $rank = $sortedTotals->map(function($item) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks) {
 
       if($item['score'] == $previous_score){
         $item['rank'] = $previous_rank;
@@ -385,7 +385,7 @@ class CondorcetScores {
     });
     
     // Go back through and flag any results that are a tie.
-    $rank = $rank->map(function($item, $key) use ($tied_ranks) {
+    $rank = $rank->map(function($item) use ($tied_ranks) {
 
       if(in_array($item['rank'], $tied_ranks)){
         $item['tied'] = 1;
@@ -408,7 +408,7 @@ class CondorcetScores {
     $previous_score = false;
     $tied_ranks = [];
 
-    $rank = $sortedTotals->map(function($item, $key) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks) {
+    $rank = $sortedTotals->map(function($item) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks) {
 
       if($item['score'] == $previous_score){
         $item['rank'] = $previous_rank;
@@ -425,7 +425,7 @@ class CondorcetScores {
     });
     
     // Go back through and flag any results that are a tie.
-    $rank = $rank->map(function($item, $key) use ($tied_ranks) {
+    $rank = $rank->map(function($item) use ($tied_ranks) {
 
       if(in_array($item['rank'], $tied_ranks)){
         $item['tied'] = 1;

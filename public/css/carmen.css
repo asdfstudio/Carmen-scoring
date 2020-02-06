@@ -3765,6 +3765,10 @@ table.spreadsheet-legend {
 .total-rank {
   font-size: 1.2em; }
 
+.penalty-note {
+  font-size: .75em;
+  font-weight: 400; }
+
 .missing-score {
   background: #CA2128;
   color: #FFF; }
