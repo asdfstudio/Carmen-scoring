@@ -24,7 +24,7 @@ class ScoringMethod {
   public function __construct($weightedScores, $penalties = false)
   {
     $competition = Division::with('competition')->find($weightedScores->first()->division_id)->competition;
-    $this->is_the_skip_epoch = isset($_GET['skip_ranks']) ? boolval(intval($_GET['skip_ranks'])) : $competition->begin_date > $this->skip_epoch;
+    $this->is_the_skip_epoch = isset($_GET['skip_ranks']) ? boolval(intval($_GET['skip_ranks'])) : $competition->begin_date >= $this->skip_epoch;
     //dd($this->is_the_skip_epoch);
     $this->weightedScores = $weightedScores;
     $this->penalties = $penalties;
