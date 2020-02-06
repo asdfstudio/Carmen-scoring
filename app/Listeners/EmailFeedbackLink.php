@@ -41,6 +41,8 @@ class EmailFeedbackLink
           return true;
         }
 
+        Log::info('EmailFeedbackLink listener fired. Preparing to send email.');
+        
         $round = $event->round;
         $round->load('feedback');
         $competition = $round->division->competition;
@@ -86,7 +88,7 @@ class EmailFeedbackLink
                 }
               );
             } catch(\Swift_TransportException $e){
-              Log::error('Email Error: Failed to deliver message "'.$competition->name.' Feedback Available" to director at "'.$email_addresses.'"');
+              Log::error('Email Error: Failed to deliver message "'.$competition->name.' Feedback Available" to director at "'.implode(', ', $email_addresses).'"');
               report($e);
             }
           }

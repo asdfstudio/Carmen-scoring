@@ -37,8 +37,13 @@ class EmailDivisionResultsLink
     public function handle(DivisionScoringFinalized $event)
     {
         // Skip sending results
-        if(env('SEND_FINAL_RESULTS_EMAIL') == false) return true;
+        if(env('SEND_FINAL_RESULTS_EMAIL') == false){
+          Log::info('EmailDivisionResultsLink listener fired but stopped because of SEND_FINAL_RESULTS_EMAIL ENV variable.');
+          return true;
+        }
 
+        Log::info('EmailSoloDivisionFeedbackLink listener fired. Preparing to send email.');
+        
         $division = $event->division;
 
         $directors = collect();
@@ -89,7 +94,7 @@ class EmailDivisionResultsLink
               }
             );
           } catch(\Swift_TransportException $e){
-            Log::error('Email Error: Failed to deliver message "'.$division->competition->name.', '. $division->name . ' Results Published" to director at "'.$email_addresses.'"');
+            Log::error('Email Error: Failed to deliver message "'.$division->competition->name.', '. $division->name . ' Results Published" to director at "'.implode(', ', $email_addresses).'"');
             report($e);
           }
         }

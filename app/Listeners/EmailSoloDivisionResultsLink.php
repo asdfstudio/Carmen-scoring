@@ -40,6 +40,8 @@ class EmailSoloDivisionResultsLink
         return true;
       }
 
+      Log::info('EmailSoloDivisionResultsLink listener fired. Preparing to send email.');
+      
       $soloDivision = $event->soloDivision;
 
       $directors = collect();
@@ -77,13 +79,13 @@ class EmailSoloDivisionResultsLink
             }
           );
         } catch(\Swift_TransportException $e){
-          Log::error('Email Error: Failed to deliver message "'.$soloDivision->competition->name.', '. $soloDivision->name . ' Results Published" to director at "'.$email_addresses.'"');
+          Log::error('Email Error: Failed to deliver message "'.$soloDivision->competition->name.', '. $soloDivision->name . ' Results Published" to director at "'.implode(', ', $email_addresses).'"');
           report($e);
         }
       }
 
       // Get organizers
-      $organizers = $division->competition->organization->users()->where('organization_role', 'admin')->get();
+      $organizers = $soloDivision->competition->organization->users()->where('organization_role', 'admin')->get();
 
       Log::debug('Organizers: ' . $organizers);
 
