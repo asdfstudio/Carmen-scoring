@@ -94,7 +94,7 @@ class CompetitionDivisionRoundChoirController extends Controller
       //dd($penalties);
 
       // Display
-      return view('competition_division_round_choir_penalty.organizer.assign',compact('competition', 'choir', 'round', 'division', 'penalties', 'selected_penalties'));
+      return view('competition_division_round_choir_penalty.organizer.assign',compact('choir', 'round', 'division', 'penalties', 'selected_penalties'));
     }
 
     public function update_penalty(Request $request, $competition_id, $division_id, $round_id, $choir_id)
