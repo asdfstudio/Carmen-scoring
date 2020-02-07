@@ -91,7 +91,7 @@ class SoloDivisionController extends Controller
 
     $soloDivision->performers = $soloDivision->performers->sortBy('rank');
 
-    return view('solo-division.judge.results', compact('competition', 'soloDivision', 'rawScores', 'rankedScores', 'totalScores', 'categoryId', 'categoryName'));
+    return view('solo-division.judge.results', compact('competition', 'soloDivision', 'rawScores', 'rankedScores', 'totalScores', 'categoryName'));
   }
 
 }
