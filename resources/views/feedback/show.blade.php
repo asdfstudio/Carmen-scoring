@@ -64,6 +64,7 @@
                   </div>
                   @if($competition->organization->is_premium == 1 && $judge_recordings->count())
                     <div class="record-row">
+                      <h5>Audio Comments:</h5>
                       <ol>
                         @foreach($judge_recordings as $recording)
                           <li class="record-item">
