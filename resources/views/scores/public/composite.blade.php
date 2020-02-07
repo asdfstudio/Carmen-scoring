@@ -39,7 +39,7 @@
         </th>
       @endforeach
 
-      <th>Total</th>
+      <th class="{{ $total_col_class }}">Total</th>
       <th>Place</th>
 
       @if(!empty($ratings))
@@ -81,7 +81,7 @@
 
         @endforeach
 
-        <td>
+        <td class="{{ $total_col_class }}">
           @php $rank = $scoreboard->rankedScores->total($choir->id, $caption->id);@endphp
           <span class="rank score">{{ $rank }}</span>
 
@@ -133,7 +133,7 @@
       </th>
     @endforeach
 
-    <th>Total</th>
+    <th class="{{ $total_col_class }}">Total</th>
     <th>Place</th>
 
     @if(!empty($ratings))
@@ -183,7 +183,7 @@
 
       @endforeach
 
-      <td>
+      <td class="{{ $total_col_class }}">
         @php $rank = $scoreboard->rankedScores->total($choir->id);@endphp
         <span class="rank score">{{ $rank }}</span>
 
