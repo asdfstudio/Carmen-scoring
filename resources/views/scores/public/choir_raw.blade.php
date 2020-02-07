@@ -89,7 +89,7 @@
 
     @foreach($division->judges as $judge)
     	<th>
-        @php $weightedSubtotal = $rawScores->where('judge_id', $judge->id)->where('choir_id', $choir->id)->sum('weightedScore'); @endphp
+        @php $weightedSubtotal = $scoreboard->weightedScores->where('judge_id', $judge->id)->where('choir_id', $choir->id)->sum('weightedScore'); @endphp
         {{ $weightedSubtotal }}
 
         @php $judgePenalty = $choir->penalties->where('apply_per_judge', 1)->sum('amount'); @endphp

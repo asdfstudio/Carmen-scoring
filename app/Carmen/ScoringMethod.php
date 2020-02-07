@@ -95,7 +95,7 @@ class ScoringMethod {
     $sorted = $captionRank->sortByDesc('score');
 
     // Assign rank and return
-    return $rank = $this->assign_rank_skippy($sorted);
+    return $this->assign_rank_skippy($sorted);
   }
   
   

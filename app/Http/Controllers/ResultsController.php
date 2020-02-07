@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Round;
+use App\Choir;
 use App\Judge;
 use App\Caption;
 use App\Director;
@@ -334,7 +335,9 @@ class ResultsController extends Controller
       $captions = $this->captions;
 
       $round = $division->rounds()->find($round_id);
-      $choir = $round->choirs()->find($choir_id);
+			$choir = Choir::with(['penalties' => function($query) use ($round_id){
+        $query->where('round_id', $round_id);
+      }])->find($choir_id);
 
       $scoreboard = new Scoreboard(['round_id' => $round_id]);
 
