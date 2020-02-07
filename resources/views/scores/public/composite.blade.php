@@ -4,7 +4,6 @@
   if($division->scoring_method_id == 5){
     $total_col_class = 'total_column weighted raw';
   }
-  
 @endphp
 <div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered scoreboard toggle-scores weighted raw rank">
@@ -40,7 +39,7 @@
         </th>
       @endforeach
 
-      <th>Total</th>
+      <th class="{{ $total_col_class }}">Total</th>
       <th>Place</th>
 
       @if(!empty($ratings))
@@ -82,7 +81,7 @@
 
         @endforeach
 
-        <td>
+        <td class="{{ $total_col_class }}">
           @php $rank = $scoreboard->rankedScores->total($choir->id, $caption->id);@endphp
           <span class="rank score">{{ $rank }}</span>
 
@@ -134,7 +133,7 @@
       </th>
     @endforeach
 
-    <th>Total</th>
+    <th class="{{ $total_col_class }}">Total</th>
     <th>Place</th>
 
     @if(!empty($ratings))
@@ -184,25 +183,27 @@
 
       @endforeach
 
-      <td>
+      <td class="{{ $total_col_class }}">
         @php $rank = $scoreboard->rankedScores->total($choir->id);@endphp
         <span class="rank score">{{ $rank }}</span>
 
         @php $weightedSubtotal = $scoreboard->weightedScores->where('choir_id', $choir->id)->sum('weightedScore');@endphp
-        @php //$weighted = $scoreboard->weightedScores->total($choir->id);@endphp
         <span class="weighted subtotal score">{{ $weightedSubtotal }}</span>
 
-        @php $raw = $scoreboard->rawScores->where('choir_id', $choir->id)->sum('score');@endphp
-        <span class="raw score">{{ $raw }}</span>
+        @php $rawSubtotal = $scoreboard->rawScores->where('choir_id', $choir->id)->sum('score');@endphp
+        <span class="raw score">{{ $rawSubtotal }}</span>
 
         @php $penalty = $scoreboard->penalties->where('choir_id', $choir->id)->where('apply_per_judge', 0)->sum('amount');@endphp
-        <span class="penalty weighted overall score">{{ $penalty }}</span>
+        <span class="penalty raw weighted overall score">{{ $penalty }}</span>
 
         @php $judgePenalty = $judges->count() * $scoreboard->penalties->where('choir_id', $choir->id)->where('apply_per_judge', 1)->sum('amount');@endphp
-        <span class="penalty weighted judge score">{{ $judgePenalty }}</span>
+        <span class="penalty raw weighted judge score">{{ $judgePenalty }}</span>
 
         @php $weightedTotal = $weightedSubtotal - $penalty - $judgePenalty; @endphp
         <span class="weighted total score">{{ $weightedTotal }}</span>
+
+        @php $rawTotal = $rawSubtotal - $penalty - $judgePenalty; @endphp
+        <span class="raw total score">{{ $rawTotal }}</span>
 
       </td>
       <td>

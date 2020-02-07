@@ -136,6 +136,11 @@
   font-size: 1.2em;
 }
 
+.penalty-note {
+  font-size: .75em;
+  font-weight: 400;
+}
+
 $i: 0;
 @while $i <= 10 {
   .score-gradient-#{$i * 10} {

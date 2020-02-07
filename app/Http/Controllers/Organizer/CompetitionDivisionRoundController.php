@@ -215,107 +215,20 @@ class CompetitionDivisionRoundController extends Controller
         Event::fire(new StandingRefreshNeeded($round));
       }
       
-      if(Auth::user()->isAdmin() && isset($_GET['feedback_urls'])){
-        $round->load('feedback');
-        $competition = $round->division->competition;
-
-        $choirIds = $round->feedback->unique('choir_id')->pluck('choir_id')->toArray();
-
-        if(!$choirIds) return;
-
-        $commentUrls = CommentUrl::with('choir', 'choir.directors')->where('competition_id', $competition->id)->whereIn('choir_id', $choirIds)->get();
-
-        //dd($commentUrls);
-        
-        echo '<pre>';
-        foreach($commentUrls as $commentUrl){
-          $directors = collect();
-
-          $commentUrl->choir->directors->each(function($director,$key) use ($directors) {
-            if($director->email)
-            {
-              $directors->push($director);
-            }
-          });
-
-          // Get unique directors
-          $directors = $directors->unique('id');
-
-          if ($directors->count() < 1) return;
-          
-          echo "========================================\n\n";
-          echo "Feedback URL for ".$commentUrl->choir->getFullNameAttribute().":\n\n";
-          echo 'https://showchoir.carmenscoring.com/feedback/' . $commentUrl->access_code . "\n\n\n";
-          
-          echo "Director Emails:\n\n";
-          echo implode("\n", $directors->pluck('email')->toArray());
-          echo "\n\n\n";
-          /*
-          $this->mailer->send('email.feedback_available',
-  					['commentUrl' => $commentUrl, 'competition' => $competition],
-  					function ($m) use ($competition, $directors) {
-              $m->to($directors->pluck('email')->toArray());
-  						$m->subject($competition->name." Feedback Available");
-          	}
-  				);
-          */
-        }
-        echo '</pre>';
-        
-        exit;
-      }
-      
       $division = $round->division;
-
-      //dd($division->judges);
-
       $competition = $division->competition;
       $rounds = $division->rounds;
       $divisions = $competition->divisions;
       $judges = $division->judges;
       $choirs = $round->choirs;
-
-      //dd($choirs);
-
-      //dd($division->sheet->criteria);
-
       $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::forSheet($division->sheet);
-
-			//$rawScores = RawScore::with('judge','choir','criterion')->where('division_id',$division_id)->where('round_id',$round_id)->get();
-
-      //$weightedScoresClass = new WeightedScores($rawScores,        $division->caption_weighting_id);
-      //$weightedScores = $weightedScoresClass->all();
-      //$rankedScores = new RankedScores($weightedScores);
-      
-      
-      //$scoreboard = new Scoreboard(['round_id' => [65, 68]]);
-      //$rawScores = $scoreboard->rawScores;
-      //dd($rawScores);
-      //
-      
-      //
       $ratings = (new Ratings($round))->all();
 
       $scoreboard = new Scoreboard(['round_id' => $round_id]);
-
       $rawScores = $scoreboard->extendedRawScores;
       $weightedScores = $scoreboard->extendedRawScores;
       $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
-      $rankedScores->total_weighted_rank();
-      $query = $rankedScores->weighted_scores()->where('choir_id', 77)->where('judge_id', 1859);
-      //dd($rankedScores->weightedScores->where('choir_id', 77)->where('judge_id', 1859)->sum('weightedScore'), $query->sum('weightedScore'), $rankedScores->weightedScore_by_judge_overall[1859], $rankedScores->weightedScore_vote_rank_by_judge_overall[1859]);
-      
-      /*$expectedScores = new CountExpectedScores($round);
-      $expectectedScoresCount = $expectedScores->run();
-      $actualScoresCount = RawScore::where('round_id', $round_id)->where('score','>',0)->count();
-      //dd([$expectectedScoresCount, $actualScoresCount]);
-
-      if ($actualScoresCount < $expectectedScoresCount) {
-        $roundIsMissingScores = true;
-      } else {
-        $roundIsMissingScores = false;
-      }*/
 
       $roundIsMissingScores = $round->isMissingScores();
 

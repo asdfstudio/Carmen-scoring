@@ -3,50 +3,19 @@
 namespace App\Carmen;
 
 use App\RawScore;
+use App\Carmen\ScoringMethod;
 
-class ConsensusOrdinalRankScores {
-  protected $weightedScores;
-  protected $penalties;
-
-  protected $judges = [];
-  protected $choirs = [];
+class ConsensusOrdinalRankScores extends ScoringMethod {
+  
   protected $choirs_remaining = [];
-
-  protected $calculated_scores = [];
-  protected $ranked = [];
-  protected $total_ranked = [];
-  protected $totals = [];
   protected $max_level = null;
-  protected $levels_to_skip = [];
   protected $level_pointer = 1;
   protected $recursions = 0;
   
   
   public function __construct($weightedScores, $penalties = false)
   {
-    $this->weightedScores = $weightedScores;
-    $this->penalties = $penalties;
-
-    $this->judges = $this->weightedScores->unique('judge_id')->pluck('judge_id');
-    $this->choirs = $this->weightedScores->unique('choir_id')->pluck('choir_id');
-  }
-  
-  
-  public function weighted_scores()
-  {
-    return $this->weightedScores;
-  }
-  
-  
-  public function total_raw_rank($caption_id = false)
-  {
-    return $this->calculate_rank('score', $caption_id);
-  }
-  
-  
-  public function total_weighted_rank($caption_id = false)
-  {
-    return $this->calculate_rank('weightedScore', $caption_id);
+    parent::__construct($weightedScores, $penalties);
   }
   
   
@@ -83,7 +52,6 @@ class ConsensusOrdinalRankScores {
     
     $this->choirs_remaining = $this->choirs->toArray();
     $this->max_level = count($this->choirs_remaining);
-    $this->levels_to_skip = [];
     $this->level_pointer = 1;
     
     while(count($this->choirs_remaining)){
@@ -110,6 +78,7 @@ class ConsensusOrdinalRankScores {
     
     return $sorted;
   }
+  
   
   
   public function get_top_choir(&$rank_by_judge, $level_bump = 0, $choirs = [], $tie_breaker = false){
@@ -217,6 +186,7 @@ class ConsensusOrdinalRankScores {
     return $top_choir;
   }
   
+  
   /*
   public function get_top_choir_backup(&$rank_by_judge, $level = 1, $choirs = [], $tie_breaker = false){
     $debug_output = '';
@@ -319,13 +289,6 @@ class ConsensusOrdinalRankScores {
   }
   */
   
-  public function total($choir_id, $caption_id = false)
-  {
-    // This function is not applicable to Consensus Ordinal Rank, but it is
-    // retained for compatibility with the shared view output.
-    return null;
-  }
-  
   
   public function totals($caption_id = false, $scoreField = 'weightedScore')
   {
@@ -347,119 +310,6 @@ class ConsensusOrdinalRankScores {
     $this->totals[$key] = $totals;
     
     return $totals;
-  }
-  
-  
-  public function rank($judge_id = false, $caption_id = false, $scoreField = 'weightedScore')
-  {
-    if(array_key_exists($judge_id."x".$caption_id, $this->ranked)){
-      return $this->ranked[$judge_id."x".$caption_id];
-    }
-
-    // Caclculate total scores
-    $scores = $this->calculate_scores($judge_id, $caption_id, $scoreField);
-
-    // Sort by sum descending
-    $sorted = $scores->sortByDesc('score');
-
-    return $rank = $this->assign_rank($sorted, $judge_id.'x'.$caption_id);
-  }
-  
-  
-  protected function calculate_scores($judge_id, $caption_id, $scoreField = 'weightedScore')
-  {
-    if(array_key_exists($judge_id."x".$caption_id, $this->calculated_scores)){
-      return $this->calculated_scores[$judge_id."x".$caption_id];
-    }
-
-    // Create new $scores collection
-    $scores = collect();
-
-    // Loop through choirs and compare sums
-    $this->choirs->each(function($choir_id, $key) use ($judge_id, $caption_id, $scores, $scoreField){
-      // Get the sum of the weighted scores for each choir
-      $query = $this->weightedScores->where('choir_id', $choir_id);
-
-      // Filter by judge
-      if($judge_id)
-        $query = $query->where('judge_id', $judge_id);
-
-      // Filter by caption
-      if($caption_id)
-        $query = $query->where('criterion_caption_id', $caption_id);
-
-      // Get the sum
-      $score = $query->sum($scoreField);
-
-      // Subtract any penalties from the score
-      if($this->penalties AND $caption_id == false)
-      {
-        $choir_penalties = $this->penalties->where('choir_id', $choir_id);
-
-        if(!$choir_penalties->isEmpty())
-        {
-          // Get all judge penalties
-          $per_judge_penalty_amount = $choir_penalties->where('apply_per_judge', 1)->sum('amount');
-          $score = $score - $per_judge_penalty_amount;
-        }
-
-      }
-
-      // Add the choir and score to the $scores collection
-      if($score)
-      {
-        $scores->put($choir_id, ['choir_id' => $choir_id, 'score' => $score]);
-      }
-
-    });
-
-    $this->calculated_scores[$judge_id."x".$caption_id] = $scores;
-
-    return $scores;
-  }
-  
-  
-  protected function assign_rank($sortedTotals, $key = false)
-  {
-    // Assign number rank
-    $loops = 1;
-    $previous_rank = 1;
-    $previous_score = false;
-    $tied_ranks = [];
-
-    $rank = $sortedTotals->map(function($item, $key) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks) {
-
-      if($item['score'] == $previous_score){
-        $item['rank'] = $previous_rank;
-        $tied_ranks[] = $item['rank'];
-      } else {
-        $item['rank'] = $loops;
-        $previous_rank = $loops;
-      }
-
-      $previous_score = $item['score'];
-      $loops = $previous_rank + 1;
-      
-      return $item;
-    });
-    
-    // Go back through and flag any results that are a tie.
-    $rank = $rank->map(function($item, $key) use ($tied_ranks) {
-
-      if(in_array($item['rank'], $tied_ranks)){
-        $item['tied'] = 1;
-      } else {
-        $item['tied'] = 0;
-      }
-      
-      return $item;
-    });
-
-    if($key){
-      $this->ranked[$key] = $rank;
-    }
-
-    return $rank;
   }
   
   

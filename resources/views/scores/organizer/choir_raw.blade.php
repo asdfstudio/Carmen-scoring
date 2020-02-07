@@ -47,7 +47,7 @@
       @foreach($division->judges as $judge)
         <th>
           @php $rawTotal = $rawScores->where('criterion_caption_id', $caption->id)->where('judge_id',$judge->id)->where('choir_id', $choir->id)->sum('score');@endphp
-          {{ $rawTotal }}
+          {{ $rawTotal ? $rawTotal : '' }}
         </th>
       @endforeach
     </tr>
@@ -60,7 +60,7 @@
         @foreach($division->judges as $judge)
           <th>
             @php $weightedTotal = $weightedScores->where('criterion_caption_id', $caption->id)->where('judge_id',$judge->id)->where('choir_id', $choir->id)->sum('weightedScore');@endphp
-            {{ $weightedTotal }}
+            {{ $weightedTotal ?  $weightedTotal : '' }}
           </th>
         @endforeach
       </tr>
@@ -81,12 +81,22 @@
   @endforeach
 
   <tr class="total-score">
-  	<th>Total Score</th>
+  	<th>
+      Total Score<br>
+      @php $overalPenalty = $choir->penalties->where('apply_per_judge', 0)->sum('amount'); @endphp
+      <span class="penalty-note">Per-judge penalties shown with totals.<br>Additional overall penalties: <span class="penalty score">{{ $overalPenalty }}</span></span>
+    </th>
 
     @foreach($division->judges as $judge)
     	<th>
-      @php $weightedTotal = $rawScores->where('judge_id',$judge->id)->where('choir_id',$choir->id)->sum('weightedScore');@endphp
-      {{ $weightedTotal }}
+        @php $weightedSubtotal = $rawScores->where('judge_id', $judge->id)->where('choir_id', $choir->id)->sum('weightedScore'); @endphp
+        {{ $weightedSubtotal }}
+
+        @php $judgePenalty = $choir->penalties->where('apply_per_judge', 1)->sum('amount'); @endphp
+        <span class="penalty score">{{ $judgePenalty }}</span>
+
+        @php $weightedTotal = $weightedSubtotal - $judgePenalty; @endphp
+        {{ $weightedTotal }}
       </th>
     @endforeach
 
