@@ -28,12 +28,14 @@ class RecordingController extends Controller
             $storage_path .= $storage_file_name;
 
             // Get MIME type
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $file_mime = finfo_file($finfo, $file_to_store);
-            finfo_close($finfo);
+            require_once 'MIME/Type.php';
+            $mime_type = \MIME_Type::autoDetect($file_to_store);
+            if($mime_type === 'application/octet-stream'){
+              $mime_type = 'audio/mpeg';
+            }
 
             // Upload the file to S3 and save the remote path
-            $remote_path = uploadToS3($storage_path, $file_to_store, ['ContentType' => $file_mime]);
+            $remote_path = uploadToS3($storage_path, $file_to_store, ['ContentType' => $mime_type]);
             $recording->url = $remote_path;
         }
         // Save modal
