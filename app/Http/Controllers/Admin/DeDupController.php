@@ -52,6 +52,7 @@ class DeDupController extends Controller
       $tmp = tempnam('/tmp', 'rec_');
       $path = 'recordings/'.$recording['name'];
       file_put_contents($tmp, $storage_driver->get($path));
+      $recording['size'] = filesize($tmp);
       $recording['mime_type'] = \MIME_Type::autoDetect($tmp);
       if($recording['mime_type'] === 'application/octet-stream'){
         $recording['mime_type'] = 'audio/mpeg';

@@ -15,7 +15,7 @@
 
     @foreach($recordings as $recording)
 
-      <li>Name: {{ $recording['name'] }}<br>MIME Type: {{ $recording['mime_type'] }}<br>URL: {{ $recording['url'] }}</li>
+      <li>Name: {{ $recording['name'] }}<br>MIME Type: {{ $recording['mime_type'] }}<br>Size: {{ $recording['size'] }}<br>URL: {{ $recording['url'] }}</li>
 
     @endforeach
 
