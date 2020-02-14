@@ -120,4 +120,69 @@ body {
   /*border-bottom: 1px dotted;*/
   cursor: pointer;
 }
+
+.saving,
+.saved,
+.errored {
+  position: relative;
+}
+
+.saving::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 50%;
+  position: absolute;
+  top: 25%;
+  left: 25px;
+  background: url(/images/loading-puff.svg) center center no-repeat;
+  background-size: contain;
+}
+
+.saved::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 40%;
+  position: absolute;
+  top: 30%;
+  left: 25px;
+  background: url(/images/check-solid.svg) center center no-repeat; /* Icon by FontAwesome: https://fontawesome.com/license */
+  background-size: contain;
+  -webkit-animation-name: fade;
+  -moz-animation-name: fade;
+  animation: fade 3s ease-in forwards;
+}
+
+.errored::after {
+  content: "";
+  display: block;
+  height: 24px;
+  width: 24px;
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  margin-left: 13px;
+  background: url(/images/exclamation-circle-solid.svg) center center no-repeat; /* Icon by FontAwesome: https://fontawesome.com/license */
+  background-size: contain;
+}
+
+
+@-webkit-keyframes fade {
+  25% {opacity:1;}
+  75% {opacity:.5;}
+  100% {opacity:0;}
+}
+
+@-moz-keyframes fade {
+  25% {opacity:1;}
+  75% {opacity:.5;}
+  100% {opacity:0;}
+}
+
+@keyframes fade {
+  25% {opacity:1;}
+  75% {opacity:.5;}
+  100% {opacity:0;}
+}
 </style>

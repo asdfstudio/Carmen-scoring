@@ -41,7 +41,7 @@
             :choir="choir"
             :criterion="criterion"
             v-bind:key="choir.id"
-            v-bind:class="{editing: isEditing(choir, criterion)}"
+            v-bind:class="{editing: isEditing(choir, criterion), saving: getSavingStatus(choir.id + '_' + caption.id + '_' + criterion.id), saved: getSavedStatus(choir.id + '_' + caption.id + '_' + criterion.id), errored: getErroredStatus(choir.id + '_' + caption.id + '_' + criterion.id)}"
             >{{ score(choir, criterion) }}</td>
         </tr>
         <!-- Caption Criteria End -->
@@ -362,6 +362,15 @@ export default {
     changeInProgressRecValue: function (value) {
       const input = document.getElementById('recordingsInProgress')
       input.value = parseInt(input.value) + value
+    },
+    getSavingStatus: function (property) {
+      return this.$store.getters.getSavingStatus(property)
+    },
+    getSavedStatus: function (property) {
+      return this.$store.getters.getSavedStatus(property)
+    },
+    getErroredStatus: function (property) {
+      return this.$store.getters.getErroredStatus(property)
     }
   },
   mounted () {

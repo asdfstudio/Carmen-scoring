@@ -4,13 +4,16 @@
       <div class="row" v-bind:class="displayType">
         <button @click="down" v-if="showIncrements  && isScoringActive" class="score-down score-increment" v-bind:class="{ outlined : isIncrementOutlined }">-</button>
 
-        <div class="current-score">{{ displayScore }}</div>
+        <div
+          class="current-score"
+          v-bind:class="{saving: getSavingStatus(choirId + '_' + captionId + '_' + criterionId), saved: getSavedStatus(choirId + '_' + captionId + '_' + criterionId), errored: getErroredStatus(choirId + '_' + captionId + '_' + criterionId)}"
+        >{{ displayScore }}</div>
 
         <button @click="up" v-if="showIncrements  && isScoringActive" class="score-up score-increment" v-bind:class="{ outlined : isIncrementOutlined }">+</button>
       </div>
 
       <CriterionScoringRange v-if="showScoringRange" :min="min" :max="max" :increment="increment" />
-      
+
       <div v-if="showScoreChoices && isScoringActive" class="score-buttons" v-bind:class="[displayType, { doubleRow: increment === .5 }]">
         <select class="score-select" v-model="currentScore">
           <option class="score-option" v-bind:value="initialScore">Select Score...</option>
@@ -120,6 +123,15 @@ export default {
       if (newScore >= this.min && newScore <= this.max) {
         this.currentScore = newScore
       }
+    },
+    getSavingStatus: function (property) {
+      return this.$store.getters.getSavingStatus(property)
+    },
+    getSavedStatus: function (property) {
+      return this.$store.getters.getSavedStatus(property)
+    },
+    getErroredStatus: function (property) {
+      return this.$store.getters.getErroredStatus(property)
     }
   }
 }
@@ -203,6 +215,23 @@ export default {
             width: auto;
           }
         }
+
+        &.saving::after {
+          background: url(/images/loading-puff-purple.svg) center center no-repeat;
+          background-size: contain;
+        }
+
+        &.saved::after {
+          background: url(/images/check-solid-purple.svg) center center no-repeat; /* Icon by FontAwesome: https://fontawesome.com/license */
+          background-size: contain;
+        }
+
+        &.errored::after {
+          height: 20px;
+          width: 20px;
+          top: 8px;
+          margin-left: 15px;
+        }
       }
     }
   }
@@ -216,7 +245,7 @@ export default {
     &.inline {
       display: block;
     }
-    
+
     @media (min-width: 640px) {
       & {
         min-width: 340px;
