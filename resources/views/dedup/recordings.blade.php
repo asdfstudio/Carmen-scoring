@@ -9,9 +9,11 @@
 
   <a id="next_link" class="btn button" href="{{ $next_link }}">Run Next Batch</a>
   <script>
-    var autoAdvance = setTimeout(function(){ $('#next_link').trigger('click'); }, 1000);
-    $(document.body).click(function(){
-      clearTimeout(autoAdvance);
+    jQuery(document).ready(function($){
+      var autoAdvance = setTimeout(function(){ $('#next_link').trigger('click'); }, 1000);
+      $(document.body).click(function(){
+        clearTimeout(autoAdvance);
+      });
     });
   </script>
 
