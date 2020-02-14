@@ -8,14 +8,6 @@
 @section('content')
 
   <a id="next_link" class="btn button" href="{{ $next_link }}">Run Next Batch</a>
-  <script>
-    jQuery(document).ready(function($){
-      var autoAdvance = setTimeout(function(){ $('#next_link').trigger('click'); }, 1000);
-      $(document.body).click(function(){
-        clearTimeout(autoAdvance);
-      });
-    });
-  </script>
 
   <pre style="padding: 0 0 0 40px;">
 
@@ -31,4 +23,15 @@
 
   </pre>
 
+@endsection
+
+@section('body-footer')
+ <script>
+  $(document).ready(function(){
+    var autoAdvance = setTimeout(function(){ $('#next_link').trigger('click'); }, 1000);
+    $(document.body).click(function(){
+      clearTimeout(autoAdvance);
+    });
+  });
+</script>
 @endsection
