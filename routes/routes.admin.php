@@ -26,7 +26,7 @@ Route::group([
     Route::get('organization/{user}/update-premium', [
       'as' => 'organization.premium-status', 'uses' => 'OrganizationController@updatePremiumStatus'
     ]);
-    
+
 
   	Route::resource('organization', 'OrganizationController');
   	Route::resource('judge', 'JudgeController');
@@ -79,7 +79,7 @@ Route::group([
     Route::get('dashboard', [
       'as' => 'dashboard', 'uses' => 'OrganizationController@index'
     ]);
- 
+
 });
 
 Route::group([
@@ -99,16 +99,16 @@ Route::group([
     Route::get('workshop/finalize', [
       'as' => 'workshop.finalize', 'uses' => 'WorkshopController@finalize'
     ]);
-  
-  
+
+
     Route::get('person/search', [
       'as' => 'person.search', 'uses' => 'PersonController@search'
     ]);
     Route::post('person/search', [
       'as' => 'person.search', 'uses' => 'PersonController@search'
     ]);
-  
-  
+
+
     Route::get('dedup', [
       'as' => 'dedup', 'uses' => 'DeDupController@index'
     ]);
@@ -145,6 +145,11 @@ Route::group([
     Route::post('dedup/merge_dup_choirs_manual', [
       'as' => 'dedup.merge_dup_choirs_manual', 'uses' => 'DeDupController@merge_dup_choirs_manual'
     ]);
+
+    Route::get('recordings', [
+      'as' => 'recordings', 'uses' => 'DeDupController@recordings'
+    ]);
+
 
   });
 // ================

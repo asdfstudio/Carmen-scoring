@@ -184,12 +184,6 @@ Route::put('profile/password', [
 ]);
 
 
-Route::get('recording/{recording_name}', [
-  'as' => 'recording.show', 'uses' => 'RecordingProxyController@show'
-]);
-
-
-
 Auth::routes();
 Route::get('/logout', 'Auth\LoginController@logout');
 
