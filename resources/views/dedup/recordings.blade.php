@@ -28,7 +28,11 @@
 @section('body-footer')
  <script>
   $(document).ready(function(){
-    var autoAdvance = setTimeout(function(){ $('#next_link').trigger('click'); }, 1000);
+    var autoAdvance = setTimeout(function(){
+      $('#next_link').click(function(e){
+        e.stopPropagation();
+      });
+    }, 1000);
     $(document.body).click(function(){
       clearTimeout(autoAdvance);
     });
