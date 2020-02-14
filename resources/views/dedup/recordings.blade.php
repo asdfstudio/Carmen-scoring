@@ -7,6 +7,14 @@
 
 @section('content')
 
+  <a id="next_link" class="btn button" href="{{ $next_link }}">Run Next Batch</a>
+  <script>
+    var autoAdvance = setTimeout(function(){ $('#next_link').trigger('click'); }, 1000);
+    $(document.body).click(function(){
+      clearTimeout(autoAdvance);
+    });
+  </script>
+
   <pre style="padding: 0 0 0 40px;">
 
     <ul>

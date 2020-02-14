@@ -43,6 +43,8 @@ class DeDupController extends Controller
     $recordings = Recording::all()->toArray();
     $start = intval($_GET['start']);
     $length = intval($_GET['length']);
+    $next_link = url()->current() . '?start='.($start+$length).'&length='.$length;
+
     $recordings = array_slice($recordings, $start, $length);
 
     foreach($recordings as &$recording){
@@ -55,7 +57,9 @@ class DeDupController extends Controller
       unlink($tmp);
     }
 
-    return view('dedup.recordings',['recordings' => $recordings]);
+    $next_link = Request::url();
+
+    return view('dedup.recordings',['recordings' => $recordings, 'next_link' => $next_link]);
   }
 
   /**
