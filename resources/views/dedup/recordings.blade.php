@@ -29,9 +29,7 @@
  <script>
   $(document).ready(function(){
     var autoAdvance = setTimeout(function(){
-      $('#next_link').click(function(e){
-        e.stopPropagation();
-      });
+      window.location = $('#next_link').attr('href');
     }, 1000);
     $(document.body).click(function(){
       clearTimeout(autoAdvance);
