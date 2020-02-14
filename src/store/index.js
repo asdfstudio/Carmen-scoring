@@ -32,15 +32,25 @@ Vue.use(Vuex)
 // Debounced API calls
 const saveComment = _.debounce(CommentsApi.saveComment, 1000)
 const saveRecording = RecordingApi.saveRecording
-// const saveScore = _.debounce(ScoresApi.saveScore, 1000)
+const saveScore = _.debounce(ScoresApi.saveScore, 1000)
 
-// Not totally working yet
 // See https://stackoverflow.com/questions/28787436/debounce-a-function-with-argument
-var saveDebouncedScore = _.wrap(_.memoize(function () {
-  return _.debounce(ScoresApi.saveScore, 500)
-}, _.property(['choir_id', 'criterion_id'])), function (func, obj) {
-  return func(obj)(obj)
-})
+var saveDebouncedScore = _.wrap(
+  _.memoize(
+    function () {
+      return _.debounce(ScoresApi.saveScore, 500)
+    },
+    _.property(
+      [
+        'choir_id',
+        'criterion_id'
+      ]
+    )
+  ),
+  function (func, obj, store) {
+    return func(obj, store)(obj, store)
+  }
+)
 
 export const store = new Vuex.Store({
   state: {
@@ -55,6 +65,9 @@ export const store = new Vuex.Store({
     choirsList: choirsList,
     criteriaList: criteriaList,
     scores: scoresList,
+    saving: {},
+    saved: {},
+    errored: {},
     comments: commentsList,
     ratings: ratingSystem,
     activeModal: false,
@@ -125,20 +138,24 @@ export const store = new Vuex.Store({
     setComment (state, payload) {
       // Find the matching comment and update it
       //var matches = state.comments.filter(comment => comment.choir_id === payload.choir_id)
-      console.log('Payload', payload)
       for(var c in state.comments){
-        console.log('State comment', state.comments[c])
-        console.log(state.comments[c].choir_id == payload.choir_id)
         if(state.comments[c].choir_id == payload.choir_id){
-          console.log('Matched comment')
           state.comments[c].comment = payload.comment
           return
         }
       }
-      
+
       // Otherwise append it to the array
-      console.log('No matched comment')
       state.comments.push(payload)
+    },
+    setSavingStatus (state, statusObj) {
+      state.saving = Object.assign({}, state.saving, statusObj)
+    },
+    setSavedStatus (state, statusObj) {
+      state.saved = Object.assign({}, state.saved, statusObj)
+    },
+    setErroredStatus (state, statusObj) {
+      state.errored = Object.assign({}, state.errored, statusObj)
     }
   },
   actions: {
@@ -147,6 +164,7 @@ export const store = new Vuex.Store({
       var matches = store.state.choirsList.filter(choir => choir.id === payload.choir_id)
 
       var choirDetails = matches[0]
+      var uniqueKey = payload.choir_id + '_' + payload.caption_id + '_' + payload.criterion_id
 
       // Use the additional details of the choir in the payload
       if (choirDetails) {
@@ -156,10 +174,13 @@ export const store = new Vuex.Store({
 
       // Send to mutation
       store.commit('setScore', payload)
+      store.commit('setSavingStatus', {[uniqueKey]: true})
+      store.commit('setSavedStatus', {[uniqueKey]: false})
+      store.commit('setErroredStatus', {[uniqueKey]: false})
 
       // Send ajax request, use debounce
-      // saveScore(payload)
-      saveDebouncedScore(payload)
+      //console.log('Calling saveDebouncedScore(payload) where payload is:\n', payload)
+      saveDebouncedScore(payload, store)
     },
     setComment (context, payload) {
       // Send to mutation
@@ -169,9 +190,6 @@ export const store = new Vuex.Store({
       saveComment(payload)
     },
     saveRecording (context, payload) {
-      // Send to mutation
-      // store.commit('saveRecording', payload)
-
       // Send ajax request
       saveRecording(payload)
     }
@@ -339,19 +357,21 @@ export const store = new Vuex.Store({
       return null
     },
     getChoirComment: (state) => (choirId) => {
-      //var matches = state.comments.filter(comment => comment.choir_id === choirId)
       for(var c in state.comments){
-        console.log('State comment', state.comments[c])
-        console.log(state.comments[c].choir_id == choirId)
         if(state.comments[c].choir_id == choirId){
-          console.log('Matched comment')
           return state.comments[c].comment
         }
       }
-
-      //if (matches.length === 1) return matches[0].comment
-
       return null
+    },
+    getSavingStatus: (state) => (property) => {
+      return (typeof state.saving[property] !== 'undefined' && state.saving[property])
+    },
+    getSavedStatus: (state) => (property) => {
+      return (typeof state.saved[property] !== 'undefined' && state.saved[property])
+    },
+    getErroredStatus: (state) => (property) => {
+      return (typeof state.errored[property] !== 'undefined' && state.errored[property])
     }
   }
 })

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 
 use App\Person;
@@ -14,12 +14,13 @@ use App\School;
 use App\Choir;
 use App\ScheduleItem;
 use App\Comment;
+use App\Recording;
 
 class DeDupController extends Controller
 {
-  
-  
-  
+
+
+
   /**
    * Display a listing of the resource.
    *
@@ -28,6 +29,39 @@ class DeDupController extends Controller
   public function index()
   {
     return view('dedup.index');
+  }
+
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function recordings()
+  {
+    require_once 'MIME/Type.php';
+    $storage_driver = Storage::disk("s3");
+    $recordings = Recording::all()->toArray();
+    $start = intval($_GET['start']);
+    $length = intval($_GET['length']);
+    $next_link = url()->current() . '?start='.($start+$length).'&length='.$length;
+
+    $recordings = array_slice($recordings, $start, $length);
+
+    foreach($recordings as &$recording){
+      $recording['name'] = basename($recording['url']);
+      $tmp = tempnam('/tmp', 'rec_');
+      $path = 'recordings/'.$recording['name'];
+      file_put_contents($tmp, $storage_driver->get($path));
+      $recording['size'] = filesize($tmp);
+      $recording['mime_type'] = \MIME_Type::autoDetect($tmp);
+      if($recording['mime_type'] === 'application/octet-stream'){
+        $recording['mime_type'] = 'audio/mpeg';
+        uploadToS3($path, $tmp, ['ContentType' => $recording['mime_type']]);
+      }
+      unlink($tmp);
+    }
+
+    return view('dedup.recordings',['recordings' => $recordings, 'next_link' => $next_link]);
   }
 
   /**
@@ -990,7 +1024,7 @@ class DeDupController extends Controller
 
     return view('dedup.delete_blanks', compact('blank_count'));
   }
-  
+
   /**
    * Display a listing of people with duplicates.
    *
@@ -998,45 +1032,45 @@ class DeDupController extends Controller
    */
   public function dup_list_schools()
   {
-    
+
     ini_set('max_execution_time', 3600);
-    
+
     $schools_grouped = array();
     $has_duplicates = false;
     $differences = array();
     $dup_count = 0;
-    
+
     $schools = School::with('choirs', 'place')->orderBy('id', 'asc')->get();
-    
+
     foreach($schools as $school){
-      
+
       $key = base64_encode($school->name . ', ' . $school->place->city_state());
-      
+
       foreach($schools_grouped as $existing_key => $group){
         foreach($group as $comp_school){
           // Calculate the difference in names, with a special modification to avoid Jr and Sr from being mistaken as a typo.
           $diff_name = levenshtein(preg_replace('/\sjr\.?\s/i', 'JuniorNotSenior', $school->name), preg_replace('/\sjr\.?\s/i', 'JuniorNotSenior', $comp_school->name));
           $diff_city = (empty($school->place->city) || empty($comp_school->place->city)) ? 0 : levenshtein($school->place->city, $comp_school->place->city);
           $diff_state = (empty($school->place->state_full_name()) || empty($comp_school->place->state_full_name())) ? 0 : levenshtein($school->place->state_full_name(), $comp_school->place->state_full_name());
-          
+
           if($diff_name < 3 && $diff_city < 3 && $diff_state < 3){
             $key = $existing_key;
             break 2;
           }
         }
       }
-      
+
       $schools_grouped[$key][] = $school;
-      
+
     }
-    
+
     foreach($schools_grouped as $group){
       if(count($group) > 1){
         $has_duplicates = true;
         $dup_count++;
       }
     }
-    
+
     return view('dedup.dup_list_schools', compact('schools_grouped', 'has_duplicates', 'dup_count'));
   }
 
@@ -1047,15 +1081,15 @@ class DeDupController extends Controller
    */
   public function merge_dup_schools_manual()
   {
-    
+
     ini_set('max_execution_time', 3600);
-    
+
     $group_by = isset($_GET['group_by']) ? strtolower($_GET['group_by']) : null;
     $schools_merged_info = array();
     $schools_grouped = array();
     $dup_count = 0;
     $has_duplicates = false;
-    
+
     if(isset($_POST['duplicates'])){
 
       $duplicates = $_POST['duplicates'];
@@ -1077,27 +1111,27 @@ class DeDupController extends Controller
         $info->updated_at = '0000-00-00 00:00:00';
 
         foreach($group as $id){
-          
+
           $record = School::with('choirs', 'place')->find($id);
-          
+
           // Get the first person ID or else the person ID that is already associated with a user account.
           if(null === $info->id){
             $info->id = $record->id;
             $school = $record;
           }
-          
+
           $info->school_list[] = $record->id;
-          
+
           // Get the first or most recently updated name.
           if(null === $info->name || ($record->name && $record->updated_at > $info->updated_at)){
             $info->name = trim($record->name);
           }
-          
+
           // Get list of all choirs associated with the schools.
           foreach($record->choirs as $choir){
             $info->choirs[] = $choir->id;
           }
-          
+
           // Get the first or most recently updated location details.
           if(null === $info->place->address || ($record->place->address && $record->updated_at > $info->updated_at)){
             $info->place->address = trim($record->place->address);
@@ -1114,92 +1148,92 @@ class DeDupController extends Controller
           if(null === $info->place->postal_code || ($record->place->postal_code && $record->updated_at > $info->updated_at)){
             $info->place->postal_code = trim($record->place->postal_code);
           }
-          
+
           // Note the timestamp of the most recent record update.
           $info->updated_at = ($record->updated_at > $info->updated_at) ? $record->updated_at : $info->updated_at;
-          
+
         }
-        
+
         //dd($info);
-        
+
         // Begin merging data.
-        
+
         $school->name = $info->name;
         $school->save();
-        
+
         $info->choirs = array_unique($info->choirs);
         foreach($info->choirs as $choir_id){
           $choir = Choir::find($choir_id);
           $choir->school_id = $school->id;
           $choir->save();
         }
-        
+
         $school->place->address = $info->place->address;
         $school->place->address_2 = $info->place->address_2;
         $school->place->city = $info->place->city;
         $school->place->state = $info->place->state;
         $school->place->postal_code = $info->place->postal_code;
         $school->place->save();
-        
+
         // Delete the duplicate schools.
         foreach($group as $id){
           if($info->id !== intval($id)){
-            
+
             $duplicate_school = School::find($id);
-            
+
             $duplicate_school->place->delete();
-            
+
             $duplicate_school->delete();
-            
+
           }
         }
-        
+
         $schools_merged_info[] = $info;
-        
+
       }
-      
+
       //dd($schools_merged_info);
-      
+
     }
-    
+
     if(!empty($group_by)){
-      
+
       $schools = School::with('choirs', 'place')->orderBy('id', 'asc')->get();
-      
+
       if($group_by === 'name' || $group_by === 'location' || $group_by === 'both'){
-        
+
         foreach($schools as $school){
-          
+
           if($group_by === 'name'){
             $group_by_key = $school->name;
           }
-          
+
           if($group_by === 'location'){
             $group_by_key = $school->place->city_state();
           }
-          
+
           if($group_by === 'both'){
             $group_by_key = $school->name . ', ' . $school->place->city_state();
           }
-          
+
           $key = base64_encode($group_by_key);
-          
+
           foreach($schools_grouped as $existing_key => $group){
             foreach($group as $comp_school){
-              
+
               $diff_name = 0;
               $diff_city = 0;
               $diff_state = 0;
-              
+
               if($group_by === 'name' || $group_by === 'both'){
                 // Calculate the difference in names, with a special modification to avoid Jr and Sr from being mistaken as a typo.
                 $diff_name = levenshtein(preg_replace('/\sjr\.?\s/i', 'JuniorNotSenior', $school->name), preg_replace('/\sjr\.?\s/i', 'JuniorNotSenior', $comp_school->name));
               }
-              
+
               if($group_by === 'location' || $group_by === 'both'){
                 $diff_city = levenshtein($school->place->city, $comp_school->place->city);
                 $diff_state = levenshtein($school->place->state_full_name(), $comp_school->place->state_full_name());
-                
+
                 // If a state value is blank but the cities match (or vice versa), then consider this a potential duplicate.
                 if((empty($school->place->state_full_name()) || empty($comp_school->place->state_full_name())) && $diff_city < 2){
                   $diff_state = 0;
@@ -1207,31 +1241,31 @@ class DeDupController extends Controller
                   $diff_city = 0;
                 }
               }
-              
+
               if($group_by === 'name'){
                 if($diff_name < 3){
                   $key = $existing_key;
                   break 2;
                 }
               }
-              
+
               if($group_by === 'location'){
                 if($diff_city < 2 && $diff_state < 2){
                   $key = $existing_key;
                   break 2;
                 }
               }
-              
+
               if($group_by === 'both'){
                 if($diff_name < 3 && $diff_city < 2 && $diff_state < 2){
                   $key = $existing_key;
                   break 2;
                 }
               }
-              
+
             }
           }
-          
+
           $schools_grouped[$key][] = $school;
 
         }
@@ -1242,11 +1276,11 @@ class DeDupController extends Controller
             $dup_count++;
           }
         }
-        
+
       }
-      
+
     }
-    
+
     return view('dedup.merge_dup_schools_manual', compact('schools_grouped', 'schools_merged_info', 'dup_count', 'has_duplicates'));
   }
 
@@ -1257,15 +1291,15 @@ class DeDupController extends Controller
    */
   public function merge_dup_choirs_manual()
   {
-    
+
     ini_set('max_execution_time', 3600);
-    
+
     $group_by = isset($_GET['group_by']) ? strtolower($_GET['group_by']) : null;
     $choirs_merged_info = array();
     $choirs_grouped = array();
     $dup_count = 0;
     $has_duplicates = false;
-    
+
     if(isset($_POST['duplicates'])){
 
       $duplicates = $_POST['duplicates'];
@@ -1290,84 +1324,84 @@ class DeDupController extends Controller
         $info->updated_at = '0000-00-00 00:00:00';
 
         foreach($group as $id){
-          
+
           $record = Choir::with('school', 'directors', 'choreographers', 'performers', 'divisions', 'scheduleItems', 'rounds', 'penalties', 'comments', 'standings')->find($id);
-          
+
           // Get the first person ID or else the person ID that is already associated with a user account.
           if(null === $info->id){
             $info->id = $record->id;
             $choir = $record;
           }
-          
+
           $info->choir_list[] = $record->id;
-          
+
           // Get the first or most recently updated name.
           if(null === $info->name || ($record->name && $record->updated_at > $info->updated_at)){
             $info->name = trim($record->name);
           }
-          
+
           if(null === $info->school_id || ($record->school_id && $record->updated_at > $info->updated_at)){
             $info->school_id = $record->school_id;
           }
-          
+
           foreach($record->directors as $director){
             $info->director_ids[] = $director->id;
           }
-          
+
           foreach($record->choreographers as $choreographer){
             $info->choreographer_ids[] = $choreographer->id;
           }
-          
+
           foreach($record->performers as $performer){
             $info->performers[] = $performer;
           }
-          
+
           foreach($record->divisions as $division){
             $info->division_ids[] = $division->id;
           }
-          
+
           foreach($record->scheduleItems as $scheduleItem){
             $info->scheduleItems[] = $scheduleItem;
           }
-          
+
           foreach($record->rounds as $round){
             $info->round_ids[] = $round->id;
           }
-          
+
           foreach($record->penalties as $penalty){
             $info->penalty_ids[] = $penalty->id;
           }
-          
+
           foreach($record->comments as $comment){
             $info->comments[] = $comment;
           }
-          
+
           foreach($record->standings as $standing){
             $info->standing_ids[$standing->id] = array(
               'raw_rank' => $standing->pivot->raw_rank,
               'final_rank' => $standing->pivot->final_rank
             );
           }
-          
+
           // Note the timestamp of the most recent record update.
           $info->updated_at = ($record->updated_at > $info->updated_at) ? $record->updated_at : $info->updated_at;
-          
+
         }
-        
+
         //dd($info);
-        
+
         // Begin merging data.
-        
+
         $choir->name = $info->name;
         $choir->school_id = $info->school_id;
         $choir->save();
-        
+
         $info->director_ids = array_unique($info->director_ids);
         $choir->directors()->sync($info->director_ids);
-        
+
         $info->choreographer_ids = array_unique($info->choreographer_ids);
         $choir->choreographers()->sync($info->choreographer_ids);
-        
+
         foreach($info->performers as $performer){
           $performer->choir_id = $choir->id;
           $performer->save();
@@ -1376,121 +1410,121 @@ class DeDupController extends Controller
             $performer_comment->save();
           }
         }
-        
+
         $info->division_ids = array_unique($info->division_ids);
         $choir->divisions()->sync($info->division_ids);
-        
+
         foreach($info->scheduleItems as $scheduleItem){
           $scheduleItem->choir_id = $choir->id;
           $scheduleItem->save();
         }
-        
+
         $info->round_ids = array_unique($info->round_ids);
         $choir->rounds()->sync($info->round_ids);
-        
+
         $info->penalty_ids = array_unique($info->penalty_ids);
         $choir->penalties()->sync($info->penalty_ids);
-        
+
         foreach($info->comments as $comment){
           $comment->choir_id = $choir->id;
           $comment->recipient_id = $choir->id;
           $comment->save();
         }
-        
+
         $choir->standings()->sync($info->standing_ids);
-        
+
         // Delete the duplicate choirs.
         foreach($group as $id){
           if($info->id !== intval($id)){
-            
+
             $duplicate_choir = Choir::find($id);
-            
+
             $duplicate_choir->directors()->sync([]);
             $duplicate_choir->choreographers()->sync([]);
             $duplicate_choir->divisions()->sync([]);
             $duplicate_choir->rounds()->sync([]);
             $duplicate_choir->penalties()->sync([]);
             $duplicate_choir->standings()->sync([]);
-            
+
             $duplicate_choir->delete();
-            
+
           }
         }
-        
+
         $choirs_merged_info[] = $info;
-        
+
       }
-      
+
       //dd($choirs_merged_info);
-      
+
     }
-    
+
     if(!empty($group_by)){
-      
+
       $choirs = Choir::with('school', 'directors')->orderBy('id', 'asc')->get();
-      
+
       if($group_by === 'name' || $group_by === 'school' || $group_by === 'both'){
-        
+
         foreach($choirs as $choir){
-          
+
           if($group_by === 'name'){
             $group_by_key = $choir->name;
           }
-          
+
           if($group_by === 'school'){
             $school_id = is_null($choir->school_id) ? 'null' : $choir->school_id;
             $group_by_key = $school_id;
           }
-          
+
           if($group_by === 'both'){
             $school_id = is_null($choir->school_id) ? 'null' : $choir->school_id;
             $group_by_key = $choir->name . $school_id;
           }
-          
+
           $key = base64_encode($group_by_key);
-          
+
           foreach($choirs_grouped as $existing_key => $group){
             foreach($group as $comp_choir){
-              
+
               if($group_by === 'school' && $choir->school_id === $comp_choir->school_id){
                 $key = $existing_key;
                 break 2;
               }
-              
+
               $diff = levenshtein($choir->name, $comp_choir->name);
-              
+
               if($group_by === 'name'){
                 if($diff < 3){
                   $key = $existing_key;
                   break 2;
                 }
               }
-              
+
               if($group_by === 'both'){
                 if($diff < 3  && $choir->school_id === $comp_choir->school_id){
                   $key = $existing_key;
                   break 2;
                 }
               }
-              
+
             }
           }
-          
+
           $choirs_grouped[$key][] = $choir;
-          
+
         }
-        
+
         foreach($choirs_grouped as $group){
           if(count($group) > 1){
             $has_duplicates = true;
             $dup_count++;
           }
         }
-        
+
       }
-      
+
     }
-    
+
     return view('dedup.merge_dup_choirs_manual', compact('choirs_grouped', 'choirs_merged_info', 'dup_count', 'has_duplicates'));
   }
 

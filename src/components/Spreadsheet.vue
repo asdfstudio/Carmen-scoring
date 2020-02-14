@@ -41,7 +41,7 @@
             :choir="choir"
             :criterion="criterion"
             v-bind:key="choir.id"
-            v-bind:class="{editing: isEditing(choir, criterion)}"
+            v-bind:class="{editing: isEditing(choir, criterion), saving: getSavingStatus(choir.id + '_' + caption.id + '_' + criterion.id), saved: getSavedStatus(choir.id + '_' + caption.id + '_' + criterion.id), errored: getErroredStatus(choir.id + '_' + caption.id + '_' + criterion.id)}"
             >{{ score(choir, criterion) }}</td>
         </tr>
         <!-- Caption Criteria End -->
@@ -142,6 +142,7 @@
               @start-recording="onRecordingStart(choir.id)"
               @stop-recording="currentRecordingId = null"
               @upload-complete="changeInProgressRecValue(-1)"
+              @upload-error="warnRecordingSaveError"
             />
           </td>
         </tr>
@@ -152,6 +153,7 @@
             <DropZone :choir="choir"
             @upload-start="changeInProgressRecValue(1)"
             @upload-complete="changeInProgressRecValue(-1)"
+            @upload-error="warnUploadRecordingError"
             />
           </td>
         </tr>
@@ -362,6 +364,21 @@ export default {
     changeInProgressRecValue: function (value) {
       const input = document.getElementById('recordingsInProgress')
       input.value = parseInt(input.value) + value
+    },
+    getSavingStatus: function (property) {
+      return this.$store.getters.getSavingStatus(property)
+    },
+    getSavedStatus: function (property) {
+      return this.$store.getters.getSavedStatus(property)
+    },
+    getErroredStatus: function (property) {
+      return this.$store.getters.getErroredStatus(property)
+    },
+    warnRecordingSaveError: function () {
+      alert('There was an error saving your recording to the server.  You can save your recording to your device using the link in the recording name.  Then refresh this page and try uploading the file.')
+    },
+    warnUploadRecordingError: function () {
+      alert('There was an error uploading your file to the server.  Please refresh this page and try uploading the file again.')
     }
   },
   mounted () {

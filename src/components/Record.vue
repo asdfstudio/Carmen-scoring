@@ -17,7 +17,7 @@
             <audio controls class="record-item">
               <source :src="recording.url" controls="true" />
             </audio>
-            <span>{{recording.created_at}}.mp3 (UTC)</span>
+            <span><a :href="recording.url" :download="recording.created_at + '.mp3'">{{recording.created_at}}.mp3 (UTC)</a></span>
             <div v-if="recording.isUnsaved && isUploading" class="slider">
               <div class="line"></div>
               <div class="subline inc"></div>
@@ -68,6 +68,7 @@ export default {
             this.$emit('start-recording')
             // something else
           }).catch(e => {
+            console.log(e)
             if(e.name === 'NotFoundError')
             {
                alert('Please plugin your microphone')
@@ -75,7 +76,7 @@ export default {
             {
                alert('Your browser does not support recording')
             }else{
-               alert('something went wrong')
+               alert('Something went wrong')
             }
             return false
           })
@@ -121,12 +122,27 @@ export default {
       }
     },
     uploadFile (payload, index) {
+      console.log(payload)
       this.isUploading = true
       axios
         .post('/judge/recording/save', payload)
         .then(response => {
-          this.unsavedRecordings[index].isUnsaved = false
-        })
+            console.log('response', response)
+            if(typeof response.statusText !== 'undefined' && response.statusText === 'Created'){
+              this.unsavedRecordings[index].isUnsaved = false
+            } else {
+              // In case of error.
+              this.$emit('upload-error')
+              this.unsavedRecordings[index].isUnsaved = true
+            }
+          },
+          response => {
+            // In case of error.
+            console.log('response', response)
+            this.$emit('upload-error')
+            this.unsavedRecordings[index].isUnsaved = true
+          }
+        )
         .finally(() => {
           this.$emit('upload-complete')
           this.isUploading = false
