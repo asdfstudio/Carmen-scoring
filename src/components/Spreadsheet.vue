@@ -142,6 +142,7 @@
               @start-recording="onRecordingStart(choir.id)"
               @stop-recording="currentRecordingId = null"
               @upload-complete="changeInProgressRecValue(-1)"
+              @upload-error="warnRecordingSaveError"
             />
           </td>
         </tr>
@@ -152,6 +153,7 @@
             <DropZone :choir="choir"
             @upload-start="changeInProgressRecValue(1)"
             @upload-complete="changeInProgressRecValue(-1)"
+            @upload-error="warnUploadRecordingError"
             />
           </td>
         </tr>
@@ -371,6 +373,12 @@ export default {
     },
     getErroredStatus: function (property) {
       return this.$store.getters.getErroredStatus(property)
+    },
+    warnRecordingSaveError: function () {
+      alert('There was an error saving your recording to the server.  You can save your recording to your device using the link in the recording name.  Then refresh this page and try uploading the file.')
+    },
+    warnUploadRecordingError: function () {
+      alert('There was an error uploading your file to the server.  Please refresh this page and try uploading the file again.')
     }
   },
   mounted () {

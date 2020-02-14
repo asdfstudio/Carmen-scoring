@@ -1,5 +1,5 @@
 <template>
-  <vue2-dropzone ref="dropzone" :options="dropzoneOptions" @vdropzone-sending="uploadFile"  @vdropzone-file-added="uploadprogress" />
+  <vue2-dropzone ref="dropzone" :options="dropzoneOptions" @vdropzone-sending="uploadFile"  @vdropzone-file-added="uploadprogress" @vdropzone-complete="complete" @vdropzone-error="error" />
 </template>
 
 <script>
@@ -36,6 +36,14 @@ export default {
     },
     success: function () {
       this.$emit('upload-complete')
+    },
+    complete: function (file, response) {
+      this.$emit('upload-complete')
+    },
+    error: function (file, message, xhr) {
+      console.log(message)
+      console.log(xhr)
+      this.$emit('upload-error')
     }
   },
   beforeDestroy () {
