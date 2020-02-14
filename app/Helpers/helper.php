@@ -11,12 +11,12 @@ function ordinal($number) {
         return $number. $ends[$number % 10];
 }
 
- 
-function uploadToS3($pathUrl, $file) {
+
+function uploadToS3($path, $contents, $options = []) {
     $storageDriver = Storage::disk("s3");
 
-    if($storageDriver->put($pathUrl, file_get_contents($file))){
-        $storedFilePath = $storageDriver->path($pathUrl);
+    if($storageDriver->put($path, file_get_contents($contents), $options)){
+        $storedFilePath = $storageDriver->path($path);
     }
     return $storedFilePath;
  }

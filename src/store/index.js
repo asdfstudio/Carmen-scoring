@@ -34,7 +34,6 @@ const saveComment = _.debounce(CommentsApi.saveComment, 1000)
 const saveRecording = RecordingApi.saveRecording
 const saveScore = _.debounce(ScoresApi.saveScore, 1000)
 
-// Not totally working yet
 // See https://stackoverflow.com/questions/28787436/debounce-a-function-with-argument
 var saveDebouncedScore = _.wrap(
   _.memoize(
@@ -191,9 +190,6 @@ export const store = new Vuex.Store({
       saveComment(payload)
     },
     saveRecording (context, payload) {
-      // Send to mutation
-      // store.commit('saveRecording', payload)
-
       // Send ajax request
       saveRecording(payload)
     }
@@ -361,15 +357,11 @@ export const store = new Vuex.Store({
       return null
     },
     getChoirComment: (state) => (choirId) => {
-      //var matches = state.comments.filter(comment => comment.choir_id === choirId)
       for(var c in state.comments){
         if(state.comments[c].choir_id == choirId){
           return state.comments[c].comment
         }
       }
-
-      //if (matches.length === 1) return matches[0].comment
-
       return null
     },
     getSavingStatus: (state) => (property) => {

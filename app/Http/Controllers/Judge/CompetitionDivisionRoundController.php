@@ -147,7 +147,7 @@ class CompetitionDivisionRoundController extends Controller
           }])->find($round_id);
 
       $division = $round->division;
-      $recordings = $round->division->judges;
+      $recording_judges = $round->division->judges;
       $competition = $division->competition->organization;
       $rating_system = $division->rating_system;
 
@@ -194,7 +194,7 @@ class CompetitionDivisionRoundController extends Controller
       }*/
 
       $isSpreadsheetScoringActive = $round->status;
-      
+
       $captionWeightingId = $division->caption_weighting_id;
 
       // Convert to arrays for use with new Vue spreadsheet
@@ -206,7 +206,7 @@ class CompetitionDivisionRoundController extends Controller
         ];
       })->toArray();
       $captions = array_values($captions);
-      
+
 
       $divisions = ['id' => $division->id, 'name' => $division->name];
 
@@ -240,7 +240,7 @@ class CompetitionDivisionRoundController extends Controller
           'raw_score' => floatval($item->score)
         ];
       })->toArray();
-      
+
       // Make sure there is at least a placeholder comment for this judge targeting each choir.
       foreach($choirs as $choir){
         $placeholder_comment = Comment::firstOrNew([
@@ -256,9 +256,9 @@ class CompetitionDivisionRoundController extends Controller
           event(new CommentSaved($placeholder_comment, $division->competition));
         }
       }
-      
+
       $round->refresh();
-            
+
       $comments = $round->feedback->where('judge_id', $judge_id)->map(function ($item, $key) {
         return [
           'choir_id' => $item->choir_id,
@@ -266,10 +266,10 @@ class CompetitionDivisionRoundController extends Controller
         ];
       })->toArray();
       //dd($comments);
-      $recordedComments = $recordings->map(function ($item, $key) {
+      $recordedComments = $recording_judges->map(function ($item, $key) {
         return $item->recordings;
       });
-      
+
       // JSON encode
       $choirs = json_encode($choirs);
       $divisions = json_encode($divisions);
@@ -375,7 +375,6 @@ class CompetitionDivisionRoundController extends Controller
         }, 'division.judges.captions.criteria','choirs','division.rounds', 'sources'])->find($round_id);
 
       $division = $round->division;
-      //$recordings = $round->division->judges;
       $competition = $division->competition->organization;
       $rating_system = $division->rating_system;
 
@@ -402,7 +401,7 @@ class CompetitionDivisionRoundController extends Controller
           });
         }
       });
-      
+
       $choirs = $source_choirs;
 
       $source_ids = $round->sources->pluck('id')->toArray();
@@ -516,7 +515,7 @@ class CompetitionDivisionRoundController extends Controller
           event(new CommentSaved($placeholder_comment, $division->competition));
         }
       }
-      
+
       $feedback = Comment::where('judge_id', $judge_id)
         ->whereIn('choir_id', $source_choirs->pluck('id')->toArray())
         ->where('subject_type', 'App\Round')
@@ -536,7 +535,7 @@ class CompetitionDivisionRoundController extends Controller
       $recordings = Recording::all()->where('judge_id', $judge_id)->whereIn('round_id', array_merge([$round_id], $source_ids))->whereIn('division_id', array_merge([$division_id], $source_division_ids));
       $recordedComments = array_values($recordings->toArray());
       //dd($recordedComments);
-      
+
       // JSON encode
       $choirs = json_encode($choirs);
       $divisions = json_encode($divisions);

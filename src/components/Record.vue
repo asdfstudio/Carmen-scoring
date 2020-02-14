@@ -68,6 +68,7 @@ export default {
             this.$emit('start-recording')
             // something else
           }).catch(e => {
+            console.log(e)
             if(e.name === 'NotFoundError')
             {
                alert('Please plugin your microphone')
@@ -75,7 +76,7 @@ export default {
             {
                alert('Your browser does not support recording')
             }else{
-               alert('something went wrong')
+               alert('Something went wrong')
             }
             return false
           })
@@ -121,10 +122,12 @@ export default {
       }
     },
     uploadFile (payload, index) {
+      console.log(payload)
       this.isUploading = true
       axios
         .post('/judge/recording/save', payload)
         .then(response => {
+          console.log('response', response)
           this.unsavedRecordings[index].isUnsaved = false
         })
         .finally(() => {

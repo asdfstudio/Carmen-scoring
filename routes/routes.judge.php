@@ -206,12 +206,12 @@ Route::group([
 
 		Route::post('recording/save', [
 			'as' => 'recording.save', 'uses' => 'RecordingController@postRecording',
-			
+
 		]);
 
 		Route::get('recording', [
 			'as' => 'recordings.list', 'uses' => 'RecordingController@show'
-		  ]);
+		]);
 
 	//});
 });

@@ -21,18 +21,24 @@ class RecordingController extends Controller
         // upload file
         if($request->file)
         {
-            $storagePath = 'recordings/';
-            $url = $request->file;
-            $storageFileName = uniqid();
-            // $filePath = public_path().'/recordings/' ;
-            // $url->move($filePath,$storageFileName);
-            $pathUrl = $storagePath . $storageFileName;    
-            $filePath= uploadToS3($pathUrl, $url); 
-            $recording->url = $filePath;
-      
+            // Get the file name and relative path
+            $storage_path = 'recordings/';
+            $file_to_store = $request->file;
+            $storage_file_name = uniqid();
+            $storage_path .= $storage_file_name;
+
+            // Get MIME type
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $file_mime = finfo_file($finfo, $file_to_store);
+            finfo_close($finfo);
+
+            // Upload the file to S3 and save the remote path
+            $remote_path = uploadToS3($storage_path, $file_to_store, ['ContentType' => $file_mime]);
+            $recording->url = $remote_path;
         }
-        // save modal
+        // Save modal
         $recording->save();
+
         // Return success
         return response()->json($recording, 201);
     }

@@ -15,9 +15,9 @@ class Recording extends Model
 	protected $fillable = ['division_id','round_id', 'choir_id', 'judge_id', 'url'];
 
 
-	public function getUrlAttribute($value)
+	public function getUrlAttribute($path)
     {
-        return ($value)?Storage::disk('s3')->url($value):'';
+        return ($path) ? Storage::disk('s3')->url($path) : '';
     }
 
     /**
