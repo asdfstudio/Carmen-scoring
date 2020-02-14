@@ -57,8 +57,6 @@ class DeDupController extends Controller
       unlink($tmp);
     }
 
-    $next_link = Request::url();
-
     return view('dedup.recordings',['recordings' => $recordings, 'next_link' => $next_link]);
   }
 
