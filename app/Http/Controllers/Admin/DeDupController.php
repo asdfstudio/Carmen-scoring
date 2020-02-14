@@ -53,7 +53,10 @@ class DeDupController extends Controller
       $path = 'recordings/'.$recording['name'];
       file_put_contents($tmp, $storage_driver->get($path));
       $recording['mime_type'] = \MIME_Type::autoDetect($tmp);
-      uploadToS3($path, $tmp, ['ContentType' => $recording['mime_type']]);
+      if($recording['mime_type'] === 'application/octet-stream'){
+        $recording['mime_type'] = 'audio/mpeg';
+        uploadToS3($path, $tmp, ['ContentType' => $recording['mime_type']]);
+      }
       unlink($tmp);
     }
 
