@@ -35,5 +35,5 @@ window. __Competition__ = {!! $competition !!};
       return;
     };
   </script>
-<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.41ea52dbb86cd037fb1d.js></script><script type=text/javascript src=/static/js/app.a4754c8337013ec26bf9.js></script></body>
+<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.41ea52dbb86cd037fb1d.js></script><script type=text/javascript src=/static/js/app.7f05dd07ff29224bc127.js></script></body>
 </html>
