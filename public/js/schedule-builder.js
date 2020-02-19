@@ -44,6 +44,7 @@ var ScheduleBuilder = (function () {
       scheduleItem.award_id = $(this).data('award-id')
       scheduleItem.caption_id = $(this).data('caption-id')
       scheduleItem.rank = $(this).data('rank')
+      scheduleItem.is_rating = typeof $(this).data('rating') === 'undefined' ? 0 : 1;
       scheduleItem.scheduled_time = $(this).find('input.scheduled_time').val()
       scheduleItem.name = $(this).find('input.item_name').val()
       data.push(scheduleItem)

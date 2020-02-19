@@ -4193,6 +4193,10 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
   font-size: 21px;
   font-weight: bold; }
 
+.list-group .list-group-item.standing .rating {
+  margin: 0 1em;
+  font-style: italic; }
+
 .list-group .list-group-item.standing .details {
   float: right; }
   .list-group .list-group-item.standing .details .tied {

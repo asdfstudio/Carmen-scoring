@@ -6,6 +6,8 @@ use App\Scopes\OrderByNameScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Carmen\Ratings;
+
 class Division extends Model
 {
     use SoftDeletes;
@@ -35,6 +37,8 @@ class Division extends Model
       'combo_award_sponsors' => 'array',
       'rating_system' => 'array'
     ];
+
+    protected $ratings;
 
     protected static function boot()
     {
@@ -234,6 +238,14 @@ class Division extends Model
       return $this->save();
     }
 
+
+    public function getRatings(){
+      if(!empty($this->ratings)){
+        return $this->ratings;
+      }
+
+      return $this->ratings = $this->rounds->first()->getRatings();
+    }
 /*
     public function setOverallAwardSponsorsAttribute($value)
     {

@@ -11,6 +11,8 @@ use App\Competition;
 use App\Division;
 use App\Standing;
 
+use App\Carmen\Ratings;
+
 class CompetitionDivisionStandingController extends Controller
 {
     public function ceremony($competition_id, $division_id)
@@ -22,16 +24,16 @@ class CompetitionDivisionStandingController extends Controller
       }, 'awards.choirs' => function($query) use ($division_id) {
         $query->where('division_id',$division_id);
       }])->find($division_id);
-      
+
       //dd($division);
-      
+
       return view('competition_division_ceremony.organizer.show', compact('division'));
     }
 
     public function show($competition_id, $division_id)
     {
       $division = Division::with(['standings','standings.choirs'])->find($division_id);
-      
+
       return view('competition_division_standing.organizer.show', compact('division'));
     }
 

@@ -24,6 +24,7 @@
       @php
       $awardWinner = false;
       $tied = false;
+      $ratings = null;
 
       if($item->division AND $item->award)
       {
@@ -48,10 +49,13 @@
         }
       }
 
+      if($item->round){
+        $ratings = $item->round->getRatings();
+      }
 
       @endphp
-      
-      @if($awardWinner !== false && $awardWinner->count())
+
+      @if(!empty($awardWinner) || !empty($ratings))
         <li class="schedule-item award">
           @if($item->division)
             <span class="division-name" data-division-id="{{ $item->division->id }}">{{ $item->division->name }}</span>
@@ -59,6 +63,11 @@
 
           @if($item->round)
             <span class="award-name">{{ $item->round->name }} Ratings</span>
+            @foreach($ratings as $rating)
+              <span class="award-winner pull-right">
+                  <span class="rating">{{ $rating['rating']['name'] }}:</span> <span class="award-winner-choir">{{ $rating['choir']->full_name }}</span>
+              </span><br>
+            @endforeach
           @endif
 
           @if($item->award)

@@ -306,6 +306,11 @@
         font-weight: bold;
       }
 
+      .rating {
+        margin: 0 1em;
+        font-style: italic;
+      }
+
       .details {
         float: right;
 
@@ -321,7 +326,7 @@
           font-size: 11px;
           letter-spacing: .5px;
         }
-        
+
         .final_rank {
           font-weight: bold;
           color: $cs-purple;
@@ -344,9 +349,9 @@
           & input {
             max-width: 60px;
           }
-          
+
         }
-        
+
         .raw_rank {
           color: $cs-gray-mid-3;
         }

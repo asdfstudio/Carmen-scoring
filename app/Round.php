@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Carmen\CountExpectedScores;
 use App\RawScore;
 use App\Carmen\Scoreboard;
+use App\Carmen\Ratings;
 
 class Round extends Model
 {
@@ -15,6 +16,8 @@ class Round extends Model
 		protected $dates = ['deleted_at'];
 
 		protected $fillable = ['division_id','name', 'sequence', 'max_choirs'];
+
+    protected $ratings;
 
 
 		public function division()
@@ -178,5 +181,15 @@ class Round extends Model
       }
 
       return $roundIsMissingScores;
+    }
+
+    public function getRatings(){
+      if(!empty($this->ratings)){
+        return $this->ratings;
+      }
+
+      return $this->ratings = (new Ratings($this))->all()->sortBy(function($rating){
+        return $rating['earned_score'];
+      });
     }
 }
