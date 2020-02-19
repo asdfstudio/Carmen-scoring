@@ -25,6 +25,12 @@
 			</li>
 		@endcan
 
+		@can('reactivateScoring', $round)
+      <li>
+        {!! form($reactivateScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id])]) !!}
+      </li>
+    @endcan
+
 		@can('deactivateScoring', $round)
 			<li>
 				{!! form($deactivateScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id])]) !!}
@@ -34,12 +40,6 @@
 		@can('completeScoring', $round)
 			<li>
 				{!! form($completeScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id])]) !!}
-			</li>
-		@endcan
-
-		@can('reactivateScoring', $round)
-			<li>
-				{!! form($reactivateScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id])]) !!}
 			</li>
 		@endcan
 
@@ -61,7 +61,7 @@
       $show_borda = false;
     }
   @endphp
-  
+
 	@parent
 
 	@if ($roundIsMissingScores)
@@ -76,7 +76,7 @@
       </li>
     </ul>
   @endif
-  
+
   {{-- Raw Scoring, 60/40 --}}
   @if ($division->scoring_method_id === 1 && $division->caption_weighting_id === 1)
     <ul class="list-group horizontal">
@@ -89,7 +89,7 @@
       </li>
     </ul>
   @endif
-  
+
   {{-- Ranked Scoring, 50/50 --}}
   @if ($division->scoring_method_id > 1 && $division->caption_weighting_id === 2)
     <ul class="list-group horizontal">
@@ -129,7 +129,7 @@
       </li>
     </ul>
   @endif
-  
+
   {{-- Condorcet methods have an extra table that is formatted a little differently to show rankings. --}}
   @if($is_condorcet)
   	@include('scores.organizer.ranked_condorcet',['choirs' => $choirs, 'judges' => $division->judges])

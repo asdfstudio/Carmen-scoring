@@ -8,6 +8,9 @@ use App\Carmen\CountExpectedScores;
 use App\RawScore;
 use App\Carmen\Scoreboard;
 use App\Carmen\Ratings;
+use Event;
+use App\Events\RoundScoringActivated;
+use App\Events\RoundScoringCompleted;
 
 class Round extends Model
 {
@@ -139,6 +142,7 @@ class Round extends Model
     {
       $this->is_scoring_active = true;
       $this->is_completed = false;
+      Event::fire(new RoundScoringActivated($this));
       return $this->save();
     }
 
@@ -160,6 +164,7 @@ class Round extends Model
     {
       $this->is_scoring_active = false;
       $this->is_completed = true;
+      Event::fire(new RoundScoringCompleted($this));
       return $this->save();
     }
 
@@ -182,6 +187,12 @@ class Round extends Model
 
       return $roundIsMissingScores;
     }
+
+    public function isNewRound()
+    {
+      return strcmp($this->created_at, $this->updated_at) === 0;
+    }
+
 
     public function getRatings(){
       if(!empty($this->ratings)){

@@ -6,9 +6,7 @@ use Kris\LaravelFormBuilder\Form;
 
 class ReactivateScoringForm extends Form
 {
-
     protected $formOptions = [
-      //'class' => 'pull-left',
       'method' => 'POST'
     ];
 

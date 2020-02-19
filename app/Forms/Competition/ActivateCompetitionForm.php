@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Forms\Scoring;
+namespace App\Forms\Competition;
 
 use Kris\LaravelFormBuilder\Form;
 
-class ActivateScoringForm extends Form
+class ActivateCompetitionForm extends Form
 {
     protected $formOptions = [
       'method' => 'POST'
@@ -13,6 +13,6 @@ class ActivateScoringForm extends Form
     public function buildForm()
     {
         $this->add('activate','hidden',['value' => '1']);
-        $this->add('submit', 'submit', ['label' => 'Activate Scoring', 'attr' => ['class' => 'action']]);
+        $this->add('submit', 'submit', ['label' => 'Activate Competition', 'attr' => ['class' => 'action']]);
     }
 }

@@ -30,8 +30,6 @@ use App\Carmen\CountExpectedScores;
 use Kris\LaravelFormBuilder\FormBuilder;
 
 use Event;
-use App\Events\RoundScoringActivated;
-use App\Events\RoundScoringCompleted;
 use App\Events\RoundSaved;
 use App\Events\StandingRefreshNeeded;
 
@@ -210,11 +208,11 @@ class CompetitionDivisionRoundController extends Controller
       ])->find($round_id);
 
       $this->authorize('show', $round);
-      
+
       if(Auth::user()->isAdmin() && isset($_GET['refresh_standings'])){
         Event::fire(new StandingRefreshNeeded($round));
       }
-      
+
       $division = $round->division;
       $competition = $division->competition;
       $rounds = $division->rounds;
@@ -230,9 +228,15 @@ class CompetitionDivisionRoundController extends Controller
       $weightedScores = $scoreboard->extendedRawScores;
       $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
-      $roundIsMissingScores = $round->isMissingScores();
-
       $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
+        'url' => route('organizer.competition.division.round.scoring', [
+          $competition_id,
+          $division_id,
+          $round_id
+        ])
+      ]);
+
+      $reactivateScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm', [
         'url' => route('organizer.competition.division.round.scoring', [
           $competition_id,
           $division_id,
@@ -255,18 +259,10 @@ class CompetitionDivisionRoundController extends Controller
           $round_id
         ]),
         'data' => [
-          'isMissingScores' => $roundIsMissingScores
+          'isMissingScores' => $round->isMissingScores()
         ]
       ]);
 
-      $reactivateScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm', [
-        'url' => route('organizer.competition.division.round.scoring', [
-          $competition_id,
-          $division_id,
-          $round_id
-        ])
-      ]);
-      
       return view('competition_division_round.organizer.show', compact('captions', 'rawScores', 'weightedScores', 'rankedScores', 'round', 'competition', 'division', 'divisions', 'rounds', 'activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard', 'judges', 'choirs', 'ratings', 'roundIsMissingScores'));
 		}
 
@@ -296,11 +292,11 @@ class CompetitionDivisionRoundController extends Controller
       ])->find($round_id);
 
       $this->authorize('show', $round);
-      
+
       if(Auth::user()->isAdmin() && isset($_GET['refresh_standings'])){
         Event::fire(new StandingRefreshNeeded($round));
       }
-      
+
       $division = $round->division;
       $competition = $division->competition;
       $rounds = $division->rounds;
@@ -355,46 +351,39 @@ class CompetitionDivisionRoundController extends Controller
 
     public function scoring($competition_id, $division_id, $round_id, Request $request)
     {
-      $round = Round::find($round_id);
-
+      $round = Round::with('division')->find($round_id);
 
       // Activate scoring
       if($request->input('activate'))
       {
         $this->authorize('activateScoring', $round);
-        $round->activateScoring();
+        $round->division->activateScoring();
         $new_status = 'activated';
-        Event::fire(new RoundScoringActivated($round));
       }
       // Deactivate scoring
       elseif($request->input('deactivate'))
       {
         $this->authorize('deactivateScoring', $round);
-        $round->deactivateScoring();
+        $round->division->deactivateScoring();
         $new_status = 'disabled';
       }
       // Reactivate scoring
       elseif($request->input('reactivate'))
       {
         $this->authorize('reactivateScoring', $round);
-        $round->reactivateScoring();
+        $round->division->reactivateScoring();
         $new_status = 'reactivated';
       }
-      // Complete and deactive scoring for all division rounds
+      // Complete and deactivate scoring for all division rounds
       elseif($request->input('complete'))
       {
         $this->authorize('completeScoring', $round);
-        $round->completeScoring();
+        $round->division->completeScoring();
         $new_status = 'completed';
-        Event::fire(new RoundScoringCompleted($round));
       }
       else {
         return false;
       }
-
-      //$round->is_scoring_active = $is_scoring_active;
-      //$round->is_completed = $is_completed;
-      //$round->save();
 
       return redirect()->route('organizer.competition.division.round.index',[$competition_id,$division_id])->with('success', "Scoring for $round->name is now $new_status.");
     }

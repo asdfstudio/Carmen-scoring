@@ -31,7 +31,7 @@ class RoundPolicy extends BasePolicy
 
     public function before($user, $ability)
 		{
-      
+
 		}
 
     public function show(User $user, $round)
@@ -71,7 +71,7 @@ class RoundPolicy extends BasePolicy
         return false;
       }
 
-      if($this->isOrgAdmin AND $round->status_slug() == 'inactive')
+      if($this->isOrgAdmin AND $round->status_slug() == 'inactive' AND $round->isNewRound())
       {
         return true;
       }
@@ -87,7 +87,7 @@ class RoundPolicy extends BasePolicy
 
     public function reactivateScoring(User $user, Round $round)
     {
-      if($this->isOrgAdmin AND $round->status_slug() == 'completed' AND $round->division->status_slug() != 'finalized')
+      if($this->isOrgAdmin AND !$round->isNewRound() AND ($round->status_slug() == 'completed' OR $round->status_slug() == 'inactive') AND $round->division->status_slug() != 'finalized')
       {
         return true;
       }

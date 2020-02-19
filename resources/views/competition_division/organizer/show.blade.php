@@ -7,31 +7,40 @@
 @section('content')
 
 	<ul class="actions-group mv">
-		@can('activateScoring', $division)
+		@can('activateScoring', $division->rounds()->first())
 			<li>{!! form($activateScoringForm) !!}</li>
 		@endcan
 
-		@can('completeScoring', $division)
-			<li>{!! form($completeScoringForm) !!}</li>
+		@can('reactivateScoring', $division->rounds()->first())
+      <li>
+        {!! form($reactivateScoringForm) !!}
+      </li>
+    @endcan
 
+    @can('deactivateScoring', $division->rounds()->first())
+      <li>
+        {!! form($deactivateScoringForm) !!}
+      </li>
+    @endcan
+
+		@can('completeScoring', $division->rounds()->first())
+			<li>{!! form($completeScoringForm) !!}</li>
 		@endcan
 
 		@can('finalizeScoring', $division)
 			<li>{!! form($finalizeScoringForm) !!}</li>
-
 		@endcan
 
 		@can('update', $division)
 			<li>{{ link_to_route('organizer.competition.division.edit', 'Edit Division', [$competition,$division],['class' => 'action']) }}</li>
 			<li>{{ link_to_route('organizer.competition.division.board', 'Enter Set Up Mode', [$competition,$division],['class' => 'action']) }}</li>
-
 		@endcan
 
 	</ul>
 
 	<div class="clearfix"></div>
 
-	@if ($divisionRoundIsMissingScores)
+	@if ($division->isMissingScores())
 		<p class="alert alert-warning">At least one round of this division is currently missing scores. Do not complete the scoring until you have received scores from all judges.</p>
 	@endif
 
