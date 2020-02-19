@@ -18,6 +18,7 @@
       $awardWinner = false;
       $sponsor = false;
       $tied = false;
+      $ratings = null;
 
       if($item->division AND $item->award)
       {
@@ -48,10 +49,14 @@
           $tied = $awardWinner->count() > 1 ? true : false;
         }
       }
-      
+
+      if($item->round){
+        $ratings = $item->round->getRatings();
+      }
+
       @endphp
 
-      @if($awardWinner !== false && $awardWinner->count())
+      @if(!empty($awardWinner) || !empty($ratings))
         <li class="schedule-item award">
 
           <div class="award-heading">
@@ -78,16 +83,11 @@
 
 
           @if($item->round)
-            @php $roundRatings = $ratings->where('round_id', $item->round->id)->first();@endphp
-
-            @if($roundRatings)
               <ul class="list-group">
-                @foreach($roundRatings['ratings'] as $rating)
-                  <li class="list-group-item">{{ $rating['choir']->full_name }}: {{ $rating['rating']['name'] }}</li>
+                @foreach($ratings as $rating)
+                  <li class="list-group-item"><span class="rating">{{ $rating['rating']['name'] }}:</span> <span class="award-winner-choir">{{ $rating['choir']->full_name }}</span></li>
                 @endforeach
               </ul>
-            @endif
-
           @endif
 
           @foreach($awardWinner as $theWinner)

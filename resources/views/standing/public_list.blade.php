@@ -12,8 +12,9 @@ $captionId = $standing->caption_id ? $standing->caption_id : 0;
 @if($standing->choirs)
 <ul class="list-group">
   @foreach($standing->choirs as $choir)
+    @php $rating = $division->getRatings()->where('choir.id', $choir->id)->pluck('rating.name')->first(); @endphp
     <li class="list-group-item standing">
-      <span class="choir">{{ $choir->full_name }}</span>
+      <span class="choir">{{ $choir->full_name }}</span> @if($rating)<span class="rating">Rating: {{ $rating }}</span>@endif
 
       @php
       $rank_name = false;

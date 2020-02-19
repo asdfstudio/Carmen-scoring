@@ -8,7 +8,7 @@
     {{ Form::hidden('round_id', $round_id) }}
     @php if($judge_id) { $selected = $judge_id; } else {  $selected = false; }
     @endphp
-       
+
     {{ Form::select('judge_id', $judgeList, $selected, ['placeholder' => 'Select a judge', 'class' => 'selectize']) }}
     {{ Form::submit('Submit', ['class' => 'btn btn-primary btn-md comment-submit-btn']) }}
     </div>
@@ -34,12 +34,12 @@
                         <audio controls> <source src="{{$recording->url}}"> </audio>
                         <span> {{$recording->created_at}} (UTC)</span>
                 </div>
-                <a class="delete record-span" id="delete-recording" onclick="deleteRecording({{$recording->id}})" href="javascript::void(0)"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <a class="delete record-span" id="delete-recording" onclick="deleteRecording({{$recording->id}})" href="javascript:void(0)"><i class="fa fa-trash" aria-hidden="true"></i></a>
             </div>
-           
+
             @endforeach
-        </div>  
-      @endif 
+        </div>
+      @endif
     </div>
 
 @endif

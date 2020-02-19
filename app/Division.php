@@ -6,6 +6,8 @@ use App\Scopes\OrderByNameScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Carmen\Ratings;
+
 class Division extends Model
 {
     use SoftDeletes;
@@ -35,6 +37,8 @@ class Division extends Model
       'combo_award_sponsors' => 'array',
       'rating_system' => 'array'
     ];
+
+    protected $ratings;
 
     protected static function boot()
     {
@@ -177,13 +181,21 @@ class Division extends Model
       return '<span class="'.$class.'">'.$this->status.'</span>';
     }
 
+    public function isMissingScores()
+    {
+      return $this->rounds()->count() ? $this->rounds()->first()->isMissingScores() : true;
+    }
 
     public function activateScoring()
     {
       $this->is_scoring_active = true;
       $this->is_completed = false;
       $this->is_published = false;
-      return $this->save();
+      $saved = $this->save();
+
+      $this->rounds()->first()->activateScoring();
+
+      return $saved;
     }
 
     public function deactivateScoring()
@@ -191,7 +203,11 @@ class Division extends Model
       $this->is_scoring_active = false;
       $this->is_completed = false;
       $this->is_published = false;
-      return $this->save();
+      $saved = $this->save();
+
+      $this->rounds()->first()->deactivateScoring();
+
+      return $saved;
     }
 
     public function reactivateScoring()
@@ -199,7 +215,11 @@ class Division extends Model
       $this->is_scoring_active = true;
       $this->is_completed = false;
       $this->is_published = false;
-      return $this->save();
+      $saved = $this->save();
+
+      $this->rounds()->first()->reactivateScoring();
+
+      return $saved;
     }
 
     public function completeScoring()
@@ -209,8 +229,7 @@ class Division extends Model
       $this->is_published = false;
       $saved = $this->save();
 
-      // Update all rounds
-      $this->rounds()->update(['is_completed' => true]);
+      $this->rounds()->first()->completeScoring();
 
       return $saved;
     }
@@ -234,6 +253,14 @@ class Division extends Model
       return $this->save();
     }
 
+
+    public function getRatings(){
+      if(!empty($this->ratings)){
+        return $this->ratings;
+      }
+
+      return $this->ratings = $this->rounds->first()->getRatings();
+    }
 /*
     public function setOverallAwardSponsorsAttribute($value)
     {

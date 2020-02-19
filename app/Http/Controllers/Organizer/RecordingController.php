@@ -11,7 +11,7 @@ use Auth;
 
 class RecordingController extends Controller
 {
-   
+
     public function getJudgeRecording(Request $request)
     {
         $data=$request->all();
@@ -20,15 +20,16 @@ class RecordingController extends Controller
         // Get an existing recording
     }
 
-    public function destroy(Request $request,$id)
+    public function destroy(Request $request, $id)
     {
-       
-        $recording=Recording::findorfail($id); // fetch the recording
-      //  $recordingPath = strstr($recording->url, 'recordings/'); remove from s3
-      //  removeS3File($recordingPath);
-        $recording->delete(); //delete the fetched recording
-       
-       return  $request->session()->flash('success', 'Record has been deleted successfully.');
-        
+
+        $recording = Recording::findorfail($id);
+
+        $recordingPath = strstr($recording->url, 'recordings/');
+        removeS3File($recordingPath);
+        $recording->delete();
+
+        return  $request->session()->flash('success', 'Record has been deleted successfully.');
+
     }
 }

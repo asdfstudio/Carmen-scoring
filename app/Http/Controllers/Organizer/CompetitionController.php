@@ -97,19 +97,12 @@ class CompetitionController extends Controller
 
         $this->authorize('show', $competition);
 
-        $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
+        $activateScoringForm = $formBuilder->create('Competition\ActivateCompetitionForm', [
           'method' => 'POST',
           'url' => route('organizer.competition.scoring',[$competition])
         ]);
 
-
-
-        /*$deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm', [
-          'method' => 'POST',
-          'url' => route('organizer.competition.scoring',[$competition])
-        ]);*/
-
-        $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm', [
+        $completeScoringForm = $formBuilder->create('Competition\CloseCompetitionForm', [
           'method' => 'POST',
           'url' => route('organizer.competition.scoring',[$competition])
         ]);
@@ -230,22 +223,14 @@ class CompetitionController extends Controller
 
       $this->authorize('update',$competition);
 
-      //dd($competition);
-
       // Activate scoring for
-      //all of the division rounds for this competition
+      // all of the division rounds for this competition
       if($request->input('activate'))
       {
         //$is_scoring_active = true;
         $competition->is_completed = false;
         $competition->is_archived = NULL;
       }
-      // Deactive scoring for all division rounds
-      /*elseif($request->input('deactivate'))
-      {
-        $is_scoring_active = false;
-        $is_completed = NULL;
-      }*/
       // Complete and deactive scoring for all division rounds
       elseif($request->input('complete'))
       {
@@ -263,13 +248,6 @@ class CompetitionController extends Controller
       }
 
       $competition->save();
-
-      /*foreach($competition->rounds as $round)
-      {
-        $round->is_scoring_active = $is_scoring_active;
-        $round->is_completed = $is_completed;
-        $round->save();
-      }*/
 
       return redirect()->route('organizer.competition.show',[$competition]);
     }

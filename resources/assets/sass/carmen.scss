@@ -348,7 +348,7 @@ a.active {
 .add-rating {
   clear: both;
   padding: 15px;
-  
+
   button {
     display: block;
     width: 100%;
@@ -357,7 +357,7 @@ a.active {
 
 .remove-rating {
   padding-top: 23px;
-  
+
   button {
     /*background: #f2dede;*/
     color: #a94442;
@@ -508,7 +508,7 @@ a.active {
       padding: 25px 0 15px;
     }
   }
-  
+
   // Clearfix
   &::after {
     content: "";
@@ -653,18 +653,18 @@ a.active {
   display: flex;
   margin: 20px 0;
   text-align: center;
-  
+
   @media (min-width: $tablet-min) {
     display: inline-block;
   }
-  
+
   a.user-person-filter {
     margin-bottom: 4px;
     font-size: 13px;
     padding: 6px;
     border-radius: 0;
     flex-grow: 1;
-    
+
     &:first-child {
       border-top-left-radius: 4px;
       border-bottom-left-radius: 4px;
@@ -679,11 +679,11 @@ a.active {
       font-size: 14px;
       padding: 6px 12px;
     }
-    
+
     @media (min-width: $tablet-min) {
       border-radius: 4px;
     }
-    
+
     &.active {
       font-weight: 400;
     }
@@ -693,11 +693,11 @@ a.active {
 #user-person-search {
   position: relative;
   margin: 20px 0;
-  
+
   @media (min-width: $tablet-min) {
     display: inline-block;
   }
-  
+
   img {
     position: absolute;
     top: 11px;
@@ -706,12 +706,12 @@ a.active {
     height: 16px;
     z-index: 1;
     opacity: .5;
-    
+
     @media (min-width: $tablet-min) {
       left: 30px;
     }
   }
-  
+
   input {
     position: relative;
     top: 2px;
@@ -719,7 +719,7 @@ a.active {
     width: 100%;
     border: 1px #ccc solid;
     border-radius: 4px;
-    
+
     @media (min-width: $tablet-min) {
       margin-left: 20px;
       width: 300px;
@@ -729,30 +729,30 @@ a.active {
 
 #user-person-list {
   border-top: 1px #ddd solid;
-  
+
   &.users-only .person.non-user,
   &.non-users-only .person.user {
     display: none;
   }
-  
+
   .person {
     position: relative;
     padding: 25px 20px;
     border: 1px #ddd solid;
     border-top-width: 0;
-    
+
     @media (min-width: $tablet-min) {
       padding: 25px 30px;
     }
-    
+
     &.even {
       background-color: #f9f9f9;
     }
-    
+
     &.search-hidden {
       display: none;
     }
-    
+
     .user-flag {
       position: absolute;
       top: 0;
@@ -764,42 +764,42 @@ a.active {
       font-size: 13px;
       text-align: center;
     }
-    
+
     &.user .user-flag {
       background: $cs-green;
     }
-    
+
     &.non-user .user-flag {
       background: $cs-purple;
     }
-    
+
     .name {
       font-size: 18px;
       font-weight: 700;
       margin-bottom: 10px;
     }
-    
+
     .user-blocks {
-      
+
       @media (min-width: $tablet-min) {
         display: flex;
       }
 
       .user-details {
         line-height: 2;
-        
+
         @media (min-width: $tablet-min) {
           padding: 0 30px;
           width: 70%;
         }
-        
+
         .detail {
           margin: 5px 0;
 
           @media (min-width: $tablet-min) {
             display: flex;
           }
-          
+
           .detail-label,
           .detail-value {
             display: block;
@@ -807,7 +807,7 @@ a.active {
 
           .detail-label {
             font-weight: 700;
-            
+
             @media (min-width: $tablet-min) {
               width: 30%;
               min-width: 120px;
@@ -821,7 +821,7 @@ a.active {
               width: 70%;
               min-width: 200px;
             }
-            
+
             a {
               display: inline;
             }
@@ -840,7 +840,7 @@ a.active {
             border-radius: 6px;
             background: #b84660;
             line-height: 1;
-            
+
             &.user-role {
               background: $cs-green;
             }
@@ -854,7 +854,7 @@ a.active {
           width: 30%;
           border-left: 1px #ddd solid;
         }
-        
+
         .user-actions-title {
           font-weight: 700;
           line-height: 2;
@@ -864,7 +864,7 @@ a.active {
         a.btn.action {
           margin-top: -2px;
         }
-        
+
         form {
           display: inline-block;
         }

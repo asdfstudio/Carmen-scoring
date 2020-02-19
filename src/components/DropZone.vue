@@ -1,5 +1,5 @@
 <template>
-  <vue2-dropzone ref="dropzone" :options="dropzoneOptions" @vdropzone-sending="uploadFile"  @vdropzone-file-added="uploadprogress" @vdropzone-complete="complete" @vdropzone-error="error" />
+  <vue2-dropzone ref="dropzone" :options="dropzoneOptions" @vdropzone-sending="uploadFile"  @vdropzone-file-added="uploadprogress" @vdropzone-success="success" @vdropzone-complete="complete" @vdropzone-error="error" />
 </template>
 
 <script>
@@ -34,8 +34,11 @@ export default {
       formData.append('round_id', this.choir.round_id)
       formData.append('choir_id', this.choir.id)
     },
-    success: function () {
-      this.$emit('upload-complete')
+    success: function (file, response) {
+      if(typeof response === 'undefined' || typeof response.url === 'undefined'){
+        console.log(response)
+        this.$emit('upload-error')
+      }
     },
     complete: function (file, response) {
       this.$emit('upload-complete')
