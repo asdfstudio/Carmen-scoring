@@ -46,15 +46,37 @@
       window.spreadsheetHeader = $('#spreadsheet-header')
       window.spreadsheetContainer = $('#spreadsheet')
       window.spreadsheetTable = $('#spreadsheet > table')
+      window.spreadsheetHeaderVisible = true
+      window.spreadsheetHeaderHidden = false
+
       $(window.spreadsheetContainer).scroll(function(e){
-        if(e.target.scrollTop != 0){
+
+        if(e.target.scrollTop != 0 && window.spreadsheetHeaderVisible){
+
           var combinedHeight = e.target.offsetHeight + window.spreadsheetHeader.height() + 50
+
           if(window.spreadsheetTable.height() > combinedHeight){
-            window.spreadsheetHeader.hide(100)
+
+            window.spreadsheetHeaderVisible = false
+
+            window.spreadsheetHeader.hide(100, function(){
+              //setTimeout(function(){ window.spreadsheetHeaderHidden = true }, 100)
+              window.spreadsheetHeaderHidden = true
+            })
+
           }
-        } else {
-          window.spreadsheetHeader.show(100)
+
+        } else if(e.target.scrollTop == 0 && window.spreadsheetHeaderHidden){
+
+          window.spreadsheetHeaderHidden = false
+
+          window.spreadsheetHeader.show(100, function(){
+            setTimeout(function(){ window.spreadsheetHeaderVisible = true }, 500)
+            //window.spreadsheetHeaderVisible = true
+          })
+
         }
+
       })
     })
   </script>
