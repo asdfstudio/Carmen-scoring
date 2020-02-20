@@ -1,28 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang=en>
 <head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=_token content={{csrf_token()}}>
-<title>Carmen - Judge Spreadsheet</title>
-<script>
-window.__DIVISIONS__ = {!! $divisions !!};
-window.__CHOIRS__ = {!! $choirs !!};
-window.__CRITERIA__ = {!! $criteria !!};
-window.__SCORES__ = {!! $scores !!};
-window.__COMMENTS__ = {!! $comments !!};
-window.__CAPTIONS__ = {!! $captions !!};
-window.__CAPTION_WEIGHTING_ID__ = {!! $captionWeightingId !!};
-window.__RATINGS__ = {!! $rating_system !!};
-window.__SPREADSHEET_TITLE__ = "{!! $spreadsheetTitle !!}";
-window.__BACK_URL__ = "{!! $backUrl !!}";
-window.__IS_SPREADSHEET_SCORING_ACTIVE__ = "{!! $isSpreadsheetScoringActive !!}";
-window. __RECORDED_COMMENTS__ = {!! $recordedComments !!}; 
-window. __Competition__ = {!! $competition !!}; 
-</script>
-<script type=text/javascript src=/js/mic-recorder.js></script>
-<link href=/css/dynamic-colors.css rel=stylesheet>
-<link href=/static/css/app.54529df7035626f4f29955f423812753.css rel=stylesheet></head>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <meta name=_token content={{csrf_token()}}>
+  <title>Carmen - Judge Spreadsheet</title>
+  <script>
+    window.__DIVISIONS__ = {!! $divisions !!};
+    window.__CHOIRS__ = {!! $choirs !!};
+    window.__CRITERIA__ = {!! $criteria !!};
+    window.__SCORES__ = {!! $scores !!};
+    window.__COMMENTS__ = {!! $comments !!};
+    window.__CAPTIONS__ = {!! $captions !!};
+    window.__CAPTION_WEIGHTING_ID__ = {!! $captionWeightingId !!};
+    window.__RATINGS__ = {!! $rating_system !!};
+    window.__SPREADSHEET_TITLE__ = "{!! $spreadsheetTitle !!}";
+    window.__BACK_URL__ = "{!! $backUrl !!}";
+    window.__IS_SPREADSHEET_SCORING_ACTIVE__ = "{!! $isSpreadsheetScoringActive !!}";
+    window. __RECORDED_COMMENTS__ = {!! $recordedComments !!};
+    window. __Competition__ = {!! $competition !!};
+  </script>
+  <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js integrity=sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb crossorigin=anonymous></script>
+  <script type=text/javascript src=/js/mic-recorder.js></script>
+  <link href=/css/dynamic-colors.css rel=stylesheet>
+  <style>
+    html, body {
+      position: relative;
+      height: 100%;
+    }
+  </style>
+<link href=/static/css/app.69bbacdc3a19c068a60269601775acfa.css rel=stylesheet></head>
 <body>
   <input type=hidden id=recordingsInProgress value=0>
   <div id=app></div>
@@ -34,6 +41,16 @@ window. __Competition__ = {!! $competition !!};
       }
       return;
     };
+
+    $(document).ready(function(){
+      $('#spreadsheet').scroll(function(e){
+        if(e.target.scrollTop == 0){
+          $('#spreadsheet-header').show(100)
+        } else {
+          $('#spreadsheet-header').hide(100)
+        }
+      })
+    })
   </script>
-<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.41ea52dbb86cd037fb1d.js></script><script type=text/javascript src=/static/js/app.7f05dd07ff29224bc127.js></script></body>
+<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.41ea52dbb86cd037fb1d.js></script><script type=text/javascript src=/static/js/app.5c2a4485b12862c923e0.js></script></body>
 </html>

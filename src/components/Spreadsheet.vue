@@ -395,12 +395,25 @@ export default {
 
 /* @import url('https://showchoir.carmenscoring.com/css/dynamic-colors.css'); */
 
+::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #eee;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #666;
+}
+
 #spreadsheet {
   margin: 5px;
   margin-top:5px;
-  margin-bottom: 300px;
   position: relative;
-  width: 100%;
+  width: calc(100% - 10px);
+  height: 100%;
   z-index: 1;
   overflow: scroll;
 
@@ -409,7 +422,8 @@ export default {
   }
 
   &.spaceBelow {
-    margin-bottom: 300px;
+    padding-bottom: 280px;
+    height: calc(100% + 280px);
   }
 
   th, td {

@@ -51,7 +51,7 @@ endif;
 
       @foreach($choirs as $choir)
         <td>&nbsp;
-          
+
         </td>
       @endforeach
     </tr>

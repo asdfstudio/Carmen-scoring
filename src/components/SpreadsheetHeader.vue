@@ -35,17 +35,18 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 #spreadsheet-header {
-  padding: 15px 0 3px;
+  padding: 15px 0;
   min-height: 30px;
+  width: 100%;
   color: #fff;
   position: relative;
   top: 0;
   left: 0;
   right: 0;
   background: #272B2D;
-  margin-bottom: 5px;
   text-align: left;
-  
+  overflow: scroll;
+
   h2 {
     margin-top: 0;
     margin-left: 240px;

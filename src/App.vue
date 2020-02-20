@@ -98,7 +98,11 @@ body {
   text-align: center;
   color: #333333;
   padding: 0;
-
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 #modal-cover {
