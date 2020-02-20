@@ -7,7 +7,7 @@ use App\Division;
 use App\Competition;
 
 class ScoringMethod {
-  
+
   protected $weightedScores;
   protected $penalties;
   protected $judges = [];
@@ -20,8 +20,8 @@ class ScoringMethod {
   protected $totals = [];
   protected $skip_epoch = '2020-02-06';
   protected $is_the_skip_epoch;
-  
-  
+
+
   public function __construct($weightedScores, $penalties = false)
   {
     if($weightedScores->count()){
@@ -37,26 +37,26 @@ class ScoringMethod {
     $this->choirs = $this->weightedScores->unique('choir_id')->pluck('choir_id');
     $this->captions = $this->weightedScores->unique('criterion_caption_id')->pluck('criterion_caption_id');
   }
-  
-  
+
+
   public function weighted_scores()
   {
     return $this->weightedScores;
   }
-  
-  
+
+
   public function total_raw_rank($caption_id = false)
   {
     return $this->calculate_rank('score', $caption_id);
   }
-  
-  
+
+
   public function total_weighted_rank($caption_id = false)
   {
     return $this->calculate_rank('weightedScore', $caption_id);
   }
-  
-  
+
+
   public function calculate_rank($scoreField = 'score', $caption_id = false)
   {
     $captionRank = collect();
@@ -97,8 +97,8 @@ class ScoringMethod {
     // Assign rank and return
     return $this->assign_rank_skippy($sorted);
   }
-  
-  
+
+
   public function total_rank($caption_id = false)
   {
     $key = $caption_id ? $caption_id : 0;
@@ -118,11 +118,11 @@ class ScoringMethod {
 
     // Assign rank and return
     $rank = $this->assign_rank_skippy($sorted);
-    
+
     return $this->total_ranked[$key] = $rank;
   }
-  
-  
+
+
   public function total($choir_id, $caption_id = false)
   {
     $key = $choir_id.'x'.$caption_id;
@@ -136,12 +136,12 @@ class ScoringMethod {
       $rank = $this->rank($judge_id, $caption_id)->where('choir_id', $choir_id)->pluck('rank')->first();
       $total = $total + $rank;
     });
-    
+
     $this->totaled[$key] = $total;
     return $total;
   }
-  
-  
+
+
   public function rank($judge_id = false, $caption_id = false)
   {
     $key = $judge_id."x".$caption_id;
@@ -157,8 +157,8 @@ class ScoringMethod {
 
     return $this->ranked[$key] = $this->assign_rank($sorted);
   }
-  
-  
+
+
   protected function calculate_scores($judge_id, $caption_id, $scoreField = 'weightedScore')
   {
     $key = $judge_id."x".$caption_id;
@@ -203,13 +203,12 @@ class ScoringMethod {
       if($score){
         $scores->put($choir_id, ['choir_id' => $choir_id, 'score' => $score]);
       }
-
     });
 
     return $this->calculated_scores[$key] = $scores;
   }
-  
-  
+
+
   protected function assign_rank($sortedTotals, $force_skippy = false)
   {
     // Assign number rank
@@ -229,7 +228,7 @@ class ScoringMethod {
       }
 
       $previous_score = $item['score'];
-      
+
       // The skip epoch ensures that all competitions after a certain point will use the
       // skippy method, while leaving historical scores unaffected.
       if($this->is_the_skip_epoch || $force_skippy){
@@ -237,10 +236,10 @@ class ScoringMethod {
       } else {
         $loops = $previous_rank + 1;
       }
-      
+
       return $item;
     });
-    
+
     // Go back through and flag any results that are a tie.
     $rank = $rank->map(function($item) use ($tied_ranks) {
 
@@ -249,19 +248,19 @@ class ScoringMethod {
       } else {
         $item['tied'] = 0;
       }
-      
+
       return $item;
     });
 
     return $rank;
   }
-  
-  
+
+
   protected function assign_rank_skippy($sortedTotals)
   {
     // The second argument forces the skippy method.
     return $this->assign_rank($sortedTotals, true);
   }
-  
-  
+
+
 }
