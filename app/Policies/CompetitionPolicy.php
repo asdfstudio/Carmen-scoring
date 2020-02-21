@@ -64,7 +64,7 @@ class CompetitionPolicy extends BasePolicy
       }
 		}
 
-    public function completeScoring(User $user, Competition $competition)
+    public function closeCompetition(User $user, Competition $competition)
     {
       if($this->isOrgAdmin AND $competition->is_completed == false)
       {
@@ -72,7 +72,7 @@ class CompetitionPolicy extends BasePolicy
       }
     }
 
-    public function activateScoring(User $user, Competition $competition)
+    public function activateCompetition(User $user, Competition $competition)
     {
       if($this->isOrgAdmin AND $competition->is_completed)
       {

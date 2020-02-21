@@ -7,11 +7,11 @@
 @section('content')
 
 	<ul class="actions-group mv">
-		@can('activateScoring', $division)
+		@can('activateScoring', $division->rounds->first())
 			<li>{!! form($activateScoringForm) !!}</li>
 		@endcan
 
-		@can('completeScoring', $division)
+		@can('completeScoring', $division->rounds->first())
 			<li>{!! form($completeScoringForm) !!}</li>
 
 		@endcan

@@ -23,13 +23,13 @@
 @section('content')
 
   <ul class="actions-group mv">
-    @can('activateScoring', $competition)
+    @can('activateCompetition', $competition)
       <li>{!! form($activateScoringForm) !!}</li>
     @endcan
     @can('archiveCompetition', $competition)
       <li>{!! form($archiveCompetitionForm) !!}</li>
     @endcan
-    @can('completeScoring', $competition)
+    @can('closeCompetition', $competition)
       <li>{!! form($completeScoringForm) !!}</li>
     @endcan
   </ul>

@@ -95,7 +95,7 @@ class RoundPolicy extends BasePolicy
 
     public function completeScoring(User $user, Round $round)
     {
-      if($this->isOrgAdmin AND $round->status_slug() == 'active')
+      if($this->isOrgAdmin AND !$round->isMissingScores() && $round->status_slug() != 'completed')
       {
         return true;
       }

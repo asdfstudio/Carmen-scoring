@@ -30,7 +30,11 @@ class ScoringMethod {
       $route_params = \Route::current()->parameters();
       $competition = Competition::find($route_params['competition']);
     }
-    $this->is_the_skip_epoch = isset($_GET['skip_ranks']) ? boolval(intval($_GET['skip_ranks'])) : $competition->begin_date >= $this->skip_epoch;
+    if(isset($_GET['skip_ranks'])){
+      $this->is_the_skip_epoch = boolval(intval($_GET['skip_ranks']));
+    } else {
+      $this->is_the_skip_epoch = empty($competition) || empty($competition->begin_date) || $competition->begin_date >= $this->skip_epoch;
+    }
     $this->weightedScores = $weightedScores;
     $this->penalties = $penalties;
     $this->judges = $this->weightedScores->unique('judge_id')->pluck('judge_id');

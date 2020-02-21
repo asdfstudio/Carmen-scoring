@@ -68,17 +68,6 @@ class DivisionPolicy extends BasePolicy
       }
 		}
 
-    public function activateScoring(User $user, Division $division)
-    {
-      if($this->isAdmin AND $division->status_slug() != 'active')
-      {
-        return true;
-      } elseif($this->isOrgAdmin AND $division->status_slug() == 'completed')
-      {
-        return true;
-      }
-    }
-
     public function finalizeScoring(User $user, Division $division)
     {
       if($this->isOrgAdmin AND $division->status_slug() == 'completed')
@@ -86,34 +75,6 @@ class DivisionPolicy extends BasePolicy
         return true;
       }
     }
-
-    /*public function deactivateScoring(User $user, Division $division)
-    {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
-      {
-        return true;
-      }
-    }*/
-
-    /*public function reactivateScoring(User $user, Division $division)
-    {
-      if($this->isAdmin)
-      {
-        return true;
-      } elseif($this->isOrgAdmin AND $division->status_slug() == 'completed')
-      {
-        return true;
-      }
-    }*/
-
-    public function completeScoring(User $user, Division $division)
-    {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
-      {
-        return true;
-      }
-    }
-
 
     public function importJudges(User $user, Division $division)
     {

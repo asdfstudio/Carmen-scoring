@@ -42,7 +42,6 @@
 				{!! form($completeScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id])]) !!}
 			</li>
 		@endcan
-
 	</ul>
 @endsection
 

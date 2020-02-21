@@ -176,10 +176,12 @@ class Round extends Model
 
       $expectedScores = new CountExpectedScores($this);
       $expectectedScoresCount = $expectedScores->run();
+      //dd($expectectedScoresCount);
 
       $actualScoresCount = RawScore::where('round_id', $this->id)->where('score','>',0)->count();
+      //dd($actualScoresCount);
 
-      if ($actualScoresCount < $expectectedScoresCount) {
+      if ($expectectedScoresCount == 0 || $actualScoresCount < $expectectedScoresCount) {
         $roundIsMissingScores = true;
       } else {
         $roundIsMissingScores = false;
