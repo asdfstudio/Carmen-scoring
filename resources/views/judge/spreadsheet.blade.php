@@ -29,7 +29,7 @@
       height: 100%;
     }
   </style>
-<link href=/static/css/app.69bbacdc3a19c068a60269601775acfa.css rel=stylesheet></head>
+<link href=/static/css/app.edbec7bd296d215a00b452344f826749.css rel=stylesheet></head>
 <body>
   <input type=hidden id=recordingsInProgress value=0>
   <div id=app></div>
@@ -80,5 +80,5 @@
       })
     })
   </script>
-<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.41ea52dbb86cd037fb1d.js></script><script type=text/javascript src=/static/js/app.5c2a4485b12862c923e0.js></script></body>
+<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.41ea52dbb86cd037fb1d.js></script><script type=text/javascript src=/static/js/app.7629e94bf99f9b65d2cd.js></script></body>
 </html>

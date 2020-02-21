@@ -7,13 +7,17 @@
 
     <div v-if="activeModal && activeModalType !== 'choirCriterion'" id="modal-cover" v-bind:class="activeModalType"></div>
 
-    <CriterionModal v-if="activeModalType === 'criterion'" v-bind:class="activeModalType"/>
+    <div id="modal-wrapper">
 
-    <ChoirModal v-if="activeModalType === 'choir'" v-bind:class="activeModalType"/>
+      <CriterionModal v-if="activeModalType === 'criterion'" v-bind:class="activeModalType"/>
 
-    <ChoirCommentModal v-if="activeModalType === 'choirComment'" v-bind:class="activeModalType"/>
+      <ChoirModal v-if="activeModalType === 'choir'" v-bind:class="activeModalType"/>
 
-    <ChoirCriterionModal v-if="activeModalType === 'choirCriterion'" v-bind:class="activeModalType"/>
+      <ChoirCommentModal v-if="activeModalType === 'choirComment'" v-bind:class="activeModalType"/>
+
+      <ChoirCriterionModal v-if="activeModalType === 'choirCriterion'" v-bind:class="activeModalType"/>
+
+    </div>
 
   </div>
 </template>
@@ -118,6 +122,15 @@ body {
 
 #modal-cover.choirCriterion {
   opacity: .25;
+}
+
+#modal-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
 }
 
 .clickable {

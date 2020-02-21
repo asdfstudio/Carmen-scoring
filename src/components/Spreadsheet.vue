@@ -418,7 +418,7 @@ export default {
   overflow: scroll;
 
   &.fixed {
-    position: fixed;
+    //position: fixed;
   }
 
   &.spaceBelow {
