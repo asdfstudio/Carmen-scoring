@@ -11,10 +11,9 @@
 			<li>{!! form($activateScoringForm) !!}</li>
 		@endcan
 
-		@can('completeScoring', $division->rounds->first())
+		@if(auth()->user()->isAdmin() || auth()->user()->can('completeScoring', $division->rounds->first()))
 			<li>{!! form($completeScoringForm) !!}</li>
-
-		@endcan
+		@endif
 
 		@can('finalizeScoring', $division)
 			<li>{!! form($finalizeScoringForm) !!}</li>
