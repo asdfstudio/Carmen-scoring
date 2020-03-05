@@ -11,7 +11,7 @@
 			<li>{!! form($activateScoringForm) !!}</li>
 		@endcan
 
-		@if($division->rounds->first()->status_slug() != 'completed' && (auth()->user()->isAdmin() || auth()->user()->can('completeScoring', $division->rounds->first())))
+		@if($division->rounds->first() && $division->rounds->first()->status_slug() != 'completed' && (auth()->user()->isAdmin() || auth()->user()->can('completeScoring', $division->rounds->first())))
 			<li>{!! form($completeScoringForm) !!}</li>
 		@endif
 
