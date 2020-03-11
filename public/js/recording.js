@@ -10,12 +10,26 @@ function AudioRecorder (element) {
 
   this.widget = $(element)
   this.otherWidgets = $('.audio-recorder').not(this.widget)
-  this.button = $(this.widget).find('.ar-control button')
-  this.existingLabel = $(this.widget).find('.ar-existing')
-  this.progressText = $(this.widget).find('.ar-progress-text')
+  this.mode = this.widget.data('mode')
+  this.controlButton = this.widget.find('.ar-control button')
+  this.recorderTitle = this.widget.find('.ar-title')
+  this.playbackTitle = this.widget.find('.ar-title-playback')
+  this.playbackTitleSlot = this.playbackTitle.find('span')
+  this.existingLabel = this.widget.find('.ar-existing')
+  this.progressText = this.widget.find('.ar-progress-text')
+  this.playlistClose = this.widget.find('.ar-playback-close')
+  this.playlist = this.widget.find('.ar-playlist > ol')
+  this.playlistItems = this.widget.find('.ar-playlist > ol > li')
+  this.playlistPlayPause = this.playlistItems.find('.ar-playlist-play-pause')
+  this.playlistDownload = this.playlistItems.find('.ar-playlist-download')
+  this.playlistDelete = this.playlistItems.find('.ar-playlist-delete')
+  this.playlistCurrentItem = null
+  this.playlistCurrentPlayPause = null
+  this.playlistCurrentAudio = null
   this.recordingTime = 0
   this.recordingTimer = null
-  this.progressMeterBar = $(this.widget).find('.ar-meter-bar')
+  this.progressMeterBox = this.widget.find('.ar-meter-box')
+  this.progressMeterBar = this.widget.find('.ar-meter-bar')
   this.micRecorder = new MicRecorder({bitRate: 128})
   this.choirId = parseInt(this.widget.data('choir')) || 0
   this.roundId = parseInt(this.widget.data('round')) || 0
@@ -31,12 +45,122 @@ function AudioRecorder (element) {
       Event Listeners
     ================================================================================*/
 
-  this.button.click((e) => {
-    e.preventDefault()
-    if(!this.widget.hasClass('disabled')){
-      this.startRecording();
+  if(this.mode === 'recorder'){
+    this.controlButton.click((e) => {
+      e.preventDefault()
+      if(!this.widget.hasClass('disabled')){
+        this.startRecording();
+      }
+    });
+  } else {
+    this.controlButton.remove()
+  }
+
+  this.existingLabel.click((e) => {
+    if(this.widget.hasClass('playlist-expanded')){
+      this.widget.removeClass('playlist-expanded');
+    } else {
+      this.widget.addClass('playlist-expanded');
     }
-  });
+  })
+
+  this.setupPlaylistPlayPause = () => {
+    this.playlistPlayPause.off('click')
+
+    this.playlistPlayPause.click((e) => {
+      e.preventDefault()
+
+      this.playlistCurrentItem = $(e.target).closest('li')
+
+      // First, see if this is the initial playback click for this item.
+      if(!this.playlistCurrentItem.hasClass('playing')){
+        // Stop all audio players on the page.
+        $('audio').each((index, audio) => {
+          audio.pause()
+          audio.currentTime = 0
+          $(audio).off('timeupdate')
+          $(audio).off('ended')
+        })
+
+        this.playlistItems.removeClass('playing')
+        this.playlistCurrentItem.addClass('playing')
+
+        this.playbackTitleSlot.text(this.playlistCurrentItem.find('.recording-name').text())
+
+        if(!this.widget.hasClass('playback')){
+          this.widget.addClass('playback disabled')
+        }
+
+        this.playlistPlayPause.removeClass('active')
+        this.playlistCurrentPlayPause = this.playlistCurrentItem.find('.ar-playlist-play-pause')
+        this.playlistCurrentPlayPause.addClass('active')
+
+        this.playlistCurrentAudio = this.playlistCurrentItem.find('audio')[0]
+
+        $(this.playlistCurrentAudio).on('timeupdate', (e) => {
+          var formattedTime = this.formatTime(this.playlistCurrentAudio.currentTime)
+          this.progressText.text(formattedTime)
+          var percent = this.playlistCurrentAudio.currentTime / this.playlistCurrentAudio.duration * 100
+          this.progressMeterBar.css('width', percent + '%')
+        })
+
+        $(this.playlistCurrentAudio).on('ended', (e) => {
+          this.playlistCurrentPlayPause.removeClass('active')
+        })
+
+        this.progressMeterBox.click((e) => {
+          console.log(e)
+          console.log($(e.target).width())
+          this.playlistCurrentAudio.currentTime = (e.offsetX / $(e.target).width()) * this.playlistCurrentAudio.duration
+        })
+
+        this.playlistCurrentAudio.play()
+      } else {
+        // If this item was already the "current" item (whether playing or paused), no setup is needed. Just handle controls.
+        if(this.playlistCurrentAudio.paused || this.playlistCurrentAudio.ended){
+          this.playlistCurrentPlayPause.addClass('active')
+          this.playlistCurrentAudio.play()
+        } else {
+          this.playlistCurrentPlayPause.removeClass('active')
+          this.playlistCurrentAudio.pause()
+        }
+      }
+    })
+  }
+
+  this.setupPlaylistPlayPause()
+
+  this.setupPlaylistDelete = () => {
+    this.playlistDelete.off('click')
+
+    this.playlistDelete.click((e) => {
+      e.preventDefault()
+      var id = $(e.target).closest('li').data('id')
+      this.deleteRecording(id)
+    })
+  }
+
+  this.setupPlaylistDelete()
+
+  if(this.mode === 'recorder'){
+    this.playlistClose.click((e) => {
+      this.widget.removeClass('playback disabled')
+      this.playbackTitleSlot.text('')
+      this.playlistItems.removeClass('playing')
+      this.playlistPlayPause.removeClass('active')
+      $('audio').each((index, audio) => {
+        audio.pause()
+        audio.currentTime = 0
+        $(audio).off('timeupdate')
+        $(audio).off('ended')
+      })
+      this.progressText.text('--:--')
+      this.progressMeterBar.css('width', '')
+      this.progressMeterBox.off('click')
+    })
+  } else {
+    this.playlistClose.remove()
+  }
 
   $(window).on('beforeunload', () => {
     if (this.recordingInProgress) {
@@ -147,9 +271,26 @@ function AudioRecorder (element) {
           this.uploadSuccessDenouement = true
 
           this.widget.data('count', this.existingRecordingCount)
+          this.widget.attr('data-count', this.existingRecordingCount)
           this.progressMeterBar.css('width', '100%')
           this.widget.removeClass('unknown')
           this.existingLabel.text(this.existingRecordingCount + ' ' + (this.existingRecordingCount == 1 ? 'Recording' : 'Recordings') + ' on File')
+
+          if(this.playlist.hasClass('empty')){
+            this.playlist.find('li').remove()
+            this.playlist.removeClass('empty')
+          }
+
+          this.playlist.append('<li id="recording-' + result.id + '" data-id="' + result.id + '" data-url="' + result.url + '"><audio><source src="' + result.url + '"></audio><span class="recording-name">' + result.nice_date + '</span><div class="ar-playlist-functions"><button class="ar-playlist-play-pause" title="Play/Pause"></button><a class="ar-playlist-download" title="Download Recording" href="' + result.url + '" download="' + result.nice_date + '" type="application/octet-stream"></a><button class="ar-playlist-delete" title="Delete Recording"></button></div></li>')
+
+          // Refresh collections that need to account for the new item.
+          this.playlistItems = this.widget.find('.ar-playlist > ol > li')
+          this.playlistPlayPause = this.playlistItems.find('.ar-playlist-play-pause')
+          this.playlistDownload = this.playlistItems.find('.ar-playlist-download')
+          this.playlistDelete = this.playlistItems.find('.ar-playlist-delete')
+
+          this.setupPlaylistPlayPause()
+          this.setupPlaylistDelete()
         }
 
         console.log('Result:', result)
@@ -207,15 +348,7 @@ function AudioRecorder (element) {
   this.updateProgressText = () => {
     var formattedText
     if(this.recordingInProgress){
-      var seconds = this.recordingTime
-      var hours = Math.floor(seconds / 3600)
-      seconds = seconds - (hours * 3600)
-      var minutes = Math.floor(seconds / 60)
-      seconds = seconds - (minutes * 60)
-      formattedText = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0')
-      if(hours){
-        formattedText = hours + ':' + formattedText;
-      }
+      formattedText = this.formatTime(this.recordingTime)
     } else if(this.uploadInProgress){
       formattedText = 'UPLOADING'
     } else if(this.uploadSuccessDenouement){
@@ -240,6 +373,19 @@ function AudioRecorder (element) {
     this.updateProgressText()
   }
 
+  this.formatTime = (seconds) => {
+    seconds = Math.floor(seconds)
+    var hours = Math.floor(seconds / 3600)
+    seconds = seconds - (hours * 3600)
+    var minutes = Math.floor(seconds / 60)
+    seconds = seconds - (minutes * 60)
+    var formattedText = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0')
+    if(hours){
+      formattedText = hours + ':' + formattedText;
+    }
+    return formattedText
+  }
+
   this.warnRecordingSaveError = () => {
     alert('There was an error saving your recording to the server.  Please refresh this page and try again.')
   }
@@ -250,16 +396,27 @@ function AudioRecorder (element) {
 
   this.deleteRecording = (id) => {
     if (confirm('Are you sure you want to delete the recording?') == true) {
+      var itemToDelete = this.playlistItems.filter('[data-id='+id+']')
       $.ajax({
         url: '/organizer/recording/delete/' + id,
         method: 'DELETE',
         beforeSend: (jqXHR, settings) => {
           jqXHR.setRequestHeader('X-CSRF-TOKEN', $('meta[name="_token"]').attr('content'))
-        },
-        success: (result) => {
-          location.reload()
+          this.widget.addClass('deleting')
+          itemToDelete.addClass('deleting')
         }
-      })
+      }).done(
+        (result, textStatus, jqXHR) => {
+          itemToDelete.animate({"height": 0}, 250, 'swing', () => {
+            itemToDelete.remove()
+          })
+          this.existingRecordingCount--
+          this.widget.data('count', this.existingRecordingCount)
+          this.widget.attr('data-count', this.existingRecordingCount)
+          this.widget.removeClass('deleting')
+          this.existingLabel.text(this.existingRecordingCount + ' ' + (this.existingRecordingCount == 1 ? 'Recording' : 'Recordings') + ' on File')
+        }
+      )
     }
   }
 }

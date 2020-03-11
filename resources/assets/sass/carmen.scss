@@ -919,6 +919,10 @@ a.active {
   display: inline-block;
 }
 
+.recording-wrapper {
+  margin: 30px 0;
+}
+
 .record-row {
   margin-top: 30px;
   padding-top: 20px;
@@ -939,3 +943,559 @@ a.active {
     }
   }
 }
+
+
+.audio-recorder {
+  position: relative;
+  padding-top: 75px;
+  min-width: 240px;
+  line-height: 1;
+  text-align: left;
+  color: #ffffff;
+  background: #4b5256;
+  overflow: hidden;
+
+  .ar-info {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 75px;
+    padding: 8px 4px 0 12px;
+    transition: all 0.5s ease;
+
+    .ar-title {
+      position: absolute;
+      top: 8px;
+      left: 12px;
+      right: 4px;
+      height: 16px;
+      font-weight: bold;
+      font-size: 16px;
+      overflow: hidden;
+      transition: all 0.5s ease;
+    }
+
+    .ar-title-playback {
+      position: absolute;
+      top: 24px;
+      left: 12px;
+      right: 4px;
+      height: 0;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 16px;
+      overflow: hidden;
+      transition: all 0.5s ease;
+    }
+
+    .ar-existing {
+      position: absolute;
+      top: 32px;
+      left: 12px;
+      right: 4px;
+      font-size: 14px;
+      color: #e5e5e5;
+      margin-bottom: 5px;
+      text-decoration: underline;
+      cursor: pointer;
+
+      &::after {
+        content: ' ';
+        display: inline-block;
+        position: relative;
+        top: -2px;
+        margin-left: 5px;
+        border-top: 5px #e5e5e5 solid;
+        border-right: 6px transparent solid;
+        border-left: 6px transparent solid;
+        border-bottom: 0 #e5e5e5 solid;
+        transition: all 0.5s ease;
+      }
+    }
+  }
+
+  .ar-playback-close {
+    position: absolute;
+    top: 6px;
+    right: -36px;
+    width: 24px;
+    height: 24px;
+    opacity: .9;
+    cursor: pointer;
+    /* Close icon from FontAwesome (https://fontawesome.com/license). Not modified except for color. */
+    background: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="window-close" class="svg-inline--fa fa-window-close fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23ffffff" d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z"></path></svg>') no-repeat center center;
+    transition: right 0.5s ease, opacity 0.25s ease;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .ar-control {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 75px;
+    height: 75px;
+    border-right: 1px #808080 solid;
+    overflow: hidden;
+    transition: all 0.5s ease;
+
+    button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      background: #903d9a;
+      border: none;
+      transition: all 0.25s ease;
+
+      .ar-control-symbol {
+        display: block;
+        position: absolute;
+        top: 34px;
+        left: 50%;
+        margin: -10px;
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        background: #ffffff;
+        transition: all 0.5s ease;
+      }
+
+      &:hover {
+        background: #7F4091;
+      }
+
+      &::after {
+        content: 'RECORD';
+        display: block;
+        position: absolute;
+        bottom: 9px;
+        left: 0;
+        right: 0;
+        font-size: 11px;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  &.recording .ar-control {
+    button {
+      background: #ee191c;
+
+      .ar-control-symbol {
+        border-radius: 0;
+      }
+
+      &:hover {
+        background: #de2131;
+      }
+
+      &::after {
+        content: 'STOP';
+      }
+    }
+  }
+
+
+  &.disabled .ar-control {
+    button {
+      background: transparent;
+      cursor: not-allowed;
+
+      .ar-control-symbol {
+        opacity: .5;
+      }
+    }
+
+    button::after {
+      opacity: .5;
+    }
+  }
+
+  .ar-progress {
+    position: absolute;
+    top: 58px;
+    left: 75px;
+    right: 0;
+    height: 16px;
+    background: #272B2D;
+    box-sizing: content-box;
+    border-top: 1px #808080 solid;
+    transition: all 0.5s ease;
+
+    .ar-meter-box {
+      position: absolute;
+      top: 5px;
+      right: 44px;
+      bottom: 5px;
+      left: 5px;
+      border: 1px #606060 solid;
+      border-radius: 3px;
+
+      .ar-meter-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        background: #ee191c;
+        border-radius: 3px;
+        transition: all 0.25s ease;
+      }
+
+      .ar-meter-bar::after {
+        content: ' ';
+        display: block;
+        position: absolute;
+        top: 3px;
+        right: 0;
+        width: 0;
+        height: 0;
+        border-radius: 5px;
+        background: #ee191c;
+        border: 0 rgba(255, 127, 127, 0) solid;
+      }
+    }
+
+    .ar-progress-text {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 38px;
+      font-size: 11px;
+      text-align: center;
+    }
+  }
+
+
+  &.recording .ar-progress {
+    .ar-meter-box .ar-meter-bar {
+      width: 85%;
+    }
+
+    .ar-meter-box .ar-meter-bar::after {
+      top: -3px;
+      right: -5px;
+      width: 10px;
+      height: 10px;
+      border: 1px rgba(255, 127, 127, 1) solid;
+      animation: ar_beacon_glow 1s alternate ease infinite;
+    }
+  }
+
+  &.uploading .ar-progress {
+    .ar-meter-box {
+      right: 74px;
+    }
+
+    .ar-meter-box .ar-meter-bar {
+      background: #0985eb;
+    }
+
+    .ar-progress-text {
+      width: 68px;
+    }
+  }
+
+  &.uploading.unknown .ar-progress .ar-meter-box .ar-meter-bar,
+  &.deleting .ar-progress .ar-meter-box .ar-meter-bar {
+    width: 100%;
+    background: #0985eb;
+    background-image: linear-gradient(
+      -45deg,
+      #0985eb 25%,
+      #80c6ff 25%,
+      #80c6ff 50%,
+      #0985eb 50%,
+      #0985eb 75%,
+      #80c6ff 75%,
+      #80c6ff
+    );
+    background-size: 50px 50px;
+    animation: ar_stripe_motion 2s linear infinite;
+  }
+
+  &.playback {
+    .ar-info {
+      left: 0;
+      right: 40px;
+
+      .ar-title {
+        height: 0;
+      }
+
+      .ar-title-playback {
+        top: 8px;
+        height: 16px;
+      }
+    }
+
+    .ar-playback-close {
+      right: 12px;
+    }
+
+    .ar-control {
+      width: 0;
+    }
+
+    .ar-progress {
+      left: 0;
+    }
+  }
+
+  .ar-playlist {
+    max-height: 0;
+    overflow-y: scroll;
+    font-size: 13px;
+    transition: all 0.5s ease;
+
+    ol {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      counter-reset: ar-playlist-counter;
+
+      li {
+        counter-increment: ar-playlist-counter;
+        padding-left: 38px;
+
+        &::before {
+          content: counter(ar-playlist-counter) ".";
+          opacity: 0.5;
+          font-weight: bold;
+          position: absolute;
+          width: 20px;
+          text-align: right;
+          left: 10px;
+        }
+      }
+
+      &.empty {
+        li {
+          padding-left: 18px;
+
+          &::before {
+            display: none;
+          }
+        }
+      }
+    }
+
+    li {
+      position: relative;
+      padding: 18px;
+      height: 50px;
+      border-top: 1px #808080 solid;
+
+      &:hover {
+        background: #586065;
+      }
+
+      audio {
+        display: none;
+      }
+
+      .ar-playlist-functions {
+        display: flex;
+        position: absolute;
+        top: 9px;
+        right: 14px;
+        height: 32px;
+
+        button, a {
+          display: block;
+          position: relative;
+          margin-left: 3px;
+          width: 32px;
+          height: 32px;
+          text-decoration: none;
+          border: 1px #808080 solid;
+          border-radius: 2px;
+          background: #272B2D;
+          transition: all 0.25s ease;
+
+          &:active {
+            background: #903d9a;
+          }
+
+          &:hover {
+            background: #7F4091;
+          }
+
+          &.ar-playlist-play-pause {
+            &::after {
+              content: ' ';
+              display: block;
+              position: absolute;
+              top: 10px;
+              left: 10px;
+              width: 12px;
+              height: 12px;
+              border-top: 6px transparent solid;
+              border-right: 0 #ffffff solid;
+              border-bottom: 6px transparent solid;
+              border-left: 12px #ffffff solid;
+            }
+
+            &.active::after {
+              top: 9px;
+              left: 9px;
+              width: 14px;
+              height: 14px;
+              border-top: 0 transparent solid;
+              border-right: 5px #ffffff solid;
+              border-bottom: 0 transparent solid;
+              border-left: 5px #ffffff solid;
+            }
+          }
+
+          &.ar-playlist-download {
+            &::after {
+              /* Download icon from FontAwesome (https://fontawesome.com/license). Not modified except for color. */
+              content: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="download" class="svg-inline--fa fa-download fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23ffffff" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path></svg>');
+              position: absolute;
+              top: 8px;
+              left: 9px;
+              width: 14px;
+            }
+          }
+
+          &.ar-playlist-delete {
+            &:hover {
+              background: #ee191c;
+            }
+
+            &::after {
+              /* Trash icon from FontAwesome (https://fontawesome.com/license). Not modified except for color. */
+              content: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash" class="svg-inline--fa fa-trash fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="%23ffffff" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"></path></svg>');
+              position: absolute;
+              top: 8px;
+              left: 9px;
+              width: 12px;
+            }
+          }
+        }
+      }
+
+      &.playing {
+        color: #903d9a;
+        background: #e5e5e5;
+        border-color: #903d9a;
+
+        .ar-playlist-functions {
+          button.ar-playlist-play-pause {
+            background: #903d9a;
+
+            &:hover {
+              background: #7F4091;
+            }
+          }
+        }
+      }
+
+      &.deleting {
+        color: #ee191c;
+        background: #e5c0c0;
+        border-color: #ee191c;
+
+        .ar-playlist-functions {
+          opacity: .5;
+        }
+      }
+    }
+  }
+
+  &.playlist-expanded,
+  &[data-mode="player"] {
+    .ar-info .ar-existing::after {
+        border-top: 0 #e5e5e5 solid;
+        border-bottom: 5px #e5e5e5 solid;
+    }
+
+    .ar-playlist {
+      max-height: 175px;
+    }
+
+    &.tall-playlist .ar-playlist {
+      max-height: 375px;
+    }
+
+    &[data-count="1"] .ar-playlist {
+      max-height: 50px;
+    }
+
+    &[data-count="2"] .ar-playlist {
+      max-height: 100px;
+    }
+
+    &[data-count="3"] .ar-playlist {
+      max-height: 150px;
+    }
+
+    &[data-count="4"].tall-playlist .ar-playlist {
+      max-height: 200px;
+    }
+
+    &[data-count="5"].tall-playlist .ar-playlist {
+      max-height: 250px;
+    }
+
+    &[data-count="6"].tall-playlist .ar-playlist {
+      max-height: 300px;
+    }
+
+    &[data-count="7"].tall-playlist .ar-playlist {
+      max-height: 350px;
+    }
+  }
+
+  &[data-mode="player"] {
+    .ar-info {
+      left: 0;
+      right: 0;
+
+      .ar-existing {
+        text-decoration: none;
+        cursor: normal;
+
+        &::after {
+          display: none;
+        }
+      }
+    }
+
+    .ar-progress {
+      left: 0;
+    }
+
+    .ar-playback-close,
+    .ar-control {
+      display: none;
+    }
+  }
+}
+
+
+@keyframes ar_beacon_glow {
+  from {
+    box-shadow: 0 0 10px 0 rgba(255, 0, 0, 0);
+  }
+  to {
+    box-shadow: 0 0 10px 2px rgba(255, 0, 0, 1);
+  }
+}
+
+@keyframes ar_stripe_motion {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 50px 50px;
+  }
+}
+

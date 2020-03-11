@@ -27,7 +27,7 @@ class CompetitionDivisionRoundController extends Controller
 {
 
 
-    public function summary($competition_id,$division_id,$round_id)
+    public function summary($competition_id, $division_id, $round_id)
     {
 
       $judge_id = Auth::user()->person_id;
@@ -57,7 +57,7 @@ class CompetitionDivisionRoundController extends Controller
         },
          'division.judges.captions.criteria','choirs',
          'choirs.recordings' => function($query) use ($division_id, $judge_id) {
-          $query->select('*', DB::raw('count(*) as total'))->where('division_id',$division_id)->where('judge_id',$judge_id)->groupBy('choir_id');
+          $query->where('division_id', $division_id)->where('judge_id', $judge_id);
         },
          'division.rounds', 'targets', 'targets.sources' => function($query) use ($round_id) {
           $query->where('id', '!=', $round_id);

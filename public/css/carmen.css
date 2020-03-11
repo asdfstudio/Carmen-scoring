@@ -5924,6 +5924,9 @@ a.active {
 .selectize-dropdown [data-selectable] .highlight {
   display: inline-block; }
 
+.recording-wrapper {
+  margin: 30px 0; }
+
 .record-row {
   margin-top: 30px;
   padding-top: 20px;
@@ -5938,3 +5941,365 @@ a.active {
     text-align: center; }
     .record-item .record-item-audio audio {
       display: block; }
+
+.audio-recorder {
+  position: relative;
+  padding-top: 75px;
+  min-width: 240px;
+  line-height: 1;
+  text-align: left;
+  color: #ffffff;
+  background: #4b5256;
+  overflow: hidden; }
+  .audio-recorder .ar-info {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 75px;
+    padding: 8px 4px 0 12px;
+    transition: all 0.5s ease; }
+    .audio-recorder .ar-info .ar-title {
+      position: absolute;
+      top: 8px;
+      left: 12px;
+      right: 4px;
+      height: 16px;
+      font-weight: bold;
+      font-size: 16px;
+      overflow: hidden;
+      transition: all 0.5s ease; }
+    .audio-recorder .ar-info .ar-title-playback {
+      position: absolute;
+      top: 24px;
+      left: 12px;
+      right: 4px;
+      height: 0;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 16px;
+      overflow: hidden;
+      transition: all 0.5s ease; }
+    .audio-recorder .ar-info .ar-existing {
+      position: absolute;
+      top: 32px;
+      left: 12px;
+      right: 4px;
+      font-size: 14px;
+      color: #e5e5e5;
+      margin-bottom: 5px;
+      text-decoration: underline;
+      cursor: pointer; }
+      .audio-recorder .ar-info .ar-existing::after {
+        content: ' ';
+        display: inline-block;
+        position: relative;
+        top: -2px;
+        margin-left: 5px;
+        border-top: 5px #e5e5e5 solid;
+        border-right: 6px transparent solid;
+        border-left: 6px transparent solid;
+        border-bottom: 0 #e5e5e5 solid;
+        transition: all 0.5s ease; }
+  .audio-recorder .ar-playback-close {
+    position: absolute;
+    top: 6px;
+    right: -36px;
+    width: 24px;
+    height: 24px;
+    opacity: .9;
+    cursor: pointer;
+    /* Close icon from FontAwesome (https://fontawesome.com/license). Not modified except for color. */
+    background: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="window-close" class="svg-inline--fa fa-window-close fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23ffffff" d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z"></path></svg>') no-repeat center center;
+    transition: right 0.5s ease, opacity 0.25s ease; }
+    .audio-recorder .ar-playback-close:hover {
+      opacity: 1; }
+  .audio-recorder .ar-control {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 75px;
+    height: 75px;
+    border-right: 1px #808080 solid;
+    overflow: hidden;
+    transition: all 0.5s ease; }
+    .audio-recorder .ar-control button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      background: #903d9a;
+      border: none;
+      transition: all 0.25s ease; }
+      .audio-recorder .ar-control button .ar-control-symbol {
+        display: block;
+        position: absolute;
+        top: 34px;
+        left: 50%;
+        margin: -10px;
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        background: #ffffff;
+        transition: all 0.5s ease; }
+      .audio-recorder .ar-control button:hover {
+        background: #7F4091; }
+      .audio-recorder .ar-control button::after {
+        content: 'RECORD';
+        display: block;
+        position: absolute;
+        bottom: 9px;
+        left: 0;
+        right: 0;
+        font-size: 11px;
+        text-transform: uppercase; }
+  .audio-recorder.recording .ar-control button {
+    background: #ee191c; }
+    .audio-recorder.recording .ar-control button .ar-control-symbol {
+      border-radius: 0; }
+    .audio-recorder.recording .ar-control button:hover {
+      background: #de2131; }
+    .audio-recorder.recording .ar-control button::after {
+      content: 'STOP'; }
+  .audio-recorder.disabled .ar-control button {
+    background: transparent;
+    cursor: not-allowed; }
+    .audio-recorder.disabled .ar-control button .ar-control-symbol {
+      opacity: .5; }
+  .audio-recorder.disabled .ar-control button::after {
+    opacity: .5; }
+  .audio-recorder .ar-progress {
+    position: absolute;
+    top: 58px;
+    left: 75px;
+    right: 0;
+    height: 16px;
+    background: #272B2D;
+    box-sizing: content-box;
+    border-top: 1px #808080 solid;
+    transition: all 0.5s ease; }
+    .audio-recorder .ar-progress .ar-meter-box {
+      position: absolute;
+      top: 5px;
+      right: 44px;
+      bottom: 5px;
+      left: 5px;
+      border: 1px #606060 solid;
+      border-radius: 3px; }
+      .audio-recorder .ar-progress .ar-meter-box .ar-meter-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        background: #ee191c;
+        border-radius: 3px;
+        transition: all 0.25s ease; }
+      .audio-recorder .ar-progress .ar-meter-box .ar-meter-bar::after {
+        content: ' ';
+        display: block;
+        position: absolute;
+        top: 3px;
+        right: 0;
+        width: 0;
+        height: 0;
+        border-radius: 5px;
+        background: #ee191c;
+        border: 0 rgba(255, 127, 127, 0) solid; }
+    .audio-recorder .ar-progress .ar-progress-text {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 38px;
+      font-size: 11px;
+      text-align: center; }
+  .audio-recorder.recording .ar-progress .ar-meter-box .ar-meter-bar {
+    width: 85%; }
+  .audio-recorder.recording .ar-progress .ar-meter-box .ar-meter-bar::after {
+    top: -3px;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    border: 1px #ff7f7f solid;
+    animation: ar_beacon_glow 1s alternate ease infinite; }
+  .audio-recorder.uploading .ar-progress .ar-meter-box {
+    right: 74px; }
+  .audio-recorder.uploading .ar-progress .ar-meter-box .ar-meter-bar {
+    background: #0985eb; }
+  .audio-recorder.uploading .ar-progress .ar-progress-text {
+    width: 68px; }
+  .audio-recorder.uploading.unknown .ar-progress .ar-meter-box .ar-meter-bar,
+  .audio-recorder.deleting .ar-progress .ar-meter-box .ar-meter-bar {
+    width: 100%;
+    background: #0985eb;
+    background-image: linear-gradient(-45deg, #0985eb 25%, #80c6ff 25%, #80c6ff 50%, #0985eb 50%, #0985eb 75%, #80c6ff 75%, #80c6ff);
+    background-size: 50px 50px;
+    animation: ar_stripe_motion 2s linear infinite; }
+  .audio-recorder.playback .ar-info {
+    left: 0;
+    right: 40px; }
+    .audio-recorder.playback .ar-info .ar-title {
+      height: 0; }
+    .audio-recorder.playback .ar-info .ar-title-playback {
+      top: 8px;
+      height: 16px; }
+  .audio-recorder.playback .ar-playback-close {
+    right: 12px; }
+  .audio-recorder.playback .ar-control {
+    width: 0; }
+  .audio-recorder.playback .ar-progress {
+    left: 0; }
+  .audio-recorder .ar-playlist {
+    max-height: 0;
+    overflow-y: scroll;
+    font-size: 13px;
+    transition: all 0.5s ease; }
+    .audio-recorder .ar-playlist ol {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      counter-reset: ar-playlist-counter; }
+      .audio-recorder .ar-playlist ol li {
+        counter-increment: ar-playlist-counter;
+        padding-left: 38px; }
+        .audio-recorder .ar-playlist ol li::before {
+          content: counter(ar-playlist-counter) ".";
+          opacity: 0.5;
+          font-weight: bold;
+          position: absolute;
+          width: 20px;
+          text-align: right;
+          left: 10px; }
+      .audio-recorder .ar-playlist ol.empty li {
+        padding-left: 18px; }
+        .audio-recorder .ar-playlist ol.empty li::before {
+          display: none; }
+    .audio-recorder .ar-playlist li {
+      position: relative;
+      padding: 18px;
+      height: 50px;
+      border-top: 1px #808080 solid; }
+      .audio-recorder .ar-playlist li:hover {
+        background: #586065; }
+      .audio-recorder .ar-playlist li audio {
+        display: none; }
+      .audio-recorder .ar-playlist li .ar-playlist-functions {
+        display: flex;
+        position: absolute;
+        top: 9px;
+        right: 14px;
+        height: 32px; }
+        .audio-recorder .ar-playlist li .ar-playlist-functions button, .audio-recorder .ar-playlist li .ar-playlist-functions a {
+          display: block;
+          position: relative;
+          margin-left: 3px;
+          width: 32px;
+          height: 32px;
+          text-decoration: none;
+          border: 1px #808080 solid;
+          border-radius: 2px;
+          background: #272B2D;
+          transition: all 0.25s ease; }
+          .audio-recorder .ar-playlist li .ar-playlist-functions button:active, .audio-recorder .ar-playlist li .ar-playlist-functions a:active {
+            background: #903d9a; }
+          .audio-recorder .ar-playlist li .ar-playlist-functions button:hover, .audio-recorder .ar-playlist li .ar-playlist-functions a:hover {
+            background: #7F4091; }
+          .audio-recorder .ar-playlist li .ar-playlist-functions button.ar-playlist-play-pause::after, .audio-recorder .ar-playlist li .ar-playlist-functions a.ar-playlist-play-pause::after {
+            content: ' ';
+            display: block;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 12px;
+            height: 12px;
+            border-top: 6px transparent solid;
+            border-right: 0 #ffffff solid;
+            border-bottom: 6px transparent solid;
+            border-left: 12px #ffffff solid; }
+          .audio-recorder .ar-playlist li .ar-playlist-functions button.ar-playlist-play-pause.active::after, .audio-recorder .ar-playlist li .ar-playlist-functions a.ar-playlist-play-pause.active::after {
+            top: 9px;
+            left: 9px;
+            width: 14px;
+            height: 14px;
+            border-top: 0 transparent solid;
+            border-right: 5px #ffffff solid;
+            border-bottom: 0 transparent solid;
+            border-left: 5px #ffffff solid; }
+          .audio-recorder .ar-playlist li .ar-playlist-functions button.ar-playlist-download::after, .audio-recorder .ar-playlist li .ar-playlist-functions a.ar-playlist-download::after {
+            /* Download icon from FontAwesome (https://fontawesome.com/license). Not modified except for color. */
+            content: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="download" class="svg-inline--fa fa-download fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23ffffff" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path></svg>');
+            position: absolute;
+            top: 8px;
+            left: 9px;
+            width: 14px; }
+          .audio-recorder .ar-playlist li .ar-playlist-functions button.ar-playlist-delete:hover, .audio-recorder .ar-playlist li .ar-playlist-functions a.ar-playlist-delete:hover {
+            background: #ee191c; }
+          .audio-recorder .ar-playlist li .ar-playlist-functions button.ar-playlist-delete::after, .audio-recorder .ar-playlist li .ar-playlist-functions a.ar-playlist-delete::after {
+            /* Trash icon from FontAwesome (https://fontawesome.com/license). Not modified except for color. */
+            content: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash" class="svg-inline--fa fa-trash fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="%23ffffff" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"></path></svg>');
+            position: absolute;
+            top: 8px;
+            left: 9px;
+            width: 12px; }
+      .audio-recorder .ar-playlist li.playing {
+        color: #903d9a;
+        background: #e5e5e5;
+        border-color: #903d9a; }
+        .audio-recorder .ar-playlist li.playing .ar-playlist-functions button.ar-playlist-play-pause {
+          background: #903d9a; }
+          .audio-recorder .ar-playlist li.playing .ar-playlist-functions button.ar-playlist-play-pause:hover {
+            background: #7F4091; }
+      .audio-recorder .ar-playlist li.deleting {
+        color: #ee191c;
+        background: #e5c0c0;
+        border-color: #ee191c; }
+        .audio-recorder .ar-playlist li.deleting .ar-playlist-functions {
+          opacity: .5; }
+  .audio-recorder.playlist-expanded .ar-info .ar-existing::after, .audio-recorder[data-mode="player"] .ar-info .ar-existing::after {
+    border-top: 0 #e5e5e5 solid;
+    border-bottom: 5px #e5e5e5 solid; }
+  .audio-recorder.playlist-expanded .ar-playlist, .audio-recorder[data-mode="player"] .ar-playlist {
+    max-height: 175px; }
+  .audio-recorder.playlist-expanded.tall-playlist .ar-playlist, .audio-recorder[data-mode="player"].tall-playlist .ar-playlist {
+    max-height: 375px; }
+  .audio-recorder.playlist-expanded[data-count="1"] .ar-playlist, .audio-recorder[data-mode="player"][data-count="1"] .ar-playlist {
+    max-height: 50px; }
+  .audio-recorder.playlist-expanded[data-count="2"] .ar-playlist, .audio-recorder[data-mode="player"][data-count="2"] .ar-playlist {
+    max-height: 100px; }
+  .audio-recorder.playlist-expanded[data-count="3"] .ar-playlist, .audio-recorder[data-mode="player"][data-count="3"] .ar-playlist {
+    max-height: 150px; }
+  .audio-recorder.playlist-expanded[data-count="4"].tall-playlist .ar-playlist, .audio-recorder[data-mode="player"][data-count="4"].tall-playlist .ar-playlist {
+    max-height: 200px; }
+  .audio-recorder.playlist-expanded[data-count="5"].tall-playlist .ar-playlist, .audio-recorder[data-mode="player"][data-count="5"].tall-playlist .ar-playlist {
+    max-height: 250px; }
+  .audio-recorder.playlist-expanded[data-count="6"].tall-playlist .ar-playlist, .audio-recorder[data-mode="player"][data-count="6"].tall-playlist .ar-playlist {
+    max-height: 300px; }
+  .audio-recorder.playlist-expanded[data-count="7"].tall-playlist .ar-playlist, .audio-recorder[data-mode="player"][data-count="7"].tall-playlist .ar-playlist {
+    max-height: 350px; }
+  .audio-recorder[data-mode="player"] .ar-info {
+    left: 0;
+    right: 0; }
+    .audio-recorder[data-mode="player"] .ar-info .ar-existing {
+      text-decoration: none;
+      cursor: normal; }
+      .audio-recorder[data-mode="player"] .ar-info .ar-existing::after {
+        display: none; }
+  .audio-recorder[data-mode="player"] .ar-progress {
+    left: 0; }
+  .audio-recorder[data-mode="player"] .ar-playback-close,
+  .audio-recorder[data-mode="player"] .ar-control {
+    display: none; }
+
+@keyframes ar_beacon_glow {
+  from {
+    box-shadow: 0 0 10px 0 rgba(255, 0, 0, 0); }
+  to {
+    box-shadow: 0 0 10px 2px red; } }
+
+@keyframes ar_stripe_motion {
+  from {
+    background-position: 0 0; }
+  to {
+    background-position: 50px 50px; } }

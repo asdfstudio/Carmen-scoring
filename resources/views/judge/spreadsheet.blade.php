@@ -22,6 +22,8 @@
   </script>
   <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js integrity=sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb crossorigin=anonymous></script>
   <script type=text/javascript src=/js/mic-recorder.js></script>
+  <script type=text/javascript src=/js/recording.js></script>
+  <link href=/css/carmen.css rel=stylesheet>
   <link href=/css/dynamic-colors.css rel=stylesheet>
   <style>
     html, body {
@@ -29,7 +31,7 @@
       height: 100%;
     }
   </style>
-<link href=/static/css/app.edbec7bd296d215a00b452344f826749.css rel=stylesheet></head>
+<link href=/static/css/app.9011e0c9f0f8834dd9c5f1110a8647b4.css rel=stylesheet></head>
 <body>
   <input type=hidden id=recordingsInProgress value=0>
   <div id=app></div>
@@ -80,5 +82,5 @@
       })
     })
   </script>
-<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.41ea52dbb86cd037fb1d.js></script><script type=text/javascript src=/static/js/app.7629e94bf99f9b65d2cd.js></script></body>
+<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.41ea52dbb86cd037fb1d.js></script><script type=text/javascript src=/static/js/app.295fdc27ca27a8ba1b6b.js></script></body>
 </html>

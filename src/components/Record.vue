@@ -5,10 +5,37 @@
       class="button"
       :class="{ 'cancel': choir.isDisabled }"
       v-on:click.stop.prevent="toggleRecording()"
+      style="display: none"
     >
       <span v-show="!choir.isRecording">Start Recording</span>
       <span v-show="choir.isRecording">Stop Recording</span>
     </button>
+    <div
+      class="audio-recorder"
+      :id="'audio-recorder-' + choir.id"
+      :data-count="filteredRecordings.length"
+      :data-choir="choir.id"
+      :data-round="choir.round_id"
+      :data-division="choir.division_id"
+      @recording_upload_started="uploadStarted"
+    >
+      <div class="ar-control">
+        <button>
+          <span class="ar-control-symbol"></span>
+        </button>
+      </div>
+      <div class="ar-info">
+        <div class="ar-title">Audio Recorder</div>
+        <div class="ar-existing">{{ filteredRecordings.length }} {{ filteredRecordings.length == 1 ? 'Recording' : 'Recordings' }} on File</div>
+      </div>
+      <div class="ar-progress">
+        <div class="ar-meter-box">
+          <div class="ar-meter-bar"></div>
+        </div>
+        <div class="ar-progress-text">--:--</div>
+      </div>
+    </div>
+    <div style="margin: 1em 0; font-style: italic;">Refresh page after recording to see new items listed below."</div>
     <ul ref="recList" class="list-container">
       <template v-for="(recording, index) in filteredRecordings">
         <li class="record-row" :key="index">
@@ -56,6 +83,11 @@ export default {
       const allRecordings = [...this.recordings, ...this.unsavedRecordings]
       return allRecordings.filter(
         recording => recording.choir_id === this.choir.id
+      )
+    },
+    audioRecorder () {
+      return window.audioRecorers.filter(
+        audioRecorer => audioRecorers.choirId === this.choir.id
       )
     }
   },
@@ -147,6 +179,43 @@ export default {
           this.$emit('upload-complete')
           this.isUploading = false
         })
+    },
+    uploadStarted (event) {
+      console.log('uploadStarted', event)
+      this.isUploading = true
+      var url = URL.createObjectURL(event.blob)
+      var datetime = currentdate.getUTCFullYear() +
+        '-' + (currentdate.getUTCMonth() + 1) +
+        '-' + currentdate.getUTCDate() +
+        ' ' + currentdate.getUTCHours() +
+        ':' + currentdate.getUTCMinutes() +
+        ':' + currentdate.getUTCSeconds()
+
+      this.unsavedRecordings.push({
+        choir_id: event.choir_id,
+        url: url,
+        created_at: datetime,
+        isUnsaved: true
+      })
+
+      this.isUploading = true
+    },
+    uploadSuccess (event) {
+      console.log('uploadSuccess', event)
+      var index = this.unsavedRecordings.length - 1
+      this.unsavedRecordings[index].isUnsaved = false
+
+    },
+    uploadError (event) {
+      console.log('uploadError', event)
+      var index = this.unsavedRecordings.length - 1
+      this.$emit('upload-error')
+      this.unsavedRecordings[index].isUnsaved = true
+    },
+    uploadComplete (event) {
+      console.log('uploadComplete', event)
+      this.$emit('upload-complete')
+      this.isUploading = false
     }
   }
 }
