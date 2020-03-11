@@ -32,7 +32,6 @@
       @php
         $recordings = $choir->recordings->where('judge_id', $judge_id)->where('round_id', $round_id);
         $recording_count = $recordings->count();
-        dd($judgeList);
       @endphp
       <h4>Recorded Audio Comments by {{ $judgeList[$judge_id] }}</h4>
       <div class="audio-recorder tall-playlist" id="audio-recorder-{{ $choir->id }}" data-mode="player" data-count="{{ $recording_count }}" data-choir="{{ $choir->id }}" data-round="{{ $round->id }}" data-division="{{ $round->division_id }}">
