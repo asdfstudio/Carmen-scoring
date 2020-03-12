@@ -20,8 +20,9 @@ function AudioRecorder (element) {
   this.existingLabel = this.widget.find('.ar-existing')
   this.progressText = this.widget.find('.ar-progress-text')
   this.playlistClose = this.widget.find('.ar-playback-close')
-  this.playlist = this.widget.find('.ar-playlist > ol')
-  this.playlistItems = this.widget.find('.ar-playlist > ol > li')
+  this.playlistContainer = this.widget.find('.ar-playlist')
+  this.playlist = this.playlistContainer.find('ol')
+  this.playlistItems = this.playlistContainer.find('ol > li')
   this.playlistPlayPause = this.playlistItems.find('.ar-playlist-play-pause')
   this.playlistDownload = this.playlistItems.find('.ar-playlist-download')
   this.playlistDelete = this.playlistItems.find('.ar-playlist-delete')
@@ -44,8 +45,33 @@ function AudioRecorder (element) {
 
 
   /*================================================================================
-      Event Listeners
+      Setup & Event Listeners
     ================================================================================*/
+
+  this.playlistItemHTML = (recording) => {
+    var maybeDeleteButton = this.canDelete ? '<button class="ar-playlist-delete" title="Delete Recording"></button>' : '';
+    return '<li id="recording-' + recording.id + '" data-id="' + recording.id + '" data-url="' + recording.url + '"><audio><source src="' + recording.url + '"></audio><div class="ar-playlist-item-name">' + niceDate(recording.created_at) + '</div><div class="ar-playlist-functions"><button class="ar-playlist-play-pause" title="Play/Pause"></button><a class="ar-playlist-download" title="Download Recording" href="' + recording.url + '" download="' + niceDate(recording.created_at) + '" type="application/octet-stream"></a>' + maybeDeleteButton + '</div></li>'
+  }
+
+  if(this.playlist.length == 0){
+    this.playlistContainer.append('<ol></ol>')
+    this.playlist = this.playlistContainer.find('ol')
+
+    if(this.playlistContainer.data('recordings')){
+      var recordings = this.playlistContainer.data('recordings')
+      for(var i = 0; i < recordings.length; i++){
+        this.playlist.append(this.playlistItemHTML(recordings[i]))
+      }
+      this.playlistItems = this.playlistContainer.find('ol > li')
+      this.playlistPlayPause = this.playlistItems.find('.ar-playlist-play-pause')
+      this.playlistDownload = this.playlistItems.find('.ar-playlist-download')
+      this.playlistDelete = this.playlistItems.find('.ar-playlist-delete')
+    }
+
+    if(!this.playlistItems.length){
+      this.playlist.addClass('empty').append('<li>No recordings on file.</li>')
+    }
+  }
 
   if(this.mode === 'recorder'){
     this.controlButton.click((e) => {
@@ -285,9 +311,7 @@ function AudioRecorder (element) {
             this.playlist.removeClass('empty')
           }
 
-          var maybeDeleteButton = this.canDelete ? '<button class="ar-playlist-delete" title="Delete Recording"></button>' : '';
-
-          this.playlist.append('<li id="recording-' + result.id + '" data-id="' + result.id + '" data-url="' + result.url + '"><audio><source src="' + result.url + '"></audio><span class="recording-name">' + result.nice_date + '</span><div class="ar-playlist-functions"><button class="ar-playlist-play-pause" title="Play/Pause"></button><a class="ar-playlist-download" title="Download Recording" href="' + result.url + '" download="' + result.nice_date + '" type="application/octet-stream"></a>' + maybeDeleteButton + '</div></li>')
+          this.playlist.append(this.playlistItemHTML(result))
 
           // Refresh collections that need to account for the new item.
           this.playlistItems = this.widget.find('.ar-playlist > ol > li')
@@ -433,26 +457,50 @@ $(document).ready(function () {
   })
 
   // Initialize the Dropzone.
-  // eslint-disable-next-line no-undef
-  Dropzone.autoDiscover = false
-  $('#myAwesomeDropzone').dropzone({
-    init: function() {
-      this.on("success", function(file, response) {
-        console.log(response);
-        if(typeof response.url === 'undefined'){
+  if($('#myAwesomeDropzone').lenth){
+    // eslint-disable-next-line no-undef
+    Dropzone.autoDiscover = false
+    $('#myAwesomeDropzone').dropzone({
+      init: function() {
+        this.on("success", function(file, response) {
+          console.log(response);
+          if(typeof response.url === 'undefined'){
+            warnUploadRecordingError();
+          }
+          console.log('Response:', response);
+        });
+        this.on("error", function(file, errorMessage, xhr) {
           warnUploadRecordingError();
-        }
-        console.log('Response:', response);
-      });
-      this.on("error", function(file, errorMessage, xhr) {
-        warnUploadRecordingError();
-        console.log('Error Message:', errorMessage);
-        console.log('XMLHttpRequest:', xhr);
-      });
-    },
-    paramName: 'file', // The name that will be used to transfer the file
-    maxFilesize: 500, // MB
-    acceptedFiles: 'audio/*',
-    addRemoveLinks: false
-  })
+          console.log('Error Message:', errorMessage);
+          console.log('XMLHttpRequest:', xhr);
+        });
+      },
+      paramName: 'file', // The name that will be used to transfer the file
+      maxFilesize: 500, // MB
+      acceptedFiles: 'audio/*',
+      addRemoveLinks: false
+    })
+  }
 })
+
+
+niceDate = (dateString) => {
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  var date = new Date(dateString)
+  var month = months[date.getMonth()]
+  var day = date.getDate()
+  var year = date.getFullYear()
+  var hour = date.getHours()
+  var ampm = hour > 11 ? 'PM' : 'AM'
+  if(hour == 0){
+    hour = 12
+  } else if(hour > 12){
+    hour = hour - 12
+  }
+  hour = hour.toString().padStart(2, '0')
+  var minute = date.getMinutes().toString().padStart(2, '0')
+  var second = date.getSeconds().toString().padStart(2, '0')
+  var timezone = 'UTC'
+
+  return month + '. ' + day + ', ' + year + ' at ' + hour + ':' + minute + ':' + second + ' ' + ampm + ' (' + timezone + ')'
+}

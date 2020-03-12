@@ -41,7 +41,7 @@ class RecordingController extends Controller
         // Save modal
         $recording->save();
 
-        $recording->nice_date = date('M. j, Y \a\t h:m:i A (\U\T\C)', strtotime($recording->created_at));
+        $recording->formatted_date = $recording->getNiceDate();
 
         // Return success
         return response()->json($recording, 201);

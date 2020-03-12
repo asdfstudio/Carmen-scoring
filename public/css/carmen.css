@@ -4730,7 +4730,6 @@ li.ui-timepicker-selected .ui-timepicker-duration,
     color: #333; }
 
 #modal-cover {
-  display: none;
   background: #444;
   opacity: .5;
   z-index: 99;
@@ -4741,7 +4740,6 @@ li.ui-timepicker-selected .ui-timepicker-duration,
   left: 0; }
 
 #modal {
-  display: none;
   z-index: 100;
   background: #fff;
   padding: 20px;
@@ -6162,101 +6160,103 @@ a.active {
       list-style: none;
       counter-reset: ar-playlist-counter; }
       .audio-recorder .ar-playlist ol li {
-        counter-increment: ar-playlist-counter;
-        padding-left: 38px; }
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding: 4px 4px 4px 38px;
+        height: 50px;
+        border-top: 1px #808080 solid;
+        counter-increment: ar-playlist-counter; }
+        .audio-recorder .ar-playlist ol li:hover {
+          background: #586065; }
         .audio-recorder .ar-playlist ol li::before {
           content: counter(ar-playlist-counter) ".";
           opacity: 0.5;
           font-weight: bold;
           position: absolute;
+          top: calc(50% - 6.5px);
           width: 20px;
           text-align: right;
           left: 10px; }
+        .audio-recorder .ar-playlist ol li audio {
+          display: none; }
+        .audio-recorder .ar-playlist ol li .ar-playlist-item-name {
+          display: flex;
+          flex-grow: 1;
+          line-height: 1.2; }
+        .audio-recorder .ar-playlist ol li .ar-playlist-functions {
+          display: flex;
+          height: 32px; }
+          .audio-recorder .ar-playlist ol li .ar-playlist-functions button, .audio-recorder .ar-playlist ol li .ar-playlist-functions a {
+            display: block;
+            position: relative;
+            margin-left: 3px;
+            width: 32px;
+            height: 32px;
+            text-decoration: none;
+            border: 1px #808080 solid;
+            border-radius: 2px;
+            background: #272B2D;
+            transition: all 0.25s ease; }
+            .audio-recorder .ar-playlist ol li .ar-playlist-functions button:active, .audio-recorder .ar-playlist ol li .ar-playlist-functions a:active {
+              background: #903d9a; }
+            .audio-recorder .ar-playlist ol li .ar-playlist-functions button:hover, .audio-recorder .ar-playlist ol li .ar-playlist-functions a:hover {
+              background: #7F4091; }
+            .audio-recorder .ar-playlist ol li .ar-playlist-functions button.ar-playlist-play-pause::after, .audio-recorder .ar-playlist ol li .ar-playlist-functions a.ar-playlist-play-pause::after {
+              content: ' ';
+              display: block;
+              position: absolute;
+              top: 10px;
+              left: 10px;
+              width: 12px;
+              height: 12px;
+              border-top: 6px transparent solid;
+              border-right: 0 #ffffff solid;
+              border-bottom: 6px transparent solid;
+              border-left: 12px #ffffff solid; }
+            .audio-recorder .ar-playlist ol li .ar-playlist-functions button.ar-playlist-play-pause.active::after, .audio-recorder .ar-playlist ol li .ar-playlist-functions a.ar-playlist-play-pause.active::after {
+              top: 9px;
+              left: 9px;
+              width: 14px;
+              height: 14px;
+              border-top: 0 transparent solid;
+              border-right: 5px #ffffff solid;
+              border-bottom: 0 transparent solid;
+              border-left: 5px #ffffff solid; }
+            .audio-recorder .ar-playlist ol li .ar-playlist-functions button.ar-playlist-download::after, .audio-recorder .ar-playlist ol li .ar-playlist-functions a.ar-playlist-download::after {
+              /* Download icon from FontAwesome (https://fontawesome.com/license). Not modified except for color. */
+              content: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="download" class="svg-inline--fa fa-download fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23ffffff" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path></svg>');
+              position: absolute;
+              top: 8px;
+              left: 9px;
+              width: 14px; }
+            .audio-recorder .ar-playlist ol li .ar-playlist-functions button.ar-playlist-delete:hover, .audio-recorder .ar-playlist ol li .ar-playlist-functions a.ar-playlist-delete:hover {
+              background: #ee191c; }
+            .audio-recorder .ar-playlist ol li .ar-playlist-functions button.ar-playlist-delete::after, .audio-recorder .ar-playlist ol li .ar-playlist-functions a.ar-playlist-delete::after {
+              /* Trash icon from FontAwesome (https://fontawesome.com/license). Not modified except for color. */
+              content: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash" class="svg-inline--fa fa-trash fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="%23ffffff" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"></path></svg>');
+              position: absolute;
+              top: 8px;
+              left: 9px;
+              width: 12px; }
+        .audio-recorder .ar-playlist ol li.playing {
+          color: #903d9a;
+          background: #e5e5e5;
+          border-color: #903d9a; }
+          .audio-recorder .ar-playlist ol li.playing .ar-playlist-functions button.ar-playlist-play-pause {
+            background: #903d9a; }
+            .audio-recorder .ar-playlist ol li.playing .ar-playlist-functions button.ar-playlist-play-pause:hover {
+              background: #7F4091; }
+        .audio-recorder .ar-playlist ol li.deleting {
+          color: #ee191c;
+          background: #e5c0c0;
+          border-color: #ee191c; }
+          .audio-recorder .ar-playlist ol li.deleting .ar-playlist-functions {
+            opacity: .5; }
       .audio-recorder .ar-playlist ol.empty li {
         padding-left: 18px; }
         .audio-recorder .ar-playlist ol.empty li::before {
           display: none; }
-    .audio-recorder .ar-playlist li {
-      position: relative;
-      padding: 18px;
-      height: 50px;
-      border-top: 1px #808080 solid; }
-      .audio-recorder .ar-playlist li:hover {
-        background: #586065; }
-      .audio-recorder .ar-playlist li audio {
-        display: none; }
-      .audio-recorder .ar-playlist li .ar-playlist-functions {
-        display: flex;
-        position: absolute;
-        top: 9px;
-        right: 14px;
-        height: 32px; }
-        .audio-recorder .ar-playlist li .ar-playlist-functions button, .audio-recorder .ar-playlist li .ar-playlist-functions a {
-          display: block;
-          position: relative;
-          margin-left: 3px;
-          width: 32px;
-          height: 32px;
-          text-decoration: none;
-          border: 1px #808080 solid;
-          border-radius: 2px;
-          background: #272B2D;
-          transition: all 0.25s ease; }
-          .audio-recorder .ar-playlist li .ar-playlist-functions button:active, .audio-recorder .ar-playlist li .ar-playlist-functions a:active {
-            background: #903d9a; }
-          .audio-recorder .ar-playlist li .ar-playlist-functions button:hover, .audio-recorder .ar-playlist li .ar-playlist-functions a:hover {
-            background: #7F4091; }
-          .audio-recorder .ar-playlist li .ar-playlist-functions button.ar-playlist-play-pause::after, .audio-recorder .ar-playlist li .ar-playlist-functions a.ar-playlist-play-pause::after {
-            content: ' ';
-            display: block;
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 12px;
-            height: 12px;
-            border-top: 6px transparent solid;
-            border-right: 0 #ffffff solid;
-            border-bottom: 6px transparent solid;
-            border-left: 12px #ffffff solid; }
-          .audio-recorder .ar-playlist li .ar-playlist-functions button.ar-playlist-play-pause.active::after, .audio-recorder .ar-playlist li .ar-playlist-functions a.ar-playlist-play-pause.active::after {
-            top: 9px;
-            left: 9px;
-            width: 14px;
-            height: 14px;
-            border-top: 0 transparent solid;
-            border-right: 5px #ffffff solid;
-            border-bottom: 0 transparent solid;
-            border-left: 5px #ffffff solid; }
-          .audio-recorder .ar-playlist li .ar-playlist-functions button.ar-playlist-download::after, .audio-recorder .ar-playlist li .ar-playlist-functions a.ar-playlist-download::after {
-            /* Download icon from FontAwesome (https://fontawesome.com/license). Not modified except for color. */
-            content: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="download" class="svg-inline--fa fa-download fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23ffffff" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path></svg>');
-            position: absolute;
-            top: 8px;
-            left: 9px;
-            width: 14px; }
-          .audio-recorder .ar-playlist li .ar-playlist-functions button.ar-playlist-delete:hover, .audio-recorder .ar-playlist li .ar-playlist-functions a.ar-playlist-delete:hover {
-            background: #ee191c; }
-          .audio-recorder .ar-playlist li .ar-playlist-functions button.ar-playlist-delete::after, .audio-recorder .ar-playlist li .ar-playlist-functions a.ar-playlist-delete::after {
-            /* Trash icon from FontAwesome (https://fontawesome.com/license). Not modified except for color. */
-            content: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash" class="svg-inline--fa fa-trash fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="%23ffffff" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"></path></svg>');
-            position: absolute;
-            top: 8px;
-            left: 9px;
-            width: 12px; }
-      .audio-recorder .ar-playlist li.playing {
-        color: #903d9a;
-        background: #e5e5e5;
-        border-color: #903d9a; }
-        .audio-recorder .ar-playlist li.playing .ar-playlist-functions button.ar-playlist-play-pause {
-          background: #903d9a; }
-          .audio-recorder .ar-playlist li.playing .ar-playlist-functions button.ar-playlist-play-pause:hover {
-            background: #7F4091; }
-      .audio-recorder .ar-playlist li.deleting {
-        color: #ee191c;
-        background: #e5c0c0;
-        border-color: #ee191c; }
-        .audio-recorder .ar-playlist li.deleting .ar-playlist-functions {
-          opacity: .5; }
   .audio-recorder.playlist-expanded .ar-info .ar-existing::after, .audio-recorder[data-mode="player"] .ar-info .ar-existing::after {
     border-top: 0 #e5e5e5 solid;
     border-bottom: 5px #e5e5e5 solid; }

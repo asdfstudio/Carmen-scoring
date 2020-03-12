@@ -3,7 +3,7 @@
 @endif
 
 <div class="alert alert-info">
-  <h3>Particants - Access Full Results</h3>
+  <h3>Participants - Access Full Results</h3>
   <p>Enter the access code for this competition.</p>
 
   {!! form($accessCodeForm) !!}

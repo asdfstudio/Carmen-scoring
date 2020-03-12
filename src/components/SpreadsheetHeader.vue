@@ -1,6 +1,6 @@
 <template>
   <div id="spreadsheet-header">
-    <a class="button back-button" :href="backUrl">Back to previous screen</a>
+    <a class="button back-button" :href="backUrl">Back to Summary View</a>
     <h2> {{ spreadsheetTitle}}
       <div class="scoring-status" v-if="isSpreadsheetScoringActive">
         Scoring is active
@@ -46,6 +46,7 @@ export default {
   background: #272B2D;
   text-align: left;
   overflow: scroll;
+  z-index: 1;
 
   h2 {
     margin-top: 0;

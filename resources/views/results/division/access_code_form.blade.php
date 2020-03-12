@@ -3,7 +3,7 @@
 @endif
 
 <div class="alert alert-info">
-  <h3>Particants - Access Full Results</h3>
+  <h3>Participants - Access Full Results</h3>
   <p>There are two ways to access the full results:</p>
   <ol>
     <li>Enter the access code for this division that was provided by your competition.</li>

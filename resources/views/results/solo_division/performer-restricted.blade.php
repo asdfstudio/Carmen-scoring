@@ -13,7 +13,7 @@
   @endif
   
   <div class="alert alert-info">
-    <h3>Particants - Access Full Results</h3>
+    <h3>Participants - Access Full Results</h3>
     <ol>
       <li>Enter the email address on file for the director of your choir.</li>
     </ol>
