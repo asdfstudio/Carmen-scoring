@@ -11,6 +11,8 @@ function AudioRecorder (element) {
   this.widget = $(element)
   this.otherWidgets = $('.audio-recorder').not(this.widget)
   this.mode = this.widget.data('mode')
+  this.role = this.widget.data('role')
+  this.canDelete = (this.role === 'organizer' || this.role === 'admin')
   this.controlButton = this.widget.find('.ar-control button')
   this.recorderTitle = this.widget.find('.ar-title')
   this.playbackTitle = this.widget.find('.ar-title-playback')
@@ -131,13 +133,15 @@ function AudioRecorder (element) {
   this.setupPlaylistPlayPause()
 
   this.setupPlaylistDelete = () => {
-    this.playlistDelete.off('click')
+    if(this.canDelete){
+      this.playlistDelete.off('click')
 
-    this.playlistDelete.click((e) => {
-      e.preventDefault()
-      var id = $(e.target).closest('li').data('id')
-      this.deleteRecording(id)
-    })
+      this.playlistDelete.click((e) => {
+        e.preventDefault()
+        var id = $(e.target).closest('li').data('id')
+        this.deleteRecording(id)
+      })
+    }
   }
 
   this.setupPlaylistDelete()
@@ -181,7 +185,7 @@ function AudioRecorder (element) {
       // Start recording.
       this.micRecorder.start()
         .then(() => {
-          console.log('Recording started.')
+          //console.log('Recording started.')
 
           this.recordingInProgress = true
           this.startRecordingTime()
@@ -206,7 +210,7 @@ function AudioRecorder (element) {
       this.micRecorder.stop()
         .getMp3()
         .then(([buffer, blob]) => {
-          console.log('Recording stopped.')
+          //console.log('Recording stopped.')
 
           this.recordingInProgress = false
           this.clearRecordingTime()
@@ -255,17 +259,17 @@ function AudioRecorder (element) {
 
           this.widget.addClass('uploading unknown')
 
-          console.log('Uploading...')
+          //console.log('Uploading...')
         }
       }
     ).done(
       (result, textStatus, jqXHR) => {
         if(typeof result.url === 'undefined'){
           console.log('Upload resulted in server-side error.')
-
+          console.log('Result:', result)
           this.warnUploadRecordingError()
         } else {
-          console.log('Upload completed successfully.')
+          //console.log('Upload completed successfully.')
 
           this.existingRecordingCount++
           this.uploadSuccessDenouement = true
@@ -281,7 +285,9 @@ function AudioRecorder (element) {
             this.playlist.removeClass('empty')
           }
 
-          this.playlist.append('<li id="recording-' + result.id + '" data-id="' + result.id + '" data-url="' + result.url + '"><audio><source src="' + result.url + '"></audio><span class="recording-name">' + result.nice_date + '</span><div class="ar-playlist-functions"><button class="ar-playlist-play-pause" title="Play/Pause"></button><a class="ar-playlist-download" title="Download Recording" href="' + result.url + '" download="' + result.nice_date + '" type="application/octet-stream"></a><button class="ar-playlist-delete" title="Delete Recording"></button></div></li>')
+          var maybeDeleteButton = this.canDelete ? '<button class="ar-playlist-delete" title="Delete Recording"></button>' : '';
+
+          this.playlist.append('<li id="recording-' + result.id + '" data-id="' + result.id + '" data-url="' + result.url + '"><audio><source src="' + result.url + '"></audio><span class="recording-name">' + result.nice_date + '</span><div class="ar-playlist-functions"><button class="ar-playlist-play-pause" title="Play/Pause"></button><a class="ar-playlist-download" title="Download Recording" href="' + result.url + '" download="' + result.nice_date + '" type="application/octet-stream"></a>' + maybeDeleteButton + '</div></li>')
 
           // Refresh collections that need to account for the new item.
           this.playlistItems = this.widget.find('.ar-playlist > ol > li')
@@ -293,7 +299,7 @@ function AudioRecorder (element) {
           this.setupPlaylistDelete()
         }
 
-        console.log('Result:', result)
+        //console.log('Result:', result)
       }
     ).fail(
       (jqXHR, textStatus, errorThrown) => {
@@ -333,8 +339,6 @@ function AudioRecorder (element) {
 
     if(progress.lengthComputable){
       percent = Math.floor(progress.loaded / progress.total * 100)
-
-      console.log('Upload progress:', percent + '%')
 
       if(percent < 100 || this.uploadProgressCounter > 0){
         this.progressMeterBar.css('width', percent + '%')

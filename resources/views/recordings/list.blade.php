@@ -29,12 +29,14 @@
       {!! Form::close() !!}
 
     <div class="recording-wrapper">
+      <h4>Recorded Audio Comments by {{ $judgeList[$judge_id] }}</h4>
       @php
         $recordings = $choir->recordings->where('judge_id', $judge_id)->where('round_id', $round_id);
         $recording_count = $recordings->count();
+        $mode = 'player';
+        $role = 'organizer'
       @endphp
-      <h4>Recorded Audio Comments by {{ $judgeList[$judge_id] }}</h4>
-      <div class="audio-recorder tall-playlist" id="audio-recorder-{{ $choir->id }}" data-mode="player" data-count="{{ $recording_count }}" data-choir="{{ $choir->id }}" data-round="{{ $round->id }}" data-division="{{ $round->division_id }}">
+      <div class="audio-recorder tall-playlist" id="audio-recorder-{{ $choir->id }}" data-mode="{{ $mode }}" data-role="{{ $role }}" data-count="{{ $recording_count }}" data-choir="{{ $choir->id }}" data-round="{{ $round->id }}" data-division="{{ $round->division_id }}">
         <div class="ar-control">
           <button>
             <span class="ar-control-symbol"></span>
@@ -66,9 +68,9 @@
                   <div class="ar-playlist-functions">
                     <button class="ar-playlist-play-pause" title="Play/Pause"></button>
                     <a class="ar-playlist-download" title="Download Recording" href="{{ $recording->url }}" target="_blank" download="{{ date('M. j, Y \a\t h:m:i A (\U\T\C)', strtotime($recording->created_at)) }}" type="application/octet-stream"></a>
-                    @can('create', $division)
+                    @if($role === 'organizer' || $role === 'admin')
                       <button class="ar-playlist-delete" title="Delete Recording"></button>
-                    @endcan
+                    @endif
                   </div>
                 </li>
               @endforeach
