@@ -6114,7 +6114,7 @@ a.active {
       font-size: 11px;
       text-align: center; }
   .audio-recorder.recording .ar-progress .ar-meter-box .ar-meter-bar {
-    width: 85%; }
+    width: 100%; }
   .audio-recorder.recording .ar-progress .ar-meter-box .ar-meter-bar::after {
     top: -3px;
     right: -5px;
