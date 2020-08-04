@@ -117,7 +117,7 @@ class CompetitionDivisionAwardController extends Controller
 
       $standard_awards = Award::withoutGlobalScope('organization')->where('organization_id', NULL)->get();
 
-      return view('competition_division_award.organizer.manage', compact('competition','division', 'awards', 'standard_awards','selected_awards', 'form'));
+      return view('competition_division_award.organizer.manage', compact('competition','division', 'awards', 'standard_awards','selected_awards'));
     }
 
     public function update(Request $request, Competition $competition, $division_id)
@@ -152,9 +152,6 @@ class CompetitionDivisionAwardController extends Controller
     public function assign(FormBuilder $formBuilder, Competition $competition, $division_id)
     {
       $division = $competition->divisions()->findOrFail($division_id);
-      $division->load(['awards', 'awards.choirs','choirs']);
-      //$division = Division::with('awards', 'awards.choirs','choirs')->find($division_id);
-      //$competition = $division->competition;
       $awards = $division->awards;
 
       $this->authorize('assign', ['App\Award', $division]);

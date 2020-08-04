@@ -20,7 +20,7 @@
 				@php
 				if($award->choir)
 				{
-					$selected = $award->choir->id;
+					$selected = $award->pivot->choir_id;
 				} else {
 					$selected = false;
 				}
