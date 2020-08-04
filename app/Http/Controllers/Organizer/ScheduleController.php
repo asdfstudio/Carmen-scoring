@@ -26,7 +26,7 @@ class ScheduleController extends Controller
     {
       $competition = Competition::with('schedules')->find($competition_id);
 
-      return view('schedule.organizer.index', compact('competition', 'schedules'));
+      return view('schedule.organizer.index', compact('competition'));
     }
 
     /**
@@ -43,7 +43,7 @@ class ScheduleController extends Controller
         'method' => 'post',
         'url' => route('organizer.competition.schedule.store', [$competition]),
       ]);
-      return view('schedule.organizer.create', compact('competition', 'schedule', 'form'));
+      return view('schedule.organizer.create', compact('competition', 'form'));
     }
 
     /**
@@ -202,7 +202,7 @@ class ScheduleController extends Controller
      */
     public function destroy(Request $request, $competition_id, $schedule_id)
     {
-      $competition = Competition::find($schedule_id);
+      $competition = Competition::find($competition_id);
       $schedule = Schedule::find($schedule_id);
 			//$this->authorize('destroy',$competition);
 
@@ -213,6 +213,6 @@ class ScheduleController extends Controller
         return response()->json($schedule);
       }
 
-			return redirect()->route('organizer.competition.schedule.index', $competition);
+			return redirect()->route('organizer.competition.show',[$competition])->with('success', 'Schedule Deleted.');
     }
 }
