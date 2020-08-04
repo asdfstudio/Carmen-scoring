@@ -219,7 +219,7 @@ class AwardScheduleController extends Controller
 
     public function destroy(Request $request, $competition_id, $schedule_id)
     {
-      $competition = Competition::find($schedule_id);
+      $competition = Competition::find($competition_id);
       $schedule = AwardSchedule::find($schedule_id);
 
       $schedule->delete();
@@ -229,6 +229,7 @@ class AwardScheduleController extends Controller
         return response()->json($schedule);
       }
 
-			return redirect()->route('organizer.competition.award-schedule.index', $competition);
+			return redirect()->route('organizer.competition.show',[$competition])->with('success', 'Award Ceremony Schedule Deleted.');
+
     }
 }
