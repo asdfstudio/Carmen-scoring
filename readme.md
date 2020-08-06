@@ -1,6 +1,6 @@
 # Carmen ShowChoir
 
-Carmen ShowChoir is an app built on the Laravel Framework that helps organizers judge showchoir contests.
+Carmen ShowChoir is an app built on the Laravel Framework that provides a scoring platform for adjudicated events, such as showchoir, solo, concert choir, band, etc. competitions. Organizers set up the competition, divisions, and the participants within the app, judges assign scores on a selected scoresheet and give typed and/or recordec comments to each performance, results are calculated according to the chosen method, results are published on a public page, and details are sent to directors via email and text.
 
 ## Technologies
 
