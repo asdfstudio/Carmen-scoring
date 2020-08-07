@@ -1,10 +1,10 @@
-# Carmen ShowChoir
+# The Carmen Scoring System
 
-Carmen ShowChoir is an app built on the Laravel Framework that provides a scoring platform for adjudicated events, such as showchoir, solo, concert choir, band, etc. competitions. Organizers set up the competition, divisions, and the participants within the app, judges assign scores on a selected scoresheet and give typed and/or recorded comments to each performance, results are calculated according to the chosen method, results are published on a public page, and details are sent to directors via email and text.
+The Carmen Scoring System is an app that provides a scoring platform for adjudicated events such as showchoir, solo, concert choir, band, etc. Organizers set up the competition, divisions, and the participants within the app, judges assign scores on a selected scoresheet and give typed and/or recorded comments to each performance, results are calculated according to the chosen method, results are published on a public page, and details are sent to directors via email and text.
 
 ## Technologies
 
-ShowChoir is built on Laravel v5.7.29 with a MariaDB v10.2.25 backend.  The judging "spreadsheet" is built on Vue.js v2.5.2
+The Carmen Scoring System is built on Laravel v5.7.29 with a MariaDB v10.2.25 backend.  The judging spreadsheet is built on Vue.js v2.5.2.
 
 ## Development
 
