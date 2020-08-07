@@ -108,6 +108,10 @@
       font-size: 1.1em;
     }
 
+    & li.schedule-item.ui-sortable-handle {
+      cursor: grab;
+    }
+
     & li.schedule-item {
       //border: 1px solid #ccc;
       background: #fff;

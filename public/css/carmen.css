@@ -4427,6 +4427,8 @@ label.block {
       padding: 3px;
       margin-bottom: 3px;
       font-size: 1.1em; }
+    .schedule-builder-container ul.schedule-builder-list li.schedule-item.ui-sortable-handle, .schedule-builder-container ul.schedule-list li.schedule-item.ui-sortable-handle {
+      cursor: grab; }
     .schedule-builder-container ul.schedule-builder-list li.schedule-item, .schedule-builder-container ul.schedule-list li.schedule-item {
       background: #fff;
       margin: 2px 0;
