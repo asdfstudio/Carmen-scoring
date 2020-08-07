@@ -25,10 +25,10 @@
 
 	{{ Form::open(['method' => 'POST']) }}
 
-	<ul class="list-group sortable-list" id="sortable-list">
+	<ul class="list-group sortable-list ui-droppable" id="sortable-list">
 		@foreach($choirs as $index => $choir)
-			<li class="list-group-item choir" data-id="{{ $choir->id }}">
-				<span class="sort-handle"><i class="fa fa-sort"></i></span>
+			<li class="list-group-item choir ui-draggable" data-id="{{ $choir->id }}">
+				<span class="sort-handle ui-draggable-handle"><i class="fa fa-sort"></i></span>
 				<span class="performance-order" id="performance-order-{{ $choir->id }}">{{ $index + 1 }}</span>
 
 				@if($choir->school)
