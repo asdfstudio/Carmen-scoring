@@ -4384,7 +4384,6 @@ label.block {
   .schedule-builder-container ul.schedule-builder-list, .schedule-builder-container ul.schedule-list {
     background: #f5f5f5;
     padding: 10px;
-    overflow: hidden;
     list-style: none;
     min-height: 200px;
     height: 400px;
@@ -4409,6 +4408,14 @@ label.block {
       border-radius: 35px; }
     .schedule-builder-container ul.schedule-builder-list.schedule .scheduled_time, .schedule-builder-container ul.schedule-list.schedule .scheduled_time {
       display: inline-block; }
+    .schedule-builder-container ul.schedule-builder-list li.spacer, .schedule-builder-container ul.schedule-list li.spacer {
+      display: block;
+      text-align: center;
+      color: grey; }
+      .schedule-builder-container ul.schedule-builder-list li.spacer.bottom, .schedule-builder-container ul.schedule-list li.spacer.bottom {
+        height: 2em; }
+      .schedule-builder-container ul.schedule-builder-list li.spacer.top, .schedule-builder-container ul.schedule-list li.spacer.top {
+        height: 1em; }
     .schedule-builder-container ul.schedule-builder-list li.division, .schedule-builder-container ul.schedule-list li.division {
       margin-bottom: 10px;
       overflow: hidden; }

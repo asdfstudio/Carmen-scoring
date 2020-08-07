@@ -37,6 +37,7 @@
         Schedule
       </div>
       <ul class="schedule-builder-list schedule">
+        <li class="spacer top"></li>
         @foreach($schedule->items as $item)
           <li class="schedule-item choir" id="item_{{ $item->round_id }}_{{ $item->choir_id }}" data-round-id="{{ $item->round_id }}" data-choir-id="{{ $item->choir_id }}">
             <input type="text" class="scheduled_time" value="{{ $item->scheduled_time }}">
@@ -58,6 +59,7 @@
             @endif
           </li>
         @endforeach
+        <li class="spacer bottom"></li>
       </ul>
     </div>
 

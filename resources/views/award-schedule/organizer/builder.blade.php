@@ -24,6 +24,7 @@
         Award Ceremony Schedule
       </div>
       <ul class="schedule-builder-list schedule">
+        <li class="spacer top"></li>
         @foreach($schedule->items as $item)
           <li class="schedule-item award" data-division-id="{{ $item->division_id }}" data-round-id="{{ $item->round_id }}" data-award-id="{{ $item->award_id }}" data-caption-id="{{ $item->caption_id }}" data-rank="{{ $item->rank }}">
             <!-- {{ print_r($item) }} -->
@@ -46,6 +47,7 @@
             @endif
           </li>
         @endforeach
+        <li class="spacer bottom"></li>
       </ul>
     </div>
 
