@@ -10,6 +10,21 @@ The Carmen Scoring System is built on Laravel v5.7.29 with a MariaDB v10.2.25 ba
 
 The easiest way to start developing is to use the Laravel Homestead. Once you have that vagrant box set up, you'll need to recreate the cache directories and create your own .env file from the .env.example file.  Create a database on the Homestead machine and restore from a backup. The migration don't currently work to create tables because an older one is broken.
 
+There is a gulp task to process the sass and js files from /resources and build them to /public. Don't edit files in /public because your changes will be overwritten by the gulp task. You can install the necessary node modules by running
+
+    npm install
+
+in the root directory of the project. While developing, you can run
+
+    npm run-script gulp
+
+to keep building css and js while you're working. When you want to deploy, you can do a build by running:
+
+    npx gulp build-js
+    npx gulp sass
+
+to run the appropriate jobs.
+
 ## Deployment
 
 Deployment is done via a "git pull" in the appropriate directory on the server. Use the ssh key for the "carmen" user, and you have read-only access to the bitbucket directory via the command line.
