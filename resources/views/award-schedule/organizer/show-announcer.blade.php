@@ -84,28 +84,38 @@
 
           @if($item->round)
               <ul class="list-group">
-                @foreach($ratings as $rating)
-                  <li class="list-group-item"><span class="rating">{{ $rating['rating']['name'] }}:</span> <span class="award-winner-choir">{{ $rating['choir']->full_name }}</span></li>
-                @endforeach
+                @if($item->round->is_scoring_active)
+                  <li class="list-group-item"><span>Awaiting Final Scores for this Round</span></li>
+                @else
+                  @foreach($ratings as $rating)
+                    <li class="list-group-item"><span class="rating">{{ $rating['rating']['name'] }}:</span> <span class="award-winner-choir">{{ $rating['choir']->full_name }}</span></li>
+                  @endforeach
+                @endif
               </ul>
           @endif
 
+          @if ($awardWinner)
           @foreach($awardWinner as $theWinner)
             <span class="award-winner">
-              @if(!empty($theWinner->recipient))
-                <span class="award-winner-recipient">{{ $theWinner->recipient }}</span>
-              @endif
+              @if ($item->division and !$item->division->is_completed)
+                <span class="award-winner-choir">Awaiting Final Scores for this Division</span>
+              @else
+                @if(!empty($theWinner->recipient))
+                  <span class="award-winner-recipient">{{ $theWinner->recipient }}</span>
+                @endif
 
-              @if(!empty($theWinner->choir))
-                <span class="award-winner-choir">{{ $theWinner->choir->full_name }}</span>
-              @endif
+                @if(!empty($theWinner->choir))
+                  <span class="award-winner-choir">{{ $theWinner->choir->full_name }}</span>
+                @endif
 
-              @if(!empty($theWinner->full_name))
-                <span class="award-winner-choir">{{ $theWinner->full_name }}</span>
+                @if(!empty($theWinner->full_name))
+                  <span class="award-winner-choir">{{ $theWinner->full_name }}</span>
+                @endif
               @endif
 
             </span>
           @endforeach
+          @endif
 
           @if($sponsor)
             <span class="award-sponsor">Sponsor: {{ $sponsor }}</span>
