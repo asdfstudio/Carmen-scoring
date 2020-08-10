@@ -11,6 +11,23 @@ class CreateForm extends Form
 
 				$this->add('name','text', ['rules' => 'required']);
 
+				$this->add('sheet_id','entity', [
+					'class' => 'App\Sheet',
+          'query_builder' => function(\App\Sheet $sheet) {
+            // If query builder option is not provided, all data is fetched
+            return $sheet->where('is_retired', 0);
+          },
+					'empty_value' => 'Choose scoring sheet...',
+					'label' => 'Scoring Sheet',
+          'label_attr' => ['class' => 'block'],
+          'expanded' => true,
+          'multiple' => false,
+          //'wrapper' => ['class' => 'wrap'],
+          'choice_options' => [
+            'wrapper' => ['class' => 'choice-container']
+          ]
+        ]);
+        
 				$this->add('caption_weighting_id','entity', [
 					'class' => 'App\CaptionWeighting',
 					'empty_value' => 'Choose caption weighting...',
@@ -51,23 +68,6 @@ class CreateForm extends Form
           ],
           'help_block' => [
             //'text' => 'The Ranked scoring method should be used only if at least one of the following is true: 1) The Caption Weighting is 50/50. 2) All judges are scoring both the Music and Show captions. 3) There are 50% more judges scoring the Music caption than the Show caption.'
-          ]
-				]);
-
-				$this->add('sheet_id','entity', [
-					'class' => 'App\Sheet',
-          'query_builder' => function(\App\Sheet $sheet) {
-            // If query builder option is not provided, all data is fetched
-            return $sheet->where('is_retired', 0);
-          },
-					'empty_value' => 'Choose scoring sheet...',
-					'label' => 'Scoring Sheet',
-          'label_attr' => ['class' => 'block'],
-          'expanded' => true,
-          'multiple' => false,
-          //'wrapper' => ['class' => 'wrap'],
-          'choice_options' => [
-            'wrapper' => ['class' => 'choice-container']
           ]
 				]);
 
