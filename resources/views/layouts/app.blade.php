@@ -40,6 +40,9 @@
     <script src="/js/dropzone.js"></script>
     <script src="/js/recording.js"></script>
 
+    <!-- sweetalert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     @yield('body-footer')
 
 </body>

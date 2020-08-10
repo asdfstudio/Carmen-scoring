@@ -506,3 +506,18 @@ $(document).ready(function() {
     $('.selectize').selectize();
 
 });
+
+function confirmAndSubmit(text, id) {
+  swal({
+    title: "Are you sure?",
+    text: text,
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+      document.getElementById(id).submit();
+    }
+  });
+}
