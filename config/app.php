@@ -144,8 +144,8 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        
-        
+
+
 
         /*
          * Application Service Providers...
@@ -155,7 +155,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Aloha\Twilio\Support\Laravel\ServiceProvider::class,
-        Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
+        Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Kris\LaravelFormBuilder\FormBuilderServiceProvider::class,
         Tolawho\Loggy\ServiceProvider::class,
