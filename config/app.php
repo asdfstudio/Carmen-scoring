@@ -154,14 +154,11 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
-				Collective\Html\HtmlServiceProvider::class,
-				Kris\LaravelFormBuilder\FormBuilderServiceProvider::class,
-				DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
         Aloha\Twilio\Support\Laravel\ServiceProvider::class,
-        Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+        Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
+        Collective\Html\HtmlServiceProvider::class,
+        Kris\LaravelFormBuilder\FormBuilderServiceProvider::class,
         Tolawho\Loggy\ServiceProvider::class,
-        //Barryvdh\DomPDF\ServiceProvider::class,
 
     ],
 
@@ -210,16 +207,13 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-				'Form' => Collective\Html\FormFacade::class,
-      	'Html' => Collective\Html\HtmlFacade::class,
-				'FormBuilder' => Kris\LaravelFormBuilder\Facades\FormBuilder::class,
-				'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
         'Twilio' => Aloha\Twilio\Support\Laravel\Facade::class,
         'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
-        'Loggy' => Tolawho\Loggy\Facades\Loggy::class,
-        //'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
         'Former' => Former\Facades\Former::class,
-        'FormBuilder' => Kris\LaravelFormBuilder\Facades\FormBuilder::class
+        'FormBuilder' => Kris\LaravelFormBuilder\Facades\FormBuilder::class,
+        'Loggy' => Tolawho\Loggy\Facades\Loggy::class,
     ],
 
 ];

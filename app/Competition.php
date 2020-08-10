@@ -10,6 +10,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Competition extends Model
 {
@@ -174,10 +175,10 @@ class Competition extends Model
     {
       if($value == false)
       {
-        $this->attributes['slug'] = str_slug($this->name);
+        $this->attributes['slug'] = Str::slug($this->name);
       }
       else {
-        $this->attributes['slug'] = str_slug($value);
+        $this->attributes['slug'] = Str::slug($value);
       }
     }
 

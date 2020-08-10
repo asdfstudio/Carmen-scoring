@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Caption extends Model
 {
@@ -31,12 +32,12 @@ class Caption extends Model
 
     public function getSlugAttribute()
     {
-      return str_slug($this->name);
+      return Str::slug($this->name);
     }
 
     public function slug()
     {
-      return str_slug($this->name);
+      return Str::slug($this->name);
     }
 
     public function scopeForSheet($query, $sheet = false)

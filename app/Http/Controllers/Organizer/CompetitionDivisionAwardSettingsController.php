@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\organizer;
+namespace App\Http\Controllers\Organizer;
 
 use Auth;
 use App\Sheet;
