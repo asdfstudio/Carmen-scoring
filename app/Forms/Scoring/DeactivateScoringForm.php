@@ -15,6 +15,6 @@ class DeactivateScoringForm extends Form
     public function buildForm()
     {
         $this->add('deactivate','hidden',['value' => '1']);
-        $this->add('submit', 'submit', ['label' => 'Deactivate Scoring', 'attr' => ['class' => 'action']]);
+        $this->add('submit', 'submit', ['label' => 'Pause Scoring', 'attr' => ['class' => 'action']]);
     }
 }
