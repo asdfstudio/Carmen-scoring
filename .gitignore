@@ -16,5 +16,3 @@ composer.lock
 .postcssrc.js
 .DS_Store
 /.nova
-
-/resources/views/public/competitions-list.php
