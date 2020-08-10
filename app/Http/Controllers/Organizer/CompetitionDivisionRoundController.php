@@ -55,7 +55,21 @@ class CompetitionDivisionRoundController extends Controller
 
         $reactivateScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm');
 
-        return view('competition_division_round.organizer.index', compact('division','activateScoringForm', 'deactivateScoringForm', 'reactivateScoringForm', 'completeScoringForm' ));
+        $finalizeScoringFormData = [
+          'method' => 'POST',
+          'url' => route('organizer.competition.division.scoring', [
+              $competition_id,
+              $division_id,
+          ]),
+        ];
+        
+        if($division->status_slug() != 'completed') {
+          $finalizeScoringFormData['disabled'] = true;
+        }
+
+        $finalizeScoringForm = $formBuilder->create('Scoring\FinalizeScoringForm', $finalizeScoringFormData);
+
+        return view('competition_division_round.organizer.index', compact('division','activateScoringForm', 'finalizeScoringForm', 'deactivateScoringForm', 'reactivateScoringForm', 'completeScoringForm' ));
     }
 
 

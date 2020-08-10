@@ -8,6 +8,9 @@
 	<h1>Manage Rounds</h1>
 
 	<ul class="actions-group">
+
+		<li>{!! form($finalizeScoringForm) !!}</li>
+
 		@can('create',['App\Round',$division])
 			<li>
 				{{ link_to_route('organizer.competition.division.round.create','Add a round',[$division->competition,$division], ['class' => 'action']) }}

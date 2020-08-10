@@ -8,12 +8,13 @@ class FinalizeScoringForm extends Form
 {
     protected $formOptions = [
       //'class' => 'pull-left',
-      'method' => 'POST'
+      'method' => 'POST',
+      'disabled' => false,
     ];
 
     public function buildForm()
     {
         $this->add('finalize','hidden',['value' => '1']);
-        $this->add('submit', 'submit', ['label' => 'Finalize / Publish Scoring', 'attr' => ['class' => 'action']]);
+        $this->add('submit', 'submit', ['label' => 'Send scores and feedback', 'attr' => ['class' => $this->formOptions['disabled'] ? 'action disabled' : 'action']]);
     }
 }

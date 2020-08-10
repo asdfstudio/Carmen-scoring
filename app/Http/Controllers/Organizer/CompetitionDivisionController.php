@@ -176,15 +176,6 @@ class CompetitionDivisionController extends Controller
           ]
         ]);
 
-        $finalizeScoringForm = $formBuilder->create('Scoring\FinalizeScoringForm', [
-          'method' => 'POST',
-          'url' => route('organizer.competition.division.scoring', [
-            $competition_id,
-            $division_id
-          ])
-        ]);
-
-
         // Support for new board view
         $choirs = Choir::all()->pluck('full_name', 'id')->toArray();
 
@@ -253,7 +244,7 @@ class CompetitionDivisionController extends Controller
 
         $deletePenaltyForm->modify('submit','submit',['label' => 'Remove']);
 
-        return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
+        return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
     }
 
     /**

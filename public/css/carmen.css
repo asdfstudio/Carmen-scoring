@@ -3956,7 +3956,8 @@ table.responsive th:first-child, table.responsive td:first-child, table.responsi
       border-color: #CA2128; }
   .action.disabled {
     opacity: 0.4;
-    cursor: not-allowed; }
+    cursor: not-allowed;
+    pointer-events: none; }
     .action.disabled:hover {
       background: inherit;
       color: inherit;

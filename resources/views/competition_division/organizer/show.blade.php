@@ -27,10 +27,6 @@
 			<li>{!! form($completeScoringForm) !!}</li>
 		@endcan
 
-		@can('finalizeScoring', $division)
-			<li>{!! form($finalizeScoringForm) !!}</li>
-		@endcan
-
 		@can('update', $division)
 			<li>{{ link_to_route('organizer.competition.division.edit', 'Edit Division', [$competition,$division],['class' => 'action']) }}</li>
 			<li>{{ link_to_route('organizer.competition.division.board', 'Enter Set Up Mode', [$competition,$division],['class' => 'action']) }}</li>
