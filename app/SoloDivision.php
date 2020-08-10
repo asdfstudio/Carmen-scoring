@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class SoloDivision extends Model
 {
@@ -129,7 +130,7 @@ class SoloDivision extends Model
 
       if($this->access_code == false)
       {
-        $this->access_code = strtoupper(str_random(8));
+        $this->access_code = strtoupper(Str::random(8));
       }
 
       return $this->save();

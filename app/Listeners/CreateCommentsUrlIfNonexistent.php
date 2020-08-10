@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\CommentSaved;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Str;
 
 use App\CommentUrl;
 
@@ -50,7 +51,7 @@ class CreateCommentsUrlIfNonexistent
 
         if(!$commentUrl->wasRecentlyCreated) return;
 
-        $commentUrl->access_code = str_random(8);
+        $commentUrl->access_code = Str::random(8);
         return $commentUrl->save();
     }
 }

@@ -5,6 +5,7 @@ namespace App;
 use App\Scopes\OrderByNameScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 use App\Carmen\Ratings;
 
@@ -242,7 +243,7 @@ class Division extends Model
 
       if($this->access_code == false)
       {
-        $this->access_code = strtoupper(str_random(8));
+        $this->access_code = strtoupper(Str::random(8));
       }
 
       if(env('IS_WORKSHOP_ENABLED') == true)
