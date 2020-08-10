@@ -4,9 +4,10 @@
     <span class="card-count" data-resource-type="judge">{{ count($division->judges) }}</span>
   </div>
 
+  <a class="add-resource" data-resource-type="judge" href="#">Add a judge</a>
+  
   {!! form($newJudgeForm) !!}
 
   @include('judge.board.list')
 
-  <a class="add-resource" data-resource-type="judge" href="#">Add a judge</a>
 </div>

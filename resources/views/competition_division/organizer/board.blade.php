@@ -49,8 +49,8 @@
 
 
 
-  <div id="modal-cover"></div>
-  <div id="modal"></div>
+  <div id="modal-cover" style="display: none"></div>
+  <div id="modal" style="display: none"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
 

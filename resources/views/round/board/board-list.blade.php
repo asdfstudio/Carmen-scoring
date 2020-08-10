@@ -4,9 +4,10 @@
     <span class="card-count" data-resource-type="round">{{ count($division->rounds) }}</span>
   </div>
 
+  <a class="add-resource" data-resource-type="round" href="#">Add a round...</a>
+  
   {!! form($newRoundForm) !!}
 
   @include('round.board.list')
 
-  <a class="add-resource" data-resource-type="round" href="#">Add a round...</a>
 </div>

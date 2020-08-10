@@ -4737,7 +4737,9 @@ li.ui-timepicker-selected .ui-timepicker-duration,
     text-align: center;
     padding: 3px 10px;
     border-radius: 5px;
-    color: #333; }
+    color: #333;
+    margin-top: 10px;
+    margin-bottom: 10px; }
 
 #modal-cover {
   background: #444;
