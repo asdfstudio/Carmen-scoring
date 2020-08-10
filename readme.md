@@ -16,7 +16,7 @@ There is a gulp task to process the sass and js files from /resources and build 
 
 in the root directory of the project. While developing, you can run
 
-    npm run-script gulp
+    npm run gulp
 
 to keep building css and js while you're working. When you want to deploy, you can do a build by running:
 
