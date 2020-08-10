@@ -9,7 +9,8 @@
 
 	@can('update', $division)
 		<ul class="actions-group">
-			<li>{{ link_to_route('organizer.competition.division.edit','Edit Division',[$competition, $division],['class' => 'action']) }}</li>
+			<li>{{ link_to_route('organizer.competition.division.edit','Edit scoring settings',[$competition, $division],['class' => 'action']) }}</li>
+			<li>{{ link_to_route('organizer.competition.division.board', 'Edit choirs, judges, rounds', [$competition,$division],['class' => 'action']) }}</li>
 			<li>{{ link_to_route('organizer.competition.division.award.settings.edit','Edit Award Settings',[$competition, $division],['class' => 'action']) }}</li>
 		</ul>
 	@endcan
