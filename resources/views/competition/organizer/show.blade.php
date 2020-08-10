@@ -9,7 +9,7 @@
 @endsection
 
 @section('content-header')
-  <h1>Competition Details</h1>
+  <h1>Competition Dashboard</h1>
 
   @can('update', $competition)
     {{ link_to_route('organizer.competition.edit', 'Edit Competition', [$competition], ['class' => 'action']) }}
