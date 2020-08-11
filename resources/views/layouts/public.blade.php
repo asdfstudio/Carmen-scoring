@@ -24,7 +24,7 @@
     <ul>
       <li>
 
-        <a href="/" class="logo @php if($active_page == '') echo 'active'; @endphp"><img src="/images/flower.png" alt="Carmen Scoring System" width="24px"></a>
+        <a href="/" class="logo @php if($active_page == '') echo 'active'; @endphp"><img src="/images/logo.png" alt="Carmen Scoring System" width="24px"></a>
       </li>
       <!--<li>
 

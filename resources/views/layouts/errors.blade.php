@@ -3,7 +3,7 @@
 
 @section('body-header')
   <div class="body-header body-width">
-    <a href="/"><img src="/images/Carmen-Logo-185x54.png" alt="Carmen Scoring System"  /></a>
+    <a href="/"><img src="/images/logo-with-text.png" width="185" alt="Carmen Scoring System"  /></a>
   </div>
 @endsection
 

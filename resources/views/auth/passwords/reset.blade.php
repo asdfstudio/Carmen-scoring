@@ -3,7 +3,7 @@
 @section('body-content')
     <div class="login-container">
         <div class="logo-container">
-            <img src="/images/Carmen-Logo-185x54.png" alt="Carmen Scoring System"  />
+            <img src="/images/logo-with-text.png" width="185" alt="Carmen Scoring System"  />
         </div>
                 <div class="panel-body">
                     @if (session('status'))
