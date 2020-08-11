@@ -106,7 +106,7 @@ class WorkshopController extends Controller
       foreach($this->divisions as $division)
       {
         $division->finalizeScoring();
-        Event::fire(new DivisionScoringFinalized($division));
+        event(new DivisionScoringFinalized($division));
       }
 
     }
@@ -116,7 +116,7 @@ class WorkshopController extends Controller
       foreach($this->rounds as $round)
       {
         $round->activateScoring();
-        Event::fire(new RoundScoringActivated($round));
+        event(new RoundScoringActivated($round));
       }
     }
 
@@ -133,7 +133,7 @@ class WorkshopController extends Controller
       foreach($this->rounds as $round)
       {
         $round->completeScoring();
-        Event::fire(new RoundScoringCompleted($round));
+        event(new RoundScoringCompleted($round));
       }
     }
 }

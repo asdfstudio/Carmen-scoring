@@ -100,7 +100,7 @@ class SoloDivisionPerformerController extends Controller
 			$comment->comments = $request->input('comment');
 			$comment->save();
 
-			Event::fire(new CommentSaved($comment, $competition));
+			event(new CommentSaved($comment, $competition));
 
       // Redirect
 			if($request->input('save_go'))

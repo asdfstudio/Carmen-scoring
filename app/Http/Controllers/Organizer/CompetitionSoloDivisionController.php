@@ -344,7 +344,7 @@ class CompetitionSoloDivisionController extends Controller
 
         $soloDivision->finalizeScoring();
 
-        Event::fire(new SoloDivisionScoringFinalized($soloDivision));
+        event(new SoloDivisionScoringFinalized($soloDivision));
 
       }
 

@@ -51,7 +51,7 @@ class CommentController extends Controller
       $comment->comments = $request->input('comment');
 			$comment->save();
 
-			Event::fire(new CommentSaved($comment, $competition));
+			event(new CommentSaved($comment, $competition));
 
 			return response()->json($comment);
 		}

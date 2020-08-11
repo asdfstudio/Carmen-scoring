@@ -497,7 +497,7 @@ class CompetitionDivisionController extends Controller
       elseif($request->input('finalize'))
       {
         $division->finalizeScoring();
-        Event::fire(new DivisionScoringFinalized($division));
+        event(new DivisionScoringFinalized($division));
       }
       else {
         return 0;

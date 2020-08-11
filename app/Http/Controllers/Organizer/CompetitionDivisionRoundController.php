@@ -180,7 +180,7 @@ class CompetitionDivisionRoundController extends Controller
         $round->sources()->sync($request->input('rounds.id',[]));
         $round->save();
 
-        Event::fire(new RoundSaved($round));
+        event(new RoundSaved($round));
 
         $successMessage = "$round->name has been added to this division.";
 
@@ -224,7 +224,7 @@ class CompetitionDivisionRoundController extends Controller
       $this->authorize('show', $round);
 
       if(Auth::user()->isAdmin() && isset($_GET['refresh_standings'])){
-        Event::fire(new StandingRefreshNeeded($round));
+        event(new StandingRefreshNeeded($round));
       }
 
       $division = $round->division;
@@ -308,7 +308,7 @@ class CompetitionDivisionRoundController extends Controller
       $this->authorize('show', $round);
 
       if(Auth::user()->isAdmin() && isset($_GET['refresh_standings'])){
-        Event::fire(new StandingRefreshNeeded($round));
+        event(new StandingRefreshNeeded($round));
       }
 
       $division = $round->division;
@@ -497,7 +497,7 @@ class CompetitionDivisionRoundController extends Controller
 
         $round->save();
 
-        Event::fire(new RoundSaved($round));
+        event(new RoundSaved($round));
 
         return redirect()->route('organizer.competition.division.round.index',[$division->competition, $division])->with('success',$round->name ." has been updated.");
     }

@@ -275,7 +275,7 @@ class CompetitionDivisionChoirController extends Controller
 					$division->choirs()->attach($choir->id);
 				}
 
-        Event::fire(new DivisionChoirCreated($division, $choir));
+        event(new DivisionChoirCreated($division, $choir));
 
         $successMessage = "$choir->name has been added to this division.";
 
@@ -352,7 +352,7 @@ class CompetitionDivisionChoirController extends Controller
 
 				$division->choirs()->detach($choir_id);
 
-        Event::fire(new DivisionChoirRemoved($division, $choir));
+        event(new DivisionChoirRemoved($division, $choir));
 
         if($request->wantsJson())
         {

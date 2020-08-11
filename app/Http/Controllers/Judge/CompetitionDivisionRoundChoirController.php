@@ -146,7 +146,7 @@ class CompetitionDivisionRoundChoirController extends Controller
 			$comment->comments = $request->input('comment');
 			$comment->save();
 
-			Event::fire(new CommentSaved($comment, $competition));
+			event(new CommentSaved($comment, $competition));
 
 
 			// Save a single score
