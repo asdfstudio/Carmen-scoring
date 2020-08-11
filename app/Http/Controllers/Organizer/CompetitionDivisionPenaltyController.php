@@ -119,7 +119,7 @@ class CompetitionDivisionPenaltyController extends Controller
         //'url' => route('organizer.competition.division.penalty.update', //[$competition_id, $division_id])
       //]);
 
-      return view('competition_division_penalty.organizer.manage', compact('competition','division', 'penalties', 'selected_penalties', 'form'));
+      return view('competition_division_penalty.organizer.manage', compact('competition','division', 'penalties', 'selected_penalties'));
     }
 
     public function update(Request $request, $competition_id, $division_id)
