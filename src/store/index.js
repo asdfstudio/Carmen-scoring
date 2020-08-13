@@ -32,7 +32,6 @@ Vue.use(Vuex)
 // Debounced API calls
 const saveComment = _.debounce(CommentsApi.saveComment, 1000)
 const saveRecording = RecordingApi.saveRecording
-const saveScore = _.debounce(ScoresApi.saveScore, 1000)
 
 // See https://stackoverflow.com/questions/28787436/debounce-a-function-with-argument
 var saveDebouncedScore = _.wrap(
@@ -137,9 +136,9 @@ export const store = new Vuex.Store({
     },
     setComment (state, payload) {
       // Find the matching comment and update it
-      //var matches = state.comments.filter(comment => comment.choir_id === payload.choir_id)
-      for(var c in state.comments){
-        if(state.comments[c].choir_id == payload.choir_id){
+      // var matches = state.comments.filter(comment => comment.choir_id === payload.choir_id)
+      for (var c in state.comments) {
+        if (state.comments[c].choir_id === payload.choir_id) {
           state.comments[c].comment = payload.comment
           return
         }
@@ -179,7 +178,7 @@ export const store = new Vuex.Store({
       store.commit('setErroredStatus', {[uniqueKey]: false})
 
       // Send ajax request, use debounce
-      //console.log('Calling saveDebouncedScore(payload) where payload is:\n', payload)
+      // console.log('Calling saveDebouncedScore(payload) where payload is:\n', payload)
       saveDebouncedScore(payload, store)
     },
     setComment (context, payload) {
@@ -357,8 +356,8 @@ export const store = new Vuex.Store({
       return null
     },
     getChoirComment: (state) => (choirId) => {
-      for(var c in state.comments){
-        if(state.comments[c].choir_id == choirId){
+      for (var c in state.comments) {
+        if (state.comments[c].choir_id === choirId) {
           return state.comments[c].comment
         }
       }

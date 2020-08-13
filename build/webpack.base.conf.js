@@ -1,8 +1,10 @@
 'use strict'
-const path = require('path')
-const utils = require('./utils')
-const config = require('./config')
-const vueLoaderConfig = require('./vue-loader.conf')
+const path = require('path');
+const utils = require('./utils');
+const config = require('./config');
+const vueLoaderConfig = require('./vue-loader.conf');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -22,8 +24,12 @@ const createLintingRule = () => ({
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './src/main.js'
+    judge: './src/main.js',
+    app: './resources/assets/js/app.js'
   },
+  plugins: [
+    new CleanWebpackPlugin()
+  ],
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
@@ -74,7 +80,25 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      }
+      },
+			{
+				test: /\.s[ac]ss$/i,
+				use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+			}
     ]
   },
   node: {

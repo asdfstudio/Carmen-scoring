@@ -53,8 +53,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: config.build.template, //'index.html',
+      filename: path.resolve(__dirname, '../resources/views/judge/spreadsheet.blade.php'),
+      template: path.resolve(__dirname, '../resources/views/judge/spreadsheet-template.html'),
       inject: true
     }),
     // copy custom static assets

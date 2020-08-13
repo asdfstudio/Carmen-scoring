@@ -45,13 +45,13 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../../resources/views/judge/spreadsheet.blade.php'),
+    filename: path.resolve(__dirname, '../../resources/views/judge/spreadsheet.blade.php'),
     template: path.resolve(__dirname, '../../resources/views/judge/spreadsheet-template.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../../public'),
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsRoot: path.resolve(__dirname, '../../public/dist/'),
+    assetsSubDirectory: 'build',
+    assetsPublicPath: '/dist/build/',
 
     /**
      * Source Maps

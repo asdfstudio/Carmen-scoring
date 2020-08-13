@@ -35,7 +35,7 @@ export default {
       formData.append('choir_id', this.choir.id)
     },
     success: function (file, response) {
-      if(typeof response === 'undefined' || typeof response.url === 'undefined'){
+      if (typeof response === 'undefined' || typeof response.url === 'undefined') {
         console.log(response)
         this.$emit('upload-error')
       }

@@ -7,7 +7,6 @@ Homestead.yaml
 Homestead.json
 .env
 .env.production
-.babelrc
 .editorconfig
 .eslintignore
 .eslintrc.js

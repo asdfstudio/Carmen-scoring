@@ -15,9 +15,9 @@ export default {
       .then(
         response => {
           var uniqueKey = payload.choir_id + '_' + payload.caption_id + '_' + payload.criterion_id
-          if(store){
+          if (store) {
             store.commit('setSavingStatus', {[uniqueKey]: false})
-            if(response.data.success){
+            if (response.data.success) {
               store.commit('setSavedStatus', {[uniqueKey]: true})
             } else {
               store.commit('setErroredStatus', {[uniqueKey]: true})

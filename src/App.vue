@@ -184,7 +184,6 @@ body {
   background-size: contain;
 }
 
-
 @-webkit-keyframes fade {
   25% {opacity:1;}
   75% {opacity:.5;}
