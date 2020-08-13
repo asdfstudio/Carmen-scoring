@@ -82,5 +82,5 @@
       splitTheTable = {{ $splitTheTable }}
     </script>
 
-  <script src="/js/responsive-tables.js"></script>
+  <script src="/dist/js/responsive-tables.js"></script>
 @endsection

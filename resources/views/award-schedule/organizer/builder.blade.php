@@ -154,7 +154,7 @@
 
 @section('body-footer')
 
-  <script src="/js/schedule-builder.js"></script>
+  <script src="/dist/js/schedule-builder.js"></script>
   <script>
     $( function() {
 

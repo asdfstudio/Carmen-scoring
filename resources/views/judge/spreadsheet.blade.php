@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang=en>
+<html lang="en">
 <head>
-  <meta charset=utf-8>
-  <meta name=viewport content="width=device-width,initial-scale=1">
-  <meta name=_token content={{csrf_token()}}>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="_token" content="{{csrf_token()}}" />
   <title>Carmen - Judge Spreadsheet</title>
   <script>
     window.__DIVISIONS__ = {!! $divisions !!};
@@ -20,20 +20,19 @@
     window. __RECORDED_COMMENTS__ = {!! $recordedComments !!};
     window. __Competition__ = {!! $competition !!};
   </script>
-  <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js integrity=sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb crossorigin=anonymous></script>
-  <script type=text/javascript src=/js/mic-recorder.js></script>
-  <script type=text/javascript src=/js/recording.js></script>
-  <link href=/css/carmen.css rel=stylesheet>
-  <link href=/css/dynamic-colors.css rel=stylesheet>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
+  <script type=text/javascript src=/dist/js/mic-recorder.js></script>
+  <script type=text/javascript src=/dist/js/recording.js></script>
+  <link href="/dist/css/app.css" rel=stylesheet>
   <style>
     html, body {
       position: relative;
       height: 100%;
     }
   </style>
-<link href=/static/css/app.dc3dc2492686ae0b3900c2df34eaa0f4.css rel=stylesheet></head>
+</head>
 <body>
-  <input type=hidden id=recordingsInProgress value=0>
+  <input type="hidden" id="recordingsInProgress" value="0"/>
   <div id=app></div>
   <script>
     const input = document.getElementById('recordingsInProgress');
@@ -82,5 +81,7 @@
       })
     })
   </script>
-<script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script><script type=text/javascript src=/static/js/vendor.fb370a0f3ac287e7de30.js></script><script type=text/javascript src=/static/js/app.20f89e3c96b7622307ac.js></script></body>
+  <script type="text/javascript" src="/dist/vue/manifest.js"></script>
+  <script type="text/javascript" src="/dist/vue/vendor.js"></script>
+  <script type="text/javascript" src="/dist/vue/main.js"></script>
 </html>

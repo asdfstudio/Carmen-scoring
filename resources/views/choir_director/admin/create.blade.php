@@ -1,10 +1,5 @@
 @extends('layouts.simple')
 
-@section('body-header')
-  <style>@import "/css/director-form.css";</style>
-@endsection
-
-
 @section('content-header')
   <h1>{{ $choir->full_name }}</h1>
 
@@ -22,5 +17,5 @@
 @endsection
 
 @section('body-footer')
-  <script src="/js/director-form.js"></script>
+  <script src="/dist/js/director-form.js"></script>
 @endsection

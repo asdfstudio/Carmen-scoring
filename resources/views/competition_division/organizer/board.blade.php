@@ -48,11 +48,11 @@
   <div id="modal-cover" style="display: none"></div>
   <div id="modal" style="display: none"></div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
 
-  <script src="/js/mustache.min.js"></script>
-  <script src="/js/board.js"></script>
-	<script src="/js/forms.js"></script>
+  <script src="/dist/js/vendor/mustache.min.js"></script>
+  <script src="/dist/js/board.js"></script>
+	<script src="/dist/js/forms.js"></script>
 
   <script type="text/javascript">
   $(document).ready(function() {

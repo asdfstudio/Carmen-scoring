@@ -1,14 +1,15 @@
-@import 'variables';
+@import "variables";
 @import "dynamic-colors";
-@import 'bootstrap-custom';
+@import "bootstrap-custom";
+@import "~sass-mediaqueries/media-queries";
+@import "./vendor/jquery.timepicker";
+
 @import "color-swatches";
-@import "media-queries";
 @import "scorecard";
 @import "scoreboard";
 @import "tabs";
 @import "tables";
 @import "actions";
-//@import "toggle-buttons";
 @import "lists";
 @import "labels";
 @import "forms";
@@ -16,11 +17,10 @@
 @import "content";
 @import "schedule";
 @import "spacing";
-@import "jquery.timepicker";
+@import "director-form";
 @import "board";
 @import "public";
 @import "ss_helper";
-
 
 
 .alert {

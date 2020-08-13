@@ -1,7 +1,3 @@
-@section('body-header')
-  <style>@import "/css/director-form.css";</style>
-@endsection
-
 <div class="board-list choirs" id="choir-list">
   <div class="list-header">
     <h3>Choirs</h3>
@@ -17,5 +13,5 @@
 </div>
 
 @section('body-footer')
-  <script src="/js/director-form.js"></script>
+  <script src="/dist/js/director-form.js"></script>
 @endsection

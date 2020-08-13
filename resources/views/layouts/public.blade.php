@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" >
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bitter:400,700|Lato:100,300,400,700">
 
-    <link rel="stylesheet" href="/css/carmen.css">
+    <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="/css/unslider.css">
     <link rel="stylesheet" href="/css/unslider-dots.css">
 
@@ -88,7 +88,7 @@
   </div>
 
   <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-	<script src="/js/unslider-min.js"></script>
+	<script src="/dist/js/vendor/unslider-min.js"></script>
   <script>
 		jQuery(document).ready(function($) {
 			$('.slider').unslider({

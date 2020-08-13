@@ -11,7 +11,7 @@
 		float: right;
 	}
 
-	.switch input { 
+	.switch input {
 		opacity: 0;
 		width: 0;
 		height: 0;
@@ -81,7 +81,7 @@
 @endsection
 
 @section('body-footer')
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 
@@ -119,7 +119,7 @@
 			})
 		});
 	})
-	
+
 </script>
 
 @endsection
