@@ -8,7 +8,8 @@
     @{{ /captions }}
   </ul>
 
-  <!--<div class="actions">
-    <a class="remove-judge" href="#">Remove judge</a>
-  </div>-->
+  <div class="actions">
+    <a class="remove-judge" href="#">Remove</a>
+    <a class="remove-judge" href="#">Edit captions</a>
+  </div>
 </li>

@@ -54,6 +54,15 @@ var Card = (function () {
     return this.renderCard(type, data.id, html)
   }
 
+  var bulkCreateAndRenderCard = function (type, data) {
+    console.log('data:', data)
+    if(!Array.isArray(data) || data.length === 1) return;
+    data.forEach(element => {
+      var html = this.createCard(type, element)
+      return this.renderCard(type, element.id, html)
+    });
+  }
+
   var removeCard = function (type, id) {
     var existingCard = this.getExistingCard(type, id)
 
@@ -76,6 +85,7 @@ var Card = (function () {
     createCard: createCard,
     renderCard: renderCard,
     createAndRenderCard: createAndRenderCard,
+    bulkCreateAndRenderCard: bulkCreateAndRenderCard,
     getExistingCard: getExistingCard,
     removeCard: removeCard
   }
@@ -100,12 +110,20 @@ var Form = (function () {
   var theForm
 
   var getForm = function (type, id, resource) {
-    var prototypeForm = $('.add-resource-form-prototype[data-resource-type="' + type + '"]')
+    var prototypeForm
+    if(type === 'import')
+      prototypeForm = $('.import-resource-form-prototype')
+    else
+     prototypeForm = $('.add-resource-form-prototype[data-resource-type="' + type + '"]')
 
     var form = prototypeForm.clone()
+    form.find('input').each(function() {
+      $(this).removeAttr('disabled')
+    })
 
     // tweak
     $(form).removeClass('add-resource-form-prototype')
+    $(form).removeClass('import-resource-form-prototype')
 
     // tweak form action
     if (id) {
@@ -122,7 +140,8 @@ var Form = (function () {
 
   var buildRequest = function (form) {
     var resourceType = form.data('resource-type')
-
+    var resourceAction = form.data('resource-action')
+    if(!resourceAction) resourceAction = 'add'
     var request = {
       data: form.serialize(),
       dataType: 'json',
@@ -132,7 +151,7 @@ var Form = (function () {
         Resource.handleSaveComplete(status)
       },
       success: function (data, status) {
-        Resource.handleSaveSuccess(resourceType, data, status)
+        Resource.handleSaveSuccess(resourceType, data, status, resourceAction)
       },
       error: function (xhr, status) {
         Resource.handleSaveError(status)
@@ -188,8 +207,13 @@ var Resource = (function () {
       JudgeForm.init(Form.theForm)
     }
 
-    var eventName = 'resourceadd' + type
-    $(document.body).trigger(eventName)
+    // var eventName = 'resourceadd' + type
+    // $(document.body).trigger(eventName)
+  }
+
+  var importt = function (type) {
+    var html = Form.getForm('import', false, {})
+    Modal.open(html)
   }
 
   var edit = function (type, id, resource) {
@@ -205,7 +229,6 @@ var Resource = (function () {
 
   var remove = function (link) {
     var request = Form.buildRemoveRequest(link)
-    console.log(request)
     $.ajax(request)
   }
 
@@ -214,8 +237,8 @@ var Resource = (function () {
     $.ajax(request)
   }
 
-  var handleSaveSuccess = function (type, data, status) {
-    Card.createAndRenderCard(type, data)
+  var handleSaveSuccess = function (type, data, status, action) {
+    action === 'add' ? Card.createAndRenderCard(type, data) : Card.bulkCreateAndRenderCard(type, data)
     List.updateCounter(type)
   }
 
@@ -234,6 +257,7 @@ var Resource = (function () {
 
   return {
     add: add,
+    importt: importt,
     edit: edit,
     remove: remove,
     save: save,

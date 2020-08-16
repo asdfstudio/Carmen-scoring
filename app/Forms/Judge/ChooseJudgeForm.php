@@ -26,7 +26,7 @@ class ChooseJudgeForm extends Form
 					'choices' => $this->data,
 					//'empty_value' => 'Choose judge...',
 					'label' => 'Choose from existing judges',
-          'attr' => ['class' => 'judge_id', 'id' => ''],
+          'attr' => ['class' => 'judge_id form-control', 'id' => ''],
 					//'property' => 'first_name',
           'rules' => ['required_without:judge.first_name'],
           'wrapper' => ['class' => 'existing_judge_container']

@@ -338,15 +338,19 @@ class CompetitionDivisionJudgeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($competition_id, $division_id, $judge_id, FormBuilder $formBuilder)
+    public function destroy($competition_id, $division_id, $judge_id, FormBuilder $formBuilder, Request $request)
     {
         $division = Division::with('competition')->find($division_id);
         $judge = Judge::find($judge_id);
 
 				$division->judges()->detach($judge_id);
 
-				// Set flash data and redirect
-				return redirect()->route('organizer.competition.division.judge.index',[$division->competition, $division])->with('success', $judge->full_name . ' was successfully removed as a judge for this division.');
+        if($request->wantsJson()) {
+          return response()->json($judge_id);
+        }
+				else { // Set flash data and redirect
+          return redirect()->route('organizer.competition.division.judge.index',[$division->competition, $division])->with('success', $judge->full_name . ' was successfully removed as a judge for this division.');
+        }
     }
 
 
@@ -362,19 +366,20 @@ class CompetitionDivisionJudgeController extends Controller
         return $value->id == $division_id;
       });
 
-      $data = [
-        'choices' => $competition->divisions->reject(function($value,$key) use ($division_id) {
-          return $value->id == $division_id;
-        })->pluck('name', 'id')->toArray()
-      ];
+      // $data = [
+      //   'choices' => $competition->divisions->reject(function($value, $key) use ($division_id) {
+      //     return $value->id == $division_id;
+      //   })->pluck('name', 'id')->toArray()
+      // ];
+      // $form = $formBuilder -> create('Division\ChooseDivisionForm', [
+      //   'method' => 'POST',
+      //   'url' => route('organizer.competition.division.judge.import.process', [$competition_id, $division_id]),
+      //   'data' => $data
+      // ]);
+      // return view('competition__division_judge.organizer.import', compact('division', 'form', 'divisions'));
 
-      $form = $formBuilder->create('Division\ChooseDivisionForm', [
-        'method' => 'POST',
-        'url' => route('organizer.competition.division.judge.import.process', [$competition_id, $division_id]),
-        'data' => $data
-      ]);
-
-      return view('competition_division_judge.organizer.import', compact('division', 'form', 'divisions'));
+      return view('competition_division_judge.organizer.import', compact('division', 'divisions', 'competition_id', 'division_id'));
+      
     }
 
 
@@ -389,12 +394,24 @@ class CompetitionDivisionJudgeController extends Controller
       $source_division_id = $request->input('id');
       $source_division = Division::find($source_division_id);
 
+      $attachedJudges = array();
       foreach($source_division->judges as $judge)
       {
         if(!$division->judges->contains($judge->id))
         {
           $division->judges()->attach($judge->id, ['caption_id' => $judge->pivot->caption_id]);
+          
+          $attachedJudge = Judge::find($judge->id);
+          $attachedJudge->load(['captions' => function($query) use ($division_id) {
+            $query->wherePivot('division_id', $division_id);
+          }]);
+          $attachedJudges[] = $attachedJudge;
         }
+      }
+
+      if($request->wantsJson())
+      {
+        return response()->json($attachedJudges);
       }
 
       return redirect()->route('organizer.competition.division.judge.index', [$competition_id, $division_id])->with('success',"Judges successfully imported from $source_division->name.");

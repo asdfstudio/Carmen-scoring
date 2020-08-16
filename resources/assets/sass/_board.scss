@@ -72,6 +72,7 @@
           .caption {
             margin: 0;
             margin-right: 3px;
+            margin-bottom: 3px;
           }
         }
       }
@@ -86,7 +87,8 @@
 
 
 
-  .add-resource {
+  .add-resource,
+  .import-resource {
     display: block;
     background: #ddd;
     text-align: center;
@@ -124,6 +126,17 @@
 	overflow-y: scroll;
 	max-height: 90%;
 }
-.add-resource-form-prototype, .card-prototype {
+.add-resource-form-prototype,
+.card-prototype,
+.import-resource-form-prototype {
   display: none;
+}
+
+.board-list.judges {
+  .actions {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+    justify-content: space-between;
+  }
 }

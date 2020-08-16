@@ -359,12 +359,13 @@ class CompetitionDivisionController extends Controller
 
         $deletePenaltyForm->modify('submit','submit',['label' => 'Remove']);
 
-        //
-				//return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'publishScoringForm', 'completeScoringForm', 'finalizeScoringForm'));
 
-
-
-        return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
+        $competition_import_judge = Competition::with('divisions', 'divisions.judges')->find($competition_id);
+        $divisions_import_judge = $competition_import_judge->divisions->reject(function($value, $key) use ($division_id) {
+          return $value->id == $division_id;
+        });
+        // return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
+        return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'divisions_import_judge', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
     }
 
 

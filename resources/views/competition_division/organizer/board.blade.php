@@ -30,8 +30,6 @@
 
 	<div class="clearfix"></div>
 
-
-
   <div class="division-board" id="division-13-board">
     <h2>{{ $division->name }}</h2>
     <!--<a href="edit-division">Edit Division</a>-->
@@ -41,8 +39,6 @@
 		@include('judge.board.board-list')
 
 		@include('round.board.board-list')
-
-
 
   </div> <!-- end board-->
 
@@ -65,6 +61,11 @@
       e.preventDefault();
       var type = $(this).data('resource-type');
       Resource.add(type);
+    });
+
+    $('.import-resource').on('click', function(e) {
+      e.preventDefault();
+      Resource.importt('import');
     });
 
     $('.edit-resource').on('click', function(e) {

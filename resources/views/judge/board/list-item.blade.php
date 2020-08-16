@@ -12,6 +12,7 @@
   <div class="actions">
     @can('removeJudge', $division)
       <a class="remove-resource" data-resource-type="judge" data-resource-id="{{ $judge->id }}" data-csrf-token="{{ csrf_token() }}" href="{{ route('organizer.competition.division.judge.destroy',[$division->competition,$division,$judge]) }}">Remove</a>
+      <a class="remove-resource" data-resource-type="judge" data-resource-id="{{ $judge->id }}" data-csrf-token="{{ csrf_token() }}" href="{{ route('organizer.competition.division.judge.destroy',[$division->competition,$division,$judge]) }}">Edit captions</a>
     @endcan
   </div>
 </li>

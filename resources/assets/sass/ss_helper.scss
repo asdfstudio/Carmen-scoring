@@ -1,0 +1,11 @@
+// display
+.d-flex {
+    display: flex !important;
+}
+
+// Font size helpers (Min: 2px, Max: 120px, Multiples of 2)
+@for $size from 1 through 60 {
+    .ss-fs-#{$size * 2} {
+        font-size: #{$size * 2}px;
+    }
+}
