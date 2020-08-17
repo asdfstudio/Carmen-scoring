@@ -111,13 +111,9 @@ class Choir extends Model
 
     public function getFullNameAttribute()
     {
-      $h = '';
-
+      $h = $this->name();
       if($this->school)
-      {
-        $h.= $this->school->name . ' ';
-      }
-      $h.= $this->name();
+        $h.= ' ( ' . $this->school->name . ' )';
 
       return $h;
     }

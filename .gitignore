@@ -14,4 +14,5 @@ Homestead.json
 .gitattributes
 .postcssrc.js
 .DS_Store
+.vscode
 /.nova

@@ -24,7 +24,8 @@ class CreateForm extends Form
           'multiple' => false,
           //'wrapper' => ['class' => 'wrap'],
           'choice_options' => [
-            'wrapper' => ['class' => 'choice-container']
+            'wrapper' => ['class' => 'choice-container'],
+            'rules' => 'required'
           ]
         ]);
         
@@ -37,7 +38,8 @@ class CreateForm extends Form
           'expanded' => true,
           'multiple' => false,
           'choice_options' => [
-            'wrapper' => ['class' => 'choice-container']
+            'wrapper' => ['class' => 'choice-container'],
+            'rules' => 'required'
           ],
           'help_block' => [
             'text' => ''
@@ -64,7 +66,8 @@ class CreateForm extends Form
           'expanded' => true,
           'multiple' => false,
           'choice_options' => [
-            'wrapper' => ['class' => 'choice-container']
+            'wrapper' => ['class' => 'choice-container'],
+            'rules' => 'required'
           ],
           'help_block' => [
             //'text' => 'The Ranked scoring method should be used only if at least one of the following is true: 1) The Caption Weighting is 50/50. 2) All judges are scoring both the Music and Show captions. 3) There are 50% more judges scoring the Music caption than the Show caption.'

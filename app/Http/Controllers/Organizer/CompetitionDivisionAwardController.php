@@ -151,7 +151,7 @@ class CompetitionDivisionAwardController extends Controller
 
     public function assign(FormBuilder $formBuilder, Competition $competition, $division_id)
     {
-      $division = $competition->divisions()->findOrFail($division_id);
+      $division = $competition->divisions()->with('choirs.school')->findOrFail($division_id);
       $awards = $division->awards;
 
       $this->authorize('assign', ['App\Award', $division]);

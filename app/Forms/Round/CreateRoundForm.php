@@ -99,9 +99,9 @@ class CreateRoundForm extends Form
         'attr' => ['class' => 'btn btn-primary', 'name' => 'submit']
       ]);
 
-      $this->add('submit_create_another', 'submit', [
-        'label' => 'Save & Create Another',
-        'attr' => ['class' => 'btn btn-secondary', 'name' => 'submit_create_another']
-      ]);
+      // $this->add('submit_create_another', 'submit', [
+      //   'label' => 'Save & Create Another',
+      //   'attr' => ['class' => 'btn btn-secondary', 'name' => 'submit_create_another']
+      // ]);
   }
 }
