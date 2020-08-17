@@ -1,8 +1,17 @@
+<template>
+  <div>
+    <div class="current-score">{{ currentScore }}</div>
+    <button @click="down">Subtract {{ increment }}</button>
+    <button @click="up">Add {{ increment }}</button>
+    <div class="score-buttons">
+      <button v-for="n in max" @click="change(n)">{{ n }}</button>
+    </div>
+  </div>
+</template>
 
-import Vue from 'vue'
-
-export default Vue.component('single-score', {
-  template: '<div><div class="current-score">{{ currentScore }}</div><button @click="down">Subtract {{ increment }}</button><button @click="up">Add {{ increment }}</button><div class="score-buttons"><button v-for="n in max" @click="change(n)">{{ n }}</button></div></div>',
+<script>
+export default {
+  name: 'single-score',
   props: {
     min: Number,
     max: Number,
@@ -34,3 +43,4 @@ export default Vue.component('single-score', {
     }
   }
 })
+</script>
