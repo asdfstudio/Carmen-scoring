@@ -138,13 +138,13 @@
 
 
     <div class="schedule-builder-footer">
-      <a href="{{ route('organizer.competition.award-schedule.builder.store', [$competition->id, $schedule->id]) }}" class="save-schedule-btn btn btn-primary">Save Award Ceremony Schedule</a>
 
       <span class="schedule-builder-status-message"></span>
 
-      <span class="is-dirty-message">
+      <span class="is-dirty-message alert alert-danger">
         Your schedule has changed. You must click "Save Schedule" to complete your changes.
       </span>
+      <a href="{{ route('organizer.competition.award-schedule.builder.store', [$competition->id, $schedule->id]) }}" class="save-schedule-btn btn btn-primary" disabled>Save Award Ceremony Schedule</a>
     </div>
   </div>
 

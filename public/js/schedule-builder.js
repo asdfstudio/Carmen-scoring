@@ -16,11 +16,13 @@ var ScheduleBuilder = (function () {
       update: function (event, ui) {
         // this.setStatusMessage('Schedule changed');
         $('.schedule-builder-container').addClass('is-dirty')
+        document.getElementsByClassName('save-schedule-btn')[0].removeAttribute('disabled')
       }
     })
 
     $('.item_name').on('blur', function () {
       $('.schedule-builder-container').addClass('is-dirty')
+      document.getElementsByClassName('save-schedule-btn')[0].removeAttribute('disabled')
     })
   }
 
@@ -73,6 +75,13 @@ var ScheduleBuilder = (function () {
     // console.log(data);
     // this.setStatusMessage('Saved');
     $('.schedule-builder-container').removeClass('is-dirty')
+    document.getElementsByClassName('save-schedule-btn')[0].setAttribute('disabled', 'disabled')
+    swal({
+      title: "Success",
+      text: "Saved successfully!",
+      icon: "success",
+      button: "OK",
+    });
   }
 
   return {
