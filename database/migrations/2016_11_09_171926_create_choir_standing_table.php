@@ -14,7 +14,7 @@ class CreateChoirStandingTable extends Migration
     {
         Schema::create('choir_standing', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('standing_id')->index();
+            $table->integer('standing_id')->unsigned()->index();
             $table->integer('choir_id')->index();
             $table->integer('raw_rank');
             $table->integer('final_rank');

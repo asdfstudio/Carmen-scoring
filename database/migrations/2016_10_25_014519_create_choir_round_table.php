@@ -14,7 +14,7 @@ class CreateChoirRoundTable extends Migration
     {
       Schema::create('choir_round', function (Blueprint $table) {
         $table->integer('choir_id')->index()->unsigned();
-        $table->integer('round_id')->index()->nullable();
+        $table->integer('round_id')->index()->unsigned();
 
         $table->foreign('choir_id')
             ->references('id')

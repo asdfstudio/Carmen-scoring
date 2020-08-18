@@ -14,9 +14,9 @@ class CreateAwardScheduleItemsTable extends Migration
     {
         Schema::create('award_schedule_items', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('award_schedule_id')->index();
-            $table->integer('division_id')->index();
-						$table->integer('award_id')->index();
+            $table->integer('award_schedule_id')->unsigned()->index();
+            $table->integer('division_id')->unsigned()->index();
+						$table->integer('award_id')->unsigned()->index();
             $table->integer('performance_order');
             $table->timestamps();
             //$table->softDeletes();

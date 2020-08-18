@@ -14,9 +14,9 @@ class CreateScheduleItemsTable extends Migration
     {
         Schema::create('schedule_items', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('schedule_id')->index();
-            $table->integer('round_id')->index();
-						$table->integer('choir_id')->index();
+            $table->integer('schedule_id')->unsigned()->index();
+            $table->integer('round_id')->unsigned()->index();
+						$table->integer('choir_id')->unsigned()->index();
             $table->integer('performance_order');
             $table->time('scheduled_time')->nullable();
             $table->timestamps();

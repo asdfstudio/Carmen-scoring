@@ -22,22 +22,22 @@ class CreateRawScoresTable extends Migration
 						$table->decimal('score', 5, 1);
 						$table->softDeletes();
 						$table->timestamps();
-            
+
 						$table->foreign('division_id')
                 ->references('id')
-                ->on('division')
+                ->on('divisions')
                 ->onDelete('cascade');
-						
+
             $table->foreign('choir_id')
                 ->references('id')
-                ->on('choir')
+                ->on('choirs')
                 ->onDelete('cascade');
-								
+
 						$table->foreign('judge_id')
                 ->references('id')
-                ->on('peopl')
+                ->on('people')
                 ->onDelete('cascade');
-								
+
 						$table->foreign('criterion_id')
                 ->references('id')
                 ->on('criteria')
