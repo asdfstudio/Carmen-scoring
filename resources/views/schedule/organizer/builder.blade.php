@@ -36,11 +36,12 @@
       <div class="schedule-builder-header">
         Schedule
       </div>
-      <ul class="schedule-builder-list schedule">
+      <ul class="schedule-builder-list schedule ui-droppable">
         <li class="spacer top"></li>
         @foreach($schedule->items as $item)
-          <li class="schedule-item choir" id="item_{{ $item->round_id }}_{{ $item->choir_id }}" data-round-id="{{ $item->round_id }}" data-choir-id="{{ $item->choir_id }}">
-            <input type="text" class="scheduled_time" value="{{ $item->scheduled_time }}">
+          <li class="schedule-item choir ui-draggable" id="item_{{ $item->round_id }}_{{ $item->choir_id }}" data-round-id="{{ $item->round_id }}" data-choir-id="{{ $item->choir_id }}">
+            <span class="sort-handle ui-draggable-handle"><i class="fa fa-sort"></i></span>
+            <input type="time" class="scheduled_time" value="{{ $item->scheduled_time }}">
 
             @if ($item->name)
               <input type="text" class="item_name" value="{{ $item->name }}">

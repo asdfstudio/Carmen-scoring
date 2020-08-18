@@ -126,6 +126,7 @@
     }
 
     & li.schedule-item {
+      display: inline-block;
       //border: 1px solid #ccc;
       background: #fff;
       margin: 2px 0;
@@ -164,7 +165,7 @@
           color: #888;
           font-size: 0.9em;
           margin-left: 3px;
-          
+
           /*&.caption-music {
             color: $cs-caption-music;
           }
