@@ -24,6 +24,8 @@ The standings seem to already be linked to both round and division. That's not e
 These are currently linked to a Division. If we're talking about keeping a single scoresheet for a round, we could move them up. Though Caption Weightings seem to be Division specific.  Maybe the caption weightings would stay  the same and the scoresheet would be a round-specific relationship.
 Sherman's Response: Captions are actually scoresheet specific. All divisions in a round should have the same scoresheet, weighting, method, and judges and their assigned captions. That way all divisions can be equally comparable to qualify for the finals round.
 
+AJ: All "Scoring Settings" would be per-round, including the sheet itself, caption weighting, and scoring method. The optional Rating Systems and Award Settings would still be tied to a Division.
+
 ### What is the Division / Solo Division separation all about?
 Is it that there are different scoring methods available? The categories? Lack of sponsors? This seems like a good candidate for the polymorphism used elsewhere.
 Sherman's Response: When the solo divisions were created, there was a concern of keeping and publishing information about minors and their personal scoring data. When scores are sent to the soloist's director, the director only has access to their student's scores and comments. Only award winners are made public, not a list of all participants. It was built with maintaining privacy in mind.
