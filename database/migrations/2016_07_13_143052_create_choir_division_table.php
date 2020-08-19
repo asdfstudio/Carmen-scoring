@@ -15,18 +15,16 @@ class CreateChoirDivisionTable extends Migration
         Schema::create('choir_division', function (Blueprint $table) {
             //$table->id();
            // $table->timestamps();
-					 
-					 $table->integer('division_id')->unsigned();
-            $table->integer('choir_id')->unsigned();
 
-            $table->foreign('division_id')
-                ->references('id')
-                ->on('divisions')
+					 // $table->integer('division_id')->unsigned();
+           //  $table->integer('choir_id')->unsigned();
+
+            $table->foreignId('division_id')
+                ->constrained('divisions')
                 ->onDelete('cascade');
 
-            $table->foreign('choir_id')
-                ->references('id')
-                ->on('choirs')
+            $table->foreignId('choir_id')
+                ->constrained('choirs')
                 ->onDelete('cascade');
 
             $table->primary(['division_id', 'choir_id']);

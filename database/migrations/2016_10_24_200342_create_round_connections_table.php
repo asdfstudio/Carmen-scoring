@@ -13,17 +13,13 @@ class CreateRoundConnectionsTable extends Migration
     public function up()
     {
         Schema::create('round_connections', function (Blueprint $table) {
-          $table->integer('source_round_id')->index()->unsigned();
-          $table->integer('target_round_id')->index()->unsigned();
 
-          $table->foreign('source_round_id')
-              ->references('id')
-              ->on('rounds')
+          $table->foreignId('source_round_id')
+              ->constrained('rounds')
               ->onDelete('cascade');
 
-          $table->foreign('target_round_id')
-            ->references('id')
-            ->on('rounds')
+          $table->foreignId('target_round_id')
+            ->constrained('rounds')
             ->onDelete('cascade');
 
           $table->primary(['source_round_id', 'target_round_id']);

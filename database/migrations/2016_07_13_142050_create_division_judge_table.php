@@ -15,24 +15,21 @@ class CreateDivisionJudgeTable extends Migration
         Schema::create('division_judge', function (Blueprint $table) {
             //$table->id();
             //$table->timestamps();
-						
-						$table->integer('division_id')->unsigned();
-            $table->integer('judge_id')->unsigned();
-						$table->integer('caption_id')->unsigned();
 
-            $table->foreign('division_id')
-                ->references('id')
-                ->on('divisions')
+						// $table->integer('division_id')->unsigned();
+            // $table->integer('judge_id')->unsigned();
+						// $table->integer('caption_id')->unsigned();
+
+            $table->foreignId('division_id')
+                ->constrained('divisions')
                 ->onDelete('cascade');
 
-            $table->foreign('judge_id')
-                ->references('id')
-                ->on('people')
+            $table->foreignId('judge_id')
+                ->constrained('people')
                 ->onDelete('cascade');
-						
-						$table->foreign('caption_id')
-                ->references('id')
-                ->on('captions')
+
+						$table->foreignId('caption_id')
+                ->constrained('captions')
                 ->onDelete('cascade');
 
             $table->primary(['division_id', 'judge_id','caption_id']);

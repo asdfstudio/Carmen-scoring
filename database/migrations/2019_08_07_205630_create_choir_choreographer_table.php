@@ -13,19 +13,15 @@ class CreateChoirChoreographerTable extends Migration
     public function up()
     {
         Schema::create('choir_choreographer', function (Blueprint $table) {
-            $table->integer('choir_id')->unsigned();
-					  $table->integer('choreographer_id')->unsigned();
 
-            $table->foreign('choir_id')
-                ->references('id')
-                ->on('choirs')
+            $table->foreignId('choir_id')
+                ->constrained('choirs')
                 ->onDelete('cascade');
 
-            $table->foreign('choreographer_id')
-                ->references('id')
-                ->on('people')
+            $table->foreignId('choreographer_id')
+                ->constrained('people')
                 ->onDelete('cascade');
-          
+
             $table->primary(['choir_id', 'choreographer_id']);
         });
     }

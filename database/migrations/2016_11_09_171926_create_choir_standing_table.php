@@ -14,10 +14,12 @@ class CreateChoirStandingTable extends Migration
     {
         Schema::create('choir_standing', function (Blueprint $table) {
             $table->id();
-            $table->integer('standing_id')->unsigned()->index();
             $table->integer('choir_id')->index();
             $table->integer('raw_rank');
             $table->integer('final_rank');
+            $table->foreignId('standing_id')
+                  ->constrained('standings')
+                  ->onDelete('cascade');
         });
     }
 

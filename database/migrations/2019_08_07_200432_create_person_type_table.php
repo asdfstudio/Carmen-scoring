@@ -13,19 +13,15 @@ class CreatePersonTypeTable extends Migration
     public function up()
     {
         Schema::create('person_type', function (Blueprint $table) {
-					  $table->integer('person_id')->unsigned();
-            $table->integer('type_id')->unsigned();
 
-            $table->foreign('person_id')
-                ->references('id')
-                ->on('people')
+            $table->foreignId('person_id')
+                ->constrained('people')
                 ->onDelete('cascade');
 
-            $table->foreign('type_id')
-                ->references('id')
-                ->on('types')
+            $table->foreignId('type_id')
+                ->constrained('types')
                 ->onDelete('cascade');
-          
+
             $table->primary(['person_id', 'type_id']);
         });
     }

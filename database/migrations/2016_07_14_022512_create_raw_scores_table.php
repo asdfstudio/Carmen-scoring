@@ -14,34 +14,29 @@ class CreateRawScoresTable extends Migration
     {
         Schema::create('raw_scores', function (Blueprint $table) {
 						$table->id();
-						$table->integer('division_id')->unsigned()->index();
-						$table->integer('round_id')->index();
-						$table->integer('choir_id')->unsigned()->index();
-						$table->integer('judge_id')->unsigned()->index();
-						$table->integer('criterion_id')->unsigned();
 						$table->decimal('score', 5, 1);
 						$table->softDeletes();
 						$table->timestamps();
 
-						$table->foreign('division_id')
-                ->references('id')
-                ->on('divisions')
-                ->onDelete('cascade');
+            $table->foreignId('round_id')
+              ->constrained('rounds')
+              ->onDelete('cascade');
 
-            $table->foreign('choir_id')
-                ->references('id')
-                ->on('choirs')
-                ->onDelete('cascade');
+            $table->foreignId('division_id')
+              ->constrained('divisions')
+              ->onDelete('cascade');
 
-						$table->foreign('judge_id')
-                ->references('id')
-                ->on('people')
-                ->onDelete('cascade');
+            $table->foreignId('choir_id')
+              ->constrained('choirs')
+              ->onDelete('cascade');
 
-						$table->foreign('criterion_id')
-                ->references('id')
-                ->on('criteria')
-                ->onDelete('cascade');
+            $table->foreignId('judge_id')
+              ->constrained('people')
+              ->onDelete('cascade');
+
+            $table->foreignId('criterion_id')
+              ->constrained('criteria')
+              ->onDelete('cascade');
 
 
             //$table->primary(['division_id','round','choir_id','judge_id','criterion_id'], 'div_rd_cho_jud_cri');

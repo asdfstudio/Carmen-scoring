@@ -13,25 +13,16 @@ class CreateDivisionPenaltyTable extends Migration
     public function up()
     {
         Schema::create('division_penalty', function (Blueprint $table) {
-            //$table->id();
-            //$table->timestamps();
-            //$table->integer('division_id')->index();
-            //$table->integer('penalty_id')->index();
 
-            $table->integer('division_id')->unsigned();
-            $table->integer('penalty_id')->unsigned();
+          $table->foreignId('division_id')
+            ->constrained('divisions')
+            ->onDelete('cascade');
 
-            $table->foreign('division_id')
-                ->references('id')
-                ->on('divisions')
-                ->onDelete('cascade');
+          $table->foreignId('penalty_id')
+            ->constrained('penalties')
+            ->onDelete('cascade');
 
-                $table->foreign('penalty_id')
-                    ->references('id')
-                    ->on('penalties')
-                    ->onDelete('cascade');
-
-            $table->primary(['division_id', 'penalty_id']);
+          $table->primary(['division_id', 'penalty_id']);
         });
     }
 

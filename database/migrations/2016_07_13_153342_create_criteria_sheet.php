@@ -13,20 +13,12 @@ class CreateCriteriaSheet extends Migration
     public function up()
     {
         Schema::create('criterion_sheet', function (Blueprint $table) {
-            //$table->id();
-            //$table->timestamps();
-						
-						$table->integer('criterion_id')->unsigned();
-            $table->integer('sheet_id')->unsigned();
-
-            $table->foreign('criterion_id')
-                ->references('id')
-                ->on('criteria')
+            $table->foreignId('criterion_id')
+                ->constrained('criteria')
                 ->onDelete('cascade');
 
-            $table->foreign('sheet_id')
-                ->references('id')
-                ->on('sheets')
+            $table->foreignId('sheet_id')
+                ->constrained('sheets')
                 ->onDelete('cascade');
 
             $table->primary(['criterion_id', 'sheet_id']);

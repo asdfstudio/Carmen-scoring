@@ -14,9 +14,6 @@ class CreateScheduleItemsTable extends Migration
     {
         Schema::create('schedule_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('schedule_id')->unsigned()->index();
-            $table->integer('round_id')->unsigned()->index();
-						$table->integer('choir_id')->unsigned()->index();
             $table->integer('performance_order');
             $table->time('scheduled_time')->nullable();
             $table->timestamps();
@@ -24,9 +21,15 @@ class CreateScheduleItemsTable extends Migration
 
             //$table->unique(['schedule_id', 'round_id', 'choir_id']);
 
-            $table->foreign('schedule_id')->references('id')->on('schedules')->onDelete('cascade');
-            $table->foreign('round_id')->references('id')->on('rounds')->onDelete('cascade');
-            $table->foreign('choir_id')->references('id')->on('choirs')->onDelete('cascade');
+            $table->foreignId('schedule_id')
+              ->constrained('schedules')
+              ->onDelete('cascade');
+            $table->foreignId('round_id')
+              ->constrained('rounds')
+              ->onDelete('cascade');
+            $table->foreignId('choir_id')
+              ->constrained('choirs')
+              ->onDelete('cascade');
         });
     }
 

@@ -14,7 +14,9 @@ class CreateRoundsTable extends Migration
     {
         Schema::create('rounds', function (Blueprint $table) {
             $table->id();
-						$table->integer('division_id')->index();
+            $table->foreignId('division_id')
+              ->constrained('divisions')
+              ->onDelete('cascade');
 						$table->string('name');
 						$table->softDeletes();
             $table->timestamps();
