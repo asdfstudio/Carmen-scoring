@@ -13,7 +13,7 @@ class CreateSoloRawScoresTable extends Migration
     public function up()
     {
         Schema::create('solo_raw_scores', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('solo_division_id')->unsigned()->index();
             $table->integer('performer_id')->unsigned()->index();
             $table->integer('judge_id')->unsigned()->index();

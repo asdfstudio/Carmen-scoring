@@ -13,7 +13,7 @@ class CreateCompetition extends Migration
     public function up()
     {
         Schema::create('competitions', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 						$table->integer('organization_id')->index();
 						$table->string('name');
 						$table->softDeletes();

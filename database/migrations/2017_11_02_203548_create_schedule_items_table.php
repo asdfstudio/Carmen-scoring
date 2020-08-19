@@ -13,7 +13,7 @@ class CreateScheduleItemsTable extends Migration
     public function up()
     {
         Schema::create('schedule_items', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('schedule_id')->unsigned()->index();
             $table->integer('round_id')->unsigned()->index();
 						$table->integer('choir_id')->unsigned()->index();

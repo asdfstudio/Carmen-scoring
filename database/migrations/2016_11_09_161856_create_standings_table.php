@@ -13,7 +13,7 @@ class CreateStandingsTable extends Migration
     public function up()
     {
         Schema::create('standings', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('division_id')->index();
             $table->integer('round_id')->index();
             $table->boolean('is_consensus_scoring');

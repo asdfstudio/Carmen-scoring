@@ -13,7 +13,7 @@ class CreatePerformersTable extends Migration
     public function up()
     {
         Schema::create('performers', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('solo_division_id')->unsigned()->index();
             $table->integer('choir_id')->unsigned()->index();
             $table->string('name');

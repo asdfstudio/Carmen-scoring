@@ -13,7 +13,7 @@ class CreateAwardScheduleItemsTable extends Migration
     public function up()
     {
         Schema::create('award_schedule_items', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('award_schedule_id')->unsigned()->index();
             $table->integer('division_id')->unsigned()->index();
 						$table->integer('award_id')->unsigned()->index();

@@ -13,7 +13,7 @@ class CreateDivisionAwardTable extends Migration
     public function up()
     {
         Schema::create('division_award', function (Blueprint $table) {
-          //$table->increments('id');
+          //$table->id();
           $table->integer('division_id')->unsigned();
           $table->integer('award_id')->unsigned();
           $table->integer('choir_id')->index()->nullable();

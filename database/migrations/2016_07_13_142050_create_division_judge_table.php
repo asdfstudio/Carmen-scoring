@@ -13,7 +13,7 @@ class CreateDivisionJudgeTable extends Migration
     public function up()
     {
         Schema::create('division_judge', function (Blueprint $table) {
-            //$table->increments('id');
+            //$table->id();
             //$table->timestamps();
 						
 						$table->integer('division_id')->unsigned();

@@ -13,7 +13,7 @@ class CreateAwardsTable extends Migration
     public function up()
     {
         Schema::create('awards', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('organization_id')->index()->nullable();
             $table->string('name');
             $table->text('description');

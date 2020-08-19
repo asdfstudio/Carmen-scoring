@@ -13,7 +13,7 @@ class CreateCommentUrlsTable extends Migration
     public function up()
     {
         Schema::create('comment_urls', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('competition_id')->index();
             $table->integer('choir_id')->index();
             $table->string('access_code')->unique();

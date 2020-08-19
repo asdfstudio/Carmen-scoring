@@ -13,7 +13,7 @@ class CreateCriteriaTable extends Migration
     public function up()
     {
         Schema::create('criteria', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 						$table->integer('caption_id')->index();
 						$table->string('name');
 						$table->softDeletes();

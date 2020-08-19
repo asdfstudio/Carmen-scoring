@@ -13,7 +13,7 @@ class CreateDivisionAwardSettingsTable extends Migration
     public function up()
     {
         Schema::create('division_award_settings', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('division_id')->unsigned()->index();
             $table->integer('caption_id')->unsigned()->default(0);
             $table->integer('award_count')->unsigned()->default(0);

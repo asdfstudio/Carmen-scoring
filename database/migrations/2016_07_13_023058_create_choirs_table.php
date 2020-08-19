@@ -13,7 +13,7 @@ class CreateChoirsTable extends Migration
     public function up()
     {
         Schema::create('choirs', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 						$table->integer('school_id')->index();
 						$table->string('name');
 						$table->softDeletes();

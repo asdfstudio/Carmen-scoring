@@ -13,7 +13,7 @@ class CreatePenaltiesTable extends Migration
     public function up()
     {
         Schema::create('penalties', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('organization_id')->index();
             $table->string('name');
             $table->text('description');

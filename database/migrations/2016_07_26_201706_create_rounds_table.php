@@ -13,7 +13,7 @@ class CreateRoundsTable extends Migration
     public function up()
     {
         Schema::create('rounds', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 						$table->integer('division_id')->index();
 						$table->string('name');
 						$table->softDeletes();

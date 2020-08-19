@@ -13,7 +13,7 @@ class CreateRawScoresTable extends Migration
     public function up()
     {
         Schema::create('raw_scores', function (Blueprint $table) {
-						$table->increments('id');
+						$table->id();
 						$table->integer('division_id')->unsigned()->index();
 						$table->integer('round_id')->index();
 						$table->integer('choir_id')->unsigned()->index();

@@ -14,7 +14,7 @@ class CreateRecordings extends Migration
     public function up()
     {
         Schema::create('recordings', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('division_id')->unsigned();
             $table->integer('round_id')->unsigned();
             $table->integer('choir_id')->unsigned();

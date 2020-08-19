@@ -13,7 +13,7 @@ class CreateDivisionsTable extends Migration
     public function up()
     {
         Schema::create('divisions', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 						$table->integer('competition_id')->index();
 						$table->integer('caption_weighting_id')->index();
 						$table->integer('scoring_method_id')->index();

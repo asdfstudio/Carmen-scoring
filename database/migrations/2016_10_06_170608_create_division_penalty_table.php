@@ -13,7 +13,7 @@ class CreateDivisionPenaltyTable extends Migration
     public function up()
     {
         Schema::create('division_penalty', function (Blueprint $table) {
-            //$table->increments('id');
+            //$table->id();
             //$table->timestamps();
             //$table->integer('division_id')->index();
             //$table->integer('penalty_id')->index();

@@ -13,7 +13,7 @@ class CreateScoringMethodsTable extends Migration
     public function up()
     {
         Schema::create('scoring_methods', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 						$table->string('name');
 						$table->softDeletes();
             $table->timestamps();

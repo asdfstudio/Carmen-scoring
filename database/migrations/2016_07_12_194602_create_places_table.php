@@ -13,7 +13,7 @@ class CreatePlacesTable extends Migration
     public function up()
     {
         Schema::create('places', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 						$table->string('address')->nullable();
 						$table->string('address_2')->nullable();
 						$table->string('city')->nullable();

@@ -13,7 +13,7 @@ class CreateChoirPenaltyTable extends Migration
     public function up()
     {
         Schema::create('choir_penalty', function (Blueprint $table) {
-            //$table->increments('id');
+            //$table->id();
             //$table->timestamps();
             $table->integer('choir_id')->index();
             $table->integer('penalty_id')->index();

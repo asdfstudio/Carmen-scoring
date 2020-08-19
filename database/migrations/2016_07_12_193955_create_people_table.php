@@ -13,7 +13,7 @@ class CreatePeopleTable extends Migration
     public function up()
     {
         Schema::create('people', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 						$table->string('first_name')->nullable();
 						$table->string('last_name')->nullable();
 						$table->string('email')->nullable();

@@ -13,7 +13,7 @@ class CreateCaptionWeightingsTable extends Migration
     public function up()
     {
         Schema::create('caption_weightings', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 						$table->string('name');
 						$table->softDeletes();
             $table->timestamps();

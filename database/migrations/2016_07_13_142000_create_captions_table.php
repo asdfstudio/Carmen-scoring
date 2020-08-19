@@ -13,7 +13,7 @@ class CreateCaptionsTable extends Migration
     public function up()
     {
         Schema::create('captions', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 						$table->string('name');
 						$table->softDeletes();
             $table->timestamps();

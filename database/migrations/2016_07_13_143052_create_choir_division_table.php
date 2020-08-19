@@ -13,7 +13,7 @@ class CreateChoirDivisionTable extends Migration
     public function up()
     {
         Schema::create('choir_division', function (Blueprint $table) {
-            //$table->increments('id');
+            //$table->id();
            // $table->timestamps();
 					 
 					 $table->integer('division_id')->unsigned();

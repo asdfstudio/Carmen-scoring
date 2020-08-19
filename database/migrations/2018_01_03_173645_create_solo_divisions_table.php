@@ -13,7 +13,7 @@ class CreateSoloDivisionsTable extends Migration
     public function up()
     {
         Schema::create('solo_divisions', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('competition_id')->unsigned()->index();
             $table->integer('sheet_id')->unsigned()->index();
             $table->string('name');
