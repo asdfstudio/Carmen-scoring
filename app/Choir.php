@@ -111,16 +111,19 @@ class Choir extends Model
 
     public function getFullNameAttribute()
     {
-      $h = $this->name();
-      if($this->school)
-        $h.= ' ( ' . $this->school->name . ' )';
-
-      return $h;
+			$h = '';
+			if($this->school)
+			{
+				$h.= $this->school->name . ' ';
+			}
+			$h.= $this->name();
+							
+			return $h;
     }
 
     public function recordings()
-		{
-			return $this->hasMany('App\Recording');
-		}
+	{
+		return $this->hasMany('App\Recording');
+	}
 
 }

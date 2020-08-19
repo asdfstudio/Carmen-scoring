@@ -142,7 +142,7 @@ class Round extends Model
     {
       $this->is_scoring_active = true;
       $this->is_completed = false;
-      Event::fire(new RoundScoringActivated($this));
+      event(new RoundScoringActivated($this));
       return $this->save();
     }
 
@@ -164,7 +164,7 @@ class Round extends Model
     {
       $this->is_scoring_active = false;
       $this->is_completed = true;
-      Event::fire(new RoundScoringCompleted($this));
+      event(new RoundScoringCompleted($this));
       return $this->save();
     }
 
