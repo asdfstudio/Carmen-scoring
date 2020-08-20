@@ -37,3 +37,53 @@ Because some columns are missing and some are in a different order, the usual ba
 
       mysqldump -n -t -u root -p --skip-extended-insert --ignore-table-data=showchoir.migrations --ignore-table-data=showchoir.comments_backup --ignore-table-data=showchoir.comment_urls_backup showchoir > showchoir.prod.data.sql
 
+
+## Changes to be made
+
+### Database / Entities
+
+- [ ] Division - change competition_id to round_id.
+- [ ] Round - remove source and target - update sequences if they're not already up-to-date.
+- [ ] Round - remove division_id - relationship is other way. be sure to write these out first.
+- [ ] RoundConnection - remove, make sure relationships are preserved.
+- [ ] Standings - have a division and a round. Make sure the division is the primary link. Maybe remove round.
+- [ ] Raw Scores - have a division and a round. Remove the round link.
+- [ ] Round and Division - move caption_weighting_id, scoring_method_id, sheet_id up to round so that it's consistent across divisions.  Move max_choirs, is_completed, and is_scoring_active down to division
+- [ ] Division Penalty - move this up to a competition or leave it at an org. Just see where this can be fixed in the UI to look up a few levels. Chop out an org-penalty API if necessary.
+- [ ] ChoirRound - Merge with ChoirDivision.  Just determines choir ordering and link to scoresheets and penalties.
+
+### Classes
+
+These files in app seem to use the source/target relationship currently:
+
+- [ ] Events/RoundScoringCompleted.php
+- [ ] Forms/Round/CreateRoundForm.php
+- [ ] Http/Controllers/Judge/CompetitionDivisionRoundController.php
+- [ ] Http/Controllers/Organizer/CompetitionDivisionRoundController.php
+- [ ] Http/Controllers/ResultsController.php
+- [ ] Http/Controllers/ResultsController.php
+- [ ] Listeners/AddChoirToRound.php
+- [ ] Listeners/RemoveChoirFromRound.php
+- [ ] Listeners/SyncRoundChoirs.php
+- [ ] Listeners/SyncRoundChoirsFromDivision.php
+- [ ] Listeners/SyncRoundChoirsFromSources.php
+- [ ] Listeners/SyncRoundChoirsToTarget.php
+- [ ] Listeners/SyncRoundChoirsToTarget.php
+- [ ] Policies/RoundPolicy.php
+
+### Templates
+
+- [ ] competition_division_round/judge/recording_summary.blade.php
+- [ ] competition_division_round/judge/recording_summary.blade.php
+- [ ] competition_division_round/judge/summary.blade.php
+- [ ] competition_division_round/judge/summary.blade.php
+- [ ] competition_division_round/organizer/list.blade.php
+- [ ] competition_division_round/organizer/list.blade.php
+- [ ] layouts/public_results.blade.php
+- [ ] layouts/public_results.blade.php
+- [ ] scores/judge/spreadsheet.blade.php
+
+
+### Scoring
+
+Most scoring id done per-division so that won't change. But there are parts of the scoring system that grade source Rounds for the sake of seeding Target rounds. This will all be manual from now on so it should be removed from the app.
