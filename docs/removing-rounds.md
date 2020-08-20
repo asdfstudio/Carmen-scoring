@@ -29,3 +29,11 @@ AJ: All "Scoring Settings" would be per-round, including the sheet itself, capti
 ### What is the Division / Solo Division separation all about?
 Is it that there are different scoring methods available? The categories? Lack of sponsors? This seems like a good candidate for the polymorphism used elsewhere.
 Sherman's Response: When the solo divisions were created, there was a concern of keeping and publishing information about minors and their personal scoring data. When scores are sent to the soloist's director, the director only has access to their student's scores and comments. Only award winners are made public, not a list of all participants. It was built with maintaining privacy in mind.
+
+### Migrating the data
+To use migrations to update the data while the entities are being updated, it's best to have a database consistent with the one created by app migrations.  The updates in this branch provide a compatible database. Import the production data from the prod server.
+
+Because some columns are missing and some are in a different order, the usual backups weren't usable. The command to get an importable backup (just data, full inserts with column names) is:
+
+      mysqldump -n -t -u root -p --skip-extended-insert --ignore-table-data=showchoir.migrations --ignore-table-data=showchoir.comments_backup --ignore-table-data=showchoir.comment_urls_backup showchoir > showchoir.prod.data.sql
+
