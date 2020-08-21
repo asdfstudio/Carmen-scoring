@@ -254,10 +254,13 @@ class CompetitionDivisionJudgeController extends Controller
         //dd($judge->captions->pluck('id')->toArray());
 
         //dd($judge);
-
+        $captions = Caption::forSheet($division->sheet)->pluck('name', 'id')->toArray();
         $form = $formBuilder->create('Caption\ChooseCaptionForm', [
 					'method' => 'PATCH',
-					'model' => $judge->captions,
+          'model' => $judge->captions,
+          'data' => [
+            'choices' => $captions
+          ],
 					'url' => route('organizer.competition.division.judge.update',[$division->competition,$division, $judge_id])
 				]);
 
@@ -292,14 +295,12 @@ class CompetitionDivisionJudgeController extends Controller
         // Get the Judge
         $judge = Judge::find($judge_id);
 
-        $form = $formBuilder->create('Caption\ChooseCaptionForm', ['model' => $judge->captions]);
+        // $form = $formBuilder->create('Caption\ChooseCaptionForm', ['model' => $judge->captions]);
 
-				// Validate input
-				if (!$form->isValid()) {
-           return redirect()->back()->withErrors($form->getErrors())->withInput();
-        }
-
-
+				// // Validate input
+				// if (!$form->isValid()) {
+        //    return redirect()->back()->withErrors($form->getErrors())->withInput();
+        // }
 
         //dd($division);
         //dd($judge);
@@ -326,8 +327,6 @@ class CompetitionDivisionJudgeController extends Controller
 						//$division->judges()->attach($judge->id, $extra);
 					}
 				}
-
-
 
         return redirect()->route('organizer.competition.division.judge.index',[$division->competition, $division])->with('success',$judge->full_name ." has been updated.");
     }

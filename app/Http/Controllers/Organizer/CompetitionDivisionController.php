@@ -216,11 +216,11 @@ class CompetitionDivisionController extends Controller
         $judges = Judge::get();
         $judges = $judges->pluck('full_name', 'id')->toArray();
 
-        $newJudgeForm = $formBuilder->create('Judge\ChooseJudgeForm', [
-					'method' => 'POST',
-          'data' => $judges,
-					'url' => route('organizer.competition.division.judge.store',[$division->competition,$division])
-				]);
+        // $newJudgeForm = $formBuilder->create('Judge\ChooseJudgeForm', [
+				// 	'method' => 'POST',
+        //   'data' => $judges,
+				// 	'url' => route('organizer.competition.division.judge.store',[$division->competition,$division])
+				// ]);
 
 
         $deleteJudgeForm = $formBuilder->create('GenericDeleteForm', [
@@ -244,7 +244,8 @@ class CompetitionDivisionController extends Controller
 
         $deletePenaltyForm->modify('submit','submit',['label' => 'Remove']);
 
-        return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
+        // return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
+        return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
     }
 
     /**
