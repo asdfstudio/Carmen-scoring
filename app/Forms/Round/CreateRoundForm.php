@@ -47,7 +47,6 @@ class CreateRoundForm extends Form
       }
 
       $this->add('choir_source','choice', [
-        'rules' => 'required',
         'label' => 'Which choirs can compete in this round?',
         'default_value' => $default_choir_source_value,
         'choices' => [
