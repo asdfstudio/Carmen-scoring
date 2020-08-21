@@ -258,7 +258,7 @@ class CompetitionDivisionController extends Controller
     {
         $competition = Competition::with('organization','place','divisions')->find($competition_id);
 
-				$division = Division::with(['choirs','rounds','judges' => function ($query) {
+				$division = Division::with(['choirs.directors','rounds','judges' => function ($query) {
 					$query->groupBy('judge_id');
 				}, 'judges.captions' => function ($query) use ($division_id) {
 					$query->where('division_id',$division_id);
@@ -365,6 +365,7 @@ class CompetitionDivisionController extends Controller
         $divisions_import_judge = $competition_import_judge->divisions->reject(function($value, $key) use ($division_id) {
           return $value->id == $division_id;
         });
+        
         // return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
         return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'divisions_import_judge', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
     }
