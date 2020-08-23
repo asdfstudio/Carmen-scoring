@@ -124,10 +124,14 @@ class CompetitionDivisionJudgeController extends Controller
         $judges = Judge::get();
         $judges = $judges->pluck('full_name', 'id')->toArray();
 
+        $captions = Caption::ForSheet($division->sheet)->pluck('name', 'id')->toArray();
         $form = $formBuilder->create('Judge\ChooseJudgeForm', [
           'class' => '',
 					'method' => 'POST',
-          'data' => $judges,
+          'data' => [
+            'judges' => $judges,
+            'captions' => $captions 
+          ],
 					'url' => route('organizer.competition.division.judge.store',[$division->competition,$division])
 				]);
 
@@ -143,12 +147,12 @@ class CompetitionDivisionJudgeController extends Controller
     public function store($competition_id, $division_id, Request $request, FormBuilder $formBuilder)
     {
         //$this->authorize('create','App\Choir');
-				$form = $formBuilder->create('Judge\ChooseJudgeForm');
+				// $form = $formBuilder->create('Judge\ChooseJudgeForm');
 
-				// Validate input
-				if (!$form->isValid()) {
-           return redirect()->back()->withErrors($form->getErrors())->withInput();
-        }
+				// // Validate input
+				// if (!$form->isValid()) {
+        //    return redirect()->back()->withErrors($form->getErrors())->withInput();
+        // }
 
 				// Get the division
 				$division = Division::with('competition','judges')->find($division_id);

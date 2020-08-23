@@ -23,7 +23,7 @@ class ChooseJudgeForm extends Form
 				]);*/
 
         $this->add('judge_id','choice', [
-					'choices' => $this->data,
+					'choices' => $this->getData('judges'),
 					//'empty_value' => 'Choose judge...',
 					'label' => 'Choose from existing judges',
           'attr' => ['class' => 'judge_id form-control', 'id' => ''],
@@ -46,10 +46,11 @@ class ChooseJudgeForm extends Form
         ]);
 
 				$this->add('caption_id','entity', [
-					'class' => 'App\Caption',
+          // 'class' => 'App\Caption',
+          'choices' => $this->getData('captions'),
 					'empty_value' => 'Choose caption ...',
 					'label' => 'Captions to Score',
-          'rules' => ['filled'],
+          // 'rules' => ['filled'],
           'choice_options' => [
             'wrapper' => ['class' => 'choice-container'],
             'labelAttrs' => 'label-attr'
