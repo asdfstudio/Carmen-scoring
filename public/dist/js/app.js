@@ -95,10 +95,6 @@ $(document).ready(function() {
       }, 5000);
     });
 
-
-
-
-
     $('input.ajax-scoring').on('blur', function(){
       var input = $(this);
       var newScore = input.val();
@@ -305,7 +301,6 @@ $(document).ready(function() {
         }
     });
 
-
     $('.check-all').on('click', function(e) {
       e.preventDefault();
       var checkboxes = $(this).data('checkbox');
@@ -318,7 +313,6 @@ $(document).ready(function() {
       $(document).find("input."+checkboxes).prop('checked', false);
     });
 
-
     //$('.new_choir_container').addClass('hidden');
     //$('.new_school_container').addClass('hidden');
     //$('.new_judge_container').addClass('hidden');
@@ -329,7 +323,6 @@ $(document).ready(function() {
       //createOnBlur: true,
       create: true
     });*/
-
 
     // scorecard comments/feedback
     $('.scorecard textarea[name="comment"]').on('change', function(e) {
@@ -358,8 +351,6 @@ $(document).ready(function() {
 
     //console.log(criterion_id + ':' + number);
     });
-
-
 
     // scoreboard popup keyboard
     $('.popup-input-container ul.number-selector a').on('click', function(e) {
@@ -403,29 +394,26 @@ $(document).ready(function() {
     // tabs
 
     $('.tab-link').on('click', function(e) {
-    e.preventDefault();
+      e.preventDefault();
 
-    // Get the tab ID
-    var tab_id = $(this).data('tab-id');
+      // Get the tab ID
+      var tab_id = $(this).data('tab-id');
 
-    // Stop if no tab ID
-    if(tab_id == false) return false;
+      // Stop if no tab ID
+      if(tab_id == false) return false;
 
-    // Hide all tabs
-    $('.tab-content[data-tab-id!='+tab_id+']').removeClass('active');
+      // Hide all tabs
+      $('.tab-content[data-tab-id!='+tab_id+']').removeClass('active');
 
-    // Show current tabs
-    $('.tab-content[data-tab-id='+tab_id+']').addClass('active');
+      // Show current tabs
+      $('.tab-content[data-tab-id='+tab_id+']').addClass('active');
 
-    // Unhighlight the active tab link
-    $(this).parents('.tab-links').find('.tab-link').removeClass('active');
+      // Unhighlight the active tab link
+      $(this).parents('.tab-links').find('.tab-link').removeClass('active');
 
-    // Highlight the active tab link
-    $(this).addClass('active');
-
+      // Highlight the active tab link
+      $(this).addClass('active');
     });
-
-
 
     $.fn.toggleScoreView = function(active_view) {
 
@@ -458,20 +446,16 @@ $(document).ready(function() {
       $('.score-view-toggle.active').toggleScoreView(active_view);
     });
 
-
     $('.score-view-toggle').on('click', function(e) {
       e.preventDefault();
       var active_view = $(this).data('score-view');
       $(this).toggleScoreView(active_view);
     });
 
-
-
     // Check for missing scores on individual scorecards
     // Give the judge an opportunity to submit as-is or
     // Return to scorecard to fill in missing values
     $('form.scorecard').on('submit', function(e) {
-
       var score_inputs = $('input.criterion-score-input');
       var score_inputs_count = score_inputs.length;
       var inputs_missing_scores_count = 0;
@@ -505,8 +489,68 @@ $(document).ready(function() {
 
     $('.selectize').selectize();
 
+    // In "Edit a division" page, when click "Save & Create Another"
+    $('.edit-division-content button[name="submit_create_another"]').on('click', function(e) {
+      e.preventDefault();
+      swal("Input a new division name here:", {
+        content: {
+          element: "input",
+          attributes: {
+            placeholder: "Type a name...",
+            id: "division_new_name",
+          },
+        },
+        button: {
+          text: "OK",
+          className: "division-new-btn",
+          closeModal: false,
+        }
+      })
+      .then((value) => {
+        // console.log(`You typed: ${value}`);
+        if(!value) throw null;
+        const formEl = $('.edit-division-content form:first');
+        let formData = formEl.serialize();
+        formData += `&new_name=${value}`;
+        // console.log('data:', formData, formEl.attr('action'))
+        return new Promise(function(resolve, reject) {
+          $.ajax({
+            data: formData,
+            dataType: 'json',
+            method: 'POST',
+            url: formEl.attr('action'),
+          }).done(resolve).fail(reject);
+        });
+      })
+      .then(result => {
+        console.log('result:', result);
+        swal('Success!', `${result.edited} division saved, and ${result.new} division created successfully!`, 'success');
+      })
+      .catch(err => {
+        console.log('error:', err)
+        if(err) swal('Oh noes!', 'The operation failed!', 'error');
+      });
+    });
+    // if name field is empty, then disable the button.
+    $(document).on('keyup', 'input#division_new_name', function(e) {
+      const value = $(this).val().trim();
+      if(value === '') {
+        $('button.division-new-btn').attr('disabled', 'disabled');
+      }
+      else {
+        $('button.division-new-btn').removeAttr('disabled');
+      }
+    });
+    // when display modal, disable the button
+    $(document).on('focus', 'input#division_new_name', function(e) {
+      const value = $(this).val().trim();
+      if(value === '') {
+        $('button.division-new-btn').attr('disabled', 'disabled');
+      }
+    });
 });
 
+// -dg-confirm modal
 function confirmAndSubmit(text, id) {
   swal({
     title: "Are you sure?",

@@ -1502,3 +1502,29 @@ a.active {
   }
 }
 
+// -dg-customize sweet alert
+.swal-text {
+  text-align: center !important;
+}
+
+// -dg-style-edit choirs, judges, rounds
+li.choir.card.list-group-item {
+  .director-div,
+  .email-div,
+  .phone-div {
+    i {
+      width: 24px;
+      color: $cs-gray-mid-1;
+    }
+  }
+  .director-div {
+    margin-top: 10px;
+  }
+  .email-div,
+  .phone-div {
+    margin-top: 5px;
+    span {
+      color: $cs-gray-mid-2;
+    }
+  }
+}

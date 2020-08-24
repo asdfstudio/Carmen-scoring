@@ -14,6 +14,7 @@
 
 @section('content')
 
+  <div class="edit-division-content">
 		{!! form_start($form) !!}
       
       {!! form_until($form, 'rating_system_heading') !!}
@@ -28,9 +29,9 @@
       <hr>
 
       <h3>Delete this division?</h3>
-      <p class="alert alert-danger">This is a permanent, irrecoverable action. Proceed with caution.</p>
+      <p class="alert alert-danger d-flex"><i class="fa fa-exclamation-triangle ss-fs-22 mr"></i>This is a permanent, irrecoverable action. Proceed with caution.</p>
       {!! form($deleteForm) !!}
     @endcan
-
+  </div>
 
 @endsection

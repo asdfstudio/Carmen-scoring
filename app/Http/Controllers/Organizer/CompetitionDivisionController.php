@@ -102,12 +102,12 @@ class CompetitionDivisionController extends Controller
      */
     public function store(Request $request, $competition_id, FormBuilder $formBuilder)
     {
-        $form = $formBuilder->create('Division\CreateForm');
+        // $form = $formBuilder->create('Division\CreateForm');
 
-				// Validate input
-				if (!$form->isValid()) {
-           return redirect()->back()->withErrors($form->getErrors())->withInput();
-        }
+				// // Validate input
+				// if (!$form->isValid()) {
+        //    return redirect()->back()->withErrors($form->getErrors())->withInput();
+        // }
 
 				$competition = Competition::with('organization','place','divisions')->find($competition_id);
 
@@ -127,8 +127,6 @@ class CompetitionDivisionController extends Controller
         else {
           return redirect()->route('organizer.competition.division.index', [$competition])->with('success',$successMessage);
         }
-
-
     }
 
 
@@ -433,16 +431,15 @@ class CompetitionDivisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $competition, $division_id, FormBuilder $formBuilder)
+    public function update(Request $request, $competition_id, $division_id, FormBuilder $formBuilder)
     {
-        $form = $formBuilder->create('Division\CreateForm');
+        // $form = $formBuilder->create('Division\CreateForm');
 
-				// Validate input
-				if (!$form->isValid()) {
-           return redirect()->back()->withErrors($form->getErrors())->withInput();
-        }
+				// // Validate input
+				// if (!$form->isValid()) {
+        //    return redirect()->back()->withErrors($form->getErrors())->withInput();
+        // }
 
-				//$competition = Competition::find($competition_id);
 				$division = Division::find($division_id);
 
         $this->authorize('update', $division);
@@ -453,8 +450,19 @@ class CompetitionDivisionController extends Controller
         $division->rating_system = array_filter($request->input('rating_system'));
 				$division->save();
 
-				// Set flash data and redirect
-				return redirect()->route('organizer.competition.division.settings',[$competition, $division])->with('success',"$division->name has been updated.");
+        if($request->wantsJson()) // save & create new division
+        {
+          $competition = Competition::find($competition_id);
+          $data['name'] = $data['new_name'];
+          $division_new = new Division($data);
+          $division_new->rating_system = array_filter($request->input('rating_system'));
+          $competition->divisions()->save($division_new);
+
+          $result = array('edited' => $division->name, 'new' => $division_new->name);
+          return response()->json($result);
+        }
+        else 
+				  return redirect()->route('organizer.competition.division.settings',[$competition, $division])->with('success',"$division->name has been updated.");
     }
 
     /**

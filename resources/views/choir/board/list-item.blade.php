@@ -7,10 +7,13 @@
   <span class="name">{{ $choir->name }}</span>
 
   @foreach($choir->directors as $director)
-    <span class="location">{{$director->fullName}}</span>
-    <div class="d-flex" style="justify-content: space-between">
-      <span>Email</span>
-      <span>
+    <div class="director-div">
+      <i class="fa fa-user ss-fs-20"></i>
+      <span class="ss-fs-18">{{$director->fullName}}</span>
+    </div>
+    <div class="d-flex email-div" style="justify-content: space-between">
+      <span><i class="fa fa-envelope ss-fs-16"></i>Email</span>
+      <span class="location">
         @php
           $email = $director->email;
           $secure_email = substr($email, 0, 2);
@@ -20,9 +23,9 @@
       </span>
     </div>
     @if($director->tel)
-      <div class="d-flex" style="justify-content: space-between">
-        <span>Phone</span>
-        <span>
+      <div class="d-flex phone-div" style="justify-content: space-between">
+        <span><i class="fa fa-phone ss-fs-20"></i>Phone</span>
+        <span class="location">
           @php
             echo '( *** ) *** - ' . explode('-', $director->tel)[1];
           @endphp
@@ -31,9 +34,12 @@
     @endif
   @endforeach
 
-  <div class="actions">
+  <div class="actions text-right" style="margin-top: 5px">
     @can('removeChoir', $division)
-      <a class="remove-resource" data-resource-type="choir" data-resource-id="{{ $choir->id }}" data-csrf-token="{{ csrf_token() }}" href="{{ route('organizer.competition.division.choir.destroy',[$division->competition,$division,$choir]) }}">Remove</a>
+      <a class="remove-resource" data-resource-type="choir" data-resource-id="{{ $choir->id }}" data-csrf-token="{{ csrf_token() }}" href="{{ route('organizer.competition.division.choir.destroy',[$division->competition,$division,$choir]) }}">
+        <i class="fa fa-trash"></i>  
+        Remove
+      </a>
     @endcan
   </div>
 </li>
