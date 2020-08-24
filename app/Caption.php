@@ -43,7 +43,7 @@ class Caption extends Model
     public function scopeForSheet($query, $sheet = false)
     {
       if (!$sheet) return false;
-      
+
       $raw = $query->whereIn('id', $sheet->caption_ids)->get();
 
       $desiredOrder = $sheet->caption_sort_order;
