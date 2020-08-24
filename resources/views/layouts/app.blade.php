@@ -38,9 +38,11 @@
     <script src="/dist/js/vendor/jquery-ui/jquery-ui.min.js"></script>
 
     <!-- Built via webpack -->
-		<script src="/dist/js/app.js"></script>
+	<script src="/dist/js/app.js"></script>
 
     @yield('body-footer')
+    
+    @stack('own-scripts')
 
 </body>
 </html>

@@ -56,7 +56,28 @@ var Card = (function () {
 
   var bulkCreateAndRenderCard = function (type, data) {
     console.log('data:', data)
-    if(!Array.isArray(data) || data.length === 1) return;
+    if(!Array.isArray(data)) return;
+    else if( data.length === 0) {
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-bottom-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "200",
+        "hideDuration": "500",
+        "timeOut": "3000",
+        "extendedTimeOut": "3000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
+      Command: toastr["info"]("There are no judges to import!");
+      return;
+    }
     data.forEach(element => {
       var html = this.createCard(type, element)
       return this.renderCard(type, element.id, html)

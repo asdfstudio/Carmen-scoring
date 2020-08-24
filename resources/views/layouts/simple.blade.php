@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+@section('style')
+  @hasSection('style')
+    @yield('style')
+  @endif
+@endsection
+
 @section('body-content')
   @include('navigation/header')
 
@@ -124,6 +130,8 @@
     </div>
   @endif
 
-
-
 @endsection
+
+@push('own-script')
+  @stack('own-script')
+@endpush

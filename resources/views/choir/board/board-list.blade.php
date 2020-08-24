@@ -11,7 +11,3 @@
   @include('choir.board.list')
 
 </div>
-
-@section('body-footer')
-  <script src="/dist/js/director-form.js"></script>
-@endsection
