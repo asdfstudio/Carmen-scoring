@@ -461,8 +461,8 @@ class CompetitionDivisionController extends Controller
           $result = array('edited' => $division->name, 'new' => $division_new->name);
           return response()->json($result);
         }
-        else 
-				  return redirect()->route('organizer.competition.division.settings',[$competition, $division])->with('success',"$division->name has been updated.");
+        else
+				  return redirect()->route('organizer.competition.division.settings',[$competition_id, $division])->with('success',"$division->name has been updated.");
     }
 
     /**
