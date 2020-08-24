@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class ScoringMethodsTableSeeder extends Seeder
+class ScoringMethodSeeder extends Seeder
 {
     /**
      * Run the database seeds.

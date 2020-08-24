@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class CaptionWeightingsTableSeeder extends Seeder
+class ChoirDirectorSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,9 +11,8 @@ class CaptionWeightingsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('caption_weightings')->insert([
-            ['name' => '60/40'],
-						['name' => '50/50']
+        DB::table('choir_director')->insert([
+            ['choir_id' => 1, 'director_id' => 3]
         ]);
     }
 }

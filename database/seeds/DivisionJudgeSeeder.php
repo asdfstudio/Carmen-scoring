@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class DivisionJudgeTableSeeder extends Seeder
+class DivisionJudgeSeeder extends Seeder
 {
     /**
      * Run the database seeds.

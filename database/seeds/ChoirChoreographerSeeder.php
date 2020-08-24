@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class ChoirChoreographerTableSeeder extends Seeder
+class ChoirChoreographerSeeder extends Seeder
 {
     /**
      * Run the database seeds.

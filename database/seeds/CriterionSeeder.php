@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class CriteriaTableSeeder extends Seeder
+class CriterionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +11,9 @@ class CriteriaTableSeeder extends Seeder
      */
     public function run()
     {
-				// MusicDemonstration of support, release of tension, tone quality, and other techniques associated with trained singing
+
+      // Music
+      // Demonstration of support, release of tension, tone quality, and other techniques associated with trained singing
 				$names = [
 					'Tone & Technique' => 'Demonstration of support, release of tension, tone quality, and other techniques associated with trained singing',
 					'Intonation' => 'Choir is in tune when singing in unison and in parts',
@@ -27,18 +29,16 @@ class CriteriaTableSeeder extends Seeder
 					'Innovation' => 'Materials pertaining to Music are creative, effective, and original'
 				];
 
-				$rows = [];
+        $musicCaption = App\Caption::firstWhere('name', 'Music');
 
 				foreach($names as $name => $desc)
 				{
-          $rows[] = [
-            'caption_id' => 1,
+          $caption = factory(App\Criterion::class)->create([
+            'caption_id' => $musicCaption,
             'name' => $name,
             'description' => $desc
-          ];
+          ]);
 				}
-
-				DB::table('criteria')->insert($rows);
 
 				// Show
 				$names = [
@@ -59,36 +59,29 @@ class CriteriaTableSeeder extends Seeder
 					'Appearance & Poise' => 'Costuming and grooming are organized, and ensemble demonstrates professionalism and confidence'
 				];
 
-
-				$rows = [];
+        $showCaption = App\Caption::firstWhere('name', 'Show');
 
 				foreach($names as $name => $desc)
 				{
-          $rows[] = [
-            'caption_id' => 2,
+          factory(App\Criterion::class)->create([
+            'caption_id' => $showCaption,
             'name' => $name,
             'description' => $desc
-          ];
+          ]);
 				}
 
-				DB::table('criteria')->insert($rows);
-
-
         // Add combo criteria for music and show
-        $rows = [];
 
-				$rows[] = [
-          'caption_id' => 1,
+        factory(App\Criterion::class)->create([
+          'caption_id' => $musicCaption,
           'name' => 'Accompaniment',
           'description' => 'Accompaniment facilitates and enhances all aspects of Music'
-        ];
-        $rows[] = [
-          'caption_id' => 2,
+        ]);
+        factory(App\Criterion::class)->create([
+          'caption_id' => $showCaption,
           'name' => 'Accompaniment',
           'description' => 'Accompaniment facilitates and enhances all aspects of Show'
-        ];
-
-				DB::table('criteria')->insert($rows);
+        ]);
 
         // Combo only sheet criteria
 				$names = [
@@ -101,20 +94,16 @@ class CriteriaTableSeeder extends Seeder
 					'Facilitates Vocals and Choreography' => 'Combo accommodates, enhances, and compliments the vocal sound and choreography'
 				];
 
-				$rows = [];
+        $comboCaption = App\Caption::firstWhere('name', 'Combo');
 
 				foreach($names as $name => $desc)
 				{
-          $rows[] = [
-            'caption_id' => 3,
+          factory(App\Criterion::class)->create([
+            'caption_id' => $comboCaption,
             'name' => $name,
             'description' => $desc
-          ];
+          ]);
 				}
-
-				DB::table('criteria')->insert($rows);
-
-
 
         // Additional show - 36, 37, 38
         $names = [
@@ -123,18 +112,14 @@ class CriteriaTableSeeder extends Seeder
           'Entertainment Value' => 'Choreography, sets, props, costuming, accompaniment, and special effects combine to enhance performance'
 				];
 
-        $rows = [];
-
 				foreach($names as $name => $desc)
 				{
-					$rows[] = [
-            'caption_id' => 2,
+          factory(App\Criterion::class)->create([
+            'caption_id' => $musicCaption,
             'name' => $name,
             'description' => $desc
-          ];
+          ]);
 				}
-
-				DB::table('criteria')->insert($rows);
 
         // Additional music - 39, 40
         $names = [
@@ -146,16 +131,11 @@ class CriteriaTableSeeder extends Seeder
 
 				foreach($names as $name => $desc)
 				{
-					$rows[] = [
-            'caption_id' => 1,
+          factory(App\Criterion::class)->create([
+            'caption_id' => $musicCaption,
             'name' => $name,
             'description' => $desc
-          ];
+          ]);
 				}
-
-				DB::table('criteria')->insert($rows);
-
-
-
     }
 }

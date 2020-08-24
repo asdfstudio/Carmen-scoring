@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 
 use App\CommentUrl;
 
-class CommentUrlsTableSeeder extends Seeder
+class CommentUrlSeeder extends Seeder
 {
     /**
      * Run the database seeds.

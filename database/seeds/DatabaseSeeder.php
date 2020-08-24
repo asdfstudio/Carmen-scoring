@@ -15,23 +15,23 @@ class DatabaseSeeder extends Seeder
 				$this->call(OrganizationSeeder::class);
 				$this->call(UserSeeder::class);
 
-        // $this->call(SheetsTableSeeder::class);
+        $this->call(SheetSeeder::class);
 				$this->call(CaptionSeeder::class);
-				// $this->call(CriteriaTableSeeder::class);
-				// $this->call(CriterionSheetTableSeeder::class);
-				// $this->call(ScoringMethodsTableSeeder::class);
-				// $this->call(CaptionWeightingsTableSeeder::class);
+				$this->call(CriterionSeeder::class);
+				$this->call(CriterionSheetSeeder::class);
+				// $this->call(ScoringMethodSeeder::class);
+				$this->call(CaptionWeightingSeeder::class);
         //
-				// $this->call(CompetitionsTableSeeder::class);
-				// $this->call(DivisionsTableSeeder::class);
-				// $this->call(SchoolsTableSeeder::class);
-				// $this->call(ChoirsTableSeeder::class);
-				// $this->call(ChoirDivisionTableSeeder::class);
-				// $this->call(PlacesTableSeeder::class);
-				// $this->call(PeopleTableSeeder::class);
-				// $this->call(DivisionJudgeTableSeeder::class);
+				// $this->call(CompetitionSeeder::class);
+				// $this->call(DivisionSeeder::class);
+				// $this->call(SchoolSeeder::class);
+				// $this->call(ChoirSeeder::class);
+				// $this->call(ChoirDivisionSeeder::class);
+				// $this->call(PlaceSeeder::class);
+				// $this->call(PeopleSeeder::class);
+				// $this->call(DivisionJudgeSeeder::class);
         // $this->call(DivisionAwardSettingsSeeder::class);
-        // $this->call(CommentsTableSeeder::class);
-        // $this->call(CommentUrlsTableSeeder::class);
+        // $this->call(CommentSeeder::class);
+        // $this->call(CommentUrlSeeder::class);
     }
 }
