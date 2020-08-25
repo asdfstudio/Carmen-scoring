@@ -10,3 +10,7 @@ $factory->define(Organization::class, function (Faker $faker) {
       'name' => $faker->company
     ];
 });
+
+$factory->afterCreating(Organization::class, function($organization, $faker) {
+  $organization->place()->save(factory(App\Place::class)->create());
+});

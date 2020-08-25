@@ -19,15 +19,14 @@ class DatabaseSeeder extends Seeder
 				$this->call(CaptionSeeder::class);
 				$this->call(CriterionSeeder::class);
 				$this->call(CriterionSheetSeeder::class);
-				// $this->call(ScoringMethodSeeder::class);
+				$this->call(ScoringMethodSeeder::class);
 				$this->call(CaptionWeightingSeeder::class);
         //
-				// $this->call(CompetitionSeeder::class);
-				// $this->call(DivisionSeeder::class);
-				// $this->call(SchoolSeeder::class);
-				// $this->call(ChoirSeeder::class);
-				// $this->call(ChoirDivisionSeeder::class);
-				// $this->call(PlaceSeeder::class);
+				$this->call(CompetitionSeeder::class);
+				$this->call(DivisionSeeder::class);
+				$this->call(SchoolSeeder::class);
+				$this->call(ChoirSeeder::class);
+				$this->call(ChoirDivisionSeeder::class);
 				// $this->call(PeopleSeeder::class);
 				// $this->call(DivisionJudgeSeeder::class);
         // $this->call(DivisionAwardSettingsSeeder::class);

@@ -2,12 +2,12 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Sheet;
+use App\Choir;
 use Faker\Generator as Faker;
 
-$factory->define(Sheet::class, function (Faker $faker) {
+$factory->define(Choir::class, function (Faker $faker) {
     return [
       'name' => $faker->word,
-      'caption_sort_order' => Array()
+      'school_id' => factory(App\School::class)->make()
     ];
 });

@@ -11,11 +11,17 @@ class CompetitionSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('competitions')->insert([
-            ['organization_id' => 1, 'name' => 'Canton 2016'],
-						['organization_id' => 1, 'name' => 'Canton 2017'],
-						['organization_id' => 2, 'name' => 'Bloomington 2017'],
-						['organization_id' => 3, 'name' => 'Beavercreek 2016']
+        factory(App\Competition::class)->create([
+          'name' => 'Demo Competition',
+          'slug' => 'demo-competition',
+          'access_code' => 'demo-competition-pass',
+          'use_runner_up_names' => TRUE,
+          'is_archived' => FALSE,
+          'is_completed' => FALSE,
+          'begin_date' => strtotime('Friday'),
+          'end_date' => strtotime('Sunday'),
+          'organization_id' => App\Organization::firstWhere('name', 'Demo Organization')
         ]);
+
     }
 }

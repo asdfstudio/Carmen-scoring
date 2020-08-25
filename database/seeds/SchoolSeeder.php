@@ -11,11 +11,6 @@ class SchoolSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('schools')->insert([
-            ['name' => 'Canton McKinley'],
-						['name' => 'Bloomington North'],
-						['name' => 'Bloomington South'],
-						['name' => 'Beavercreek']
-        ]);
+      factory(App\School::class, 4)->create();
     }
 }
