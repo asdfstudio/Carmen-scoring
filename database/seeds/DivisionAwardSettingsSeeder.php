@@ -6,42 +6,35 @@ use App\DivisionAwardSetting;
 
 class DivisionAwardSettingsSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        // get all divisions
-        $divisions = Division::all(); 
+  /**
+   * Run the database seeds.
+   *
+   * @return void
+   */
+  public function run()
+  {
+    // loop though divisions
+    foreach (Division::all() as $division) {
+      // Don't give more awards than we have choirs
+      $max = $division->choirs()->count();
 
-        $captions = [
-          '0' => 'overall',
-          '1' => 'music',
-          '2' => 'show',
-          '3' => 'combo'
-        ];
+      // Add the Overall Caption w/ ID = 0
+      factory(App\DivisionAwardSetting::class)->create([
+        'division_id' => $division->id,
+        'caption_id' => 0,
+        'award_count' => rand(0, $max-1)
+      ]);
 
-        // loop though divisions
-        foreach ($divisions as $division) {
-          $awardSettings = [];
+      foreach ($division->sheet->criteria()->pluck('caption_id')
+        ->unique()->values() as $captionId) {
 
-          $index = 0;
+        factory(App\DivisionAwardSetting::class)->create([
+          'division_id' => $division->id,
+          'caption_id' => $captionId,
+          'award_count' => rand(0, $max-1)
+        ]);
 
-          foreach ($captions as $captionId => $columnName) {
-
-            $awardSettings[$index] = DivisionAwardSetting::firstOrNew([
-              'division_id' => $division->id,
-              'caption_id' => $captionId
-            ]);
-            $awardSettings[$index]->award_count = $division->{$columnName.'_award_count'};
-            $awardSettings[$index]->award_sponsors = $division->{$columnName.'_award_sponsors'};
-            $index++;
-          }
-
-          $division->awardSettings()->saveMany($awardSettings);
-        }
-
+      }
     }
+  }
 }

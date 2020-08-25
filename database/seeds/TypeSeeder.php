@@ -11,8 +11,10 @@ class TypeSeeder extends Seeder
      */
     public function run()
     {
-      factory->create(App\Type::class)->create(['name' => 'App\Judge']);
-      factory->create(App\Type::class)->create(['name' => 'App\Directory']);
-      factory->create(App\Type::class)->create(['name' => 'App\Choreographer']);
+      DB::table('types')->insert([
+        ['id' => 1, 'name' => 'App\Judge'],
+        ['id' => 2, 'name' => 'App\Directory'],
+        ['id' => 3, 'name' => 'App\Choreographer']
+      ]);
     }
 }

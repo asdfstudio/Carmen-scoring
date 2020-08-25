@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Type extends Model
 {
+    protected $fillable = ['name'];
+
     /**
      * The people that belong to the role.
      */
