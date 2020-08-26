@@ -76,12 +76,16 @@ var ScheduleBuilder = (function () {
     // this.setStatusMessage('Saved');
     $('.schedule-builder-container').removeClass('is-dirty')
     document.getElementsByClassName('save-schedule-btn')[0].setAttribute('disabled', 'disabled')
-    swal({
+    Swal.fire({
       title: "Success",
       text: "Saved successfully!",
       icon: "success",
-      button: "OK",
+      confirmButtonColor: '#7F4091',
     });
+    // Toast_DG.fire({
+    //   icon: 'success',
+    //   title: 'Saved successfully!'
+    // })
   }
 
   return {

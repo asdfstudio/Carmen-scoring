@@ -1503,8 +1503,23 @@ a.active {
 }
 
 // -dg-customize sweet alert
-.swal-text {
-  text-align: center !important;
+.dg-confirm-container {
+  .swal2-modal,
+  .swal2-toast {
+    .swal2-actions {
+      button {
+        i {
+          font-size: 16px;
+          margin-right: 7px;
+        }
+      }
+    }
+  }
+}
+
+.swal2-modal,
+.swal2-toast {
+  font-size: 14px !important;
 }
 
 // -dg-style-edit choirs, judges, rounds

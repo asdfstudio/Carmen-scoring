@@ -203,10 +203,32 @@ $(document).ready(function() {
     });
 
     $('button.danger, a.danger, submit.danger').on('click', function(e) {
-        if(confirm('Are you sure you want to do this?') == false) {
-          e.preventDefault();
-          //console.log('cancel');
-        }
+        // if(confirm('Are you sure you want to do this?') == false) {
+        //   e.preventDefault();
+        //   //console.log('cancel');
+        // }
+        e.preventDefault();
+
+        Swal.fire({
+          title: "Are you sure?",
+          text: 'Are you sure you want to do this?',
+          icon: "warning",
+          timer: 0,
+          showCancelButton: true,
+          focusCancel: true,
+          customClass: {
+            container: 'dg-confirm-container',
+          },
+          confirmButtonText: '<i class="fa fa-check"></i> Yes, Do it!',
+          cancelButtonText: '<i class="fa fa-times"></i> Cancel',
+          confirmButtonColor: '#7F4091',
+        })
+        .then((result) => {
+          if (result.value) { // if 'ok' is clicked,
+            $(this).closest('form').submit();
+          }
+          console.log('result:', result)
+        });
     });
 
     $.fn.toggleChoirSource = function(choir_source) {
@@ -492,76 +514,93 @@ $(document).ready(function() {
     // In "Edit a division" page, when click "Save & Create Another"
     $('.edit-division-content button[name="submit_create_another"]').on('click', function(e) {
       e.preventDefault();
-      swal("Input a new division name here:", {
-        content: {
-          element: "input",
-          attributes: {
-            placeholder: "Type a name...",
-            id: "division_new_name",
-          },
+      Swal.fire({
+        title: '<div class="ss-fs-18 dg-mt-24">Input a new division name here:</div>',
+        input: 'text',
+        inputAttributes: {
+          autocapitalize: 'off'
         },
-        button: {
-          text: "OK",
-          className: "division-new-btn",
-          closeModal: false,
+        showCancelButton: true,
+        confirmButtonText: 'Save & Create',
+        showLoaderOnConfirm: true,
+        allowOutsideClick: () => !Swal.isLoading(),
+        preConfirm: (name) => {
+          console.log('name:', name)
+          if(!name.trim()) {
+            Swal.showValidationMessage(
+              `Request failed: Name is required!`
+            );
+          }
+          else {
+            const formEl = $('.edit-division-content form:first');
+            let formData = formEl.serialize();
+            formData += `&new_name=${name.trim()}`;
+            return new Promise(function(resolve, reject) {
+              $.ajax({
+                data: formData,
+                dataType: 'json',
+                method: 'POST',
+                url: formEl.attr('action'),
+              }).done(resolve).fail(reject);
+            });
+          }
+        },
+      })
+      .then((result) => {
+        console.log('result:', result)
+        if (result.value) {
+          Swal.fire({
+            title: 'Success!',
+            text: `${result.value.edited} division saved, and ${result.value.new} division created successfully!`,
+            icon: 'success',
+          });
         }
-      })
-      .then((value) => {
-        // console.log(`You typed: ${value}`);
-        if(!value) throw null;
-        const formEl = $('.edit-division-content form:first');
-        let formData = formEl.serialize();
-        formData += `&new_name=${value}`;
-        // console.log('data:', formData, formEl.attr('action'))
-        return new Promise(function(resolve, reject) {
-          $.ajax({
-            data: formData,
-            dataType: 'json',
-            method: 'POST',
-            url: formEl.attr('action'),
-          }).done(resolve).fail(reject);
-        });
-      })
-      .then(result => {
-        console.log('result:', result);
-        swal('Success!', `${result.edited} division saved, and ${result.new} division created successfully!`, 'success');
       })
       .catch(err => {
         console.log('error:', err)
-        if(err) swal('Oh noes!', 'The operation failed!', 'error');
+        if(err) Swal.fire({
+          title: 'Failed',
+          text: 'Something went wrong!',
+          icon: 'error',
+        });
       });
-    });
-    // if name field is empty, then disable the button.
-    $(document).on('keyup', 'input#division_new_name', function(e) {
-      const value = $(this).val().trim();
-      if(value === '') {
-        $('button.division-new-btn').attr('disabled', 'disabled');
-      }
-      else {
-        $('button.division-new-btn').removeAttr('disabled');
-      }
-    });
-    // when display modal, disable the button
-    $(document).on('focus', 'input#division_new_name', function(e) {
-      const value = $(this).val().trim();
-      if(value === '') {
-        $('button.division-new-btn').attr('disabled', 'disabled');
-      }
     });
 });
 
 // -dg-confirm modal
 function confirmAndSubmit(text, id) {
-  swal({
+  Swal.fire({
     title: "Are you sure?",
     text: text,
     icon: "warning",
-    buttons: true,
-    dangerMode: true,
+    timer: 0,
+    showCancelButton: true,
+    focusCancel: true,
+    customClass: {
+      container: 'dg-confirm-container',
+    },
+    confirmButtonText: '<i class="fa fa-check"></i> OK',
+    cancelButtonText: '<i class="fa fa-times"></i> Cancel',
+    confirmButtonColor: '#7F4091',
   })
-  .then((willDelete) => {
-    if (willDelete) {
+  .then((result) => {
+    if (result.value) { // if 'ok' is clicked,
       document.getElementById(id).submit();
     }
   });
 }
+
+// const Toast_DG = Swal.mixin({
+//   customClass: {
+//     container: 'dg-confirm-container',
+//   },
+//   toast: true,
+//   position: 'top-end',
+//   showConfirmButton: false,
+//   timer: 4000,
+//   timerProgressBar: true,
+//   onOpen: (toast) => {
+//     toast.addEventListener('mouseenter', Swal.stopTimer)
+//     toast.addEventListener('mouseleave', Swal.resumeTimer)
+//   }
+// });

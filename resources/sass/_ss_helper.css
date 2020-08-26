@@ -3,9 +3,86 @@
     display: flex !important;
 }
 
-// Font size helpers (Min: 2px, Max: 120px, Multiples of 2)
+// -----------------------------------------------------------------------------------------------------
+// @ Font size helpers   (Min: 2px, Max: 120px, Multiples of 2)
+// -----------------------------------------------------------------------------------------------------
+
 @for $size from 1 through 60 {
     .ss-fs-#{$size * 2} {
         font-size: #{$size * 2}px;
     }
+}
+
+// -----------------------------------------------------------------------------------------------------
+// @ Spacing helpers (margin, padding helpers)   Min: 0px, Max: 256px, Multiples of 4
+// -----------------------------------------------------------------------------------------------------
+
+@each $prop, $abbrev in (margin: m, padding: p) {
+  @for $index from 0 through 64 {
+    $size: $index * 4;
+    $length: #{$size}px;
+
+    .dg-#{$abbrev}-#{$size} {
+      #{$prop}: $length !important;
+    }
+
+    .dg-#{$abbrev}x-#{$size} {
+      #{$prop}-right: $length !important;
+      #{$prop}-left: $length !important;
+    }
+
+    .dg-#{$abbrev}y-#{$size} {
+      #{$prop}-top: $length !important;
+      #{$prop}-bottom: $length !important;
+    }
+
+    .dg-#{$abbrev}t-#{$size} {
+      #{$prop}-top: $length !important;
+    }
+
+    .dg-#{$abbrev}r-#{$size} {
+      #{$prop}-right: $length !important;
+    }
+
+    .dg-#{$abbrev}b-#{$size} {
+      #{$prop}-bottom: $length !important;
+    }
+
+    .dg-#{$abbrev}l-#{$size} {
+      #{$prop}-left: $length !important;
+    }
+  }
+
+  @if ($abbrev == m) {
+    // Some special margin utils for flex alignments
+    .dg-m-auto {
+      margin: auto !important;
+    }
+
+    .dg-mt-auto {
+      margin-top: auto !important;
+    }
+
+    .dg-mr-auto {
+      margin-right: auto !important;
+    }
+
+    .dg-mb-auto {
+      margin-bottom: auto !important;
+    }
+
+    .dg-ml-auto {
+      margin-left: auto !important;
+    }
+
+    .dg-mx-auto {
+      margin-right: auto !important;
+      margin-left: auto !important;
+    }
+
+    .dg-my-auto {
+      margin-top: auto !important;
+      margin-bottom: auto !important;
+    }
+  }
 }
