@@ -545,9 +545,7 @@ $(document).ready(function() {
         preConfirm: (name) => {
           console.log('name:', name)
           if(!name.trim()) {
-            Swal.showValidationMessage(
-              `Request failed: Name is required!`
-            );
+            Swal.showValidationMessage('Request failed: Name is required!');
           }
           else {
             const formEl = $(form).closest('form');

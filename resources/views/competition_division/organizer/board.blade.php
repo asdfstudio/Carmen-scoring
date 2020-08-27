@@ -75,10 +75,82 @@
 
       $('.edit-resource').on('click', function(e) {
         e.preventDefault();
-        var type = $(this).data('resource-type');
-        var id = $(this).data('resource-id');
-        var resource = $(this).data('resource');
-        Resource.edit(type, id, resource);
+
+        const arrAllCaptions = $(this).data('all-captions').split('-');
+        const arrJudgeCaptionsId = $(this).data('captions').split('-');
+
+        let fHtml = '<form id="swal_edit_judge_form">';
+        for (let i = 0; i < arrAllCaptions.length; i += 2) {
+          const id = arrAllCaptions[i];
+          const name = arrAllCaptions[i+1];
+          if(id) {
+            const idx = (arrJudgeCaptionsId || []).findIndex(element => element === id);
+            fHtml += `<div class="d-flex"><input id="dg_modal_caption_${id}" class="dg-mr-4" type="checkbox" name="caption_id[]" value="${id}" ${idx>-1 ? 'checked="checked"' : ''}/>
+                      <label for="dg_modal_caption_${id}">${name}</label></div>`;
+          }
+        }
+        fHtml += '</form>';
+
+        const judgeName = $(this).parent().siblings('span.name').text();
+
+        Swal.fire({
+          title: `Choose captions for ${judgeName} to score`,
+          html: fHtml,
+          showCancelButton: true,
+          confirmButtonText: "Update",
+          focusConfirm: false,
+          showLoaderOnConfirm: true,
+          allowOutsideClick: () => !Swal.isLoading(),
+          preConfirm: (result) => {
+            const url = $(this).attr('href');
+            let formData = $('form#swal_edit_judge_form').serialize();
+
+            if (result && !formData) {
+              Swal.showValidationMessage('Request failed: There are no selected captions!');
+            }
+            else if (result && formData){
+              formData += `&_token=${$(this).data('csrf-token')}&_method=PATCH`;
+              return new Promise(function(resolve, reject) {
+                $.ajax({
+                  data: formData,
+                  dataType: 'json',
+                  method: 'POST',
+                  url: url,
+                }).done(resolve).fail(reject);
+              });
+            }
+          }
+        })
+        .then((result) => {
+          console.log('result:', result)
+          if (result.value) {
+            Swal.fire({
+              title: 'Success!',
+              html: `Captions for <b>${judgeName}</b> have been updated successfully!`,
+              icon: 'success',
+            })
+            .then(() => {
+              let captionsEl = '';
+              let captions = '';
+              result.value.forEach(element => {
+                captionsEl += `<li class="background-color-${element.color_id} caption label">${element.name}</li>`;
+                captions += `${element.id}-`;
+              });
+              console.log('captions:', captions)
+              $(this).parent().siblings('ul').html(captionsEl);
+              $(this).attr('data-captions', captions);
+              $(this).data('captions', captions);
+            });
+          }
+        })
+        .catch(err => {
+          console.log('error:', err)
+          if(err) Swal.fire({
+            title: 'Failed',
+            text: 'Something went wrong!',
+            icon: 'error',
+          });
+        });
       });
 
       $('a.remove-resource').on('click', function(e) {

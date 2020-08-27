@@ -365,7 +365,6 @@ class CompetitionDivisionController extends Controller
         $divisions_import_judge = $competition_import_judge->divisions->reject(function($value, $key) use ($division_id) {
           return $value->id == $division_id;
         });
-        
         // return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
         return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'divisions_import_judge', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
     }

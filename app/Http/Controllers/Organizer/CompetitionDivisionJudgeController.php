@@ -299,16 +299,6 @@ class CompetitionDivisionJudgeController extends Controller
         // Get the Judge
         $judge = Judge::find($judge_id);
 
-        // $form = $formBuilder->create('Caption\ChooseCaptionForm', ['model' => $judge->captions]);
-
-				// // Validate input
-				// if (!$form->isValid()) {
-        //    return redirect()->back()->withErrors($form->getErrors())->withInput();
-        // }
-
-        //dd($division);
-        //dd($judge);
-
         // Attach the judge to the division and assign captions
 				if($judge)
 				{
@@ -324,7 +314,7 @@ class CompetitionDivisionJudgeController extends Controller
 
 						if($id)
 						{
-							$extra = ['caption_id' => $id];
+              $extra = ['caption_id' => $id];
 						}
 
             $judge->divisions()->attach($division->id, $extra);
@@ -332,7 +322,18 @@ class CompetitionDivisionJudgeController extends Controller
 					}
 				}
 
-        return redirect()->route('organizer.competition.division.judge.index',[$division->competition, $division])->with('success',$judge->full_name ." has been updated.");
+        if ($request->wantsJson()) {
+          $division_updated = Division::with(['judges' => function ($query) use ($judge_id) {
+            $query->where('judge_id', $judge_id)->groupBy('judge_id');
+          }, 'judges.captions' => function ($query) use ($division_id) {
+            $query->where('division_id',$division_id);
+          }])->find($division_id);
+          
+          return response()->json($division_updated->judges[0]->captions);
+        }
+        else {
+          return redirect()->route('organizer.competition.division.judge.index',[$division->competition, $division])->with('success',$judge->full_name ." has been updated.");
+        }
     }
 
     /**

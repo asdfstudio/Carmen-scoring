@@ -9,6 +9,14 @@
   
   {!! form($newJudgeForm) !!}
 
+  @php
+    $str_all_captions = "";
+    $arr_captions = $captions->pluck('name', 'id')->toArray();
+    foreach ($arr_captions as $id => $name) {
+      $str_all_captions .= $id . "-" . $name . "-";
+    }
+  @endphp
+
   @can('importJudges', $division)
     @if (count($divisions_import_judge) > 0)
     
