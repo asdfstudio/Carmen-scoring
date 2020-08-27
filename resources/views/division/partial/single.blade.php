@@ -1,15 +1,21 @@
 
 <ul class="list-group">
 	@if($division->captionWeighting)
-		<li class="list-group-item">Caption Weighting: {{ $division->captionWeighting->name }}</li>
+		<li class="list-group-item">
+			Caption Weighting: <div class="ss-fs-24 dg-m-8">{{ $division->captionWeighting->name }}</div>
+		</li>
 	@endif
 
 	@if($division->scoringMethod)
-  	<li class="list-group-item">Scoring Method: {{ $division->scoringMethod->name }}</li>
+  	<li class="list-group-item">
+			Scoring Method: <div class="ss-fs-24 dg-m-8">{{ $division->scoringMethod->name }}</div>
+		</li>
 	@endif
 
 	@if($division->sheet)
-  	<li class="list-group-item">Scoring Sheet: {{ $division->sheet->name }}</li>
+  	<li class="list-group-item">
+			Scoring Sheet: <div class="ss-fs-24 dg-m-8">{{ $division->sheet->name }}</div>
+		</li>
 	@endif
 
 	<!--<li class="list-group-item">Overall Awards: {{ $division->overall_award_count }}</li>

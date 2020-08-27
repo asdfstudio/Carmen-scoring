@@ -227,7 +227,6 @@ $(document).ready(function() {
           if (result.value) { // if 'ok' is clicked,
             $(this).closest('form').submit();
           }
-          console.log('result:', result)
         });
     });
 
@@ -514,6 +513,25 @@ $(document).ready(function() {
     // In "Edit a division" page, when click "Save & Create Another"
     $('.edit-division-content button[name="submit_create_another"]').on('click', function(e) {
       e.preventDefault();
+      if(!$(this).closest('form')[0].checkValidity()) {
+        $(this).siblings('button[type="submit"]')[0].click();
+        return;
+      }
+      swal_save_create_another('edit', $(this));
+    });
+    
+    // In "Create a division" page, when click "Save & Create Another"
+    $('.create-division-content button[name="submit_create_another"]').on('click', function(e) {
+      e.preventDefault();
+      if(!$(this).closest('form')[0].checkValidity()) {
+        $(this).siblings('button[type="submit"]')[0].click();
+        return;
+      }
+      swal_save_create_another('create', $(this));
+    });
+
+    // division "save & create another" on edit/create page
+    const swal_save_create_another = (type, form) => {
       Swal.fire({
         title: '<div class="ss-fs-18 dg-mt-24">Input a new division name here:</div>',
         input: 'text',
@@ -532,7 +550,7 @@ $(document).ready(function() {
             );
           }
           else {
-            const formEl = $('.edit-division-content form:first');
+            const formEl = $(form).closest('form');
             let formData = formEl.serialize();
             formData += `&new_name=${name.trim()}`;
             return new Promise(function(resolve, reject) {
@@ -551,8 +569,17 @@ $(document).ready(function() {
         if (result.value) {
           Swal.fire({
             title: 'Success!',
-            text: `${result.value.edited} division saved, and ${result.value.new} division created successfully!`,
+            html: type === 'edit' ?
+                   `<p><b>${result.value.edited}</b> division has been <b><i>saved!</i></b></p>
+                    <p><b>${result.value.new}</b> division has been <b><i>created</i></b> successfully!</p>`
+                  :
+                  `<b>${result.value[0]}</b> and <b>${result.value[1]}</b> divisions have been <b><i>created</i></b> successfully!`,
             icon: 'success',
+          })
+          .then((result) => {
+            if(type === 'create') {
+              $('a.dg-back-all-divisions')[0].click();
+            }
           });
         }
       })
@@ -564,7 +591,7 @@ $(document).ready(function() {
           icon: 'error',
         });
       });
-    });
+    }
 });
 
 // -dg-confirm modal

@@ -8,12 +8,12 @@
 	<h1>Create a division</h1>
 
 	<ul class="actions-group">
-		<li>{{ link_to_route('organizer.competition.division.index','Back to All Divisions',[$competition],['class' => 'action']) }}</li>
+		<li>{{ link_to_route('organizer.competition.division.index','Back to All Divisions',[$competition],['class' => 'action dg-back-all-divisions']) }}</li>
 	</ul>
 @endsection
 
 @section('content')
-
+	<div class="create-division-content">
 		{!! form_start($form) !!}
       
       {!! form_until($form, 'rating_system_heading') !!}
@@ -23,5 +23,5 @@
       </div>
       
 		{!! form_end($form) !!}
-
+	</div>
 @endsection

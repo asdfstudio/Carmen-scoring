@@ -102,30 +102,29 @@ class CompetitionDivisionController extends Controller
      */
     public function store(Request $request, $competition_id, FormBuilder $formBuilder)
     {
-        // $form = $formBuilder->create('Division\CreateForm');
-
-				// // Validate input
-				// if (!$form->isValid()) {
-        //    return redirect()->back()->withErrors($form->getErrors())->withInput();
-        // }
-
 				$competition = Competition::with('organization','place','divisions')->find($competition_id);
 
-        //dd($request->all());
-
-				$division = new Division($request->all());
+        $data = $request->all();
+				$division = new Division($data);
         $division->rating_system = array_filter($request->input('rating_system'));
 
 				$competition->divisions()->save($division);
 
-        $successMessage = "$division->name has been created.";
-
-        if($request->exists('submit_create_another'))
+        // if($request->exists('submit_create_another'))
+        if($request->wantsJson())
         {
-          return redirect()->back()->with('success',$successMessage);
+          // return redirect()->back()->with('success',$successMessage);
+          $data['name'] = $data['new_name'];
+          $division_new = new Division($data);
+          $division_new->rating_system = array_filter($request->input('rating_system'));
+          $competition->divisions()->save($division_new);
+
+          $result = array($division->name, $division_new->name);
+          return response()->json($result);
         }
         else {
-          return redirect()->route('organizer.competition.division.index', [$competition])->with('success',$successMessage);
+          $successMessage = "$division->name has been created.";
+          return redirect()->route('organizer.competition.division.index', [$competition_id])->with('success',$successMessage);
         }
     }
 
