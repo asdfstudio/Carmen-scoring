@@ -23,3 +23,9 @@ $factory->define(Division::class, function (Faker $faker) {
       // 'rating_system'
     ];
 });
+
+$factory->afterCreating(Division::class, function($division, $faker) {
+  $round = factory(App\Round::class)->create([
+    'division_id' => $division->id
+  ]);
+});

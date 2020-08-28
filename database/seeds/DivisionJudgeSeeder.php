@@ -12,8 +12,13 @@ class DivisionJudgeSeeder extends Seeder
   public function run()
   {
     App\Division::all()->each(function ($division) {
-      factory(App\Judge::class, 2)->create()->each(function($judge) use ($division) {
-        $division->judges()->attach($judge, ['caption_id' => App\Caption::all()->random()->id]);
+      $allCaptions = $division->sheet->criteria()->pluck('caption_id')->unique();
+      $maxCaptions = $allCaptions->count();
+      factory(App\Judge::class, 6)->create()->each(function($judge) use ($division, $allCaptions, $maxCaptions) {
+        $captions = $allCaptions->random(rand(1, $maxCaptions));
+        foreach ($captions as $caption_id) {
+          $division->judges()->attach($judge, ['caption_id' => $caption_id]);
+        }
       });
     });
 

@@ -16,6 +16,7 @@ class ChoirDivisionSeeder extends Seeder
       // Seed it with four random choirs
       $choirs = App\Choir::all()->random(4);
       $division->choirs()->sync($choirs);
+      $division->rounds()->first()->choirs()->sync($choirs);
     });
   }
 }
