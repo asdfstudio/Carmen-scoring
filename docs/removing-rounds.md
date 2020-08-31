@@ -87,3 +87,9 @@ These files in app seem to use the source/target relationship currently:
 ### Scoring
 
 Most scoring id done per-division so that won't change. But there are parts of the scoring system that grade source Rounds for the sake of seeding Target rounds. This will all be manual from now on so it should be removed from the app.
+
+### Tests
+
+- [ ] As a judge, do my scores and comments from a Choir in a Division appear in the same place?
+- [ ] As an organizer, can I find the relationship between a Prelim and a Final?
+- [ ] Do the public results pages looks the same?
