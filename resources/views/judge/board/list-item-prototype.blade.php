@@ -4,12 +4,16 @@
 
   <ul class="captions-group">
     @{{ #captions }}
-      <li class="@{{ name }} caption label">@{{ name }} </span>
+      <li class="background-color-@{{ color_id }} caption label">@{{ name }} </span>
     @{{ /captions }}
   </ul>
 
   <div class="actions">
-    <a class="remove-judge" href="#">Remove</a>
-    <a class="remove-judge" href="#">Edit captions</a>
+    @can('removeJudge', $division)
+      <!-- <a class="remove-judge" href="#">Remove</a> -->
+      <a class="remove-resource" data-resource-type="judge" data-resource-id="@{{ id }}" data-csrf-token="{{ csrf_token() }}" href="{{ route('organizer.competition.division.show',[$division->competition,$division]) }}/judge/@{{id}}">Remove</a>
+      <!-- <a class="remove-judge" href="#">Edit captions</a> -->
+      <a class="edit-resource" data-resource-type="judge" data-resource-id="@{{ id }}"  data-csrf-token="{{ csrf_token() }}" data-captions="@{{ captions_join }}" data-all-captions="{{ $str_all_captions }}" href="{{ route('organizer.competition.division.show',[$division->competition,$division]) }}/judge/@{{id}}">Edit captions</a>
+    @endcan
   </div>
 </li>

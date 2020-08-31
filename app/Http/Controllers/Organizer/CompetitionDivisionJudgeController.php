@@ -207,6 +207,10 @@ class CompetitionDivisionJudgeController extends Controller
           $judge->load(['captions' => function($query) use ($division_id) {
             $query->wherePivot('division_id', $division_id);
           }]);
+          $judge->captions_join = '';
+          foreach($judge->captions as $caption) {
+            $judge->captions_join .= $caption->id . '-';
+          }
           return response()->json($judge);
         }
 
@@ -409,6 +413,11 @@ class CompetitionDivisionJudgeController extends Controller
           $attachedJudge->load(['captions' => function($query) use ($division_id) {
             $query->wherePivot('division_id', $division_id);
           }]);
+
+          $attachedJudge->captions_join = '';
+          foreach($attachedJudge->captions as $caption) {
+            $attachedJudge->captions_join .= $caption->id . '-';
+          }
           $attachedJudges[] = $attachedJudge;
         }
       }

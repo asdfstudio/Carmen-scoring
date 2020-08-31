@@ -73,7 +73,7 @@
         Resource.importt('import');
       });
 
-      $('.edit-resource').on('click', function(e) {
+      $('ul').on('click', 'a.edit-resource', function(e) {
         e.preventDefault();
 
         const arrAllCaptions = $(this).data('all-captions').split('-');
@@ -229,7 +229,7 @@
         }
       });
 
-      $('a.remove-resource').on('click', function(e) {
+      $('ul').on('click', 'a.remove-resource', function(e) {
         e.preventDefault();
         Resource.remove(this);
       });
