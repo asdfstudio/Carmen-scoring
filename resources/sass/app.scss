@@ -1502,6 +1502,35 @@ a.active {
   }
 }
 
+// -dg-create/edit division
+.dg-sheet-option-wrapper {
+  label {
+    position: relative;
+  }
+  &:hover {
+    label {
+      &:after {
+        position: absolute;
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: 18px;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        font-weight: 400;
+        content: "\f05a";
+        right: -25px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.sheet-detail-modal {
+  .swal2-modal {
+    width: 80vw;
+  }
+}
+
 // -dg-customize sweet alert
 .dg-confirm-container {
   .swal2-modal,

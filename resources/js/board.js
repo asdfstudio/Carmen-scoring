@@ -1,4 +1,4 @@
-// $(document).ready(function() {
+
 
 var Modal = (function () {
   var modal = $('#modal')
@@ -289,4 +289,3 @@ var Resource = (function () {
   }
 })()
 
-// });

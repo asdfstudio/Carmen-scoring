@@ -590,6 +590,39 @@ $(document).ready(function() {
         });
       });
     }
+
+    // -dg-Create/Edit division sheet detail
+    $('.dg-sheet-option-wrapper label').on('click', function(e) {
+      // console.log('offset:', e.offsetX, $(this).outerWidth())
+      if(e.offsetX > $(this).outerWidth()) {
+        const sheet_id = $(this).attr('for').split('_')[2];
+        const sheet_wrapper = $(`.all-sheets-detail-wrapper .sheet-id-${sheet_id}`);
+        if(sheet_id && sheet_wrapper.length > 0) {
+          const swalHtml = sheet_wrapper.clone();
+          Swal.fire({
+            html: swalHtml,
+            showClass: {
+              popup: 'animate__animated animate__fadeInRight'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__fadeOutRight'
+            },
+            customClass: {
+              container: 'sheet-detail-modal',
+            },
+            showConfirmButton: false,
+            showCancelButton: false,
+          })
+        }
+        else {
+          Swal.fire({
+            title: 'Oops...',
+            text: 'There is no detail for scoring sheet you selected!',
+            icon: 'info'
+          });
+        }
+      }
+    });
 });
 
 // -dg-confirm modal
@@ -629,3 +662,4 @@ function confirmAndSubmit(text, id) {
 //     toast.addEventListener('mouseleave', Swal.resumeTimer)
 //   }
 // });
+

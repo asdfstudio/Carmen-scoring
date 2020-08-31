@@ -1,6 +1,10 @@
 // display
 .d-flex {
-    display: flex !important;
+  display: flex !important;
+}
+
+.d-none {
+  display: none !important;
 }
 
 // -----------------------------------------------------------------------------------------------------

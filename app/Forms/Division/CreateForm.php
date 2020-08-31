@@ -17,16 +17,13 @@ class CreateForm extends Form
             // If query builder option is not provided, all data is fetched
             return $sheet->where('is_retired', 0);
           },
-					'empty_value' => 'Choose scoring sheet...',
-					'label' => 'Scoring Sheet',
-          'label_attr' => ['class' => 'block'],
-          'expanded' => true,
-          'multiple' => false,
-          //'wrapper' => ['class' => 'wrap'],
+          'label' => 'Scoring Sheet',
           'choice_options' => [
-            'wrapper' => ['class' => 'choice-container'],
+            'wrapper' => ['class' => 'choice-container dg-sheet-option-wrapper'],
             'rules' => 'required'
-          ]
+          ],
+          'expanded' => true,
+          'multiple' => false
         ]);
         
 				$this->add('caption_weighting_id','entity', [

@@ -13,6 +13,7 @@ use App\Division;
 use App\Caption;
 use App\Standing;
 use App\Judge;
+use App\Sheet;
 use App\RawScore;
 use App\Carmen\CountExpectedScores;
 
@@ -86,12 +87,17 @@ class CompetitionDivisionController extends Controller
     {
 				$competition = Competition::with('organization','place','divisions')->find($competition_id);
 
+        $sheets = Sheet::with('criteria')->get()->where('is_retired', 0);
+        foreach ($sheets as $sheet) {
+          $sheet->captions = Caption::forSheet($sheet);
+        }
+
         $form = $formBuilder->create('Division\CreateForm', [
 					'method' => 'POST',
 					'url' => route('organizer.competition.division.store',[$competition])
 				]);
 
-				return view('competition_division.organizer.create', compact('competition','form'));
+				return view('competition_division.organizer.create', compact('competition','form', 'sheets'));
     }
 
     /**
@@ -408,6 +414,11 @@ class CompetitionDivisionController extends Controller
 
         //dd($division->overall_award_sponsors);
 
+        $sheets = Sheet::with('criteria')->get()->where('is_retired', 0);
+        foreach ($sheets as $sheet) {
+          $sheet->captions = Caption::forSheet($sheet);
+        }
+
         $form = $formBuilder->create('Division\CreateForm', [
 					'method' => 'PUT',
 					'model' => $division,
@@ -419,7 +430,7 @@ class CompetitionDivisionController extends Controller
           'url' => route('organizer.competition.division.destroy',[$competition,$division])
         ]);
 
-				return view('competition_division.organizer.edit', compact('competition','division','form', 'deleteForm'));
+				return view('competition_division.organizer.edit', compact('competition','division','form', 'deleteForm', 'sheets'));
     }
 
     /**
