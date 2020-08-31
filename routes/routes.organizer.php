@@ -18,6 +18,8 @@ Route::group([
     'as' => 'user.password.update', 'uses' => 'PasswordController@update'
   ]);
 
+  Route::put('user/password/mass', 'PasswordController@update_mass')->name('user.password.update-mass');
+  
 });
 
 

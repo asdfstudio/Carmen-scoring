@@ -153,6 +153,82 @@
         });
       });
 
+      $('.change-password').on('click', function(e) {
+        e.preventDefault();
+        const judge_id_cnt = $('.board-list.judges span.card-count').text();
+        if(judge_id_cnt === '0') {
+          Swal.fire({
+            title: 'Oops...',
+            text: 'There are no judges!',
+            icon: 'info'
+          })
+        }
+        else {
+          let ids_str = '';
+          $('.judges.cards.list-group > li:not(:first)').each(function() {
+            ids_str += $(this).data('resource-id') + '-';
+          });
+          const fHtml = `<div class="text-left dg-mb-4 dg-mt-20">New Password:</div>
+                        <input type="password" id="dg_password_input" class="form-control dg-mb-20" style="width:100%"/>
+                        <div class="text-left dg-mb-4">Password Confirm:</div>
+                        <input type="password" id="dg_password_confirm_input" class="form-control dg-mb-20" style="width:100%"/>`;
+          Swal.fire({
+            title: 'Change password',
+            html: fHtml,
+            showCancelButton: true,
+            confirmButtonText: "Update",
+            focusConfirm: false,
+            showLoaderOnConfirm: true,
+            allowOutsideClick: () => !Swal.isLoading(),
+            preConfirm: (result) => {
+              const pwd = $('#dg_password_input').val().trim();
+              const pwd_confirm = $('#dg_password_confirm_input').val().trim();
+              
+              if(result) {
+                if (!pwd) {
+                  Swal.showValidationMessage('Request failed: New Password is required!');
+                }
+                else if (!pwd_confirm) {
+                  Swal.showValidationMessage('Request failed: Confirmation is required!');
+                }
+                else if (pwd !== pwd_confirm){
+                  Swal.showValidationMessage('Request failed: Password confirmation does not match!');
+                }
+                else {
+                  const token = $('meta[name="_token"]').attr('content');
+                  return new Promise(function(resolve, reject) {
+                    $.ajax({
+                      data: `_token=${token}&_method=PUT&password=${pwd}&ids=${ids_str}`,
+                      dataType: 'json',
+                      method: 'POST',
+                      url: $('.base-url-div').html() + '/organizer/user/password/mass',
+                    }).done(resolve).fail(reject);
+                  });
+                }
+              }
+            }
+          })
+          .then((result) => {
+            console.log('result:', result)
+            if (result.value) {
+              Swal.fire({
+                title: 'Success!',
+                html: `Password have been updated successfully!`,
+                icon: 'success',
+              });
+            }
+          })
+          .catch(err => {
+            console.log('error:', err)
+            if(err) Swal.fire({
+              title: 'Failed',
+              text: 'Something went wrong!',
+              icon: 'error',
+            });
+          });
+        }
+      });
+
       $('a.remove-resource').on('click', function(e) {
         e.preventDefault();
         Resource.remove(this);

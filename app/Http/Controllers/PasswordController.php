@@ -57,7 +57,6 @@ class PasswordController extends Controller
         ]);
       }
 
-
       return view('profile.edit_password', compact('form', 'user'));
     }
 
@@ -91,5 +90,17 @@ class PasswordController extends Controller
           return redirect($request->input('previous_url'))->with('success','Password updated!');
         }
 
+    }
+
+    public function update_mass(Request $request, FormBuilder $formBuilder)
+    {
+        $password = $request->input('password');
+        $ids_str = rtrim($request->input('ids'), '-');
+        $ids_arr = explode('-', $ids_str);
+
+        User::whereIn('person_id', $ids_arr)->update(['password' => bcrypt($password)]);
+
+        $result = array('status' => 'success');
+        return response()->json($result);
     }
 }
