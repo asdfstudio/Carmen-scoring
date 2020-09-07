@@ -98,7 +98,17 @@ class PasswordController extends Controller
         $ids_str = rtrim($request->input('ids'), '-');
         $ids_arr = explode('-', $ids_str);
 
-        User::whereIn('person_id', $ids_arr)->update(['password' => bcrypt($password)]);
+        // keep superAdmin or Admin password as it is,
+        foreach ($ids_arr as $id) {
+          $user = User::where('person_id', $id)->first();
+          if(!$user->isSuperAdmin() && !$user->isAdmin()) {
+            // Update password of judge
+            $user->password = bcrypt($password);
+            $user->save();
+          }
+        }
+
+        // User::whereIn('person_id', $ids_arr)->update(['password' => bcrypt($password)]);
 
         $result = array('status' => 'success');
         return response()->json($result);
