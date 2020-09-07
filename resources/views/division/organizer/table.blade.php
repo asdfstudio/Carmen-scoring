@@ -13,7 +13,7 @@
 
   @foreach($divisions as $division)
   <tr>
-  	<td>{{ link_to_route('organizer.competition.division.show', $division->name, [$division->competition,$division]) }}</td>
+  	<td>{{ link_to_route('organizer.competition.division.settings', $division->name, [$division->competition,$division]) }}</td>
     <td>{{ link_to_route('organizer.competition.division.edit', 'Edit', [$division->competition,$division]) }}</td>
   </tr>
   @endforeach

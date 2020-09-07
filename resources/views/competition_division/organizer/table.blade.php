@@ -22,7 +22,7 @@
 
   @foreach($competition->divisions as $division)
   <tr>
-  	<td>{{ link_to_route('organizer.competition.division.show', $division->name, [$competition, $division]) }}</td>
+  	<td>{{ link_to_route('organizer.competition.division.settings', $division->name, [$competition, $division]) }}</td>
 		<td>
 			@can('update', $division)
 				{{ link_to_route('organizer.competition.division.edit', 'Edit', [$competition,$division]) }}

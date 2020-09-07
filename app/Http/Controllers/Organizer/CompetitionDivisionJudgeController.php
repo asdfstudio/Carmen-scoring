@@ -219,7 +219,7 @@ class CompetitionDivisionJudgeController extends Controller
           return redirect()->back()->with('success',$successMessage);
         }
         else {
-          return redirect()->route('organizer.competition.division.judge.index',[$division->competition, $division])->with('success',$successMessage);
+          return redirect()->route('organizer.competition.division.settings',[$division->competition, $division])->with('success',$successMessage);
         }
     }
 
@@ -336,7 +336,7 @@ class CompetitionDivisionJudgeController extends Controller
           return response()->json($division_updated->judges[0]->captions);
         }
         else {
-          return redirect()->route('organizer.competition.division.judge.index',[$division->competition, $division])->with('success',$judge->full_name ." has been updated.");
+          return redirect()->route('organizer.competition.division.settings',[$division->competition, $division])->with('success',$judge->full_name ." has been updated.");
         }
     }
 
@@ -357,7 +357,7 @@ class CompetitionDivisionJudgeController extends Controller
           return response()->json($judge_id);
         }
 				else { // Set flash data and redirect
-          return redirect()->route('organizer.competition.division.judge.index',[$division->competition, $division])->with('success', $judge->full_name . ' was successfully removed as a judge for this division.');
+          return redirect()->route('organizer.competition.division.settings',[$division->competition, $division])->with('success', $judge->full_name . ' was successfully removed as a judge for this division.');
         }
     }
 
@@ -427,6 +427,6 @@ class CompetitionDivisionJudgeController extends Controller
         return response()->json($attachedJudges);
       }
 
-      return redirect()->route('organizer.competition.division.judge.index', [$competition_id, $division_id])->with('success',"Judges successfully imported from $source_division->name.");
+      return redirect()->route('organizer.competition.division.settings', [$competition_id, $division_id])->with('success',"Judges successfully imported from $source_division->name.");
     }
 }

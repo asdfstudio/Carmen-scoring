@@ -51,14 +51,14 @@
 			<p>{{ link_to_route('organizer.competition.division.settings', 'Manage scoring settings', [$competition, $division]) }}</p>
 			<p>{{ link_to_route('organizer.competition.division.award.settings.edit','Edit Award Settings',[$competition, $division]) }}</p>
 		</li>
-		<li class="list-group-item">
+		<!-- <li class="list-group-item">
 			<h3>Choirs</h3>
 			<p>{{ link_to_route('organizer.competition.division.choir.index', 'Manage choirs', [$competition, $division]) }}</p>
 		</li>
 		<li class="list-group-item">
 			<h3>Judges</h3>
 			<p>{{ link_to_route('organizer.competition.division.judge.index', 'Manage judges', [$competition, $division]) }}</p>
-		</li>
+		</li> -->
 		<li class="list-group-item">
 			<h3>Rounds</h3>
 			<p>{{ link_to_route('organizer.competition.division.round.index', 'Manage rounds', [$competition, $division]) }}</p>

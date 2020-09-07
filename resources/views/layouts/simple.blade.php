@@ -54,25 +54,25 @@
     @if (isset($division))
       <div class="division-navigation-bar body-width">
         <ul class="division-navigation">
-          <li>
+          <!-- <li>
             @php $link_class = in_array(Request::segment(6),['overview']) ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.show', [$competition, $division]) }}" class="{{ $link_class }}">Overview</a>
-          </li>
+          </li> -->
           <li>
             @php $link_class = in_array(Request::segment(6),['settings','edit']) ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.settings', [$competition, $division]) }}" class="{{ $link_class }}">Settings</a>
           </li>
-          <li>
+          <!-- <li>
             @php $link_class = Request::segment(6) == 'choir' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.choir.index', [$competition, $division]) }}" class="{{ $link_class }}">Choirs
               <span class="count">{{ $division->choirs->count() }}</span>
             </a>
-          </li>
-          <li>
+          </li> -->
+          <!-- <li>
             @php $link_class = Request::segment(6) == 'judge' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.judge.index', [$competition, $division]) }}" class="{{ $link_class }}">Judges
               <span class="count">{{ $division->judges->unique('id')->count() }}</span></a>
-          </li>
+          </li> -->
           <li>
             @php $link_class = Request::segment(6) == 'round' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.round.index', [$competition, $division]) }}" class="{{ $link_class }}">Rounds
@@ -95,10 +95,10 @@
             @php $link_class = Request::segment(6) == 'standing' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.standing.show', [$competition, $division]) }}" class="{{ $link_class }}">Final Standings</a>
           </li>
-          <li>
+          <!-- <li>
             @php $link_class = Request::segment(6) == 'ceremony' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.ceremony.show', [$competition, $division]) }}" class="{{ $link_class }}">Award Ceremony</a>
-          </li>
+          </li> -->
 
         </ul>
       </div>

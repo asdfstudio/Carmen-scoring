@@ -6,7 +6,7 @@
 	<ul class="actions-group">
     @can('show', $division)
       <li>
-				{{ link_to_route('organizer.competition.division.show', 'Back to Division', [$division->competition,$division], ['class' => 'action']) }}
+				{{ link_to_route('organizer.competition.division.settings', 'Back to Division', [$division->competition,$division], ['class' => 'action']) }}
 			</li>
     @endcan
 
@@ -80,7 +80,7 @@
 
   <div class="alert alert-info">
     <p>When the Award Ceremony is over, remember to finalize/publish the results of this division. This will allow Participants, judges and the general public to view the results.</p>
-    <p>{{ link_to_route('organizer.competition.division.show', 'Go to Division', [$division->competition, $division]) }}</p>
+    <p>{{ link_to_route('organizer.competition.division.settings', 'Go to Division', [$division->competition, $division]) }}</p>
   </div>
 
 

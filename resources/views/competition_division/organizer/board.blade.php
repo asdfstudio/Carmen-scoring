@@ -26,7 +26,7 @@
 			<li>{{ link_to_route('organizer.competition.division.edit', 'Edit Division', [$competition,$division],['class' => 'action']) }}</li>
 		@endcan
 
-		<li>{{ link_to_route('organizer.competition.division.show', 'Exit Set Up Mode', [$competition,$division],['class' => 'action']) }}</li>
+		<li>{{ link_to_route('organizer.competition.division.settings', 'Exit Set Up Mode', [$competition,$division],['class' => 'action']) }}</li>
 
 	</ul>
 

@@ -526,6 +526,6 @@ class CompetitionDivisionController extends Controller
         return 0;
       }
 
-      return redirect()->route('organizer.competition.division.show',[$competition_id,$division_id]);
+      return redirect()->route('organizer.competition.division.settings',[$competition_id,$division_id]);
     }
 }

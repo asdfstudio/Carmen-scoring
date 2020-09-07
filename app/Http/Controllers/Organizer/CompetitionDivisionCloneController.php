@@ -70,7 +70,7 @@ class CompetitionDivisionCloneController extends Controller
         }
       }
 
-      return redirect()->route('organizer.competition.division.show',[$competition,$division_clone]);
+      return redirect()->route('organizer.competition.division.settings',[$competition,$division_clone]);
 
     }
 }

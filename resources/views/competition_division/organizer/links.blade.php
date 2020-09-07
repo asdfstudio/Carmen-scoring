@@ -12,7 +12,7 @@
         }
         @endphp
         @php $anchor = $div->name;@endphp
-        {!! link_to_route('organizer.competition.division.show', $anchor, [$div->competition_id,$div],['class' => 'list-group-item '.$active_class]) !!}
+        {!! link_to_route('organizer.competition.division.settings', $anchor, [$div->competition_id,$div],['class' => 'list-group-item '.$active_class]) !!}
     @endforeach
 
     {!! link_to_route('organizer.competition.division.create', 'Create New Division', [$div->competition_id],['class' => 'btn']) !!}

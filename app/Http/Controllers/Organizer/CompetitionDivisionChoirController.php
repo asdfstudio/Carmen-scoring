@@ -137,7 +137,7 @@ class CompetitionDivisionChoirController extends Controller
 
 
 				// Set flash data and redirect
-				return redirect()->route('organizer.competition.division.choir.index',[$competition,$division]);
+				return redirect()->route('organizer.competition.division.settings',[$competition,$division]);
     }
 
 
@@ -301,7 +301,7 @@ class CompetitionDivisionChoirController extends Controller
             return redirect()->back()->with('success',$successMessage);
           }
           else {
-            return redirect()->route('organizer.competition.division.choir.index', [$division->competition, $division])->with('success',$successMessage);
+            return redirect()->route('organizer.competition.division.settings', [$division->competition, $division])->with('success',$successMessage);
           }
         }
 
@@ -371,7 +371,7 @@ class CompetitionDivisionChoirController extends Controller
         }
         else {
           // Set flash data and redirect
-  				return redirect()->route('organizer.competition.division.choir.index',[$division->competition, $division])->with('success',"$choir->name has been removed from this division." );
+  				return redirect()->route('organizer.competition.division.settings',[$division->competition, $division])->with('success',"$choir->name has been removed from this division." );
         }
 
 

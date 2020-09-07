@@ -301,24 +301,31 @@ Breadcrumbs::register('organizer.competition.division.show', function($breadcrum
     $breadcrumbs->push($division->name, route('organizer.competition.division.show',[$competition,$division]));
 });
 
+// Competitions > [Competition] > Divisions > [Division] - settings
+Breadcrumbs::register('organizer.competition.division.settings', function($breadcrumbs, $competition, $division)
+{
+    $breadcrumbs->parent('organizer.competition.show',$competition);
+    $breadcrumbs->push($division->name, route('organizer.competition.division.settings',[$competition,$division]));
+});
+
 // Competitions > [Competition] > Divisions > [Division] > Edit
 Breadcrumbs::register('organizer.competition.division.edit', function($breadcrumbs, $competition, $division)
 {
-    $breadcrumbs->parent('organizer.competition.division.show',$competition, $division);
+    $breadcrumbs->parent('organizer.competition.division.settings',$competition, $division);
     $breadcrumbs->push('Edit', route('organizer.competition.division.edit',[$competition,$division]));
 });
 
 // Competitions > [Competition] > Divisions > [Division] > Clone
 Breadcrumbs::register('organizer.competition.division.clone', function($breadcrumbs, $competition, $division)
 {
-    $breadcrumbs->parent('organizer.competition.division.show',$competition, $division);
+    $breadcrumbs->parent('organizer.competition.division.settings',$competition, $division);
     $breadcrumbs->push('Clone', route('organizer.competition.division.clone',[$competition,$division]));
 });
 
 // Competitions > [Competition] > Divisions > [Division] > Choirs
 Breadcrumbs::register('organizer.competition.division.choir.index', function($breadcrumbs, $competition, $division)
 {
-    $breadcrumbs->parent('organizer.competition.division.show',$competition, $division);
+    $breadcrumbs->parent('organizer.competition.division.settings',$competition, $division);
     $breadcrumbs->push('Choirs', route('organizer.competition.division.choir.index',[$competition,$division]));
 });
 
@@ -334,7 +341,7 @@ Breadcrumbs::register('organizer.competition.division.choir.show', function($bre
 // Competitions > [Competition] > Divisions > [Division] > Rounds
 Breadcrumbs::register('organizer.competition.division.round.index', function($breadcrumbs, $competition, $division)
 {
-    $breadcrumbs->parent('organizer.competition.division.show',$competition, $division);
+    $breadcrumbs->parent('organizer.competition.division.settings',$competition, $division);
     $breadcrumbs->push('Rounds', route('organizer.competition.division.round.index',[$competition,$division]));
 });
 
@@ -349,7 +356,7 @@ Breadcrumbs::register('organizer.competition.division.round.index', function($br
 // Competitions > [Competition] > Divisions > [Division] > Judges
 Breadcrumbs::register('organizer.competition.division.judge.index', function($breadcrumbs, $competition, $division)
 {
-    $breadcrumbs->parent('organizer.competition.division.show',$competition, $division);
+    $breadcrumbs->parent('organizer.competition.division.settings',$competition, $division);
     $breadcrumbs->push('Judges', route('organizer.competition.division.judge.index',[$competition,$division]));
 });
 
