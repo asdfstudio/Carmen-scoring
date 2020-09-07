@@ -282,6 +282,17 @@ class CompetitionDivisionChoirController extends Controller
         if($request->wantsJson())
         {
           $choir->load('school');
+          $directors = array();
+          foreach ($choir->directors as $director)
+          {
+            $directors[] = array(
+              'fullName' => $director['fullName'],
+              'email' => substr($director['email'], 0, 2) . '****@****' . substr($director['email'], -7),
+              'tel' => empty($director['tel']) ? NULL : '( *** ) *** - ' . explode('-', $director['tel'])[1]
+            );
+          }
+          unset($choir['directors']);
+          $choir['directors'] = $directors;
           return response()->json($choir);
         }
         else {

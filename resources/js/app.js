@@ -203,31 +203,9 @@ $(document).ready(function() {
     });
 
     $('button.danger, a.danger, submit.danger').on('click', function(e) {
-        // if(confirm('Are you sure you want to do this?') == false) {
-        //   e.preventDefault();
-        //   //console.log('cancel');
-        // }
         e.preventDefault();
 
-        Swal.fire({
-          title: "Are you sure?",
-          text: 'Are you sure you want to do this?',
-          icon: "warning",
-          timer: 0,
-          showCancelButton: true,
-          focusCancel: true,
-          customClass: {
-            container: 'dg-confirm-container',
-          },
-          confirmButtonText: '<i class="fa fa-check"></i> Yes, Do it!',
-          cancelButtonText: '<i class="fa fa-times"></i> Cancel',
-          confirmButtonColor: '#7F4091',
-        })
-        .then((result) => {
-          if (result.value) { // if 'ok' is clicked,
-            $(this).closest('form').submit();
-          }
-        });
+        confirmAndSubmit('Are you sure you want to do this?', null, this);
     });
 
     $.fn.toggleChoirSource = function(choir_source) {
@@ -626,7 +604,7 @@ $(document).ready(function() {
 });
 
 // -dg-confirm modal
-function confirmAndSubmit(text, id) {
+function confirmAndSubmit(text, id, element) {
   Swal.fire({
     title: "Are you sure?",
     text: text,
@@ -643,11 +621,44 @@ function confirmAndSubmit(text, id) {
   })
   .then((result) => {
     if (result.value) { // if 'ok' is clicked,
-      document.getElementById(id).submit();
+      if(id) {
+        document.getElementById(id).submit();
+      }
+      if(element) {
+        $(element).closest('form').submit();
+      }
     }
   });
 }
 
+function dgSwalNotify(title, text, icon) {
+  Swal.fire({
+    title,
+    text,
+    icon
+  });
+}
+
+function dgToast(type, text) {
+  toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": true,
+    "positionClass": "toast-bottom-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "200",
+    "hideDuration": "500",
+    "timeOut": "3000",
+    "extendedTimeOut": "3000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  }
+  Command: toastr[type](text);
+}
 // const Toast_DG = Swal.mixin({
 //   customClass: {
 //     container: 'dg-confirm-container',

@@ -44,8 +44,6 @@ class CompetitionDivisionRoundController extends Controller
       $weightedScores = $scoreboard->weightedScores;
       //$rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
-
-
       //$competition = Competition::find($competition_id);
 
       $round = Round::with(['division','division.competition' => function($query) {

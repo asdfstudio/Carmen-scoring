@@ -1,10 +1,12 @@
 <li class="choir card list-group-item" data-resource-type="choir" data-resource-id="{{ $choir->id }}">
 
-  @if($choir->school)
-    <span class="school">{{ $choir->school->name }}</span>
-  @endif
+  <div class="dg-card-dec1"></div>
 
-  <span class="name">{{ $choir->name }}</span>
+  <span class="name text-center">{{ $choir->name }}</span>
+
+  @if($choir->school)
+    <span class="school text-center">{{ $choir->school->name }}</span>
+  @endif
 
   @foreach($choir->directors as $director)
     <div class="director-div">
@@ -34,10 +36,10 @@
     @endif
   @endforeach
 
-  <div class="actions text-right" style="margin-top: 5px">
+  <div class="actions text-center">
     @can('removeChoir', $division)
       <a class="remove-resource" data-resource-type="choir" data-resource-id="{{ $choir->id }}" data-csrf-token="{{ csrf_token() }}" href="{{ route('organizer.competition.division.choir.destroy',[$division->competition,$division,$choir]) }}">
-        <i class="fa fa-trash"></i>  
+        <i class="fa fa-trash"></i>
         Remove
       </a>
     @endcan

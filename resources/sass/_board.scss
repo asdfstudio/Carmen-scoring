@@ -40,26 +40,51 @@
   }
 
   ul.cards {
-    margin: 10px 0;
+    // margin: 10px 0;
     padding: 0;
     overflow: hidden;
     list-style: none;
+    margin: 0 -8px;
 
     .card {
       padding: 10px;
       background: #fff;
-      margin-bottom: 3px;
       border-radius: 5px;
-      box-shadow: 0px 1px 1px rgba(0,0,0,0.2);
-      margin-bottom: 8px;
+      -webkit-box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.03);
+      -moz-box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.03);
+      margin: 10px 10px 12px;
+      border: none;
+
+      .dg-card-dec1 {
+        width: 30px;
+        height: 2px;
+        margin: 4px auto 10px;
+        background: #038fde;
+      }
 
       &.choir {
         .name {
           font-size: 17px;
         }
+        .actions {
+          margin: 10px -10px -10px;
+          padding: 7px 0;
+          background: #038fde;
+          &:hover {
+            background: lighten(#038fde, 7);
+          }
+          a {
+            color: white;
+            i:before {
+              margin-right: 4px;
+            }
+          }
+        }
       }
 
       &.judge {
+        padding-bottom: 0;
         .name {
           font-size: 17px;
         }
@@ -70,9 +95,28 @@
           margin-top: 6px;
 
           .caption {
-            margin: 0;
-            margin-right: 3px;
-            margin-bottom: 3px;
+            margin: 0 3px 3px 0;
+            &:last-child {
+              margin-bottom: 10px;
+            }
+          }
+        }
+        .actions {
+          display: flex;
+          justify-content: center;
+          flex-direction: row-reverse;
+          margin: 10px -10px 0px;
+          width: calc(100% + 20px);
+          padding: 7px 0;
+          background: #038fde;
+          &:hover {
+            background: lighten(#038fde, 7);
+          }
+          a {
+            color: white;
+            i:before {
+              margin-right: 4px;
+            }
           }
         }
       }
@@ -82,6 +126,7 @@
           font-size: 17px;
         }
       }
+
     }
   }
 
@@ -97,7 +142,6 @@
     border-radius: 5px;
     color: #333;
     margin-top: 10px;
-    margin-bottom: 10px;
   }
 }
 
@@ -133,11 +177,3 @@
   display: none;
 }
 
-.board-list.judges {
-  .actions {
-    display: flex;
-    flex-direction: row-reverse;
-    width: 100%;
-    justify-content: space-between;
-  }
-}
