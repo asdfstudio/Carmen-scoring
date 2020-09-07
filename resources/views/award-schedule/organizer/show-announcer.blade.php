@@ -38,8 +38,10 @@
         }
         else {
           $standing = $standings->where('division_id', $item->division->id)->where('caption_id', null)->first();
-          $sponsor = $item->division->awardSettings->where('caption_id', 0)->first()->awardSponsor($item->rank);
-          //dd($item->division->awardSettings->where('caption_id', 0)->first()->awardSponsor($item->rank));
+          $dg_sponsors = $item->division->awardSettings->where('caption_id', 0);
+          if($dg_sponsors->isNotEmpty()) {
+            $sponsor = $dg_sponsors->first()->awardSponsor($item->rank);
+          }
         }
 
 

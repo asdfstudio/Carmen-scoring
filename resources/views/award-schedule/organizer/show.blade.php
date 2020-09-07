@@ -80,26 +80,28 @@
             <span class="caption-name caption-overall">Overall {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
           @endif
 
-          @foreach($awardWinner as $theWinner)
-            <span class="award-winner pull-right">
-              @if(!empty($theWinner->recipient))
-                <span class="award-winner-recipient">{{ $theWinner->recipient }}</span>
+          @if(!empty($awardWinner))
+            @foreach($awardWinner as $theWinner)
+              <span class="award-winner pull-right">
+                @if(!empty($theWinner->recipient))
+                  <span class="award-winner-recipient">{{ $theWinner->recipient }}</span>
+                @endif
+
+                @if(!empty($theWinner->choir))
+                  <span class="award-winner-choir">{{ $theWinner->choir->full_name }}</span>
+                @endif
+
+                @if(!empty($theWinner->full_name))
+                  <span class="award-winner-choir">{{ $theWinner->full_name }}</span>
+                @endif
+
+              </span><br>
+
+              @if(!empty($theWinner->sponsor))
+                <!--<span class="award-sponsor">{{ $theWinner->sponsor }}</span>-->
               @endif
-
-              @if(!empty($theWinner->choir))
-                <span class="award-winner-choir">{{ $theWinner->choir->full_name }}</span>
-              @endif
-
-              @if(!empty($theWinner->full_name))
-                <span class="award-winner-choir">{{ $theWinner->full_name }}</span>
-              @endif
-
-            </span><br>
-
-            @if(!empty($theWinner->sponsor))
-              <!--<span class="award-sponsor">{{ $theWinner->sponsor }}</span>-->
-            @endif
-          @endforeach
+            @endforeach
+          @endif
         </li>
       @endif
     @endforeach
