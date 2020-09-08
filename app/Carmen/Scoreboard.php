@@ -196,21 +196,21 @@ class Scoreboard {
 
   public function getRankedScoresForCurrentMethod()
   {
-    switch($this->division->scoring_method_id){
-      case 1:
-      case 2:
+    switch($this->division->scoringMethod->name) {
+      case 'Raw Scores':
+      case 'Ranked Scores':
         $this->rankedScoresForCurrentMethod = $this->rankedScores;
         break;
-      case 3:
+      case 'Condorcet - Ranked Pairs Winning':
         $this->rankedScoresForCurrentMethod = $this->condorcetScoresRankedPairs;
         break;
-      case 4:
+      case 'Condorcet - Schultze Winning':
         $this->rankedScoresForCurrentMethod = $this->condorcetScoresSchulze;
         break;
-      case 5:
+      case 'Consensus Ordinal Rank':
         $this->rankedScoresForCurrentMethod = $this->consensusOrdinalRankScores;
         break;
-      case 6:
+      case 'Borda Count':
         $this->rankedScoresForCurrentMethod = $this->bordaCountScores;
         break;
       default:
