@@ -33,7 +33,8 @@ function AudioRecorder (element) {
   this.recordingTimer = null
   this.progressMeterBox = this.widget.find('.ar-meter-box')
   this.progressMeterBar = this.widget.find('.ar-meter-bar')
-  this.micRecorder = new MicRecorder({bitRate: 128})
+  
+  this.micRecorder = this.mode === 'recorder' ? new MicRecorder({bitRate: 128}) : null
   this.choirId = parseInt(this.widget.data('choir')) || 0
   this.roundId = parseInt(this.widget.data('round')) || 0
   this.divisionId = parseInt(this.widget.data('division')) || 0
@@ -50,7 +51,15 @@ function AudioRecorder (element) {
 
   this.playlistItemHTML = (recording) => {
     var maybeDeleteButton = this.canDelete ? '<button class="ar-playlist-delete" title="Delete Recording"></button>' : '';
-    return '<li id="recording-' + recording.id + '" data-id="' + recording.id + '" data-url="' + recording.url + '"><audio><source src="' + recording.url + '"></audio><div class="ar-playlist-item-name">' + niceDate(recording.created_at) + '</div><div class="ar-playlist-functions"><button class="ar-playlist-play-pause" title="Play/Pause"></button><a class="ar-playlist-download" title="Download Recording" href="' + recording.url + '" download="' + niceDate(recording.created_at) + '" type="application/octet-stream"></a>' + maybeDeleteButton + '</div></li>'
+    return `<li id="recording-${recording.id}" data-id="${recording.id}" data-url="${recording.url}">
+              <audio><source src="${recording.url}"></audio>
+              <div class="ar-playlist-item-name">${niceDate(recording.created_at)}</div>
+              <div class="ar-playlist-functions">
+                <button class="ar-playlist-play-pause" title="Play/Pause"></button>
+                <a class="ar-playlist-download" href="${recording.url}" title="Download Recording" download="${niceDate(recording.created_at)}"></a>
+                ${maybeDeleteButton}
+              </div>
+            </li>`
   }
 
   if(this.playlist.length == 0){
@@ -254,6 +263,7 @@ function AudioRecorder (element) {
   }
 
   this.uploadRecording = (blob) => {
+    const recordingBlob = blob;
     var formData = new FormData()
     formData.append('division_id', this.divisionId)
     formData.append('round_id', this.roundId)
@@ -290,7 +300,7 @@ function AudioRecorder (element) {
       }
     ).done(
       (result, textStatus, jqXHR) => {
-        if(typeof result.url === 'undefined'){
+        if(!result.url){
           console.log('Upload resulted in server-side error.')
           console.log('Result:', result)
           this.warnUploadRecordingError()
@@ -330,7 +340,7 @@ function AudioRecorder (element) {
         console.log('Upload resulted in AJAX error.')
         console.log('jqXHR:', jqXHR)
 
-        this.warnUploadRecordingError()
+        this.warnUploadRecordingErrorDownload(recordingBlob)
       }
     ).always(
       () => {
@@ -415,11 +425,46 @@ function AudioRecorder (element) {
   }
 
   this.warnRecordingSaveError = () => {
-    alert('There was an error saving your recording to the server.  Please refresh this page and try again.')
+    Swal.fire({
+      title: "Failed!",
+      text: "There was an error saving your recording to the server.  Please refresh this page and try again.",
+      icon: "error",
+    })
   }
 
   this.warnUploadRecordingError = () => {
-    alert('There was an error uploading your file to the server.  Please refresh this page and try uploading the file again.')
+    Swal.fire({
+      title: "Failed!",
+      text: "There was an error uploading your file to the server.  Please refresh this page and try uploading the file again.",
+      icon: "error",
+    })
+  }
+
+  this.warnUploadRecordingErrorDownload = (blob) => {
+    console.log('blob:', blob)
+    Swal.fire({
+      title: "Uploading Failed!",
+      text: "Would you download the recording?",
+      icon: "error",
+      showCancelButton: true,
+      customClass: {
+        container: 'dg-confirm-container',
+      },
+      confirmButtonText: '<i class="fa fa-download"></i> Yes, download it',
+      cancelButtonText: '<i class="fa fa-times"></i> No',
+      confirmButtonColor: '#7F4091',
+    })
+    .then((result) => {
+      if (result.value) { // if 'ok' is clicked,
+        var dgDownloadLink = document.createElement("a");
+        dgDownloadLink.href = window.URL.createObjectURL(blob);
+        dgDownloadLink.setAttribute("download", 'Recording.mp3');
+        document.body.appendChild(dgDownloadLink);
+        dgDownloadLink.click();
+        document.body.removeChild(dgDownloadLink);
+        delete dgDownloadLink;
+      }
+    });
   }
 
   this.deleteRecording = (id) => {
@@ -454,6 +499,28 @@ $(document).ready(function () {
   // Initialize all audio recorder widgets.
   $('.audio-recorder').each(function(i, element){
     window.audioRecorers.push(new AudioRecorder(element))
+  })
+
+  // -dg-download recording file from s3
+  $(document).on('click', 'a.ar-playlist-download', function(e) {
+    e.preventDefault();
+
+    const downloadURL = $(this).attr('href');
+    console.log('dowonload clicked')
+    fetch(downloadURL).then(function(t) {
+      return t.blob().then((b)=>{
+          var dgDownloadLink = document.createElement("a");
+          dgDownloadLink.href = URL.createObjectURL(b);
+          dgDownloadLink.setAttribute("download", 'Recording.mp3');
+          document.body.appendChild(dgDownloadLink);
+          dgDownloadLink.click();
+          document.body.removeChild(dgDownloadLink);
+          delete dgDownloadLink;
+      });
+    })
+    .catch((error) => {
+      console.log('download Error:', error)
+    });
   })
 
   // Initialize the Dropzone.

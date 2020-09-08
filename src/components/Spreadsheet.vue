@@ -100,7 +100,7 @@
         </tr>
         <!-- Total score end -->
 
-        <!-- Total score start -->
+        <!-- Rank / Rating start -->
         <tr class="rank-rating-row">
           <th class="rank-rating-label">
             Rank <span v-if="hasRatings">&amp; Rating</span>
@@ -131,6 +131,7 @@
             {{ comment(choir) }}
           </td>
         </tr>
+
          <!-- Record -->
         <tr class="comment-row" v-if="hasPremium">
           <th class="criterion-name">Record Comments</th>
@@ -146,6 +147,7 @@
             />
           </td>
         </tr>
+
         <!-- DropZone -->
         <tr class="comment-row" v-if="hasPremium">
           <th class="criterion-name">Upload Recorded File</th>
@@ -157,6 +159,7 @@
             />
           </td>
         </tr>
+        
       </tbody>
     </table>
   </div>

@@ -14,7 +14,7 @@ class RecordingController extends Controller
     public function postRecording(Request $request)
     {
         $recording = new Recording;
-        $recording->judge_id = isset($request->judge_id)?$request->judge_id:Auth::user()->person_id;
+        $recording->judge_id = isset($request->judge_id) ? $request->judge_id : Auth::user()->person_id;
         $recording->choir_id = $request->choir_id;
         $recording->division_id = $request->division_id;
         $recording->round_id = $request->round_id;
@@ -28,11 +28,16 @@ class RecordingController extends Controller
             $storage_path .= $storage_file_name;
 
             // Get MIME type
-            require_once 'MIME/Type.php';
-            $mime_type = \MIME_Type::autoDetect($file_to_store);
-            if($mime_type === 'application/octet-stream'){
-              $mime_type = 'audio/mpeg';
-            }
+            // require_once 'MIME/Type.php';
+            // $mime_type = \MIME_Type::autoDetect($file_to_store);
+            
+            // if($mime_type === 'application/octet-stream'){
+            //   $mime_type = 'audio/mpeg';
+            // }
+
+            $dg_file_name = $file_to_store->getPath() . '\\' . $file_to_store->getFilename();
+            $mime_type = mime_content_type($dg_file_name);
+
 
             // Upload the file to S3 and save the remote path
             $remote_path = uploadToS3($storage_path, $file_to_store, ['ContentType' => $mime_type]);

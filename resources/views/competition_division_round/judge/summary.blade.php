@@ -56,3 +56,7 @@
   ])
 
 @endsection
+
+@push('own-scripts')
+  <script type=text/javascript src=/dist/js/recording.js></script>
+@endpush

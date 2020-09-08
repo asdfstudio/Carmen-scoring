@@ -1413,8 +1413,9 @@ a.active {
     }
   }
 
-  &.playlist-expanded,
-  &[data-mode="player"] {
+  &.playlist-expanded {
+  // &.playlist-expanded,
+  // &[data-mode="player"] {
     .ar-info .ar-existing::after {
         border-top: 0 #e5e5e5 solid;
         border-bottom: 5px #e5e5e5 solid;
@@ -1464,11 +1465,11 @@ a.active {
 
       .ar-existing {
         text-decoration: none;
-        cursor: normal;
+        // cursor: normal;
 
-        &::after {
-          display: none;
-        }
+        // &::after {
+        //   display: none;
+        // }
       }
     }
 
