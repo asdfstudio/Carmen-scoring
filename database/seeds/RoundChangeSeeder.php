@@ -2,6 +2,11 @@
 
 use Illuminate\Database\Seeder;
 
+use App\Events\RoundSaved;
+use App\Events\RoundScoringActivated;
+use App\Events\RoundScoringCompleted;
+
+
 class RoundChangeSeeder extends Seeder
 {
     /**
@@ -12,7 +17,7 @@ class RoundChangeSeeder extends Seeder
     public function run()
     {
         // Model: Loveland 2020 Showfest in prod - #71
-        //
+
         // Create a basic user
         factory(\App\User::class)->create([
             'username' => 'test-admin',
@@ -32,68 +37,55 @@ class RoundChangeSeeder extends Seeder
         // Seed the person types
         $this->call(TypeSeeder::class);
 
-        // $this->call(CompetitionSeeder::class);
-        // $this->call(DivisionSeeder::class);
-        // $this->call(SchoolSeeder::class);
-        // $this->call(ChoirSeeder::class);
-        // $this->call(ChoirDivisionSeeder::class);
-
-        // $this->call(DivisionAwardSettingsSeeder::class);
-
         // Create a basic competition with three divisions
         $competition = factory(\App\Competition::class)->create([
             'name' => 'Round Change 2020'
         ]);
 
         $fiftyFifty = App\CaptionWeighting::firstWhere('name', '50/50');
-        $scoringMethod = App\ScoringMethod::first();
+        $scoringMethod = App\ScoringMethod::firstWhere('name', 'Ranked Scores');
         $sheet = App\Sheet::firstWhere('name', 'Carmen Showchoir');
         $advancedSheet = App\Sheet::firstWhere('name', 'Carmen Showchoir Advanced');
 
-        $divisionSettings = ['competition_id' => $competition, 'caption_weighting_id' => $fiftyFifty, 'scoring_method_id' => $scoringMethod,
-            'sheet_id' => $advancedSheet, 'name' => 'Tough Division'];
+        $divisionSettings = ['competition_id' => $competition,
+            'caption_weighting_id' => $fiftyFifty, 'scoring_method_id' => $scoringMethod,
+            'sheet_id' => $advancedSheet, 'name' => 'Oddly Easy Division'];
 
-        $toughDivision = factory(App\Division::class)->create($divisionSettings);
-        $easyDivision = factory(App\Division::class)->create(array_merge($divisionSettings,
-            ['sheet_id' => $sheet, 'name' => 'Easy Division']));
+
+        $oddDivision = factory(App\Division::class)->create($divisionSettings);
+        $evenDivision = factory(App\Division::class)->create(array_merge($divisionSettings,
+            ['sheet_id' => $sheet, 'name' => 'Even Tougher Division']));
 
         // Add Choirs to the prelim divisions
-        foreach(['Two Choir', 'Four Choir', 'Six Choir', 'Eight Choir'] as $choirName) {
-            factory(\App\Choir::class)->create([
-                'name' => $choirName
+        for ($i = 1; $i < 10; $i++) {
+            $choir = factory(\App\Choir::class)->create([
+                'name' => "Choir $i"
             ]);
+
+            if ($i % 2 == 0) {
+                $evenDivision->choirs()->attach($choir);
+            } else {
+                $oddDivision->choirs()->attach($choir);
+            }
         }
 
-        App\Division::all()->each(function ($division) {
-            $choirs = App\Choir::all();
-            $division->choirs()->sync($choirs);
-            $division->rounds()->first()->choirs()->sync($choirs);
-        });
-
-        // Create a target "Finals Qualifiers" round that is fed by the other divisions
-        $finalistsDivision = factory(\App\Division::class)->create(array_merge($divisionSettings,
-            ['name' => 'Finalists']));
-
-        //TODO: Round connections here
-
-        // Create a final "Finals" round with the top 6 from all the scored divisions
-        $finalsDivision = factory(\App\Division::class)->create(array_merge($divisionSettings,
-            ['name' => 'Finals']));
+        $oddDivision->save();
+        $evenDivision->save();
 
         // Add judges to each division
         $musicJudge = factory(\App\Judge::class)->create([
             'first_name' => 'Music',
-            'last_name' => 'Judge'
+            'last_name' => 'Meanie'
         ]);
 
         $showJudge = factory(\App\Judge::class)->create([
             'first_name' => 'Show',
-            'last_name' => 'Judge'
+            'last_name' => 'Nicely'
         ]);
 
         $allJudge = factory(\App\Judge::class)->create([
             'first_name' => 'All',
-            'last_name' => 'Judge'
+            'last_name' => 'Even'
         ]);
 
         $musicCaption = \App\Caption::firstWhere('name', 'Music');
@@ -107,8 +99,76 @@ class RoundChangeSeeder extends Seeder
             $division->judges()->attach($allJudge, ['caption_id' => $showCaption->id]);
             $division->judges()->attach($allJudge, ['caption_id' => $comboCaption->id]);
         });
-        // TODO: Add Raw Scores for prelims
+
+        foreach ($competition->divisions as $division) {
+            $round = $division->rounds()->first();
+            $division->activateScoring();
+            $judges = $division->judges;
+            $choirs = $round->choirs;
+            foreach ($choirs as $choir) {
+                foreach ($division->sheet->criteria as $criterion) {
+                    foreach ($judges as $judge) {
+                        if ($judge->pivot->caption_id == $criterion->caption->id) {
+                            factory(App\RawScore::class)->create([
+                                'score' => $this->getJudgeScore($judge->last_name, $division->name, $choir->name),
+                                'judge_id' => $judge->id,
+                                'division_id' => $division->id,
+                                'round_id' => $round->id,
+                                'choir_id' => $choir->id,
+                                'criterion_id' => $criterion->id
+                            ]);
+                        }
+                    }
+                }
+            }
+            $division->completeScoring();
+        }
+
         // TODO: Create awards in a addition to placing scores
+        $prelims = App\Division::all();
+
+        // Create a target "Finals Qualifiers" round that is fed by the other divisions
+        $finalistsDivision = factory(\App\Division::class)->create(array_merge($divisionSettings,
+            ['name' => 'Finalists']));
+
+        foreach ($prelims as $prelim) {
+            $finalistsDivision->rounds()->first()->sources()->attach($prelim->rounds()->first());
+            $finalistsDivision->rounds()->first()->save();
+        }
+
+        // Create a final "Finals" round with the top 6 from all the scored divisions
+        $finalsDivision = factory(\App\Division::class)->create(array_merge($divisionSettings,
+            ['name' => 'Finals']));
+    }
+
+
+    /**
+     * Helper function so we can get different grades for the different judges for testing later
+     *
+     */
+    private function getJudgeScore($judgeName, $divisionName, $choirName)
+    {
+        $score = (int) substr($choirName, -1);
+
+        switch ($divisionName) {
+        case "Even Tougher Division":
+            $score -= 1;
+            break;
+        case "Oddly Easy Division":
+            $score += 1;
+            break;
+        }
+
+        switch ($judgeName) {
+        case "Meanie":
+            $score -= 1;
+            break;
+        case "Nicely":
+            $score += 1;
+            break;
+        }
+
+        return $score;
 
     }
 }

@@ -13,11 +13,11 @@ class ScoringMethodSeeder extends Seeder
     {
         DB::table('scoring_methods')->insert([
             ['name' => 'Raw Scores'],
-						['name' => 'Ranked Scores'],
-						['name' => 'Condorcet - Ranked Pairs Winning'],
-						['name' => 'Condorcet - Schultze Winning'],
-						['name' => 'Consensus Ordinal Rank'],
-						['name' => 'Borda Count']
+            ['name' => 'Ranked Scores'],
+            ['name' => 'Condorcet - Ranked Pairs Winning'],
+            ['name' => 'Condorcet - Schultze Winning'],
+            ['name' => 'Consensus Ordinal Rank'],
+            ['name' => 'Borda Count']
         ]);
     }
 }
