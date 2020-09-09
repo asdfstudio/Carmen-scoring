@@ -13,6 +13,10 @@ class RoundChangeTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        // Only run this on a testing environment
+        if (\App::environment() != 'testing') {
+            $this->markTestSkipped();
+        }
 
         $this->seed('RoundChangeSeeder');
     }

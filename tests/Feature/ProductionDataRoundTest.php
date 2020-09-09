@@ -8,6 +8,18 @@ use Tests\TestCase;
 
 class ProductionDataRoundTest extends TestCase
 {
+
+    protected function setUp(): void
+    {
+        parent::setup();
+        // Only run this on the regular showchoir_db environment
+        if (\App::environment() != 'prod-data') {
+            $this->markTestSkipped();
+        }
+    }
+
+
+
     /**
      * Checking Kate Burns scores for Loveland Showfest 2020 Finals
      */
