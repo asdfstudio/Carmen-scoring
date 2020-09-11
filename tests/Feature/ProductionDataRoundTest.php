@@ -18,8 +18,6 @@ class ProductionDataRoundTest extends TestCase
         }
     }
 
-
-
     /**
      * Checking Kate Burns scores for Loveland Showfest 2020 Finals
      */
@@ -91,6 +89,44 @@ class ProductionDataRoundTest extends TestCase
 
         $score = $this->getJudgeScore($division_id, $choir_id, $judge_id, $show_design_id);
         $this->assertEquals(9.0, $score, 'Coe Score for Decatur (Show Design) wrong');
+
+    }
+
+    /**
+     * The Auburn Show Choir Showdown 2020 has a working Finals round that's fed from
+     * the Prelims properly
+     */
+    public function testAuburnScores()
+    {
+        $division_id = 1102; // Finals Division
+        $judge_id = 1285; // Calvin Ellis
+
+        $show_entertainment_id = 64; // First Criterion
+        $music_rhythm_id = 7; // Second Criterion
+
+        // Check scores for Oak Mountain "Singers"
+        $choir_id = 583;
+        $score = $this->getJudgeScore($division_id, $choir_id, $judge_id, $show_entertainment_id);
+        $this->assertEquals(10.0, $score, 'Ellis Score for Oak Mountain (Entertainment) wrong');
+
+        $score = $this->getJudgeScore($division_id, $choir_id, $judge_id, $music_rhythm_id);
+        $this->assertEquals(9.0, $score, 'Ellis Score for Oak Mountain (Music - Rhythm) wrong');
+
+        // Check scores for Grenada
+        $choir_id = 520;
+        $score = $this->getJudgeScore($division_id, $choir_id, $judge_id, $show_entertainment_id);
+        $this->assertEquals(9.0, $score, 'Ellis Score for Grenada (Entertainment) wrong');
+
+        $score = $this->getJudgeScore($division_id, $choir_id, $judge_id, $music_rhythm_id);
+        $this->assertEquals(9.0, $score, 'Ellis Score for Grenada (Music - Rhythm) wrong');
+
+        // Check scores for Homewood
+        $choir_id = 521;
+        $score = $this->getJudgeScore($division_id, $choir_id, $judge_id, $show_entertainment_id);
+        $this->assertEquals(9.5, $score, 'Ellis Score for Homewood (Entertainment) wrong');
+
+        $score = $this->getJudgeScore($division_id, $choir_id, $judge_id, $music_rhythm_id);
+        $this->assertEquals(10.0, $score, 'Ellis Score for Homewood (Music - Rhythm) wrong');
 
     }
 
