@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Judge;
 
 use Illuminate\Http\Request;
@@ -19,8 +20,7 @@ class RecordingController extends Controller
         $recording->division_id = $request->division_id;
         $recording->round_id = $request->round_id;
         // upload file
-        if($request->file)
-        {
+        if ($request->file) {
             // Get the file name and relative path
             $storage_path = 'recordings/';
             $file_to_store = $request->file;
@@ -30,12 +30,12 @@ class RecordingController extends Controller
             // Get MIME type
             // require_once 'MIME/Type.php';
             // $mime_type = \MIME_Type::autoDetect($file_to_store);
-            
+
             // if($mime_type === 'application/octet-stream'){
             //   $mime_type = 'audio/mpeg';
             // }
 
-            $dg_file_name = $file_to_store->getPath() . '\\' . $file_to_store->getFilename();
+            $dg_file_name = $file_to_store->getPath() . '/' . $file_to_store->getFilename();
             $mime_type = mime_content_type($dg_file_name);
 
 
@@ -51,6 +51,4 @@ class RecordingController extends Controller
         // Return success
         return response()->json($recording, 201);
     }
-
-
 }

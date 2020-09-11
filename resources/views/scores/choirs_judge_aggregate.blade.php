@@ -47,8 +47,8 @@
             @php
               $recordings = $choir->recordings;
               $recording_count = $recordings->count();
-              //$mode = 'recorder';
-              $mode = 'player';
+              $mode = 'recorder';
+              //$mode = 'player';
               $role = 'judge';
             @endphp
 

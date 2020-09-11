@@ -58,5 +58,6 @@
 @endsection
 
 @push('own-scripts')
+  <script type=text/javascript src=/dist/js/mic-recorder.js></script>
   <script type=text/javascript src=/dist/js/recording.js></script>
 @endpush
