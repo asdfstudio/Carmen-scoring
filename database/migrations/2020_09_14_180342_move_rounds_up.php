@@ -52,6 +52,8 @@ class MoveRoundsUp extends Migration
         Schema::table('divisions', function (Blueprint $table) {
             $table->dropColumn('competition_id');
             $table->dropColumn('caption_weighting_id');
+            $table->dropColumn('scoring_method_id');
+            $table->dropColumn('sheet_id');
         });
 
         Schema::table('rounds', function (Blueprint $table) {
