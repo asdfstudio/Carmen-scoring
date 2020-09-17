@@ -16,12 +16,29 @@ class Round extends Model
 {
     use SoftDeletes;
 
-		protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at'];
 
-		protected $fillable = ['division_id','name', 'sequence', 'max_choirs'];
+    // Post-migration object changes
+    // protected $fillable = ['competition_id','name', 'sequence', 'max_choirs'];
+    protected $fillable = [
+        'division_id',
+        'name',
+        'sequence',
+        // TODO: post-migration removal
+        'max_choirs',
+        // TODO: post-migration adds
+        // 'caption_weighting_id',
+        // 'scoring_method_id',
+        // 'sheet_id',
+    ];
 
     protected $ratings;
 
+    // Post-migration object changes
+    // public function competition()
+    // {
+    //     return $this->belongsTo('App\Competition');
+    // }
 
 		public function division()
 		{

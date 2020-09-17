@@ -26,6 +26,11 @@ Sherman's Response: Captions are actually scoresheet specific. All divisions in 
 
 AJ: All "Scoring Settings" would be per-round, including the sheet itself, caption weighting, and scoring method. The optional Rating Systems and Award Settings would still be tied to a Division.
 
+AJ: Rounds can't be optional but should have a sensible default. If a round has only a single Division, it should be called a "Set" and has its own scoring properties
+
+### Private Rounds
+Some rounds are scored but should not have the results made public. Add an "is_exhibition" flag to these private rounds or think of an overarching privacy setting for a round to fold Solo Divisions in with others (scoring methods permitting).
+
 ### What is the Division / Solo Division separation all about?
 Is it that there are different scoring methods available? The categories? Lack of sponsors? This seems like a good candidate for the polymorphism used elsewhere.
 Sherman's Response: When the solo divisions were created, there was a concern of keeping and publishing information about minors and their personal scoring data. When scores are sent to the soloist's director, the director only has access to their student's scores and comments. Only award winners are made public, not a list of all participants. It was built with maintaining privacy in mind.
@@ -42,12 +47,12 @@ Because some columns are missing and some are in a different order, the usual ba
 
 ### Database / Entities
 
-- [ ] Division - change competition_id to round_id.
+- [X] Division - change competition_id to round_id.
 - [ ] Round - remove source and target - update sequences if they're not already up-to-date.
-- [ ] Round - remove division_id - relationship is other way. be sure to write these out first.
+- [X] Round - remove division_id - relationship is other way. be sure to write these out first.
 - [ ] RoundConnection - remove, make sure relationships are preserved.
-- [ ] Standings - have a division and a round. Make sure the division is the primary link. Maybe remove round.
-- [ ] Raw Scores - have a division and a round. Remove the round link.
+- [ ] Standings - have a division and a round. Make sure the division is the primary link. Maybe remove round. NB: The Scoring listener works on rounds, checks division to see if it is the final division in the round.
+- [ ] Raw Scores - have a division and a round. Remove the round link?
 - [ ] Round and Division - move caption_weighting_id, scoring_method_id, sheet_id up to round so that it's consistent across divisions.  Move max_choirs, is_completed, and is_scoring_active down to division
 - [ ] Division Penalty - move this up to a competition or leave it at an org. Just see where this can be fixed in the UI to look up a few levels. Chop out an org-penalty API if necessary.
 - [ ] ChoirRound - Merge with ChoirDivision.  Just determines choir ordering and link to scoresheets and penalties.

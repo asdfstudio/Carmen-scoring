@@ -19,9 +19,13 @@ class Division extends Model
 
 		protected $fillable =  [
       'name',
+      // TODO post-migration add
+      // 'max_choirs',
+      // TODO: Take these out post-migration
       'caption_weighting_id',
       'scoring_method_id',
       'sheet_id',
+      // TODO END
       'combo_award_count',
       'music_award_count',
       'show_award_count',
@@ -50,6 +54,7 @@ class Division extends Model
         static::addGlobalScope(new OrderByNameScope);
     }
 
+    // TODO: Delete Post-migration object changes
 		public function competition()
 		{
 			return $this->belongsTo('App\Competition');
@@ -99,6 +104,11 @@ class Division extends Model
         return $this->hasMany('App\DivisionAwardSetting');
     }
 
+    // TODO: Uncomment Post-migration object changes
+    // public function round()
+    // {
+    //     return $this->belongsTo('App\Round');
+    // }
 		public function rounds()
     {
         return $this->hasMany('App\Round');

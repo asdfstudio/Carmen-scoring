@@ -9,33 +9,39 @@ class CaptionWeighting extends Model
 {
     use SoftDeletes;
 
-		protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at'];
 
-		protected $fillable = ['name'];
+    protected $fillable = ['name'];
 
-		public function divisions()
-		{
-			return $this->hasMany('App\Division');
-		}
+    // TODO: Update after rounds migration
+    public function divisions()
+    {
+        return $this->hasMany('App\Division');
+    }
 
+    // public function rounds()
+    // {
+    //     return $this->hasMany('App\Rounds');
+    // }
+    //
 
     public function getFullNameAttribute()
     {
-      if($this->id == 1)
-        return '60% Music / 40% Show';
-      elseif($this->id == 2)
-        return '50% Music / 50% Show';
-      else
-        return false;
+        if($this->id == 1)
+            return '60% Music / 40% Show';
+        elseif($this->id == 2)
+            return '50% Music / 50% Show';
+        else
+            return false;
     }
 
     public function getSlugAttribute()
     {
-      if($this->id == 1)
-        return '60-40';
-      elseif($this->id == 2)
-        return '50-50';
-      else
-        return false;
+        if($this->id == 1)
+            return '60-40';
+        elseif($this->id == 2)
+            return '50-50';
+        else
+            return false;
     }
 }
