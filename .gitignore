@@ -1,9 +1,9 @@
-.env
-.env.production
+.env*
 .gitattributes
 .DS_Store
 /.vscode
 /.nova
+/database/data
 /vendor
 /node_modules
 /public/hot
