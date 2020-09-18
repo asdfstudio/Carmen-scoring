@@ -28,7 +28,8 @@ class Penalty extends Model
 			return $this->belongsTo('App\Organization');
 		}
 
-    public function divisions()
+        //TODO: Remove this. It only applies to choirs anyway.
+        public function divisions()
 		{
 			return $this->belongsToMany('App\Division');
 		}

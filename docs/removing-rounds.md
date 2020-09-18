@@ -48,12 +48,12 @@ Because some columns are missing and some are in a different order, the usual ba
 ### Database / Entities
 
 - [X] Division - change competition_id to round_id.
-- [ ] Round - remove source and target - update sequences if they're not already up-to-date.
 - [X] Round - remove division_id - relationship is other way. be sure to write these out first.
+- [ ] Round - remove source and target - update sequences if they're not already up-to-date.
 - [ ] RoundConnection - remove, make sure relationships are preserved.
 - [ ] Standings - have a division and a round. Make sure the division is the primary link. Maybe remove round. NB: The Scoring listener works on rounds, checks division to see if it is the final division in the round.
 - [ ] Raw Scores - have a division and a round. Remove the round link?
-- [ ] Round and Division - move caption_weighting_id, scoring_method_id, sheet_id up to round so that it's consistent across divisions.  Move max_choirs, is_completed, and is_scoring_active down to division
+- [X] Round and Division - move caption_weighting_id, scoring_method_id, sheet_id up to round so that it's consistent across divisions.  Move max_choirs down to division. 
 - [ ] Division Penalty - move this up to a competition or leave it at an org. Just see where this can be fixed in the UI to look up a few levels. Chop out an org-penalty API if necessary.
 - [ ] ChoirRound - Merge with ChoirDivision.  Just determines choir ordering and link to scoresheets and penalties.
 

@@ -16,7 +16,6 @@ class MoveRoundsUp extends Migration
         // We're adding foreign keys so turn this off first;
         Schema::disableForeignKeyConstraints();
 
-        // Add Competition ID to rounds
         Schema::table('rounds', function (Blueprint $table) {
             $table->foreignId('competition_id')
                 ->constrained()
@@ -32,13 +31,16 @@ class MoveRoundsUp extends Migration
                 ->onDelete('cascade');
         });
 
-        // Move the competition id and the round id to the division
         Schema::table('divisions', function (Blueprint $table) {
             // $table->dropIndex('competition_id');
             $table->foreignId('round_id')
                 ->constrained()
                 ->onDelete('cascade');
             $table->integer('max_choirs');
+        });
+
+        Schema::table('choir_division', function(Blueprint $table) {
+            $table->integer('performance_order')->unsigned();
         });
 
         $update = 'UPDATE rounds r JOIN divisions d ON r.division_id = d.id SET r.competition_id = d.competition_id, '.
@@ -48,7 +50,10 @@ class MoveRoundsUp extends Migration
         $update = 'UPDATE divisions d JOIN rounds r ON r.division_id = d.id SET d.round_id = r.id, d.max_choirs = r.max_choirs';
         DB::update($update);
 
-        // Drop the columns with the transferred data
+        $update = 'UPDATE choir_division cd JOIN divisions d on cd.division_id = d.id join rounds r on r.division_id = d.id join choir_round cr on cr.round_id = r.id and cr.choir_id = cd.choir_id '.
+            'SET cd.performance_order = cr.performance_order';
+        DB::update($update);
+
         Schema::table('divisions', function (Blueprint $table) {
             $table->dropColumn('competition_id');
             $table->dropColumn('caption_weighting_id');
@@ -61,6 +66,10 @@ class MoveRoundsUp extends Migration
             $table->dropColumn('division_id');
             $table->dropColumn('max_choirs');
 
+        });
+
+        Schema::table('choir_round', function(Blueprint $table) {
+            $table->dropColumn('performance_order');
         });
 
         // Turn foreign keys back on
@@ -93,7 +102,14 @@ class MoveRoundsUp extends Migration
 
         });
 
-        // copy the round's competition id back to the division
+        Schema::table('choir_round', function(Blueprint $table) {
+            $table->integer('performance_order')->unsigned();
+        });
+
+        $update = 'UPDATE choir_round cr JOIN rounds r on r.id = cr.round_id join divisions d on d.round_id = r.id join choir_division cd on cd.division_id = d.id and cd.choir_id = cr.choir_id '.
+            'SET cr.performance_order = cd.performance_order';
+        DB::update($update);
+
         $update = 'UPDATE divisions d JOIN rounds r on d.round_id = r.id SET d.competition_id = r.competition_id, '.
             'd.caption_weighting_id = r.caption_weighting_id, d.scoring_method_id = r.scoring_method_id, d.sheet_id = r.sheet_id';
         DB::update($update);
@@ -101,8 +117,6 @@ class MoveRoundsUp extends Migration
         $update = 'UPDATE rounds r JOIN divisions d on d.round_id = r.id SET r.division_id = d.id, r.max_choirs = d.max_choirs';
         DB::update($update);
 
-
-        // // Drop the new round's competition id
         Schema::table('rounds', function (Blueprint $table) {
             $table->dropForeign(['competition_id']);
             $table->dropColumn('competition_id');
@@ -118,6 +132,10 @@ class MoveRoundsUp extends Migration
             $table->dropForeign(['round_id']);
             $table->dropColumn('round_id');
             $table->dropColumn('max_choirs');
+        });
+
+        Schema::table('choir_division', function(Blueprint $table) {
+            $table->dropColumn('performance_order');
         });
 
         Schema::enableForeignKeyConstraints();

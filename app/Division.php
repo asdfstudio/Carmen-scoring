@@ -54,11 +54,11 @@ class Division extends Model
         static::addGlobalScope(new OrderByNameScope);
     }
 
-    // TODO: Delete Post-migration object changes
-		public function competition()
-		{
-			return $this->belongsTo('App\Competition');
-		}
+    //TODO: Delete Post-migration object changes
+    public function competition()
+    {
+        return $this->belongsTo('App\Competition');
+    }
 
 
 		public function judges()
@@ -68,6 +68,8 @@ class Division extends Model
 
 		public function choirs()
     {
+        // TODO Add the performance_order pivot
+        // return $this->belongsToMany('App\Choir')->withPivot( 'performance_order')->orderBy('performance_order', 'ASC');
         return $this->belongsToMany('App\Choir');
     }
 

@@ -77,6 +77,7 @@ class Round extends Model
 		}
 
 
+        // TODO: Move methods to Division
 		public function status()
 		{
 			if($this->is_completed)
