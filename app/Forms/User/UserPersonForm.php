@@ -2,6 +2,7 @@
 
 namespace App\Forms\User;
 
+use App\Rules\TelValidate;
 use Kris\LaravelFormBuilder\Form;
 
 class UserPersonForm extends Form
@@ -161,10 +162,11 @@ class UserPersonForm extends Form
     $this->add('tel','tel', [
       'label' => 'Phone Number',
       'wrapper' => ['class' => 'form-group name-email-section'],
-      'rules' => ['regex:/^(?:(?:(\s*\(?([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\)?\s*(?:[.-]\s*)?)([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})$/'],
-      'error_messages' => [
-        'tel.regex' => 'Please enter a valid telephone number with the area code.'
-      ]
+      // 'rules' => ['regex:/^(?:(?:(\s*\(?([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\)?\s*(?:[.-]\s*)?)([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})$/'],
+      'rules' => new TelValidate,
+      // 'error_messages' => [
+      //   'tel.regex' => 'Please enter a valid telephone number with the area code.'
+      // ]
     ]);
 
     if($this->person && $this->person->tel){

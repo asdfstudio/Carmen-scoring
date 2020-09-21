@@ -35,7 +35,7 @@ jQuery(document).ready(function($){
     orgIdSelectize[0].selectize.disable();
   }
   
-  $(toggleNewUser).click(function(e){
+  $(toggleNewUser).on('click', function(e){
     e.preventDefault();
     
     if($(userAccountSection).first().hasClass('hidden')){
@@ -55,7 +55,7 @@ jQuery(document).ready(function($){
     
   });
   
-  $(toggleNewPassword).click(function(e){
+  $(toggleNewPassword).on('click', function(e){
     e.preventDefault();
     
     if($(passwordInputs).first().hasClass('hidden')){
