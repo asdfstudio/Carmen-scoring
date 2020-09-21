@@ -164,4 +164,13 @@ class DivisionPolicy extends BasePolicy
         return true;
       }
     }
+
+    // -dg-
+    public function viewResults(User $user, Division $division)
+    {
+      if($this->isOrgAdmin AND $division->status_slug() == 'finalized')
+      {
+        return true;
+      }
+    }
 }
