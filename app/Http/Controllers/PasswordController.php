@@ -43,7 +43,8 @@ class PasswordController extends Controller
       if($this->self)
       {
         $form = $formBuilder->create('User\EditPasswordForm', [
-          'url' => route('password.update'),
+          // 'url' => route('password.update'),
+          'url' => route('password.update.self'),
           'model' => $user,
           'data' => ['previous_url' => URL::previous()]
         ]);

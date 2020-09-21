@@ -180,7 +180,8 @@ Route::get('profile/password', [
 ]);
 
 Route::put('profile/password', [
-  'as' => 'password.update', 'uses' => 'PasswordController@update'
+  // 'as' => 'password.update', 'uses' => 'PasswordController@update'
+  'as' => 'password.update.self', 'uses' => 'PasswordController@update'
 ]);
 
 
