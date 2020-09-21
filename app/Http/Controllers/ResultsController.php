@@ -106,6 +106,7 @@ class ResultsController extends Controller
         $query->where('is_published', 1);
       })->orderBy('name', 'asc')->get();
 
+      // dd($competitions);
       return view('results.index', compact('competitions', 'year'));
     }
 
@@ -121,6 +122,7 @@ class ResultsController extends Controller
         $query->published();
       }])->find($competition_id);
 
+      //dd($competition);
       if (!$competition) {
         return view('results.competition.no-match');
       }
@@ -143,9 +145,20 @@ class ResultsController extends Controller
         $query->published();
       }])->where('slug', $competition_slug)->first();
 
-      if($competition == false)
+      if(!$competition)
       {
-        return redirect()->route('results.index');
+        // return redirect()->route('results.index');
+        $competition = Competition::withoutGlobalScope('organization')->with(['divisions' => function($query) {
+          $query->published();
+        }, 'soloDivisions' => function($query) {
+          $query->published();
+        }])->where('slug', $competition_slug)->first();
+
+        if (!$competition) {
+          return view('results.competition.no-match');
+        }
+        
+        return view('results.competition.show-public', compact('competition'));
       }
 
       if($access_code AND $competition)
