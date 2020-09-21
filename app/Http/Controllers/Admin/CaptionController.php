@@ -82,6 +82,7 @@ class CaptionController extends Controller
   public function edit($id, FormBuilder $formBuilder)
   {
     $caption = Caption::find($id);
+    $color_id = $caption->color_id;
 
     $form = $formBuilder->create('Caption\CreateForm', [
       'method' => 'PATCH',
@@ -89,7 +90,7 @@ class CaptionController extends Controller
       'model' => $caption
     ]);
 
-    return view('caption.admin.edit', compact('form'));
+    return view('caption.admin.edit', compact('form', 'color_id'));
   }
 
   /**

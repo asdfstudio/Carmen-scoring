@@ -8,7 +8,9 @@
 @endsection
 
 @section('content')
+  <div class="create-caption-content create-edit-caption-content">
 		{!! form($form) !!}
 
     @include('caption.admin.color-chart')
+  </div>
 @endsection

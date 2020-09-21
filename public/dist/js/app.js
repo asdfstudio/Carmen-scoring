@@ -601,6 +601,21 @@ $(document).ready(function() {
         }
       }
     });
+
+  // -dg- create/edit captions
+
+  $('.create-caption-content ul.color-list li.list-group-item').first().addClass('dg-active');
+
+  $('.create-edit-caption-content ul.color-list li.list-group-item').on('click', function() {
+    $('.create-edit-caption-content ul.color-list li.list-group-item').each(function() {
+      $(this).removeClass('dg-active');
+    });
+    $(this).addClass('dg-active');
+    const colorId = $(this).data('color');
+    // console.log('color id:', colorId);
+    $(`.create-edit-caption-content select#color_id option[value=${colorId}]`).prop('selected', true);
+  });
+
 });
 
 // -dg-confirm modal

@@ -118,6 +118,7 @@ a.active {
 
   & + .content {
     margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   &.admin {
@@ -1571,6 +1572,38 @@ li.choir.card.list-group-item {
     margin-top: 5px;
     span {
       color: $cs-gray-mid-2;
+    }
+  }
+}
+
+// -dg-style, create/edit captions
+.create-edit-caption-content {
+  position: relative;
+  padding-bottom: 40px;
+  form:first-child {
+    & > div.form-group + div.form-group {
+      display: none !important;
+    }
+    button {
+      position: absolute;
+      bottom: 0;
+    }
+  }
+  & > ul > li {
+    position: relative;
+    &:hover {
+      cursor: pointer;
+    }
+    &.dg-active {
+      background: #7F409120;
+      &::after {
+        position: absolute;
+        content: '\2713';
+        font-size: 23px;
+        right: 14px;
+        top: 4px;
+        color: #7F4091;
+      }
     }
   }
 }
