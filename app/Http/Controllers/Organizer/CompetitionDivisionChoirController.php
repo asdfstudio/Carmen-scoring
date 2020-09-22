@@ -180,11 +180,13 @@ class CompetitionDivisionChoirController extends Controller
     public function store($competition_id, $division_id, Request $request, FormBuilder $formBuilder)
     {
         //$this->authorize('create','App\Choir');
-				$form = $formBuilder->create('Choir\CreateChoirForm');
-        
-				// Validate input
-				if (!$form->isValid()) {
-           return redirect()->back()->withErrors($form->getErrors())->withInput();
+        if($request->wantsJson() == false) {
+          $form = $formBuilder->create('Choir\CreateChoirForm');
+          
+          // Validate input
+          if (!$form->isValid()) {
+             return redirect()->back()->withErrors($form->getErrors())->withInput();
+          }
         }
 
 				// Get the division
@@ -268,11 +270,26 @@ class CompetitionDivisionChoirController extends Controller
           $choir->directors()->save($director);
 
         }
-      
+      // dd($division->choirs);
 				// Attach choir to the division
 				if($choir)
 				{
-					$division->choirs()->attach($choir->id);
+          $existing_choir = $division->choirs()->where('id', $choir->id)->pluck('id');
+          if($existing_choir->count() > 0) {
+            $warning_message = "The '$choir->name' choir already belongs to this division.";
+            if($request->wantsJson()) {
+              $response = [];
+              $response['status'] = 'failed';
+              $response['errors'] = $warning_message;
+              return response()->json($response);
+            }
+            else {
+              return redirect()->back()->with('warning',$warning_message);
+            }
+          }
+          else {
+            $division->choirs()->attach($choir->id);
+          }
 				}
 
         event(new DivisionChoirCreated($division, $choir));
@@ -293,7 +310,11 @@ class CompetitionDivisionChoirController extends Controller
           }
           unset($choir['directors']);
           $choir['directors'] = $directors;
-          return response()->json($choir);
+          $response = array(
+            'status' => 'success',
+            'data' => $choir
+          );
+          return response()->json($response);
         }
         else {
           if($request->exists('submit_create_another'))

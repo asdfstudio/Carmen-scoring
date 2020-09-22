@@ -1607,3 +1607,16 @@ li.choir.card.list-group-item {
     }
   }
 }
+
+// -dg-style add a judge modal
+.dg-add-judge-form {
+  .selectize-dropdown-content {
+    max-height: 140px !important;
+  }
+}
+// -dg-style add a choir modal
+.dg-add-choir-form {
+  .selectize-dropdown-content {
+    max-height: 120px !important;
+  }
+}

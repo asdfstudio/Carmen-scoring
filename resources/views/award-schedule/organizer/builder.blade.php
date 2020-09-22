@@ -142,7 +142,7 @@
       <span class="schedule-builder-status-message"></span>
 
       <span class="is-dirty-message alert alert-danger">
-        <i class="fa fa-exclamation-triangle ss-fs-20 mr"></i>
+        <i class="fa fa-exclamation-triangle dg-fs-20 mr"></i>
         Your schedule has changed. You must click "Save Schedule" to complete your changes.
       </span>
       <a href="{{ route('organizer.competition.award-schedule.builder.store', [$competition->id, $schedule->id]) }}" class="save-schedule-btn btn btn-primary" disabled>Save Award Ceremony Schedule</a>

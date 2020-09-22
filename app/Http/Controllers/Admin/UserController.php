@@ -311,7 +311,8 @@ class UserController extends Controller
         
         if(!empty($existing_user)){
           $number++;
-          $new_username = $this->generateUsername($first_name, $last_name, $number);
+          // $new_username = $this->generateUsername($first_name, $last_name, $number);
+          $new_username = self::generateUsername($first_name, $last_name, $number);
         }
         
         return $new_username;

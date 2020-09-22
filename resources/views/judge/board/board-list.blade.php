@@ -23,7 +23,7 @@
     @if (count($divisions_import_judge) > 0)
     
       {{ Form::open(['method' => 'POST', 'url' => route('organizer.competition.division.judge.import.process', [$division->competition->id, $division->id]), 'class' => 'import-resource-form-prototype', 'data-resource-type' => 'judge', 'data-resource-action' => 'import']) }}
-        <label for="id" class="control-label ss-fs-16">Choose a division to import judges from</label>
+        <!-- <label for="id" class="control-label dg-fs-16">Choose a division to import judges from</label> -->
 
         @foreach($divisions_import_judge as $division_import_judge)
 
@@ -33,17 +33,17 @@
           @endphp
 
           <div class="choice-container d-flex">
-            {{ Form::radio('id', $division_import_judge->id, NULL, ['id' => 'id_'.$division_import_judge->id, 'required' => 'required', 'disabled' => 'disabled'])}}
+            {{ Form::radio('id', $division_import_judge->id, NULL, ['id' => 'proto_id_'.$division_import_judge->id, 'required' => 'required', 'disabled' => 'disabled'])}}
 
-            <label for="id_{{ $division_import_judge->id }}">
-              <strong>{{ $division_import_judge -> name }}</strong><br />
-              {{ $judges_list_import }}
+            <label for="proto_id_{{ $division_import_judge->id }}">
+              <div class="text-left dg-fs-18 dg-fw-bold">{{ $division_import_judge -> name }}</div>
+              <div class="text-left dg-mt-4 dg-ml-4 dg-fs-16 dg-color-9">{{ $judges_list_import }}</div>
             </label>
           </div>
 
         @endforeach
 
-        {{ Form::submit('Import Judges', ['class' => 'btn btn-primary']) }}
+        <!-- {{ Form::submit('Import Judges', ['class' => 'btn btn-primary']) }} -->
       {{ Form::close() }}
     @endif
   @endcan

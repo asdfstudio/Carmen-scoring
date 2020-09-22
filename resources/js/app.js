@@ -254,10 +254,12 @@ $(document).ready(function() {
 
     $('.toggle-new-judge-container').on('click', function(e) {
       e.preventDefault();
+      // console.log('haha-app')
       var parent = $(this).parents('form');
       parent.find('.new_judge_container').show();
       parent.find('.existing_judge_container').hide();
       $(this).hide();
+      isClickedNewJudge = true;
     });
 
 
@@ -511,7 +513,7 @@ $(document).ready(function() {
     // division "save & create another" on edit/create page
     const swal_save_create_another = (type, form) => {
       Swal.fire({
-        title: '<div class="ss-fs-18 dg-mt-24">Input a new division name here:</div>',
+        title: '<div class="dg-fs-18 dg-mt-24">Input a new division name here:</div>',
         input: 'text',
         inputAttributes: {
           autocapitalize: 'off'

@@ -160,17 +160,36 @@ class CompetitionDivisionJudgeController extends Controller
         // Create the judge
         if($request->filled('judge.first_name'))
 				{
-					$judge = new Judge($request->input('judge'));
-          $judge->save();
-
-          // Create the judge user login
-          $user = new User;
-          $user->username = \App\Http\Controllers\Admin\UserController::generateUsername($request->input('judge.first_name'), $request->input('judge.last_name'));
-          $user->email = $request->input('judge.email');
-          $user->password = bcrypt('test');
           
-          $person = Person::find($judge->id);
-          $person->user()->save($user);
+          // Create the judge user login
+          try {
+            $user = new User;
+            $user->username = \App\Http\Controllers\Admin\UserController::generateUsername($request->input('judge.first_name'), $request->input('judge.last_name'));
+            $user->email = $request->input('judge.email');
+            $user->password = bcrypt('test');
+
+            $judge = new Judge($request->input('judge'));
+            $judge->save();
+            
+            $person = Person::find($judge->id);
+            $person->user()->save($user);
+
+          }
+          catch(\Exception $e) {
+            if($judge->id !== null) {
+              $judge->forceDelete();
+            }
+            if($request->wantsJson()) {
+              $response = [];
+              $response['status'] = 'failed';
+              $response['errors'] = $e->getMessage();
+              return response()->json($response);
+            }
+            else {
+              return redirect()->back()->with('warning',$e->getMessage());
+            }
+          }
+
 
 				}
         elseif($request->filled('judge_id'))
@@ -184,7 +203,20 @@ class CompetitionDivisionJudgeController extends Controller
         // Attach the judge to the division and assign captions
 				if($judge)
 				{
-					$caption_id = $request->input('caption_id');
+          $caption_id = $request->input('caption_id');
+
+          // -dg- error handling when there is no caption_id
+          if(!$caption_id) {
+            if($request->wantsJson()) {
+              $response = [];
+              $response['status'] = 'failed';
+              $response['errors'] = 'There are no captions selected! Please select captions!';
+              return response()->json($response);
+            }
+            else {
+              return redirect()->back()->with('warning','There are no captions selected! Please select captions!');
+            }
+          }
 
 					foreach($caption_id as $id)
 					{
@@ -211,7 +243,11 @@ class CompetitionDivisionJudgeController extends Controller
           foreach($judge->captions as $caption) {
             $judge->captions_join .= $caption->id . '-';
           }
-          return response()->json($judge);
+          $response = array(
+            'status' => 'success',
+            'data' => $judge
+          );
+          return response()->json($response);
         }
 
         if($request->exists('submit_create_another'))

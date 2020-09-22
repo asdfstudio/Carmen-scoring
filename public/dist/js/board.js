@@ -1,3 +1,8 @@
+var isClickedNewJudge = false;
+var isBoard = false;
+var isClickedNewChoir = false;
+var isClickedNewSchool = false;
+
 var Modal = (function () {
   var modal = $('#modal')
   var modalCover = $('#modal-cover')
@@ -135,6 +140,82 @@ var Form = (function () {
 
     this.theForm = $(form)
 
+    // To prevent id duplicates
+    // remove "proto_" string from <for & id> attribute in the case of IMPORT JUDGE
+    if(type === 'import') {
+      $(form).find('label').each(function() {
+        const forStr = $(this).attr('for');
+        if((forStr || "").includes('proto_')) {
+          $(this).attr('for', forStr.slice(6));
+        }
+      });
+      $(form).find('input').each(function() {
+        const idStr = $(this).attr('id');
+        if((idStr || "").includes('proto_')) {
+          $(this).attr('id', idStr.slice(6));
+        }
+      });
+
+      // add class
+      $(form).addClass('dg-import-resource-form');
+    }
+
+    // add "modal_" to <for & id> attribute in case of ADD a JUDGE
+    if(type === 'judge') {
+      
+      $(form).find('select').attr('id', 'modal_' + $(form).find('select').attr('id'));
+
+      $(form).find('div.choice-container input[type="checkbox"]').each(function() {
+        const idStr = $(this).attr('id');
+        if(idStr.includes('caption_id_')) {
+          $(this).attr('id', `modal_${idStr}`);
+          if($(this).siblings('label')) {
+            $(this).siblings('label').attr('for', `modal_${idStr}`);
+          }
+        }
+      })
+
+      $(form).find('div.new_judge_container label.control-label').each(function() {
+        const forStr = $(this).attr('for');
+        if(forStr.includes('judge[')) {
+          $(this).attr('for', `modal_${forStr}`);
+          if($(this).siblings('input')) {
+            $(this).siblings('input').attr('id', `modal_${forStr}`);
+          }
+        }
+      })
+
+      // delete submit button
+      $(form).find('button[type="submit"]').remove();
+      
+      $(form).addClass('dg-mt-20');
+
+    }
+
+    // add "modal_" to <for & id> attribute in case of ADD a Choir
+    if(type === 'choir') {
+      
+      // $(form).find('select#choir_id').attr('id', 'modal_' + $(form).find('select#choir_id').attr('id'));
+
+      $(form).find('div.new_choir_container input, div.new_choir_container select, div.existing_choir_container select').each(function() {
+        const idStr = $(this).attr('id');
+        $(this).attr('id', `modal_${idStr}`);
+        if($(this).siblings('label')) {
+          $(this).siblings('label').attr('for', `modal_${idStr}`);
+        }
+      })
+
+      // delete submit button
+      $(form).find('button[type="submit"]').remove();
+
+      const formId = $(form).attr('id');
+      $(form).attr('id', `modal_${formId}`)
+      $(form).addClass('dg-mt-20');
+      $(form).addClass('dg-mb-80');
+
+    }
+    // 
+
     $(form).show()
     form.wrap('<div>')
     return Mustache.render(form.parent().html(), resource)
@@ -203,11 +284,11 @@ var Resource = (function () {
     var html = Form.getForm(type, false, {})
     Modal.open(html)
 
-    if (type == 'choir') {
-      ChoirForm.init(Form.theForm)
-    } else if (type == 'judge') {
-      JudgeForm.init(Form.theForm)
-    }
+    // if (type == 'choir') {
+    //   ChoirForm.init(Form.theForm)
+    // } else if (type == 'judge') {
+    //   JudgeForm.init(Form.theForm)
+    // }
 
     // var eventName = 'resourceadd' + type
     // $(document.body).trigger(eventName)
@@ -273,15 +354,294 @@ var Resource = (function () {
 // -dg-
 $(document).ready(function() {
 
+  // add a choir, judge, round
   $('.add-resource').on('click', function(e) {
     e.preventDefault();
     var type = $(this).data('resource-type');
-    Resource.add(type);
+    console.log('type:', type)
+
+    // Resource.add(type);
+
+    // -dg- add a judge
+    if(type === 'judge') {
+      const fHtml = Form.getForm('judge', false, {});
+
+      Swal.fire({
+        title: 'Add a Judge',
+        html: fHtml,
+        showCancelButton: true,
+        confirmButtonText: "Add a Judge",
+        focusConfirm: false,
+        showLoaderOnConfirm: true,
+        allowOutsideClick: () => !Swal.isLoading(),
+        onOpen: () => {
+          JudgeForm.init($('.dg-add-judge-form'));
+        },
+        preConfirm: (result) => {
+          const url = $('form.dg-add-judge-form:not(.add-resource-form-prototype)').attr('action');
+          const formData = $('form.dg-add-judge-form:not(.add-resource-form-prototype)').serialize();
+          const formDataObj = JSON.parse(JSON.stringify($('form.dg-add-judge-form:not(.add-resource-form-prototype').serializeArray())) || [];
+          let existingJudgeIds = [];
+          $('.judges.cards.list-group > li:not(:first)').each(function() {
+            existingJudgeIds.push($(this).data('resource-id'));
+          });
+          const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          // console.log('existing judge:', existingJudgeIds)
+          // console.log('formData:', formData)
+          // console.log('formdata obj:', formDataObj)
+          if(result) {
+            if(!formDataObj.some(({name}) => name === 'caption_id[]')) {
+              // check whether captions are selected or not,
+              Swal.showValidationMessage('Request failed: Please choose captions to score!');
+            }
+            else if(!isClickedNewJudge) {
+              if(formData.includes('&judge_id=&')) {
+                // check judge choice,
+                Swal.showValidationMessage('Request failed: There is no selected judge!')
+              }
+              else if(existingJudgeIds.findIndex(judgeId => judgeId && `${judgeId}` === (formDataObj[1] || {}).value) > -1) {
+                // check existance,
+                Swal.showValidationMessage('Request failed: The judge you selected already belongs to this division! Try again!')
+              }
+              else {
+                // success
+                return new Promise(function(resolve, reject) {
+                  $.ajax({
+                    data: formData,
+                    dataType: 'json',
+                    method: 'POST',
+                    url: url,
+                  }).done(resolve).fail(reject);
+                });
+              }
+            }
+            else {
+              if(!(formDataObj[2] || {}).value) {
+                Swal.showValidationMessage('Request failed: First Name is required!')
+              }
+              else if(!(formDataObj[3] || {}).value) {
+                Swal.showValidationMessage('Request failed: Last Name is required!')
+              }
+              else if(!(formDataObj[4] || {}).value) {
+                Swal.showValidationMessage('Request failed: Email is required!')
+              }
+              else if(!emailRegEx.test((formDataObj[4] || {}).value.trim().toLowerCase())) {
+                Swal.showValidationMessage('Request failed: Invalid Email address!')
+              }
+              else {
+                // success
+                return new Promise((resolve, reject) => {
+                  $.ajax({
+                    data: formData,
+                    dataType: 'json',
+                    method: 'POST',
+                    url: url,
+                  }).done(resolve).fail(reject);
+                });
+              }
+            }
+          }
+        }
+      })
+      .then((result) => {
+        isClickedNewJudge = false;
+        // console.log('result:', result)
+        if ((result.value || {}).status === 'success') {
+          Resource.handleSaveSuccess('judge', result.value.data, 200, 'add')
+        }
+        else if((result.value || {}).status === 'failed') {
+          if(result.value.errors.includes('users_email_unique')) {
+            dgSwalNotify('Failed', 'Duplicated email address! Input another email!', 'error');
+          }
+          else {
+            console.log('error:', result.value.errors)
+            dgSwalNotify('Failed', 'Something went wrong!', 'error');
+          }
+        }
+      })
+      .catch((err) => {
+        console.log('error:', err)
+        isClickedNewJudge = false;
+        if(err) dgSwalNotify('Failed', 'Something went wrong!', 'error');
+      });
+    }
+    else if(type === 'choir') {
+      // -dg- add a choir
+      const fHtml = Form.getForm('choir', false, {});
+
+      Swal.fire({
+        title: 'Add a Choir',
+        html: fHtml,
+        showCancelButton: true,
+        confirmButtonText: "Add a Choir",
+        focusConfirm: false,
+        showLoaderOnConfirm: true,
+        allowOutsideClick: () => !Swal.isLoading(),
+        onOpen: () => {
+          ChoirForm.init($('.dg-add-choir-form'));
+        },
+        preConfirm: (result) => {
+          const url = $('form.dg-add-choir-form:not(.add-resource-form-prototype)').attr('action');
+          const formData = $('form.dg-add-choir-form:not(.add-resource-form-prototype)').serialize();
+          const formDataObj = JSON.parse(JSON.stringify($('form.dg-add-choir-form:not(.add-resource-form-prototype').serializeArray())) || [];
+          let existingChoirIds = [];
+          $('.choirs.cards.list-group > li:not(:first)').each(function() {
+            existingChoirIds.push($(this).data('resource-id'));
+          });
+          const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          // console.log('existing judge:', existingChoirIds)
+          // console.log('formData:', formData)
+          // console.log('formdata obj:', formDataObj)
+          if(result) {
+            if(!isClickedNewChoir) {
+              if(formData.includes('&choir_id=&')) {
+                // check choir choice,
+                Swal.showValidationMessage('Request failed: There is no selected choir!')
+              }
+              else if(existingChoirIds.findIndex(choirId => choirId && `${choirId}` === (formDataObj[1] || {}).value) > -1) {
+                // check existance,
+                Swal.showValidationMessage('Request failed: The choir you selected already belongs to this division! Try again!')
+              }
+              else {
+                // success
+                return new Promise(function(resolve, reject) {
+                  $.ajax({
+                    data: formData,
+                    dataType: 'json',
+                    method: 'POST',
+                    url: url,
+                  }).done(resolve).fail(reject);
+                });
+              }
+            }
+            else {
+              if(!(formDataObj[2] || {}).value) {
+                Swal.showValidationMessage('Request failed: Choir Name is required!')
+              }
+              else if(!isClickedNewSchool && formData.includes('&school_id=&')) {
+                // check school choice,
+                Swal.showValidationMessage('Request failed: There is no selected school!')
+              }
+              else if(isClickedNewSchool && formData.includes('&school_id=&')) {
+                // check school choice,
+                Swal.showValidationMessage('Request failed: There is no selected school!')
+              }
+              else if(isClickedNewSchool && !(formDataObj[4] || {}).value) {
+                Swal.showValidationMessage('Request failed: School Name is required!')
+              }
+              else if(isClickedNewSchool && !(formDataObj[5] || {}).value) {
+                Swal.showValidationMessage('Request failed: School city is required!')
+              }
+              else if(isClickedNewSchool && !(formDataObj[6] || {}).value) {
+                Swal.showValidationMessage('Request failed: School state is required!')
+              }
+              else if((formDataObj[7] || {}).name === 'director[person_id]' && !(formDataObj[7] || {}).value) {
+                Swal.showValidationMessage('Request failed: There is no selected director!')
+              }
+              else if((formDataObj[7] || {}).name === 'director[first_name]' && !(formDataObj[7] || {}).value) {
+                Swal.showValidationMessage('Request failed: First Name is Required!')
+              }
+              else if((formDataObj[7] || {}).name === 'director[first_name]' && !(formDataObj[8] || {}).value) {
+                Swal.showValidationMessage('Request failed: Last Name is Required!')
+              }
+              else if((formDataObj[7] || {}).name === 'director[first_name]' && !(formDataObj[9] || {}).value) {
+                Swal.showValidationMessage('Request failed: Email is Required!')
+              }
+              else if((formDataObj[7] || {}).name === 'director[first_name]' && !emailRegEx.test((formDataObj[9] || {}).value.trim().toLowerCase())) {
+                Swal.showValidationMessage('Request failed: Invalid Email address!')
+              }
+              else if(!(formDataObj[7] || {}).name) {
+                Swal.showValidationMessage('Request failed: Invalid input!')
+              }
+              else {
+                // success
+                return new Promise((resolve, reject) => {
+                  $.ajax({
+                    data: formData,
+                    dataType: 'json',
+                    method: 'POST',
+                    url: url,
+                  }).done(resolve).fail(reject);
+                });
+              }
+            }
+          }
+        }
+      })
+      .then((result) => {
+        isClickedNewChoir = false;
+        isClickedNewSchool = false;
+        // console.log('result:', result)
+        if ((result.value || {}).status === 'success') {
+          Resource.handleSaveSuccess('choir', result.value.data, 200, 'add')
+        }
+        else if((result.value || {}).status === 'failed') {
+          if(result.value.errors.includes('users_email_unique')) {
+            dgSwalNotify('Failed', 'Duplicated email address! Input another email!', 'error');
+          }
+          else {
+            console.log('error:', result.value.errors)
+            dgSwalNotify('Failed', 'Something went wrong!', 'error');
+          }
+        }
+      })
+      .catch((err) => {
+        console.log('error:', err)
+        isClickedNewChoir = false;
+        isClickedNewSchool = false;
+        if(err) dgSwalNotify('Failed', 'Something went wrong!', 'error');
+      });
+    }
+    else {
+      Resource.add(type);
+    }
+
   });
 
+  // import judges 
   $('.import-resource').on('click', function(e) {
     e.preventDefault();
-    Resource.importt('import');
+    // Resource.importt('import');
+
+    // -dg-
+    const fHtml = Form.getForm('import', false, {});
+    Swal.fire({
+      title: 'Choose a division to import judges from',
+      html: fHtml,
+      showCancelButton: true,
+      confirmButtonText: "Import Judges",
+      focusConfirm: false,
+      showLoaderOnConfirm: true,
+      allowOutsideClick: () => !Swal.isLoading(),
+      preConfirm: (result) => {
+        const url = $('form.dg-import-resource-form').attr('action');
+        let formData = $('form.dg-import-resource-form').serialize();
+        const isValid = formData.includes('&id=');
+        if (result && !isValid) {
+          Swal.showValidationMessage('Request failed: There are no selected divisions!');
+        }
+        else if (result && isValid){
+          return new Promise(function(resolve, reject) {
+            $.ajax({
+              data: formData,
+              dataType: 'json',
+              method: 'POST',
+              url: url,
+            }).done(resolve).fail(reject);
+          });
+        }
+      }
+    })
+    .then((result) => {
+      console.log('result:', result)
+      if (result.value) {
+        Resource.handleSaveSuccess('judge', result.value, 200, 'import')
+      }
+    })
+    .catch(err => {
+      console.log('error:', err)
+      if(err) dgSwalNotify('Failed', 'Something went wrong!', 'error');
+    });
   });
 
   // edit captions for judge
@@ -355,6 +715,7 @@ $(document).ready(function() {
     });
   });
 
+  // change password
   $('.change-password').on('click', function(e) {
     e.preventDefault();
     const judge_id_cnt = $('.board-list.judges span.card-count').text();
@@ -446,9 +807,6 @@ $(document).ready(function() {
         const token = $(this).data('csrf-token')
         const data = {'_token': token, '_method': 'DELETE' }
 
-        // if (result && !formData) {
-        //   Swal.showValidationMessage('Request failed: There are no selected captions!');
-        // }
         if (result){
           return new Promise(function(resolve, reject) {
             $.ajax({
@@ -501,18 +859,23 @@ $(document).ready(function() {
     e.preventDefault();
     ChoirForm.init($(this).parents('form'));
     ChoirForm.showNewChoirForm();
+    isClickedNewChoir = true;
+    if(choirSelectize) choirSelectize[0].selectize.clear();
   });
 
   $('body').on('click', '.toggle-new-school-container', function(e) {
     e.preventDefault();
     ChoirForm.init($(this).parents('form'));
     ChoirForm.showNewSchoolForm();
+    isClickedNewSchool = true;
   });
 
   $('body').on('click', '.toggle-new-judge-container', function(e) {
     e.preventDefault();
+    // console.log('haha-board')
     JudgeForm.init($(this).parents('form'));
     JudgeForm.showNewJudgeForm();
+    isClickedNewJudge = true;
   });
 
   $('body').on('change', 'input[name="choir_source"]', function(e) {

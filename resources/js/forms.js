@@ -4,13 +4,14 @@ var ChoirForm = (function () {
   var init = function (form) {
     this.form = form
 
-    choirSelectize = $('#modal').find('.choir_id').selectize()
+    choirSelectize = $(form).find('#modal_choir_id').selectize()
 
-    schoolId = $('#modal #school_id')
-    personId = $('#modal #person-id')
-    toggleNewDirector = $('#modal .toggle-new-director')
-    directorSearchGroup = $('#modal .director-search-group')
-    directorCreateGroup = $('#modal .director-create-group')
+    schoolId = $('#modal_school_id')
+    personId = $('#modal_person-id')
+    toggleNewDirector = $(form).find('.toggle-new-director')
+    directorSearchGroup = $(form).find('.director-search-group')
+    directorCreateGroup = $(form).find('.director-create-group')
+    isBoard = true;
     initSelectize()
   }
 
@@ -39,9 +40,10 @@ var JudgeForm = (function () {
 
   var init = function (form) {
     this.form = form
-    judgeSelectize = $('#modal').find('.judge_id').selectize({
+    // judgeSelectize = $('#modal').find('.judge_id').selectize({
+    judgeSelectize = $(form).find('#modal_judge_id').selectize({
+      placeholder: 'Select a judge...',
       allowEmptyOption: true,
-      placeholder: 'Select a judge...'
     })
     judgeSelectize[0].selectize.clear();
   }

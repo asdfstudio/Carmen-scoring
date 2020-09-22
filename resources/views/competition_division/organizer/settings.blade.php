@@ -21,7 +21,7 @@
 	<!-- dg -->
 	@can('viewResults', $division)
 		<div class="alert alert-info d-flex">
-			<i class="fa fa-commenting ss-fs-20 mr"></i>
+			<i class="fa fa-commenting dg-fs-20 mr"></i>
 			<p>Results for this division are available at {{ link_to_route('results.division.show', NULL, [$division, $division->access_code], ['target' => '_blank']) }} </p>
 		</div>
 	@endcan

@@ -7,7 +7,7 @@ use Kris\LaravelFormBuilder\Form;
 class ChooseJudgeForm extends Form
 {
     protected $formOptions = [
-      'class' => 'add-resource-form-prototype add-resource-form',
+      'class' => 'add-resource-form-prototype add-resource-form dg-add-judge-form',
       'data-resource-type' => 'judge'
     ];
 
@@ -26,16 +26,17 @@ class ChooseJudgeForm extends Form
 					'choices' => $this->getData('judges'),
 					//'empty_value' => 'Choose judge...',
 					'label' => 'Choose from existing judges',
-          'attr' => ['class' => 'judge_id form-control', 'id' => ''],
+          'attr' => ['class' => 'judge_id form-control'],
 					//'property' => 'first_name',
           'rules' => ['required_without:judge.first_name'],
-          'wrapper' => ['class' => 'existing_judge_container']
+          'wrapper' => ['class' => 'existing_judge_container text-left']
 				]);
 
         $this->add('add_new_judge','static', [
           'tag' => 'a',
           'attr' => ['class' => 'toggle-new-judge-container btn btn-secondary'],
           'value' => 'Create a new judge',
+          'wrapper' => ['class' => 'text-left form-group'],
           'label_show' => false
         ]);
 
@@ -49,7 +50,8 @@ class ChooseJudgeForm extends Form
           // 'class' => 'App\Caption',
           'choices' => $this->getData('captions'),
 					'empty_value' => 'Choose caption ...',
-					'label' => 'Captions to Score',
+          'label' => 'Captions to Score',
+          'wrapper' => ['class' => 'text-left form-group'],
           // 'rules' => ['filled'],
           'choice_options' => [
             'wrapper' => ['class' => 'choice-container'],

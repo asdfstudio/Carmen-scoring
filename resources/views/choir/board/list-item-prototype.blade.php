@@ -6,18 +6,18 @@
 
   @{{ #directors}}
     <div class="director-div">
-      <i class="fa fa-user ss-fs-20"></i>
-      <span class="ss-fs-18">@{{fullName}}</span>
+      <i class="fa fa-user dg-fs-20"></i>
+      <span class="dg-fs-18">@{{fullName}}</span>
     </div>
     <div class="d-flex email-div" style="justify-content: space-between">
-      <span><i class="fa fa-envelope ss-fs-16"></i>Email</span>
+      <span><i class="fa fa-envelope dg-fs-16"></i>Email</span>
       <span class="location">
         @{{ email }}
       </span>
     </div>
     @{{ #tel }}
       <div class="d-flex phone-div" style="justify-content: space-between">
-        <span><i class="fa fa-phone ss-fs-20"></i>Phone</span>
+        <span><i class="fa fa-phone dg-fs-20"></i>Phone</span>
         <span class="location">
           @{{ tel }}
         </span>

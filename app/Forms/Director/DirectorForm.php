@@ -17,7 +17,8 @@ class DirectorForm extends Form
     $this->add('director_heading', 'static', [
       'tag' => 'h2',
       'value' => 'Director',
-      'label_show' => false
+      'label_show' => false,
+      'wrapper' => ['class' => 'text-left']
     ]);
 
     $people = Person::all();
@@ -30,7 +31,7 @@ class DirectorForm extends Form
       'choices' => $people_choices,
       'label' => 'Add Existing Director',
       'attr' => ['id' => 'person-id'],
-      'wrapper' => ['class' => 'director-search-group'],
+      'wrapper' => ['class' => 'director-search-group text-left'],
       'multiple' => false,
       'rules' => 'required_without_all:choir_id,director.first_name',
       'error_messages' => [
@@ -43,12 +44,12 @@ class DirectorForm extends Form
       'tag' => 'a',
       'attr' => ['class' => 'toggle-new-director btn btn-secondary', 'href' => '#'],
       'value' => 'Or create a new director',
-      'wrapper' => ['class' => 'search-or-new']
+      'wrapper' => ['class' => 'search-or-new text-left']
     ]);
     
     $this->add('first_name','text', [
       'label' => 'First Name',
-      'wrapper' => ['class' => 'form-group director-create-group'],
+      'wrapper' => ['class' => 'form-group director-create-group text-left'],
       'rules' => 'required_without_all:choir_id,person_id,director.person_id',
       'error_messages' => [
         'first_name.required_without' => 'Director first name is required unless selecting an existing director.'
@@ -57,7 +58,7 @@ class DirectorForm extends Form
 
     $this->add('last_name','text', [
       'label' => 'Last Name',
-      'wrapper' => ['class' => 'form-group director-create-group'],
+      'wrapper' => ['class' => 'form-group director-create-group text-left'],
       'rules' => 'required_without_all:choir_id,person_id,director.person_id',
       'error_messages' => [
         'last_name.required_without' => 'Director last name is required unless selecting an existing director.'
@@ -66,7 +67,7 @@ class DirectorForm extends Form
 
     $this->add('email','email', [
       'label' => 'Email Address',
-      'wrapper' => ['class' => 'form-group director-create-group'],
+      'wrapper' => ['class' => 'form-group director-create-group text-left'],
       'rules' => ['required_without_all:choir_id,person_id,director.person_id', 'unique:people,email', 'email'],
       'error_messages' => [
         'email.required_without' => 'Director email is required unless selecting an existing director.',
@@ -76,7 +77,7 @@ class DirectorForm extends Form
 
     $this->add('emails_additional','text', [
       'label' => 'Additional Email Addresses',
-      'wrapper' => ['class' => 'form-group director-create-group'],
+      'wrapper' => ['class' => 'form-group director-create-group text-left'],
       'help_block' => [
         'text' => 'One or more addition emails that should also get notifications. Separate addresses with a comma.',
         'tag' => 'p',
@@ -90,7 +91,7 @@ class DirectorForm extends Form
 
     $this->add('tel','tel', [
       'label' => 'Mobile Phone Number (to receive link to results via text message) - optional',
-      'wrapper' => ['class' => 'form-group director-create-group'],
+      'wrapper' => ['class' => 'form-group director-create-group text-left'],
       // 'rules' => ['regex:/^(?:(?:(\s*\(?([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\)?\s*(?:[.-]\s*)?)([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})$/'],
       // 'error_messages' => [
       //   'tel.regex' => 'Please enter a valid telephone number with the area code.'

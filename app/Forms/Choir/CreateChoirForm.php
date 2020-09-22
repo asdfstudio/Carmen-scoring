@@ -8,7 +8,7 @@ class CreateChoirForm extends Form
 {
   protected $formOptions = [
     'id' => 'create-choir-form',
-    'class' => 'add-resource-form-prototype add-resource-form',
+    'class' => 'add-resource-form-prototype add-resource-form dg-add-choir-form',
     'data-resource-type' => 'choir'
   ];
 
@@ -19,29 +19,30 @@ class CreateChoirForm extends Form
           'choices' => $this->data,
           'empty_value' => 'Choose choir...',
           'label' => 'Choose from existing choirs',
-          'attr' => ['class' => 'choir_id form-group', 'id' => ''],
+          'attr' => ['class' => 'choir_id form-control'],
           'rules' => ['required_without:name'],
-          'wrapper' => ['class' => 'existing_choir_container']
+          'wrapper' => ['class' => 'existing_choir_container text-left']
         ]);
 
         $this->add('add_new_choir','static', [
           'tag' => 'a',
           'attr' => ['class' => 'toggle-new-choir-container btn btn-secondary'],
           'value' => 'Or create a new choir',
-          'label_show' => false
+          'label_show' => false,
+          'wrapper' => ['class' => 'text-left']
         ]);
 
         $this->add('heading', 'static', [
           'tag' => 'h2',
           'value' => 'Choir',
           'label_show' => false,
-          'attr' => ['class' => 'new_choir_container']
+          'attr' => ['class' => 'new_choir_container text-left']
         ]);
 
         // Create a Choir
         $this->add('name','text', [
           'rules' => '',
-          'wrapper' => ['class' => 'new_choir_container form-group'],
+          'wrapper' => ['class' => 'new_choir_container form-group text-left'],
           'label' => 'Choir Name',
           'rules' => ['required_without:choir_id']
         ]);
@@ -51,16 +52,16 @@ class CreateChoirForm extends Form
           'tag' => 'h2',
           'value' => 'School',
           'label_show' => false,
-          'attr' => ['class' => 'new_choir_container']
+          'attr' => ['class' => 'new_choir_container text-left']
         ]);
 
         $this->add('school_id','entity', [
           'class' => 'App\School',
           'empty_value' => 'Choose school...',
-          'attr' => ['class' => 'form-group'],
+          'attr' => ['class' => 'form-control'],
           'label' => 'Add Existing School',
           'rules' => ['required_without_all:choir_id,school.name'],
-          'wrapper' => ['class' => 'new_choir_container existing_school_container']
+          'wrapper' => ['class' => 'new_choir_container existing_school_container text-left']
         ]);
 
         $this->add('add_new_school','static', [
@@ -68,7 +69,7 @@ class CreateChoirForm extends Form
           'attr' => ['class' => 'toggle-new-school-container btn btn-secondary'],
           'value' => 'Or create a new school',
           'label_show' => false,
-          'wrapper' => ['class' => 'new_choir_container']
+          'wrapper' => ['class' => 'new_choir_container text-left']
         ]);
 
         $this->add('school', 'form', [

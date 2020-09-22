@@ -33,7 +33,7 @@
       <hr>
 
       <h3>Delete this division?</h3>
-      <p class="alert alert-danger d-flex"><i class="fa fa-exclamation-triangle ss-fs-22 mr"></i>This is a permanent, irrecoverable action. Proceed with caution.</p>
+      <p class="alert alert-danger d-flex"><i class="fa fa-exclamation-triangle dg-fs-22 mr"></i>This is a permanent, irrecoverable action. Proceed with caution.</p>
       {!! form($deleteForm) !!}
     @endcan
   </div>

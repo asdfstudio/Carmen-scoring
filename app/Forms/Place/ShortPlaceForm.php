@@ -10,9 +10,11 @@ class ShortPlaceForm extends Form
     {
       $this->add('city','text', [
         //'rules' => ['required_with:school.name']
+        'wrapper' => ['class' => 'text-left']
       ]);
       $this->add('state','text', [
         //'rules' => ['required_with:school.name']
+        'wrapper' => ['class' => 'text-left']
       ]);
     }
 }
