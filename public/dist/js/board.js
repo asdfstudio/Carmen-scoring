@@ -522,10 +522,6 @@ $(document).ready(function() {
                 // check school choice,
                 Swal.showValidationMessage('Request failed: There is no selected school!')
               }
-              else if(isClickedNewSchool && formData.includes('&school_id=&')) {
-                // check school choice,
-                Swal.showValidationMessage('Request failed: There is no selected school!')
-              }
               else if(isClickedNewSchool && !(formDataObj[4] || {}).value) {
                 Swal.showValidationMessage('Request failed: School Name is required!')
               }
