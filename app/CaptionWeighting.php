@@ -13,17 +13,10 @@ class CaptionWeighting extends Model
 
     protected $fillable = ['name'];
 
-    // TODO: Update after rounds migration
-    public function divisions()
+    public function rounds()
     {
-        return $this->hasMany('App\Division');
+        return $this->hasMany('App\Rounds');
     }
-
-    // public function rounds()
-    // {
-    //     return $this->hasMany('App\Rounds');
-    // }
-    //
 
     public function getFullNameAttribute()
     {

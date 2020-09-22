@@ -41,10 +41,10 @@ class Sheet extends Model
       //return $this->hasManyThrough('App\Caption', 'App\Criterion');
     }*/
 
-    /*public function getCaptionsAttribute()
+    public function getCaptionsAttribute()
     {
       return $this->criteria->unique('caption_id')->pluck('caption');
-    }*/
+    }
 
 
     /*public function abb()

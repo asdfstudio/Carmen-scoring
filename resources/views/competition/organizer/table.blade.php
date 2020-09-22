@@ -21,7 +21,6 @@
   	<td>{{ link_to_route('organizer.competition.show', $competition->name, [$competition]) }}</td>
     <td>@if($competition->place) {{ $competition->place->city }} @endif</td>
     <td>@if($competition->place) {{ $competition->place->state }} @endif</td>
-    <!--<td>{{ link_to_route('organizer.competition.division.index', $competition->divisions->count(), [$competition]) }}</td>-->
     <td>
 
 

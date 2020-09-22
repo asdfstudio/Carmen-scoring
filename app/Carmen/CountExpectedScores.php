@@ -4,19 +4,18 @@ namespace App\Carmen;
 
 use App\RawScore;
 use App\Division;
-use App\Round;
 
 class CountExpectedScores {
 
-  protected $round;
+  protected $division;
   protected $captions;
   protected $choirCount;
   protected $expectedTotalCount;
 
-  public function __construct(Round $round)
+  public function __construct(Division $division)
   {
-    $round->load(['choirs', 'division', 'division.judges', 'division.sheet', 'division.sheet.criteria']);
-    $this->round = $round;
+    $division->load(['choirs', 'judges', 'round', 'round.sheet', 'round.sheet.criteria']);
+    $this->division = $division;
   }
 
 
@@ -34,7 +33,7 @@ class CountExpectedScores {
 
   public function getDistinctCaptions()
   {
-    $this->captions = $this->round->division->sheet->criteria->unique('caption_id')->pluck('caption_id', 'caption_id')->toArray();
+    $this->captions = $this->division->round->sheet->criteria->unique('caption_id')->pluck('caption_id', 'caption_id')->toArray();
 
     foreach ($this->captions as $key => $caption) {
       $this->captions[$key] = [
@@ -47,12 +46,12 @@ class CountExpectedScores {
 
   public function countChoirs()
   {
-    $this->choirCount = $this->round->choirs->count();
+    $this->choirCount = $this->division->choirs->count();
   }
 
   public function countCaptionJudges()
   {
-    foreach ($this->round->division->judges as $judge) {
+    foreach ($this->division->judges as $judge) {
       if (!array_key_exists($judge->pivot->caption_id, $this->captions)) continue;
 
       $this->captions[$judge->pivot->caption_id]['judgeCount']++;
@@ -62,7 +61,7 @@ class CountExpectedScores {
   public function countCaptionCriteria()
   {
     foreach ($this->captions as $key => $caption) {
-      $this->captions[$key]['criteriaCount'] = $this->round->division->sheet->criteria->where('caption_id', $key)->count();
+      $this->captions[$key]['criteriaCount'] = $this->division->round->sheet->criteria->where('caption_id', $key)->count();
     }
   }
 

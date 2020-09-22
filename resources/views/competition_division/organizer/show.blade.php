@@ -7,23 +7,23 @@
 @section('content')
 
 	<ul class="actions-group mv">
-		@can('activateScoring', $division->rounds()->first())
+		@can('activateScoring', $division->round)
 			<li>{!! form($activateScoringForm) !!}</li>
 		@endcan
 
-		@can('reactivateScoring', $division->rounds()->first())
+		@can('reactivateScoring', $division->round)
       <li>
         {!! form($reactivateScoringForm) !!}
       </li>
     @endcan
 
-    @can('deactivateScoring', $division->rounds()->first())
+    @can('deactivateScoring', $division->round)
       <li>
         {!! form($deactivateScoringForm) !!}
       </li>
     @endcan
 
-		@can('completeScoring', $division->rounds()->first())
+		@can('completeScoring', $division->round)
 			<li>{!! form($completeScoringForm) !!}</li>
 		@endcan
 
@@ -36,7 +36,7 @@
 	<div class="clearfix"></div>
 
 	@if ($division->isMissingScores())
-		<p class="alert alert-warning">At least one round of this division is currently missing scores. Do not complete the scoring until you have received scores from all judges.</p>
+		<p class="alert alert-warning">This division is currently missing scores. Do not complete the scoring until you have received scores from all judges.</p>
 	@endif
 
 	@if($division->status_slug() == 'finalized')
@@ -60,10 +60,6 @@
 			<p>{{ link_to_route('organizer.competition.division.judge.index', 'Manage judges', [$competition, $division]) }}</p>
 		</li> -->
 		<li class="list-group-item">
-			<h3>Rounds</h3>
-			<p>{{ link_to_route('organizer.competition.division.round.index', 'Manage rounds', [$competition, $division]) }}</p>
-		</li>
-		<li class="list-group-item">
 			<h3>Penalties</h3>
 			<p>{{ link_to_route('organizer.competition.division.penalty.index', 'Manage penalties', [$competition, $division]) }}</p>
 		</li>
@@ -82,9 +78,10 @@
 
   <div class="row">
 
+    {{-- TODO Move this to the round form elsewhere
     <div data-tab-id="rounds" class="tab-content col-xs-12 col-sm-12">
 
-      <h3>{{ link_to_route('organizer.competition.division.round.index','Rounds',[$competition,$division]) }} ({{ $division->rounds->count() }})</h3>
+      <h3>{{ link_to_route('organizer.competition.division.round.index','Rounds',[$competition,$division]) }} ({{ $competition->rounds->count() }})</h3>
 
       @include('competition_division_round.organizer.table')
 
@@ -94,6 +91,7 @@
 
 
     </div>
+    --}}
 
     <div data-tab-id="choirs" class="tab-content col-xs-12 col-sm-12">
 
@@ -111,7 +109,7 @@
 
     	<h3>{{ link_to_route('organizer.competition.division.judge.index','Judges',[$competition,$division]) }} ({{ $division->judges->count() }})</h3>
 
-    	@include('competition_division_judge.organizer.table',['judges' => $division->judges])
+    	@include('competition_division_judge.organizer.table',['judges' => $division->judges, 'captions' => $division->round->sheet->captions])
 
       {{ link_to_route('organizer.competition.division.judge.create','Add a judge',[$competition,$division],['class' => 'btn btn-primary']) }}
 

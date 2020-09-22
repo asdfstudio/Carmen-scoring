@@ -80,12 +80,14 @@
               </a>
             </li>
           @endif
+            {{--
           <li>
             @php $link_class = Request::segment(6) == 'round' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.round.index', [$competition, $division]) }}" class="{{ $link_class }}">Rounds
             <span class="count">{{ $division->rounds->count() }}</span>
             </a>
           </li>
+            --}}
           <li>
             @php $link_class = Request::segment(6) == 'penalty' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.penalty.index', [$competition, $division]) }}" class="{{ $link_class }}">Penalties

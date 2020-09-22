@@ -18,32 +18,25 @@ class Round extends Model
 
     protected $dates = ['deleted_at'];
 
-    // Post-migration object changes
-    // protected $fillable = ['competition_id','name', 'sequence', 'max_choirs'];
     protected $fillable = [
-        'division_id',
         'name',
         'sequence',
-        // TODO: post-migration removal
-        'max_choirs',
-        // TODO: post-migration adds
-        // 'caption_weighting_id',
-        // 'scoring_method_id',
-        // 'sheet_id',
+        'caption_weighting_id',
+        'scoring_method_id',
+        'sheet_id',
     ];
 
     protected $ratings;
 
-    // Post-migration object changes
-    // public function competition()
-    // {
-    //     return $this->belongsTo('App\Competition');
-    // }
+    public function competition()
+    {
+        return $this->belongsTo('App\Competition');
+    }
 
-		public function division()
-		{
-			return $this->belongsTo('App\Division');
-		}
+    public function divisions()
+    {
+        return $this->hasMany('App\Division');
+    }
 
     public function sources()
     {
@@ -55,105 +48,90 @@ class Round extends Model
       return $this->belongsToMany('App\Round', 'round_connections', 'source_round_id', 'target_round_id');
     }
 
-    public function choirs()
-    {
-      return $this->belongsToMany('App\Choir')->withPivot( 'performance_order')->orderBy('performance_order', 'ASC');
-    }
-
     public function penalties()
     {
-      return $this->belongsToMany('App\Penalty', 'choir_penalty')->withPivot('choir_id');
+        return $this->belongsToMany('App\Penalty', 'choir_penalty')->withPivot('choir_id');
     }
 
     public function feedback()
-		{
-			return $this->morphMany('App\Comment', 'subject');
-		}
+    {
+        return $this->morphMany('App\Comment', 'subject');
+    }
 
+    public function sheet()
+    {
+        return $this->belongsTo('App\Sheet');
+    }
 
-		public function isScoringActive()
-		{
-			return $this->is_scoring_active ? 'Active' : 'Not Active';
-		}
+    public function scoringMethod()
+    {
+        return $this->belongsTo('App\ScoringMethod');
+    }
 
+    public function captionWeighting()
+    {
+        return $this->belongsTo('App\CaptionWeighting');
+    }
 
-        // TODO: Move methods to Division
-		public function status()
-		{
-			if($this->is_completed)
-			{
-				return 'Completed';
-			}
-			elseif($this->is_scoring_active)
-			{
-				return 'Active';
-			}
-			else
-			{
-				return 'Inactive';
-			}
-		}
+    public function isScoringActive()
+    {
+        return $this->is_scoring_active ? 'Active' : 'Not Active';
+    }
+
+    public function status()
+    {
+        if($this->is_completed)
+        {
+            return 'Completed';
+        }
+        elseif($this->is_scoring_active)
+        {
+            return 'Active';
+        }
+        else
+        {
+            return 'Inactive';
+        }
+    }
 
     public function status_slug()
-		{
-			if($this->is_completed)
-			{
-				return 'completed';
-			}
-			elseif($this->is_scoring_active)
-			{
-				return 'active';
-			}
-			else
-			{
-				return 'inactive';
-			}
-		}
+    {
+        if($this->is_completed)
+        {
+            return 'completed';
+        }
+        elseif($this->is_scoring_active)
+        {
+            return 'active';
+        }
+        else
+        {
+            return 'inactive';
+        }
+    }
 
 
-    ///
     public function getStatusAttribute()
     {
-      return $this->status();
+        return $this->status();
     }
 
     public function getStatusSlugAttribute()
     {
-      return $this->status_slug();
+        return $this->status_slug();
     }
 
 
     public function status_label($class_attr = false)
     {
-      $class_array = ['label', 'status', $this->status_slug];
+        $class_array = ['label', 'status', $this->status_slug];
 
-      if($class_attr)
-        $class_array[] = $class_attr;
+        if($class_attr)
+            $class_array[] = $class_attr;
 
-      $class = implode(' ', $class_array);
+        $class = implode(' ', $class_array);
 
-      return '<span class="'.$class.'">'.$this->status.'</span>';
-    }
-
-    ///
-
-    public function getMaxChoirsTextAttribute()
-    {
-      return $this->max_choirs == 0 ? 'All' : $this->max_choirs;
-    }
-
-    public function getFullNameAttribute()
-    {
-      $h = '';
-
-      if($this->division)
-      {
-        $h.= $this->division->name . ' - ';
-      }
-
-      $h.= $this->name;
-
-      return $h;
+        return '<span class="'.$class.'">'.$this->status.'</span>';
     }
 
     public function activateScoring()
@@ -180,32 +158,10 @@ class Round extends Model
 
     public function completeScoring()
     {
-      $this->is_scoring_active = false;
-      $this->is_completed = true;
-      event(new RoundScoringCompleted($this));
-      return $this->save();
-    }
-
-    public function isMissingScores()
-    {
-      if (!$this instanceof Round) {
-        return false;
-      }
-
-      $expectedScores = new CountExpectedScores($this);
-      $expectectedScoresCount = $expectedScores->run();
-      //dd($expectectedScoresCount);
-
-      $actualScoresCount = RawScore::where('round_id', $this->id)->where('score','>',0)->count();
-      //dd($actualScoresCount);
-
-      if ($expectectedScoresCount == 0 || $actualScoresCount < $expectectedScoresCount) {
-        $roundIsMissingScores = true;
-      } else {
-        $roundIsMissingScores = false;
-      }
-
-      return $roundIsMissingScores;
+        $this->is_scoring_active = false;
+        $this->is_completed = true;
+        event(new RoundScoringCompleted($this));
+        return $this->save();
     }
 
     public function isNewRound()

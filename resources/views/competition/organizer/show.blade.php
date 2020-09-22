@@ -42,14 +42,16 @@
   </ul>
 
 
-  <h3>Manage Divisions</h3>
-  <p>Divisions are used to organize your competition and consist of choirs, judges, scoring settings and more.</p>
+  <h3>Manage Rounds and Divisions</h3>
+  <p>Divisions are used to organize your competition and consist of choirs, judges</p>
+  <p>Divisions are grouped into rounds, which have consistent scoring systems</p>
+
 
   <p>{{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition], ['class' => 'action']) }}</p>
 
   @if($competition->divisions->count() > 0)
 
-    @include('division.organizer.list',['divisions' => $competition->divisions])
+    @include('round.organizer.list',['rounds' => $competition->rounds])
 
   @else
     <p>{{ link_to_route('organizer.competition.division.create','Create your first division',[$competition]) }}</p>

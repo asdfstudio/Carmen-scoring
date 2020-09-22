@@ -10,39 +10,34 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 use App\Carmen\Ratings;
+use App\Carmen\CountExpectedScores;
 
 class Division extends Model
 {
     use SoftDeletes;
 
-		protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at'];
 
-		protected $fillable =  [
-      'name',
-      // TODO post-migration add
-      // 'max_choirs',
-      // TODO: Take these out post-migration
-      'caption_weighting_id',
-      'scoring_method_id',
-      'sheet_id',
-      // TODO END
-      'combo_award_count',
-      'music_award_count',
-      'show_award_count',
-      'overall_award_count',
-      'overall_award_sponsors',
-      'music_award_sponsors',
-      'show_award_sponsors',
-      'combo_award_sponsors',
-      'rating_system'
+    protected $fillable =  [
+        'name',
+        'max_choirs',
+        'combo_award_count',
+        'music_award_count',
+        'show_award_count',
+        'overall_award_count',
+        'overall_award_sponsors',
+        'music_award_sponsors',
+        'show_award_sponsors',
+        'combo_award_sponsors',
+        'rating_system'
     ];
 
     protected $casts = [
-      'overall_award_sponsors' => 'array',
-      'music_award_sponsors' => 'array',
-      'show_award_sponsors' => 'array',
-      'combo_award_sponsors' => 'array',
-      'rating_system' => 'array'
+        'overall_award_sponsors' => 'array',
+        'music_award_sponsors' => 'array',
+        'show_award_sponsors' => 'array',
+        'combo_award_sponsors' => 'array',
+        'rating_system' => 'array'
     ];
 
     protected $ratings;
@@ -54,44 +49,17 @@ class Division extends Model
         static::addGlobalScope(new OrderByNameScope);
     }
 
-    //TODO: Delete Post-migration object changes
-    public function competition()
-    {
-        return $this->belongsTo('App\Competition');
-    }
-
-
-		public function judges()
+    public function judges()
     {
         return $this->belongsToMany('App\Judge')->withPivot('caption_id');
     }
 
-		public function choirs()
+    public function choirs()
     {
-        // TODO Add the performance_order pivot
-        // return $this->belongsToMany('App\Choir')->withPivot( 'performance_order')->orderBy('performance_order', 'ASC');
-        return $this->belongsToMany('App\Choir');
+        return $this->belongsToMany('App\Choir')->withPivot( 'performance_order')->orderBy('performance_order', 'ASC');
     }
 
-
-		public function sheet()
-		{
-			return $this->belongsTo('App\Sheet');
-		}
-
-
-		public function scoringMethod()
-		{
-			return $this->belongsTo('App\ScoringMethod');
-		}
-
-		public function captionWeighting()
-		{
-			return $this->belongsTo('App\CaptionWeighting');
-		}
-
-
-		public function penalties()
+    public function penalties()
     {
         return $this->belongsToMany('App\Penalty');
     }
@@ -106,169 +74,184 @@ class Division extends Model
         return $this->hasMany('App\DivisionAwardSetting');
     }
 
-    // TODO: Uncomment Post-migration object changes
-    // public function round()
-    // {
-    //     return $this->belongsTo('App\Round');
-    // }
-		public function rounds()
+    public function round()
     {
-        return $this->hasMany('App\Round');
+        return $this->belongsTo('App\Round');
+    }
+
+    public function competition()
+    {
+        return $this->hasOneThrough('App\Competition', 'App\Round', 'id', 'id', 'round_id', 'competition_id');
     }
 
     public function standings()
     {
-      return $this->hasMany('App\Standing');
+        return $this->hasMany('App\Standing');
     }
 
     public function scopeCompleted($query)
-		{
-			return $query->where('is_completed', 1);
-		}
+    {
+        return $query->where('is_completed', 1);
+    }
 
     public function scopePublished($query)
-		{
-			return $query->where('is_published', 1);
-		}
+    {
+        return $query->where('is_published', 1);
+    }
 
     public function status()
     {
-      if($this->is_completed)
-			{
-        if($this->is_published)
-          return 'Finalized / Published';
-        else
-				  return 'Completed';
-			}
-			/*elseif($this->is_scoring_active)
-			{
-				return 'Active';
-			}*/
-			else
-			{
-				return 'Active';
-			}
+        if($this->is_completed) {
+            if($this->is_published)
+                return 'Finalized / Published';
+            else
+                return 'Completed';
+        } else {
+            return 'Active';
+        }
     }
 
     public function status_slug()
-		{
-			if($this->is_completed)
-			{
-        if($this->is_published)
-          return 'finalized';
-        else
-				  return 'completed';
-			}
-			/*elseif($this->is_scoring_active)
-			{
-				return 'active';
-			}*/
-			else
-			{
-				return 'active';
-			}
-		}
+    {
+        if($this->is_completed) {
+            if($this->is_published) {
+                return 'finalized';
+            } else {
+                return 'completed';
+            }
+        } else {
+            return 'active';
+        }
 
+    }
     public function getStatusAttribute()
     {
-      return $this->status();
+        return $this->status();
     }
 
     public function getStatusSlugAttribute()
     {
-      return $this->status_slug();
+        return $this->status_slug();
     }
 
     public function status_label($class_attr = false)
     {
-      $class_array = ['label', 'status', $this->status_slug];
+        $class_array = ['label', 'status', $this->status_slug];
 
-      if($class_attr)
-        $class_array[] = $class_attr;
+        if($class_attr)
+            $class_array[] = $class_attr;
 
-      $class = implode(' ', $class_array);
+        $class = implode(' ', $class_array);
 
-      return '<span class="'.$class.'">'.$this->status.'</span>';
+        return '<span class="'.$class.'">'.$this->status.'</span>';
     }
 
-    public function isMissingScores()
+    public function getFullNameAttribute()
     {
-      return $this->rounds()->count() ? $this->rounds()->first()->isMissingScores() : true;
+        return $this->round->name() . " round - " . $this->name();
+    }
+
+    public function getMaxChoirsTextAttribute()
+    {
+        return $this->max_choirs == 0 ? 'All' : $this->max_choirs;
     }
 
     public function activateScoring()
     {
-      $this->is_scoring_active = true;
-      $this->is_completed = false;
-      $this->is_published = false;
-      $saved = $this->save();
+        $this->is_scoring_active = true;
+        $this->is_completed = false;
+        $this->is_published = false;
+        $saved = $this->save();
 
-      $this->rounds()->first()->activateScoring();
+        $this->rounds()->first()->activateScoring();
 
-      return $saved;
+        return $saved;
     }
 
     public function deactivateScoring()
     {
-      $this->is_scoring_active = false;
-      $this->is_completed = false;
-      $this->is_published = false;
-      $saved = $this->save();
+        $this->is_scoring_active = false;
+        $this->is_completed = false;
+        $this->is_published = false;
+        $saved = $this->save();
 
-      $this->rounds()->first()->deactivateScoring();
+        $this->rounds()->first()->deactivateScoring();
 
-      return $saved;
+        return $saved;
     }
 
     public function reactivateScoring()
     {
-      $this->is_scoring_active = true;
-      $this->is_completed = false;
-      $this->is_published = false;
-      $saved = $this->save();
+        $this->is_scoring_active = true;
+        $this->is_completed = false;
+        $this->is_published = false;
+        $saved = $this->save();
 
-      $this->rounds()->first()->reactivateScoring();
+        $this->rounds()->first()->reactivateScoring();
 
-      return $saved;
+        return $saved;
     }
 
     public function completeScoring()
     {
-      $this->is_scoring_active = false;
-      $this->is_completed = true;
-      $this->is_published = false;
-      $saved = $this->save();
+        $this->is_scoring_active = false;
+        $this->is_completed = true;
+        $this->is_published = false;
+        $saved = $this->save();
 
-      $this->rounds()->first()->completeScoring();
+        $this->rounds()->first()->completeScoring();
 
-      return $saved;
+        return $saved;
     }
 
     public function finalizeScoring()
     {
-      $this->is_published = true;
-      $this->is_scoring_active = false;
-      $this->is_completed = true;
+        $this->is_published = true;
+        $this->is_scoring_active = false;
+        $this->is_completed = true;
 
-      if($this->access_code == false)
-      {
-        $this->access_code = strtoupper(Str::random(8));
-      }
+        if($this->access_code == false) {
+            $this->access_code = strtoupper(Str::random(8));
+        }
 
-      if(env('IS_WORKSHOP_ENABLED') == true)
-      {
-        $this->access_code = $this->id;
-      }
+        if(env('IS_WORKSHOP_ENABLED') == true) {
+            $this->access_code = $this->id;
+        }
 
-      return $this->save();
+        return $this->save();
+    }
+
+    public function getRatings() {
+        if(!empty($this->ratings)) {
+            return $this->ratings;
+        }
+
+        return $this->ratings = $this->rounds->first()->getRatings();
     }
 
     public function getRatings(){
-      if(!empty($this->ratings)){
-        return $this->ratings;
-      }
+        if(!empty($this->ratings)){
+            return $this->ratings;
+        }
+    }
 
-      return $this->ratings = $this->rounds->first()->getRatings();
+    public function isMissingScores() {
+        if (!$this instanceof Division) {
+            return false;
+        }
+
+        $expectedScores = new CountExpectedScores($this);
+        $expectectedScoresCount = $expectedScores->run();
+
+        $actualScoresCount = RawScore::where('division_id', $this->id)->where('score','>',0)->count();
+
+        if ($expectectedScoresCount == 0 || $actualScoresCount < $expectectedScoresCount) {
+            $roundIsMissingScores = true;
+        } else {
+            $roundIsMissingScores = false;
+        }
+
+        return $roundIsMissingScores;
     }
 
   /**
@@ -299,5 +282,6 @@ class Division extends Model
     public function setComboAwardSponsorsAttribute($value)
     {
       return array_values(array_filter(explode(PHP_EOL, $value)));
-    }*/
+    }
+ */
 }

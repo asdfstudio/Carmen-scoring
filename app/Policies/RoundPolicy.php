@@ -85,6 +85,7 @@ class RoundPolicy extends BasePolicy
       }
     }
 
+    // TODO: Consider round scoring now that it's above a division.
     public function reactivateScoring(User $user, Round $round)
     {
       if($this->isOrgAdmin AND !$round->isNewRound() AND ($round->status_slug() == 'completed' OR $round->status_slug() == 'inactive') AND $round->division->status_slug() != 'finalized')
@@ -95,10 +96,17 @@ class RoundPolicy extends BasePolicy
 
     public function completeScoring(User $user, Round $round)
     {
-      if($this->isOrgAdmin AND !$round->isMissingScores() && $round->status_slug() != 'completed')
-      {
-        return true;
-      }
+        $scoresMissing = false;
+        foreach ($round->divisions as $division) {
+            if ($division->isMissingScores()) {
+                $scoresMissing = true;
+                break;
+            }
+        }
+
+        if ($this->isOrgAdmin AND !$scoresMissing AND $round->status_slug() != 'completed') {
+            return true;
+        }
     }
 
     public function setPerformanceOrder(User $user, $round)

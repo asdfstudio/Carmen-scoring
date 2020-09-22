@@ -96,7 +96,7 @@ class Competition extends Model
 
 		public function divisions()
 		{
-			return $this->hasMany('App\Division');
+			return $this->hasManyThrough('App\Division', 'App\Round');
 		}
 
     public function soloDivisions()
@@ -106,7 +106,7 @@ class Competition extends Model
 
     public function rounds()
 		{
-			return $this->hasManyThrough('App\Round','App\Division');
+            return $this->hasMany('App\Round');
 		}
 
     public function commentUrls()

@@ -13,11 +13,13 @@
     <th>Weighting</th>
     <th>Scoring</th>
     <th>Sheet</th>
-		<!--<th>Rounds</th>
+        <!--
+    <th>Rounds</th>
     <th>Choirs</th>
     <th>Judges</th>
     <th>Penalties</th>
-    <th>Awards</th>-->
+    <th>Awards</th>
+-->
   </tr>
 
   @foreach($competition->divisions as $division)
@@ -38,13 +40,9 @@
     <td>@if ($division->scoringMethod){{ $division->scoringMethod->name }} @endif</td>
     <td>@if ($division->sheet){{ $division->sheet->name }} @endif</td>
 
-		<!--<td>
-			@php $anchor = $division->rounds->count() > 0 ? $division->rounds->count() : 'Set Up';@endphp
-			{{ link_to_route('organizer.competition.division.round.index', $anchor, [$competition,$division]) }}
-
-		</td>
+<!--
     <td>
-			@php $anchor = $division->choirs->count() > 0 ? $division->choirs->count() : 'Set Up';@endphp
+            @php $anchor = $division->choirs->count() > 0 ? $division->choirs->count() : 'Set Up';@endphp
 
 			{{ link_to_route('organizer.competition.division.choir.index', $anchor, [$competition,$division]) }}
 
@@ -56,7 +54,8 @@
 
 		</td>
     <td>{{ $division->penalties->count() }}</td>
-    <td>{{ $division->awards->count() }}</td>-->
+    <td>{{ $division->awards->count() }}</td>
+-->
   </tr>
   @endforeach
 </table>

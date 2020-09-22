@@ -42,9 +42,6 @@ class CompetitionDivisionRoundController extends Controller
 
       $rawScores = $scoreboard->rawScores;
       $weightedScores = $scoreboard->weightedScores;
-      //$rankedScores = $scoreboard->rankedScoresForCurrentMethod;
-
-      //$competition = Competition::find($competition_id);
 
       $round = Round::with(['division','division.competition' => function($query) {
         $query->withoutGlobalScope('organization');
@@ -61,7 +58,7 @@ class CompetitionDivisionRoundController extends Controller
           $query->where('id', '!=', $round_id);
         }])->find($round_id);
 
-      $division = $round->division;
+      $division = App\Division::find($division_id);
       $competition = $division->competition;
 
       $captions = Caption::forSheet($division->sheet);

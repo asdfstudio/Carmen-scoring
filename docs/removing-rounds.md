@@ -15,8 +15,8 @@ These are all the comments applied to any performances in the round. We could le
 Sherman's Response: Not sure if this matters, but since there is only ever one performance for each participant in any given round, we could just leave it and not worry aboout the division... maybe?
 
 ### Round -> Round (this is the relationship that links rounds as a target and source or parent and child)
-We could replace this parent/child relationship by adding a pivot table between competition and round, with info such as the ordering.
-gk
+We could replace this parent/child relationship by adding a pivot table between competition and round, with info such as the ordering. NB: Choir ordering is performance_order, now in choir_division.
+
 ### Good news for data cleanup
 The standings seem to already be linked to both round and division. That's not efficient (since a round has a division already) but it does help us keep the relationship between standings and divisions even though we may put a round between a division and a competition.
 
@@ -88,10 +88,9 @@ These files in app seem to use the source/target relationship currently:
 - [ ] layouts/public_results.blade.php
 - [ ] scores/judge/spreadsheet.blade.php
 
-
 ### Scoring
 
-Most scoring id done per-division so that won't change. But there are parts of the scoring system that grade source Rounds for the sake of seeding Target rounds. This will all be manual from now on so it should be removed from the app.
+Most scoring is done per-division so that won't change. But there are parts of the scoring system that grade source Rounds for the sake of seeding Target rounds. This will all be manual from now on so it should be removed from the app.
 
 ### Tests
 

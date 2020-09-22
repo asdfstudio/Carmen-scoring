@@ -1,3 +1,4 @@
+{{-- TODO Move this up or pitch it --}}
 @if($division->rounds->isEmpty())
 	<p>There are no rounds. {{ link_to_route('organizer.competition.division.round.create','Add one',[$division->competition,$division]) }}</p>
 @endif

@@ -15,7 +15,6 @@ use App\Standing;
 use App\Judge;
 use App\Sheet;
 use App\RawScore;
-use App\Carmen\CountExpectedScores;
 
 use Kris\LaravelFormBuilder\FormBuilder;
 
@@ -31,11 +30,7 @@ class CompetitionDivisionController extends Controller
      */
     public function index($competition_id)
     {
-				$competition = Competition::with('organization','place','divisions')->find($competition_id);
-				//dd($competition);
-        //
-
-        //$division = new Division;
+        $competition = Competition::with('organization','place','divisions')->find($competition_id);
 
 				return view('competition_division.organizer.index', compact('competition'));
     }
@@ -44,7 +39,7 @@ class CompetitionDivisionController extends Controller
 
     public function setup($competition_id, FormBuilder $formBuilder)
     {
-      $competition = Competition::with('organization','place','divisions','divisions.rounds')->find($competition_id);
+        $competition = Competition::with('organization','place','divisions','rounds')->find($competition_id);
 
       $form = $formBuilder->create('Competition\SetupForm', [
         'method' => 'POST',
@@ -69,8 +64,9 @@ class CompetitionDivisionController extends Controller
 
         foreach($request->input('divisions') as $division_input)
         {
-          $division = new Division($division_input);
-          $competition->divisions()->save($division);
+            $division = new Division($division_input);
+            // TODO: Create new divisions in any round
+            $competition->rounds->first()->divisions()->save($division);
         }
 
 
@@ -190,11 +186,9 @@ class CompetitionDivisionController extends Controller
 					'url' => route('organizer.competition.division.choir.store',[$division->competition,$division])
 				]);
 
-        $competition_rounds = Competition::find($competition_id )->rounds()->whereHas('division', function ($query) use ($division) {
-          $query->where('sheet_id', $division->sheet_id);
-        })->get();
+        $competition_rounds = Competition::find($competition_id )->rounds();
 
-        $choices = $competition_rounds->pluck('full_name', 'id')->toArray();
+        $choices = $competition_rounds->pluck('name', 'id')->toArray();
         $selected = [];
 
 
