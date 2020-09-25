@@ -33,7 +33,7 @@ use Event;
 use App\Events\RoundSaved;
 use App\Events\StandingRefreshNeeded;
 
-class CompetitionDivisionRoundController extends Controller
+class CompetitionRoundController extends Controller
 {
 
     /**
@@ -41,53 +41,55 @@ class CompetitionDivisionRoundController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($competition_id, $division_id, FormBuilder $formBuilder)
+    public function index($competition_id, FormBuilder $formBuilder)
     {
         $this->authorize('showAll', 'App\Round');
 
-        $division = Division::with('competition','rounds')->find($division_id);
+        $competition = Competition::find($competition_id);
 
-        $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm');
+        // $division = Division::with('competition','rounds')->find($division_id);
 
-        $deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm');
+        // $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm');
+        //
+        // $deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm');
+        //
+        // $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm');
+        //
+        // $reactivateScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm');
+        //
+        // $finalizeScoringFormData = [
+        //   'method' => 'POST',
+        //   'url' => route('organizer.competition.round.scoring', [
+        //       $competition_id,
+        //       // $round_id
+        //   ]),
+        // ];
 
-        $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm');
+        // if($division->status_slug() != 'completed') {
+        //   $finalizeScoringFormData['disabled'] = true;
+        // }
+        //
+        // $finalizeScoringForm = $formBuilder->create('Scoring\FinalizeScoringForm', $finalizeScoringFormData);
 
-        $reactivateScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm');
-
-        $finalizeScoringFormData = [
-          'method' => 'POST',
-          'url' => route('organizer.competition.division.scoring', [
-              $competition_id,
-              $division_id,
-          ]),
-        ];
-        
-        if($division->status_slug() != 'completed') {
-          $finalizeScoringFormData['disabled'] = true;
-        }
-
-        $finalizeScoringForm = $formBuilder->create('Scoring\FinalizeScoringForm', $finalizeScoringFormData);
-
-        return view('competition_division_round.organizer.index', compact('division','activateScoringForm', 'finalizeScoringForm', 'deactivateScoringForm', 'reactivateScoringForm', 'completeScoringForm' ));
+        return view('competition_round.organizer.index', compact('competition'));
+        // 'division','activateScoringForm', 'finalizeScoringForm', 'deactivateScoringForm', 'reactivateScoringForm', 'completeScoringForm' ));
     }
 
 
 
-    public function setup($competition_id,$division_id, FormBuilder $formBuilder)
+    public function setup($competition_id,FormBuilder $formBuilder)
     {
-        $division = Division::with('competition','rounds')->find($division_id);
         $competition = $division->competition;
 
         $form = $formBuilder->create('Round\CreateRoundsForm', [
-          'url' => route('organizer.competition.division.round.setup.store',[$competition,$division])
+          'url' => route('organizer.competition.round.setup.store',[$competition])
         ]);
 
-        return view('competition_division_round.organizer.setup', compact('division','competition','form'));
+        return view('competition.round.organizer.setup', compact('competition','form'));
     }
 
 
-    public function storeMultiple(Request $request, FormBuilder $formBuilder, $competition_id, $division_id)
+    public function storeMultiple(Request $request, FormBuilder $formBuilder, $competition_id)
     {
         $form = $formBuilder->create('Round\CreateRoundsForm');
 
@@ -96,18 +98,17 @@ class CompetitionDivisionRoundController extends Controller
            return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 
-        $division = Division::with('competition','rounds')->find($division_id);
-        $competition = $division->competition;
+        $competition = Competition::find($competition_id);
 
         foreach($request->input('rounds') as $round_input)
         {
           $round = new Round($round_input);
-          $division->rounds()->save($round);
+          $competition->rounds()->save($round);
         }
 
 
 				// Set flash data and redirect
-				return redirect()->route('organizer.competition.division.round.setup',[$competition,$division]);
+				return redirect()->route('organizer.competition.round.setup',[$competition]);
     }
 
 
@@ -117,17 +118,18 @@ class CompetitionDivisionRoundController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($competition_id, $division_id, FormBuilder $formBuilder)
+    public function create($competition_id, FormBuilder $formBuilder)
     {
-				$division = Division::with('competition','rounds')->find($division_id);
-
+        // TODO authorize on a competition, not a division
         $this->authorize('create','App\Round',$division);
 
-        $competition_rounds = Competition::find($competition_id)->rounds()->whereHas('division', function ($query) use ($division) {
-          $query->where('sheet_id', $division->sheet_id);
-        })->get();
+        $competition_rounds = Competition::find($competition_id)->rounds();
 
-        $choices = $competition_rounds->pluck('full_name', 'id')->toArray();
+        //     ->whereHas('division', function ($query) use ($division) {
+        //   $query->where('sheet_id', $division->sheet_id);
+        // })->get();
+
+        $choices = $competition_rounds->pluck('name', 'id')->toArray();
         $selected = [];
 
         $form = $formBuilder->create('Round\CreateRoundForm', [
@@ -138,10 +140,10 @@ class CompetitionDivisionRoundController extends Controller
             'selected' => $selected,
             'division' => $division
           ],
-					'url' => route('organizer.competition.division.round.store', [$division->competition,$division])
+					'url' => route('organizer.competition.round.store', [$division->competition,$division])
 				]);
 
-				return view('competition_division_round.organizer.create', compact('division','form'));
+				return view('competition.round.organizer.create', compact('division','form'));
     }
 
 
@@ -152,7 +154,7 @@ class CompetitionDivisionRoundController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($competition_id, $division_id, Request $request, FormBuilder $formBuilder)
+    public function store($competition_id, Request $request, FormBuilder $formBuilder)
     {
         // Get the division
         $division = Division::with('competition','rounds')->find($division_id);
@@ -194,94 +196,101 @@ class CompetitionDivisionRoundController extends Controller
           return redirect()->back()->with('success',$successMessage);
         }
         else {
-          return redirect()->route('organizer.competition.division.round.index',[$division->competition, $division])->with('success',$successMessage);
+          return redirect()->route('organizer.competition.round.index',[$division->competition, $division])->with('success',$successMessage);
         }
     }
 
 
 
-    public function show(Request $request,$competition_id,$division_id,$round_id, FormBuilder $formBuilder)
+    public function show(Request $request,$competition_id,$round_id, FormBuilder $formBuilder)
 		{
 
       $round = Round::with([
-        'choirs',
-        'division',
-        'division.competition',
-        'division.choirs',
-        'division.competition.divisions',
-        'division.rounds',
-        'division.judges' => function($query) {
-					//$query->where('judge_id',$judge_id)->first();
-          $query->groupBy('judge_id');
-          //$query->distinct('id');
-				},
-        'division.judges.captions' => function($query) use ($division_id) {
-					$query->where('division_id',$division_id);
-				},
-        'division.judges.captions.criteria'
+          'competition',
+          'sheet',
+          'divisions'
+          // 'divisions.choirs',
+          // 'divisions.judges',
+          // 'divisions.judges.captions',
+          // 'divisions.judges.captions.criteria'
       ])->find($round_id);
 
       $this->authorize('show', $round);
 
-      if(Auth::user()->isAdmin() && isset($_GET['refresh_standings'])){
-        event(new StandingRefreshNeeded($round));
-      }
+      // if(Auth::user()->isAdmin() && isset($_GET['refresh_standings'])){
+      //   event(new StandingRefreshNeeded($round));
+      // }
 
-      $division = $round->division;
-      $competition = $division->competition;
-      $rounds = $division->rounds;
-      $divisions = $competition->divisions;
-      $judges = $division->judges;
-      $choirs = $round->choirs;
-      $caption_ids = $division->sheet->caption_ids;
-      $captions = Caption::forSheet($division->sheet);
-      $ratings = (new Ratings($round))->all();
+      $competition = $round->competition;
+      // $divisions = $round->divisions;
+      // $judges = $division->judges;
+      // $choirs = $round->choirs;
+      // $caption_ids = $round->sheet->caption_ids;
+      // $captions = Caption::forSheet($round->sheet);
+      // $ratings = (new Ratings($round))->all();
 
-      $scoreboard = new Scoreboard(['round_id' => $round_id]);
-      $rawScores = $scoreboard->extendedRawScores;
-      $weightedScores = $scoreboard->extendedRawScores;
-      $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
+      // $scoreboard = new Scoreboard(['round_id' => $round_id]);
+      // $rawScores = $scoreboard->extendedRawScores;
+      // $weightedScores = $scoreboard->extendedRawScores;
+      // $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
-      $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
-        'url' => route('organizer.competition.division.round.scoring', [
-          $competition_id,
-          $division_id,
-          $round_id
-        ])
-      ]);
+      // $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
+      //   'url' => route('organizer.competition.round.scoring', [
+      //     $competition_id,
+      //     $division_id,
+      //     $round_id
+      //   ])
+      // ]);
+      //
+      // $reactivateScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm', [
+      //   'url' => route('organizer.competition.round.scoring', [
+      //     $competition_id,
+      //     $division_id,
+      //     $round_id
+      //   ])
+      // ]);
+      //
+      // $deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm', [
+      //   'url' => route('organizer.competition.round.scoring', [
+      //     $competition_id,
+      //     $division_id,
+      //     $round_id
+      //   ])
+      // ]);
+      //
+      // $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm', [
+      //   'url' => route('organizer.competition.round.scoring', [
+      //     $competition_id,
+      //     $division_id,
+      //     $round_id
+      //   ]),
+      //   'data' => [
+      //     'isMissingScores' => $round->isMissingScores()
+      //   ]
+      // ]);
 
-      $reactivateScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm', [
-        'url' => route('organizer.competition.division.round.scoring', [
-          $competition_id,
-          $division_id,
-          $round_id
-        ])
-      ]);
-
-      $deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm', [
-        'url' => route('organizer.competition.division.round.scoring', [
-          $competition_id,
-          $division_id,
-          $round_id
-        ])
-      ]);
-
-      $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm', [
-        'url' => route('organizer.competition.division.round.scoring', [
-          $competition_id,
-          $division_id,
-          $round_id
-        ]),
-        'data' => [
-          'isMissingScores' => $round->isMissingScores()
-        ]
-      ]);
-
-      return view('competition_division_round.organizer.show', compact('captions', 'rawScores', 'weightedScores', 'rankedScores', 'round', 'competition', 'division', 'divisions', 'rounds', 'activateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'reactivateScoringForm', 'scoreboard', 'judges', 'choirs', 'ratings'));
+      return view('competition_round.organizer.show', compact('competition', 'round' ));
+      // return view('competition.round.organizer.show', compact(/* 'captions', /*'rawScores', /* 'weightedScores', 'rankedScores',*/ 'round', 'competition', 'divisions', // 'rounds', )); //'scoreboard'));
 		}
 
 
+    /**
+     * Display the Scoring Setting for the Round.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function settings($competition_id, $round_id, FormBuilder $formBuilder)
+    {
+        $competition = Competition::with(['organization', 'place', 'rounds' => function($query) use ($round_id) {
+            $query->find($round_id);
+        }, 'rounds.sheet', 'rounds.sheet.criteria', 'rounds.sheet.criteria.caption'])->find($competition_id);
 
+        $round = $competition->rounds->first();
+        $unique_captions = $round->sheet->captions = $round->sheet->criteria->unique('caption_id')->pluck('caption');
+
+        return view('competition_round.organizer.settings', compact('competition','round'));
+    }
 
     public function show_sources(Request $request,$competition_id,$division_id,$round_id, FormBuilder $formBuilder)
 		{
@@ -359,11 +368,11 @@ class CompetitionDivisionRoundController extends Controller
       $weightedScores = $scoreboard->extendedRawScores;
       $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
-      return view('competition_division_round.organizer.show_sources', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round','competition','division', 'divisions','rounds', 'scoreboard', 'choirs', 'judges'));
+      return view('competition.round.organizer.show_sources', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round','competition','division', 'divisions','rounds', 'scoreboard', 'choirs', 'judges'));
 		}
 
 
-    public function scoring($competition_id, $division_id, $round_id, Request $request)
+    public function scoring($competition_id, Request $request)
     {
       $round = Round::with('division')->find($round_id);
 
@@ -399,7 +408,7 @@ class CompetitionDivisionRoundController extends Controller
         return false;
       }
 
-      return redirect()->route('organizer.competition.division.round.index',[$competition_id,$division_id])->with('success', "Scoring for $round->name is now $new_status.");
+      return redirect()->route('organizer.competition.round.index',[$competition_id])->with('success', "Scoring for $round->name is now $new_status.");
     }
 
 
@@ -410,7 +419,7 @@ class CompetitionDivisionRoundController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($competition_id, $division_id, $round_id, FormBuilder $formBuilder)
+    public function edit($competition_id, $round_id, FormBuilder $formBuilder)
     {
         $division = Division::with('competition','rounds')->find($division_id);
 				$round = Round::with('sources', 'targets')->find($round_id);
@@ -443,17 +452,17 @@ class CompetitionDivisionRoundController extends Controller
             'selected' => $selected,
             'division' => $division
           ],
-					'url' => route('organizer.competition.division.round.update', [$competition_id,$division_id, $round_id])
+					'url' => route('organizer.competition.round.update', [$competition_id,$round_id])
 				]);
 
         $deleteForm = $formBuilder->create('GenericDeleteForm', [
 					'method' => 'DELETE',
-					'url' => route('organizer.competition.division.round.destroy', [$competition_id,$division_id,$round_id])
+					'url' => route('organizer.competition.round.destroy', [$competition_id,$division_id,$round_id])
 				]);
 
         //$deleteForm->modify('submit','submit',['label' => 'Remove from division']);
 
-				return view('competition_division_round.organizer.edit', compact('division', 'round', 'form', 'deleteForm', 'competition_rounds'));
+				return view('competition.round.organizer.edit', compact('division', 'round', 'form', 'deleteForm', 'competition_rounds'));
     }
 
 
@@ -464,7 +473,7 @@ class CompetitionDivisionRoundController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FormBuilder $formBuilder, $competition_id, $division_id, $round_id)
+    public function update(Request $request, FormBuilder $formBuilder, $competition_id, $round_id)
     {
         // Get the division
         $division = Division::find($division_id);
@@ -499,7 +508,7 @@ class CompetitionDivisionRoundController extends Controller
 
         event(new RoundSaved($round));
 
-        return redirect()->route('organizer.competition.division.round.index',[$division->competition, $division])->with('success',$round->name ." has been updated.");
+        return redirect()->route('organizer.competition.round.index',[$division->competition, $division])->with('success',$round->name ." has been updated.");
     }
 
 
@@ -509,16 +518,15 @@ class CompetitionDivisionRoundController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($competition_id, $division_id, $round_id, FormBuilder $formBuilder)
+    public function destroy($competition_id, $round_id, FormBuilder $formBuilder)
     {
-        $division = Division::with('competition')->find($division_id);
         $round = Round::find($round_id);
 
         $this->authorize('destroy', $round);
 
         $round->delete();
 				// Set flash data and redirect
-				return redirect()->route('organizer.competition.division.round.index', [$division->competition, $division])->with('success', $round->name . ' was successfully removed from this division.');
+				return redirect()->route('organizer.competition.round.index', [$division->competition, $division])->with('success', $round->name . ' was successfully removed from this division.');
     }
 
 }

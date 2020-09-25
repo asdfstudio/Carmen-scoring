@@ -134,28 +134,6 @@ class Round extends Model
         return '<span class="'.$class.'">'.$this->status.'</span>';
     }
 
-    public function activateScoring()
-    {
-      $this->is_scoring_active = true;
-      $this->is_completed = false;
-      event(new RoundScoringActivated($this));
-      return $this->save();
-    }
-
-    public function deactivateScoring()
-    {
-      $this->is_scoring_active = false;
-      $this->is_completed = false;
-      return $this->save();
-    }
-
-    public function reactivateScoring()
-    {
-      $this->is_scoring_active = true;
-      $this->is_completed = false;
-      return $this->save();
-    }
-
     public function completeScoring()
     {
         $this->is_scoring_active = false;
@@ -163,6 +141,18 @@ class Round extends Model
         event(new RoundScoringCompleted($this));
         return $this->save();
     }
+
+    // TODO: Make this more efficient with its own query
+    public function isMissingScores()
+    {
+        foreach($this->divisions as $division) {
+            if ($division->isMissingScores()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public function isNewRound()
     {

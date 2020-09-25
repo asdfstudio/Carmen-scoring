@@ -295,7 +295,7 @@ class ResultsController extends Controller
       $judges = $division->judges;
 
       $scoreboard = new Scoreboard(['round_id' => $round_id]);
-      $ratings = (new Ratings($round))->all();
+      $ratings = (new Ratings($division))->all();
       $rawScores = $scoreboard->extendedRawScores;
       $weightedScores = $scoreboard->extendedRawScores;
       $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
@@ -340,7 +340,7 @@ class ResultsController extends Controller
       $judges = Judge::whereIn('id', $judge_ids)->get();
 
       $scoreboard = new Scoreboard(['round_id' => $source_rounds->pluck('id')->toArray()]);
-      $ratings = (new Ratings($round))->all();
+      $ratings = (new Ratings($division))->all();
       $rawScores = $scoreboard->extendedRawScores;
       $weightedScores = $scoreboard->extendedRawScores;
       $rankedScores = $scoreboard->rankedScoresForCurrentMethod;

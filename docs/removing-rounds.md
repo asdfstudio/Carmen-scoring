@@ -88,6 +88,10 @@ These files in app seem to use the source/target relationship currently:
 - [ ] layouts/public_results.blade.php
 - [ ] scores/judge/spreadsheet.blade.php
 
+
+### UI Overview changes
+- [ ] Move the "Settings" tab from Division to a new "Round" manage index. Move the "edit scoring settings" and underlying top part of the form. Change to "edit optional rating systems" and just have that part remaining. 
+- [ ] Remove "Rounds" tab from the Division settings page
 ### Scoring
 
 Most scoring is done per-division so that won't change. But there are parts of the scoring system that grade source Rounds for the sake of seeding Target rounds. This will all be manual from now on so it should be removed from the app.

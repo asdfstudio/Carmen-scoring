@@ -6,13 +6,12 @@
 <ul class="list-group">
   @foreach($rounds as $round)
 	  <li class="round list-group-item">
-			<span class="name">{{ link_to_route('organizer.competition.division.round.show', $round->name, [$division->competition,$division,$round]) }}</span>
+			<span class="name">{{ link_to_route('organizer.competition.round.show', $round->name, [$round->competition,$round]) }}</span>
 
 			<span class="label status {{ $round->status_slug() }}">{{ $round->status() }}</span>
 
+        {{-- TODO: Does the sequence of Rounds matter?
 			<div>Order: {{ $round->sequence }}</div>
-
-			<div>Number of participating choirs: {{ $round->max_choirs_text }}</div>
 
 			@if(!$round->choirs->isEmpty())
 				<h4>Choirs</h4>
@@ -40,17 +39,19 @@
 					@endforeach
 				</ul>
 			@endif
+            --}}
 
 			<ul class="actions-group">
 				@can('update', $round)
 					<li>
-						{{ link_to_route('organizer.competition.division.round.edit', 'Edit', [$division->competition,$division,$round], ['class' => 'action']) }}
+						{{ link_to_route('organizer.competition.round.edit', 'Edit', [$division->competition,$division,$round], ['class' => 'action']) }}
 					</li>
 				@endcan
 
+            {{--
 				@can('setPerformanceOrder', $round)
 					<li>
-						{{ link_to_route('organizer.competition.division.round.choir.performance_order', 'Set Choir Performance Order', [$division->competition,$division,$round], ['class' => 'action']) }}
+						{{ link_to_route('organizer.competition..round.choir.performance_order', 'Set Choir Performance Order', [$division->competition,$division,$round], ['class' => 'action']) }}
 					</li>
 				@endcan
 
@@ -78,6 +79,7 @@
 						{!! form($reactivateScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id]), 'class' => '']) !!}
 					</li>
 				@endcan
+            --}}
 
 			</ul>
 

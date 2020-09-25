@@ -168,7 +168,7 @@ class AwardScheduleController extends Controller
 
         $ratings[] = [
           'round_id' => $item->round_id,
-          'ratings' => (new Ratings($item->round))->all()
+          'ratings' => (new Ratings($item->division))->all()
         ];
       }
 

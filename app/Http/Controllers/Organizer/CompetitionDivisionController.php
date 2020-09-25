@@ -141,13 +141,13 @@ class CompetitionDivisionController extends Controller
     {
         $competition = Competition::with('organization','place','divisions')->find($competition_id);
 
-				$division = Division::with(['choirs','rounds','judges' => function ($query) {
+				$division = Division::with(['choirs','round','judges' => function ($query) {
 					$query->groupBy('judge_id');
 				}, 'judges.captions' => function ($query) use ($division_id) {
 					$query->where('division_id',$division_id);
 				}])->find($division_id);
 
-				$captions = Caption::forSheet($division->sheet);
+				$captions = Caption::forSheet($division->round->sheet);
 
         $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
           'method' => 'POST',
@@ -199,7 +199,7 @@ class CompetitionDivisionController extends Controller
             'selected' => $selected,
             'division' => $division
           ],
-					'url' => route('organizer.competition.division.round.store', [$division->competition,$division])
+					'url' => route('organizer.competition.round.store', [$division->competition,$division])
 				]);
 
         $deleteChoirForm = $formBuilder->create('GenericDeleteForm', [
@@ -242,7 +242,7 @@ class CompetitionDivisionController extends Controller
         $deletePenaltyForm->modify('submit','submit',['label' => 'Remove']);
 
         // return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
-        return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
+        return view('competition_division.organizer.show', compact('competition', 'division', 'choirs', 'captions', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
     }
 
     /**
@@ -370,16 +370,14 @@ class CompetitionDivisionController extends Controller
     {
         $competition = Competition::with('organization', 'place', 'divisions')->find($competition_id);
 
-				$division = Division::find($division_id);
-        $division->load('competition', 'awardSettings', 'sheet', 'sheet.criteria', 'sheet.criteria.caption');
+        $division = Division::find($division_id);
+        $division->load('competition', 'awardSettings', 'round', 'round.sheet', 'round.sheet.criteria', 'round.sheet.criteria.caption');
 
-        if ($division->sheet) {
-          $division->sheet->captions = $division->sheet->criteria->unique('caption_id')->pluck('caption');
+        if ($division->round->sheet) {
+            $division->round->sheet->captions = $division->round->sheet->criteria->unique('caption_id')->pluck('caption');
         }
 
-
-        //
-				return view('competition_division.organizer.settings', compact('competition','division'));
+        return view('competition_division.organizer.settings', compact('competition','division'));
     }
 
     /**

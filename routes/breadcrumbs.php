@@ -338,19 +338,19 @@ Breadcrumbs::register('organizer.competition.division.choir.show', function($bre
 
 
 
-// Competitions > [Competition] > Divisions > [Division] > Rounds
-Breadcrumbs::register('organizer.competition.division.round.index', function($breadcrumbs, $competition, $division)
+// Competitions > [Competition] > Rounds
+Breadcrumbs::register('organizer.competition.round.index', function($breadcrumbs, $competition)
 {
-    $breadcrumbs->parent('organizer.competition.division.settings',$competition, $division);
-    $breadcrumbs->push('Rounds', route('organizer.competition.division.round.index',[$competition,$division]));
+    $breadcrumbs->parent('organizer.competition.show',$competition);
+    $breadcrumbs->push('Rounds', route('organizer.competition.round.index',[$competition]));
 });
 
-// Competitions > [Competition] > Divisions > [Division] > Rounds > [Round]
-/*Breadcrumbs::register('organizer.competition.division.round.show', function($breadcrumbs, $competition, $division, $round)
+// Competitions > [Competition] > Rounds > [Round]
+Breadcrumbs::register('organizer.competition.round.show', function($breadcrumbs, $competition, $round)
 {
-    $breadcrumbs->parent('organizer.competition.division.round.index',$competition, $division);
-    $breadcrumbs->push($round->name, route('organizer.competition.division.round.show',[$competition,$division,$round]));
-});*/
+    $breadcrumbs->parent('organizer.competition.round.index',$competition);
+    $breadcrumbs->push($round->name, route('organizer.competition.round.show',[$competition,$round]));
+});
 
 
 // Competitions > [Competition] > Divisions > [Division] > Judges
@@ -368,18 +368,18 @@ Breadcrumbs::register('organizer.competition.division.judge.show', function($bre
 });
 
 
-// Competitions > [Competition] > Divisions > [Division] > [Round]
-Breadcrumbs::register('organizer.competition.division.round.show', function($breadcrumbs, $competition, $division, $round)
-{
-    $breadcrumbs->parent('organizer.competition.division.show',$competition, $division);
-    $breadcrumbs->push($round->name, route('organizer.competition.division.round.show',[$competition,$division,$round]));
-});
+// // Competitions > [Competition] > Divisions > [Division] > [Round]
+// Breadcrumbs::register('organizer.competition.round.show', function($breadcrumbs, $competition, $division, $round)
+// {
+//     $breadcrumbs->parent('organizer.competition.division.show',$competition, $division);
+//     $breadcrumbs->push($round->name, route('organizer.competition.round.show',[$competition,$division,$round]));
+// });
 
 
 // Competitions > [Competition] > Divisions > [Division] > [Round] > [Choir]
 Breadcrumbs::register('organizer.competition.division.round.choir.show', function($breadcrumbs, $competition, $division, $round, $choir)
 {
-    $breadcrumbs->parent('organizer.competition.division.round.show',$competition, $division, $round);
+    $breadcrumbs->parent('organizer.competition.round.show',$competition, $division, $round);
     $breadcrumbs->push($choir->name, route('organizer.competition.division.round.choir.show',[$competition,$division,$round, $choir]));
 });
 
@@ -387,7 +387,7 @@ Breadcrumbs::register('organizer.competition.division.round.choir.show', functio
 // Competitions > [Competition] > Divisions > [Division] > [Round] > [Judge]
 Breadcrumbs::register('organizer.competition.division.round.judge.show', function($breadcrumbs, $competition, $division, $round, $judge)
 {
-    $breadcrumbs->parent('organizer.competition.division.round.show',$competition, $division, $round);
+    $breadcrumbs->parent('organizer.competition.round.show',$competition, $division, $round);
     $breadcrumbs->push($judge->full_name, route('organizer.competition.division.round.judge.show',[$competition,$division,$round, $judge]));
 });
 
@@ -411,7 +411,7 @@ Breadcrumbs::register('organizer.competition.division.round.choir.judge.index', 
 // Competitions > [Competition] > Divisions > [Division] > Round > [Round] > Judges
 Breadcrumbs::register('organizer.competition.division.round.judge.index', function($breadcrumbs, $competition, $division, $round)
 {
-    $breadcrumbs->parent('organizer.competition.division.round.show',$competition, $division, $round);
+    $breadcrumbs->parent('organizer.competition.round.show',$competition, $round);
     $breadcrumbs->push('Judges', route('organizer.competition.division.round.judge.index',[$competition,$division,$round]));
 });
 

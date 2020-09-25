@@ -49,7 +49,7 @@ class CompetitionDivisionRoundJudgeController extends Controller
       $weightedScores = $scoreboard->weightedScores;
       $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
-      $ratings = (new Ratings($round))->all();
+      $ratings = (new Ratings($division))->all();
 
       $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::forSheet($division->sheet);

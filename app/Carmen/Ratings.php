@@ -3,16 +3,16 @@
 namespace App\Carmen;
 
 use DB;
-use App\Round;
+use App\Division;
 use App\RawScore;
 
 class Ratings
 {
-  protected $round;
+  protected $division;
 
-  public function __construct(Round $round)
+  public function __construct(Division $division)
   {
-    $this->round = $round;
+    $this->division = $division;
   }
 
   public function all($keys = null)
@@ -32,7 +32,7 @@ class Ratings
   {
     $percentages = [];
 
-    foreach ($this->round->choirs as $choir) {
+    foreach ($this->division->choirs as $choir) {
       $earnedScore = $scores->where('choir_id', $choir->id)->sum('earned_score');
       $maxScore = $scores->where('choir_id', $choir->id)->sum('max_score');
 
@@ -58,7 +58,7 @@ class Ratings
   {
     $ratings = [];
 
-    $ratingOptions = collect($this->round->division->rating_system);
+    $ratingOptions = collect($this->division->rating_system);
     $ratingOptions = $ratingOptions->sortByDesc('min_score')->toArray();
 
 
@@ -94,7 +94,7 @@ class Ratings
       LEFT JOIN criteria ON criteria.id = criterion_id
       WHERE round_id = ?
       GROUP BY choir_id, caption_id",
-      [$this->round->id]);
+      [$this->division->round->id]);
 
     return collect($scores);
   }

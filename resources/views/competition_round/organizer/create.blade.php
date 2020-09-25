@@ -5,7 +5,7 @@
 
   <ul class="actions-group">
 		<li>
-			{{ link_to_route('organizer.competition.division.round.index','Back to rounds',[$division->competition,$division], ['class' => 'action']) }}
+			{{ link_to_route('organizer.competition.round.index','Back to competition',[$round->competition], ['class' => 'action']) }}
 		</li>
 	</ul>
 @endsection

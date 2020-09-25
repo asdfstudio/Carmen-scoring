@@ -41,17 +41,25 @@
     <li class="list-group-item">Access Code: {{ $competition->access_code }}</li>
   </ul>
 
+  <h3>Manage Rounds</h3>
+  <p>Rounds are a group of divisions that utilize the same scoring system.</p>
 
-  <h3>Manage Rounds and Divisions</h3>
-  <p>Divisions are used to organize your competition and consist of choirs, judges</p>
-  <p>Divisions are grouped into rounds, which have consistent scoring systems</p>
+  <p>{{ link_to_route('organizer.competition.round.index','Manage your rounds',[$competition], ['class' => 'action']) }}</p>
 
+  @if($competition->rounds->count() > 0)
+    @include('round.organizer.list',['rounds' => $competition->rounds])
+  @else
+    <p>{{ link_to_route('organizer.competition.round.create','Create your first round',[$competition]) }}</p>
+  @endif
+
+  <h3>Manage Divisions</h3>
+  <p>Divisions are used to organize your competition and consist of choirs and judges</p>
 
   <p>{{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition], ['class' => 'action']) }}</p>
 
   @if($competition->divisions->count() > 0)
 
-    @include('round.organizer.list',['rounds' => $competition->rounds])
+    @include('division.organizer.list',['divisions' => $competition->divisions])
 
   @else
     <p>{{ link_to_route('organizer.competition.division.create','Create your first division',[$competition]) }}</p>
@@ -66,7 +74,6 @@
   @else
     <p>{{ link_to_route('organizer.competition.solo-division.create','Create your first solo division',[$competition]) }}</p>
   @endif
-
 
   <h3>Manage Schedules</h3>
 

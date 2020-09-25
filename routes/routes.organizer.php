@@ -19,7 +19,7 @@ Route::group([
   ]);
 
   Route::put('user/password/mass', 'PasswordController@update_mass')->name('user.password.update-mass');
-  
+
 });
 
 
@@ -215,23 +215,23 @@ Route::group([
 
   // Assign penalties to choir
   Route::get('competition/{competition}/division/{division}/round/{round}/choir/{choir}/penalty', [
-    'as' => 'competition.division.round.choir.penalty.assign', 'uses' => 'CompetitionDivisionRoundChoirController@assign_penalty'
+    'as' => 'competition.round.choir.penalty.assign', 'uses' => 'CompetitionDivisionRoundChoirController@assign_penalty'
 	]);
 
   // Save assigned penalties to choir
   Route::post('competition/{competition}/division/{division}/round/{round}/choir/{choir}/penalty', [
-    'as' => 'competition.division.round.choir.penalty.update_assign', 'uses' => 'CompetitionDivisionRoundChoirController@update_penalty'
+    'as' => 'competition.round.choir.penalty.update_assign', 'uses' => 'CompetitionDivisionRoundChoirController@update_penalty'
 	]);
 
 
   // Set choir round performance order
   Route::get('competition/{competition}/division/{division}/round/{round}/performance-order', [
-    'as' => 'competition.division.round.choir.performance_order', 'uses' => 'CompetitionDivisionRoundChoirController@performance_order'
+    'as' => 'competition.round.choir.performance_order', 'uses' => 'CompetitionDivisionRoundChoirController@performance_order'
 	]);
 
   // Save choir round performance order
   Route::post('competition/{competition}/division/{division}/round/{round}/performance-order', [
-    'as' => 'competition.division.round.choir.performance_order.update', 'uses' => 'CompetitionDivisionRoundChoirController@update_performance_order'
+    'as' => 'competition.round.choir.performance_order.update', 'uses' => 'CompetitionDivisionRoundChoirController@update_performance_order'
 	]);
 
 
@@ -314,12 +314,12 @@ Route::group([
     'as' => 'competition.division.award.settings.store', 'uses' => 'CompetitionDivisionAwardSettingsController@update'
   ]);
 
-  Route::get('competition/{competition}/division/{division}/round/setup', [
-    'as' => 'competition.division.round.setup', 'uses' => 'CompetitionDivisionRoundController@setup'
+  Route::get('competition/{competition}/round/setup', [
+    'as' => 'competition.round.setup', 'uses' => 'CompetitionRoundController@setup'
   ]);
 
-  Route::post('competition/{competition}/division/{division}/round/setup', [
-    'as' => 'competition.division.round.setup.store', 'uses' => 'CompetitionDivisionRoundController@storeMultiple'
+  Route::post('competition/{competition}/round/setup', [
+    'as' => 'competition.round.setup.store', 'uses' => 'CompetitionRoundController@storeMultiple'
   ]);
 
   Route::get('competition/{competition}/division/{division}/choir/setup', [
@@ -361,12 +361,16 @@ Route::post('competition/{competition}/division/{division}/audience/update', [
 	Route::resource('competition.division', 'CompetitionDivisionController');
 	Route::resource('competition.division.choir', 'CompetitionDivisionChoirController');
 	Route::resource('competition.division.judge', 'CompetitionDivisionJudgeController');
-  Route::resource('competition.division.round', 'CompetitionDivisionRoundController');
+  Route::resource('competition.round', 'CompetitionRoundController');
   Route::resource('competition.solo-division', 'CompetitionSoloDivisionController');
   Route::resource('competition.solo-division', 'CompetitionSoloDivisionController');
 
   Route::get('dashboard', [
     'as' => 'dashboard', 'uses' => 'CompetitionController@index'
+  ]);
+
+  Route::get('competition/{competition}/round/{round}/settings', [
+    'as' => 'competition.round.settings', 'uses' => 'CompetitionRoundController@settings'
   ]);
 
   Route::get('competition/{competition}/solo-division/{soloDivision}/manage', [
@@ -422,8 +426,8 @@ Route::post('competition/{competition}/division/{division}/audience/update', [
     'as' => 'competition.division.scoring', 'uses' => 'CompetitionDivisionController@scoring'
 	]);
 
-  Route::post('competition/{competition}/division/{division}/round/{round}/scoring', [
-    'as' => 'competition.division.round.scoring', 'uses' => 'CompetitionDivisionRoundController@scoring'
+  Route::post('competition/{competition}/round/{round}/scoring', [
+    'as' => 'competition.round.scoring', 'uses' => 'CompetitionRoundController@scoring'
 	]);
 
 
@@ -439,14 +443,9 @@ Route::post('competition/{competition}/division/{division}/audience/update', [
     'as' => 'organization.update', 'uses' => 'OrganizationController@update'
 	]);
 
-	Route::get('competition/{competition}/division/{division}/round/{round}', [
-    'as' => 'competition.division.round.show', 'uses' => 'CompetitionDivisionRoundController@show'
+	Route::get('competition/{competition}/round/{round}', [
+    'as' => 'competition.round.show', 'uses' => 'CompetitionRoundController@show'
 	]);
-
-  Route::get('competition/{competition}/division/{division}/round/{round}/sources', [
-    'as' => 'competition.division.round.show_sources', 'uses' => 'CompetitionDivisionRoundController@show_sources'
-	]);
-
 
 	Route::get('competition/{competition}/division/{division}/round/{round}/choir/{choir}', [
     'as' => 'competition.division.round.choir.show', 'uses' => 'CompetitionDivisionRoundChoirController@show'
@@ -493,6 +492,7 @@ Route::post('competition/{competition}/division/{division}/audience/update', [
   Route::post('/vote-setting',[
       'as' => 'option.setting-audience', 'uses' => 'OrganizationController@voteSetting'
   ] );
+	// Route::resource('competition.round', 'CompetitionRoundController');
 });
 
 Route::post('/audience/fileupload/','Organizer\CompetitionDivisionAudienceController@fileupload')->name('audience.fileupload');

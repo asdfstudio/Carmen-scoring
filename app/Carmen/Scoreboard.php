@@ -103,7 +103,7 @@ class Scoreboard {
 	{
 		$this->getDivision();
 
-		$weightedScoresClass = new WeightedScores($this->rawScores, $this->division->caption_weighting_id);
+		$weightedScoresClass = new WeightedScores($this->rawScores, $this->division->round->caption_weighting_id);
 
 		$this->weightedScores = $weightedScoresClass->all();
 		$this->extendedRawScores = $this->weightedScores;
