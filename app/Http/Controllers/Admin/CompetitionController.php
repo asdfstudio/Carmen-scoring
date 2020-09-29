@@ -26,7 +26,6 @@ class CompetitionController extends Controller
     public function index()
     {
 				$competitions = Competition::with('organization','place')->get();
-
 				return view('competition.index', compact('competitions'));
 
     }

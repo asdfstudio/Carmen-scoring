@@ -49,12 +49,12 @@
         </div>
 
         <div class="form-group">
-            <div class="">
+            <div class="flex justify-content-between">
                 <button type="submit" class="btn btn-primary">
                     Login
                 </button>
 
-                <!--<a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>-->
+                <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
             </div>
         </div>
     </form>

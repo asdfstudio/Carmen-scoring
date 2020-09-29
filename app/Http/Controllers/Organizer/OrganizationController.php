@@ -106,4 +106,19 @@ class OrganizationController extends Controller
 				// Redirect
 				return redirect()->route('organizer.organization.show')->with('success', 'Organization updated.');
     }
+
+  /**
+   * @param Request $request
+   * @return mixed
+   */
+    public function voteSetting(Request $request) {
+      if (Auth::user()->isAdmin()){
+        $organizationId = $request->input('organization_id');
+        $voteSetting = $request->input('vote_setting');
+        $organization = Organization::find($organizationId);
+        $organization->vote_setting = $voteSetting;
+        $organization->save();
+        return $organization;
+      }
+    }
 }

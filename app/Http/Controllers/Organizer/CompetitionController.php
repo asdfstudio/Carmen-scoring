@@ -20,7 +20,7 @@ class CompetitionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function index(FormBuilder $formBuilder)
     {
@@ -28,16 +28,17 @@ class CompetitionController extends Controller
 
 				$archivedCompetitions = Competition::with('organization', 'place')->archived()->get();
 
-        $deleteCompetitionForm = $formBuilder->create('GenericDeleteForm');
+				$organization =  Organization::find(Auth::user()->organization_id);
 
-				return view('competition.organizer.index', compact('competitions', 'archivedCompetitions', 'deleteCompetitionForm'));
+        $deleteCompetitionForm = $formBuilder->create('GenericDeleteForm');
+				return view('competition.organizer.index', compact('competitions', 'archivedCompetitions', 'deleteCompetitionForm','organization'));
 
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function create(FormBuilder $formBuilder)
     {

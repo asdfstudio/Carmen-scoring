@@ -105,6 +105,10 @@ Route::get('results/division/{division}/standings/{access_code}', [
   'as' => 'results.division.standings', 'uses' => 'ResultsController@divisionStandings'
 ]);
 
+Route::get('results/division/{division}/audience-vote-results/{access_code}', [
+  'as' => 'results.division.audience-vote-results', 'uses' => 'ResultsController@audienceVoteResult'
+]);
+
 Route::get('results/division/{division}/round/{round}/{access_code}', [
   'as' => 'results.division.round.show', 'uses' => 'ResultsController@divisionRound'
 ]);
@@ -186,7 +190,35 @@ Route::put('profile/password', [
 
 
 Auth::routes();
+//Auth::routes(['verify' => true]);
+Route::post('/user-login', 'Auth\LoginController@loginAjax');
+Route::post('/vote-logout', 'Auth\LoginController@voteLogOut');
+Route::post('/user-register', 'Auth\RegisterController@registerAjax');
+Route::post('/user-forgot', 'Auth\ForgotPasswordController@sendResetLinkEmailAjax');
+Route::post('/user-vote', 'VoteController@vote');
+
+
+
+Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
+Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
+Route::get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
 Route::get('/logout', 'Auth\LoginController@logout');
 
+Route::get('home/{organizer}/{alias}', [
+    'as' => 'home.organizer', 'uses' => 'HomeController@organizer'
+]);
+Route::get('home/{organizer}/{alias}/results', [
+    'as' => 'home.organizer', 'uses' => 'ResultsController@showAudienceVoteResult'
+]);
 
-//Route::get('/home', 'HomeController@index');
+Route::get('solo-division/{organizer}/{alias}', [
+  'as' => 'home.solo-division', 'uses' => 'HomeController@soloDivisionVote'
+]);
+
+Route::get('solo-division/{organizer}/{alias}/results', [
+  'as' => 'home.solo-division.results', 'uses' => 'ResultsController@viewSoloAudienceVoteResult'
+]);
+
+Route::post('buy-petl-points', [
+  'as' => 'buy-petl-points', 'uses' => 'PaymentController@paymentStripe'
+]);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Audience;
 use App\Round;
 use App\Choir;
 use App\Judge;
@@ -17,7 +18,9 @@ use App\Carmen\SoloTotalScores;
 use App\Carmen\SoloRankedScores;
 use App\Http\Requests;
 use App\Carmen\Scoreboard;
+use App\Vote;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use App\Http\Controllers\Controller;
 use Kris\LaravelFormBuilder\FormBuilder;
@@ -43,6 +46,10 @@ class ResultsController extends Controller
       elseif($segment == 'round-shared')
       {
         $current_page = 'round_shared_'.$request->segment(5);
+      }
+      elseif($segment == 'audience-vote-results')
+      {
+        $current_page = 'vote-results';
       }
       else {
         $current_page = 'awards';
@@ -72,7 +79,8 @@ class ResultsController extends Controller
         'judges' => function($query) {
           $query->groupBy('judge_id');
         },
-        'awardSettings'
+        'awardSettings',
+        'choirs'
       ])->where('access_code', $access_code)->where('is_published', 1)->find($division_id);
 
       if($this->division == false) abort('404');
@@ -228,7 +236,7 @@ class ResultsController extends Controller
       }, 'awards.choirs' => function($query) use ($division_id) {
         $query->where('division_id',$division_id);
       }])->where('is_published', 1)->find($division_id);
-      
+
       $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::forSheet($division->sheet);
 
@@ -289,7 +297,7 @@ class ResultsController extends Controller
       $rawScores = $scoreboard->extendedRawScores;
       $weightedScores = $scoreboard->extendedRawScores;
       $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
-      
+
       $show_links = true;
 
       return view('results.division_round.show', compact('division', 'round', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'captions', 'access_code', 'choirs', 'judges', 'show_links', 'ratings'));
@@ -301,7 +309,7 @@ class ResultsController extends Controller
       $this->loadDivision($division_id, $access_code);
       $division = $this->division;
       $captions = $this->captions;
-      
+
       $round = $division->rounds()->find($round_id)->targets()->find($target_round_id);
 
       $source_rounds = $round->sources;
@@ -472,7 +480,20 @@ class ResultsController extends Controller
 
       $soloDivision->performers = $soloDivision->performers->sortBy('rank');
 
-      return view('results.solo_division.results', compact('competition', 'judges', 'soloDivision', 'access_code', 'genderName', 'categoryName'));
+      if ($request->input('view') && 'audience-vote' === $request->input('view')){
+        $audience = Audience::where('division_id', $soloDivision->id)
+          ->where('competition_id', $competition->id)
+          ->first();
+
+        $this->updateSoloVoteList($audience, $soloDivision);
+
+        $votes = $this->votedList($audience);
+        return view('results.solo_division.results',
+          compact('competition', 'judges', 'soloDivision', 'access_code', 'categoryName','votes', 'audience')
+        )->with(['view'=>'audience-vote-result']);
+      }
+
+      return view('results.solo_division.results', compact('competition', 'judges', 'soloDivision', 'access_code', 'categoryName'));
     }
 
 
@@ -524,8 +545,126 @@ class ResultsController extends Controller
                     ->where('performer_id', $performer->id)
                     ->get();
 
-
-
       return view('results.solo_division.performer-results', compact('competition', 'judges', 'soloDivision', 'access_code', 'performer', 'captions', 'rawScores'));
+    }
+
+  /**
+   * @param $divisionId
+   * @param null $access_code
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+   */
+    public function audienceVoteResult( $divisionId, $access_code = NULL)
+    {
+      $this->loadDivision($divisionId, $access_code);
+      $division = $this->division;
+      $audience = Audience::where('division_id', $divisionId)->first();
+      $votes = [];
+
+      if (isset($audience)) {
+        $this->updateVoteList($audience);
+        $votes = $this->votedList($audience);
+      }
+
+      return view('results.division.audience_vote_results', compact('division', 'access_code','audience','votes'));
+    }
+
+  /**
+   * Get all voted from vote
+   *
+   * @param $audience
+   * @return Choir[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+   */
+    public function votedList($audience)
+    {
+
+      if (null != $audience) {
+        return Vote::where('audience_id', $audience->id)
+          ->orderBy('vote_count', 'DESC')
+          ->take($audience->limit_result)
+          ->get();
+      }
+    }
+
+  /**
+   * Update vote list for audience
+   *
+   * @param $audience
+   * @return int
+   */
+    public function updateVoteList($audience)
+    {
+      $choirInAudiences = $audience->division->choirs;
+      $allChoirs = [];
+
+      foreach ($choirInAudiences as $key => $choirInAudience) {
+        if (NULL === $this->getAreadyVoteItem($audience->id,$choirInAudience->id )){
+          $allChoirs[$key] = ['audience_id' => $audience->id, 'vote_id' => $choirInAudience->id];
+        }
+      }
+
+      return DB::table('votes')->insert($allChoirs);
+    }
+
+  /**
+   * @param $audienceId
+   * @param $vote_id
+   * @return mixed
+   */
+    public function getAreadyVoteItem($audienceId, $voteId) {
+      return Vote::where('audience_id',$audienceId)
+        ->where('vote_id', $voteId)->first();
+    }
+
+    /**
+     * Update solo vote list
+     *
+     * @param $audience
+     * @param $soloDivision
+     * @return int
+     */
+    public function updateSoloVoteList($audience, $soloDivision)
+    {
+      $performerInSoloDivisions = $soloDivision->performers;
+      $allPerformers = [];
+
+      if (isset($audience)){
+        foreach ($performerInSoloDivisions as $key => $performer) {
+            if (NULL === $this->getAreadyVoteItem($audience->id, $performer->id )){
+              $allPerformers[$key] = ['audience_id' => $audience->id, 'vote_id' => $performer->id];
+            }
+
+        }
+      }
+
+      return DB::table('votes')->insert($allPerformers);
+    }
+
+  /**
+   * Show division vote result ( not solo vote )
+   * @param $organizer
+   * @return \Illuminate\Http\RedirectResponse
+   */
+    public function showAudienceVoteResult($organizer)
+    {
+      $tmp = explode('-', $organizer);
+      $divisionId = end($tmp);
+      $division = Division::with('competition', 'choirs')->find($divisionId);
+      return redirect()->route('results.division.audience-vote-results', [$divisionId, $division->access_code]);
+    }
+
+    /**
+     * Solo Vote result with generate URL
+     *
+     * @param $organizer
+     * @param $alias
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function viewSoloAudienceVoteResult($organizer, $alias)
+    {
+      $tmp = explode('-', $organizer);
+      $divisionId = end($tmp);
+      $soloDivision = SoloDivision::find($divisionId);
+      return redirect()->route('results.solo-division.show',
+        [  $divisionId, $soloDivision->access_code, 'view'=>'audience-vote'])->with('view', 'aucience-vote');
     }
 }

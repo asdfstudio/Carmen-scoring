@@ -66,6 +66,8 @@ class CompetitionDivisionChoirController extends Controller
         $division = Division::with('competition','choirs')->find($division_id);
         $competition = $division->competition;
 
+
+
         $form = $formBuilder->create('Choir\CreateChoirsForm', [
           'url' => route('organizer.competition.division.choir.setup.store',[$competition,$division])
         ]);

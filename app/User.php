@@ -5,8 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
 
     use Notifiable;
@@ -18,7 +19,15 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'email', 'password', 'person_id', 'organization_id', 'organization_role', 'is_admin',
+        'username', 'email', 'password', 'person_id', 'organization_id', 'organization_role', 'is_admin','_redirect','voted','petl_point'
+    ];
+
+  /**
+   * Voted campaign ID list in array
+   * @var string[]
+   */
+    protected $casts = [
+      'voted' => 'array'
     ];
 
     /**
@@ -46,7 +55,7 @@ class User extends Authenticatable
       //if(!empty(1)){
       //  $current_url = url()->current();
       //}
-      
+
       // Automatically change an admin's "organization_id" to the current organization.
       // This avoids errors when admins jump from one org to another via direct URL
       // instead of navigating through the web interface.
@@ -107,6 +116,7 @@ class User extends Authenticatable
 
       return $this->email;
     }
+
 
     //public function organization_role()
     //{

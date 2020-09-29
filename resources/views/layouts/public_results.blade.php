@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-
 @section('body-header')
   <div class="body-header body-width">
     <a href="/"><img src="/images/logo-with-dark-text.png" width="185" alt="Carmen Scoring System"  /></a>
@@ -18,7 +17,6 @@
 
 @section('body-content')
   <div class="collapse content body-width">
-
     @yield('breadcrumbs')
 
     @if(isset($division))
@@ -52,6 +50,10 @@
               @endif
             @endforeach
           @endforeach
+
+          <li>
+            <a href="{{ route('results.division.audience-vote-results', [$division, $access_code]) }}" class="@if($current_page == 'vote-results') active @endif action">Audience Vote Results</a>
+          </li>
       	</ul>
       @endif
 

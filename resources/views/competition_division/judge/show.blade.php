@@ -14,6 +14,11 @@
         <li>
           <a href="#choirs" class="tab-link" data-tab-id="choirs">Choirs</a>
         </li>
+
+        <li>
+          <a href="#audience_vote" class="tab-link" data-tab-id="audience_vote">Audience vote</a>
+        </li>
+
         <li>
           <a href="#judges" class="tab-link" data-tab-id="judges">Judges</a>
         </li>
@@ -53,6 +58,13 @@
       <h2>Choirs</h2>
       @include('competition_division_choir.judge.list',['choirs' => $division->choirs])
     </div>
+
+    @if($division->competition->organization->vote_setting)
+    <div data-tab-id="audience_vote" class="tab-content col-xs-12 col-sm-12">
+      <h2>Audience vote</h2>
+      @include('competition_division_audience_vote.judge.list',['audience_vote' => $division->audience_vote])
+    </div>
+    @endif
 
     <div data-tab-id="judges" class="tab-content col-xs-12 col-sm-12">
     	<h2>Judges</h2>

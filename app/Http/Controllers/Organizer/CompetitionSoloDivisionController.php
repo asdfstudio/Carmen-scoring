@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Organizer;
 
+use App\Audience;
+use App\Vote;
 use Event;
 use App\Choir;
 use App\Judge;
@@ -15,6 +17,7 @@ use Illuminate\Http\Request;
 use App\Carmen\SoloTotalScores;
 use App\Carmen\SoloRankedScores;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Kris\LaravelFormBuilder\FormBuilder;
 use App\Events\SoloDivisionScoringFinalized;
 
@@ -222,6 +225,21 @@ class CompetitionSoloDivisionController extends Controller
         return view('solo-division.organizer.results', compact('competition', 'soloDivision', 'category', 'categoryName'));
     }
 
+  /**
+   * Get all voted from vote
+   *
+   * @param $audience
+   * @return Choir[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+   */
+  public function votedList($audience)
+  {
+    if (null != $audience) {
+      return Vote::where('audience_id', $audience->id)
+        ->orderBy('vote_count', 'DESC')
+        ->take($audience->limit_result)
+        ->get();
+    }
+  }
 
     /**
      * Show the form for editing the specified resource.
@@ -350,4 +368,62 @@ class CompetitionSoloDivisionController extends Controller
 
       return redirect()->route('organizer.competition.solo-division.show', [$competition, $soloDivision]);
     }
+
+  /**
+   * @param $organization
+   * @return string
+   */
+    private function getOrganizationSlug($organization){
+      $ary = explode(' ',trim($organization->name));
+      return strtolower($ary[0]);
+    }
+
+  /**
+   * @param $competitionId
+   * @param $soloDivisionId
+   * @param Request $request
+   * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+   */
+    public function audienceVote($competitionId, $soloDivisionId)
+    {
+      $competition = Competition::find($competitionId);
+      $soloDivision = SoloDivision::find($soloDivisionId);
+      $organization_slug = $this->getOrganizationSlug($soloDivision->competition->organization);
+      $audience = Audience::where('division_id', $soloDivisionId)->first();
+
+      return view('solo-division.organizer.audience-vote',
+        compact(
+          'soloDivision',
+          'audience',
+          'competition',
+          'organization_slug'
+        ));
+    }
+
+  public function soloDivisionStore(Request $request){
+    $data = $request->all();
+
+    $audience =Audience::where('division_id',$data['division_id'])->first();
+    if($audience){
+      $audience->alias_name = $data['alias_name'];
+      $audience->is_dark = $data['is_dark'];
+      $audience->banner_type = $data['banner_type'];
+      $audience->banner_upload = $data['banner_upload'];
+      $audience->social = $data['social'];
+      $audience->list_of_votes = isset($data['list_of_votes'])?$data['list_of_votes']:[];
+      $audience->banner_embed = $data['banner_embed'];
+      $audience->limit_result = $data['limit_result'];
+      $audience->is_required_login = isset($data['is_required_login'])?1:0;
+      $audience->disable_vote = isset($data['disable_vote'])?1:0;
+      $audience->save();
+    }else{
+      $data['created_at'] = date("Y-m-d H:i:s");
+      if(!isset($data['is_required_login']))$data['is_required_login'] = 0;
+      if(!isset($data['disable_vote']))$data['disable_vote'] = 0;
+
+      Audience::create($data);
+    }
+
+    return redirect(route('organizer.competition.solo-division.audience-votes',[$data['competition_id'],$data['division_id']]));
+  }
 }

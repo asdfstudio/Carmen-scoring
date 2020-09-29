@@ -57,4 +57,20 @@ class Performer extends Model
 
     return '<span class="'.$class.'">'.$this->categoryName.'</span>';
   }
+
+  public function vote()
+  {
+    return $this->hasMany('App\Vote','vote_id','id');
+  }
+
+  /**
+   * Get vote from votes table
+   *
+   * @param $audienceId
+   * @return mixed
+   */
+  public function votes($audienceId)
+  {
+    return Vote::getVote($audienceId, $this->id);
+  }
 }

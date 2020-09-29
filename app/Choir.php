@@ -86,7 +86,7 @@ class Choir extends Model
 			return $this->hasManyThrough('App\Competition','App\Division');
 		}
     */
-    
+
     public function penalties()
 		{
 			return $this->belongsToMany('App\Penalty');
@@ -117,7 +117,7 @@ class Choir extends Model
 				$h.= $this->school->name . ' ';
 			}
 			$h.= $this->name();
-							
+
 			return $h;
     }
 
@@ -125,5 +125,22 @@ class Choir extends Model
 	{
 		return $this->hasMany('App\Recording');
 	}
+
+  public function vote()
+  {
+    return $this->hasMany('App\Vote','vote_id','id');
+  }
+
+  /**
+   * Get vote from votes table
+   *
+   * @param $audienceId
+   * @return mixed
+   */
+  public function votes($audienceId)
+  {
+    return Vote::getVote($audienceId, $this->id);
+  }
+
 
 }

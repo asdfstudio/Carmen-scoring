@@ -36,7 +36,7 @@ Route::group([
   Route::post('user/get-new-username', [
     'as' => 'user.username.new', 'uses' => 'UserController@getNewUsername'
   ]);
-  
+
   Route::resource('penalty', 'PenaltyController');
 
   Route::resource('award', 'AwardController');
@@ -330,6 +330,13 @@ Route::group([
     'as' => 'competition.division.choir.setup.store', 'uses' => 'CompetitionDivisionChoirController@storeMultiple'
   ]);
 
+Route::get('competition/{competition}/division/{division}/audience', [
+    'as' => 'competition.division.audience.index', 'uses' => 'CompetitionDivisionAudienceController@index'
+]);
+
+Route::post('competition/{competition}/division/{division}/audience/update', [
+    'as' => 'competition.division.audience.store', 'uses' => 'CompetitionDivisionAudienceController@store'
+]);
 
   Route::get('competition/{competition}/division/{division}/judge/import', [
     'as' => 'competition.division.judge.import', 'uses' => 'CompetitionDivisionJudgeController@import'
@@ -355,6 +362,7 @@ Route::group([
 	Route::resource('competition.division.choir', 'CompetitionDivisionChoirController');
 	Route::resource('competition.division.judge', 'CompetitionDivisionJudgeController');
   Route::resource('competition.division.round', 'CompetitionDivisionRoundController');
+  Route::resource('competition.solo-division', 'CompetitionSoloDivisionController');
   Route::resource('competition.solo-division', 'CompetitionSoloDivisionController');
 
   Route::get('dashboard', [
@@ -446,7 +454,7 @@ Route::group([
 	Route::post('competition/{competition}/division/{division}/round/{round}/choir/{choir}', [
     'as' => 'competition.division.round.choir.recordings', 'uses' => 'CompetitionDivisionRoundChoirController@show'
 	]);
-  
+
 
 	Route::get('competition/{competition}/division/{division}/round/{round}/judge/{judge}', [
     'as' => 'competition.division.round.judge.show', 'uses' => 'CompetitionDivisionRoundJudgeController@show'
@@ -473,10 +481,25 @@ Route::group([
     'as' => 'recording.delete', 'uses' => 'RecordingController@destroy'
     ]);
 
+  Route::get('competition/{competitionId}/solo-division/{soloDivisionId}/audience-votes', [
+    'as' => 'competition.solo-division.audience-votes', 'uses' => 'CompetitionSoloDivisionController@audienceVote'
+  ]);
+
+  Route::post('competition/{competitionId}/solo-division/{soloDivisionId}/audience-votes', [
+    'as' => 'competition.solo-division.audience-vote', 'uses' => 'CompetitionSoloDivisionController@soloDivisionStore'
+  ]);
 	//Route::resource('competition.division.round', 'CompetitionDivisionRoundController');
+
+  Route::post('/vote-setting',[
+      'as' => 'option.setting-audience', 'uses' => 'OrganizationController@voteSetting'
+  ] );
 });
+
+Route::post('/audience/fileupload/','Organizer\CompetitionDivisionAudienceController@fileupload')->name('audience.fileupload');
 
 
 // ======================
 // End Organizer Routes
 // ======================
+
+

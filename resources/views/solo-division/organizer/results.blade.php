@@ -26,6 +26,7 @@
 		@if ($soloDivision->category_2)
 			<li>{{ link_to_route('organizer.competition.solo-division.results', $soloDivision->category_2 . ' results',[$competition, $soloDivision, 'category' => 2],['class' => 'action']) }}</li>
 		@endif
+    <li>
 	</ul>
 
   @if ($soloDivision->performers->count() > 0)

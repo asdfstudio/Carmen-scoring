@@ -59,6 +59,8 @@ class Kernel extends HttpKernel
         'auth.admin' => \App\Http\Middleware\AuthenticateAdmin::class,
         'auth.organizer' => \App\Http\Middleware\AuthenticateOrganizer::class,
         'auth.judge' => \App\Http\Middleware\AuthenticateJudge::class,
+        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
+        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
 }
 

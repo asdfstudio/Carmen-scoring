@@ -4,6 +4,8 @@ namespace App;
 
 use App\Scopes\OrderByNameScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -102,24 +104,20 @@ class Division extends Model
         return $this->hasMany('App\Round');
     }
 
-
     public function standings()
     {
       return $this->hasMany('App\Standing');
     }
-
 
     public function scopeCompleted($query)
 		{
 			return $query->where('is_completed', 1);
 		}
 
-
     public function scopePublished($query)
 		{
 			return $query->where('is_published', 1);
 		}
-
 
     public function status()
     {
@@ -168,7 +166,6 @@ class Division extends Model
     {
       return $this->status_slug();
     }
-
 
     public function status_label($class_attr = false)
     {
@@ -254,13 +251,22 @@ class Division extends Model
       return $this->save();
     }
 
-
     public function getRatings(){
       if(!empty($this->ratings)){
         return $this->ratings;
       }
 
       return $this->ratings = $this->rounds->first()->getRatings();
+    }
+
+  /**
+   * Get audience
+   *
+   * @return HasOne
+   */
+    public function audience()
+    {
+      return $this->hasOne('App\Audience');
     }
 /*
     public function setOverallAwardSponsorsAttribute($value)

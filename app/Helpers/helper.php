@@ -29,3 +29,4 @@ function uploadToS3($path, $contents, $options = []) {
     }
     return false;
  }
+

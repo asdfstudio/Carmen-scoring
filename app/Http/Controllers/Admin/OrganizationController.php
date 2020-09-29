@@ -111,13 +111,12 @@ class OrganizationController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function show($id)
     {
                 $organization = Organization::find($id);
 
-        //dd(Auth::user());
 
         // Switch organizations for admin
         $user = Auth::user();
@@ -125,10 +124,6 @@ class OrganizationController extends Controller
         $user->save();
 
         return redirect()->route('organizer.competition.index');
-
-        $this->authorize('show', $organization);
-
-                return view('organization.show', ['organization' => $organization]);
     }
 
     /**
