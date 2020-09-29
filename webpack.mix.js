@@ -17,6 +17,7 @@ mix.autoload({ 'jquery': ['window.$', 'window.jQuery'] })
   // .copyDirectory('resources/js/vendor', 'public/dist/vendor/js')
   // .copyDirectory('resources/css/vendor', 'public/dist/css/vendor')
   .copyDirectory('resources/css', 'public/dist/css')
+  .copyDirectory('resources/fonts', 'public/dist/fonts')
   // Build the vue components
   // .js('resources/js/components', 'public/dist/js/vue-app.js')
   .js('src/main.js', 'public/dist/vue')
