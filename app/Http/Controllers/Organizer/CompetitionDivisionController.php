@@ -16,6 +16,9 @@ use App\Judge;
 use App\Sheet;
 use App\RawScore;
 
+use App\Carmen\Ratings;
+use App\Carmen\Scoreboard;
+
 use Kris\LaravelFormBuilder\FormBuilder;
 
 use Event;
@@ -139,15 +142,25 @@ class CompetitionDivisionController extends Controller
      */
     public function show($competition_id, $division_id, FormBuilder $formBuilder)
     {
-        $competition = Competition::with('organization','place','divisions')->find($competition_id);
+        // $division = Division::with(['competition', 'choirs','round','judges' => function ($query) {
+        //     $query->groupBy('judge_id');
+        // }, 'judges.captions' => function ($query) use ($division_id) {
+        //     $query->where('division_id',$division_id);
+        // }])->find($division_id);
 
-				$division = Division::with(['choirs','round','judges' => function ($query) {
-					$query->groupBy('judge_id');
-				}, 'judges.captions' => function ($query) use ($division_id) {
-					$query->where('division_id',$division_id);
-				}])->find($division_id);
+      $division = Division::find($division_id);
+      $competition = $division->round->competition;
+      $captions = Caption::forSheet($division->round->sheet);
+      $judges = $division->judges;
+      $choirs = $division->choirs;
+      $caption_ids = $division->round->sheet->caption_ids;
+      $captions = Caption::forSheet($division->round->sheet);
+      $ratings = (new Ratings($division))->all();
 
-				$captions = Caption::forSheet($division->round->sheet);
+      $scoreboard = new Scoreboard(['division_id' => $division_id]);
+      $rawScores = $scoreboard->extendedRawScores;
+      $weightedScores = $scoreboard->extendedRawScores;
+      $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
         $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
           'method' => 'POST',
@@ -176,53 +189,38 @@ class CompetitionDivisionController extends Controller
         ]);
 
         // Support for new board view
-        $choirs = Choir::all()->pluck('full_name', 'id')->toArray();
-
-        //dd($choirs);
+        // $choirs = Choir::all()->pluck('full_name', 'id')->toArray();
 
         $newChoirForm = $formBuilder->create('Choir\CreateChoirForm', [
 					'method' => 'POST',
-          'data' => $choirs,
+                    'data' => Choir::all()->pluck('full_name', 'id')->toArray(),
 					'url' => route('organizer.competition.division.choir.store',[$division->competition,$division])
 				]);
 
-        $competition_rounds = Competition::find($competition_id )->rounds();
-
-        $choices = $competition_rounds->pluck('name', 'id')->toArray();
         $selected = [];
-
-
-        $newRoundForm = $formBuilder->create('Round\CreateRoundForm', [
-					'method' => 'POST',
-          'data' => [
-            'choices' => $choices,
-            'selected' => $selected,
-            'division' => $division
-          ],
-					'url' => route('organizer.competition.round.store', [$division->competition,$division])
-				]);
 
         $deleteChoirForm = $formBuilder->create('GenericDeleteForm', [
 					'method' => 'DELETE',
-          'class' => 'remove-resource'
+                  'class' => 'remove-resource'
 				]);
 
         $deleteChoirForm->modify('submit','submit',['label' => 'Remove']);
 
 
-        $judges = Judge::get();
-        $judges = $judges->pluck('full_name', 'id')->toArray();
+        // $judges = Judge::get();
+        // $judges = $judges->pluck('full_name', 'id')->toArray();
 
         // $newJudgeForm = $formBuilder->create('Judge\ChooseJudgeForm', [
-				// 	'method' => 'POST',
-        //   'data' => $judges,
-				// 	'url' => route('organizer.competition.division.judge.store',[$division->competition,$division])
-				// ]);
+		// 			'method' => 'POST',
+        //             'data' => Judge::all()->pluck('full_name', 'id')->toArray(),
+        //             'class' => 'add-judge',
+        //             'url' => route('organizer.competition.division.judge.store',[$division->competition,$division])
+		// 		]);
 
 
         $deleteJudgeForm = $formBuilder->create('GenericDeleteForm', [
 					'method' => 'DELETE',
-          'class' => 'remove-resource'
+                    'class' => 'remove-resource'
 				]);
 
         $deleteJudgeForm->modify('submit','submit',['label' => 'Remove']);
@@ -242,7 +240,7 @@ class CompetitionDivisionController extends Controller
         $deletePenaltyForm->modify('submit','submit',['label' => 'Remove']);
 
         // return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
-        return view('competition_division.organizer.show', compact('competition', 'division', 'choirs', 'captions', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
+        return view('competition_division.organizer.show', compact('competition', 'division', 'judges', 'choirs', 'captions', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'deleteChoirForm', 'deleteJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
     }
 
     /**

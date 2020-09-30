@@ -40,9 +40,9 @@ class DivisionPolicy extends BasePolicy
 		}
 
 
-		public function create($model)
+		public function create($competition)
 		{
-      if($this->isOrgAdmin)
+      if($this->isOrgAdmin AND $competition)
       {
         return true;
       }

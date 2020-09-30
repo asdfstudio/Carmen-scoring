@@ -34,20 +34,21 @@
           {{ $judge->full_name }}
         </th>
       @endforeach
-      
+
       <th class="{{ $total_col_class }}">Total</th>
-      
+
       <th>Place</th>
 
       @if(!empty($ratings))
         <th>Rating</th>
       @endif
     </tr>
+    {{ $choirs }}
 
     @foreach($choirs as $choir)
       <tr>
         <th>
-          {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
+          {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$division->competition,$division,$division->round,$choir]) }}
         </th>
         @foreach($judges as $judge)
 
@@ -147,7 +148,7 @@
   @foreach($choirs as $choir)
     <tr>
       <th>
-        {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
+        {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$division->competition,$division,$division->round,$choir]) }}
       </th>
       @foreach($judges as $judge)
         <td>

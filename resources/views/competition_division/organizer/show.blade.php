@@ -193,12 +193,13 @@
     </ul>
   @endif
 
+  {{--
   {{-- Condorcet methods have an extra table that is formatted a little differently to show rankings. --}}
   @if($is_condorcet)
   	@include('scores.organizer.ranked_condorcet',['choirs' => $choirs, 'judges' => $division->judges])
   @endif
 
-	@include('scores.organizer.composite',['choirs' => $choirs, 'judges' => $division->judges])
+	@include('scores.organizer.composite',['choirs' => $choirs, 'judges' => $judges])
 
   </div>
 

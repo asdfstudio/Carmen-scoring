@@ -1,7 +1,7 @@
 @php
   // Hide the "Total" column for Consensus Ordinal Rank (scoring method 5)
   $total_col_class = 'total_column weighted raw rank';
-  if($division->scoring_method_id == 5){
+  if($division->round->scoring_method_id == 5){
     $total_col_class = 'total_column weighted raw';
   }
 @endphp
@@ -10,7 +10,7 @@
   @foreach($captions as $caption)
 
     @php
-      if($division->caption_weighting_id === 1){
+      if($division->round->caption_weighting_id === 1){
         $captionTotalRank = $rankedScores->total_weighted_rank($caption->id);
       } else {
         $captionTotalRank = $rankedScores->total_raw_rank($caption->id);
@@ -39,10 +39,11 @@
       <th>Rating</th>
     </tr>
 
-    @foreach($round->choirs as $choir)
+    {{--
+    @foreach($choirs as $choir)
       <tr>
         <th>
-          {{ link_to_route('judge.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
+          {{ link_to_route('judge.competition.division.choir.show',$choir->full_name,[$round->division->competition,$division,$round,$choir]) }}
         </th>
         @foreach($judges as $judge)
           <td>
@@ -88,6 +89,7 @@
       </tr>
     @endforeach
   @endforeach
+  --}}
 
 
   <tr class="caption-header caption-place">
@@ -142,10 +144,10 @@
 
           @php $penalty = $scoreboard->penalties->where('choir_id', $choir->id)->where('apply_per_judge', 1)->sum('amount');@endphp
           <span class="penalty raw weighted score">{{ $penalty }}</span>
-          
+
           @php $weightedTotal = $weightedSubtotal - $penalty; @endphp
           <span class="weighted total score">{{ $weightedTotal }}</span>
-          
+
           @php $rawTotal = $rawSubtotal - $penalty; @endphp
           <span class="raw total score">{{ $rawTotal }}</span>
 

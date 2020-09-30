@@ -196,7 +196,7 @@ class Scoreboard {
 
   public function getRankedScoresForCurrentMethod()
   {
-    switch($this->division->scoringMethod->name) {
+    switch($this->division->round->scoringMethod->name) {
       case 'Raw Scores':
       case 'Ranked Scores':
         $this->rankedScoresForCurrentMethod = $this->rankedScores;
