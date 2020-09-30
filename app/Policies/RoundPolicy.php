@@ -40,9 +40,9 @@ class RoundPolicy extends BasePolicy
 		}
 
 
-		public function create($division=false)
+		public function create($competition=false)
 		{
-      if($this->isOrgAdmin AND $division)
+      if($this->isOrgAdmin AND $competition)
       {
         return true;
       }

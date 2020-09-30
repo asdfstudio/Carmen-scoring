@@ -34,6 +34,7 @@
   </div>
   @endif
 
+  {{-- // TODO: Make a better flag than whether this object exists. Maybe create this as a partial if we're sticking with it. --}}
   @if (isset($division))
   <div class="division-bar body-width">
     <div class="heading">

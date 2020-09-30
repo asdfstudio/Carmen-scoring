@@ -13,52 +13,15 @@
 			<li>{{ link_to_route('organizer.competition.round.index', 'Back to all Rounds', [$competition], ['class' => 'action']) }}</li>
 		@endcan
 
-		@can('update', $round)
-			<li>
-				{{ link_to_route('organizer.competition.round.edit', 'Edit', [$competition,$round], ['class' => 'action']) }}
-			</li>
+		@can('update', [$round])
+            <li> {{ link_to_route('organizer.competition.round.edit', 'Edit Scoring', [$competition,$round], ['class' => 'action']) }} </li>
+			<li>{{ link_to_route('organizer.competition.division.index', 'Edit Divisions', [$competition, $round], ['class' => 'action']) }}</li>
 		@endcan
 
-        {{--
-		@can('activateScoring', $round)
-			<li>
-				{!! form($activateScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id])]) !!}
-			</li>
-		@endcan
-
-		@can('reactivateScoring', $round)
-      <li>
-        {!! form($reactivateScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id])]) !!}
-      </li>
-    @endcan
-
-		@can('deactivateScoring', $round)
-			<li>
-				{!! form($deactivateScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id])]) !!}
-			</li>
-		@endcan
-
-		@can('completeScoring', $round)
-			<li>
-				{!! form($completeScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id])]) !!}
-			</li>
-		@endcan
-        --}}
 	</ul>
 @endsection
 
 @section('content')
-	<ul class="actions-group mv">
-		@can('completeScoring', $round)
-			<li>{!! form($completeScoringForm) !!}</li>
-		@endcan
-
-		@can('update', $round)
-			<li>{{ link_to_route('organizer.competition.round.edit', 'Edit Round', [$competition,$round],['class' => 'action']) }}</li>
-		@endcan
-
-	</ul>
-
 	<div class="clearfix"></div>
 
 	@if ($round->isMissingScores())
@@ -71,16 +34,14 @@
 		</div>
 	@endif
 
+    @include('round.partial.single')
 	<ul class="list-group">
 		<li class="list-group-item">
-			<h3>Settings</h3>
-			<p>{{ link_to_route('organizer.competition.round.settings', 'Manage scoring settings', [$competition, $round]) }}</p>
-		</li>
-		<li class="list-group-item">
 			<h3>Divisions</h3>
-{{--
-			<p>{{ link_to_route('organizer.competition.round.division.index', 'Manage divisions', [$competition, $round]) }}</p>
---}}
+            @foreach($round->divisions as $div)
+            <p>Division: {{ $div->name }}</p>
+            @endforeach
+
 		</li>
 	</ul>
 

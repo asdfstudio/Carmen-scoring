@@ -7,11 +7,9 @@
 @section('content-header')
 	<h1>Manage Rounds</h1>
 
-	<ul class="actions-group">
-	@can('createRound', [$competition])
+	@can('create', App\Round::class)
 		{{ link_to_route('organizer.competition.round.create', 'Add a Round', [$competition], ['class' => 'action']) }}
 	@endcan
-	</ul>
 @endsection
 
 @section('content')
