@@ -26,7 +26,7 @@
           allowEmptyOption: true,
           placeholder: 'Select a judge...'
         });
-        
+
         // Clear the Selectize field so that the placeholder will show
         // and validation will detect the field as empty.
         judgeSelectize[0].selectize.clear();
