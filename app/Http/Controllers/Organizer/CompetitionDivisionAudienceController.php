@@ -107,7 +107,7 @@ class CompetitionDivisionAudienceController extends Controller
 
                $path = Storage::disk('s3')->put($destinationPath, $request->file);
                $request->merge([
-                 'size' => $request->file->getClientSize(),
+                 'size' => $request->file->getSize(),
                  'path' => $path
                ]);
 
