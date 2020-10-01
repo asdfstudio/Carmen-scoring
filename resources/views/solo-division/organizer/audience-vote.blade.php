@@ -13,9 +13,9 @@
 
 @section('content')
   <!-- CSS -->
-  <link rel="stylesheet" type="text/css" href="{{asset('dropzone/dist/min/dropzone.min.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/dropzone.css')}}">
   <!-- JS -->
-  <script src="{{asset('dropzone/dist/min/dropzone.min.js')}}" type="text/javascript"></script>
+  <script src="{{asset('dist/js/vendor/dropzone.js')}}" type="text/javascript"></script>
   <form method="POST"
         action="{{route('organizer.competition.solo-division.audience-vote',[$competition->id,$soloDivision->id])}}"
         accept-charset="UTF-8"
@@ -41,8 +41,6 @@
           type="text">{{isset($audience)?$audience->alias_name:str_replace(' ','-', $soloDivision->name)}}</span>/results
         <button type="button" class="ml-5 btn btn-primary" onclick="copyLink(2)">Copy Link</button>
       </div>
-
-
     </div>
 
     <div class="form-group">
@@ -54,6 +52,18 @@
         <label class="radio-inline">
           <input type="radio" name="is_dark" value="0" class="form-check-input"
                  @if($audience) @if(!$audience->is_dark)checked @endif @endif>Bright</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label required">Select Vote Type</label>
+      <div>
+        <label class="radio-inline">
+          <input type="radio" name="is_premium_vote" value="0" class="form-check-input"
+                 @if($audience) @if(!$audience->is_premium_vote)checked @endif  @else checked @endif>Free</label>
+        <label class="radio-inline">
+          <input type="radio" name="is_premium_vote" value="1" class="form-check-input"
+                 @if($audience) @if($audience->is_premium_vote)checked @endif @endif>Premium</label>
       </div>
     </div>
 
