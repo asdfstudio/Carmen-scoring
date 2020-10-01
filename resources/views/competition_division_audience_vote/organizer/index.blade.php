@@ -10,9 +10,9 @@
 
 @section('content')
   <!-- CSS -->
-  <link rel="stylesheet" type="text/css" href="{{asset('dropzone/dist/min/dropzone.min.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/dropzone.css')}}">
   <!-- JS -->
-  <script src="{{asset('dropzone/dist/min/dropzone.min.js')}}" type="text/javascript"></script>
+  <script src="{{asset('dist/js/vendor/dropzone.js')}}" type="text/javascript"></script>
   <form method="POST" action="{{route('organizer.competition.division.audience.store',[$competition_id,$division_id])}}"
         accept-charset="UTF-8"
         id="organizer_form">

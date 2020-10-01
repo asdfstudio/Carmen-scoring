@@ -432,7 +432,7 @@ footer {
   border-radius: 50%;
   padding: 0px;
   color: #fff;
-  background: #3376ba url(../images/ic_close_w.svg) center no-repeat;
+  background: #3376ba url(../../../images/ic_close_w.svg) center no-repeat;
   background-size: 10px;
   opacity: 1;
   position: absolute;
@@ -556,11 +556,11 @@ footer {
 }
 
 .facebookBtn {
-  background-image: url(../images/fb.svg);
+  background-image: url(../../../images/fb.svg);
 }
 
 .gplusBtn {
-  background-image: url(../images/gplus.svg);
+  background-image: url(../../../images/gplus.svg);
 }
 
 .orDiv {
@@ -642,7 +642,7 @@ footer {
   content: " ";
   vertical-align: middle;
   display: inline-block;
-  background-image: url(../images/login.svg);
+  background-image: url(../../../images/login.svg);
   background-repeat: no-repeat;
   background-size: 42.3em 26.9em;
 }

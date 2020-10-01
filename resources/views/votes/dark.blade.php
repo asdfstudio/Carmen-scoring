@@ -1,8 +1,8 @@
 @extends('votes.layout')
 
 @section('style')
-  <link rel="stylesheet" type="text/css" href="/assets/css/dark_style.css" />
-  <link rel="stylesheet" type="text/css" href="/assets/css/dark_responsive.css" />
+  <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/dark_style.css')}}" />
+  <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/dark_responsive.css')}}" />
 @endsection
 
 @section('content')

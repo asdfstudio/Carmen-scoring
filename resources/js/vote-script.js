@@ -16,6 +16,20 @@
           password: password,
           _token: token
         },
+        error: function (data) {
+          $('.screen-loading').addClass('d-none');
+          let message = 'Please check your email and password!<br />';
+          $.each(data.responseJSON.errors, function (index, value) {
+            message += value+"<br />";
+          });
+
+          Swal.fire({
+            title: 'Whoop!',
+            html: '<p class="h5 py-4">' + message + '</p>',
+            icon: 'error',
+            showConfirmButton: false,
+          })
+        },
         success: function (data) {
           $('.screen-loading').addClass('d-none');
           $('#user-header').html(data);

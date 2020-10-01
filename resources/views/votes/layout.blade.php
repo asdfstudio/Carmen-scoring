@@ -5,12 +5,12 @@
   <title>Carmen-Scoring system</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <link rel="shortcut icon" href="/assets/images/fevicon.png"/>
-  <link rel="stylesheet" type="text/css" href="/assets/css/card-js.min.css">
-  <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css"/>
-  <link rel="stylesheet" type="text/css" href="/assets/css/animate.css"/>
-  <link rel="stylesheet" type="text/css" href="/assets/css/circular-std.css">
-  <link rel="stylesheet" type="text/css" href="/assets/css/fontawesome-all.css">
+  <link rel="shortcut icon" href="{{asset('assets/images/fevicon.png')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/card-js.min.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/bootstrap.min.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/animate.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/circular-std.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/fontawesome-all.css')}}">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/regular.css" crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css"crossorigin="anonymous">
   @yield('style')
@@ -23,13 +23,12 @@
 @include('votes.partial.footer')
 @include('votes.partial.modal')
 
-<script src="/assets/js/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="{{asset('dist/js/vendor/jquery.min.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-<script src="/assets/js/fontawesome.js"></script>
-<script src="/assets/js/bootstrap.min.js"></script>
-<script src="/assets/js/card-js.min.js"></script>
-<script src="/assets/js/vote-script.js"></script>
+<script src="{{asset('dist/js/vendor/fontawesome.js')}}"></script>
+<script src="{{asset('dist/js/vendor/bootstrap.min.js')}}"></script>
+<script src="{{asset('dist/js/vendor/card-js.min.js')}}"></script>
+<script src="{{asset('dist/js/vote-script.js')}}"></script>
 
 <script>
   // Add active class to the current button (highlight it)
