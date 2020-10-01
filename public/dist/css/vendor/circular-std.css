@@ -1,7 +1,7 @@
 /* CircularStd @font-face kit */
 @font-face {
   font-family: 'CircularStd';
-  src: url('../../fonts/CircularStd/CircularStd/CircularStd-Black.eot');
+  src: url('../../fonts/CircularStd/CircularStd-Black.eot');
   src: url('../../fonts/CircularStd/CircularStd-Black.eot?#iefix') format('embedded-opentype'), url('../../fonts/CircularStd/CircularStd-Black.woff') format('woff'), url('../../fonts/CircularStd/CircularStd-Black.ttf') format('truetype'), url('../../fonts/CircularStd/CircularStd-Black.svg#bcc26993292869431e54c666aafa8fcd') format('svg');
   font-weight: 800;
   font-style: normal;
