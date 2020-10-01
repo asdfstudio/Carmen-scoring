@@ -413,6 +413,7 @@ class CompetitionSoloDivisionController extends Controller
       $audience->list_of_votes = isset($data['list_of_votes'])?$data['list_of_votes']:[];
       $audience->banner_embed = $data['banner_embed'];
       $audience->limit_result = $data['limit_result'];
+      $audience->is_premium_vote = $data['is_premium_vote'];
       $audience->is_required_login = isset($data['is_required_login'])?1:0;
       $audience->disable_vote = isset($data['disable_vote'])?1:0;
       $audience->save();
