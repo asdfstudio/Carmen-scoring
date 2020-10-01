@@ -39,7 +39,7 @@ class PaymentController extends Controller
   {
     $this->validateData($request);
     $input = $request->all();
-    $input = array_except($input, array('_token'));
+    unset($input['_token']);
     $amount = $input['petl_point'];
     $stripe = Stripe::make(env('STRIPE_SECRET'));
 
