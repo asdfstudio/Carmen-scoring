@@ -16,6 +16,7 @@ class Division extends Model
 {
     use SoftDeletes;
 
+    // TODO: Is this neccessary if we've already used SoftDeletes?
     protected $dates = ['deleted_at'];
 
     protected $fillable =  [
@@ -87,6 +88,16 @@ class Division extends Model
     public function standings()
     {
         return $this->hasMany('App\Standing');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_scoring_active', 1);
+    }
+
+    public function scopeIncomplete($query)
+    {
+        return $query->where('is_completed', 0);
     }
 
     public function scopeCompleted($query)
@@ -163,8 +174,6 @@ class Division extends Model
         $this->is_published = false;
         $saved = $this->save();
 
-        $this->rounds()->first()->activateScoring();
-
         return $saved;
     }
 
@@ -174,8 +183,6 @@ class Division extends Model
         $this->is_completed = false;
         $this->is_published = false;
         $saved = $this->save();
-
-        $this->rounds()->first()->deactivateScoring();
 
         return $saved;
     }
@@ -187,8 +194,6 @@ class Division extends Model
         $this->is_published = false;
         $saved = $this->save();
 
-        $this->rounds()->first()->reactivateScoring();
-
         return $saved;
     }
 
@@ -198,8 +203,6 @@ class Division extends Model
         $this->is_completed = true;
         $this->is_published = false;
         $saved = $this->save();
-
-        $this->rounds()->first()->completeScoring();
 
         return $saved;
     }
@@ -263,6 +266,13 @@ class Division extends Model
     {
       return $this->hasOne('App\Audience');
     }
+    public function isNew()
+    {
+      return strcmp($this->created_at, $this->updated_at) === 0;
+    }
+
+
+
 /*
     public function setOverallAwardSponsorsAttribute($value)
     {

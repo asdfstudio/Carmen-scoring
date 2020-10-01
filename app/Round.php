@@ -38,21 +38,12 @@ class Round extends Model
         return $this->hasMany('App\Division');
     }
 
-    public function sources()
-    {
-      return $this->belongsToMany('App\Round', 'round_connections', 'target_round_id', 'source_round_id');
-    }
-
-    public function targets()
-    {
-      return $this->belongsToMany('App\Round', 'round_connections', 'source_round_id', 'target_round_id');
-    }
-
     public function penalties()
     {
         return $this->belongsToMany('App\Penalty', 'choir_penalty')->withPivot('choir_id');
     }
 
+    // TODO: See if the migration affected the morph here. Might need to update the subject_type columns.
     public function feedback()
     {
         return $this->morphMany('App\Comment', 'subject');
@@ -73,18 +64,23 @@ class Round extends Model
         return $this->belongsTo('App\CaptionWeighting');
     }
 
+    // TODO: Clean this all up, have a chat about duplicate data and whether it's worth keeping around
+    // in case of mistakes and re-activated divisions. Also reduce the number of methods being used to
+    // do the same thing here.
     public function isScoringActive()
     {
-        return $this->is_scoring_active ? 'Active' : 'Not Active';
+        $numActiveDivisions = $this->divisions()->active()->count();
+        return $numActiveDivisions == 0 ? 'Active': 'Not Active';
     }
 
+    // TODO: Why are we using both "Inactive" and "Not Active"? Let's make that consistent.
     public function status()
     {
-        if($this->is_completed)
+        if($this->divisions()->incomplete()->count() == 0)
         {
             return 'Completed';
         }
-        elseif($this->is_scoring_active)
+        elseif($this->isScoringActive() == 'Active')
         {
             return 'Active';
         }
@@ -96,20 +92,8 @@ class Round extends Model
 
     public function status_slug()
     {
-        if($this->is_completed)
-        {
-            return 'completed';
-        }
-        elseif($this->is_scoring_active)
-        {
-            return 'active';
-        }
-        else
-        {
-            return 'inactive';
-        }
+        return strtolower($this->status());
     }
-
 
     public function getStatusAttribute()
     {
@@ -134,14 +118,6 @@ class Round extends Model
         return '<span class="'.$class.'">'.$this->status.'</span>';
     }
 
-    public function completeScoring()
-    {
-        $this->is_scoring_active = false;
-        $this->is_completed = true;
-        event(new RoundScoringCompleted($this));
-        return $this->save();
-    }
-
     // TODO: Make this more efficient with its own query
     public function isMissingScores()
     {
@@ -151,12 +127,6 @@ class Round extends Model
             }
         }
         return false;
-    }
-
-
-    public function isNewRound()
-    {
-      return strcmp($this->created_at, $this->updated_at) === 0;
     }
 
 

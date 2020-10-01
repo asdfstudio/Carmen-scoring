@@ -26,151 +26,186 @@ class DivisionPolicy extends BasePolicy
      */
     public function __construct()
     {
-      parent::__construct();
+        parent::__construct();
     }
 
     public function before($user, $ability)
-		{
+    {
 
-		}
+    }
 
     public function show(User $user, $round)
-		{
-      return $this->isOrgUser;
-		}
+    {
+        return $this->isOrgUser;
+    }
 
 
-		public function create($competition)
-		{
-      if($this->isOrgAdmin AND $competition)
-      {
-        return true;
-      }
-		}
+    public function create($competition)
+    {
+        if($this->isOrgAdmin AND $competition)
+        {
+            return true;
+        }
+    }
 
     public function update(User $user, $division)
-		{
-      if($this->isAdmin)
-      {
-        return true;
-      }
-      elseif($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
-      {
-        return true;
-      }
-		}
-
-		public function destroy(User $user, $division)
-		{
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
-      {
-        return true;
-      }
-		}
-
-    public function finalizeScoring(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'completed')
-      {
-        return true;
-      }
+        if($this->isAdmin)
+        {
+            return true;
+        }
+        elseif($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
+        {
+            return true;
+        }
+    }
+
+    public function destroy(User $user, $division)
+    {
+        if($this->isOrgAdmin AND $division->status_slug() == 'active')
+        {
+            return true;
+        }
+    }
+
+    public function activateScoring(User $user, $division)
+    {
+        if($this->isOrgAdmin AND $division->status_slug() == 'inactive' AND $division->isNew())
+        {
+            return true;
+        }
+    }
+
+    public function deactivateScoring(User $user, $division)
+    {
+        if($this->isOrgAdmin AND $division->status_slug() == 'active')
+        {
+            return true;
+        }
+    }
+
+    public function reactivateScoring(User $user, $division)
+    {
+        if ($this->isOrgAdmin AND !$division->isNew() AND
+            ($division->status_slug() == 'completed' OR $division->status_slug() == 'inactive')
+            AND $division->division->status_slug() != 'finalized')
+        {
+            return true;
+        }
+    }
+
+    public function completeScoring(User $user, $division)
+    {
+        $scoresMissing = $division->isMissingScores();
+
+        if ($this->isOrgAdmin AND !$scoresMissing AND $division->status_slug() != 'completed') {
+            return true;
+        }
+    }
+
+    public function finalizeScoring(User $user, $division)
+    {
+        if($this->isOrgAdmin AND $division->status_slug() == 'completed')
+        {
+            return true;
+        }
     }
 
     public function importJudges(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
-      {
-        return true;
-      }
+        if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
+        {
+            return true;
+        }
     }
 
     public function createJudge(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
-      {
-        return true;
-      }
+        if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
+        {
+            return true;
+        }
     }
 
     public function updateJudge(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
-      {
-        return true;
-      }
+        if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
+        {
+            return true;
+        }
     }
 
     public function removeJudge(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
-      {
-        return true;
-      }
+        if($this->isOrgAdmin AND $division->status_slug() == 'active')
+        {
+            return true;
+        }
     }
 
     public function addChoir(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
-      {
-        return true;
-      }
+        if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
+        {
+            return true;
+        }
     }
 
     public function removeChoir(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
-      {
-        return true;
-      }
+        if($this->isOrgAdmin AND $division->status_slug() == 'active')
+        {
+            return true;
+        }
     }
 
     public function viewFinalStandings(User $user, Division $division)
     {
-      if($this->isOrgAdmin OR $division->status_slug() == 'finalized')
-      {
-        return true;
-      }
+        if($this->isOrgAdmin OR $division->status_slug() == 'finalized')
+        {
+            return true;
+        }
     }
 
 
     public function createPenalty(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
-      {
-        return true;
-      }
+        if($this->isOrgAdmin AND $division->status_slug() == 'active')
+        {
+            return true;
+        }
     }
 
     public function assignPenalty(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
-      {
-        return true;
-      }
+        if($this->isOrgAdmin AND $division->status_slug() == 'active')
+        {
+            return true;
+        }
     }
 
     public function managePenalties(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
-      {
-        return true;
-      }
+        if($this->isOrgAdmin AND $division->status_slug() == 'active')
+        {
+            return true;
+        }
     }
 
     public function createAward(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'active')
-      {
-        return true;
-      }
+        if($this->isOrgAdmin AND $division->status_slug() == 'active')
+        {
+            return true;
+        }
     }
 
     // -dg-
     public function viewResults(User $user, Division $division)
     {
-      if($this->isOrgAdmin AND $division->status_slug() == 'finalized')
-      {
-        return true;
-      }
+        if($this->isOrgAdmin AND $division->status_slug() == 'finalized')
+        {
+            return true;
+        }
     }
 }
