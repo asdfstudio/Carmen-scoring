@@ -26,8 +26,12 @@
       <li>{{ link_to_route('results.solo-division.show', 'Audience vote results',[$soloDivision, $access_code, 'view' => 'audience-vote'],['class' => 'action']) }}</li>
 	</ul>
 
-  @if ($soloDivision->performers->count() > 0)
+  @if ($soloDivision->performers->count() > 0 && !isset($audience))
     @include('performer.public.table', ['performers' => $soloDivision->performers, 'judges' => $soloDivision->judges])
+  @endif
+
+  @if(isset($audience))
+    @include('performer.public.audience-vote-result')
   @endif
 
 @endsection
