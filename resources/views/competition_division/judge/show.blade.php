@@ -16,10 +16,6 @@
         </li>
 
         <li>
-          <a href="#audience_vote" class="tab-link" data-tab-id="audience_vote">Audience vote</a>
-        </li>
-
-        <li>
           <a href="#judges" class="tab-link" data-tab-id="judges">Judges</a>
         </li>
         <li>
