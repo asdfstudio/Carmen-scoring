@@ -23,6 +23,7 @@
 		@if ($soloDivision->category_2)
 			<li>{{ link_to_route('results.solo-division.show', $soloDivision->category_2 . ' results',[$soloDivision, $access_code, 'category' => 2],['class' => 'action']) }}</li>
 		@endif
+      <li>{{ link_to_route('results.solo-division.show', 'Audience vote results',[$soloDivision, $access_code, 'view' => 'audience-vote'],['class' => 'action']) }}</li>
 	</ul>
 
   @if ($soloDivision->performers->count() > 0)

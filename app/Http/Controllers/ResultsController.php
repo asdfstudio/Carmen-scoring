@@ -165,7 +165,7 @@ class ResultsController extends Controller
         if (!$competition) {
           return view('results.competition.no-match');
         }
-        
+
         return view('results.competition.show-public', compact('competition'));
       }
 
@@ -356,7 +356,7 @@ class ResultsController extends Controller
       $captions = $this->captions;
 
       $round = $division->rounds()->find($round_id);
-			$choir = Choir::with(['penalties' => function($query) use ($round_id){
+      $choir = Choir::with(['penalties' => function($query) use ($round_id){
         $query->where('round_id', $round_id);
       }])->find($choir_id);
 
@@ -602,7 +602,7 @@ class ResultsController extends Controller
         }
       }
 
-      return DB::table('votes')->insert($allChoirs);
+      return DB::table('vote_results')->insert($allChoirs);
     }
 
   /**
@@ -636,7 +636,7 @@ class ResultsController extends Controller
         }
       }
 
-      return DB::table('votes')->insert($allPerformers);
+      return DB::table('vote_results')->insert($allPerformers);
     }
 
   /**
