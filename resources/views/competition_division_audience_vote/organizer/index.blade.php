@@ -161,6 +161,7 @@
 
         <label class="checkbox-inline">
           <input type="checkbox" name="is_required_login" value="1"
+                 @if(!$audience) checked @endif
                  @if($audience) @if($audience->is_required_login)checked @endif @endif> Require login for
           election</label>
         <label class="checkbox-inline">

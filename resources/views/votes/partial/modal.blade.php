@@ -168,7 +168,7 @@
 
                   <input type="hidden" name="redirect" value="{{Request::url()}}">
                   <div>
-                    <button type="submit" class="btn_modalFull" id="resetPassWord">Signup</button>
+                    <button type="submit" class="btn_modalFull" id="resetPassWord">Reset password</button>
                   </div>
                 </form>
                 <div class="screen-loading text-center pt-2 d-none">

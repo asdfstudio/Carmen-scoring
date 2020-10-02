@@ -7,9 +7,16 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Vote;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class VoteController extends Controller
 {
+  private $successful_message;
+
+  public function __construct()
+  {
+    $this->successful_message = 'Thanks for your voting! If you made a mistake, you can undo your action';
+  }
 
   /**
    * @param Request $request
@@ -19,22 +26,23 @@ class VoteController extends Controller
   {
     $audientId = $request->input('audientId');
     $audience = Audience::find($audientId);
+    $user = Auth::user();
 
-    if ($audience->is_required_login && !Auth::check()) return $this->requireLogin();
+    if (($audience->is_premium_vote && !$user) || ($audience->is_required_login && !$user)){
+      return $this->requireLogin();
+    }
 
     if (NULL === $audience) return $this->notOpen();
 
     if ($audience->disable_vote) return $this->disableVote();
 
-    $user = Auth::user();
+    if(!$audience->is_required_login) {
+      return $this->addVote(['vote_id' => $request->input('voteId'),'audience' => $audience]);
+    }
 
-    if ($user->email_verified_at === "0000-00-00 00:00:00"){ return $this->requireActiveAccount();}
+    if ($user->email_verified_at === "0000-00-00 00:00:00") return $this->requireActiveAccount();
 
-    return $this->addVote([
-      'user' => $user,
-      'vote_id' => $request->input('voteId'),
-      'audience' => $audience
-    ]);
+    return $this->addVote(['vote_id' => $request->input('voteId'),'audience' => $audience]);
   }
 
   /**
@@ -58,9 +66,7 @@ class VoteController extends Controller
    */
   public function checkUserVoted($audienceId, $user)
   {
-    if (NULL === $user->voted) {
-      return false;
-    }
+    if (NULL === $user->voted)  return false;
     return in_array($audienceId, $user->voted);
   }
 
@@ -107,17 +113,23 @@ class VoteController extends Controller
    */
   public function addVote($data)
   {
-    $message = 'Thanks for your voting! If you made a mistake, you can undo your action';
+    $message = $this->successful_message;
     $audience = $data['audience'];
+    $user = Auth::user();
     $vote = Vote::where('vote_id', $data['vote_id'])->where('audience_id', $audience->id)->first();
-    $newVote = $data['user']->id . '_' . $audience->id . '_' . $data['vote_id'];
+
+    if (!$user ) {
+      $newVote =  $_SERVER['REMOTE_ADDR'] . '_' . $audience->id . '_' . $data['vote_id'];
+    } else {
+      $newVote = $user->id . '_' . $audience->id . '_' . $data['vote_id'];
+    }
+
     $votes = (NULL == $vote) ? [] : (array)$vote->votes;
+
     $data['votes'] = $votes;
     $data['newVote'] = $newVote;
 
-    if (NULL === $vote) {
-      $vote = $this->firstVote($data);
-    }
+    if (NULL === $vote) {  $vote = $this->firstVote($data);  }
 
     if ($audience->is_premium_vote) {
       $message = 'Thanks for your voting!';
@@ -130,7 +142,33 @@ class VoteController extends Controller
       return $this->cancelVote($data, $vote, $votes);
     }
 
+    if (!Auth::user()) {
+      return $this->anonymousVote($data, $vote, $message);
+    }
+
     return $this->freeVote($data, $vote, $message);
+  }
+
+  /**
+   * @param $data
+   * @param $vote
+   * @param $message
+   * @return JsonResponse
+   */
+  public function anonymousVote($data, $vote, $message) {
+    $votes = $data['votes'];
+    $newVote = $data['newVote'];
+    $cookieName = 'audience_voted_'.$data['audience']->id.'';
+
+    if (Cookie::get($cookieName) != null) {
+      return response()->json([
+        'message' => 'No more votes available for your account'
+      ], 500);
+    }
+
+    array_push($votes, $newVote);
+    Cookie::queue($cookieName, $data['audience']->id, 512640);
+    return $this->updateVote($vote, $votes, $message);
   }
 
   /**
@@ -141,12 +179,12 @@ class VoteController extends Controller
    */
   public function premiumVote($data, $vote, $message)
   {
-    $user = $data['user'];
+    $user = Auth::user();
     if ($user->petl_point > 0) {
       $votes = $data['votes'];
       array_push($votes, $data['newVote']);
-      $this->updateUserVoted($data['user'], $data['audience']->id);  //Update voted id to user data
-      $this->updateUserPetlPoint($data['user']); //Update user petl points
+      $this->updateUserVoted($user, $data['audience']->id);  //Update voted id to user data
+      $this->updateUserPetlPoint($user); //Update user petl points
       return $this->updatePremiumVote($vote, $votes, $message);
     }
 
@@ -173,14 +211,15 @@ class VoteController extends Controller
   public function freeVote($data, $vote, $message)
   {
     $votes = $data['votes'];
-    if ($this->checkUserVoted($data['audience']->id, $data['user'])) {
+    $user = Auth::user();
+    if ($this->checkUserVoted($data['audience']->id, $user)) {
       return response()->json([
         'message' => 'No more votes available for your account'
       ], 500);
     }
 
     array_push($votes, $data['newVote']);
-    $this->updateUserVoted($data['user'], $data['audience']->id);  //Update voted id to user data
+    $this->updateUserVoted($user, $data['audience']->id);  //Update voted id to user data
     return $this->updateVote($vote, $votes, $message);
   }
 
@@ -193,7 +232,13 @@ class VoteController extends Controller
   public function cancelVote($data, $vote, $votes)
   {
     $message = 'Vote successfully canceled!';
-    $this->removeVotedFromUser($data['user'], $data['audience']->id);
+
+    $user = Auth::user();
+    if ($user) {
+      $this->removeVotedFromUser($user, $data['audience']->id);
+    }
+
+    Cookie::queue(Cookie::forget('audience_voted_'.$data['audience']->id));
     return $this->updateVote($vote, $votes, $message);
   }
 
