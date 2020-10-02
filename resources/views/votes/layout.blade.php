@@ -5,7 +5,6 @@
   <title>Carmen-Scoring system</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <link rel="shortcut icon" href="{{asset('assets/images/fevicon.png')}}"/>
   <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/card-js.min.css')}}">
   <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/bootstrap.min.css')}}"/>
   <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/animate.css')}}"/>

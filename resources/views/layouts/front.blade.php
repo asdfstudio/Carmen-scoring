@@ -9,7 +9,6 @@
     <title>@section('title') Carmen Scoring System @show</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="shortcut icon" href="images/fevicon.png" />
 
     <link rel="stylesheet" type="text/css" href="/front/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/front/css/owl.carousel.min.css" />
