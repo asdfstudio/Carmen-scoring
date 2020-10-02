@@ -1,6 +1,6 @@
 @extends('layouts.simple')
 
-@php $include_division_navigation_bar = TRUE @endphp
+@php $include_division_navigation_bar = FALSE @endphp
 
 @section('breadcrumbs')
     {!! Breadcrumbs::render('organizer.competition.division.show',$competition,$division) !!}
@@ -32,6 +32,7 @@
 
         @can('update', $division)
             <li>{{ link_to_route('organizer.competition.division.edit', 'Edit Division', [$competition,$division],['class' => 'action']) }}</li>
+            {{-- <li>{{ link_to_route('organizer.competition.division.scoring.edit', 'Edit Division Scoring', [$competition,$division],['class' => 'action']) }}</li> --}}
         @endcan
 
     </ul>
@@ -49,6 +50,10 @@
     @endif
 
     <ul class="list-group">
+        <li class="list-group-item">
+            <h3>Division</h3>
+            <p>{{ link_to_route('organizer.competition.division.edit', 'Manage Division Settings', [$competition, $division]) }}</p>
+        </li>
         <li class="list-group-item">
             <h3>Penalties</h3>
             <p>{{ link_to_route('organizer.competition.division.penalty.index', 'Manage penalties', [$competition, $division]) }}</p>

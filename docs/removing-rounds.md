@@ -64,7 +64,7 @@ These files in app seem to use the source/target relationship currently:
 - [ ] Events/RoundScoringCompleted.php
 - [ ] Forms/Round/CreateRoundForm.php
 - [ ] Http/Controllers/Judge/CompetitionDivisionRoundController.php
-- [ ] Http/Controllers/Organizer/CompetitionDivisionRoundController.php
+- [X] Http/Controllers/Organizer/CompetitionDivisionRoundController.php
 - [ ] Http/Controllers/ResultsController.php
 - [ ] Http/Controllers/ResultsController.php
 - [ ] Listeners/AddChoirToRound.php
@@ -74,7 +74,8 @@ These files in app seem to use the source/target relationship currently:
 - [ ] Listeners/SyncRoundChoirsFromSources.php
 - [ ] Listeners/SyncRoundChoirsToTarget.php
 - [ ] Listeners/SyncRoundChoirsToTarget.php
-- [ ] Policies/RoundPolicy.php
+- [X] Policies/RoundPolicy.php
+- [X] Policies/DivisionPolicy.php
 
 ### Templates
 
@@ -82,8 +83,8 @@ These files in app seem to use the source/target relationship currently:
 - [ ] competition_division_round/judge/recording_summary.blade.php
 - [ ] competition_division_round/judge/summary.blade.php
 - [ ] competition_division_round/judge/summary.blade.php
-- [ ] competition_division_round/organizer/list.blade.php
-- [ ] competition_division_round/organizer/list.blade.php
+- [X] competition_division_round/organizer/list.blade.php
+- [X] competition_division_round/organizer/list.blade.php
 - [ ] layouts/public_results.blade.php
 - [ ] layouts/public_results.blade.php
 - [ ] scores/judge/spreadsheet.blade.php
@@ -91,7 +92,7 @@ These files in app seem to use the source/target relationship currently:
 
 ### UI Overview changes
 - [ ] Move the "Settings" tab from Division to a new "Round" manage index. Move the "edit scoring settings" and underlying top part of the form. Change to "edit optional rating systems" and just have that part remaining. 
-- [ ] Remove "Rounds" tab from the Division settings page
+- [X] Remove "Rounds" tab from the Division settings page
 ### Scoring
 
 Most scoring is done per-division so that won't change. But there are parts of the scoring system that grade source Rounds for the sake of seeding Target rounds. This will all be manual from now on so it should be removed from the app.

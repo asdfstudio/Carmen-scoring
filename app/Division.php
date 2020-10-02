@@ -30,7 +30,8 @@ class Division extends Model
         'music_award_sponsors',
         'show_award_sponsors',
         'combo_award_sponsors',
-        'rating_system'
+        'rating_system',
+        'round_id'
     ];
 
     protected $casts = [

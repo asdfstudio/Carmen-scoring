@@ -2,6 +2,8 @@
 
 namespace App\Forms\Division;
 
+use App\Round;
+
 use Kris\LaravelFormBuilder\Form;
 
 class CreateForm extends Form
@@ -9,8 +11,27 @@ class CreateForm extends Form
     public function buildForm()
     {
 
-				$this->add('name','text', ['rules' => 'required']);
+        $this->add('name','text', ['rules' => 'required']);
 
+        $competition_id = $this->getData('competition_id');
+        $this->add('round_id', 'entity', [
+            'class' => 'App\Round',
+            'query_builder' => function(Round $round) use ($competition_id) {
+                return $round->where('competition_id', $competition_id);
+            },
+            'property' => 'name',
+            'property_key' => 'id',
+            'selected' => $this->getData('round_selected'),
+            'label' => 'Choose a Round',
+            'empty_value' => '-- Select From Available Rounds --',
+            'rules' => 'required',
+            'expanded' => false,
+            'multiple' => false,
+            'choice_options' => [
+                'wrapper' => ['class' => 'choice-container'],
+                'labelAttrs' => 'label-class',
+            ]
+        ]);
 
             /*
 				$this->add('sheet_id','entity', [

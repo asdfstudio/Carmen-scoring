@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Choir;
 use App\Competition;
 use App\Division;
+use App\Round;
 use App\Caption;
 use App\Standing;
 use App\Judge;
@@ -84,19 +85,17 @@ class CompetitionDivisionController extends Controller
      */
     public function create($competition_id, FormBuilder $formBuilder)
     {
-				$competition = Competition::with('organization','place','divisions')->find($competition_id);
-
-        $sheets = Sheet::with('criteria')->get()->where('is_retired', 0);
-        foreach ($sheets as $sheet) {
-          $sheet->captions = Caption::forSheet($sheet);
-        }
+        $competition = Competition::with('organization','place','divisions')->find($competition_id);
 
         $form = $formBuilder->create('Division\CreateForm', [
-					'method' => 'POST',
-					'url' => route('organizer.competition.division.store',[$competition])
-				]);
+            'method' => 'POST',
+            'data' => [
+                'competition_id' => $competition_id,
+            ],
+            'url' => route('organizer.competition.division.store',[$competition])
+        ]);
 
-				return view('competition_division.organizer.create', compact('competition','form', 'sheets'));
+        return view('competition_division.organizer.create', compact('competition','form'));
     }
 
     /**
@@ -107,13 +106,11 @@ class CompetitionDivisionController extends Controller
      */
     public function store(Request $request, $competition_id, FormBuilder $formBuilder)
     {
-				$competition = Competition::with('organization','place','divisions')->find($competition_id);
+        $competition = Competition::with('organization','place','divisions')->find($competition_id);
 
-        $data = $request->all();
-				$division = new Division($data);
+        $division = new Division($request->all());
         $division->rating_system = array_filter($request->input('rating_system'));
-
-				$competition->divisions()->save($division);
+        $division->save();
 
         // if($request->exists('submit_create_another'))
         if($request->wantsJson())
@@ -142,14 +139,18 @@ class CompetitionDivisionController extends Controller
      */
     public function show($competition_id, $division_id, FormBuilder $formBuilder)
     {
-        // $division = Division::with(['competition', 'choirs','round','judges' => function ($query) {
-        //     $query->groupBy('judge_id');
-        // }, 'judges.captions' => function ($query) use ($division_id) {
-        //     $query->where('division_id',$division_id);
-        // }])->find($division_id);
+        $division = Division::with(['round', 'competition', 'choirs','round','judges' => function ($query) {
+            $query->groupBy('judge_id');
+        }, 'judges.captions' => function ($query) use ($division_id) {
+            $query->where('division_id',$division_id);
+        }])->find($division_id);
 
-      $division = Division::find($division_id);
+      // $division = Division::find($division_id);
+        // dd($division->round->competition);
       $competition = $division->round->competition;
+        // dd($division->round->sheet);
+      // dd($division);
+      // dd($competition);
       $captions = Caption::forSheet($division->round->sheet);
       $judges = $division->judges;
       $choirs = $division->choirs;
@@ -164,17 +165,17 @@ class CompetitionDivisionController extends Controller
 
         $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
           'method' => 'POST',
-          'url' => route('organizer.competition.division.scoring',[$competition,$division])
+          'url' => route('organizer.competition.division.scoring',[$competition_id,$division_id])
         ]);
 
         $reactivateScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm', [
           'method' => 'POST',
-          'url' => route('organizer.competition.division.scoring',[$competition,$division])
+          'url' => route('organizer.competition.division.scoring',[$competition_id,$division_id])
         ]);
 
         $deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm', [
           'method' => 'POST',
-          'url' => route('organizer.competition.division.scoring',[$competition,$division])
+          'url' => route('organizer.competition.division.scoring',[$competition_id,$division_id])
         ]);
 
         $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm', [
@@ -194,7 +195,7 @@ class CompetitionDivisionController extends Controller
         $newChoirForm = $formBuilder->create('Choir\CreateChoirForm', [
 					'method' => 'POST',
                     'data' => Choir::all()->pluck('full_name', 'id')->toArray(),
-					'url' => route('organizer.competition.division.choir.store',[$division->competition,$division])
+					'url' => route('organizer.competition.division.choir.store',[$competition_id,$division_id])
 				]);
 
         $selected = [];
@@ -386,30 +387,29 @@ class CompetitionDivisionController extends Controller
      */
     public function edit($competition_id, $division_id, FormBuilder $formBuilder)
     {
-        $competition = Competition::with('organization','place','divisions')->find($competition_id);
-				$division = Division::find($division_id);
+        $division = Division::with('competition', 'competition.organization', 'competition.place', 'round')
+            ->find($division_id);
 
         $this->authorize('update', $division);
 
-        //dd($division->overall_award_sponsors);
-
-        $sheets = Sheet::with('criteria')->get()->where('is_retired', 0);
-        foreach ($sheets as $sheet) {
-          $sheet->captions = Caption::forSheet($sheet);
-        }
+        $competition = $division->competition;
 
         $form = $formBuilder->create('Division\CreateForm', [
-					'method' => 'PUT',
-					'model' => $division,
-					'url' => route('organizer.competition.division.update',[$competition,$division_id])
-				]);
-
-
-        $deleteForm = $formBuilder->create('GenericDeleteForm', [
-          'url' => route('organizer.competition.division.destroy',[$competition,$division])
+            'method' => 'PUT',
+            'model' => $division,
+            'url' => route('organizer.competition.division.update', [$competition, $division_id]),
+            'data' => [
+                'competition_id' => $competition_id,
+            ],
         ]);
 
-				return view('competition_division.organizer.edit', compact('competition','division','form', 'deleteForm', 'sheets'));
+        $deleteForm = $formBuilder->create('GenericDeleteForm', [
+            'url' => route('organizer.competition.division.destroy', [$competition, $division])
+        ]);
+
+        $updating = TRUE;
+
+        return view('competition_division.organizer.create', compact('competition', 'division', 'form', 'updating', 'deleteForm'));
     }
 
     /**
@@ -421,36 +421,34 @@ class CompetitionDivisionController extends Controller
      */
     public function update(Request $request, $competition_id, $division_id, FormBuilder $formBuilder)
     {
-        // $form = $formBuilder->create('Division\CreateForm');
-
-				// // Validate input
-				// if (!$form->isValid()) {
-        //    return redirect()->back()->withErrors($form->getErrors())->withInput();
-        // }
-
-				$division = Division::find($division_id);
+        $division = Division::find($division_id);
 
         $this->authorize('update', $division);
 
-        $data = $request->all();
+        // Validate input
+        $form = $formBuilder->create('Division\CreateForm');
+        if (!$form->isValid()) {
+           return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
 
-				$division->fill($data);
+        $division->fill($request->all());
         $division->rating_system = array_filter($request->input('rating_system'));
-				$division->save();
+
+        $division->save();
 
         if($request->wantsJson()) // save & create new division
         {
-          $competition = Competition::find($competition_id);
-          $data['name'] = $data['new_name'];
-          $division_new = new Division($data);
-          $division_new->rating_system = array_filter($request->input('rating_system'));
-          $competition->divisions()->save($division_new);
+            $competition = Competition::find($competition_id);
+            $data['name'] = $data['new_name'];
+            $division_new = new Division($data);
+            $division_new->rating_system = array_filter($request->input('rating_system'));
+            $competition->divisions()->save($division_new);
 
-          $result = array('edited' => $division->name, 'new' => $division_new->name);
-          return response()->json($result);
+            $result = array('edited' => $division->name, 'new' => $division_new->name);
+            return response()->json($result);
+        } else {
+            return redirect()->route('organizer.competition.division.index', [$competition_id])->with('success', "$division->name has been updated.");
         }
-        else
-				  return redirect()->route('organizer.competition.division.settings',[$competition_id, $division])->with('success',"$division->name has been updated.");
     }
 
     /**
@@ -467,7 +465,7 @@ class CompetitionDivisionController extends Controller
 
       $division->delete();
 
-      return redirect()->route('organizer.competition.show',[$competition_id])->with('success', "$division->name successfully deleted.");
+      return redirect()->route('organizer.competition.division.index',[$competition_id])->with('success', "$division->name successfully deleted.");
     }
 
 
