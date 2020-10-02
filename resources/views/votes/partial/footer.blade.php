@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-6 col-md-8 col-12">
-          Copy right © Voting 2019. All Right Reserved.
+          Copy right © Voting {{date('Y')}}. All Right Reserved.
         </div>
         <div class="col-lg-6 col-md-4 col-12">
           <ul class="socilList">
