@@ -147,13 +147,13 @@ class CompetitionSoloDivisionController extends Controller
       return $this->results($competition, $id, 'M');
     }
 
-    /**
-     * [results description]
-     * @param  Competition $competition [description]
-     * @param  [type]      $id          [description]
-     * @param  [type]      $gender      [description]
-     * @return [type]                   [description]
-     */
+  /**
+   * [results description]
+   * @param Competition $competition [description]
+   * @param  [type]      $id          [description]
+   * @param Request $request
+   * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View [type]                   [description]
+   */
     public function results(Competition $competition, $id, Request $request)
     {
         $soloDivision = SoloDivision::with('performers', 'judges')->find($id);
@@ -220,9 +220,18 @@ class CompetitionSoloDivisionController extends Controller
           return $performer;
         });
 
+        $showAudienceVoteResult = false;
+        $audience = Audience::where('competition_id', $competition->id)
+          ->where('division_id', $id)
+          ->first();
+        if ($request->input('view')) {
+          $categoryName = 'Audience vote';
+          $showAudienceVoteResult = true;
+        }
+
         $soloDivision->performers = $soloDivision->performers->sortBy('rank');
 
-        return view('solo-division.organizer.results', compact('competition', 'soloDivision', 'category', 'categoryName'));
+        return view('solo-division.organizer.results', compact('competition', 'soloDivision', 'category', 'categoryName', 'showAudienceVoteResult','audience'));
     }
 
   /**

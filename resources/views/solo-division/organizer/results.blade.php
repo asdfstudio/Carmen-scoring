@@ -26,11 +26,16 @@
 		@if ($soloDivision->category_2)
 			<li>{{ link_to_route('organizer.competition.solo-division.results', $soloDivision->category_2 . ' results',[$competition, $soloDivision, 'category' => 2],['class' => 'action']) }}</li>
 		@endif
+    <li>{{ link_to_route('organizer.competition.solo-division.results', 'Audience vote results',[$competition, $soloDivision, 'view' => 'audience-vote'],['class' => 'action']) }}</li>
     <li>
 	</ul>
 
-  @if ($soloDivision->performers->count() > 0)
+  @if ($soloDivision->performers->count() > 0 && !$showAudienceVoteResult)
     @include('performer.organizer.table', ['performers' => $soloDivision->performers, 'judges' => $soloDivision->judges])
+  @endif
+
+  @if($showAudienceVoteResult)
+    @include('performer.organizer.audience-vote', ['performers' => $soloDivision->performers, 'judges' => $soloDivision->judges])
   @endif
 
 @endsection
