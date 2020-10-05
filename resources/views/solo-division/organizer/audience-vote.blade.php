@@ -84,8 +84,8 @@
               <div class="dz-image">
                 @php
                   $banner_url = 'uploads/'.$audience->batnner_upload;
-                  if(env('AWS_ACCESS_KEY_ID')) {
-                    $banner_url = env('AWS_URL').$audience->banner_upload;
+                  if(env('VOTING_AWS_ACCESS_KEY_ID')) {
+                    $banner_url = env('VOTING_AWS_URL').$audience->banner_upload;
                   }
                 @endphp
 

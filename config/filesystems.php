@@ -68,6 +68,15 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        'votingS3' => [
+          'driver' => 's3',
+          'key' => env('VOTING_AWS_ACCESS_KEY_ID'),
+          'secret' => env('VOTING_AWS_SECRET_ACCESS_KEY'),
+          'region' => env('VOTING_AWS_DEFAULT_REGION'),
+          'bucket' => env('VOTING_AWS_BUCKET'),
+          'url' => env('VOTING_AWS_URL'),
+        ],
+
     ],
 
 ];

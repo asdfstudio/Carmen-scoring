@@ -97,7 +97,7 @@ class CompetitionDivisionAudienceController extends Controller
 
           // Check extension
           if(in_array(strtolower($extension), $validextensions)){
-             if (env('AWS_ACCESS_KEY_ID')) {
+             if (env('VOTING_AWS_ACCESS_KEY_ID')) {
 
                if (strtolower($extension) === 'mp4') {
                  $destinationPath =  $destinationPath.'/'.'video';
@@ -105,7 +105,7 @@ class CompetitionDivisionAudienceController extends Controller
                  $destinationPath =  $destinationPath.'/'.'image';
                }
 
-               $path = Storage::disk('s3')->put($destinationPath, $request->file);
+               $path = Storage::disk('votingS3')->put($destinationPath, $request->file);
                $request->merge([
                  'size' => $request->file->getSize(),
                  'path' => $path
