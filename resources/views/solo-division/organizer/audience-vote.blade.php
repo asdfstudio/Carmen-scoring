@@ -78,9 +78,11 @@
         <label><input type="radio" name="banner_type" value="image_video" class="form-check-input"
                       @if($audience) @if($audience->banner_type == 'image_video')checked @endif @endif>Show Video or
           Images</label>
+
+        <button type="button" class="ml-5 btn btn-danger btn-embed-file " style="display: none;" onclick="clearFile()">Clear</button>
         <div class='dropzone image_video banner_option' style="display: none">
           @if(isset($audience) && '' != $audience->banner_upload)
-            <div class="dz-preview dz-processing dz-success dz-complete dz-image-preview img-uploaded">
+            <div id="banner-element" class="dz-preview dz-processing dz-success dz-complete dz-image-preview img-uploaded">
               <div class="dz-image">
                 @php
                   $banner_url = 'uploads/'.$audience->batnner_upload;
@@ -186,13 +188,16 @@
       'use strict';
       const bannerInput = $('input[name="banner_type"]:checked');
       let banner_type = bannerInput.val();
-      $('.' + banner_type).show();
+      resetView(banner_type);
+
       $('input[name="banner_type"]').closest('label').click(function () {
         $('.banner_option').hide();
         banner_type = $(this).find('input').val();
-        $('.' + banner_type).show();
+        resetView(banner_type);
       });
     })(jQuery)
+
+
 
     $('#alias_name').keyup(function () {
       $('#copy_alias_name').text($(this).val());
@@ -260,5 +265,20 @@
       });
     })(jQuery)
 
+
+    function clearFile(){
+      myDropzone.removeAllFiles(true);
+      $("#banner-element").remove();
+      $("#banner_upload").val("");
+    }
+    function resetView(banner_type){
+      $('.' + banner_type).show();
+
+      if(banner_type == 'image_video'){
+        $(".btn-embed-file").show();
+      }else{
+        $(".btn-embed-file").hide();
+      }
+    }
   </script>
 @endsection
