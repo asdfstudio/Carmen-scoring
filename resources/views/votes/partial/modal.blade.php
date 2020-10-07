@@ -239,7 +239,7 @@
           <div class='form-row mt-3'>
               <div id="alertPayment" class='col-md-12 error form-group'>
                 <div class='alert-danger alert'>
-                  You not enough Petl Points please make a payment to continue!.
+                  You do not have enough Petl Points! Please make a purchase to continue.
                 </div>
               </div>
           </div>
