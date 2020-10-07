@@ -138,7 +138,7 @@
       $('.loginModal').modal('hide');
     });
 
-    $('.userInfo button').click(function () {
+    $('.userInfo').click(function () {
       const voteID = $(this).data('vote');
       const token = $("input[name='_token']").val();
       const audientId = $('input[name="audientId"]').val();

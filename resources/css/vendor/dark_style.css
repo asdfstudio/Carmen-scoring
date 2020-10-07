@@ -250,6 +250,7 @@ section.heroVideo {
 h2.videoTitle {
   color: #fff;
   padding: 25px 130px;
+  text-align: center;
 }
 
 h2.videoTitle span {
@@ -326,6 +327,7 @@ section.userSection {
 
 .userInfo {
   padding-left: 50px;
+  cursor: pointer;
 }
 
 

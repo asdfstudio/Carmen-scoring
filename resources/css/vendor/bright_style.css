@@ -262,6 +262,7 @@ h2.videoTitle {
   color: #000;
   padding: 25px 130px;
   font-weight: bold;
+  text-align: center;
 }
 
 h2.videoTitle span {
@@ -334,6 +335,7 @@ h2.videoTitle span {
 
 .userInfo {
   padding-left: 52px;
+  cursor: pointer;
 }
 
 
