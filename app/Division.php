@@ -86,6 +86,11 @@ class Division extends Model
         return $this->hasOneThrough('App\Competition', 'App\Round', 'id', 'id', 'round_id', 'competition_id');
     }
 
+    public function sheet()
+    {
+        return $this->hasOneThrough('App\Sheet', 'App\Round', 'id', 'id', 'round_id', 'sheet_id');
+    }
+
     public function standings()
     {
         return $this->hasMany('App\Standing');

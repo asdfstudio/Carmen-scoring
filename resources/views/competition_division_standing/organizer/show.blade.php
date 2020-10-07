@@ -6,7 +6,7 @@
 	<ul class="actions-group">
     @can('show', $division)
       <li>
-				{{ link_to_route('organizer.competition.division.settings', 'Back to Division', [$division->competition,$division], ['class' => 'action']) }}
+				{{ link_to_route('organizer.competition.division.show', 'Back to Division', [$division->competition,$division], ['class' => 'action']) }}
 			</li>
     @endcan
 

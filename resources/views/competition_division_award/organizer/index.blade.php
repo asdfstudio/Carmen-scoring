@@ -1,5 +1,6 @@
 @extends('layouts.simple')
 
+@php $include_division_navigation_bar = TRUE @endphp
 
 @section('content-header')
 	<h1>Awards</h1>
@@ -32,7 +33,7 @@
 	<h2>Caption Specific Awards</h2>
 
 	@can('update', $division)
-		{{ link_to_route('organizer.competition.division.award.settings.edit', 'Edit Award Settings', [$division->competition_id, $division], ['class' => 'action mv']) }}
+        {{ link_to_route('organizer.competition.division.award.settings.edit', 'Edit Award Settings', [$division->competition->id, $division], ['class' => 'action mv']) }}
 	@endcan
 
 	@include('division_award_settings.organizer.list', ['awardSettings' => $division->awardSettings])

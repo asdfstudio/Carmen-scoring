@@ -240,8 +240,9 @@ class CompetitionDivisionController extends Controller
 
         $deletePenaltyForm->modify('submit','submit',['label' => 'Remove']);
 
+        $include_division_navigation_bar = TRUE;
         // return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
-        return view('competition_division.organizer.show', compact('competition', 'division', 'judges', 'choirs', 'captions', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'deleteChoirForm', 'deleteJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
+        return view('competition_division.organizer.show', compact('competition', 'include_division_navigation_bar', 'division', 'judges', 'choirs', 'captions', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'deleteChoirForm', 'deleteJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
     }
 
     /**
@@ -252,15 +253,14 @@ class CompetitionDivisionController extends Controller
      */
     public function board($competition_id, $division_id, FormBuilder $formBuilder)
     {
-        $competition = Competition::with('organization','place','divisions')->find($competition_id);
+        $division = Division::with(['competition', 'choirs', 'choirs.directors','round','judges' => function ($query) {
+            $query->groupBy('judge_id');
+        }, 'judges.captions' => function ($query) use ($division_id) {
+            $query->where('division_id',$division_id);
+        }])->find($division_id);
 
-				$division = Division::with(['choirs.directors','rounds','judges' => function ($query) {
-					$query->groupBy('judge_id');
-				}, 'judges.captions' => function ($query) use ($division_id) {
-					$query->where('division_id',$division_id);
-				}])->find($division_id);
-
-				$captions = Caption::forSheet($division->sheet);
+        $captions = Caption::forSheet($division->sheet);
+        $competition = $division->competition;
 
         $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
           'method' => 'POST',
@@ -289,23 +289,23 @@ class CompetitionDivisionController extends Controller
 					'url' => route('organizer.competition.division.choir.store',[$division->competition,$division])
 				]);
 
-        $competition_rounds = Competition::find($competition_id )->rounds()->whereHas('division', function ($query) use ($division) {
-          $query->where('sheet_id', $division->sheet_id);
-        })->get();
-
-        $choices = $competition_rounds->pluck('full_name', 'id')->toArray();
-        $selected = [];
-
-
-        $newRoundForm = $formBuilder->create('Round\CreateRoundForm', [
-					'method' => 'POST',
-          'data' => [
-            'choices' => $choices,
-            'selected' => $selected,
-            'division' => $division
-          ],
-					'url' => route('organizer.competition.division.round.store', [$division->competition,$division])
-				]);
+        // $competition_rounds = Competition::find($competition_id )->rounds()->whereHas('division', function ($query) use ($division) {
+        //   $query->where('sheet_id', $division->sheet_id);
+        // })->get();
+        //
+        // $choices = $competition_rounds->pluck('full_name', 'id')->toArray();
+        // $selected = [];
+        //
+        //
+        // $newRoundForm = $formBuilder->create('Round\CreateRoundForm', [
+		// 			'method' => 'POST',
+        //   'data' => [
+        //     'choices' => $choices,
+        //     'selected' => $selected,
+        //     'division' => $division
+        //   ],
+		// 			'url' => route('organizer.competition.division.round.store', [$division->competition,$division])
+		// 		]);
 
         // $deleteChoirForm = $formBuilder->create('GenericDeleteForm', [
 				// 	'method' => 'DELETE',
@@ -354,7 +354,7 @@ class CompetitionDivisionController extends Controller
           return $value->id == $division_id;
         });
         // return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
-        return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'divisions_import_judge', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'newJudgeForm'));
+        return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'divisions_import_judge', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newJudgeForm'));
     }
 
 

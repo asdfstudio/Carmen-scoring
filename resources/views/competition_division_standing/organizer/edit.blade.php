@@ -11,7 +11,7 @@
 
 	<ul class="actions-group">
 			<li>
-				{{ link_to_route('organizer.competition.division.settings', 'Back to Division', [$division->competition,$division], ['class' => 'action']) }}
+				{{ link_to_route('organizer.competition.division.show', 'Back to Division', [$division->competition,$division], ['class' => 'action']) }}
 			</li>
 
       <li>

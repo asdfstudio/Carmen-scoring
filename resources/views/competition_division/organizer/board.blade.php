@@ -1,4 +1,5 @@
 @extends('layouts.simple')
+@php $include_division_navigation_bar = TRUE @endphp
 
 @section('style')
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -9,40 +10,36 @@
 @endsection
 
 @section('content')
-	<ul class="actions-group mv">
-		@can('activateScoring', $division->rounds->first())
-			<li>{!! form($activateScoringForm) !!}</li>
-		@endcan
+    {{-- <ul class="actions-group mv"> --}}
+    {{--     @can('activateScoring', $division->round) --}}
+    {{--         <li>{!! form($activateScoringForm) !!}</li> --}}
+    {{--     @endcan --}}
+    {{--  --}}
+    {{--     @if($division->round->status_slug() != 'completed' && (auth()->user()->isAdmin() || auth()->user()->can('completeScoring', $division->round()))) --}}
+    {{--         <li>{!! form($completeScoringForm) !!}</li> --}}
+    {{--     @endif --}}
+    {{--  --}}
+    {{--     @can('finalizeScoring', $division) --}}
+    {{--         <li>{!! form($finalizeScoringForm) !!}</li> --}}
+    {{--     @endcan --}}
+    {{--  --}}
+    {{--  --}}
+    {{-- </ul> --}}
 
-		@if($division->rounds->first() && $division->rounds->first()->status_slug() != 'completed' && (auth()->user()->isAdmin() || auth()->user()->can('completeScoring', $division->rounds->first())))
-			<li>{!! form($completeScoringForm) !!}</li>
-		@endif
+<div class="clearfix"></div>
 
-		@can('finalizeScoring', $division)
-			<li>{!! form($finalizeScoringForm) !!}</li>
-		@endcan
-
-		@can('update', $division)
-			<li>{{ link_to_route('organizer.competition.division.edit', 'Edit Division', [$competition,$division],['class' => 'action']) }}</li>
-		@endcan
-
-		<li>{{ link_to_route('organizer.competition.division.settings', 'Exit Set Up Mode', [$competition,$division],['class' => 'action']) }}</li>
-
-	</ul>
-
-	<div class="clearfix"></div>
-
-  <div class="division-board" id="division-13-board">
-    <h2>{{ $division->name }}</h2>
+<div class="division-board content-header" id="division-13-board">
+    <ul class="actions-group">
+        <li>{{ link_to_route('organizer.competition.division.show', 'Back to the Division', [$competition,$division],['class' => 'action']) }}</li>
+    </ul>
+    <h2>Edit Choirs and Judges</h2>
 
     @include('choir.board.board-list')
 
-		@include('judge.board.board-list')
+    @include('judge.board.board-list')
 
-		@include('round.board.board-list')
-
-  </div> 
-  <!-- end board-->
+</div>
+<!-- end board-->
 
   <div id="modal-cover" style="display: none"></div>
   <div id="modal" style="display: none"></div>

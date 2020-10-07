@@ -32,16 +32,6 @@ class AddChoirToRound
         $division = $event->division;
         $choir = $event->choir;
 
-        $rounds = $division->rounds()->where('max_choirs', 0)->get();
-
-        //dd($rounds);
-
-        foreach($rounds as $round)
-        {
-          if($round->sources->count() == 0)
-          {
-            $round->choirs()->attach($choir->id);
-          }
-        }
+        $choir->rounds()->attach($division->round);
     }
 }

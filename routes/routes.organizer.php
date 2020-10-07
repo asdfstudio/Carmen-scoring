@@ -215,12 +215,12 @@ Route::group([
 
   // Assign penalties to choir
   Route::get('competition/{competition}/division/{division}/round/{round}/choir/{choir}/penalty', [
-    'as' => 'competition.round.choir.penalty.assign', 'uses' => 'CompetitionDivisionRoundChoirController@assign_penalty'
+    'as' => 'competition.division.penalty.choir.assign', 'uses' => 'CompetitionDivisionChoirController@assign_penalty'
 	]);
 
   // Save assigned penalties to choir
   Route::post('competition/{competition}/division/{division}/round/{round}/choir/{choir}/penalty', [
-    'as' => 'competition.round.choir.penalty.update_assign', 'uses' => 'CompetitionDivisionRoundChoirController@update_penalty'
+    'as' => 'competition.division.penalty.choir.update_assign', 'uses' => 'CompetitionDivisionChoirController@update_penalty'
 	]);
 
 

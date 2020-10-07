@@ -32,14 +32,6 @@ class RemoveChoirFromRound
       $division = $event->division;
       $choir = $event->choir;
 
-      $rounds = $division->rounds()->where('max_choirs', 0)->get();
-
-      foreach($rounds as $round)
-      {
-        if($round->sources->count() == 0)
-        {
-          $round->choirs()->detach($choir->id);
-        }
-      }
+      $choir->rounds()->detach($division->round);
     }
 }

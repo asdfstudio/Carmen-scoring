@@ -58,7 +58,6 @@ class Choir extends Model
 
 		public function divisions()
 		{
-			//return $this->hasMany('App\Division');
 			return $this->belongsToMany('App\Division');
 		}
 
@@ -89,7 +88,7 @@ class Choir extends Model
 
     public function penalties()
 		{
-			return $this->belongsToMany('App\Penalty');
+			return $this->belongsToMany('App\Penalty')->withPivot('division_id');
 		}
 
     public function comments()

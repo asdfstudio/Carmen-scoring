@@ -1,6 +1,6 @@
 @extends('layouts.simple')
 
-@php $include_division_navigation_bar = FALSE @endphp
+@php $include_division_navigation_bar = TRUE @endphp
 
 @section('breadcrumbs')
     {!! Breadcrumbs::render('organizer.competition.division.show',$competition,$division) !!}
@@ -32,7 +32,10 @@
 
         @can('update', $division)
             <li>{{ link_to_route('organizer.competition.division.edit', 'Edit Division', [$competition,$division],['class' => 'action']) }}</li>
-            {{-- <li>{{ link_to_route('organizer.competition.division.scoring.edit', 'Edit Division Scoring', [$competition,$division],['class' => 'action']) }}</li> --}}
+        @endcan
+
+        @can('update', $division)
+            <li>{{ link_to_route('organizer.competition.division.board', 'Edit Choirs and Judges', [$competition,$division],['class' => 'action']) }}</li>
         @endcan
 
     </ul>
@@ -52,15 +55,34 @@
     <ul class="list-group">
         <li class="list-group-item">
             <h3>Division</h3>
+            <p>Division Name: {{ $division->name }}
+            <p>Division Round: {{ $division->round->name }}
+            <h4>Division Rating Systems</h4>
+            @foreach ($division->rating_system as $rating)
+                <p>{{ $rating['name'] }}: {{ $rating['min_score'] }}%</p>
+            @endforeach
+
+
             <p>{{ link_to_route('organizer.competition.division.edit', 'Manage Division Settings', [$competition, $division]) }}</p>
         </li>
+        {{-- <li class="list-group-item"> --}}
+            {{--     <h3>Penalties</h3> --}}
+            {{--     <p>{{ link_to_route('organizer.competition.division.penalty.index', 'Manage penalties', [$competition, $division]) }}</p> --}}
+            {{-- </li> --}}
         <li class="list-group-item">
-            <h3>Penalties</h3>
-            <p>{{ link_to_route('organizer.competition.division.penalty.index', 'Manage penalties', [$competition, $division]) }}</p>
+            {{ link_to_route('organizer.competition.division.award.index', 'Manage Awards', [$competition ,$division]) }} ({{ $division->awards->count() }})</h3>
+        @include('division_award_settings.organizer.list', ['awardSettings' => $division->awardSettings])
+        @include('award.organizer.list', ['awards' => $division->awards])
         </li>
         <li class="list-group-item">
-            <h3>Awards</h3>
-            <p>{{ link_to_route('organizer.competition.division.award.index', 'Manage awards', [$competition, $division]) }}</p>
+            <h3>Choirs</h3>
+            <h3>{{ link_to_route('organizer.competition.division.choir.index','Choirs',[$competition,$division]) }} ({{ $division->choirs->count() }})</h3>
+
+            @include('competition_division_choir.organizer.table')
+
+            {{ link_to_route('organizer.competition.division.choir.create','Add a choir',[$competition,$division],['class' => 'btn btn-primary']) }}
+
+            {{ link_to_route('organizer.competition.division.choir.setup','Set up choir',[$competition,$division],['class' => 'btn btn-primary']) }}
         </li>
     </ul>
 
@@ -70,18 +92,12 @@
 
 
 
+    {{--
 
-    <div class="row">
+        <div class="row">
 
         <div data-tab-id="choirs" class="tab-content col-xs-12 col-sm-12">
 
-            <h3>{{ link_to_route('organizer.competition.division.choir.index','Choirs',[$competition,$division]) }} ({{ $division->choirs->count() }})</h3>
-
-            @include('competition_division_choir.organizer.table')
-
-            {{ link_to_route('organizer.competition.division.choir.create','Add a choir',[$competition,$division],['class' => 'btn btn-primary']) }}
-
-            {{ link_to_route('organizer.competition.division.choir.setup','Set up choir',[$competition,$division],['class' => 'btn btn-primary']) }}
 
         </div>
 
@@ -114,30 +130,26 @@
         </div>
 
     </div>
+--}}
 
-@endsection
+@php
+    if($division->round->scoring_method_id === 3 || $division->round->scoring_method_id === 4){
+        $rankings_tab_name = "Condorcet";
+        $rankings_class = "condorcet";
+        $is_condorcet = true;
+        $show_borda = true;
+    } else {
+        $rankings_tab_name = "Rankings";
+        $rankings_class = "rank";
+        $is_condorcet = false;
+        $show_borda = false;
+    }
+@endphp
 
-@section('content')
+@parent
 
-    @php
-        if($division->round->scoring_method_id === 3 || $division->round->scoring_method_id === 4){
-            $rankings_tab_name = "Condorcet";
-            $rankings_class = "condorcet";
-            $is_condorcet = true;
-            $show_borda = true;
-        } else {
-            $rankings_tab_name = "Rankings";
-            $rankings_class = "rank";
-            $is_condorcet = false;
-            $show_borda = false;
-        }
-    @endphp
-
-    @parent
-
-    @if ($division->isMissingScores())
-        <p class="alert alert-warning">This round is currently missing scores. Do not complete the scoring until you have received scores from all judges.</p>
-    @endif
+@if (!$division->isMissingScores())
+    <p class="alert alert-warning">This round is currently missing scores. Do not complete the scoring until you have received scores from all judges.</p>
 
     {{-- Raw Scoring, 50/50 --}}
     @if ($division->round->scoring_method_id === 1 && $division->round->caption_weighting_id === 2)
@@ -209,6 +221,7 @@
 
     @include('scores.organizer.composite',['choirs' => $choirs, 'judges' => $judges])
 
+@endif
   </div>
 
 @endsection

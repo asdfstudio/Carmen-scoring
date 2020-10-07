@@ -1,5 +1,6 @@
 @extends('layouts.simple')
 
+@php $include_division_navigation_bar = TRUE @endphp
 @section('content-header')
 	<h1>Manage Division Penalties</h1>
 
