@@ -9,11 +9,7 @@
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen></iframe>
           </div>
-          <div class="videoTitle">
-            <h2 class="videoTitle">Audience Vote – {{$division->name}}, {{ isset($division->competition)?$division->competition->name:'' }}
-              <span>Choose the soloist that you would like to see in the next round.</span>
-            </h2>
-          </div>
+
         @endif
 
         @if($audience->banner_type === 'image_video')
@@ -38,5 +34,9 @@
 
       @endif
       </div>
+    <div class="videoTitle">
+        <h2 class="videoTitle">Audience Vote – {{$division->name}}, {{ isset($division->competition)?$division->competition->name:'' }}
+        </h2>
+    </div>
     </div>
   </section>
