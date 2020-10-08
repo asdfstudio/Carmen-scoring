@@ -1,8 +1,8 @@
 @extends('votes.layout')
 
 @section('style')
-  <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/bright_style.css')}}" />
-  <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/bright_responsive.css')}}" />
+  <link rel="stylesheet" type="text/css" href="{{asset('dist/css/bright_style.css')}}" />
+  <link rel="stylesheet" type="text/css" href="{{asset('dist/css/bright_responsive.css')}}" />
 @endsection
 
 @section('extra_class')style="background: #c3e1ff;"@endsection
