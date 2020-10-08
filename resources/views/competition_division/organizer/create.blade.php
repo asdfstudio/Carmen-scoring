@@ -1,6 +1,7 @@
 @extends('layouts.simple')
 
-@php $include_division_navigation_bar = TRUE @endphp
+@php if (isset($updating)) $include_division_navigation_bar = TRUE @endphp
+
 
 @section('style')
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>

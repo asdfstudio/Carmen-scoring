@@ -62,52 +62,6 @@
         </li>
     </ul>
 
-    <div data-tab-id="scoring" class="tab-content">
-        <p> Just the award settings should be here rather than on the tab.</p>
-    </div>
-
-
-
-    {{--
-
-        <div class="row">
-
-        <div data-tab-id="choirs" class="tab-content col-xs-12 col-sm-12">
-
-
-        </div>
-
-        <div data-tab-id="judges" class="tab-content col-xs-12 col-sm-12">
-
-            <h3>{{ link_to_route('organizer.competition.division.judge.index','Judges',[$competition,$division]) }} ({{ $division->judges->count() }})</h3>
-
-            @include('competition_division_judge.organizer.table',['judges' => $division->judges, 'captions' => $division->round->sheet->captions])
-
-            {{ link_to_route('organizer.competition.division.judge.create','Add a judge',[$competition,$division],['class' => 'btn btn-primary']) }}
-
-            {{ link_to_route('organizer.competition.division.judge.setup','Set up judges',[$competition,$division],['class' => 'btn btn-primary']) }}
-
-        </div>
-
-        <div data-tab-id="awards" class="tab-content col-xs-12 col-sm-12">
-
-            <h3>{{ link_to_route('organizer.competition.division.award.index', 'Awards', [$competition,$division]) }} ({{ $division->awards->count() }})</h3>
-
-            @include('award.organizer.list', ['awards' => $division->awards])
-
-        </div>
-
-        <div data-tab-id="penalties" class="tab-content col-xs-12 col-sm-12">
-
-            <h3>{{ link_to_route('organizer.competition.division.penalty.index','Penalties', [$competition,$division]) }} ({{ $division->penalties->count() }})</h3>
-
-            @include('penalty.organizer.list', ['penalties' => $division->penalties])
-
-        </div>
-
-    </div>
---}}
-
 @php
     if($division->round->scoring_method_id === 3 || $division->round->scoring_method_id === 4){
         $rankings_tab_name = "Condorcet";
@@ -189,7 +143,6 @@
         </ul>
     @endif
 
-    {{--
         {{-- Condorcet methods have an extra table that is formatted a little differently to show rankings. --}}
         @if($is_condorcet)
             @include('scores.organizer.ranked_condorcet',['choirs' => $choirs, 'judges' => $division->judges])
