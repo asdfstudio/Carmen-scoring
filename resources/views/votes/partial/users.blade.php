@@ -20,16 +20,14 @@
               </h3>
               <button type="button" class="btn like" data-vote="{{$choir->id}}">
                 <i class="fas fa-thumbs-up"></i>
-                @if($division->is_completed)
-                  @php $votesObject = isset($audience)?json_decode($choir->votes($audience->id)):NULL; @endphp
+                  @php $votesObject = isset($audience)?json_decode($choir->votes_byUser($audience->id)):NULL; @endphp
                   <span class="vote-count">
                     @if(NULL === $votesObject)
                       0
                     @else
-                      {{ number_format($votesObject->vote_count) }}
+                      {{ number_format($votesObject) }}
                     @endif
                   </span>
-                @endif
               </button>
             </div>
           </div>

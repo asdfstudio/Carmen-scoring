@@ -116,6 +116,7 @@ class VoteController extends Controller
     $message = $this->successful_message;
     $audience = $data['audience'];
     $user = Auth::user();
+
     $vote = Vote::where('vote_id', $data['vote_id'])->where('audience_id', $audience->id)->first();
 
     if (!$user ) {
@@ -165,10 +166,10 @@ class VoteController extends Controller
         'message' => 'No more votes available for your account'
       ], 500);
     }
-
+    $voteId = $data['newVote'];
     array_push($votes, $newVote);
     Cookie::queue($cookieName, $data['audience']->id, 512640);
-    return $this->updateVote($vote, $votes, $message);
+    return $this->updateVote($vote, $votes, $message, $voteId);
   }
 
   /**
@@ -182,10 +183,11 @@ class VoteController extends Controller
     $user = Auth::user();
     if ($user->petl_point > 0) {
       $votes = $data['votes'];
+      $voteId = $data['newVote'];
       array_push($votes, $data['newVote']);
       $this->updateUserVoted($user, $data['audience']->id);  //Update voted id to user data
       $this->updateUserPetlPoint($user); //Update user petl points
-      return $this->updatePremiumVote($vote, $votes, $message);
+      return $this->updatePremiumVote($vote, $votes, $message, $voteId);
     }
 
     return response()->json(['message' => 'not_enough_petl_points'], 500);
@@ -217,10 +219,10 @@ class VoteController extends Controller
         'message' => 'No more votes available for your account'
       ], 500);
     }
-
+    $voteId = $data['newVote'];
     array_push($votes, $data['newVote']);
     $this->updateUserVoted($user, $data['audience']->id);  //Update voted id to user data
-    return $this->updateVote($vote, $votes, $message);
+    return $this->updateVote($vote, $votes, $message, $voteId);
   }
 
   /**
@@ -237,9 +239,9 @@ class VoteController extends Controller
     if ($user) {
       $this->removeVotedFromUser($user, $data['audience']->id);
     }
-
+    $voteId = $data['newVote'];
     Cookie::queue(Cookie::forget('audience_voted_'.$data['audience']->id));
-    return $this->updateVote($vote, $votes, $message);
+    return $this->updateVote($vote, $votes, $message, $voteId);
   }
 
   /**
@@ -264,17 +266,23 @@ class VoteController extends Controller
    * @param $message
    * @return JsonResponse
    */
-  public function updatePremiumVote($vote, $votes, $message)
+  public function updatePremiumVote($vote, $votes, $message, $voteId)
   {
+
     $freeVote = $vote->votes ? $vote->votes : [];
     $freeVoteCount = count($freeVote);
     $vote['premium_votes'] = $votes;
     $vote['vote_count'] = count($votes) + $freeVoteCount;
     $vote->save();
 
+    // get vote numbers for login user
+    $freeVote = isset($vote->votes) ? json_encode($vote->votes) : "";
+    $freeVoteCount = substr_count($freeVote, $voteId);
+    $vote_count = substr_count(json_encode($votes), $voteId) + $freeVoteCount;
+
     return response()->json([
       'message' => $message,
-      'vote_count' => $vote['vote_count'],
+      'vote_count' => $vote_count,
       'petl_point' => Auth::user()->petl_point
     ]);
   }
@@ -285,7 +293,7 @@ class VoteController extends Controller
    * @param $message
    * @return JsonResponse
    */
-  public function updateVote($vote, $votes, $message)
+  public function updateVote($vote, $votes, $message, $voteId)
   {
     $premiumVote = $vote->premium_votes ? $vote->premium_votes : [];
     $premiumVoteCount = count($premiumVote);
@@ -293,9 +301,14 @@ class VoteController extends Controller
     $vote['vote_count'] = count(array_unique($votes)) + $premiumVoteCount;
     $vote->save();
 
+    // get vote numbers for login user
+    $premiumVoteStr = isset($vote->premium_votes) ? json_encode($vote->premium_votes) : "";
+    $premiumVoteCount = substr_count($premiumVoteStr, $voteId);
+    $vote_count = substr_count(json_encode(array_unique($votes)), $voteId) + $premiumVoteCount;
+
     return response()->json([
       'message' => $message,
-      'vote_count' => $vote['vote_count']
+      'vote_count' => $vote_count
     ]);
   }
 
