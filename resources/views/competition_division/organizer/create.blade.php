@@ -1,5 +1,7 @@
 @extends('layouts.simple')
 
+@php $include_division_navigation_bar = TRUE @endphp
+
 @section('style')
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>
 @endsection
@@ -9,11 +11,17 @@
 @endsection
 
 @section('content-header')
-    @isset($updating) <h1>Edit a division</h1> @else <h1>Create a division</h1> @endisset
-
-    <ul class="actions-group">
-        <li>{{ link_to_route('organizer.competition.division.index','Back to All Divisions',[$competition],['class' => 'action dg-back-all-divisions']) }}</li>
-    </ul>
+    @isset($updating)
+        <h1>Edit a division</h1>
+        <ul class="actions-group">
+            <li>{{ link_to_route('organizer.competition.division.show','Back to the division',[$competition, $division],['class' => 'action']) }}</li>
+        </ul>
+    @else
+        <h1>Create a division</h1>
+        <ul class="actions-group">
+            <li>{{ link_to_route('organizer.competition.division.index','Back to All Divisions',[$competition],['class' => 'action']) }}</li>
+        </ul>
+@endisset
 @endsection
 
 @section('content')

@@ -30,14 +30,6 @@
             <li>{!! form($completeScoringForm) !!}</li>
         @endcan
 
-        @can('update', $division)
-            <li>{{ link_to_route('organizer.competition.division.edit', 'Edit Division', [$competition,$division],['class' => 'action']) }}</li>
-        @endcan
-
-        @can('update', $division)
-            <li>{{ link_to_route('organizer.competition.division.board', 'Edit Choirs and Judges', [$competition,$division],['class' => 'action']) }}</li>
-        @endcan
-
     </ul>
 
     <div class="clearfix"></div>
@@ -54,35 +46,19 @@
 
     <ul class="list-group">
         <li class="list-group-item">
-            <h3>Division</h3>
-            <p>Division Name: {{ $division->name }}
-            <p>Division Round: {{ $division->round->name }}
+            <h3>Division in Round {{ $division->round->name }}</h3>
             <h4>Division Rating Systems</h4>
             @foreach ($division->rating_system as $rating)
                 <p>{{ $rating['name'] }}: {{ $rating['min_score'] }}%</p>
             @endforeach
-
-
-            <p>{{ link_to_route('organizer.competition.division.edit', 'Manage Division Settings', [$competition, $division]) }}</p>
-        </li>
-        {{-- <li class="list-group-item"> --}}
-            {{--     <h3>Penalties</h3> --}}
-            {{--     <p>{{ link_to_route('organizer.competition.division.penalty.index', 'Manage penalties', [$competition, $division]) }}</p> --}}
-            {{-- </li> --}}
-        <li class="list-group-item">
-            {{ link_to_route('organizer.competition.division.award.index', 'Manage Awards', [$competition ,$division]) }} ({{ $division->awards->count() }})</h3>
-        @include('division_award_settings.organizer.list', ['awardSettings' => $division->awardSettings])
-        @include('award.organizer.list', ['awards' => $division->awards])
         </li>
         <li class="list-group-item">
             <h3>Choirs</h3>
-            <h3>{{ link_to_route('organizer.competition.division.choir.index','Choirs',[$competition,$division]) }} ({{ $division->choirs->count() }})</h3>
-
             @include('competition_division_choir.organizer.table')
-
-            {{ link_to_route('organizer.competition.division.choir.create','Add a choir',[$competition,$division],['class' => 'btn btn-primary']) }}
-
-            {{ link_to_route('organizer.competition.division.choir.setup','Set up choir',[$competition,$division],['class' => 'btn btn-primary']) }}
+        </li>
+        <li class="list-group-item">
+            <h3>Judges</h3>
+            @include('competition_division_judge.organizer.table')
         </li>
     </ul>
 

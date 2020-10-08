@@ -14,8 +14,12 @@
 <div class="division-navigation-bar body-width">
     <ul class="division-navigation">
         <li>
-            @php $link_class = in_array(Request::segment(6),['settings','edit']) ? 'active' : false; @endphp
+            @php $link_class = Request::segment(6) == 'edit' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.edit', [$competition, $division]) }}" class="{{ $link_class }}">Edit Division Settings</a>
+        </li>
+        <li>
+            @php $link_class = Request::segment(6) == 'board' ? 'active' : false; @endphp
+            <a href="{{ route('organizer.competition.division.board', [$competition,$division]) }}" class="{{ $link_class }}">Edit Judges and Choirs</a>
         </li>
         <li>
             @php $link_class = Request::segment(6) == 'penalty' ? 'active' : false; @endphp
