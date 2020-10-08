@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\Auth;
 class Performer extends Model
 {
 
@@ -73,4 +73,19 @@ class Performer extends Model
   {
     return Vote::getVote($audienceId, $this->id);
   }
+
+  public function votes_byUser($audienceId)
+  {
+    $votesByUser = Vote::where('audience_id', $audienceId)->where('vote_id', $this->id)->first();
+    $user = Auth::user();
+    if (!$user ) {
+      $votesId =  $_SERVER['REMOTE_ADDR'] . '_' . $audienceId. '_' . $this->id;
+    } else {
+      $votesId = $user->id . '_' . $audienceId . '_' . $this->id;
+    }
+    $total_nums = substr_count(isset($votesByUser->premium_votes)? json_encode($votesByUser->premium_votes): "", $votesId);
+    $total_nums +=  substr_count(isset($votesByUser->votes)? json_encode($votesByUser->votes): "", $votesId);
+    return $total_nums;
+  }
+
 }
