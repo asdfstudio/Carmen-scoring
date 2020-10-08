@@ -90,22 +90,6 @@ Route::group([
     'as' => 'competition.schedule.store', 'uses' => 'ScheduleController@store'
   ]);
 
-  // update a competition schedule item
-  Route::post('competition/{competition}/schedule/{schedule}/item/{item}', [
-    'as' => 'competition.schedule.item.update', 'uses' => 'ScheduleItemController@update'
-  ]);
-
-  // store a competition schedule item
-  Route::post('competition/{competition}/schedule/{schedule}/item', [
-    'as' => 'competition.schedule.item.store', 'uses' => 'ScheduleItemController@store'
-  ]);
-
-  // Destroy a competition schedule item
-  Route::delete('competition/{competition}/schedule/{schedule}/item/{item}', [
-    'as' => 'competition.schedule.item.destroy', 'uses' => 'ScheduleItemController@destroy'
-  ]);
-
-
   // Award schedule
 
 
