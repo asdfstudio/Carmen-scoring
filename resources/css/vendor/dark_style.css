@@ -951,6 +951,10 @@ footer {
   background: #fff!important;
 }
 
+.wbg2.vote-completely .vote-count {
+  color: #000!important;
+}
+
 .wbg2.vote-completely h3 {
   color: #000!important;
 }

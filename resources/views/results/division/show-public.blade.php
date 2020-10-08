@@ -59,4 +59,30 @@
 			@endif
 		@endforeach
 
+    <div class="standing-container">
+      <div class="content-subheader caption background-color-3">
+        <h3>Audience vote results</h3>
+      </div>
+      @if($voteResults)
+      <ul class="list-group">
+        @foreach($voteResults as $key => $result)
+        <li class="list-group-item standing">
+          <span class="choir">{{$result->choir->name}}</span>
+          <div class="details">
+            <span class="final_rank ceremony">
+              {{$result->vote_count}}
+            </span>
+          </div>
+        </li>
+        @endforeach
+      </ul>
+      @else
+        We have no audience vote yet.
+      @endif
+    </div>
+
+
+
+
+
 @endsection

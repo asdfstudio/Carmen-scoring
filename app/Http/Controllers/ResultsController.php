@@ -245,7 +245,9 @@ class ResultsController extends Controller
         'method' => 'post'
       ]);
 
-      return view('results.division.show-public', compact('division', 'captions', 'accessCodeForm'));
+      $voteResults  = $this->votedList($division->audience);
+
+      return view('results.division.show-public', compact('division', 'captions', 'accessCodeForm', 'voteResults'));
     }
 
     public function division($division_id, $access_code)

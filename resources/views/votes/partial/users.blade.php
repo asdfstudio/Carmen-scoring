@@ -6,7 +6,7 @@
         <div class="col-lg-4" data-choir="{{$choir->id}}">
           <div class="white-bg wbg2 {{$colors[$key%6]}}">
 
-            <div class="userInfo">
+            <div class="userInfo" data-vote="{{$choir->id}}">
               <h3>
                 @if($choir->school)
                   <span class="school">{{ $choir->school->name }}</span>
