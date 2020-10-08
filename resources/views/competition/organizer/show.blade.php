@@ -44,35 +44,32 @@
   <h3>Manage Rounds</h3>
   <p>Rounds are a group of divisions that utilize the same scoring system.</p>
 
-  <p>{{ link_to_route('organizer.competition.round.index','Manage your rounds',[$competition], ['class' => 'action']) }}</p>
-
-  @if($competition->rounds->count() > 0)
-    @include('round.organizer.list',['rounds' => $competition->rounds])
+  @if($roundsCount > 0)
+      <p>{{ link_to_route('organizer.competition.round.index','Manage your rounds',[$competition], ['class' => 'action']) }}</p>
+      @include('round.organizer.list',['rounds' => $competition->rounds])
   @else
-    <p>{{ link_to_route('organizer.competition.round.create','Create your first round',[$competition]) }}</p>
+      <p>{{ link_to_route('organizer.competition.round.create','Create your first round',[$competition], ['class' => 'action']) }}</p>
   @endif
 
   <h3>Manage Divisions</h3>
-  <p>Divisions are used to organize your competition and consist of choirs and judges</p>
+  <p>Divisions are used to organize your competition and consist of choirs and judges.</p>
 
-  <p>{{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition], ['class' => 'action']) }}</p>
-
-  @if($competition->divisions->count() > 0)
-
-    @include('division.organizer.list',['divisions' => $competition->divisions])
-
+  @if($divisionCount > 0)
+      <p>{{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition], ['class' => 'action']) }}</p>
+      @include('division.organizer.list',['divisions' => $competition->divisions])
+  @elseif($roundsCount > 0)
+      <p>{{ link_to_route('organizer.competition.division.create','Create your first division',[$competition], ['class' => 'action']) }}</p>
   @else
-    <p>{{ link_to_route('organizer.competition.division.create','Create your first division',[$competition]) }}</p>
+      <p>{{ link_to_route('organizer.competition.round.create','Create your first round to add divisions',[$competition], ['class' => 'action']) }}</p>
   @endif
 
   <h3>Manage Solo Divisions</h3>
 
   @if($competition->soloDivisions->count() > 0)
-    <p>{{ link_to_route('organizer.competition.solo-division.create','Create a solo division',[$competition], ['class' => 'action']) }}</p>
-
-    @include('solo-division.organizer.list',['soloDivisions' => $competition->soloDivisions])
+      <p>{{ link_to_route('organizer.competition.solo-division.create','Create a solo division',[$competition], ['class' => 'action']) }}</p>
+      @include('solo-division.organizer.list',['soloDivisions' => $competition->soloDivisions])
   @else
-    <p>{{ link_to_route('organizer.competition.solo-division.create','Create your first solo division',[$competition]) }}</p>
+      <p>{{ link_to_route('organizer.competition.solo-division.create','Create your first solo division',[$competition], ['class' => 'action']) }}</p>
   @endif
 
   <h3>Manage Schedules</h3>

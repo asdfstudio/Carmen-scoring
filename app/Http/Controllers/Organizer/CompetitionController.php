@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Competition;
+use App\Division;
 use App\Organization;
 use App\Place;
 
@@ -94,26 +95,29 @@ class CompetitionController extends Controller
      */
     public function show($id, FormBuilder $formBuilder)
     {
-				$competition = Competition::with('place','organization','divisions', 'soloDivisions')->find($id);
+        $competition = Competition::with('place','organization','divisions', 'soloDivisions')->find($id);
 
         $this->authorize('show', $competition);
 
         $activateScoringForm = $formBuilder->create('Competition\ActivateCompetitionForm', [
-          'method' => 'POST',
-          'url' => route('organizer.competition.scoring',[$competition])
+            'method' => 'POST',
+            'url' => route('organizer.competition.scoring',[$competition])
         ]);
 
         $completeScoringForm = $formBuilder->create('Competition\CloseCompetitionForm', [
-          'method' => 'POST',
-          'url' => route('organizer.competition.scoring',[$competition])
+            'method' => 'POST',
+            'url' => route('organizer.competition.scoring',[$competition])
         ]);
 
         $archiveCompetitionForm = $formBuilder->create('Competition\ArchiveForm', [
-          'method' => 'POST',
-          'url' => route('organizer.competition.scoring',[$competition])
+            'method' => 'POST',
+            'url' => route('organizer.competition.scoring',[$competition])
         ]);
 
-				return view('competition.organizer.show', compact('competition', 'activateScoringForm', 'completeScoringForm', 'archiveCompetitionForm'));
+        $roundsCount = $competition->rounds->count();
+        $divisionCount = Division::join('rounds', 'divisions.round_id', '=', 'rounds.id')->where('rounds.competition_id', '=', $competition->id)->count();
+
+        return view('competition.organizer.show', compact('competition', 'roundsCount', 'divisionCount', 'activateScoringForm', 'completeScoringForm', 'archiveCompetitionForm'));
     }
 
     /**
