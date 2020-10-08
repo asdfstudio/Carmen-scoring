@@ -1,5 +1,5 @@
 @if($division->choirs->isEmpty())
-	<p>There are no choirs. {{ link_to_route('organizer.competition.division.choir.create','Add one',[$division->competition,$division]) }}</p>
+	<p>There are no choirs. {{ link_to_route('organizer.competition.division.board','Add one',[$division->competition,$division]) }}</p>
 @endif
 
 @if(!$division->choirs->isEmpty())
