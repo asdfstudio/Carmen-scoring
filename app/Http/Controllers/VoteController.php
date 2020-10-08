@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Vote;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use App\SoloDivision;
+use App\Division;
 
 class VoteController extends Controller
 {
@@ -25,6 +27,19 @@ class VoteController extends Controller
   public function vote(Request $request)
   {
     $audientId = $request->input('audientId');
+    $isSoloDivision = $request->input('isSoloDivision');
+    $divisionId = $request->input('divisionId');
+    if($isSoloDivision == 1){
+      $division = SoloDivision::find($divisionId);
+    }
+    else{
+      $division = Division::find($divisionId);
+    }
+  
+    if($division->is_completed){
+      return response()->json(['message' => 'The division has been already archived.'], 500);
+    }
+
     $audience = Audience::find($audientId);
     $user = Auth::user();
 

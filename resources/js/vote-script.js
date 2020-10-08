@@ -150,6 +150,8 @@
         type: 'POST',
         data: {
           'voteId': voteID,
+          'divisionId': $("#divisionId").val(),
+          'isSoloDivision': $("#isSoloDivision").val(),
           'audientId': audientId,
           '_token': token,
         },
