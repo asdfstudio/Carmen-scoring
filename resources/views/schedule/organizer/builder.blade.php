@@ -39,7 +39,8 @@
       <ul class="schedule-builder-list schedule ui-droppable">
         <li class="spacer top"></li>
         @foreach($schedule->items as $item)
-          <li class="schedule-item choir ui-draggable" id="item_{{ $item->round_id }}_{{ $item->choir_id }}" data-round-id="{{ $item->round_id }}" data-choir-id="{{ $item->choir_id }}">
+            <li class="schedule-item choir ui-draggable" id="item_{{ $item->round_id }}_{{ $item->choir_id }}" data-division-id="{{ $item->division_id }}"
+                data-round-id="{{ $item->round_id }}" data-choir-id="{{ $item->choir_id }}">
             <span class="sort-handle ui-draggable-handle"><i class="fa fa-sort"></i></span>
             <input type="time" class="scheduled_time" value="{{ $item->scheduled_time }}">
 
@@ -47,9 +48,11 @@
               <input type="text" class="item_name" value="{{ $item->name }}">
             @endif
 
+            @if ($item->division)
+                <span class="division-name">{{ $item->division->name }}</span>
+            @endif
             @if ($item->round)
-              <span class="division-name">{{ $item->round->division->name }}</span>
-              <span class="round-name">{{ $item->round->name }}</span>
+                <span class="round-name">{{ $item->round->name }}</span>
             @endif
 
 
@@ -86,11 +89,11 @@
           </ul>
         </li>
 
-        @foreach($competition->divisions as $div)
+        @foreach($competition->rounds as $div)
           <li class="division">
             <span class="division-heading">{{ $div->name }}</span>
             <ul class="rounds">
-              @foreach($div->rounds as $round)
+              @foreach($div->divisions as $round)
                 <li class="round">
                   <span class="round-heading">{{ $round->name }}</span>
                   <ul class="choirs">

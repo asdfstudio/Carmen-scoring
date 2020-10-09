@@ -106,15 +106,15 @@ class ScheduleController extends Controller
      */
     public function builder($competition_id, $schedule_id, FormBuilder $formBuilder)
     {
-      $competition = Competition::with('divisions', 'divisions.rounds', 'divisions.rounds.choirs')->find($competition_id);
+        $competition = Competition::with('rounds', 'rounds.divisions', 'rounds.divisions.choirs')->find($competition_id);
 
-      $schedule = Schedule::with(['items', 'items.round', 'items.round.division', 'items.choir'])->find($schedule_id);
+        $schedule = Schedule::with(['items', 'items.round', 'items.round.divisions', 'items.choir'])->find($schedule_id);
 
-      $excludedScheduleItems = ScheduleItem::whereHas('schedule', function($query) use ($competition_id) {
-        $query->where('competition_id', $competition_id);
-      })->get();
+        $excludedScheduleItems = ScheduleItem::whereHas('schedule', function($query) use ($competition_id) {
+            $query->where('competition_id', $competition_id);
+        })->get();
 
-      return view('schedule.organizer.builder', compact('competition', 'schedule', 'excludedScheduleItems'));
+        return view('schedule.organizer.builder', compact('competition', 'schedule', 'excludedScheduleItems'));
     }
 
     /**

@@ -34,7 +34,7 @@ var ScheduleBuilder = (function () {
   var save = function (url) {
     // this.setStatusMessage('Saving..');
 
-    var items = $('ul.schedule li')
+    var items = $('ul.schedule li.schedule-item')
     var data = []
 
     items.each(function (index, element) {
