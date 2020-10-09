@@ -13,9 +13,25 @@ class ChangeSchedulesToDivisionBased extends Migration
      */
     public function up()
     {
-        Schema::table('division_based', function (Blueprint $table) {
-            //
+        // We're adding foreign keys so turn this off first;
+        Schema::disableForeignKeyConstraints();
+
+        Schema::table('schedule_items', function (Blueprint $table) {
+            $table->foreignId('division_id')
+                ->constrained()
+                ->onDelete('cascade');
         });
+
+        $update = 'UPDATE schedule_items si JOIN divisions d on si.round_id = d.round_id SET si.division_id = d.id';
+        DB::update($update);
+
+        Schema::table('schedule_items', function (Blueprint $table) {
+            $table->dropForeign(['round_id']);
+            $table->dropColumn('round_id');
+        });
+
+        // Turn foreign keys back on
+        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -25,8 +41,24 @@ class ChangeSchedulesToDivisionBased extends Migration
      */
     public function down()
     {
-        Schema::table('division_based', function (Blueprint $table) {
-            //
+        // We're adding foreign keys so turn this off first;
+        Schema::disableForeignKeyConstraints();
+
+        Schema::table('schedule_items', function (Blueprint $table) {
+            $table->foreignId('round_id')
+                ->constrained()
+                ->onDelete('cascade');
         });
+
+        $update = 'UPDATE schedule_items si JOIN divisions d on si.division_id = d.id SET si.round_id = d.round_id';
+        DB::update($update);
+
+        Schema::table('schedule_items', function (Blueprint $table) {
+            $table->dropForeign(['division_id']);
+            $table->dropColumn('division_id');
+        });
+
+        // Turn foreign keys back on
+        Schema::enableForeignKeyConstraints();
     }
 }
