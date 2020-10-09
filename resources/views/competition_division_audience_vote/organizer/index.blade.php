@@ -1,5 +1,7 @@
 @extends('layouts.simple')
 
+@php $include_division_navigation_bar = TRUE @endphp
+
 @section('breadcrumbs')
   {!! Breadcrumbs::render('organizer.competition.division.choir.index',$division->competition,$division) !!}
 @endsection
