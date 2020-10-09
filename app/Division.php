@@ -230,14 +230,6 @@ class Division extends Model
         return $this->save();
     }
 
-    public function getRatings() {
-        if(!empty($this->ratings)) {
-            return $this->ratings;
-        }
-
-        return $this->ratings = $this->rounds->first()->getRatings();
-    }
-
     public function getRatings(){
         if(!empty($this->ratings)){
             return $this->ratings;
