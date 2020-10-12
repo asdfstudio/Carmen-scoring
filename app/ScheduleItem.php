@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 class ScheduleItem extends Model
 {
 
-    protected $fillable = ['round_id', 'choir_id', 'name', 'performance_order', 'scheduled_time'];
+    protected $fillable = ['division_id', 'choir_id', 'name', 'performance_order', 'scheduled_time'];
 
     protected static function boot()
     {

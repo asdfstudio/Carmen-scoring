@@ -88,7 +88,7 @@ class ScheduleController extends Controller
     public function show($competition_id, $schedule_id, FormBuilder $formBuilder)
     {
       $competition = Competition::find($competition_id);
-      $schedule = Schedule::with(['items', 'items.round', 'items.round.division', 'items.choir'])->find($schedule_id);
+      $schedule = Schedule::with(['items', 'items.division', 'items.division.round', 'items.choir'])->find($schedule_id);
 
       $deleteForm = $formBuilder->create('GenericDeleteForm', [
         'url' => route('organizer.competition.schedule.destroy',[$competition, $schedule])
@@ -108,7 +108,7 @@ class ScheduleController extends Controller
     {
         $competition = Competition::with('rounds', 'rounds.divisions', 'rounds.divisions.choirs')->find($competition_id);
 
-        $schedule = Schedule::with(['items', 'items.round', 'items.round.divisions', 'items.choir'])->find($schedule_id);
+        $schedule = Schedule::with(['items', 'items.division', 'items.division.round', 'items.choir'])->find($schedule_id);
 
         $excludedScheduleItems = ScheduleItem::whereHas('schedule', function($query) use ($competition_id) {
             $query->where('competition_id', $competition_id);

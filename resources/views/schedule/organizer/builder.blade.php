@@ -39,10 +39,9 @@
       <ul class="schedule-builder-list schedule ui-droppable">
         <li class="spacer top"></li>
         @foreach($schedule->items as $item)
-            <li class="schedule-item choir ui-draggable" id="item_{{ $item->round_id }}_{{ $item->choir_id }}" data-division-id="{{ $item->division_id }}"
-                data-round-id="{{ $item->round_id }}" data-choir-id="{{ $item->choir_id }}">
+            <li class="schedule-item choir ui-draggable" id="item_{{ $item->division_id}}_{{ $item->choir_id }}" data-division-id="{{ $item->division_id }}" data-choir-id="{{ $item->choir_id }}">
             <span class="sort-handle ui-draggable-handle"><i class="fa fa-sort"></i></span>
-            <input type="time" class="scheduled_time" value="{{ $item->scheduled_time }}">
+            <input type="text" class="scheduled_time" value="{{ $item->scheduled_time }}">
 
             @if ($item->name)
               <input type="text" class="item_name" value="{{ $item->name }}">
@@ -50,11 +49,8 @@
 
             @if ($item->division)
                 <span class="division-name">{{ $item->division->name }}</span>
+                <span class="round-name">{{ $item->division->round->name }}</span>
             @endif
-            @if ($item->round)
-                <span class="round-name">{{ $item->round->name }}</span>
-            @endif
-
 
             @if($item->choir)
               <span class="choir-name">{{ $item->choir->name }}</span>
@@ -89,36 +85,36 @@
           </ul>
         </li>
 
-        @foreach($competition->rounds as $div)
+        @foreach($competition->rounds as $rnd)
           <li class="division">
-            <span class="division-heading">{{ $div->name }}</span>
+            <span class="division-heading">{{ $rnd->name }}</span>
             <ul class="rounds">
-              @foreach($div->divisions as $round)
+              @foreach($rnd->divisions as $div)
                 <li class="round">
-                  <span class="round-heading">{{ $round->name }}</span>
+                  <span class="round-heading">{{ $div->name }}</span>
                   <ul class="choirs">
-                    @foreach($round->choirs as $choir)
+                    @foreach($div->choirs as $choir)
                       @php
-                      $isInSchedule = $schedule->items->where('round_id', $round->id)->where('choir_id', $choir->id)->count();
+                      $isInSchedule = $schedule->items->where('division_id', $div->id)->where('choir_id', $choir->id)->count();
 
-                      $isInAnotherSchedule = $excludedScheduleItems->where('round_id', $round->id)->where('choir_id', $choir->id)->count();
+                      $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('choir_id', $choir->id)->count();
                       @endphp
                       @if(!$isInSchedule AND !$isInAnotherSchedule)
-                        <li class="schedule-item choir" id="item_{{ $round->id }}_{{ $choir->id }}" data-round-id="{{ $round->id }}" data-choir-id="{{ $choir->id }}">
+                        <li class="schedule-item choir" id="item_{{ $div->id }}_{{ $choir->id }}" data-division-id="{{ $div->id }}" data-choir-id="{{ $choir->id }}">
                           <input type="text" class="scheduled_time" value="">
-                          <span class="division-name">{{ $div->name }}</span>
-                          <span class="round-name">{{ $round->name }} </span>
+                          <span class="division-name">{{ $rnd->name }}</span>
+                          <span class="round-name">{{ $div->name }} </span>
                           <span class="choir-name">{{ $choir->full_name }}</span>
                         </li>
                       @endif
                     @endforeach
 
                     @php
-                    if($round->max_choirs > 0 AND $round->max_choirs != $round->choirs->count())
+                    if($div->max_choirs > 0 AND $div->max_choirs != $div->choirs->count())
                     {
-                      $tbdChoirsCount = $round->max_choirs - $round->choirs->count();
+                      $tbdChoirsCount = $div->max_choirs - $div->choirs->count();
 
-                      $isInScheduleCount = $schedule->items->where('round_id', $round->id)->where('choir_id', 0)->count();
+                      $isInScheduleCount = $schedule->items->where('division_id', $div->id)->where('choir_id', 0)->count();
 
                       $tbdChoirsCount = $tbdChoirsCount - $isInScheduleCount;
                     }
@@ -130,9 +126,9 @@
                     @if($tbdChoirsCount > 0)
                       @php $i = 0; @endphp
                       @while ($i < $tbdChoirsCount)
-                        <li class="schedule-item choir" data-round-id="{{ $round->id }}" data-choir-id="">
-                          <span class="division-name">{{ $div->name }}</span>
-                          <span class="round-name">{{ $round->name }} </span>
+                        <li class="schedule-item choir" data-division-id="{{ $div->id }}" data-choir-id="">
+                          <span class="division-name">{{ $rnd->name }}</span>
+                          <span class="round-name">{{ $div->name }} </span>
                           <span class="choir-name choir-tbd">TBD</span>
                         </li>
                         @php $i++; @endphp

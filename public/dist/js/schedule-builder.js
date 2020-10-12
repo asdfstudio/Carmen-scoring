@@ -34,15 +34,14 @@ var ScheduleBuilder = (function () {
   var save = function (url) {
     // this.setStatusMessage('Saving..');
 
-    var items = $('ul.schedule li')
+    var items = $('ul.schedule li.schedule-item')
     var data = []
 
     items.each(function (index, element) {
       var scheduleItem = {}
       scheduleItem.performance_order = index + 1
-      scheduleItem.round_id = $(this).data('round-id')
-      scheduleItem.choir_id = $(this).data('choir-id')
       scheduleItem.division_id = $(this).data('division-id')
+      scheduleItem.choir_id = $(this).data('choir-id')
       scheduleItem.award_id = $(this).data('award-id')
       scheduleItem.caption_id = $(this).data('caption-id')
       scheduleItem.rank = $(this).data('rank')
