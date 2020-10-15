@@ -120,24 +120,14 @@ class AwardScheduleController extends Controller
         $query->withoutGlobalScope('organization');
       }, 'items.caption'])->find($schedule_id);
 
-      //$divisions = $competition->divisions()->with(['awards', 'awards.winner'])->get();
-      //dd($divisions);
-
       $awardWinners = AwardWinner::with(['division', 'division.choirs', 'division.round' => function($query) use ($competition_id) {
           $query->where('competition_id', $competition_id);
       }])->get();
-
-
-      // }, whereHas('division', function($query) use ($competition_id) {
-      //   $query->where('division.round.competition_id', $competition_id);
-      // })->with(['divisions', 'divisions.choir'])->get();
-
 
       $standings = Standing::whereHas('round', function($query) use ($competition_id) {
         $query->where('competition_id', $competition_id);
       })->with(['division', 'division.choirs'])->get();
 
-      //dd($standings);
 
       $deleteForm = $formBuilder->create('GenericDeleteForm', [
         'url' => route('organizer.competition.award-schedule.destroy',[$competition, $schedule])
@@ -169,10 +159,10 @@ class AwardScheduleController extends Controller
       $ratings = [];
 
       foreach ($schedule->items as $item) {
-        if(!$item->round) continue;
+        if (!$item->division) continue;
 
         $ratings[] = [
-          'round_id' => $item->round_id,
+          'division_id' => $item->division_id,
           'ratings' => (new Ratings($item->division))->all()
         ];
       }
