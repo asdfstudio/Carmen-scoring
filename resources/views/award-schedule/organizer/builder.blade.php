@@ -58,50 +58,50 @@
       </div>
 
       <ul class="schedule-builder-list schedule-items divisions">
-        @foreach($competition->divisions as $div)
+        @foreach($competition->rounds as $round)
           <li class="division">
-            <span class="division-heading">{{ $div->name }}</span>
+            <span class="division-heading">{{ $round->name }}</span>
+              @foreach ($round->divisions as $div)
+                <span class="round-heading">{{ $div->name }}</span>
             <ul class="awards">
-
               <!-- Begin division overall and caption specific awards -->
+                  @foreach ($div->awardSettings as $awardSetting)
+                      <p>{{ $awardSetting }}</p>
+                    @if($awardSetting->award_count > 0)
+                      @php
+                      $i = 1;
 
-              @foreach ($div->awardSettings as $awardSetting)
-                @if($awardSetting->award_count > 0)
-                  @php
-                  $i = 1;
+                      if ($awardSetting->caption) {
+                        $captionName = $awardSetting->caption->name;
+                        $captionSlug = $awardSetting->caption->slug;
+                        $captionCss = $awardSetting->caption->text_css;
+                      } else {
+                        $captionName = 'Overall';
+                        $captionSlug = 'overall';
+                        $captionCss = false;
+                      }
+                      @endphp
+                      @while($i <= $awardSetting->award_count)
+                        @php
+                        $isInSchedule = $schedule->items->where('division_id', $div->id)->where('caption_id', $awardSetting->caption_id)->where('rank', $i)->count();
 
-                  if ($awardSetting->caption) {
-                    $captionName = $awardSetting->caption->name;
-                    $captionSlug = $awardSetting->caption->slug;
-                    $captionCss = $awardSetting->caption->text_css;
-                  } else {
-                    $captionName = 'Overall';
-                    $captionSlug = 'overall';
-                    $captionCss = false;
-                  }
-                  @endphp
-                  @while($i <= $awardSetting->award_count)
-                    @php
-                    $isInSchedule = $schedule->items->where('division_id', $div->id)->where('caption_id', $awardSetting->caption_id)->where('rank', $i)->count();
-
-                    $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('caption_id', $awardSetting->caption_id)->where('rank', $i)->count();
-                    @endphp
-                    @if(!$isInSchedule AND !$isInAnotherSchedule)
-                      <li class="schedule-item award" data-division-id="{{ $div->id }}" data-caption-id="{{ $awardSetting->caption_id }}" data-rank="{{ $i }}">
-                        <span class="division-name">{{ $div->name }}</span>
-                        <span class="caption-name {{ $captionCss }}">{{ $captionName}} {{ ordinal($i) }} Place</span>
-                      </li>
+                        $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('caption_id', $awardSetting->caption_id)->where('rank', $i)->count();
+                        @endphp
+                        @if(!$isInSchedule AND !$isInAnotherSchedule)
+                          <li class="schedule-item award" data-division-id="{{ $div->id }}" data-caption-id="{{ $awardSetting->caption_id }}" data-rank="{{ $i }}">
+                            <span class="division-name">{{ $div->name }}</span>
+                            <span class="caption-name {{ $captionCss }}">{{ $captionName}} {{ ordinal($i) }} Place</span>
+                          </li>
+                        @endif
+                        @php $i++; @endphp
+                      @endwhile
                     @endif
-                    @php $i++; @endphp
-                  @endwhile
-                @endif
-              @endforeach
+                  @endforeach
 
 
               <!-- End division overall and caption specific awards -->
 
               <!-- Begin Round Ratings -->
-              @foreach ($div->rounds as $round)
                 @php
                 $isInSchedule = $schedule->items->where('division_id', $div->id)->where('round_id', $round->id)->count();
 
@@ -113,7 +113,6 @@
                     <span class="award-name rating">{{ $round->name }} Ratings</span>
                   </li>
                 @endif
-              @endforeach
               <!-- End Round Ratings -->
 
 
@@ -131,6 +130,7 @@
                 @endif
               @endforeach
             </ul>
+              @endforeach
           </li>
         @endforeach
       </ul>

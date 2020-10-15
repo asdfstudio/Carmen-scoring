@@ -116,21 +116,26 @@ class AwardScheduleController extends Controller
       $competition = Competition::find($competition_id);
       $schedule = AwardSchedule::with(['items' => function($query) {
         $query->performanceOrder();
-      }, 'items.division', 'items.division.awardSettings', 'items.round', 'items.award' => function($query) {
+      }, 'items.division', 'items.division', 'items.division.awardSettings', 'items.round', 'items.round.competition', 'items.award' => function($query) {
         $query->withoutGlobalScope('organization');
       }, 'items.caption'])->find($schedule_id);
 
       //$divisions = $competition->divisions()->with(['awards', 'awards.winner'])->get();
       //dd($divisions);
 
-      $awardWinners = AwardWinner::whereHas('division', function($query) use ($competition_id) {
-        $query->where('competition_id', $competition_id);
-      })->with(['choir'])->get();
+      $awardWinners = AwardWinner::with(['division', 'division.choirs', 'division.round' => function($query) use ($competition_id) {
+          $query->where('competition_id', $competition_id);
+      }])->get();
 
 
-      $standings = Standing::whereHas('division', function($query) use ($competition_id) {
+      // }, whereHas('division', function($query) use ($competition_id) {
+      //   $query->where('division.round.competition_id', $competition_id);
+      // })->with(['divisions', 'divisions.choir'])->get();
+
+
+      $standings = Standing::whereHas('round', function($query) use ($competition_id) {
         $query->where('competition_id', $competition_id);
-      })->with(['choirs'])->get();
+      })->with(['division', 'division.choirs'])->get();
 
       //dd($standings);
 

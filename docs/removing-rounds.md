@@ -28,6 +28,8 @@ AJ: All "Scoring Settings" would be per-round, including the sheet itself, capti
 
 AJ: Rounds can't be optional but should have a sensible default. If a round has only a single Division, it should be called a "Set" and has its own scoring properties
 
+AJ: Judges should be the same across all divisions in a Round.  Their captions should also be the same.
+
 ### Private Rounds
 Some rounds are scored but should not have the results made public. Add an "is_exhibition" flag to these private rounds or think of an overarching privacy setting for a round to fold Solo Divisions in with others (scoring methods permitting).
 
