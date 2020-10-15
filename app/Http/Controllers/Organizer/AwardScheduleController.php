@@ -138,23 +138,24 @@ class AwardScheduleController extends Controller
 
 
 
+    // TODO: If the majority of these are the same query as the "show" view, combine them and change the route to use different layouts, create an easily
+    // digestible scope, or something to reduce cutting and pasting here.
     public function showAsAnnouncer($competition_id, $schedule_id)
     {
       $competition = Competition::find($competition_id);
       $schedule = AwardSchedule::with(['items' => function($query) {
         $query->performanceOrder();
-      }, 'items.division', 'items.division.awardSettings', 'items.round', 'items.award' => function($query) {
+      }, 'items.division', 'items.division', 'items.division.awardSettings', 'items.round', 'items.round.competition', 'items.award' => function($query) {
         $query->withoutGlobalScope('organization');
       }, 'items.caption'])->find($schedule_id);
 
-      $awardWinners = AwardWinner::whereHas('division', function($query) use ($competition_id) {
-        $query->where('competition_id', $competition_id);
-      })->with(['choir'])->get();
+      $awardWinners = AwardWinner::with(['division', 'division.choirs', 'division.round' => function($query) use ($competition_id) {
+          $query->where('competition_id', $competition_id);
+      }])->get();
 
-
-      $standings = Standing::whereHas('division', function($query) use ($competition_id) {
+      $standings = Standing::whereHas('round', function($query) use ($competition_id) {
         $query->where('competition_id', $competition_id);
-      })->with(['choirs'])->get();
+      })->with(['division', 'division.choirs'])->get();
 
       $ratings = [];
 

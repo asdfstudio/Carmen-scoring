@@ -52,8 +52,8 @@
         }
       }
 
-      if($item->round){
-        $ratings = $item->round->getRatings();
+      if($item->division){
+        $ratings = $item->division->getRatings();
       }
 
       @endphp
