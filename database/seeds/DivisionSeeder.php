@@ -11,17 +11,14 @@ class DivisionSeeder extends Seeder
    */
   public function run()
   {
-    $competition = App\Competition::firstWhere('name', 'Demo Competition');
-    $fiftyFifty = App\CaptionWeighting::firstWhere('name', '50/50');
-    $scoringMethod = App\ScoringMethod::first();
-    $advancedSheet = App\Sheet::firstWhere('name', 'Carmen Showchoir Advanced');
-    $sheet = App\Sheet::firstWhere('name', 'Carmen Showchoir');
+    $round1 = App\Round::firstWhere('name', 'Prelims');
+    $round2 = App\Round::firstWhere('name', 'Finals');
 
     $divisions = [
-      ['competition_id' => $competition, 'caption_weighting_id' => $fiftyFifty, 'scoring_method_id' => $scoringMethod, 'sheet_id' => $advancedSheet, 'name' => 'High School - Mens'],
-      ['competition_id' => $competition, 'caption_weighting_id' => $fiftyFifty, 'scoring_method_id' => $scoringMethod, 'sheet_id' => $advancedSheet, 'name' => 'High School - Womens'],
-      ['competition_id' => $competition, 'caption_weighting_id' => $fiftyFifty, 'scoring_method_id' => $scoringMethod, 'sheet_id' => $sheet, 'name' => 'Middle School - Mixed'],
-      ['competition_id' => $competition, 'caption_weighting_id' => $fiftyFifty, 'scoring_method_id' => $scoringMethod, 'sheet_id' => $sheet, 'name' => 'Middle School - Mens'],
+      ['round_id' => $round1, 'name' => 'Demo Band'],
+      ['round_id' => $round1, 'name' => 'Demo High School Division 1'],
+      ['round_id' => $round2, 'name' => 'Demo High School Division 2'],
+      ['round_id' => $round1, 'name' => 'Demo High School Finals'],
     ];
 
     foreach ($divisions as $division) {

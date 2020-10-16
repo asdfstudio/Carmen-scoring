@@ -6,15 +6,19 @@ use App\Division;
 use Faker\Generator as Faker;
 
 $factory->define(Division::class, function (Faker $faker) {
+
     return [
       'name' => $faker->word,
-      'caption_weighting_id' => factory(App\CaptionWeighting::class),
-      'scoring_method_id' => factory(App\ScoringMethod::class),
-      'sheet_id' => factory(App\Sheet::class),
       'combo_award_count' => $faker->numberBetween(0, 3),
       'music_award_count' => $faker->numberBetween(0, 3),
       'show_award_count' => $faker->numberBetween(0, 3),
       'overall_award_count'=> $faker->numberBetween(0, 3),
+      'rating_system' => [
+          ["name" => $faker->word." Rating", "min_score" => $faker->numberBetween(0, 40)]
+      ],
+      'max_choirs' => $faker->numberBetween(1, 4),
+      'round_id' => factory(App\Round::class)
+
       // These don't seem to be used in the database
       // 'overall_award_sponsors' => $faker,
       // 'music_award_sponsors',
@@ -22,10 +26,4 @@ $factory->define(Division::class, function (Faker $faker) {
       // 'combo_award_sponsors',
       // 'rating_system'
     ];
-});
-
-$factory->afterCreating(Division::class, function($division, $faker) {
-  $round = factory(App\Round::class)->create([
-    'division_id' => $division->id
-  ]);
 });

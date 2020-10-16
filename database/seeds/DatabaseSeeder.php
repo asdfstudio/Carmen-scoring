@@ -28,10 +28,14 @@ class DatabaseSeeder extends Seeder
 
     // Seed a random competition
     $this->call(CompetitionSeeder::class);
+    $this->call(RoundSeeder::class);
     $this->call(DivisionSeeder::class);
     $this->call(SchoolSeeder::class);
     $this->call(ChoirSeeder::class);
     $this->call(ChoirDivisionSeeder::class);
+
+    // Seed an audience vote setting
+    $this->call(VoteSeeder::class);
 
     // Add some Judges and random comments and scores
     $this->call(DivisionJudgeSeeder::class);

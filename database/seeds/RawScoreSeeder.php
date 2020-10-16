@@ -13,9 +13,9 @@ class RawScoreSeeder extends Seeder
   {
     $competition = App\Competition::firstWhere('name', 'Demo Competition');
     foreach ($competition->divisions as $division) {
-      $round = $division->rounds()->first();
+      $round = $division->round()->first();
       $judges = $division->judges;
-      $choirs = $round->choirs;
+      $choirs = $division->choirs;
       foreach ($choirs as $choir) {
         foreach ($division->sheet->criteria as $criterion) {
           foreach ($judges as $judge) {
