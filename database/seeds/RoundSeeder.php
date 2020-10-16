@@ -17,11 +17,11 @@ class RoundSeeder extends Seeder
         $advancedSheet = App\Sheet::firstWhere('name', 'Carmen Showchoir Advanced');
 
         factory(App\Round::class)->create([
-            'name' => 'Prelims'
-            , 'competition_id' => $competition
-            , 'caption_weighting_id' => $fiftyFifty
-            , 'scoring_method_id' => $scoringMethod
-            , 'sheet_id' => $advancedSheet
+            'name' => 'Prelims',
+            'competition_id' => $competition,
+            'caption_weighting_id' => $fiftyFifty,
+            'scoring_method_id' => $scoringMethod,
+            'sheet_id' => $advancedSheet
         ]);
 
         $sixtyFourty = App\CaptionWeighting::firstWhere('name', '60/40');
@@ -29,11 +29,11 @@ class RoundSeeder extends Seeder
         $advancedSheet = App\Sheet::firstWhere('name', 'Carmen Showchoir');
 
         factory(App\Round::class)->create([
-            'name' => 'Finals'
-            , 'competition_id' => $competition
-            , 'caption_weighting_id' => $sixtyFourty
-            , 'scoring_method_id' => $scoringMethod
-            , 'sheet_id' => $advancedSheet
+            'name' => 'Finals',
+            'competition_id' => $competition,
+            'caption_weighting_id' => $sixtyFourty,
+            'scoring_method_id' => $scoringMethod,
+            'sheet_id' => $advancedSheet
         ]);
     }
 }
