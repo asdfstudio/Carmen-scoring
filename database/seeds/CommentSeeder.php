@@ -15,7 +15,7 @@ class CommentSeeder extends Seeder
   {
     // for each judge in the division, add a comment for each choir
     App\Division::all()->each(function($division) {
-      $round = $division->round();
+      $round = $division->round()->first();
       $judges = $division->judges;
       $choirs = $division->choirs;
       foreach ($judges as $judge) {
