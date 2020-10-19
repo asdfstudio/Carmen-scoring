@@ -40,13 +40,11 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
 
-    protected static function boot()
+    protected static function booted()
     {
-        parent::boot();
-
         static::addGlobalScope('orderByEmail', function(Builder $builder) {
-					$builder->orderBy('email', 'ASC');
-				});
+            $builder->orderBy('email', 'ASC');
+        });
     }
 
 

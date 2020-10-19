@@ -15,13 +15,10 @@ class Award extends Model
 
   protected $fillable = ['name', 'description', 'organization_id'];
 
-  protected static function boot()
+  protected static function booted()
   {
-      parent::boot();
-
       static::addGlobalScope(new OrderByNameScope);
   }
-
 
   public function organization()
   {

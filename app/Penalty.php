@@ -15,13 +15,10 @@ class Penalty extends Model
 
 		protected $fillable = ['name', 'description', 'amount', 'apply_per_judge', 'organization_id'];
 
-		protected static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope(new OrderByNameScope);
-    }
-
+		protected static function booted()
+        {
+            static::addGlobalScope(new OrderByNameScope);
+        }
 
 		public function organization()
 		{

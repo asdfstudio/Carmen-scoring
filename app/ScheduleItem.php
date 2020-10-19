@@ -10,10 +10,8 @@ class ScheduleItem extends Model
 
     protected $fillable = ['division_id', 'choir_id', 'name', 'performance_order', 'scheduled_time'];
 
-    protected static function boot()
+    protected static function booted()
     {
-        parent::boot();
-
         static::addGlobalScope('performanceOrder', function(Builder $builder) {
             $builder->orderBy('performance_order', 'asc');
         });

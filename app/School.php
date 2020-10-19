@@ -15,10 +15,8 @@ class School extends Model
 		protected $fillable = ['name'];
 
 
-    protected static function boot()
+    protected static function booted()
     {
-        parent::boot();
-
         static::addGlobalScope(new OrderByNameScope);
     }
 

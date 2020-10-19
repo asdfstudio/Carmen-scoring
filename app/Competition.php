@@ -30,11 +30,9 @@ class Competition extends Model
     protected $casts = [
       'use_runner_up_names' => 'array'
     ];
-    
-		protected static function boot()
+
+    protected static function booted()
     {
-        parent::boot();
-        
         static::addGlobalScope(new OrderByNameScope);
     }
 

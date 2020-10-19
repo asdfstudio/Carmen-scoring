@@ -14,12 +14,10 @@ class Choir extends Model
 
 		protected $fillable = ['school_id','name'];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope(new OrderByNameScope);
-    }
+        protected static function booted()
+        {
+            static::addGlobalScope(new OrderByNameScope);
+        }
 
 
 		public function school()
