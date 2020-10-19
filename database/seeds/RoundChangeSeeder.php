@@ -47,14 +47,14 @@ class RoundChangeSeeder extends Seeder
         $sheet = App\Sheet::firstWhere('name', 'Carmen Showchoir');
         $advancedSheet = App\Sheet::firstWhere('name', 'Carmen Showchoir Advanced');
 
-        $divisionSettings = ['competition_id' => $competition,
+        $roundSettings = ['competition_id' => $competition,
             'caption_weighting_id' => $fiftyFifty, 'scoring_method_id' => $scoringMethod,
-            'sheet_id' => $advancedSheet, 'name' => 'Oddly Easy Division'];
+            'sheet_id' => $advancedSheet, 'name' => 'Round'];
 
+        $Round = factory(App\Round::class)->create($roundSettings);
 
-        $oddDivision = factory(App\Division::class)->create($divisionSettings);
-        $evenDivision = factory(App\Division::class)->create(array_merge($divisionSettings,
-            ['sheet_id' => $sheet, 'name' => 'Even Tougher Division']));
+        $oddDivision = factory(App\Division::class)->create(['round_id' => $Round, 'name' => 'Oddly Easy Division']);
+        $evenDivision = factory(App\Division::class)->create(['round_id' => $Round, 'name' => 'Even Tougher Division']);
 
         // Add Choirs to the prelim divisions
         for ($i = 1; $i < 10; $i++) {
@@ -101,10 +101,10 @@ class RoundChangeSeeder extends Seeder
         });
 
         foreach ($competition->divisions as $division) {
-            $round = $division->rounds()->first();
+            $round = $division->round;
             $division->activateScoring();
             $judges = $division->judges;
-            $choirs = $round->choirs;
+            $choirs = $division->choirs;
             foreach ($choirs as $choir) {
                 foreach ($division->sheet->criteria as $criterion) {
                     foreach ($judges as $judge) {
@@ -124,21 +124,6 @@ class RoundChangeSeeder extends Seeder
             $division->completeScoring();
         }
 
-        // TODO: Create awards in a addition to placing scores
-        $prelims = App\Division::all();
-
-        // Create a target "Finals Qualifiers" round that is fed by the other divisions
-        $finalistsDivision = factory(\App\Division::class)->create(array_merge($divisionSettings,
-            ['name' => 'Finalists']));
-
-        foreach ($prelims as $prelim) {
-            $finalistsDivision->rounds()->first()->sources()->attach($prelim->rounds()->first());
-            $finalistsDivision->rounds()->first()->save();
-        }
-
-        // Create a final "Finals" round with the top 6 from all the scored divisions
-        $finalsDivision = factory(\App\Division::class)->create(array_merge($divisionSettings,
-            ['name' => 'Finals']));
     }
 
 
