@@ -41,7 +41,7 @@
 
         </td>
     <td>
-    @php $anchor = $division->round->judges->count() > 0 ? $division->round->judges->count() : 'Set Up';@endphp
+    @php $anchor = $round->judges->count() > 0 ? $round->judges->count() : 'Set Up';@endphp
 
             {{ link_to_route('organizer.competition.division.judge.index', $anchor, [$competition,$division]) }}
 

@@ -17,6 +17,7 @@
             <li> {{ link_to_route('organizer.competition.round.edit', 'Edit Scoring', [$competition,$round], ['class' => 'action']) }} </li>
 			<li>{{ link_to_route('organizer.competition.division.index', 'Edit Divisions', [$competition, $round], ['class' => 'action']) }}</li>
 		@endcan
+			<li>{{ link_to_route('organizer.competition.round.board', 'Edit Judges', [$competition, $round], ['class' => 'action']) }}</li>
 
 	</ul>
 @endsection
@@ -43,6 +44,10 @@
             @endforeach
 
 		</li>
+        <li class="list-group-item">
+            <h3>Judges</h3>
+            @include('competition_division_judge.organizer.table')
+        </li>
 	</ul>
 
   <div class="row">

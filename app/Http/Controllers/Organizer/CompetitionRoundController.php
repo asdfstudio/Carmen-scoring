@@ -189,7 +189,8 @@ class CompetitionRoundController extends Controller
       $round = Round::with([
           'competition',
           'sheet',
-          'divisions'
+          'divisions',
+          'judges',
           // 'divisions.choirs',
           // 'divisions.judges',
           // 'divisions.judges.captions',
@@ -203,8 +204,11 @@ class CompetitionRoundController extends Controller
       // }
 
       $competition = $round->competition;
+      $captions = Caption::all();
+      $judges = $round->judges;
+      $division = $round->divisions->first();
 
-      return view('competition_round.organizer.show', compact('competition', 'round' ));
+      return view('competition_round.organizer.show', compact('captions', 'judges', 'competition', 'round', 'division' ));
       // return view('competition.round.organizer.show', compact(/* 'captions', /*'rawScores', /* 'weightedScores', 'rankedScores',*/ 'round', 'competition', 'divisions', // 'rounds', )); //'scoreboard'));
 		}
 
@@ -461,4 +465,41 @@ class CompetitionRoundController extends Controller
 				return redirect()->route('organizer.competition.round.index', [$division->competition, $division])->with('success', $round->name . ' was successfully removed from this division.');
     }
 
+    /**
+     * Display the judge board.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function board($competition_id, $round_id, FormBuilder $formBuilder)
+    {
+        $round = Round::with(['competition', 'divisions', 'judges', 'judges.captions'])->find($round_id);
+
+        $captions = Caption::forSheet($round->sheet);
+        $competition = $round->competition;
+        // TODO: Remove this from the template. No need for divisions here.
+        $division = $round->divisions->first();
+
+        $judges = Judge::get();
+        $judges = $judges->pluck('full_name', 'id')->toArray();
+
+        $newJudgeForm = $formBuilder->create('Judge\ChooseJudgeForm', [
+            'method' => 'POST',
+            'data' => [
+                'judges' => $judges,
+                'captions' => $captions->pluck('name', 'id')->toArray()
+            ],
+            'url' => route('organizer.competition.division.judge.store',[$round->competition,$round])
+        ]);
+
+        // TODO: Change to $rounds_import_judge
+        $competition_import_judge = Competition::with('rounds.judges')->find($competition_id);
+        $round_id = $round->id;
+
+        $rounds_import_judge = $competition_import_judge->rounds->reject(function($value, $key) use ($round_id) {
+          return $value->id == $round_id;
+        });
+
+        return view('competition_round.organizer.board', compact('competition', 'round', 'division', 'captions', 'rounds_import_judge', 'newJudgeForm'));
+    }
 }

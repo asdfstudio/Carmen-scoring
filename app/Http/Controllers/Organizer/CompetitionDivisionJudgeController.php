@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Competition;
 use App\Division;
+use App\Round;
 use App\Judge;
 use App\Person;
 use App\Caption;
@@ -142,8 +143,9 @@ class CompetitionDivisionJudgeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($competition_id, $division_id, Request $request, FormBuilder $formBuilder)
+    public function store($competition_id, $round_id, Request $request, FormBuilder $formBuilder)
     {
+        // TODO: See why this authorization has been commented out.
         //$this->authorize('create','App\Choir');
 				// $form = $formBuilder->create('Judge\ChooseJudgeForm');
 
@@ -153,7 +155,7 @@ class CompetitionDivisionJudgeController extends Controller
         // }
 
 				// Get the division
-				$division = Division::with('competition','judges')->find($division_id);
+				$round = Round::with('competition','judges')->find($round_id);
 
         // Create the judge
         if($request->filled('judge.first_name'))
@@ -225,17 +227,17 @@ class CompetitionDivisionJudgeController extends Controller
 							$extra = ['caption_id' => $id];
 						}
 
-						$division->round->judges()->attach($judge->id, $extra);
+						$round->judges()->attach($judge->id, $extra);
 					}
 				}
 
-        $successMessage = $judge->full_name." has been added to this division.";
+        $successMessage = $judge->full_name." has been added to this round";
 
 
         if($request->wantsJson())
         {
-          $judge->load(['captions' => function($query) use ($division_id) {
-            $query->wherePivot('division_id', $division_id);
+          $judge->load(['captions' => function($query) use ($round_id) {
+            $query->wherePivot('round_id', $round_id);
           }]);
           $judge->captions_join = '';
           foreach($judge->captions as $caption) {
@@ -253,7 +255,7 @@ class CompetitionDivisionJudgeController extends Controller
           return redirect()->back()->with('success',$successMessage);
         }
         else {
-          return redirect()->route('organizer.competition.division.settings',[$division->competition, $division])->with('success',$successMessage);
+          return redirect()->route('organizer.competition.round.show',[$round->competition, $round])->with('success',$successMessage);
         }
     }
 

@@ -19,7 +19,7 @@
         </li>
         <li>
             @php $link_class = Request::segment(6) == 'board' ? 'active' : false; @endphp
-            <a href="{{ route('organizer.competition.division.board', [$competition,$division]) }}" class="{{ $link_class }}">Edit Choirs and Judges</a>
+            <a href="{{ route('organizer.competition.division.board', [$competition,$division]) }}" class="{{ $link_class }}">Edit Choirs</a>
         </li>
         <li>
             @php $link_class = Request::segment(6) == 'penalty' ? 'active' : false; @endphp

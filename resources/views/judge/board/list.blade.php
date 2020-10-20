@@ -1,7 +1,7 @@
 <ul class="judges cards list-group" data-resource-type="judge">
   @include('judge.board.list-item-prototype')
 
-  @foreach($division->round->judges as $judge)
+  @foreach($round->judges as $judge)
     @include('judge.board.list-item')
   @endforeach
 </ul>

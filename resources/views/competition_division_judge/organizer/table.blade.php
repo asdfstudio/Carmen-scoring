@@ -1,8 +1,8 @@
-@if($division->round->judges->isEmpty())
+@if($round->judges->isEmpty())
 	<p>There are no judges. {{ link_to_route('organizer.competition.division.board','Add one',[$division->competition,$division]) }}</p>
 @endif
 
-@if(!$division->round->judges->isEmpty())
+@if(!$round->judges->isEmpty())
 <div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered">
   <tr>
@@ -18,7 +18,7 @@
   @foreach($judges as $judge)
   <tr>
 
-    <td>{{ link_to_route('organizer.competition.division.judge.show',$judge->full_name, [$division->competition, $division, $judge]) }}</td>
+    <td>{{ link_to_route('organizer.competition.division.judge.show',$judge->full_name, [$competition, $division, $judge]) }}</td>
 
     @foreach($captions as $caption)
     <td>
@@ -28,7 +28,7 @@
     </td>
     @endforeach
 
-    <td>{{ link_to_route('organizer.competition.division.judge.edit','Edit', [$division->competition, $division, $judge]) }}</td>
+    <td>{{ link_to_route('organizer.competition.division.judge.edit','Edit', [$competition, $division, $judge]) }}</td>
   </tr>
   @endforeach
 </table>

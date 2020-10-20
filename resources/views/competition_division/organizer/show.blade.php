@@ -56,10 +56,6 @@
             <h3>Choirs</h3>
             @include('competition_division_choir.organizer.table')
         </li>
-        <li class="list-group-item">
-            <h3>Judges</h3>
-            @include('competition_division_judge.organizer.table')
-        </li>
     </ul>
 
 @php

@@ -283,78 +283,8 @@ class CompetitionDivisionController extends Controller
 					'url' => route('organizer.competition.division.choir.store',[$division->competition,$division])
 				]);
 
-        // $competition_rounds = Competition::find($competition_id )->rounds()->whereHas('division', function ($query) use ($division) {
-        //   $query->where('sheet_id', $division->sheet_id);
-        // })->get();
-        //
-        // $choices = $competition_rounds->pluck('full_name', 'id')->toArray();
-        // $selected = [];
-        //
-        //
-        // $newRoundForm = $formBuilder->create('Round\CreateRoundForm', [
-		// 			'method' => 'POST',
-        //   'data' => [
-        //     'choices' => $choices,
-        //     'selected' => $selected,
-        //     'division' => $division
-        //   ],
-		// 			'url' => route('organizer.competition.division.round.store', [$division->competition,$division])
-		// 		]);
-
-        // $deleteChoirForm = $formBuilder->create('GenericDeleteForm', [
-				// 	'method' => 'DELETE',
-        //   'class' => 'remove-resource'
-				// ]);
-
-        // $deleteChoirForm->modify('submit','submit',['label' => 'Remove']);
-
-
-        $judges = Judge::get();
-        $judges = $judges->pluck('full_name', 'id')->toArray();
-
-        $newJudgeForm = $formBuilder->create('Judge\ChooseJudgeForm', [
-					'method' => 'POST',
-          'data' => [
-            'judges' => $judges,
-            'captions' => $captions->pluck('name', 'id')->toArray()
-          ],
-					'url' => route('organizer.competition.division.judge.store',[$division->competition,$division])
-				]);
-
-        // $deleteJudgeForm = $formBuilder->create('GenericDeleteForm', [
-				// 	'method' => 'DELETE',
-        //   'class' => 'remove-resource'
-				// ]);
-
-        // $deleteJudgeForm->modify('submit','submit',['label' => 'Remove']);
-
-
-        // $newPenaltyForm = $formBuilder->create('Penalty\CreatePenaltyForm', [
-        //   'method' => 'POST',
-        //   'url' => route('organizer.competition.division.penalty.store', [$competition_id, $division_id])
-        // ]);
-
-
-        // $deletePenaltyForm = $formBuilder->create('GenericDeleteForm', [
-				// 	'method' => 'DELETE',
-        //   'class' => 'remove-resource'
-				// ]);
-
-        // $deletePenaltyForm->modify('submit','submit',['label' => 'Remove']);
-
-
-        // TODO: Change to $rounds_import_judge
-        $competition_import_judge = Competition::with('rounds.judges')->find($competition_id);
-        $round_id = $division->round->id;
-
-        $divisions_import_judge = $competition_import_judge->rounds->reject(function($value, $key) use ($round_id) {
-          return $value->id == $round_id;
-        });
-        // return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
-        return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'divisions_import_judge', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newJudgeForm'));
+        return view('competition_division.organizer.board', compact('competition', 'division', 'newChoirForm'));
     }
-
-
 
     /**
      * Display the specified resource.

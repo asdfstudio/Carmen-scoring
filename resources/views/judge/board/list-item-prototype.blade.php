@@ -11,13 +11,13 @@
   </ul>
 
   <div class="actions">
-    @can('removeJudge', $division)
-      <a class="remove-resource" data-resource-type="judge" data-resource-id="@{{ id }}" data-csrf-token="{{ csrf_token() }}" href="{{ route('organizer.competition.division.show',[$division->competition,$division]) }}/judge/@{{id}}">
-        <i class="fa fa-trash"></i>  
+    @can('removeJudge', $round)
+      <a class="remove-resource" data-resource-type="judge" data-resource-id="@{{ id }}" data-csrf-token="{{ csrf_token() }}" href="{{ route('organizer.competition.round.show',[$round->competition,$round]) }}/judge/@{{id}}">
+        <i class="fa fa-trash"></i>
         Remove
       </a>
-      <a class="edit-resource dg-mr-28" data-resource-type="judge" data-resource-id="@{{ id }}"  data-csrf-token="{{ csrf_token() }}" data-captions="@{{ captions_join }}" data-all-captions="{{ $str_all_captions }}" href="{{ route('organizer.competition.division.show',[$division->competition,$division]) }}/judge/@{{id}}">
-        <i class="fa fa-pencil"></i>  
+      <a class="edit-resource dg-mr-28" data-resource-type="judge" data-resource-id="@{{ id }}"  data-csrf-token="{{ csrf_token() }}" data-captions="@{{ captions_join }}" data-all-captions="{{ $str_all_captions }}" href="{{ route('organizer.competition.round.show',[$round->competition,$round]) }}/judge/@{{id}}">
+        <i class="fa fa-pencil"></i>
         Edit
       </a>
     @endcan

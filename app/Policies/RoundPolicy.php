@@ -64,6 +64,38 @@ class RoundPolicy extends BasePolicy
       }
 		}
 
+    public function importJudges(User $user, Round $round)
+    {
+        if($this->isOrgAdmin AND $round->status_slug() == 'active' AND $round->competition->is_completed == false)
+        {
+            return true;
+        }
+    }
+
+    public function createJudge(User $user, Round $round)
+    {
+        if($this->isOrgAdmin AND $round->status_slug() == 'active' AND $round->competition->is_completed == false)
+        {
+            return true;
+        }
+    }
+
+    public function updateJudge(User $user, Round $round)
+    {
+        if($this->isOrgAdmin AND $round->status_slug() == 'active' AND $round->competition->is_completed == false)
+        {
+            return true;
+        }
+    }
+
+    public function removeJudge(User $user, Round $round)
+    {
+        if($this->isOrgAdmin AND $round->status_slug() == 'active')
+        {
+            return true;
+        }
+    }
+
     public function setPerformanceOrder(User $user, $round)
 		{
       if($this->isOrgAdmin AND $round->status_slug() == 'inactive')

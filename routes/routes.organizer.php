@@ -218,11 +218,15 @@ Route::group([
     'as' => 'competition.round.choir.performance_order.update', 'uses' => 'CompetitionDivisionRoundChoirController@update_performance_order'
 	]);
 
+  // TODO: Edit this and put it in the right place for judges
+  Route::get('competition/{competition}/round/{round}/board', [
+    'as' => 'competition.round.board', 'uses' => 'CompetitionRoundController@board'
+  ]);
 
+  // TODO: Edit this and put it in the right place for choirs
   Route::get('competition/{competition}/division/{division}/board', [
     'as' => 'competition.division.board', 'uses' => 'CompetitionDivisionController@board'
   ]);
-
 
   // List division awards
   Route::get('competition/{competition}/division/{division}/award', [

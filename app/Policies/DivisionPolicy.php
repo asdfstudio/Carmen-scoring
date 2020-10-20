@@ -111,38 +111,6 @@ class DivisionPolicy extends BasePolicy
         }
     }
 
-    public function importJudges(User $user, Division $division)
-    {
-        if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
-        {
-            return true;
-        }
-    }
-
-    public function createJudge(User $user, Division $division)
-    {
-        if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
-        {
-            return true;
-        }
-    }
-
-    public function updateJudge(User $user, Division $division)
-    {
-        if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
-        {
-            return true;
-        }
-    }
-
-    public function removeJudge(User $user, Division $division)
-    {
-        if($this->isOrgAdmin AND $division->status_slug() == 'active')
-        {
-            return true;
-        }
-    }
-
     public function addChoir(User $user, Division $division)
     {
         if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
