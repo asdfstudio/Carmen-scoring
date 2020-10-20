@@ -398,38 +398,43 @@ class CompetitionDivisionController extends Controller
 
     public function scoring($competition_id, $division_id, Request $request)
     {
-      $division = Division::with('rounds')->find($division_id);
+      $division = Division::with('round')->find($division_id);
 
       // Activate scoring for
       //all of the division rounds for this competition
       if($request->input('activate'))
       {
         $division->activateScoring();
+        $msg = "activated";
       }
       // Reactivate scoring for all division rounds
       elseif($request->input('reactivate'))
       {
         $division->reactivateScoring();
+        $msg = "reactivated";
       }
       // Deactivate scoring for all division rounds
       elseif($request->input('deactivate'))
       {
         $division->deactivateScoring();
+        $msg = "deactivated";
       }
       // Complete scoring for all division rounds
       elseif($request->input('complete'))
       {
         $division->completeScoring();
+        $msg = "completed";
       }
       elseif($request->input('finalize'))
       {
         $division->finalizeScoring();
         event(new DivisionScoringFinalized($division));
+        $msg = "finalized";
       }
       else {
         return 0;
       }
 
-      return redirect()->route('organizer.competition.division.settings',[$competition_id,$division_id]);
+      return redirect()->route('organizer.competition.division.show',[$competition_id,$division_id])->with('success', "$division->name scoring has been ".$msg.'.');
     }
 }
