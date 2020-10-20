@@ -44,10 +44,8 @@ class Division extends Model
 
     protected $ratings;
 
-    protected static function boot()
+    protected static function booted()
     {
-        parent::boot();
-
         static::addGlobalScope(new OrderByNameScope);
     }
 
