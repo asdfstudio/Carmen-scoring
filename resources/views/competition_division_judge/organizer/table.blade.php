@@ -1,5 +1,5 @@
 @if($round->judges->isEmpty())
-	<p>There are no judges. {{ link_to_route('organizer.competition.division.board','Add one',[$division->competition,$division]) }}</p>
+	<p>There are no judges. {{ link_to_route('organizer.competition.round.board','Add one',[$competition,$round]) }}</p>
 @endif
 
 @if(!$round->judges->isEmpty())

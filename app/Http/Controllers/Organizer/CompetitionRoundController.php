@@ -473,12 +473,14 @@ class CompetitionRoundController extends Controller
      */
     public function board($competition_id, $round_id, FormBuilder $formBuilder)
     {
-        $round = Round::with(['competition', 'divisions', 'judges', 'judges.captions'])->find($round_id);
+        $round = Round::with(['competition', 'judges' => function($query) {
+            $query->groupBy('judge_id');
+        }, 'judges.captions' => function ($query) use ($round_id) {
+            $query->where('round_id', $round_id);
+        }])->find($round_id);
 
         $captions = Caption::forSheet($round->sheet);
         $competition = $round->competition;
-        // TODO: Remove this from the template. No need for divisions here.
-        $division = $round->divisions->first();
 
         $judges = Judge::get();
         $judges = $judges->pluck('full_name', 'id')->toArray();
@@ -500,6 +502,6 @@ class CompetitionRoundController extends Controller
           return $value->id == $round_id;
         });
 
-        return view('competition_round.organizer.board', compact('competition', 'round', 'division', 'captions', 'rounds_import_judge', 'newJudgeForm'));
+        return view('competition_round.organizer.board', compact('competition', 'round', 'captions', 'rounds_import_judge', 'newJudgeForm'));
     }
 }
