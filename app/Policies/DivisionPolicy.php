@@ -88,7 +88,7 @@ class DivisionPolicy extends BasePolicy
     {
         if ($this->isOrgAdmin AND !$division->isNew() AND
             ($division->status_slug() == 'completed' OR $division->status_slug() == 'inactive')
-            AND $division->division->status_slug() != 'finalized')
+            AND $division->status_slug() != 'finalized')
         {
             return true;
         }
