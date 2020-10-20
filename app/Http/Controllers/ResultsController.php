@@ -292,7 +292,7 @@ class ResultsController extends Controller
       $round = $division->rounds()->find($round_id);
 
       $choirs = $round->choirs;
-      $judges = $division->judges;
+      $judges = $division->round->judges;
 
       $scoreboard = new Scoreboard(['round_id' => $round_id]);
       $ratings = (new Ratings($division))->all();
@@ -375,7 +375,7 @@ class ResultsController extends Controller
       $captions = $this->captions;
 
       $round = $division->rounds()->find($round_id);
-      $judge = $division->judges()->with(['captions' => function($query) use ($division_id) {
+      $judge = $division->round->judges()->with(['captions' => function($query) use ($division_id) {
         $query->where('division_id', $division_id);
       }])->find($judge_id);
 

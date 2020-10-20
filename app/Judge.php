@@ -26,30 +26,33 @@ class Judge extends Person
         });
     }
 
-
     public function types()
     {
         return $this->belongsToMany('App\Type', 'person_type', 'person_id', 'type_id');
     }
-  
-		public function divisions()
+
+    public function rounds()
     {
-        return $this->belongsToMany('App\Division')->withPivot('caption_id');
+        return $this->belongsToMany('App\Round', 'round_judge')->withPivot('caption_id');
     }
 
-
-		public function captions()
+    public function divisions()
     {
-        return $this->belongsToMany('App\Caption','division_judge')->withPivot('division_id');
+        return $this->hasManyThrough('App\Division', 'App\Round', 'round_judge.judge_id');
     }
 
-		public function comments()
-		{
-			return $this->hasMany('App\Comment');
+    public function captions()
+    {
+        return $this->belongsToMany('App\Caption','round_judge')->withPivot('round_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('App\Comment');
     }
     public function recordings()
-		{
-			return $this->hasMany('App\Recording');
+    {
+        return $this->hasMany('App\Recording');
 		}
 
 }

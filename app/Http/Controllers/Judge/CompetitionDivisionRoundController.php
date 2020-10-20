@@ -142,7 +142,7 @@ class CompetitionDivisionRoundController extends Controller
           }])->find($round_id);
 
       $division = $round->division;
-      $recording_judges = $round->division->judges;
+      $recording_judges = $round->judges;
       $competition = $division->competition->organization;
       $rating_system = $division->rating_system;
 
@@ -299,7 +299,7 @@ class CompetitionDivisionRoundController extends Controller
       $division = $round->division;
       $competition = $division->competition;
 
-      $judge = $division->judges->first();
+      $judge = $round->judges->first();
 
       $judge = Judge::with(['captions' => function($query) use ($division_id) {
         $query->where('division_id', $division_id);
@@ -375,10 +375,10 @@ class CompetitionDivisionRoundController extends Controller
 
       $captionWeightingId = $division->caption_weighting_id;
 
-      $judge = $division->judges->first();
+      $judge = $round->judges->first();
 
-      $judge = Judge::with(['captions' => function($query) use ($division_id) {
-        $query->where('division_id', $division_id);
+      $judge = Judge::with(['captions' => function($query) use ($round_id) {
+        $query->where('round_id', $round_id);
       }])->find($judge_id);
 
       //

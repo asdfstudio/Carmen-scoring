@@ -23,20 +23,16 @@ class CompetitionDivisionRoundJudgeController extends Controller
 {
     public function index($competition_id,$division_id,$round_id)
 		{
-      $round = Round::with(['division','division.competition' => function($query) {
+      $round = Round::with(['judges', 'division','division.competition' => function($query) {
         $query->withoutGlobalScope('organization');
-      },'division.choirs','division.judges' => function ($query) {
-					$query->groupBy('judge_id');
-				}])->find($round_id);
+      },'division.choirs')->find($round_id);
 
       if($round->status_slug != 'completed')
       {
         return redirect()->route('judge.round.scores.summary', [$competition_id, $division_id, $round_id])->with('warning', "You cannot view other judge's scores until the round is complete.");
       }
 
-      $judges = $round->division->judges->unique('id');
-			//$judge_id = Auth::user()->person_id;
-
+      $judges = $round->judges->unique('id');
       $division = $round->division;
       $competition = $division->competition;
 
@@ -62,15 +58,11 @@ class CompetitionDivisionRoundJudgeController extends Controller
 		{
 			$rawScores = RawScore::with('judge','choir')->where('division_id',$division_id)->where('round_id',$round_id)->where('judge_id',$judge_id)->get();
 
-			//$round = Round::with(['division','division.competition','division.choirs'])->find($round_id);
-
-			$round = Round::with(['division','division.competition' => function($query) {
-        $query->withoutGlobalScope('organization');
-      },'division.choirs','division.judges' => function($query) use ($judge_id) {
-					$query->where('judge_id',$judge_id)->first();
-				}, 'division.judges.captions' => function($query) use ($division_id) {
-					$query->where('division_id',$division_id);
-				}, 'division.judges.captions.criteria','division.choirs'])->find($round_id);
+            $round = Round::with(['judges', 'division','division.competition' => function($query) {
+                $query->withoutGlobalScope('organization');
+            }, 'division.choirs', 'round.judges.captions' => function($query) use ($round_id) {
+                $query->where('round_id',$round_id);
+            }, 'round.judges.captions.criteria','division.choirs'])->find($round_id);
 
 			$judge = Judge::find($judge_id);
 

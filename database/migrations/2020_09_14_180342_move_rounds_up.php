@@ -16,6 +16,11 @@ class MoveRoundsUp extends Migration
         // We're adding foreign keys so turn this off first;
         Schema::disableForeignKeyConstraints();
 
+
+        // There are divisions with no rounds. We don't want to lose their connection to their competitions so we'll create rounds called "Default Set" to link them.
+        $defaults = 'INSERT INTO rounds (division_id, name) SELECT d.id, ? FROM divisions d WHERE d.id NOT IN (SELECT DISTINCT (division_id) FROM rounds)';
+        DB::insert($defaults, ['Default Set']);
+
         Schema::table('rounds', function (Blueprint $table) {
             $table->foreignId('competition_id')
                 ->constrained()
@@ -137,6 +142,9 @@ class MoveRoundsUp extends Migration
         Schema::table('choir_division', function(Blueprint $table) {
             $table->dropColumn('performance_order');
         });
+
+        $defaults = 'DELETE FROM rounds WHERE name = \'Default Set\'';
+        DB::delete($defaults);
 
         Schema::enableForeignKeyConstraints();
     }

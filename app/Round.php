@@ -38,6 +38,11 @@ class Round extends Model
         return $this->hasMany('App\Division');
     }
 
+    public function judges()
+    {
+        return $this->belongsToMany('App\Judge', 'round_judge')->withPivot('caption_id');
+    }
+
     public function penalties()
     {
         return $this->belongsToMany('App\Penalty', 'choir_penalty')->withPivot('choir_id');

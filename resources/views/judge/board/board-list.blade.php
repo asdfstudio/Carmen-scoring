@@ -1,14 +1,14 @@
 <div class="board-list judges" id="judge-list">
   <div class="list-header">
     <h3>Judges</h3>
-    <span class="card-count" data-resource-type="judge">{{ count($division->judges) }}</span>
+    <span class="card-count" data-resource-type="judge">{{ count($division->round->judges) }}</span>
     <div class="d-none base-url-div">{{ url('/') }}</div>
   </div>
 
   <a class="add-resource" data-resource-type="judge" href="#">Add a judge</a>
   <a class="import-resource" data-resource-type="judge" href="#">Import a judge</a>
   <a class="change-password" href="#">Change Password</a>
-  
+
   {!! form($newJudgeForm) !!}
 
   @php

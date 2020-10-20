@@ -26,13 +26,11 @@ class CompetitionDivisionJudgeController extends Controller
      */
     public function index($competition_id,$division_id)
     {
-        $division = Division::with(['competition','judges.user','judges' => function ($query) {
+        $division = Division::with(['competition','rounds.judges.user','rounds.judges' => function ($query) {
 					$query->groupBy('judge_id');
 				}, 'judges.captions' => function ($query) use ($division_id) {
 					$query->where('division_id',$division_id);
 				}])->find($division_id);
-
-        //dd($division->judges);
 
 				$captions = Caption::forSheet($division->sheet);
         
@@ -99,7 +97,7 @@ class CompetitionDivisionJudgeController extends Controller
   							$extra = ['caption_id' => $id];
   						}
 
-  						$division->judges()->attach($judge_id, $extra);
+  						$division->round->judges()->attach($judge_id, $extra);
   					}
           }
         }
@@ -227,7 +225,7 @@ class CompetitionDivisionJudgeController extends Controller
 							$extra = ['caption_id' => $id];
 						}
 
-						$division->judges()->attach($judge->id, $extra);
+						$division->round->judges()->attach($judge->id, $extra);
 					}
 				}
 
@@ -294,7 +292,7 @@ class CompetitionDivisionJudgeController extends Controller
 
         $this->authorize('updateJudge', $division);
 
-        //$judges = $division->judges()->where('judge_id',$judge_id)->get();
+        //$judges = $division->round->judges()->where('judge_id',$judge_id)->get();
         //dd($judge->captions->pluck('id')->toArray());
 
         //dd($judge);
@@ -344,7 +342,7 @@ class CompetitionDivisionJudgeController extends Controller
 				{
 					$caption_id = $request->input('caption_id');
 
-          //$division->judges()->detach($judge->id);
+          //$division->round->judges()->detach($judge->id);
 
           $judge->divisions()->detach($division->id);
 
@@ -358,7 +356,7 @@ class CompetitionDivisionJudgeController extends Controller
 						}
 
             $judge->divisions()->attach($division->id, $extra);
-						//$division->judges()->attach($judge->id, $extra);
+						//$division->round->judges()->attach($judge->id, $extra);
 					}
 				}
 
@@ -387,7 +385,7 @@ class CompetitionDivisionJudgeController extends Controller
         $division = Division::with('competition')->find($division_id);
         $judge = Judge::find($judge_id);
 
-				$division->judges()->detach($judge_id);
+				$division->round->judges()->detach($judge_id);
 
         if($request->wantsJson()) {
           return response()->json($judge_id);
@@ -439,12 +437,12 @@ class CompetitionDivisionJudgeController extends Controller
       $source_division = Division::find($source_division_id);
 
       $attachedJudges = array();
-      foreach($source_division->judges as $judge)
+      foreach($source_division->round->judges as $judge)
       {
-        if(!$division->judges->contains($judge->id))
+        if(!$division->round->judges->contains($judge->id))
         {
-          $division->judges()->attach($judge->id, ['caption_id' => $judge->pivot->caption_id]);
-          
+          $division->round->judges()->attach($judge->id, ['caption_id' => $judge->pivot->caption_id]);
+
           $attachedJudge = Judge::find($judge->id);
           $attachedJudge->load(['captions' => function($query) use ($division_id) {
             $query->wherePivot('division_id', $division_id);

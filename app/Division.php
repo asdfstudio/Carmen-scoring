@@ -49,14 +49,16 @@ class Division extends Model
         static::addGlobalScope(new OrderByNameScope);
     }
 
-    public function judges()
-    {
-        return $this->belongsToMany('App\Judge')->withPivot('caption_id');
-    }
-
     public function choirs()
     {
         return $this->belongsToMany('App\Choir')->withPivot( 'performance_order')->orderBy('performance_order', 'ASC');
+    }
+
+    public function judges()
+    {
+        if ($this->round) {
+            return $this->round->judges;
+        }
     }
 
     public function penalties()

@@ -1,8 +1,8 @@
-@if($division->judges->isEmpty())
+@if($division->round->judges->isEmpty())
 	<p>There are no judges. {{ link_to_route('organizer.competition.division.board','Add one',[$division->competition,$division]) }}</p>
 @endif
 
-@if(!$division->judges->isEmpty())
+@if(!$division->round->judges->isEmpty())
 <div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered">
   <tr>

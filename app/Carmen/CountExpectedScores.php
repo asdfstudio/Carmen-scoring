@@ -14,7 +14,7 @@ class CountExpectedScores {
 
   public function __construct(Division $division)
   {
-    $division->load(['choirs', 'judges', 'round', 'round.sheet', 'round.sheet.criteria']);
+    $division->load(['choirs', 'round', 'round.judges', 'round.sheet', 'round.sheet.criteria']);
     $this->division = $division;
   }
 
@@ -51,7 +51,7 @@ class CountExpectedScores {
 
   public function countCaptionJudges()
   {
-    foreach ($this->division->judges as $judge) {
+    foreach ($this->division->round->judges as $judge) {
       if (!array_key_exists($judge->pivot->caption_id, $this->captions)) continue;
 
       $this->captions[$judge->pivot->caption_id]['judgeCount']++;

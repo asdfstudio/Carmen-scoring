@@ -139,10 +139,8 @@ class CompetitionDivisionController extends Controller
      */
     public function show($competition_id, $division_id, FormBuilder $formBuilder)
     {
-        $division = Division::with(['round', 'competition', 'choirs','round','judges' => function ($query) {
+        $division = Division::with(['round', 'competition', 'choirs', 'round.judges' => function ($query) {
             $query->groupBy('judge_id');
-        }, 'judges.captions' => function ($query) use ($division_id) {
-            $query->where('division_id',$division_id);
         }])->find($division_id);
 
       // $division = Division::find($division_id);
@@ -152,7 +150,7 @@ class CompetitionDivisionController extends Controller
       // dd($division);
       // dd($competition);
       $captions = Caption::forSheet($division->round->sheet);
-      $judges = $division->judges;
+      $judges = $division->round->judges;
       $choirs = $division->choirs;
       $caption_ids = $division->round->sheet->caption_ids;
       $captions = Caption::forSheet($division->round->sheet);
@@ -253,11 +251,7 @@ class CompetitionDivisionController extends Controller
      */
     public function board($competition_id, $division_id, FormBuilder $formBuilder)
     {
-        $division = Division::with(['competition', 'choirs', 'choirs.directors','round','judges' => function ($query) {
-            $query->groupBy('judge_id');
-        }, 'judges.captions' => function ($query) use ($division_id) {
-            $query->where('division_id',$division_id);
-        }])->find($division_id);
+        $division = Division::with(['competition', 'choirs', 'choirs.directors','round','round.judges', 'round.judges.captions'])->find($division_id);
 
         $captions = Caption::forSheet($division->sheet);
         $competition = $division->competition;
@@ -349,9 +343,12 @@ class CompetitionDivisionController extends Controller
         // $deletePenaltyForm->modify('submit','submit',['label' => 'Remove']);
 
 
-        $competition_import_judge = Competition::with('divisions', 'divisions.judges')->find($competition_id);
-        $divisions_import_judge = $competition_import_judge->divisions->reject(function($value, $key) use ($division_id) {
-          return $value->id == $division_id;
+        // TODO: Change to $rounds_import_judge
+        $competition_import_judge = Competition::with('rounds.judges')->find($competition_id);
+        $round_id = $division->round->id;
+
+        $divisions_import_judge = $competition_import_judge->rounds->reject(function($value, $key) use ($round_id) {
+          return $value->id == $round_id;
         });
         // return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
         return view('competition_division.organizer.board', compact('competition', 'division', 'captions', 'divisions_import_judge', 'activateScoringForm', 'completeScoringForm', 'finalizeScoringForm', 'newChoirForm', 'newJudgeForm'));

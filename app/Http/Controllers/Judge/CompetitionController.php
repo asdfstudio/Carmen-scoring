@@ -17,13 +17,13 @@ class CompetitionController extends Controller
 		{
 			$judge_id = Auth::user()->person_id;
 
-			$competitions = Competition::withoutGlobalScope('organization')->whereHas('divisions.judges', function($query) use ($judge_id) {
+			$competitions = Competition::withoutGlobalScope('organization')->whereHas('rounds.judges', function($query) use ($judge_id) {
 				$query->where('judge_id',$judge_id);
 			})->orWhereHas('soloDivisions.judges', function($query) use ($judge_id) {
 				$query->where('judge_id',$judge_id);
 			})->active()->get();
 
-			$archivedCompetitions = Competition::withoutGlobalScope('organization')->whereHas('divisions.judges',function($query) use ($judge_id) {
+			$archivedCompetitions = Competition::withoutGlobalScope('organization')->whereHas('rounds.judges',function($query) use ($judge_id) {
 				$query->where('judge_id',$judge_id);
 			})->orWhereHas('soloDivisions.judges', function($query) use ($judge_id) {
 				$query->where('judge_id',$judge_id);

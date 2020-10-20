@@ -19,16 +19,15 @@ class Caption extends Model
     ];*/
 
 
-		public function criteria()
-		{
-			return $this->hasMany('App\Criterion');
-		}
+        public function criteria()
+        {
+            return $this->hasMany('App\Criterion');
+        }
 
-
-		public function judges()
-    {
-        return $this->belongsToMany('App\Judge','division_judge');
-    }
+        public function judges()
+        {
+            return $this->belongsToMany('App\Judge','round_judge');
+        }
 
     public function getSlugAttribute()
     {

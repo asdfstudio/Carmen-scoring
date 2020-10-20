@@ -44,6 +44,10 @@ Because some columns are missing and some are in a different order, the usual ba
 
       mysqldump -n -t -u root -p --skip-extended-insert --ignore-table-data=showchoir.migrations --ignore-table-data=showchoir.comments_backup --ignore-table-data=showchoir.comment_urls_backup showchoir > showchoir.prod.data.sql
 
+AJ: Data issue: There are 61 non-deleted Divisions in the production data that don't have a round.
+      select d.id, d.name from divisions d where d.id not in (select distinct(division_id) from rounds) and d.deleted_at is null;
+
+To fix these divisions so they don't lose a connection to their competitions, they've been put into created rounds called 'Default Set'.  They look like data cruft but we can clean them out later rather than permanently losing their competition connections.
 
 ## Changes to be made
 
