@@ -25,7 +25,7 @@ class CreatePenaltyForm extends Form
           'rules' => ''
         ]);
 
-        $this->add('amount','text', [
+        $this->add('amount','number', [
           'rules' => 'required'
         ]);
 
