@@ -143,12 +143,7 @@ class CompetitionDivisionController extends Controller
             $query->groupBy('judge_id');
         }])->find($division_id);
 
-      // $division = Division::find($division_id);
-        // dd($division->round->competition);
       $competition = $division->round->competition;
-        // dd($division->round->sheet);
-      // dd($division);
-      // dd($competition);
       $captions = Caption::forSheet($division->round->sheet);
       $judges = $division->round->judges;
       $choirs = $division->choirs;
@@ -176,6 +171,11 @@ class CompetitionDivisionController extends Controller
           'url' => route('organizer.competition.division.scoring',[$competition_id,$division_id])
         ]);
 
+        $finalizeScoringForm = $formBuilder->create('Scoring\FinalizeScoringForm', [
+          'method' => 'POST',
+          'url' => route('organizer.competition.division.scoring', [$competition_id, $division_id])
+        ]);
+
         $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm', [
           'method' => 'POST',
           'url' => route('organizer.competition.division.scoring', [
@@ -187,60 +187,11 @@ class CompetitionDivisionController extends Controller
           ]
         ]);
 
-        // Support for new board view
-        // $choirs = Choir::all()->pluck('full_name', 'id')->toArray();
-
-        $newChoirForm = $formBuilder->create('Choir\CreateChoirForm', [
-					'method' => 'POST',
-                    'data' => Choir::all()->pluck('full_name', 'id')->toArray(),
-					'url' => route('organizer.competition.division.choir.store',[$competition_id,$division_id])
-				]);
-
-        $selected = [];
-
-        $deleteChoirForm = $formBuilder->create('GenericDeleteForm', [
-					'method' => 'DELETE',
-                  'class' => 'remove-resource'
-				]);
-
-        $deleteChoirForm->modify('submit','submit',['label' => 'Remove']);
-
-
-        // $judges = Judge::get();
-        // $judges = $judges->pluck('full_name', 'id')->toArray();
-
-        // $newJudgeForm = $formBuilder->create('Judge\ChooseJudgeForm', [
-		// 			'method' => 'POST',
-        //             'data' => Judge::all()->pluck('full_name', 'id')->toArray(),
-        //             'class' => 'add-judge',
-        //             'url' => route('organizer.competition.division.judge.store',[$division->competition,$division])
-		// 		]);
-
-
-        $deleteJudgeForm = $formBuilder->create('GenericDeleteForm', [
-					'method' => 'DELETE',
-                    'class' => 'remove-resource'
-				]);
-
-        $deleteJudgeForm->modify('submit','submit',['label' => 'Remove']);
-
-
-        $newPenaltyForm = $formBuilder->create('Penalty\CreatePenaltyForm', [
-          'method' => 'POST',
-          'url' => route('organizer.competition.division.penalty.store', [$competition_id, $division_id])
-        ]);
-
-
-        $deletePenaltyForm = $formBuilder->create('GenericDeleteForm', [
-					'method' => 'DELETE',
-          'class' => 'remove-resource'
-				]);
-
-        $deletePenaltyForm->modify('submit','submit',['label' => 'Remove']);
-
         $include_division_navigation_bar = TRUE;
-        // return view('competition_division.organizer.show', compact('competition', 'division', 'captions', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'newRoundForm', 'deleteChoirForm', 'deleteJudgeForm', 'newJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
-        return view('competition_division.organizer.show', compact('competition', 'include_division_navigation_bar', 'division', 'judges', 'choirs', 'captions', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'newChoirForm', 'deleteChoirForm', 'deleteJudgeForm', 'newPenaltyForm', 'deletePenaltyForm'));
+
+        return view('competition_division.organizer.show', compact('include_division_navigation_bar', 'competition', 'division', 'judges', 'choirs',
+            'captions', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores',
+            'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'finalizeScoringForm'));
     }
 
     /**

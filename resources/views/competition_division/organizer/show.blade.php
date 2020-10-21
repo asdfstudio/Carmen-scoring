@@ -30,6 +30,11 @@
             <li>{!! form($completeScoringForm) !!}</li>
         @endcan
 
+        @can('finalizeScoring', $division)
+            <li>{!! form($finalizeScoringForm) !!}</li>
+
+        @endcan
+
     </ul>
 
     <div class="clearfix"></div>
