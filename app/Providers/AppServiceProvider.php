@@ -42,5 +42,11 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->alias('bugsnag.multi', \Psr\Log\LoggerInterface::class);
+
+        // Only use telescope locally
+        if ($this->app->isLocal()) {
+            $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
+            $this->app->register(TelescopeServiceProvider::class);
+        }
     }
 }
