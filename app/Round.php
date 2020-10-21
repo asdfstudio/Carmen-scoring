@@ -69,29 +69,16 @@ class Round extends Model
         return $this->belongsTo('App\CaptionWeighting');
     }
 
-    // TODO: Clean this all up, have a chat about duplicate data and whether it's worth keeping around
-    // in case of mistakes and re-activated divisions. Also reduce the number of methods being used to
-    // do the same thing here.
-    public function isScoringActive()
-    {
-        $numActiveDivisions = $this->divisions()->active()->count();
-        return $numActiveDivisions == 0 ? 'Active': 'Not Active';
-    }
-
-    // TODO: Why are we using both "Inactive" and "Not Active"? Let's make that consistent.
     public function status()
     {
-        if($this->divisions()->incomplete()->count() == 0)
-        {
+        $total = $this->divisions()->count();
+
+        if ($this->divisions()->published()->count() == $total) {
+            return 'Finalized';
+        } elseif ($this->divisions()->completed()->count() == $total) {
             return 'Completed';
-        }
-        elseif($this->isScoringActive() == 'Active')
-        {
+        } else {
             return 'Active';
-        }
-        else
-        {
-            return 'Inactive';
         }
     }
 
@@ -109,7 +96,6 @@ class Round extends Model
     {
         return $this->status_slug();
     }
-
 
     public function status_label($class_attr = false)
     {
@@ -133,7 +119,6 @@ class Round extends Model
         }
         return false;
     }
-
 
     public function getRatings(){
       if(!empty($this->ratings)){
