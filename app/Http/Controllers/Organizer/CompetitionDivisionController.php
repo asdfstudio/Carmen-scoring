@@ -110,7 +110,18 @@ class CompetitionDivisionController extends Controller
         $competition = Competition::with('organization','place','divisions')->find($competition_id);
 
         $division = new Division($request->all());
-        $division->rating_system = array_filter($request->input('rating_system'));
+        $rating_system = $request->input('rating_system');
+        foreach($rating_system as $index => $rating_item){
+            if($rating_item['name'] == '' OR $rating_item['min_score'] == ''){
+                unset($rating_system[$index]);
+            }
+        }
+        if(sizeof($rating_system) == 0) {
+            $division->rating_system = NULL;
+        }
+        else{
+            $division->rating_system = array_filter($rating_system);
+        }
         $division->save();
 
 
@@ -316,8 +327,18 @@ class CompetitionDivisionController extends Controller
         }
 
         $division->fill($request->all());
-        $division->rating_system = array_filter($request->input('rating_system'));
-
+        $rating_system = $request->input('rating_system');
+        foreach($rating_system as $index => $rating_item){
+            if($rating_item['name'] == '' OR $rating_item['min_score'] == ''){
+                unset($rating_system[$index]);
+            }
+        }
+        if(sizeof($rating_system) == 0) {
+            $division->rating_system = NULL;
+        }
+        else{
+            $division->rating_system = array_filter($rating_system);
+        }
         $division->save();
 
         if($request->wantsJson()) // save & create new division

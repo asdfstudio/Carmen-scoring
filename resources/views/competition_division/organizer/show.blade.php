@@ -53,9 +53,11 @@
         <li class="list-group-item">
             <h3>Division in Round {{ $division->round->name }}</h3>
             <h4>Division Rating Systems</h4>
-            @foreach ($division->rating_system as $rating)
-                <p>{{ $rating['name'] }}: {{ $rating['min_score'] }}%</p>
-            @endforeach
+            @if (isset($division->rating_system))
+                @foreach ($division->rating_system as $rating)
+                    <p>{{ $rating['name'] }}: {{ $rating['min_score'] }}%</p>
+                @endforeach
+            @endif
         </li>
         <li class="list-group-item">
             <h3>Choirs</h3>
