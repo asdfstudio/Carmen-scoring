@@ -91,6 +91,7 @@ class CompetitionDivisionController extends Controller
             'method' => 'POST',
             'data' => [
                 'competition_id' => $competition_id,
+                'is_new' => true,
             ],
             'url' => route('organizer.competition.division.store',[$competition])
         ]);
@@ -112,7 +113,7 @@ class CompetitionDivisionController extends Controller
         $division->rating_system = array_filter($request->input('rating_system'));
         $division->save();
 
-        // if($request->exists('submit_create_another'))
+
         if($request->wantsJson())
         {
           // return redirect()->back()->with('success',$successMessage);
@@ -125,8 +126,13 @@ class CompetitionDivisionController extends Controller
           return response()->json($result);
         }
         else {
-          $successMessage = "$division->name has been created.";
-          return redirect()->route('organizer.competition.division.index', [$competition_id])->with('success',$successMessage);
+            $successMessage = "$division->name has been created.";
+            if($request->exists('submit_create_another')){
+                return redirect()->route('organizer.competition.division.create', [$competition_id])->with('success', $successMessage);
+            }
+            else {
+                return redirect()->route('organizer.competition.division.index', [$competition_id])->with('success', $successMessage);
+            }
         }
     }
 
@@ -325,7 +331,7 @@ class CompetitionDivisionController extends Controller
             $result = array('edited' => $division->name, 'new' => $division_new->name);
             return response()->json($result);
         } else {
-            return redirect()->route('organizer.competition.division.index', [$competition_id])->with('success', "$division->name has been updated.");
+            return redirect()->route('organizer.competition.division.show', [$competition_id,$division_id])->with('success', "$division->name has been updated.");
         }
     }
 
