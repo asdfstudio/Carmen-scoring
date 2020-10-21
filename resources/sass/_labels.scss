@@ -78,11 +78,11 @@
       background-color: $cs-status-completed;
     }
 
-    &.active {
+    &.active, &.activated {
       background-color: $cs-status-active;
     }
 
-    &.inactive {
+    &.inactive, &.deactivated {
       background-color: $cs-status-inactive;
     }
 

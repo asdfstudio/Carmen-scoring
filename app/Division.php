@@ -39,7 +39,10 @@ class Division extends Model
         'music_award_sponsors' => 'array',
         'show_award_sponsors' => 'array',
         'combo_award_sponsors' => 'array',
-        'rating_system' => 'array'
+        'rating_system' => 'array',
+        'is_scoring_active' => 'boolean',
+        'is_completed' => 'boolean',
+        'is_published' => 'boolean'
     ];
 
     protected $ratings;
@@ -116,31 +119,30 @@ class Division extends Model
         return $query->where('is_published', 1);
     }
 
+    /**
+     * Statuses to be printed in labels
+     */
     public function status()
     {
         if($this->is_completed) {
-            if($this->is_published)
-                return 'Finalized / Published';
-            else
-                return 'Completed';
+            return $this->is_published ? 'Finalized / Published' : 'Completed';
         } else {
-            return 'Active';
+            return $this->is_scoring_active ? 'Active' : 'Inactive';
         }
     }
 
+    /**
+     * Terse statuses used in CSS classes and string comparisons
+     */
     public function status_slug()
     {
         if($this->is_completed) {
-            if($this->is_published) {
-                return 'finalized';
-            } else {
-                return 'completed';
-            }
+            return $this->is_published ? 'finalized' : 'completed';
         } else {
-            return 'active';
+            return $this->is_scoring_active ? 'activated' : 'deactivated';
         }
-
     }
+
     public function getStatusAttribute()
     {
         return $this->status();
@@ -213,6 +215,7 @@ class Division extends Model
         return $saved;
     }
 
+    // Finalize == Publishing
     public function finalizeScoring()
     {
         $this->is_published = true;
@@ -235,10 +238,6 @@ class Division extends Model
     }
 
     public function isMissingScores() {
-        if (!$this instanceof Division) {
-            return false;
-        }
-
         $expectedScores = new CountExpectedScores($this);
         $expectectedScoresCount = $expectedScores->run();
 

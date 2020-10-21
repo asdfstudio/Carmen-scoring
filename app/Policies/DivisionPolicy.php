@@ -60,6 +60,7 @@ class DivisionPolicy extends BasePolicy
         }
     }
 
+    // TODO: Why 'active'?  How about deactivated?
     public function destroy(User $user, $division)
     {
         if($this->isOrgAdmin AND $division->status_slug() == 'active')
@@ -70,28 +71,17 @@ class DivisionPolicy extends BasePolicy
 
     public function activateScoring(User $user, $division)
     {
-        if($this->isOrgAdmin AND $division->status_slug() == 'inactive' AND $division->isNew())
-        {
-            return true;
-        }
+        return ($this->isOrgAdmin AND $division->isNew() AND $division->status_slug == 'deactivated');
     }
 
     public function deactivateScoring(User $user, $division)
     {
-        if($this->isOrgAdmin AND $division->status_slug() == 'active')
-        {
-            return true;
-        }
+        return ($this->isOrgAdmin AND $division->status_slug == 'activated');
     }
 
     public function reactivateScoring(User $user, $division)
     {
-        if ($this->isOrgAdmin AND !$division->isNew() AND
-            ($division->status_slug() == 'completed' OR $division->status_slug() == 'inactive')
-            AND $division->status_slug() != 'finalized')
-        {
-            return true;
-        }
+        return ($this->isOrgAdmin AND !$division->isNew() AND $division->status_slug == 'deactivated');
     }
 
     public function completeScoring(User $user, $division)
@@ -105,10 +95,7 @@ class DivisionPolicy extends BasePolicy
 
     public function finalizeScoring(User $user, $division)
     {
-        if($this->isOrgAdmin AND $division->status_slug() == 'completed')
-        {
-            return true;
-        }
+        return ($this->isOrgAdmin AND $division->status_slug() == 'completed');
     }
 
     public function addChoir(User $user, Division $division)
