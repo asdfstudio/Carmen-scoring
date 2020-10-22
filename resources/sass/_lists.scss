@@ -248,6 +248,17 @@
       }
     }
 
+    &.division {
+      .name {
+        font-size: 22px;
+        display: inline-block;
+      }
+
+      .status {
+        float: right;
+      }
+    }
+
     &.round {
       .name {
         font-size: 22px;

@@ -184,33 +184,27 @@ class CompetitionRoundController extends Controller
 
 
     public function show(Request $request,$competition_id,$round_id, FormBuilder $formBuilder)
-		{
+    {
 
-      $round = Round::with([
-          'competition',
-          'sheet',
-          'divisions',
-          'judges',
-          // 'divisions.choirs',
-          // 'divisions.judges',
-          // 'divisions.judges.captions',
-          // 'divisions.judges.captions.criteria'
-      ])->find($round_id);
+        $round = Round::with(['competition', 'sheet', 'divisions', 'judges' => function($query) {
+            $query->groupBy('judge_id');
+        }, 'judges.captions' => function ($query) use ($round_id) {
+            $query->where('round_id', $round_id);
+        }])->find($round_id);
 
-      $this->authorize('show', $round);
+        $this->authorize('show', $round);
 
-      // if(Auth::user()->isAdmin() && isset($_GET['refresh_standings'])){
-      //   event(new StandingRefreshNeeded($round));
-      // }
+        // if(Auth::user()->isAdmin() && isset($_GET['refresh_standings'])){
+        //   event(new StandingRefreshNeeded($round));
+        // }
 
-      $competition = $round->competition;
-      $captions = Caption::all();
-      $judges = $round->judges;
-      $division = $round->divisions->first();
+        $competition = $round->competition;
+        $captions = Caption::all();
+        $judges = $round->judges;
+        $division = $round->divisions->first();
 
-      return view('competition_round.organizer.show', compact('captions', 'judges', 'competition', 'round', 'division' ));
-      // return view('competition.round.organizer.show', compact(/* 'captions', /*'rawScores', /* 'weightedScores', 'rankedScores',*/ 'round', 'competition', 'divisions', // 'rounds', )); //'scoreboard'));
-		}
+        return view('competition_round.organizer.show', compact('captions', 'judges', 'competition', 'round', 'division' ));
+    }
 
 
     /**

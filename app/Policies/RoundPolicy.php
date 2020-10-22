@@ -50,7 +50,7 @@ class RoundPolicy extends BasePolicy
 
     public function update(User $user, $round)
 		{
-      if($this->isOrgAdmin AND $round->status_slug() == 'inactive')
+      if($this->isOrgAdmin AND $round->status_slug() != 'published')
       {
         return true;
       }
@@ -58,7 +58,7 @@ class RoundPolicy extends BasePolicy
 
 		public function destroy(User $user, $round)
 		{
-      if($this->isOrgAdmin AND $round->status_slug() == 'inactive')
+      if($this->isOrgAdmin AND $round->status_slug() != 'published')
       {
         return true;
       }
