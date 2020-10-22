@@ -34,11 +34,11 @@ class CompetitionDivisionJudgeController extends Controller
 				}])->find($division_id);
 
 				$captions = Caption::forSheet($division->sheet);
-        
+
         if(!$captions){
           $captions = Collect();
         }
-        
+
 				return view('competition_division_judge.organizer.index', compact('division','captions'));
     }
 
@@ -129,7 +129,7 @@ class CompetitionDivisionJudgeController extends Controller
 					'method' => 'POST',
           'data' => [
             'judges' => $judges,
-            'captions' => $captions 
+            'captions' => $captions
           ],
 					'url' => route('organizer.competition.division.judge.store',[$division->competition,$division])
 				]);
@@ -160,7 +160,7 @@ class CompetitionDivisionJudgeController extends Controller
         // Create the judge
         if($request->filled('judge.first_name'))
 				{
-          
+
           // Create the judge user login
           try {
             $user = new User;
@@ -170,7 +170,7 @@ class CompetitionDivisionJudgeController extends Controller
 
             $judge = new Judge($request->input('judge'));
             $judge->save();
-            
+
             $person = Person::find($judge->id);
             $person->user()->save($user);
 
@@ -331,48 +331,42 @@ class CompetitionDivisionJudgeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FormBuilder $formBuilder, $competition_id, $division_id, $judge_id)
+    public function update(Request $request, FormBuilder $formBuilder, $competition_id, $round_id, $judge_id)
     {
-        // Get the division
-        $division = Division::find($division_id);
+        // Get the Round
+        $round = Round::find($round_id);
 
         // Get the Judge
         $judge = Judge::find($judge_id);
 
-        // Attach the judge to the division and assign captions
-				if($judge)
-				{
-					$caption_id = $request->input('caption_id');
+        // Attach the judge to the round and assign captions
+        if($judge) {
+            $round->judges()->detach($judge->id);
+            $caption_id = $request->input('caption_id');
 
-          //$division->round->judges()->detach($judge->id);
+            foreach($caption_id as $id) {
+                $extra = NULL;
 
-          $judge->divisions()->detach($division->id);
+                if($id)
+                {
+                    $extra = ['caption_id' => $id];
+                }
 
-					foreach($caption_id as $id)
-					{
-						$extra = NULL;
-
-						if($id)
-						{
-              $extra = ['caption_id' => $id];
-						}
-
-            $judge->divisions()->attach($division->id, $extra);
-						//$division->round->judges()->attach($judge->id, $extra);
-					}
-				}
+                $judge->rounds()->attach($round->id, $extra);
+            }
+        }
 
         if ($request->wantsJson()) {
-          $division_updated = Division::with(['judges' => function ($query) use ($judge_id) {
-            $query->where('judge_id', $judge_id)->groupBy('judge_id');
-          }, 'judges.captions' => function ($query) use ($division_id) {
-            $query->where('division_id',$division_id);
-          }])->find($division_id);
-          
-          return response()->json($division_updated->judges[0]->captions);
+            $round_updated = Round::with(['judges' => function ($query) use ($judge_id) {
+                $query->where('judge_id', $judge_id)->groupBy('judge_id');
+            }, 'judges.captions' => function ($query) use ($round_id) {
+                $query->where('round_id',$round_id);
+            }])->find($round_id);
+
+            return response()->json($round_updated->judges[0]->captions);
         }
         else {
-          return redirect()->route('organizer.competition.division.settings',[$division->competition, $division])->with('success',$judge->full_name ." has been updated.");
+            return redirect()->route('organizer.competition.round.show',[$round->competition, $round])->with('success',$judge->full_name ." has been updated.");
         }
     }
 
@@ -382,18 +376,16 @@ class CompetitionDivisionJudgeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($competition_id, $division_id, $judge_id, FormBuilder $formBuilder, Request $request)
+    public function destroy($competition_id, $round_id, $judge_id, FormBuilder $formBuilder, Request $request)
     {
-        $division = Division::with('competition')->find($division_id);
-        $judge = Judge::find($judge_id);
-
-				$division->round->judges()->detach($judge_id);
+        $round = Round::with('competition')->find($round_id);
+        $round->judges()->detach($judge_id);
 
         if($request->wantsJson()) {
-          return response()->json($judge_id);
+            return response()->json($judge_id);
         }
-				else { // Set flash data and redirect
-          return redirect()->route('organizer.competition.division.settings',[$division->competition, $division])->with('success', $judge->full_name . ' was successfully removed as a judge for this division.');
+        else { // Set flash data and redirect
+            return redirect()->route('organizer.competition.round.show',[$round->competition, $round])->with('success', $judge->full_name . ' was successfully removed as a judge for this round.');
         }
     }
 
