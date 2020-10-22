@@ -73,9 +73,9 @@ class Round extends Model
     {
         $total = $this->divisions()->count();
 
-        if ($this->divisions()->published()->count() == $total) {
+        if ($this->divisions()->published()->count() == $total && $total != 0) {
             return 'Finalized';
-        } elseif ($this->divisions()->completed()->count() == $total) {
+        } elseif ($this->divisions()->completed()->count() == $total && $total != 0) {
             return 'Completed';
         } else {
             return 'Active';
