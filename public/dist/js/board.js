@@ -162,7 +162,7 @@ var Form = (function () {
 
     // add "modal_" to <for & id> attribute in case of ADD a JUDGE
     if(type === 'judge') {
-      
+
       $(form).find('select').attr('id', 'modal_' + $(form).find('select').attr('id'));
 
       $(form).find('div.choice-container input[type="checkbox"]').each(function() {
@@ -187,14 +187,14 @@ var Form = (function () {
 
       // delete submit button
       $(form).find('button[type="submit"]').remove();
-      
+
       $(form).addClass('dg-mt-20');
 
     }
 
     // add "modal_" to <for & id> attribute in case of ADD a Choir
     if(type === 'choir') {
-      
+
       // $(form).find('select#choir_id').attr('id', 'modal_' + $(form).find('select#choir_id').attr('id'));
 
       $(form).find('div.new_choir_container input, div.new_choir_container select, div.existing_choir_container select').each(function() {
@@ -214,7 +214,7 @@ var Form = (function () {
       $(form).addClass('dg-mb-80');
 
     }
-    // 
+    //
 
     $(form).show()
     form.wrap('<div>')
@@ -594,7 +594,7 @@ $(document).ready(function() {
 
   });
 
-  // import judges 
+  // import judges
   $('.import-resource').on('click', function(e) {
     e.preventDefault();
     // Resource.importt('import');
@@ -602,7 +602,7 @@ $(document).ready(function() {
     // -dg-
     const fHtml = Form.getForm('import', false, {});
     Swal.fire({
-      title: 'Choose a division to import judges from',
+      title: 'Choose a round to import judges from',
       html: fHtml,
       showCancelButton: true,
       confirmButtonText: "Import Judges",
@@ -738,7 +738,7 @@ $(document).ready(function() {
         preConfirm: (result) => {
           const pwd = $('#dg_password_input').val().trim();
           const pwd_confirm = $('#dg_password_confirm_input').val().trim();
-          
+
           if(result) {
             if (!pwd) {
               Swal.showValidationMessage('Request failed: New Password is required!');
@@ -779,7 +779,7 @@ $(document).ready(function() {
   // remove choir, judge
   $('ul').on('click', 'a.remove-resource', function(e) {
     e.preventDefault();
-    
+
     // Resource.remove(this);
     const resourceType = $(this).data('resource-type')
     const resourceId = $(this).data('resource-id')

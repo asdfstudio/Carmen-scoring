@@ -5,8 +5,8 @@
     <div class="d-none base-url-div">{{ url('/') }}</div>
   </div>
 
-  <a class="add-resource" data-resource-type="judge" href="#">Add a judge</a>
-  <a class="import-resource" data-resource-type="judge" href="#">Import a judge</a>
+  <a class="add-resource" data-resource-type="judge" href="#">Add a Judge</a>
+  <a class="import-resource" data-resource-type="judge" href="#">Import From Another Round</a>
   <a class="change-password" href="#">Change Password</a>
 
   {!! form($newJudgeForm) !!}

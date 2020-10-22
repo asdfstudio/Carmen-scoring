@@ -399,55 +399,40 @@ class CompetitionDivisionJudgeController extends Controller
 
 
     // Import / duplicate / clone judges from another division
-    public function import($competition_id, $division_id, FormBuilder $formBuilder)
+    public function import($competition_id, $round_id, FormBuilder $formBuilder)
     {
-      $competition = Competition::with('divisions','divisions.judges')->find($competition_id);
-      $division = Division::with('competition')->find($division_id);
+      $competition = Competition::with('rounds','rounds.judges')->find($competition_id);
+      $round = $competition->rounds->firstWhere('id', $round_id);
 
-      $this->authorize('importJudges', $division);
+      $this->authorize('importJudges', $round);
 
-      $divisions = $competition->divisions->reject(function($value,$key) use ($division_id) {
-        return $value->id == $division_id;
-      });
+      $rounds = $competition->rounds->whereNotIn('id', [$round_id]);
 
-      // $data = [
-      //   'choices' => $competition->divisions->reject(function($value, $key) use ($division_id) {
-      //     return $value->id == $division_id;
-      //   })->pluck('name', 'id')->toArray()
-      // ];
-      // $form = $formBuilder -> create('Division\ChooseDivisionForm', [
-      //   'method' => 'POST',
-      //   'url' => route('organizer.competition.division.judge.import.process', [$competition_id, $division_id]),
-      //   'data' => $data
-      // ]);
-      // return view('competition__division_judge.organizer.import', compact('division', 'form', 'divisions'));
-
-      return view('competition_division_judge.organizer.import', compact('division', 'divisions', 'competition_id', 'division_id'));
-      
+      return view('competition_division_judge.organizer.import', compact('round', 'rounds', 'competition_id', 'round_id'));
     }
 
 
-    public function process_import($competition_id, $division_id, Request $request, FormBuilder $formBuilder)
+    public function process_import($competition_id, $round_id, Request $request, FormBuilder $formBuilder)
     {
-      $competition = Competition::with('divisions')->find($competition_id);
-      $division = Division::with('competition')->find($division_id);
+      $competition = Competition::with('rounds')->find($competition_id);
+      $round = $competition->rounds->firstWhere('id', $round_id);
 
-      $this->authorize('importJudges', $division);
+      $this->authorize('importJudges', $round);
 
-      // Source division
-      $source_division_id = $request->input('id');
-      $source_division = Division::find($source_division_id);
+      // Source round
+      $source_round_id = $request->input('id');
+      $source_round = Round::find($source_round_id);
 
       $attachedJudges = array();
-      foreach($source_division->round->judges as $judge)
+      foreach($source_round->judges as $judge)
       {
-        if(!$division->round->judges->contains($judge->id))
+        if(!$round->judges->contains($judge->id))
         {
-          $division->round->judges()->attach($judge->id, ['caption_id' => $judge->pivot->caption_id]);
+          $round->judges()->attach($judge->id, ['caption_id' => $judge->pivot->caption_id]);
 
           $attachedJudge = Judge::find($judge->id);
-          $attachedJudge->load(['captions' => function($query) use ($division_id) {
-            $query->wherePivot('division_id', $division_id);
+          $attachedJudge->load(['captions' => function($query) use ($round_id) {
+            $query->wherePivot('round_id', $round_id);
           }]);
 
           $attachedJudge->captions_join = '';
@@ -463,6 +448,6 @@ class CompetitionDivisionJudgeController extends Controller
         return response()->json($attachedJudges);
       }
 
-      return redirect()->route('organizer.competition.division.settings', [$competition_id, $division_id])->with('success',"Judges successfully imported from $source_division->name.");
+      return redirect()->route('organizer.competition.round.show', [$competition_id, $round_id])->with('success',"Judges successfully imported from $source_round->name.");
     }
 }
