@@ -387,13 +387,11 @@ class CompetitionRoundController extends Controller
      */
     public function update(Request $request, FormBuilder $formBuilder, $competition_id, $round_id)
     {
-        $round = Round::with('competition')->find($round_id);
-        // $competition = Competition::find($competition_id);
+        $round = Round::with(['competition'])->find($round_id);
+
+        $competition = Competition::find($competition_id);
         $this->authorize('update', $round);
 
-        $round = new Round($request->all());
-
-        // $round = new Round($request->all());
         $form = $formBuilder->create('Round\CreateRoundForm', [
             'data' => [
                 'choices' => [],
@@ -406,39 +404,16 @@ class CompetitionRoundController extends Controller
             return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 
-        $round->competition()->associate($competition);
-        $round->save();
-
-        // TODO: Check out which events should actually be running
-        // event(new RoundSaved($round));
-
-        $successMessage = "$round->name has been added to this division.";
-
-        if($request->wantsJson())
-        {
-          return response()->json($round);
-        }
-
-        if($request->exists('submit_create_another'))
-        {
-          return redirect()->back()->with('success',$successMessage);
-        }
-        else {
-          return redirect()->route('organizer.competition.round.index',[$competition])->with('success',$successMessage);
-        }
-
         $round->name = $request->input('name');
-        $round->sequence = $request->input('sequence');
-        $round->max_choirs = $request->input('max_choirs');
-        //$round->fill($request->input());
-
-        $round->sources()->sync($request->input('rounds.id',[]));
+        $round->sheet_id = $request->input('sheet_id');
+        $round->caption_weighting_id = $request->input('caption_weighting_id');
+        $round->scoring_method_id = $request->input('scoring_method_id');
 
         $round->save();
 
         event(new RoundSaved($round));
 
-        return redirect()->route('organizer.competition.round.index',[$division->competition, $division])->with('success',$round->name ." has been updated.");
+        return redirect()->route('organizer.competition.round.index',[$competition])->with('success',$round->name ." has been updated.");
     }
 
 
