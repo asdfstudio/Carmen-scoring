@@ -54,16 +54,15 @@ class DivisionPolicy extends BasePolicy
         {
             return true;
         }
-        elseif($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
+        elseif($this->isOrgAdmin AND $division->status_slug() == 'activated' AND $division->competition->is_completed == false)
         {
             return true;
         }
     }
 
-    // TODO: Why 'active'?  How about deactivated?
     public function destroy(User $user, $division)
     {
-        if($this->isOrgAdmin AND $division->status_slug() == 'active')
+        if($this->isOrgAdmin AND $division->status_slug() == 'activated')
         {
             return true;
         }
@@ -100,7 +99,7 @@ class DivisionPolicy extends BasePolicy
 
     public function addChoir(User $user, Division $division)
     {
-        if($this->isOrgAdmin AND $division->status_slug() == 'active' AND $division->competition->is_completed == false)
+        if($this->isOrgAdmin AND $division->status_slug() == 'activated' AND $division->competition->is_completed == false)
         {
             return true;
         }
@@ -108,7 +107,7 @@ class DivisionPolicy extends BasePolicy
 
     public function removeChoir(User $user, Division $division)
     {
-        if($this->isOrgAdmin AND $division->status_slug() == 'active')
+        if($this->isOrgAdmin AND $division->status_slug() == 'activated')
         {
             return true;
         }
@@ -125,7 +124,7 @@ class DivisionPolicy extends BasePolicy
 
     public function createPenalty(User $user, Division $division)
     {
-        if($this->isOrgAdmin AND $division->status_slug() == 'active')
+        if($this->isOrgAdmin AND $division->status_slug() == 'activated')
         {
             return true;
         }
@@ -133,7 +132,7 @@ class DivisionPolicy extends BasePolicy
 
     public function assignPenalty(User $user, Division $division)
     {
-        if($this->isOrgAdmin AND $division->status_slug() == 'active')
+        if($this->isOrgAdmin AND $division->status_slug() == 'activated')
         {
             return true;
         }
@@ -141,7 +140,7 @@ class DivisionPolicy extends BasePolicy
 
     public function managePenalties(User $user, Division $division)
     {
-        if($this->isOrgAdmin AND $division->status_slug() == 'active')
+        if($this->isOrgAdmin AND $division->status_slug() == 'activated')
         {
             return true;
         }
@@ -149,7 +148,7 @@ class DivisionPolicy extends BasePolicy
 
     public function createAward(User $user, Division $division)
     {
-        if($this->isOrgAdmin AND $division->status_slug() == 'active')
+        if($this->isOrgAdmin AND $division->status_slug() == 'activated')
         {
             return true;
         }
