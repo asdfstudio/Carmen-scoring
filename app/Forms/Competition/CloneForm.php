@@ -8,8 +8,15 @@ class CloneForm extends Form
 {
     public function buildForm()
     {
+
         $this->add('competition_name', 'text', [
-          //'default_value' => $division->name,
+          'default_value' => $this->data['competition_name'].' - Copy',
+        ]);
+
+        $this->add('clone_rounds', 'checkbox', [
+            'value' => 1,
+            'checked' => false,
+            'label' => 'Clone all division rounds?'
         ]);
 
         $this->add('clone_divisions', 'checkbox', [
@@ -18,12 +25,6 @@ class CloneForm extends Form
             'label' => 'Clone all divisions?',
             //'wrapper' => ['class' => 'checkbox'],
             //'attr' => ['class' => 'checkbox']
-        ]);
-
-        $this->add('clone_rounds', 'checkbox', [
-            'value' => 1,
-            'checked' => false,
-            'label' => 'Clone all division rounds?'
         ]);
 
         $this->add('clone_judges', 'checkbox', [

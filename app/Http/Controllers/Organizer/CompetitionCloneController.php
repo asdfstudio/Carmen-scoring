@@ -23,7 +23,8 @@ class CompetitionCloneController extends Controller
       $form = $formBuilder->create('Competition\CloneForm', [
         'method' => 'POST',
         'model' => $competition,
-        'url' => route('organizer.competition.clone.store',[$competition])
+        'url' => route('organizer.competition.clone.store',[$competition]),
+        'data' => [ 'competition_name' => $competition->name ]
       ]);
 
       return view('competition.organizer.clone', compact('competition','form'));
@@ -33,18 +34,13 @@ class CompetitionCloneController extends Controller
     public function store(Request $request, $competition_id)
     {
 
-
       // Begin DB transaction
       $competition_clone = DB::transaction(function() use ($request, $competition_id) {
 
-
-        $competition = Competition::with('place','divisions',
-          'divisions.rounds','divisions.choirs',
-          'divisions.judges')->find($competition_id);
+        $competition = Competition::with('place','divisions')->find($competition_id);
 
         $competition_clone = $competition->replicate(['name']);
 
-        //dd($competition_clone);
 
         // Set the new competition name
         if($request->filled('competition_name'))
@@ -64,36 +60,32 @@ class CompetitionCloneController extends Controller
           $competition_clone->place()->save($place);
         }
 
-        // Clone divisions
-        if($request->filled('clone_divisions'))
+        // Clone Competition Rounds
+        if($request->filled('clone_rounds'))
         {
-          //$divisions = $competition->divisions->replicate();
-          //$competition_clone->divisions()->save($divisions);
-          foreach($competition->divisions as $division)
+          foreach($competition->rounds as $round)
           {
+            $new_round = $round->replicate();
+            $new_round->competition_id = $competition_clone->id;
+            $new_round->save();
+
             // Clone division
-            $new_division = $division->replicate();
-            $competition_clone->divisions()->save($new_division);
-
-            // Clone division rounds
-            if($request->filled('clone_rounds'))
+            if($request->filled('clone_divisions'))
             {
-              foreach($division->rounds as $round)
+              foreach($round->divisions as $division)
               {
-                $new_round = $round->replicate();
-                $new_division->rounds()->save($new_round);
-              }
-            }
+                $new_division = $division->replicate();
+                $new_division->round_id = $new_round->id;
+                $new_division->save();
 
-            // Clone dvision judges
-            if($request->filled('clone_judges'))
-            {
-              foreach($division->judges as $judge)
-              {
-                //$new_judge = $judge->replicate();
-                //$new_division->judges()->save($new_judge);
-                $data = ['caption_id' => $judge->pivot->caption_id];
-                $new_division->judges()->attach($judge, $data);
+                // Clone division judges
+                if($request->filled('clone_judges'))
+                {
+                  foreach($round->judges as $judge)
+                  {
+                    $new_round->judges()->attach($judge->id, ['caption_id' => $judge->pivot->caption_id]);
+                  }
+                }
               }
             }
           }
