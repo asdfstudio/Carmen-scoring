@@ -21,7 +21,7 @@
     <ul class="list-group">
       @foreach($division->choirs as $choir)
         <li class="list-group-item">
-          {{ link_to_route('organizer.competition.division.choir.penalty.assign', $choir->full_name, [$division->competition, $division, $choir]) }}
+          {{ link_to_route('organizer.competition.division.penalty.assign', $choir->full_name, [$division->competition, $division, $choir]) }}
         </li>
       @endforeach
     </ul>
