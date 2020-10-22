@@ -21,9 +21,9 @@ class CompetitionDivisionPenaltyController extends Controller
 {
     public function index($competition_id, $division_id)
     {
-      $division = Division::with('competition', 'penalties')->find($division_id);
-      $competition = $division->competition;
-      $penalties = $division->penalties;
+      $division = Division::with('round', 'round.competition', 'round.competition.organization.penalties')->find($division_id);
+      $competition = $division->round->competition;
+      $penalties = $competition->organization->penalties;
 
       return view('competition_division_penalty.organizer.index', compact('competition','division', 'penalties'));
     }
@@ -34,7 +34,6 @@ class CompetitionDivisionPenaltyController extends Controller
 
       $this->authorize('create','App\Penalty');
       $this->authorize('createPenalty', $division);
-
 
 
       $form = $formBuilder->create('Penalty\CreatePenaltyForm', [

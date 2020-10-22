@@ -27,16 +27,16 @@ class CompetitionDivisionRoundChoirController extends Controller
 
     public function show(Request $request, $competition_id, $division_id, $round_id, $choir_id)
 		{
-      
+
       $competition = Competition::with('divisions')->find($competition_id);
       $divisions = $competition->divisions;
-      
+
 			$choir = Choir::with(['penalties' => function($query) use ($round_id){
         $query->where('round_id', $round_id);
       }])->find($choir_id);
-      
+
 			$round = Round::find($round_id);
-      
+
 			$division = Division::with(['choirs', 'rounds', 'sheet', 'sheet.criteria', 'sheet.criteria.caption', 'competition',
         'judges' => function ($query) use($request) {
           if($request->judge_id){
@@ -57,7 +57,7 @@ class CompetitionDivisionRoundChoirController extends Controller
       $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::forSheet($division->sheet);
       $rounds = $division->rounds;
-      
+
       $scoreboard = new Scoreboard(['round_id' => $round_id]);
       $rawScores = $scoreboard->extendedRawScores;
       $weightedScores = $scoreboard->extendedRawScores;
@@ -66,7 +66,7 @@ class CompetitionDivisionRoundChoirController extends Controller
       $judgeList = Division::with(['judges'])->find($division_id)->judges->pluck('full_name','id');
       $judgeList->prepend('Please select a judge', 'null');
       $judge_id= ($request->judge_id)?$request->judge_id:'';
-      
+
       $penalty_query = ChoirRoundPenalty::with('penalty');
       if(is_array($round_id)){
         $penalty_query->whereIn('round_id', $round_id);
@@ -86,43 +86,46 @@ class CompetitionDivisionRoundChoirController extends Controller
           ]);
         }
       });
-      
+
 			return view('competition_division_round_choir.organizer.show',compact('competition', 'rawScores', 'weightedScores', 'rankedScores', 'choir', 'round', 'division', 'rounds', 'divisions', 'captions', 'judgeList','judge_id'));
 
 		}
 
 
-    public function assign_penalty($competition_id, $division_id, $round_id, $choir_id)
+    public function assign_penalty($competition_id, $division_id, $choir_id)
     {
-      // Get choir
+      $division = Division::find($division_id);
+      $round = $division->round;
+
+      $round_id = $round->id;
+
       $choir = Choir::with(['penalties' => function($query) use ($round_id){
         $query->where('round_id', $round_id);
       }])->find($choir_id);
+
       $selected_penalties = $choir->penalties;
-      //dd($choir);
 
       // Get all available penalties
-      $division = Division::find($division_id);
-      $round = Round::find($round_id);
-
-      $penalties = Division::find($division_id)->penalties()->with(['choirs' => function($query) use ($choir_id) {
-        $query->where('choir_id', $choir_id);
-      }])->get();
-      //$penalties->load('choirs');
-      //dd($penalties);
+      $penalties = $division->competition->organization->penalties;
+      // $penalties = Division::find($division_id)->penalties()->with(['choirs' => function($query) use ($choir_id) {
+      //   $query->where('choir_id', $choir_id);
+      // }])->get();
+      $penalties->load('choirs');
 
       // Display
       return view('competition_division_round_choir_penalty.organizer.assign',compact('choir', 'round', 'division', 'penalties', 'selected_penalties'));
     }
 
-    public function update_penalty(Request $request, $competition_id, $division_id, $round_id, $choir_id)
+    public function update_penalty(Request $request, $competition_id, $division_id, $choir_id)
     {
-      // Get choir
+      $division = Division::find($division_id);
+      $round = $division->round;
+
+      $round_id = $round->id;
+
       $choir = Choir::with(['penalties' => function($query) use ($round_id){
         $query->where('round_id', $round_id);
       }])->find($choir_id);
-
-      $division = Division::find($division_id);
 
       $penalties = $request->input('penalties', array());
       $data = array();
@@ -134,11 +137,8 @@ class CompetitionDivisionRoundChoirController extends Controller
 
       $choir->penalties()->wherePivot('round_id', $round_id)->sync($data);
 
-      //$penalties->load('choirs');
-      //dd($penalties);
-
       // Set flash data and redirect
-      return redirect()->route('organizer.competition.division.round.choir.show', [$competition_id, $division_id, $round_id, $choir_id])->with('success','Choir Penalties Assigned.');
+      return redirect()->route('organizer.competition.division.penalty.index', [$competition_id, $division_id])->with('success','Choir Penalties Assigned.');
     }
 
 

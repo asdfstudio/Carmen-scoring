@@ -25,7 +25,7 @@ class CompetitionDivisionRoundJudgeController extends Controller
 		{
       $round = Round::with(['judges', 'division','division.competition' => function($query) {
         $query->withoutGlobalScope('organization');
-      },'division.choirs')->find($round_id);
+      },'division.choirs'])->find($round_id);
 
       if($round->status_slug != 'completed')
       {

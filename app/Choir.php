@@ -86,7 +86,7 @@ class Choir extends Model
 
     public function penalties()
 		{
-			return $this->belongsToMany('App\Penalty')->withPivot('division_id');
+			return $this->belongsToMany('App\Penalty')->withPivot('round_id');
 		}
 
     public function comments()
