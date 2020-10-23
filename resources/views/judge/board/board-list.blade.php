@@ -7,8 +7,8 @@
   @can('importJudges', $round)
     <a class="add-resource" data-resource-type="judge" href="#">Add a Judge</a>
     <a class="import-resource" data-resource-type="judge" href="#">Import From Another Round</a>
-    <a class="change-password" href="#">Change Password</a>
   @endcan
+  <a class="change-password" href="#">Change Password</a>
   {!! form($newJudgeForm) !!}
 
   @php
