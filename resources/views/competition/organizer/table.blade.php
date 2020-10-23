@@ -32,9 +32,9 @@
 				<!--Archived, no editing allowed-->
 			@endif
 
-			@can('replicate', $competition)
+			{{--@can('replicate', $competition)
 				{{ link_to_route('organizer.competition.clone', 'Duplicate', [$competition], ['class' => 'action']) }}
-			@endcan
+			@endcan--}}
     </td>
 		<td>
 			@can('destroy',$competition)

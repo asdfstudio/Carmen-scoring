@@ -24,7 +24,7 @@
         <li>
             @php $link_class = Request::segment(6) == 'penalty' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.penalty.index', [$competition, $division]) }}" class="{{ $link_class }}">Penalties
-                <span class="count">{{ $division->penalties->count() }}</span>
+                <span class="count">{{ $penalties->count() }}</span>
             </a>
         </li>
         <li>
