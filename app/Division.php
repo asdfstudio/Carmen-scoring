@@ -234,7 +234,10 @@ class Division extends Model
     }
 
     public function getRatings(){
-        return new Ratings($this);
+        if (!$this->ratings) {
+            $this->ratings = new Ratings($this);
+        }
+        return $this->ratings->all();
     }
 
     public function isMissingScores() {

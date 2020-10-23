@@ -76,7 +76,7 @@ class ResultsController extends Controller
         'awards.choirs' => function($query) use ($division_id) {
           $query->where('division_id',$division_id);
         },
-        'judges' => function($query) {
+        'round', 'round.judges' => function($query) {
           $query->groupBy('judge_id');
         },
         'awardSettings',
@@ -85,8 +85,8 @@ class ResultsController extends Controller
 
       if($this->division == false) abort('404');
 
-      $caption_ids = $this->division->sheet->caption_ids;
-      $this->captions = Caption::forSheet($this->division->sheet);
+      $caption_ids = $this->division->round->sheet->caption_ids;
+      $this->captions = Caption::forSheet($this->division->round->sheet);
 
       View::share('competition', $this->division->competition);
     }
@@ -256,12 +256,7 @@ class ResultsController extends Controller
       $division = $this->division;
       $captions = $this->captions;
 
-      $rounds = $division->rounds->pluck('id')->toArray();
-
-      foreach($rounds as $round_id)
-      {
-        $scoreboards[$round_id] = new Scoreboard(['round_id' => $round_id]);
-      }
+      $scoreboards[$division->id] = new Scoreboard(['division_id' => $division->id]);
 
       return view('results.division.show', compact('division', 'scoreboards', 'captions', 'access_code'));
     }
@@ -273,12 +268,7 @@ class ResultsController extends Controller
       $division = $this->division;
       $captions = $this->captions;
 
-      $rounds = $division->rounds->pluck('id')->toArray();
-
-      foreach($rounds as $round_id)
-      {
-        $scoreboards[$round_id] = new Scoreboard(['round_id' => $round_id]);
-      }
+      $scoreboards[$division->id] = new Scoreboard(['division_id' => $division->id]);
 
       return view('results.division.standings', compact('division', 'scoreboards', 'captions', 'access_code'));
     }

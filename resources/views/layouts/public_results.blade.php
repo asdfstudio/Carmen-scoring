@@ -31,26 +31,6 @@
       			<a href="{{ route('results.division.standings', [$division, $access_code]) }}" class="@if($current_page == 'standings') active @endif action">Standings</a>
       		</li>
 
-          @foreach($division->rounds as $round)
-            <li>
-              @php
-              $active = $current_page == 'round_'.$round->id ? 'active' : false;
-              @endphp
-        			<a href="{{ route('results.division.round.show', [$division, $round, $access_code]) }}" class="{{ $active }} action">Division Scores</a>
-        		</li>
-
-            @foreach($round->targets as $target)
-              @if($target AND $target->sources->count() > 1)
-                <li>
-                  @php
-                  $active = $current_page == 'round_shared_'.$round->id ? 'active' : false;
-                  @endphp
-            			<a href="{{ route('results.division.round-shared.show', [$division, $round, $target->id, $access_code]) }}" class="{{ $active }} action">Scores for All Divisions</a>
-            		</li>
-              @endif
-            @endforeach
-          @endforeach
-
           <li>
             <a href="{{ route('results.division.audience-vote-results', [$division, $access_code]) }}" class="@if($current_page == 'vote-results') active @endif action">Audience Vote Results</a>
           </li>
