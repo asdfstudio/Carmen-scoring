@@ -36,7 +36,7 @@ class CompetitionController extends Controller
 		{
 			$judge_id = Auth::user()->person_id;
 
-			$competition = Competition::withoutGlobalScope('organization')->with(['divisions' => function($query) use ($judge_id) {
+			$competition = Competition::withoutGlobalScope('organization')->with(['rounds' => function($query) use ($judge_id) {
 					$query->whereHas('judges', function($query) use ($judge_id) {
 						$query->where('judge_id', $judge_id);
 					});
@@ -44,7 +44,7 @@ class CompetitionController extends Controller
   					$query->whereHas('judges', function($query) use ($judge_id) {
   						$query->where('judge_id', $judge_id);
   					});
-  				},'divisions.judges'])->active()->find($id);
+  				},'rounds.judges'])->active()->find($id);
 
       //dd($competition);
 
