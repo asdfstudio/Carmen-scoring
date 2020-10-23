@@ -43,7 +43,6 @@
         <th>Rating</th>
       @endif
     </tr>
-    {{ $choirs }}
 
     @foreach($choirs as $choir)
       <tr>
@@ -74,7 +73,7 @@
           @endif
 
         @endforeach
-        
+
         <td class="{{ $total_col_class }}">
           @php $rank = $rankedScores->total($choir->id, $caption->id);@endphp
           <span class="rank score">{{ $rank }}</span>
@@ -85,7 +84,7 @@
           @php $raw = $rawScores->where('choir_id', $choir->id)->where('criterion_caption_id', $caption->id)->sum('score');@endphp
           <span class="raw score">{{ $raw }}</span>
         </td>
-        
+
         <td>
           @php
             $rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();
@@ -123,11 +122,11 @@
         {{ $judge->full_name }}
       </th>
     @endforeach
-    
+
     @if($division->scoring_method_id !== 5)
     <th>Total</th>
     @endif
-    
+
     <th>Place</th>
 
     @if(!empty($ratings))
@@ -166,16 +165,16 @@
 
           @php $penalty = $scoreboard->penalties->where('choir_id', $choir->id)->where('apply_per_judge', 1)->sum('amount');@endphp
           <span class="penalty raw weighted score">{{ $penalty }}</span>
-          
+
           @php $weightedTotal = $weightedSubtotal - $penalty; @endphp
           <span class="weighted total score">{{ $weightedTotal }}</span>
-          
+
           @php $rawTotal = $rawSubtotal - $penalty; @endphp
           <span class="raw total score">{{ $rawTotal }}</span>
-          
+
         </td>
       @endforeach
-      
+
       <td class="{{ $total_col_class }}">
         @php $rank = $rankedScores->total($choir->id);@endphp
         <span class="rank score">{{ $rank }}</span>
@@ -199,7 +198,7 @@
         <span class="raw total score">{{ $rawTotal }}</span>
 
       </td>
-      
+
       <td>
         @php
           $rank = $totalRank->where('choir_id' , $choir->id)->pluck('rank')->first();
