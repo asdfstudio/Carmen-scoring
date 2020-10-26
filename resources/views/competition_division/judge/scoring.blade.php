@@ -11,7 +11,7 @@
 
   <h4>Select Round to Score</h4>
 
-  @include('competition_division_round.judge.list', ['rounds' => $division->rounds])
+  @include('competition_round.judge.list', ['round' => $division->round])
 
 
 @endsection

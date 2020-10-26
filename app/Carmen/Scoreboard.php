@@ -103,7 +103,7 @@ class Scoreboard {
 	{
 		$this->getDivision();
 
-		$weightedScoresClass = new WeightedScores($this->rawScores, $this->division->round->caption_weighting_id);
+		$weightedScoresClass = new WeightedScores($this->rawScores, $this->round->caption_weighting_id);
 
 		$this->weightedScores = $weightedScoresClass->all();
 		$this->extendedRawScores = $this->weightedScores;
@@ -196,7 +196,7 @@ class Scoreboard {
 
   public function getRankedScoresForCurrentMethod()
   {
-    switch($this->division->round->scoringMethod->name) {
+    switch($this->round->scoringMethod->name) {
       case 'Raw Scores':
       case 'Ranked Scores':
         $this->rankedScoresForCurrentMethod = $this->rankedScores;
