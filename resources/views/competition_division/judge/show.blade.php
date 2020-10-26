@@ -1,43 +1,6 @@
 @extends('layouts.simple')
 
-
-@section('division_navigation_bar')
-  @if (isset($division))
-    <div class="division-navigation-bar body-width">
-      <ul class="division-navigation tab-links">
-        <!--<li>
-          <a href="#overview">Overview</a>
-        </li>-->
-        <li>
-          <a href="#scoring" class="active tab-link" data-tab-id="scoring">Settings</a>
-        </li>
-        <li>
-          <a href="#choirs" class="tab-link" data-tab-id="choirs">Choirs</a>
-        </li>
-
-        <li>
-          <a href="#judges" class="tab-link" data-tab-id="judges">Judges</a>
-        </li>
-        <li>
-          <a href="#rounds" class="tab-link" data-tab-id="rounds">Rounds</a>
-        </li>
-
-        <li>
-          <a href="#penalties" class="tab-link" data-tab-id="penalties">Penalties</a>
-        </li>
-        <li>
-          <a href="#" class="tab-link" data-tab-id="awards">Awards</a>
-        </li>
-        <li>
-          <a href="#" class="tab-link" data-tab-id="standings">Final Standings</a>
-        </li>
-        <li class="scoring">
-          <a href="{{ route('judge.competition.division.scoring', [$competition, $division]) }}">Enter Scoring Mode</a>
-        </li>
-      </ul>
-    </div>
-  @endif
-@endsection
+@php $include_judge_navigation_bar = TRUE @endphp
 
 @section('content')
 
@@ -47,7 +10,7 @@
 
     <div data-tab-id="scoring" class="active tab-content col-xs-12 col-sm-12">
       <h2>Scoring Settings</h2>
-      @include('division.partial.single')
+      @include('round.partial.single')
     </div>
 
     <div data-tab-id="choirs" class="tab-content col-xs-12 col-sm-12">
@@ -64,17 +27,17 @@
 
     <div data-tab-id="judges" class="tab-content col-xs-12 col-sm-12">
     	<h2>Judges</h2>
-    	@include('competition_division_judge.judge.list',['judges' => $division->judges])
+        @include('competition_division_judge.judge.list',['judges' => $division->round->judges])
     </div>
 
     <div data-tab-id="rounds" class="tab-content col-xs-12 col-sm-12">
       <h2>Rounds</h2>
-      @include('competition_division_round.judge.list', ['rounds' => $division->rounds])
+      @include('competition_round.judge.list', ['rounds' => $division->round])
     </div>
 
     <div data-tab-id="penalties" class="tab-content col-xs-12 col-sm-12">
       <h2>Penalties</h2>
-      @include('penalty.organizer.list', ['penalties' => $division->penalties])
+      @include('penalty.organizer.list', ['penalties' => $round->penalties])
     </div>
 
     <div data-tab-id="awards" class="tab-content col-xs-12 col-sm-12">
