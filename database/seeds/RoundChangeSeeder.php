@@ -49,12 +49,15 @@ class RoundChangeSeeder extends Seeder
 
         $roundSettings = ['competition_id' => $competition,
             'caption_weighting_id' => $fiftyFifty, 'scoring_method_id' => $scoringMethod,
-            'sheet_id' => $advancedSheet, 'name' => 'Round'];
+            'sheet_id' => $advancedSheet, 'name' => 'Round1'];
 
-        $Round = factory(App\Round::class)->create($roundSettings);
+        $Round1 = factory(App\Round::class)->create($roundSettings);
 
-        $oddDivision = factory(App\Division::class)->create(['round_id' => $Round, 'name' => 'Oddly Easy Division']);
-        $evenDivision = factory(App\Division::class)->create(['round_id' => $Round, 'name' => 'Even Tougher Division']);
+        $roundSettings['name'] = 'Round2';
+        $Round2 = factory(App\Round::class)->create($roundSettings);
+
+        $oddDivision = factory(App\Division::class)->create(['round_id' => $Round1, 'name' => 'Oddly Easy Division']);
+        $evenDivision = factory(App\Division::class)->create(['round_id' => $Round2, 'name' => 'Even Tougher Division']);
 
         // Add Choirs to the prelim divisions
         for ($i = 1; $i < 10; $i++) {
@@ -93,17 +96,17 @@ class RoundChangeSeeder extends Seeder
         $comboCaption = \App\Caption::firstWhere('name', 'Combo');
 
         \App\Division::all()->each(function($division) use ($musicJudge, $showJudge, $allJudge, $musicCaption, $showCaption, $comboCaption) {
-            $division->judges()->attach($musicJudge, ['caption_id' => $musicCaption->id]);
-            $division->judges()->attach($showJudge, ['caption_id' => $showCaption->id]);
-            $division->judges()->attach($allJudge, ['caption_id' => $musicCaption->id]);
-            $division->judges()->attach($allJudge, ['caption_id' => $showCaption->id]);
-            $division->judges()->attach($allJudge, ['caption_id' => $comboCaption->id]);
+            $division->round->judges()->attach($musicJudge, ['caption_id' => $musicCaption->id]);
+            $division->round->judges()->attach($showJudge, ['caption_id' => $showCaption->id]);
+            $division->round->judges()->attach($allJudge, ['caption_id' => $musicCaption->id]);
+            $division->round->judges()->attach($allJudge, ['caption_id' => $showCaption->id]);
+            $division->round->judges()->attach($allJudge, ['caption_id' => $comboCaption->id]);
         });
 
         foreach ($competition->divisions as $division) {
             $round = $division->round;
             $division->activateScoring();
-            $judges = $division->judges;
+            $judges = $division->round->judges;
             $choirs = $division->choirs;
             foreach ($choirs as $choir) {
                 foreach ($division->sheet->criteria as $criterion) {
