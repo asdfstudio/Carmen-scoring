@@ -38,7 +38,7 @@ class CompetitionDivisionRoundController extends Controller
         ->where('judge_id',$judge_id)
         ->get();
 
-      $scoreboard = new Scoreboard(['round_id' => $round_id]);
+      $scoreboard = new Scoreboard(['division_id' => $division_id, 'round_id' => $round_id]);
 
       $rawScores = $scoreboard->rawScores;
       $weightedScores = $scoreboard->weightedScores;
@@ -138,7 +138,8 @@ class CompetitionDivisionRoundController extends Controller
       $division = Division::with('round')->find($division_id);
       $round_id = $division->round->id;
 
-        $division = $division->load(['choirs', 'choirs.recordings', 'round.judges' => function($query) {
+      $division = $division->load(['choirs', 'choirs.recordings',
+          'round.judges' => function($query) {
             $query->groupBy('judge_id');
         },'round.judges.captions' => function($query) use ($round_id) {
             $query->where('round_id',$round_id);
@@ -198,7 +199,7 @@ class CompetitionDivisionRoundController extends Controller
 
       $isSpreadsheetScoringActive = $division->status;
 
-      $captionWeightingId = $division->caption_weighting_id;
+      $captionWeightingId = $division->round->caption_weighting_id;
 
       // Convert to arrays for use with new Vue spreadsheet
       $captions = $captions->map(function ($item, $key) {
@@ -209,7 +210,6 @@ class CompetitionDivisionRoundController extends Controller
         ];
       })->toArray();
       $captions = array_values($captions);
-
 
       $divisions = ['id' => $division->id, 'name' => $division->name];
 

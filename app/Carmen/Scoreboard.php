@@ -101,9 +101,7 @@ class Scoreboard {
 
 	protected function getWeightedScores()
 	{
-		$this->getDivision();
-
-		$weightedScoresClass = new WeightedScores($this->rawScores, $this->round->caption_weighting_id);
+        $weightedScoresClass = new WeightedScores($this->rawScores, $this->getRound()->captionWeightingId);
 
 		$this->weightedScores = $weightedScoresClass->all();
 		$this->extendedRawScores = $this->weightedScores;
@@ -144,30 +142,21 @@ class Scoreboard {
 		return $this->penalties = $penalties;
 	}
 
-	protected function getRound()
-	{
-		if (is_array($this->round_id)) {
-			$roundIds = $this->round_id;
-			$roundId = array_shift($roundIds);
-			//$this->round_id = array_shift($this->round_id);
-		} else {
-			$roundId = $this->round_id;
-		}
-		return $this->round = Round::find($roundId);
-	}
+    protected function getRound()
+    {
+        if ($this->round_id) {
+            return $this->round = Round::find($this->round_id);
+        } elseif ($this->division_id) {
+            return $this->round = Division::find($this->division_id)->round;
+        }
+    }
 
-	protected function getDivision()
-	{
-		if($this->division_id)
-		{
-			return $this->division = Division::find($this->division_id);
-		}
-		else
-		{
-			$this->getRound();
-			return $this->division = $this->round->division;
-		}
-	}
+    protected function getDivision()
+    {
+        if($this->division_id) {
+            return $this->division = Division::find($this->division_id);
+        }
+    }
 
 	protected function getRankedScores()
 	{

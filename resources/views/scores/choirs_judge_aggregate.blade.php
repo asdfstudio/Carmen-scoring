@@ -6,12 +6,12 @@
       <th>Choir</th>
       <th>My Raw Score</th>
 
-      @if($division->captionWeighting->slug == '60-40')
+      @if($division->round->captionWeighting->slug == '60-40')
         <th>
           My Weighted Score
         </th>
       @endif
-      
+
       @if($round->is_scoring_active == true && $judge_id == Auth::user()->person_id && $competition->organization->is_premium == 1)
         <th>Record</th>
       @endif
@@ -33,9 +33,9 @@
           <span class="score raw">{{ $aggregateScore }}</span>
         </td>
 
-        @if($division->captionWeighting->slug == '60-40')
+        @if($division->round->captionWeighting->slug == '60-40')
           <td>
-            @php 
+            @php
               $aggregateScore = $weightedScores->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('weightedScore');
             @endphp
             <span class="score weighted">{{ $aggregateScore }}</span>
