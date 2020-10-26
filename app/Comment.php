@@ -32,7 +32,7 @@ class Comment extends Model
 
 		public function recordings()
 		{
-			
+
 			return $this->hasMany('App\Recording','judge_id','judge_id');
 		}
 
