@@ -43,7 +43,9 @@ class PenaltyController extends Controller
       $form = $formBuilder->create('Penalty\CreatePenaltyForm', [
         'class' => '',
         'method' => 'POST',
-        'url' => route('organizer.penalty.store')
+        'url' => route('organizer.penalty.store'),
+        'data' => [ 'is_new' => true ]
+
       ]);
 
       return view('penalty.organizer.create', compact('form'));
@@ -73,8 +75,13 @@ class PenaltyController extends Controller
       $penalty = Penalty::create($data);
       $penalty->save();
 
-      // Set flash data and redirect
-      return redirect()->route('organizer.penalty.index')->with('success','Penalty created.');
+      if($request->exists('submit_create_another'))
+      {
+        return redirect()->route('organizer.penalty.create', [Auth::user()->organization_id])->with('success','Penalty created.');
+      }
+      else{
+          return redirect()->route('organizer.penalty.index')->with('success','Penalty created.');
+      }
     }
 
     /**
