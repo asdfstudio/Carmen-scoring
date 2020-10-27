@@ -47,56 +47,35 @@ class CompetitionDivisionRoundChoirController extends Controller
 		}
 
 
-    public function show($competition_id,$division_id,$round_id,$choir_id)
-		{
+        public function show($competition_id,$division_id,$round_id,$choir_id)
+        {
+            $judge_id = Auth::user()->person_id;
+            $judge = Judge::find($judge_id);
+            $choir = Choir::find($choir_id);
 
-			$judge_id = Auth::user()->person_id;
-			$judge = Judge::find($judge_id);
+            $rawScores = RawScore::with('judge','choir','criterion')
+                ->where('division_id',$division_id)
+                ->where('round_id',$round_id)
+                ->where('judge_id',$judge_id)
+                ->where('choir_id',$choir_id)
+                ->get();
 
-			$rawScores = RawScore::with('judge','choir','criterion')
-				->where('division_id',$division_id)
-				->where('round_id',$round_id)
-				->where('judge_id',$judge_id)
-				->where('choir_id',$choir_id)
-				->get();
+            $scoreboard = new Scoreboard(['round_id' => $round_id]);
 
-			$scoreboard = new Scoreboard(['round_id' => $round_id]);
+            $rawScores = $scoreboard->rawScores;
+            $weightedScores = $scoreboard->weightedScores;
+            $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
-	    $rawScores = $scoreboard->rawScores;
-	    $weightedScores = $scoreboard->weightedScores;
-      $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
+            $comment = Comment::where('judge_id', $judge_id)
+                ->where('choir_id', $choir_id)
+                ->where('subject_type', 'App\Round')
+                ->where('subject_id', $round_id)
+                ->pluck('comments')->first();
 
-			$comment = Comment::where('judge_id', $judge_id)
-									->where('choir_id', $choir_id)
-									->where('subject_type', 'App\Round')
-									->where('subject_id', $round_id)
-									->pluck('comments')->first();
-
-			//dd($rawScores);
-
-			//$division = Division::with('choirs','judges','judges.captions','competition','competition.organization')->find($division_id);
-
-			/*$round = Round::with(['division','division.competition','division.choirs' => function($query) use ($choir_id) {
-				$query->where('choir_id',$choir_id);
-			}, 'division.judges' => function ($query) use ($judge_id) {
-					$query->where('judge_id',$judge_id);
-				}])->find($round_id);*/
-
-
-			$round = Round::with(['division', 'division.competition' => function($query) {
-        $query->withoutGlobalScope('organization');
-      }, 'division.sheet', 'division.sheet.criteria', 'division.judges' => 	function($query) use ($judge_id) {
-					$query->where('judge_id',$judge_id)->first();
-				}, 'division.judges.captions' => function($query) use ($division_id) {
-					$query->where('division_id',$division_id);
-				}, 'division.judges.captions.criteria','division.choirs' => function($query) use ($choir_id) {
-				$query->where('choir_id',$choir_id);
-			}])->find($round_id);
-
-			$choir = Choir::find($choir_id);
-
-            $division = $round->division;
-            $competition = $division->competition;
+            $division = Division::with(['round', 'round.sheet', 'round.competition',
+                'round.competition.organization'])->find($division_id);
+            $round = $division->round;
+            $competition = $round->competition;
 
             $captions = Caption::forSheet($division->sheet);
             if(!empty($round->judges->first())){
@@ -104,8 +83,9 @@ class CompetitionDivisionRoundChoirController extends Controller
                 $captions = $captions->whereIn('id', $judgeCaptionIds);
             }
 
-			return view('competition_division_round_choir.judge.show',compact('scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'captions','round','choir','judge','competition','division', 'comment'));
-		}
+            return view('competition_division_round_choir.judge.show',compact('scoreboard', 'rawScores', 'weightedScores', 'rankedScores',
+                'captions','round','choir','judge','competition','division', 'comment'));
+        }
 
 
 

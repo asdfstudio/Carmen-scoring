@@ -56,7 +56,7 @@
           @endif
 
           @if($round->is_scoring_active == false AND $judge_id == Auth::user()->person_id)
-            {{ link_to_route('judge.competition.division.round.choir.show', 'View My Scores', [$round->division->competition,$round->division,$round,$choir],
+            {{ link_to_route('judge.competition.division.round.choir.show', 'View My Scores', [$round->competition,$division,$round,$choir],
             ['class' => 'action'])}}
           @endif
         </td>

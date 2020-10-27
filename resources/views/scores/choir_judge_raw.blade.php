@@ -1,7 +1,7 @@
-@if(!$division->sheet->criteria->isEmpty())
+@if(!$round->sheet->criteria->isEmpty())
 
 @php
-if($division->captionWeighting->slug == '60-40') :
+if($round->captionWeighting->slug == '60-40') :
   $toggle_scores = 'toggle-scores';
 else :
   $toggle_scores = false;
@@ -32,14 +32,14 @@ endif;
         Raw Score
       </th>
 
-      @if($division->captionWeighting->slug == '60-40')
+      @if($round->captionWeighting->slug == '60-40')
         <th class="score weighted">
           Weighted Score
         </th>
       @endif
     </tr>
 
-    @foreach($division->sheet->criteria->where('caption_id', $caption->id) as $criterion)
+    @foreach($round->sheet->criteria->where('caption_id', $caption->id) as $criterion)
     <tr>
     	<td>{{ $criterion->name }}</td>
       <td>
@@ -50,7 +50,7 @@ endif;
         <span class="score raw">{{ $score }}</span>
       </td>
 
-      @if($division->captionWeighting->slug == '60-40')
+      @if($round->captionWeighting->slug == '60-40')
         <td>
           @php
           $weightedScore = $scoreboard->weightedScores->where('criterion_id', $criterion->id)->where('judge_id', $judge->id)->where('choir_id', $choir->id)->pluck('weightedScore');
@@ -73,7 +73,7 @@ endif;
         {{ $rawTotal }}
       </th>
 
-      @if($division->captionWeighting->slug == '60-40')
+      @if($round->captionWeighting->slug == '60-40')
         <th>
           @php $weightedTotal = $weightedScores->where('criterion_caption_id', $caption->id)->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('weightedScore');@endphp
           {{ $weightedTotal }}
@@ -103,7 +103,7 @@ endif;
       {{ $rawTotal }}
     </th>
 
-    @if($division->captionWeighting->slug == '60-40')
+    @if($round->captionWeighting->slug == '60-40')
       <th>
         @php $weightedTotal = $weightedScores->where('choir_id',$choir->id)->where('judge_id', $judge->id)->sum('weightedScore');@endphp
         {{ $weightedTotal }}
