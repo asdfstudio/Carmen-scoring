@@ -21,11 +21,10 @@ let scoresList = window.__SCORES__ ? window.__SCORES__ : scores
 let commentsList = window.__COMMENTS__ ? window.__COMMENTS__ : comments
 let ratingSystem = window.__RATINGS__ ? _.values(window.__RATINGS__) : ratings
 let recordedComments = window.__RECORDED_COMMENTS__ || []
-let competitionList = window.__Competition__ || []
+let competition = window.__COMPETITION__ || {}
 let spreadsheetTitle = window.__SPREADSHEET_TITLE__ ? window.__SPREADSHEET_TITLE__ : 'Spreadsheet title'
 let backUrl = window.__BACK_URL__ ? window.__BACK_URL__ : '/test-back-url'
 let isSpreadsheetScoringActive = window.__IS_SPREADSHEET_SCORING_ACTIVE__ === 'Active'
-// let isSpreadsheetScoringActive = true
 
 Vue.use(Vuex)
 
@@ -60,7 +59,7 @@ export const store = new Vuex.Store({
     captionWeightingId: captionWeightingId,
     divisions: divisionsList,
     recordings: recordedComments,
-    competition: competitionList,
+    competition: competition,
     choirsList: choirsList,
     criteriaList: criteriaList,
     scores: scoresList,

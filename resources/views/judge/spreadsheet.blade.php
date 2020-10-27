@@ -18,8 +18,8 @@
     window.__SPREADSHEET_TITLE__ = "{!! $spreadsheetTitle !!}";
     window.__BACK_URL__ = "{!! $backUrl !!}";
     window.__IS_SPREADSHEET_SCORING_ACTIVE__ = "{!! $isSpreadsheetScoringActive !!}";
-    window. __RECORDED_COMMENTS__ = {!! $recordedComments !!};
-    window. __Competition__ = {!! $competition !!};
+    window.__RECORDED_COMMENTS__ = {!! $recordedComments !!};
+    window.__COMPETITION__ = {!! $competition !!};
   </script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@9"></script>

@@ -159,7 +159,7 @@
             />
           </td>
         </tr>
-        
+
       </tbody>
     </table>
   </div>
@@ -208,7 +208,7 @@ export default {
       return this.$store.state.ratings.length !== 0
     },
     hasPremium () {
-      return this.$store.state.competition.is_premium
+      return this.$store.state.competition.organization.is_premium
     },
     activeModal () {
       return this.$store.state.activeModal

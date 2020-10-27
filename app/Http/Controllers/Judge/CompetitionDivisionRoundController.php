@@ -79,13 +79,13 @@ class CompetitionDivisionRoundController extends Controller
     {
         $judge_id = Auth::user()->person_id;
 
-        $round = Round::with(['sheet', 'divisions', 'divisions.choirs', 'divisions.choirs.recordings',
+        $round = Round::with(['competition', 'competition.organization', 'sheet',
+            'divisions', 'divisions.choirs', 'divisions.choirs.recordings',
             'judges' => function($query) {
                 $query->groupBy('judge_id');
             },'judges.captions' => function($query) use ($round_id) {
                 $query->where('round_id',$round_id);
-            }, 'judges.captions.criteria',
-                'competition', 'competition.organization'
+            }, 'judges.captions.criteria'
             ])->find($round_id);
 
         $competition = $round->competition;
