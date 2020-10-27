@@ -9,6 +9,7 @@
 
           <th v-for="choir in choirsList" class="choir-header"  :choir="choir" v-bind:key="choir.id">
             <span class="clickable" @click="activateChoirModal(choir)">{{ choir.name }}</span>
+            <span class="division">{{ choir.division_name }}</span>
           </th>
         </tr>
       </thead>
@@ -497,6 +498,11 @@ table {
   .choir-header,
   .caption-value {
     min-width: 150px;
+  }
+
+  .choir-header > span.division {
+    display: inline-block;
+    font-weight: lighter;
   }
 
   tr.table-header {

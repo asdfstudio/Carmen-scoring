@@ -138,6 +138,7 @@ class CompetitionDivisionRoundController extends Controller
                     'name' => $choir->full_name,
                     'round_id' => $round_id,
                     'division_id' => $division->id,
+                    'division_name' => $division->name,
                     'performance_order' => $choir->pivot->performance_order
                 ];
             }
