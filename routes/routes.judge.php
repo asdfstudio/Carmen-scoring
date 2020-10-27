@@ -93,7 +93,7 @@ Route::group([
    	 'as' => 'round.scores.spreadsheet-old', 'uses' => 'CompetitionDivisionRoundController@spreadsheetOld'
 		]);
 
-    Route::get('competition/{competition}/division/{division}/round/{round}/spreadsheet', [
+    Route::get('competition/{competition}/round/{round}/spreadsheet', [
    	 'as' => 'round.scores.spreadsheet', 'uses' => 'CompetitionDivisionRoundController@spreadsheet'
 		]);
 

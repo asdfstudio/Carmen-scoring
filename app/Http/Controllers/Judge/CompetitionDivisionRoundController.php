@@ -75,38 +75,35 @@ class CompetitionDivisionRoundController extends Controller
         return view('competition_round.judge.summary',compact('rawScores', 'weightedScores', 'captions', 'round', 'competition', 'division'));
     }
 
-    public function spreadsheet($competition_id,$division_id,$round_id)
+    public function spreadsheet($competition_id, $round_id)
     {
         $judge_id = Auth::user()->person_id;
-        $division = Division::with('round')->find($division_id);
-        $round_id = $division->round->id;
 
-        $division = $division->load(['choirs', 'choirs.recordings',
-            'round.judges' => function($query) {
+        $round = Round::with(['sheet', 'divisions', 'divisions.choirs', 'divisions.choirs.recordings',
+            'judges' => function($query) {
                 $query->groupBy('judge_id');
-            },'round.judges.captions' => function($query) use ($round_id) {
+            },'judges.captions' => function($query) use ($round_id) {
                 $query->where('round_id',$round_id);
-            }, 'round.judges.captions.criteria',
-                'competition' => function($query) {
-                    $query->withoutGlobalScope('organization');
-                },'competition.organization'])->find($division_id);
+            }, 'judges.captions.criteria',
+                'competition', 'competition.organization'
+            ])->find($round_id);
 
-        $captions = Caption::forSheet($division->sheet);
-        $competition = $division->competition;
-        $round = $division->round;
+        $competition = $round->competition;
 
         $recording_judges = $round->judges;
-        $rating_system = $division->rating_system;
+
+        // TODO: Allocate these properly to divisions
+        $rating_system = $round->divisions()->first()->rating_system;
 
         $judge = Judge::with(['captions' => function($query) use ($round_id, $round) {
             $query->where('round_id', $round_id);
         }])->find($judge_id);
 
         $judgeCaptionIds = $judge->captions->pluck('id')->toArray();
-        $captions = Caption::forSheet($division->sheet);
+        $captions = Caption::forSheet($round->sheet);
         $captions = $captions->whereIn('id', $judgeCaptionIds);
 
-        $criteria = $division->sheet->criteria->whereIn('caption_id', $judgeCaptionIds);
+        $criteria = $round->sheet->criteria->whereIn('caption_id', $judgeCaptionIds);
 
         //$before = memory_get_usage();
         $scoreboard = new Scoreboard(['round_id' => $round_id, 'judge_id' => $judge_id]);
@@ -114,12 +111,12 @@ class CompetitionDivisionRoundController extends Controller
         //$allocatedSize = ($after - $before);
         //dd($allocatedSize/1024/1024);
 
-        $spreadsheetTitle = $round->name.' > '.$division->name;
-        $backUrl = route('judge.round.scores.summary', [$competition_id,$division_id,$round_id]);
+        $spreadsheetTitle = $round->name;
+        $backUrl = route('judge.competition.show', [$competition_id]);
 
-        $isSpreadsheetScoringActive = $division->status;
+        $isSpreadsheetScoringActive = $round->status;
 
-        $captionWeightingId = $division->round->caption_weighting_id;
+        $captionWeightingId = $round->caption_weighting_id;
 
         // Convert to arrays for use with new Vue spreadsheet
         $captions = $captions->map(function ($item, $key) {
@@ -131,17 +128,20 @@ class CompetitionDivisionRoundController extends Controller
         })->toArray();
         $captions = array_values($captions);
 
-        $divisions = ['id' => $division->id, 'name' => $division->name];
+        $divisions = $round->divisions->pluck('id', 'name');
 
-        $choirs = $division->choirs->map(function ($item, $key) use ($round_id, $division_id) {
-            return [
-                'id' => $item->id,
-                'name' => $item->full_name,
-                'round_id' => $round_id,
-                'division_id' => $division_id,
-                'performance_order' => $item->pivot->performance_order
-            ];
-        })->toArray();
+        $choirs = [];
+        foreach ($round->divisions as $division) {
+            foreach ($division->choirs as $choir) {
+                $choirs[] = [
+                    'id' => $choir->id,
+                    'name' => $choir->full_name,
+                    'round_id' => $round_id,
+                    'division_id' => $division->id,
+                    'performance_order' => $choir->pivot->performance_order
+                ];
+            }
+        }
 
         $criteria = $criteria->map(function ($item, $key) {
             return [
@@ -194,7 +194,7 @@ class CompetitionDivisionRoundController extends Controller
 
         // JSON encode
         $choirs = json_encode($choirs);
-        $divisions = json_encode($divisions);
+        $divisions = json_encode($round->divisions);
         $criteria = json_encode($criteria);
         $comments = json_encode($comments);
         $recordedComments = json_encode($recordedComments->first());
@@ -203,7 +203,8 @@ class CompetitionDivisionRoundController extends Controller
         $rating_system = json_encode($rating_system);
         $competition = json_encode($competition);
 
-        return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'captions', 'divisions', 'captionWeightingId', 'choirs', 'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'rating_system','recordedComments','competition'));
+        return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'divisions', 'captions', 'captionWeightingId', 'choirs',
+            'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'rating_system','recordedComments','competition'));
     }
 
     public function spreadsheet_sources($competition_id, $division_id, $round_id)
