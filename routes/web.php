@@ -11,87 +11,12 @@
 |
 */
 
-Route::get('judge-spreadsheet', function () {
-
-  $captions = json_encode([
-    [
-      'id' => 1,
-      'name' => 'Music',
-      'color' => '#333',
-      'colorDarker' => '#222',
-      'colorLighter' => '#555'
-    ]
-  ]);
-
-  $divisions = json_encode([
-    [
-      'id' => 1,
-      'name' => 'Mixed High School'
-    ]
-  ]);
-
-  $choirs = json_encode([
-    [
-      'id' => 1,
-      'name' => 'Bloomington South'
-    ]
-  ]);
-
-  $criteria = json_encode([
-    [
-      'id' => 1,
-      'caption_id' => 1,
-      'name' => 'Tone & Technique',
-      'description' => 'This is a description of the Style criterion...',
-      'minScore' => 0,
-      'maxScore' => 8,
-      'increment' => 0.5
-    ]
-  ]);
-
-  $scores = json_encode([
-    [
-      'choir_id' => 1,
-      'criterion_id' => 1,
-      'caption_id' => 1,
-      'raw_score' => 7
-    ]
-  ]);
-
-  $comments = json_encode([
-    [
-      'choir_id' => 1,
-      'comment' => 'a fake comment'
-    ]
-  ]);
-
-  return view('judge.spreadsheet', compact('captions', 'divisions', 'choirs', 'criteria', 'scores', 'comments'));
-});
-
-Route::get('/', function () {
-    //return view('public.home');
-    return redirect('login');
-});
-
-Route::get('about', function () {
-    //return view('public.about');
-    return redirect('login');
-});
-
-Route::get('contact', function () {
-    //return view('public.contact');
-    return redirect('login');
-});
-
-Route::get('system', function () {
-    //return view('public.system_information');
-    return redirect('login');
-});
-
-Route::get('contest', function () {
-    //return view('public.contest');
-    return redirect('login');
-});
+// Basic redirects for old pages
+Route::redirect('/', '/login');
+Route::redirect('/about', '/login');
+Route::redirect('/contact', '/login');
+Route::redirect('/system', '/login');
+Route::redirect('/contact', '/login');
 
 /*Route::get('pdf-test', [
   'as' => 'pdf.test', 'uses' => 'ResultsPdfController@test'
@@ -137,23 +62,13 @@ Route::post('results/division/{division}', [
   'as' => 'results.division.access-protected', 'uses' => 'ResultsController@divisionAccessProtected'
 ]);
 
-Route::post('results/solo-division/{soloDivision}/performer/{performer}/{access_code?}/{director_email?}/', [
+Route::match(['get', 'post'], 'results/solo-division/{soloDivision}/performer/{performer}/{access_code?}/{director_email?}/', [
   'as' => 'results.solo-division.performer.show', 'uses' => 'ResultsController@soloDivisionPerformer'
 ]);
 
-Route::get('results/solo-division/{soloDivision}/performer/{performer}/{access_code?}/{director_email?}/', [
-  'as' => 'results.solo-division.performer.show', 'uses' => 'ResultsController@soloDivisionPerformer'
-]);
-
-Route::post('results/solo-division/{soloDivision}/{access_code?}/', [
+Route::match(['get', 'post'], 'results/solo-division/{soloDivision}/{access_code?}/', [
   'as' => 'results.solo-division.show', 'uses' => 'ResultsController@soloDivision'
 ]);
-
-Route::get('results/solo-division/{soloDivision}/{access_code?}/', [
-  'as' => 'results.solo-division.show', 'uses' => 'ResultsController@soloDivision'
-]);
-
-
 
 Route::get('results/competition/{competition}', [
   'as' => 'results.competition.show-public', 'uses' => 'ResultsController@competitionPublic'
@@ -184,7 +99,6 @@ Route::get('profile/password', [
 ]);
 
 Route::put('profile/password', [
-  // 'as' => 'password.update', 'uses' => 'PasswordController@update'
   'as' => 'password.update.self', 'uses' => 'PasswordController@update'
 ]);
 
@@ -197,8 +111,7 @@ Route::post('/user-register', 'Auth\RegisterController@registerAjax');
 Route::post('/user-forgot', 'Auth\ForgotPasswordController@sendResetLinkEmailAjax');
 Route::post('/user-vote', 'VoteController@vote');
 
-
-
+// Audience Vote Routes
 Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
 Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
@@ -207,8 +120,9 @@ Route::get('/logout', 'Auth\LoginController@logout');
 Route::get('home/{organizer}/{alias}', [
     'as' => 'home.organizer', 'uses' => 'HomeController@organizer'
 ]);
+
 Route::get('home/{organizer}/{alias}/results', [
-    'as' => 'home.organizer', 'uses' => 'ResultsController@showAudienceVoteResult'
+    'as' => 'home.organizer.results', 'uses' => 'ResultsController@showAudienceVoteResult'
 ]);
 
 Route::get('solo-division/{organizer}/{alias}', [

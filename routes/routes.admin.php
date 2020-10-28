@@ -99,16 +99,9 @@ Route::group([
     Route::get('workshop/finalize', [
       'as' => 'workshop.finalize', 'uses' => 'WorkshopController@finalize'
     ]);
-
-
-    Route::get('person/search', [
+    Route::match(['get', 'post'], 'person/search', [
       'as' => 'person.search', 'uses' => 'PersonController@search'
     ]);
-    Route::post('person/search', [
-      'as' => 'person.search', 'uses' => 'PersonController@search'
-    ]);
-
-
     Route::get('dedup', [
       'as' => 'dedup', 'uses' => 'DeDupController@index'
     ]);
@@ -121,10 +114,7 @@ Route::group([
     Route::get('dedup/merge_dups', [
       'as' => 'dedup.merge_dups', 'uses' => 'DeDupController@merge_dups'
     ]);
-    Route::get('dedup/merge_dups_manual', [
-      'as' => 'dedup.merge_dups_manual', 'uses' => 'DeDupController@merge_dups_manual'
-    ]);
-    Route::post('dedup/merge_dups_manual', [
+    Route::match(['get', 'post'], 'dedup/merge_dups_manual', [
       'as' => 'dedup.merge_dups_manual', 'uses' => 'DeDupController@merge_dups_manual'
     ]);
     Route::get('dedup/delete_blanks', [
@@ -133,16 +123,10 @@ Route::group([
     Route::get('dedup/dup_list_schools', [
       'as' => 'dedup.dup_list_schools', 'uses' => 'DeDupController@dup_list_schools'
     ]);
-    Route::get('dedup/merge_dup_schools_manual', [
+    Route::match(['get', 'post'], 'dedup/merge_dup_schools_manual', [
       'as' => 'dedup.merge_dup_schools_manual', 'uses' => 'DeDupController@merge_dup_schools_manual'
     ]);
-    Route::post('dedup/merge_dup_schools_manual', [
-      'as' => 'dedup.merge_dup_schools_manual', 'uses' => 'DeDupController@merge_dup_schools_manual'
-    ]);
-    Route::get('dedup/merge_dup_choirs_manual', [
-      'as' => 'dedup.merge_dup_choirs_manual', 'uses' => 'DeDupController@merge_dup_choirs_manual'
-    ]);
-    Route::post('dedup/merge_dup_choirs_manual', [
+    Route::match(['get', 'post'], 'dedup/merge_dup_choirs_manual', [
       'as' => 'dedup.merge_dup_choirs_manual', 'uses' => 'DeDupController@merge_dup_choirs_manual'
     ]);
 

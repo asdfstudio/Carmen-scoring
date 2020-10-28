@@ -277,7 +277,7 @@ Route::group([
   ]);
 
   // Update organization details
-  Route::post('organization', [
+  Route::match(['post', 'patch'], 'organization', [
     'as' => 'organization.update',
     'uses' => 'OrganizationController@update'
   ]);
@@ -425,10 +425,6 @@ Route::post('competition/{competition}/division/{division}/audience/update', [
 
 	Route::get('organization/edit', [
     'as' => 'organization.edit', 'uses' => 'OrganizationController@edit'
-	]);
-
-	Route::patch('organization', [
-    'as' => 'organization.update', 'uses' => 'OrganizationController@update'
 	]);
 
 	Route::get('competition/{competition}/round/{round}', [

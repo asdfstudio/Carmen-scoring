@@ -73,25 +73,11 @@ Route::group([
 			'as' => 'competition.division.scoring', 'uses' => 'CompetitionDivisionController@scoring'
 		]);
 
-		/*Route::get('competition/{competition}/division/{division}/round/{round}', [
-   	 'as' => 'competition.division.round.show', 'uses' => 'CompetitionDivisionRoundController@show'
-		]);*/
 
 		Route::get('competition/{competition}/division/{division}/round/{round}', [
    	 'as' => 'round.scores.summary', 'uses' => 'CompetitionDivisionRoundController@summary'
 		]);
 
-    Route::get('competition/{competition}/division/{division}/round/{round}/sources-old', [
-      'as' => 'round.scores.sources-old', 'uses' => 'CompetitionDivisionRoundController@spreadsheet_sources_old'
-  	]);
-
-    Route::get('competition/{competition}/division/{division}/round/{round}/sources', [
-      'as' => 'round.scores.sources', 'uses' => 'CompetitionDivisionRoundController@spreadsheet_sources'
-  	]);
-
-    Route::get('competition/{competition}/division/{division}/round/{round}/spreadsheet-old', [
-   	 'as' => 'round.scores.spreadsheet-old', 'uses' => 'CompetitionDivisionRoundController@spreadsheetOld'
-		]);
 
     Route::get('competition/{competition}/round/{round}/spreadsheet', [
    	 'as' => 'round.scores.spreadsheet', 'uses' => 'CompetitionDivisionRoundController@spreadsheet'
@@ -118,14 +104,6 @@ Route::group([
 		Route::get('competition/{competition}/division/{division}/round/{round}/scores/mine/ranked', [
    	 'as' => 'round.scores.mine.ranked', 'uses' => 'CompetitionDivisionRoundController@show_ranked'
 		]);
-
-		/*Route::get('competition/{competition}/division/{division}/round/{round}/scores/mine', [
-   	 'as' => 'competition.division.round.show', 'uses' => 'Judge\CompetitionDivisionRoundController@show'
-		]);*/
-
-		/*Route::get('competition/{competition}/division/{division}/round/{round}/scores/choir/{choir}', [
-   	 'as' => 'round.scores.choir.show', 'uses' => 'Judge\CompetitionDivisionRoundChoirController@index'
-		]);*/
 
 		Route::get('competition/{competition}/division/{division}/round/{round}/scores/choir/{choir}/ranked', [
    	 'as' => 'round.scores.choir.show.ranked', 'uses' => 'CompetitionDivisionRoundChoirController@index_ranked'
@@ -191,14 +169,9 @@ Route::group([
 
 
 
-		Route::get('score/save', [
+		Route::match(['get', 'post'], 'score/save', [
 			'as' => 'score.save', 'uses' => 'ScoreController@save'
 		]);
-
-		Route::post('score/save', [
-			'as' => 'score.save', 'uses' => 'ScoreController@save'
-		]);
-
 
         Route::any('comment/save', [
 			'as' => 'comment.save', 'uses' => 'CommentController@save'
