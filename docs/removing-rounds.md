@@ -49,6 +49,15 @@ AJ: Data issue: There are 61 non-deleted Divisions in the production data that d
 
 To fix these divisions so they don't lose a connection to their competitions, they've been put into created rounds called 'Default Set'.  They look like data cruft but we can clean them out later rather than permanently losing their competition connections.
 
+To use the production data in your dev environment, and test migrations:
+
+     php artisan migrate:fresh
+     php artisan migrate:rollback --steps=13 // This takes you back to before we started rounds migrations.
+     mysql showchoir < database/data/showchoir.prod.data.sql // This is to dump into the "showchoir" database. Use the name of your dev database
+     php artisan migrate // Brings us back to the latest migrations
+
+Now that you have the production data, you may need to add yourself via tinker or some other method such as a Seeder.
+
 ## Changes to be made
 
 ### Database / Entities
