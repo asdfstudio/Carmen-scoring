@@ -26,3 +26,17 @@ Deployment is done via a "git pull" in the appropriate directory on the server. 
 - The "master" branch is deployed to /home/carmen/showchoir and is available at https://showchoir.carmenscoring.com/login
 
 There is no automated process to run composer so be sure to manually do so if you've upgraded any of the PHP libraries. If you update the judging spreadsheet, you will likely need to use npm to build the application before checking it in to git.
+
+## Tests
+
+The Carmen Scoring System is built with testing. It is using PHPUnit and a phpunit.xml file is already setup for this application.
+
+There is /tests directory that contains three sub-directories(Feature, Unit, and Pages). Feature and Unit are default directory and Pages is custom directory to add pages tests.
+
+You are free to define other testing environment configuration values as necessary. The testing environment variables may be configured in the phpunit.xml file, but make sure to clear your configuration cache using the config:clear Artisan command before running your tests!
+
+In addition, you may create a .env.testing file in the root of your project. This file will override the .env file when running PHPUnit tests or executing Artisan commands with the --env=testing option.
+
+You can use the test Artisan command to run your tests. The Artisan test runner provides test reports:
+
+    php artisan test

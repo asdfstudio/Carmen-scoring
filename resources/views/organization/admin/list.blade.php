@@ -11,7 +11,7 @@
       
     <label class="switch">
   <input type="checkbox" @if($organization->is_premium == 1) checked @endif>
-  <span class="slider round" data-id="{{ $organization->id }}"></span>
+  <span class="slider round" data-id="{{ $organization->id }}" title="Enable/Disable Premium"></span>
 </label>
     @endif
     </li>

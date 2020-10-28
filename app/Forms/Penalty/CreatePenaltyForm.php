@@ -26,7 +26,8 @@ class CreatePenaltyForm extends Form
         ]);
 
         $this->add('amount','number', [
-          'rules' => 'required'
+          'rules' => 'required',
+          'attr' => ['min' => 1]
         ]);
 
         $this->add('apply_per_judge', 'choice', [
