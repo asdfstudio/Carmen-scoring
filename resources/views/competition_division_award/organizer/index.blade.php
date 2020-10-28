@@ -10,9 +10,9 @@
             {{ link_to_route('organizer.competition.division.award.settings.edit', 'Edit caption awards', [$division->competition->id, $division], ['class' => 'action']) }}
             </li>
         @endcan
-        @can('createAward', $division)
+        @can('create', ['App\Award', $division])
             <li>
-                {{ link_to_route('organizer.competition.division.award.create','Create new award', [$division->competition->id, $division->id], ['class' => 'action']) }}
+                {{ link_to_route('organizer.competition.division.award.create','Create division award', [$division->competition->id, $division->id], ['class' => 'action']) }}
             </li>
         @endcan
 

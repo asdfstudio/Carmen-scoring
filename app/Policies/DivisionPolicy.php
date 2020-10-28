@@ -146,14 +146,6 @@ class DivisionPolicy extends BasePolicy
         }
     }
 
-    public function createAward(User $user, Division $division)
-    {
-        if($this->isOrgAdmin AND $division->status_slug() == 'activated')
-        {
-            return true;
-        }
-    }
-
     // -dg-
     public function viewResults(User $user, Division $division)
     {
