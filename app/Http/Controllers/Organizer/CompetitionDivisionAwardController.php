@@ -42,8 +42,7 @@ class CompetitionDivisionAwardController extends Controller
     {
       $division = Division::find($division_id);
 
-      //$this->authorize('create', ['App\Award', $division]);
-      $this->authorize('createAward' , $division);
+      $this->authorize('create', ['App\Award', $division]);
 
       $form = $formBuilder->create('Award\CreateAwardForm', [
         'method' => 'POST',
@@ -58,8 +57,7 @@ class CompetitionDivisionAwardController extends Controller
     {
       $division = Division::find($division_id);
 
-      //$this->authorize('create', ['App\Award', $division]);
-      $this->authorize('createAward' , $division);
+      $this->authorize('create', ['App\Award', $division]);
 
       $form = $formBuilder->create('Award\CreateAwardForm');
 
