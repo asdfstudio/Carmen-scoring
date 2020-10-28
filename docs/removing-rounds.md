@@ -52,7 +52,7 @@ To fix these divisions so they don't lose a connection to their competitions, th
 To use the production data in your dev environment, and test migrations:
 
      php artisan migrate:fresh
-     php artisan migrate:rollback --steps=13 // This takes you back to before we started rounds migrations.
+     php artisan migrate:rollback --step=13 // This takes you back to before we started rounds migrations.
      mysql showchoir < database/data/showchoir.prod.data.sql // This is to dump into the "showchoir" database. Use the name of your dev database
      php artisan migrate // Brings us back to the latest migrations
 
