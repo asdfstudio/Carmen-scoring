@@ -10,37 +10,6 @@
 
 			<span class="label status {{ $round->status_slug() }}">{{ $round->status() }}</span>
 
-        {{-- TODO: Does the sequence of Rounds matter?
-			<div>Order: {{ $round->sequence }}</div>
-
-			@if(!$round->choirs->isEmpty())
-				<h4>Choirs</h4>
-				<ul>
-					@foreach($round->choirs as $choir)
-						<li>{{ $choir->full_name }}</li>
-					@endforeach
-				</ul>
-			@endif
-
-			@if(!$round->sources->isEmpty())
-				<h4>Source(s) - {{ link_to_route('organizer.competition.division.round.show_sources', 'View combined scores', [$division->competition_id, $division, $round]) }}</h4>
-				<ul>
-					@foreach($round->sources as $source)
-						<li>{{ link_to_route('organizer.competition.division.round.show', $source->full_name, [$division->competition_id, $division, $source->id]) }}</li>
-					@endforeach
-				</ul>
-			@endif
-
-			@if(!$round->targets)
-				<h4>Target</h4>
-				<ul>
-					@foreach($round->targets as $target)
-						<li>{{ $target->full_name }}</li>
-					@endforeach
-				</ul>
-			@endif
-            --}}
-
 			<ul class="actions-group">
 				@can('update', $round)
 					<li>
@@ -54,35 +23,9 @@
 						{{ link_to_route('organizer.competition..round.choir.performance_order', 'Set Choir Performance Order', [$division->competition,$division,$round], ['class' => 'action']) }}
 					</li>
 				@endcan
-
-				@can('activateScoring', $round)
-					<li>
-						{!! form($activateScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id]), 'class' => '']) !!}
-					</li>
-				@endcan
-
-				@can('deactivateScoring', $round)
-					<li>
-						{!! form($deactivateScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id]), 'class' => '']) !!}
-					</li>
-				@endcan
-
-				@can('completeScoring', $round)
-
-					<li>
-						{!! form($completeScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id]), 'class' => '']) !!}
-					</li>
-				@endcan
-
-				@can('reactivateScoring', $round)
-					<li>
-						{!! form($reactivateScoringForm, ['url' => route('organizer.competition.division.round.scoring',[$division->competition->id,$division->id,$round->id]), 'class' => '']) !!}
-					</li>
-				@endcan
             --}}
 
 			</ul>
-
 		</li>
   @endforeach
 </ul>

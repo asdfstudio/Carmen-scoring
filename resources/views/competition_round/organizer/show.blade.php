@@ -14,6 +14,7 @@
             <li>{{ link_to_route('organizer.competition.division.index', 'Manage Divisions', [$competition, $round], ['class' => 'action']) }}</li>
         @endcan
         @can('showAll', $round)
+            <li>{{ link_to_route('organizer.competition.round.scores.show', 'See Scores', [$competition, $round], ['class' => 'action']) }}</li>
             <li>{{ link_to_route('organizer.competition.round.index', 'Back to all Rounds', [$competition], ['class' => 'action']) }}</li>
         @endcan
     </ul>
@@ -21,13 +22,6 @@
 
 @section('content')
     <div class="clearfix"></div>
-    {{--
-    @if($round->status_slug() == 'published')
-        <div class="alert alert-info">
-            <p>Results for this round are available at {{ link_to_route('results.round.show', NULL, [$round, $round->access_code], ['target' => '_blank']) }} </p>
-        </div>
-    @endif
-    --}}
     <ul class="list-group">
         <h3>Scoring Settings</h3>
 

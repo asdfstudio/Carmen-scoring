@@ -225,84 +225,44 @@ class CompetitionRoundController extends Controller
         return view('competition_round.organizer.settings', compact('competition','round'));
     }
 
-    public function show_sources(Request $request,$competition_id,$division_id,$round_id, FormBuilder $formBuilder)
-		{
+    public function show_scores(Request $request,$competition_id,$round_id, FormBuilder $formBuilder)
+    {
 
-      $round = Round::with([
-        'sources',
-        'sources.choirs',
-        'division',
-        'division.competition',
-        //'division.choirs',
-        //'division.competition.divisions',
-        //'division.rounds',
-        'division.judges' => function($query) {
-					//$query->where('judge_id',$judge_id)->first();
-          $query->groupBy('judge_id');
-          //$query->distinct('id');
-				},
-        'division.judges.captions' => function($query) use ($division_id) {
-					$query->where('division_id',$division_id);
-				},
-        'division.judges.captions.criteria'
-      ])->find($round_id);
+        $round = Round::with([
+            'competition',
+            'divisions',
+            'divisions.choirs',
+            'judges' => function($query) {
+                $query->groupBy('judge_id');
+            },
+            'judges.captions' => function($query) use ($round_id) {
+                $query->where('round_id',$round_id);
+            },
+            'judges.captions.criteria'
+        ])->find($round_id);
 
-      $this->authorize('show', $round);
+        $this->authorize('show', $round);
 
-      if(Auth::user()->isAdmin() && isset($_GET['refresh_standings'])){
-        event(new StandingRefreshNeeded($round));
-      }
-
-      $division = $round->division;
-      $competition = $division->competition;
-      $rounds = $division->rounds;
-      $divisions = $competition->divisions;
-
-      $caption_ids = $division->sheet->caption_ids;
-      $captions = Caption::forSheet($division->sheet);
-
-      $source_division_ids = $round->sources->pluck('division_id')->toArray();
-
-      $source_divisions = Division::with('choirs', 'judges')->whereIn('id', $source_division_ids)->get();
-
-      $source_choirs = collect();
-      $source_judges = collect();
-
-      $source_divisions->each(function($item, $key) use ($source_choirs, $source_judges) {
-        if($item->has('choirs'))
-        {
-          $item->choirs->each(function($choir,$key) use ($source_choirs) {
-            return $source_choirs->push($choir);
-          });
+        if(Auth::user()->isAdmin() && isset($_GET['refresh_standings'])){
+            event(new StandingRefreshNeeded($round));
         }
 
-        if($item->has('judges'))
-        {
-          $item->judges->each(function($judge,$key) use ($source_judges) {
-            return $source_judges->push($judge->id);
-          });
-        }
-      });
+        $competition = $round->competition;
+        $divisions = $round->divisions;
 
-      $choirs = $source_choirs;
+        $judges = $round->judges;
+        $caption_ids = $round->sheet->caption_ids;
+        $captions = Caption::forSheet($round->sheet);
 
+        $scoreboard = new Scoreboard(['round_id' => $round_id]);
 
-      $judge_ids = $source_judges->unique();
-      $judges = Judge::whereIn('id', $judge_ids)->get();
+        $rawScores = $scoreboard->extendedRawScores;
+        $weightedScores = $scoreboard->extendedRawScores;
+        $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
-      //dd($judges);
-
-      $source_ids = $round->sources->pluck('id')->toArray();
-      $scoreboard = new Scoreboard(['round_id' => $source_ids]);
-
-      //dd($scoreboard);
-
-      $rawScores = $scoreboard->extendedRawScores;
-      $weightedScores = $scoreboard->extendedRawScores;
-      $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
-
-      return view('competition.round.organizer.show_sources', compact('captions','rawScores', 'weightedScores', 'rankedScores', 'round','competition','division', 'divisions','rounds', 'scoreboard', 'choirs', 'judges'));
-		}
+        return view('competition_round.organizer.scores', compact('rawScores', 'weightedScores', 'rankedScores', 'round', 'competition', 'divisions',
+            'scoreboard', 'judges', 'captions'));
+    }
 
 
     public function scoring($competition_id, Request $request)

@@ -431,6 +431,10 @@ Route::post('competition/{competition}/division/{division}/audience/update', [
     'as' => 'competition.round.show', 'uses' => 'CompetitionRoundController@show'
 	]);
 
+	Route::get('competition/{competition}/round/{round}/scores', [
+    'as' => 'competition.round.scores.show', 'uses' => 'CompetitionRoundController@show_scores'
+	]);
+
 	Route::get('competition/{competition}/division/{division}/round/{round}/choir/{choir}', [
     'as' => 'competition.division.round.choir.show', 'uses' => 'CompetitionDivisionRoundChoirController@show'
 	]);
@@ -476,7 +480,7 @@ Route::post('competition/{competition}/division/{division}/audience/update', [
   Route::post('/vote-setting',[
       'as' => 'option.setting-audience', 'uses' => 'OrganizationController@voteSetting'
   ] );
-	// Route::resource('competition.round', 'CompetitionRoundController');
+
 });
 
 Route::post('/audience/fileupload/','Organizer\CompetitionDivisionAudienceController@fileupload')->name('audience.fileupload');
