@@ -26,7 +26,7 @@ class CompetitionDivisionAwardController extends Controller
       }, 'awards.choirs' => function($query) use ($division_id) {
         $query->where('division_id',$division_id);
       }])->find($division_id);
-      
+
       $this->authorize('showAll', 'App\Award');
 
       //dd($division->awards);
@@ -162,11 +162,15 @@ class CompetitionDivisionAwardController extends Controller
     public function update_assignment(Request $request, Competition $competition, $division_id)
     {
       $division = $competition->divisions()->findOrFail($division_id);
-      //$division = Division::find($division_id);
-
       $this->authorize('assign', ['App\Award', $division]);
 
-      $awards = $request->input('awards', []);
+      // Force empty choir_id to be null, not a blank string;
+      $awards = collect($request->input('awards', []))->map(function($item, $key) {
+          if (!$item['choir_id']) {
+              $item['choir_id'] = NULL;
+          }
+          return $item;
+      });
 
       $division->awards()->sync($awards);
 

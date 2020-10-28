@@ -15,9 +15,9 @@ class CreateDivisionAwardTable extends Migration
         Schema::create('division_award', function (Blueprint $table) {
           $table->string('recipient')->nullable();
           $table->foreignId('choir_id')
+            ->nullable()
             ->constrained('choirs')
-            ->index()
-            ->nullable();
+            ->index();
 
           $table->foreignId('division_id')
             ->constrained('divisions')

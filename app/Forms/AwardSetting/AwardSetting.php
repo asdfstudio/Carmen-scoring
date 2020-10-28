@@ -8,7 +8,6 @@ class AwardSetting extends Form
 {
     public function buildForm()
     {
-      //dd($this->data);
       $this->add('caption_'.rand(1111,9999), 'static', [
         'label_show' => false,
         'tag' => 'h2',
@@ -38,6 +37,7 @@ class AwardSetting extends Form
 
       $this->add('award_sponsors','textarea', [
         'default_value' => $awardSponsors,
+        'attr' => ['rows' => 3],
         'help_block' => [
           'text' => 'Enter 1 sponsor per line, with Grand Champion sponsor on line 1, 1st runner up on line 2 and so on...'
         ]

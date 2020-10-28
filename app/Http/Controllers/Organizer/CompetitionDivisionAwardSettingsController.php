@@ -19,13 +19,6 @@ class CompetitionDivisionAwardSettingsController extends Controller
       $division->load('competition', 'awardSettings', 'sheet', 'sheet.criteria', 'sheet.criteria.caption');
       $division->sheet->captions = $division->sheet->criteria->unique('caption_id')->pluck('caption');
 
-      //dd($division->awardSettings->first()->award_sponsors_array);
-      //dd($division->awardSettings->first()->awardSponsor(1));
-      //$sponsors = $division->awardSettings->first()->award_sponsors;
-      //$sponsors = explode(PHP_EOL, $sponsors);
-      //$sponsors = array_combine(range(1, count($sponsors)), $sponsors);
-      //dd($sponsors);
-
       $form = $formBuilder->create('AwardSetting\DivisionAwardSettings', [
         'url' => route('organizer.competition.division.award.settings.store', [$competition, $division]),
         'method' => 'post',
@@ -40,8 +33,6 @@ class CompetitionDivisionAwardSettingsController extends Controller
 
     public function update(Competition $competition, Division $division, FormBuilder $formBuilder, Request $request)
     {
-      //dd($request->input());
-
       $awardSettings = [];
 
       foreach ($request->input('award_settings') as $index => $awardSetting) {
@@ -53,10 +44,8 @@ class CompetitionDivisionAwardSettingsController extends Controller
         $awardSettings[$index]->award_sponsors = $awardSetting['award_sponsors'];
       }
 
-      //dd($awardSettings);
-
       $division->awardSettings()->saveMany($awardSettings);
 
-      return redirect()->back();
+      return redirect()->route('organizer.competition.division.award.index', [$division->competition, $division])->with('success', 'Caption Awards Updated');
     }
 }
