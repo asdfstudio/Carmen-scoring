@@ -18,22 +18,16 @@ class ScoringMethod {
   protected $total_ranked = [];
   protected $totaled = [];
   protected $totals = [];
-  protected $skip_epoch = '2020-02-06';
   protected $is_the_skip_epoch;
 
 
-  public function __construct($weightedScores, $penalties = false)
+  public function __construct($weightedScores, $penalties = false, $is_the_skip_epoch = FALSE)
   {
-    if($weightedScores->count()){
-      $competition = Division::with('competition')->find($weightedScores->first()->division_id)->competition;
-    } else {
-      $route_params = \Route::current()->parameters();
-      $competition = Competition::find($route_params['competition']);
-    }
+    // Set whether to skip tied ranks, with URL input overridding time-based parameter from Scoreboard
     if(isset($_GET['skip_ranks'])){
       $this->is_the_skip_epoch = boolval(intval($_GET['skip_ranks']));
-    } else {
-      $this->is_the_skip_epoch = empty($competition) || empty($competition->begin_date) || $competition->begin_date >= $this->skip_epoch;
+    } elseif ($is_the_skip_epoch) {
+        $this->is_the_skip_epoch = TRUE;
     }
     $this->weightedScores = $weightedScores;
     $this->penalties = $penalties;
