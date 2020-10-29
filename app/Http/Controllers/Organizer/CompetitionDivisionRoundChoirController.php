@@ -35,35 +35,18 @@ class CompetitionDivisionRoundChoirController extends Controller
         $query->where('round_id', $round_id);
       }])->find($choir_id);
 
-			$round = Round::find($round_id);
+		$round = Round::find($round_id);
 
-			$division = Division::with(['choirs', 'rounds', 'sheet', 'sheet.criteria', 'sheet.criteria.caption', 'competition',
-        'judges' => function ($query) use($request) {
-          if($request->judge_id){
-            $query->where('judge_id', $request->judge_id);
-          }
-          $query->groupBy('judge_id');
-		    },
-        'judges.recordings' => function($query) use ($choir_id, $round_id, $request){
-          if($request->judge_id){
-            $query->where('judge_id', $request->judge_id);
-          }else{
-            $query->where('judge_id', null);
-          }
-          $query->where('choir_id', $choir_id)->where('round_id', $round_id);
-        }
-      ])->find($division_id);
+		$division = Division::with(['choirs', 'round', 'sheet', 'sheet.criteria', 'sheet.criteria.caption', 'competition'])->find($division_id);
 
-      $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::forSheet($division->sheet);
-      $rounds = $division->rounds;
 
       $scoreboard = new Scoreboard(['round_id' => $round_id]);
       $rawScores = $scoreboard->extendedRawScores;
       $weightedScores = $scoreboard->extendedRawScores;
       $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
-      $judgeList = Division::with(['judges'])->find($division_id)->judges->pluck('full_name','id');
+      $judgeList = $round->judges->pluck('full_name','id');
       $judgeList->prepend('Please select a judge', 'null');
       $judge_id= ($request->judge_id)?$request->judge_id:'';
 
@@ -87,7 +70,7 @@ class CompetitionDivisionRoundChoirController extends Controller
         }
       });
 
-			return view('competition_division_round_choir.organizer.show',compact('competition', 'rawScores', 'weightedScores', 'rankedScores', 'choir', 'round', 'division', 'rounds', 'divisions', 'captions', 'judgeList','judge_id'));
+			return view('competition_division_round_choir.organizer.show',compact('competition', 'rawScores', 'weightedScores', 'rankedScores', 'choir', 'round', 'division',  'divisions', 'captions', 'judgeList','judge_id'));
 
 		}
 
