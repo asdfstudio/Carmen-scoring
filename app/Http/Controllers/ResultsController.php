@@ -106,16 +106,14 @@ class ResultsController extends Controller
       return view('results.choose_year', compact('years'));
     }
 
-
     public function indexYear($year)
     {
-      //$competitions = Competition::withoutGlobalScope('organization')->completed()->year($year)->orderBy('name', 'asc')->get();
-      $competitions = Competition::withoutGlobalScope('organization')->year($year)->whereHas('divisions', function($query){
-        $query->where('is_published', 1);
-      })->orderBy('name', 'asc')->get();
+        $competitions = Competition::withoutGlobalScope('organization')->year($year)->completed()
+            ->with(['rounds', 'rounds.divisions' => function($query) {
+                $query->where('is_published', 1);
+            }])->orderBy('name', 'asc')->get();
 
-      // dd($competitions);
-      return view('results.index', compact('competitions', 'year'));
+        return view('results.index', compact('competitions', 'year'));
     }
 
     public function competitionPublic($competition_id, Request $request)
