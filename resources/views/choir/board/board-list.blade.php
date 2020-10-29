@@ -4,8 +4,10 @@
     <span class="card-count" data-resource-type="choir">{{ count($division->choirs) }}</span>
   </div>
 
-  <a class="add-resource" data-resource-type="choir" href="#">Add a choir</a>
-  
+  @if($division->status_slug() != 'finalized' AND $division->status_slug() != 'completed')
+    <a class="add-resource" data-resource-type="choir" href="#">Add a choir</a>
+  @endif
+
   {!! form($newChoirForm) !!}
 
   @include('choir.board.list')

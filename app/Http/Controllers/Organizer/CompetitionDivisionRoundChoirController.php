@@ -35,9 +35,24 @@ class CompetitionDivisionRoundChoirController extends Controller
         $query->where('round_id', $round_id);
       }])->find($choir_id);
 
-		$round = Round::find($round_id);
+      $division = Division::with(['choirs', 'round', 'sheet', 'sheet.criteria', 'sheet.criteria.caption', 'competition',
+          'round.judges' => function ($query) use($request) {
+            if($request->judge_id){
+              $query->where('judge_id', $request->judge_id);
+            }
+            $query->groupBy('judge_id');
+          },
+          'round.judges.recordings' => function($query) use ($choir_id, $round_id, $request){
+            if($request->judge_id){
+              $query->where('judge_id', $request->judge_id);
+            }else{
+              $query->where('judge_id', null);
+            }
+            $query->where('choir_id', $choir_id)->where('round_id', $round_id);
+          }
+      ])->find($division_id);
 
-		$division = Division::with(['choirs', 'round', 'sheet', 'sheet.criteria', 'sheet.criteria.caption', 'competition'])->find($division_id);
+      $round = $division->round;
 
       $captions = Caption::forSheet($division->sheet);
 
