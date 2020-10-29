@@ -101,7 +101,7 @@ class Scoreboard {
 
 	protected function getWeightedScores()
 	{
-        $weightedScoresClass = new WeightedScores($this->rawScores, $this->getRound()->captionWeightingId);
+        $weightedScoresClass = new WeightedScores($this->rawScores, $this->getRound()->captionWeighting->id);
 
 		$this->weightedScores = $weightedScoresClass->all();
 		$this->extendedRawScores = $this->weightedScores;
