@@ -94,8 +94,7 @@
 
 @parent
 
-@if (!$division->isMissingScores())
-    <p class="alert alert-warning">This round is currently missing scores. Do not complete the scoring until you have received scores from all judges.</p>
+@if (sizeof($division->choirs) > 0)
 
     {{-- Raw Scoring, 50/50 --}}
     @if ($division->round->scoring_method_id === 1 && $division->round->caption_weighting_id === 2)
