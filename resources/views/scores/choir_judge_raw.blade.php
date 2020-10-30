@@ -53,7 +53,7 @@ endif;
       @if($round->captionWeighting->slug == '60-40')
         <td>
           @php
-          $weightedScore = $scoreboard->weightedScores->where('criterion_id', $criterion->id)->where('judge_id', $judge->id)->where('choir_id', $choir->id)->pluck('weightedScore');
+          $weightedScore = $weightedScores->where('criterion_id', $criterion->id)->where('judge_id', $judge->id)->where('choir_id', $choir->id)->pluck('weightedScore');
           $score = $weightedScore->first();
           @endphp
           <span class="score weighted">{{ $score }}</span>
