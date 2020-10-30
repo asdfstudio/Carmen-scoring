@@ -52,11 +52,24 @@
     <ul class="list-group">
         <li class="list-group-item">
             <h3>Division in Round {{ $division->round->name }}</h3>
-            <h4>Division Rating Systems</h4>
+
             @if (isset($division->rating_system))
-                @foreach ($division->rating_system as $rating)
-                    <p>{{ $rating['name'] }}: {{ $rating['min_score'] }}%</p>
-                @endforeach
+            <h4>Division Rating Systems</h4>
+
+            <div class="table-wrapper-responsive">
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>Rating Name</th>
+                        <th>Minimum % of Total Available Score</th>
+                    </tr>
+                    @foreach ($division->rating_system as $rating)
+                        <tr>
+                            <td>{{ $rating['name'] }}</td>
+                            <td>{{ $rating['min_score'] }}%</td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
             @endif
         </li>
         <li class="list-group-item">
