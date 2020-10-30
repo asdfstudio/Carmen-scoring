@@ -118,24 +118,14 @@ class ResultsController extends Controller
 
     public function competitionPublic($competition_id, Request $request)
     {
-      /*$competition = Competition::with(['divisions' => function($query) {
-        $query->published();
-      }])->completed()->find($competition_id);*/
-
-      $competition = Competition::withoutGlobalScope('organization')->with(['divisions' => function($query) {
+      $competition = Competition::withoutGlobalScope('organization')->with(['rounds', 'rounds.divisions' => function($query) {
         $query->published();
       }, 'soloDivisions' => function($query) {
         $query->published();
       }])->find($competition_id);
 
-      //dd($competition);
       if (!$competition) {
         return view('results.competition.no-match');
-      }
-
-      if($request->session()->has('competition_access_code'))
-      {
-        return redirect()->route('results.competition.show-custom', [$competition->slug, 'access_code' => $request->session()->get('competition_access_code')]);
       }
 
       return view('results.competition.show-public', compact('competition'));
@@ -154,7 +144,7 @@ class ResultsController extends Controller
       if(!$competition)
       {
         // return redirect()->route('results.index');
-        $competition = Competition::withoutGlobalScope('organization')->with(['divisions' => function($query) {
+        $competition = Competition::withoutGlobalScope('organization')->with(['rounds', 'rounds.divisions' => function($query) {
           $query->published();
         }, 'soloDivisions' => function($query) {
           $query->published();
@@ -238,14 +228,9 @@ class ResultsController extends Controller
       $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::forSheet($division->sheet);
 
-      $accessCodeForm = $formBuilder->create('Division\AccessCodeForm', [
-        'url' => route('results.division.access-protected', [$division]),
-        'method' => 'post'
-      ]);
-
       $voteResults  = $this->votedList($division->audience);
 
-      return view('results.division.show-public', compact('division', 'captions', 'accessCodeForm', 'voteResults'));
+      return view('results.division.show-public', compact('division', 'captions', 'voteResults'));
     }
 
     public function division($division_id, $access_code)

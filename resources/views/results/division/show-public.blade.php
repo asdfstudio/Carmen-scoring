@@ -6,10 +6,6 @@
 
 @section('content')
 
-
-
-		@include('results/division/access_code_form')
-
 		<h2 id="awards">Awards</h2>
 
 		<div class="individual-awards-container">
