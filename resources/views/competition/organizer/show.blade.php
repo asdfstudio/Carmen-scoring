@@ -56,7 +56,7 @@
 
   @if($divisionCount > 0)
       <p>{{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition], ['class' => 'action']) }}</p>
-      @include('division.organizer.list',['divisions' => $competition->divisions])
+      @include('division.organizer.list',['divisions' => $competition->divisions, 'scoringForms' => $divisionScoringForms])
   @elseif($roundsCount > 0)
       <p>{{ link_to_route('organizer.competition.division.create','Create your first division',[$competition], ['class' => 'action']) }}</p>
   @else

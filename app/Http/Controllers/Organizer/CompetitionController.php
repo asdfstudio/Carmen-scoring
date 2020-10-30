@@ -117,7 +117,39 @@ class CompetitionController extends Controller
         $roundsCount = $competition->rounds->count();
         $divisionCount = Division::join('rounds', 'divisions.round_id', '=', 'rounds.id')->where('rounds.competition_id', '=', $competition->id)->count();
 
-        return view('competition.organizer.show', compact('competition', 'roundsCount', 'divisionCount', 'activateScoringForm', 'completeScoringForm', 'archiveCompetitionForm'));
+        $scoringForms = [];
+        $returnUrl = route('organizer.competition.show', $id);
+
+        $activateDivisionScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
+          'method' => 'POST',
+        ])->add('redirect','hidden',['value' => $returnUrl]);
+
+        $reactivateDivisionScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm', [
+          'method' => 'POST',
+        ])->add('redirect','hidden',['value' => $returnUrl]);
+
+        $deactivateDivisionScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm', [
+          'method' => 'POST',
+        ])->add('redirect','hidden',['value' => $returnUrl]);
+
+        $finalizeDivisionScoringForm = $formBuilder->create('Scoring\FinalizeScoringForm', [
+          'method' => 'POST',
+        ])->add('redirect','hidden',['value' => $returnUrl]);
+
+        $completeDivisionScoringForm = $formBuilder->create('Scoring\CompleteScoringForm', [
+          'method' => 'POST',
+        ])->add('redirect','hidden',['value' => $returnUrl]);
+
+        $divisionScoringForms = [
+            'activate' => $activateDivisionScoringForm,
+            'reactivate' => $reactivateDivisionScoringForm,
+            'deactivate' => $deactivateDivisionScoringForm,
+            'finalize' => $finalizeDivisionScoringForm,
+            'complete' => $completeDivisionScoringForm
+        ];
+
+
+        return view('competition.organizer.show', compact('competition', 'roundsCount', 'divisionCount', 'divisionScoringForms', 'activateScoringForm', 'completeScoringForm', 'archiveCompetitionForm'));
     }
 
     /**

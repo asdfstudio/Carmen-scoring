@@ -413,6 +413,10 @@ class CompetitionDivisionController extends Controller
         return 0;
       }
 
+      if ($request->input('redirect')) {
+        return redirect($request->input('redirect'))->with('success', "$division->name scoring has been ".$msg.'.');
+      }
+
       return redirect()->route('organizer.competition.division.show',[$competition_id,$division_id])->with('success', "$division->name scoring has been ".$msg.'.');
     }
 }
