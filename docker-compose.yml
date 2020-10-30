@@ -1,0 +1,50 @@
+version: "3.5"
+services:
+  app:
+    build:
+      args:
+        user: carmen
+        uid: 1000
+      context: ./docker-compose/app/
+      dockerfile: Dockerfile
+    image: carmen
+    container_name: carmen-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - carmen
+
+  db:
+    image: mariadb:10.2
+    container_name: carmen-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+    volumes:
+      - carmen-data:/var/lib/mysql/
+    networks:
+      - carmen
+
+  nginx:
+    image: nginx:alpine
+    container_name: carmen-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - carmen
+
+volumes:
+  carmen-data:
+
+networks:
+  carmen:
+    driver: bridge

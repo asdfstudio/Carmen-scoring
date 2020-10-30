@@ -10,6 +10,8 @@ The Carmen Scoring System is built on Laravel v7 with a MariaDB v10.2.25 backend
 
 The easiest way to start developing is to use the Laravel Homestead. Once you have that vagrant box set up, you'll need to recreate the cache directories and create your own .env file from the .env.example file.  Create a database on the Homestead machine and restore from a backup. The migration don't currently work to create tables because an older one is broken.
 
+There's also a docker-compose file that will create a docker app with the database and nginx server, serving the app at http://localhost:8000.  You'll need to populate the database but it should be created using the name and password from your .env file.
+
 Assets are processed by Laravel Mix and written to /public/dist. If you need to edit any assets, do so in the /resources folder.  You can build the javascript and sass by using npm tasks, for example:
 
     npm run watch

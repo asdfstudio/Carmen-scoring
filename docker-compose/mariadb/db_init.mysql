@@ -1,0 +1,2 @@
+CREATE DATABASE showchoir;
+CREATE USER 'showchoir'
