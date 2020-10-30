@@ -22,7 +22,7 @@ use App\Carmen\Scoreboard;
 
 use Kris\LaravelFormBuilder\FormBuilder;
 
-use Event;
+use App\Events\DivisionScoringCompleted;
 use App\Events\DivisionScoringFinalized;
 
 class CompetitionDivisionController extends Controller
@@ -378,29 +378,29 @@ class CompetitionDivisionController extends Controller
     {
       $division = Division::with('round')->find($division_id);
 
-      // Activate scoring for
-      //all of the division rounds for this competition
+      // Activate scoring for the division
       if($request->input('activate'))
       {
         $division->activateScoring();
         $msg = "activated";
       }
-      // Reactivate scoring for all division rounds
+      // Reactivate scoring for the division
       elseif($request->input('reactivate'))
       {
         $division->reactivateScoring();
         $msg = "reactivated";
       }
-      // Deactivate scoring for all division rounds
+      // Deactivate scoring for the division
       elseif($request->input('deactivate'))
       {
         $division->deactivateScoring();
         $msg = "deactivated";
       }
-      // Complete scoring for all division rounds
+      // Complete scoring for the division
       elseif($request->input('complete'))
       {
         $division->completeScoring();
+        event(new DivisionScoringCompleted($division));
         $msg = "completed";
       }
       elseif($request->input('finalize'))

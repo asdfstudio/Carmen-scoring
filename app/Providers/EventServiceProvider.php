@@ -21,17 +21,10 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Event' => [
             'App\Listeners\EventListener',
         ],
-        'App\Events\RoundScoringActivated' => [
-          'App\Listeners\SyncRoundChoirsFromSources'
-        ],
-        'App\Events\RoundScoringCompleted' => [
-          'App\Listeners\SyncRoundChoirsToTarget',
+        'App\Events\DivisionScoringCompleted' => [
           'App\Listeners\ProduceFinalStandings',
-          'App\Listeners\EmailFeedbackLink',
-          'App\Listeners\SendSMSFeedbackLink',
         ],
         'App\Events\StandingRefreshNeeded' => [
-          'App\Listeners\SyncRoundChoirsToTarget',
           'App\Listeners\ProduceFinalStandings',
         ],
         'App\Events\DivisionChoirCreated' => [
@@ -42,6 +35,8 @@ class EventServiceProvider extends ServiceProvider
           'App\Listeners\RemoveChoirDivisionRawScores'
         ],
         'App\Events\DivisionScoringFinalized' => [
+          'App\Listeners\EmailFeedbackLink',
+          'App\Listeners\SendSMSFeedbackLink',
           'App\Listeners\EmailDivisionResultsLink',
           'App\Listeners\SendSMSDivisionResultsLink'
         ],

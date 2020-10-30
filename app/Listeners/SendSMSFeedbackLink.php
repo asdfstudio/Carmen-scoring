@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\RoundScoringCompleted;
+use App\Events\DivisionScoringCompleted;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -28,10 +28,10 @@ class SendSMSFeedbackLink
     /**
      * Handle the event.
      *
-     * @param  RoundScoringCompleted  $event
+     * @param  DivisionScoringCompleted  $event
      * @return void
      */
-    public function handle(RoundScoringCompleted $event)
+    public function handle(DivisionScoringCompleted $event)
     {
       // Skip sending results
       if(env('SEND_FEEDBACK_URL_SMS') == false)

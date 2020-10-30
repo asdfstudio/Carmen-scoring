@@ -66,8 +66,8 @@ Now that you have the production data, you may need to add yourself via tinker o
 - [X] Round - remove division_id - relationship is other way. be sure to write these out first.
 - [ ] Round - remove source and target - update sequences if they're not already up-to-date.
 - [ ] RoundConnection - remove, make sure relationships are preserved.
-- [ ] Standings - have a division and a round. Make sure the division is the primary link. Maybe remove round. NB: The Scoring listener works on rounds, checks division to see if it is the final division in the round.
-- [ ] Raw Scores - have a division and a round. Remove the round link?
+- [X] Standings - have a division and a round. Make sure the division is the primary link. Maybe remove round. NB: The Scoring listener works on rounds, checks division to see if it is the final division in the round.
+- [X] Raw Scores - have a division and a round. Remove the round link?
 - [X] Round and Division - move caption_weighting_id, scoring_method_id, sheet_id up to round so that it's consistent across divisions.  Move max_choirs down to division. 
 - [ ] Division Penalty - move this up to a competition or leave it at an org. Just see where this can be fixed in the UI to look up a few levels. Chop out an org-penalty API if necessary.
 - [ ] ChoirRound - Merge with ChoirDivision.  Just determines choir ordering and link to scoresheets and penalties.
@@ -76,19 +76,18 @@ Now that you have the production data, you may need to add yourself via tinker o
 
 These files in app seem to use the source/target relationship currently:
 
-- [ ] Events/RoundScoringCompleted.php
-- [ ] Forms/Round/CreateRoundForm.php
+- [X] Events/RoundScoringCompleted.php
+- [X] Forms/Round/CreateRoundForm.php
 - [ ] Http/Controllers/Judge/CompetitionDivisionRoundController.php
 - [X] Http/Controllers/Organizer/CompetitionDivisionRoundController.php
 - [ ] Http/Controllers/ResultsController.php
-- [ ] Http/Controllers/ResultsController.php
-- [ ] Listeners/AddChoirToRound.php
-- [ ] Listeners/RemoveChoirFromRound.php
-- [ ] Listeners/SyncRoundChoirs.php
-- [ ] Listeners/SyncRoundChoirsFromDivision.php
-- [ ] Listeners/SyncRoundChoirsFromSources.php
-- [ ] Listeners/SyncRoundChoirsToTarget.php
-- [ ] Listeners/SyncRoundChoirsToTarget.php
+- [X] Listeners/AddChoirToRound.php
+- [X] Listeners/RemoveChoirFromRound.php
+- [X] Listeners/SyncRoundChoirs.php
+- [X] Listeners/SyncRoundChoirsFromDivision.php
+- [X] Listeners/SyncRoundChoirsFromSources.php
+- [X] Listeners/SyncRoundChoirsToTarget.php
+- [X] Listeners/SyncRoundChoirsToTarget.php
 - [X] Policies/RoundPolicy.php
 - [X] Policies/DivisionPolicy.php
 
@@ -100,9 +99,9 @@ These files in app seem to use the source/target relationship currently:
 - [ ] competition_division_round/judge/summary.blade.php
 - [X] competition_division_round/organizer/list.blade.php
 - [X] competition_division_round/organizer/list.blade.php
-- [ ] layouts/public_results.blade.php
-- [ ] layouts/public_results.blade.php
-- [ ] scores/judge/spreadsheet.blade.php
+- [X] layouts/public_results.blade.php
+- [X] layouts/public_results.blade.php
+- [X] scores/judge/spreadsheet.blade.php
 
 
 ### UI Overview changes
@@ -116,4 +115,4 @@ Most scoring is done per-division so that won't change. But there are parts of t
 
 - [ ] As a judge, do my scores and comments from a Choir in a Division appear in the same place?
 - [ ] As an organizer, can I find the relationship between a Prelim and a Final?
-- [ ] Do the public results pages looks the same?
+- [X] Do the public results pages looks the same?

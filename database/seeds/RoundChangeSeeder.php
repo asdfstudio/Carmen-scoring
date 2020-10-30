@@ -2,11 +2,6 @@
 
 use Illuminate\Database\Seeder;
 
-use App\Events\RoundSaved;
-use App\Events\RoundScoringActivated;
-use App\Events\RoundScoringCompleted;
-
-
 class RoundChangeSeeder extends Seeder
 {
     /**

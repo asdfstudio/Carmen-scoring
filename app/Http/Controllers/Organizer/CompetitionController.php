@@ -228,18 +228,18 @@ class CompetitionController extends Controller
 
       $this->authorize('update',$competition);
 
+      // TODO: See whether the activation/deactivation of divisions is actually happening.
+
       // Activate scoring for
-      // all of the division rounds for this competition
+      // all of the divisions for this competition
       if($request->input('activate'))
       {
-        //$is_scoring_active = true;
         $competition->is_completed = false;
         $competition->is_archived = NULL;
       }
       // Complete and deactive scoring for all division rounds
       elseif($request->input('complete'))
       {
-        //$is_scoring_active = false;
         $competition->is_completed = true;
         $competition->is_archived = NULL;
       }

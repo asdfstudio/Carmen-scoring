@@ -6,22 +6,24 @@ use App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-use App\Round;
+use App\Division;
+use Illuminate\Support\Facades\Log;
 
-class RoundScoringActivated extends Event
+class DivisionScoringCompleted extends Event
 {
     use SerializesModels;
 
-    public $round;
+    public $division;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Round $round)
+    public function __construct(Division $division)
     {
-        $this->round = $round;
+        $this->division = $division;
+        //Log::debug('DivisionScoringCompleted event:'.$this->division->id);
     }
 
     /**

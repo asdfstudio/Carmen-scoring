@@ -8,9 +8,6 @@ use App\Carmen\CountExpectedScores;
 use App\RawScore;
 use App\Carmen\Scoreboard;
 use App\Carmen\Ratings;
-use Event;
-use App\Events\RoundScoringActivated;
-use App\Events\RoundScoringCompleted;
 
 class Round extends Model
 {

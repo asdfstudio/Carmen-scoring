@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\RoundScoringCompleted;
+use App\Events\DivisionScoringFinalized;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -28,10 +28,10 @@ class EmailFeedbackLink
     /**
      * Handle the event.
      *
-     * @param  RoundScoringCompleted  $event
+     * @param  DivisionScoringFinalized  $event
      * @return void
      */
-    public function handle(RoundScoringCompleted $event)
+    public function handle(DivisionScoringFinalized $event)
     {
 
         // Skip sending results
