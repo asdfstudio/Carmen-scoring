@@ -418,17 +418,14 @@ class CompetitionSoloDivisionController extends Controller
       $audience->is_dark = $data['is_dark'];
       $audience->banner_type = $data['banner_type'];
       $audience->banner_upload = $data['banner_upload'];
-      $audience->social = $data['social'];
       $audience->list_of_votes = isset($data['list_of_votes'])?$data['list_of_votes']:[];
       $audience->banner_embed = $data['banner_embed'];
       $audience->limit_result = $data['limit_result'];
       $audience->is_premium_vote = $data['is_premium_vote'];
-      $audience->is_required_login = isset($data['is_required_login'])?1:0;
       $audience->disable_vote = isset($data['disable_vote'])?1:0;
       $audience->save();
     }else{
       $data['created_at'] = date("Y-m-d H:i:s");
-      if(!isset($data['is_required_login']))$data['is_required_login'] = 0;
       if(!isset($data['disable_vote']))$data['disable_vote'] = 0;
 
       Audience::create($data);

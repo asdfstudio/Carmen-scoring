@@ -1634,6 +1634,23 @@ li.choir.card.list-group-item {
   width: 0;
   height: 0;
 }
+.disable-vote-span{
+  float: left;
+  margin-top: 6px;
+}
+.disable-vote-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  float: left;
+}
+
+.disable-vote-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
 
 .slider {
   position: absolute;

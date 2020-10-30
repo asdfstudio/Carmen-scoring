@@ -125,54 +125,20 @@
                value="@if($audience){{$audience->limit_result}}@else{{6}}@endif">
       </div>
 
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="facebook_url" class="control-label">Facebook</label>
-            <input id="facebook_url" type="text"
-                   name="social[facebook]"
-                   value="{{isset($audience)?$audience->social['facebook']:''}}"
-                   class="form-control"
-                   placeholder="Facebook URL">
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="twitter_url" class="control-label">Twitter </label>
-            <input id="twitter_url"
-                   type="text"
-                   name="social[twitter]"
-                   value="{{isset($audience)?$audience->social['twitter']:''}}"
-                   class="form-control"
-                   placeholder="Twitter URL">
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="instagram_url" class="control-label">Instagram </label>
-            <input id="instagram_url"
-                   type="text"
-                   name="social[instagram]"
-                   value="{{isset($audience)?$audience->social['instagram']:''}}"
-                   class="form-control"
-                   placeholder="Instagram URL">
-          </div>
-        </div>
-      </div>
-
       <div class="form-group">
 
-        <label class="checkbox-inline">
-          <input type="checkbox" name="is_required_login" value="1"
-                 @if(!$audience) checked @endif
-                 @if($audience) @if($audience->is_required_login)checked @endif @endif> Require login for
-          election</label>
-        <label class="checkbox-inline">
+        <span class="disable-vote-span">Disable Vote:&nbsp;&nbsp;&nbsp;</span>
+        <label class="disable-vote-switch">
           <input type="checkbox" name="disable_vote" value="1"
                  @if(!$audience) checked @endif
-                 @if($audience) @if($audience->disable_vote) checked @endif @endif> Disable Vote</label>
+                 @if($audience) @if($audience->disable_vote) checked @endif @endif>
+          <span class="slider round"></span>
+        </label>
 
       </div>
+      &nbsp;&nbsp;&nbsp;
+      <br><br><br>
+
       <button class="btn btn-primary" type="submit" name="submit">Save</button>
 
   </form>

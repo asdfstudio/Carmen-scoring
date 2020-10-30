@@ -26,6 +26,12 @@ class VoteController extends Controller
    */
   public function vote(Request $request)
   {
+    $user = Auth::user();
+
+    if (!$user){
+      return $this->requireLogin();
+    }
+
     $audientId = $request->input('audientId');
     $isSoloDivision = $request->input('isSoloDivision');
     $divisionId = $request->input('divisionId');
@@ -41,19 +47,10 @@ class VoteController extends Controller
     }
 
     $audience = Audience::find($audientId);
-    $user = Auth::user();
-
-    if (($audience->is_premium_vote && !$user) || ($audience->is_required_login && !$user)){
-      return $this->requireLogin();
-    }
 
     if (NULL === $audience) return $this->notOpen();
 
     if ($audience->disable_vote) return $this->disableVote();
-
-    if(!$audience->is_required_login) {
-      return $this->addVote(['vote_id' => $request->input('voteId'),'audience' => $audience]);
-    }
 
     if ($user->email_verified_at === "0000-00-00 00:00:00") return $this->requireActiveAccount();
 

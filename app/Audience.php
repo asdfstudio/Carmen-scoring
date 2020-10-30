@@ -21,8 +21,6 @@ class Audience extends Model
         'banner_type',
         'banner_upload',
         'banner_embed',
-        'is_required_login',
-        'social',
         'list_of_votes',
         'disable_vote',
         'limit_result',
@@ -33,7 +31,6 @@ class Audience extends Model
     ];
 
     protected $casts = [
-      'social' => 'array',
       'list_of_votes' => 'array'
     ];
 

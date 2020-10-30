@@ -100,7 +100,9 @@ class LoginController extends Controller
     if ($validator->passes()) {
       if (auth()->attempt(array('email' => $request->input('username'),
         'password' => $request->input('password')), true)) {
-        return view('votes.partial.user-header' );
+
+        $division = \App\Division::find($request->input('divisionId'));
+        return view('votes.partial.user-header' , compact('division'));
       }
       return response()->json(['error' => 'Sorry User not found.'], 500);
     }

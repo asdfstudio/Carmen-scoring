@@ -14,7 +14,8 @@
         data: {
           username: email,
           password: password,
-          _token: token
+          divisionId: $("#divisionId").val(),
+          _token: token,
         },
         error: function (data) {
           $('.screen-loading').addClass('d-none');
