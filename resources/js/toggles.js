@@ -17,34 +17,15 @@ toastr.options = {
 }
 
 $(document).ready(function(){
+  let toggleStatus = function(element) {
+    let url = $(this).data('href');
 
-  $(document).on("click",'.premium',function(){
-
-    var org_id = $(this).data('id');
-    var Url = $(this).data('href');
-
-    $.ajax({
-      type: "GET",
-      url: Url,
-      success: function (data) {
-
+    $.get(url, [], function(data) {
         Command: toastr["success"](data.message);
-      }
-    })
-  });
+      });
+  }
 
-  $(document).on("click",'.audience-vote',function(){
+  $(document).on("click",'.premium', toggleStatus);
+  $(document).on("click",'.audience-vote', toggleStatus);
 
-    var org_id = $(this).data('id');
-    var Url = $(this).data('href');
-
-    $.ajax({
-      type: "GET",
-      url: Url,
-      success: function (data) {
-
-        Command: toastr["success"](data.message);
-      }
-    })
-  });
-})
+});
