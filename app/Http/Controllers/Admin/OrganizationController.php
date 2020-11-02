@@ -222,4 +222,24 @@ class OrganizationController extends Controller
         }
         return response()->json($data, $status = 200, $headers = [], $options = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
+
+    public function updateAudienceVote($orgId){
+
+        $organization = Organization::find($orgId);
+
+        if($organization->vote_setting == 1){
+            $organization->vote_setting = 0;
+            $organization->save();
+
+            $data['message'] = $organization->name.' has audience vote access removed.';
+
+        }else{
+            $organization->vote_setting = 1;
+            $organization->save();
+
+            $data['message'] = $organization->name.' has been granted audience vote access.';
+        }
+        return response()->json($data, $status = 200, $headers = [], $options = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    }
+
 }

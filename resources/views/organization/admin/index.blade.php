@@ -20,44 +20,6 @@
 
 @section('body-footer')
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script type="text/javascript">
-	$(document).ready(function(){
-
-		$(document).on("click",'.round',function(){
-
-			var org_id = $(this).data('id');
-			var Url = '{{ route('admin.organization.premium-status', ['param']) }}';
-			var Url = Url.replace('param', org_id);
-
-			$.ajax({
-				type: "GET",
-				url: Url,
-				success: function (data) {
-					// alert();
-					Command: toastr["success"](data.message);
-
-					toastr.options = {
-						"closeButton": false,
-						"debug": false,
-						"newestOnTop": false,
-						"progressBar": false,
-						"positionClass": "toast-top-right",
-						"preventDuplicates": false,
-						"onclick": null,
-						"showDuration": "300",
-						"hideDuration": "1000",
-						"timeOut": "5000",
-						"extendedTimeOut": "1000",
-						"showEasing": "swing",
-						"hideEasing": "linear",
-						"showMethod": "fadeIn",
-						"hideMethod": "fadeOut"
-					}
-				}
-			})
-		});
-	})
-
-</script>
+<script type="text/javascript" src="/dist/js/toggles.js"></script>
 
 @endsection

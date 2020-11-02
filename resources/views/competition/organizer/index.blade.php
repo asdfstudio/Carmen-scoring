@@ -9,19 +9,6 @@
 @section('content-header')
 	<h1>Competitions</h1>
 	<ul class="actions-group">
-    @if(Auth::user()->isAdmin())
-    <li class="switch-action" style="margin-right: 20px;">
-        <span>Audience vote on/off&nbsp;&nbsp;&nbsp;</span>
-        <label class="switch" style="margin-top: -5px;" >
-          <input type="checkbox"
-                 data-organization="{{$organization->id}}"
-                 id="organization-vote" {{$organization->vote_setting?'checked':''}}
-          >
-          <span class="slider round"></span>
-        </label>
-      &nbsp;&nbsp;&nbsp;
-    </li>
-    @endif
 		@can('create','App\Competition')
 			<li>{{ link_to_route('organizer.competition.create','Add a competition',NULL,['class' => 'action']) }}</li>
 		@endcan

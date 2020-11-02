@@ -27,6 +27,9 @@ Route::group([
       'as' => 'organization.premium-status', 'uses' => 'OrganizationController@updatePremiumStatus'
     ]);
 
+    Route::get('organization/{user}/update-audience-vote', [
+        'as' => 'organization.audience-vote', 'uses' => 'OrganizationController@updateAudienceVote'
+    ]);
 
   	Route::resource('organization', 'OrganizationController');
   	Route::resource('judge', 'JudgeController');
