@@ -31,8 +31,7 @@
         <h3>Divisions</h3>
         @foreach($round->divisions as $div)
             <li class="division list-group-item">
-                <span class="name">{{ $div->name }}
-                </span>
+                <span class="name">{{ link_to_route('organizer.competition.division.show', $div->name, [$div->competition,$div]) }}</span>
                 <span class="label status {{ $div->status_slug }} pull-right">{{ $div->status }}</span>
             </li>
         @endforeach
