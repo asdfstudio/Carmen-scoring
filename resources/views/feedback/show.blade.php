@@ -13,7 +13,7 @@
   <h3>Divisions</h3>
 
   @foreach($competition->divisions as $div)
-    @foreach($div->rounds as $round)
+      {{ $round = $div->round }}
       @php
         $round_comments = $comments->where('subject_id', $round->id)->where('subject_type', 'App\Round');
         $round_recordings = $recordings->where('round_id', $round->id);
@@ -75,15 +75,14 @@
                           </li>
                         @endforeach
                       </ol>
-                    </div>   
-                  @endif            
+                    </div>
+                  @endif
                 </div>
               </li>
             @endforeach
           </ul>
         @endif
       @endif
-    @endforeach
   @endforeach
 
   <h3>Solo Divisions</h3>
@@ -92,7 +91,7 @@
       @php
         $solo_comments = $comments->where('subject_id', $soloDivision->id)->where('subject_type', 'App\SoloDivision');
         $solo_recordings = $recordings->where('division_id', $soloDivision->id);
-        
+
         $judges = collect();
         foreach($solo_comments as $comment){
            $judges->push($comment->judge);
@@ -114,9 +113,9 @@
             @if(!$solo_comments->where('recipient_id', $performer->id)->count())
               @php continue; @endphp
             @endif
-            
+
             <h5>Feedback for {{ $performer->name }}</h5>
-            
+
             <ul class="list-group" style="padding-left: 20px;">
               @foreach($judges as $judge)
                 @php

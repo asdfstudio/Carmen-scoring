@@ -24,7 +24,7 @@ class FeedbackController extends Controller
 
       $commentUrl = CommentUrl::with(['recipient', 'choir', 'competition', 'competition.divisions' => function($q) {
         $q->withoutGlobalScope('organization');
-      }, 'competition.divisions.rounds', 'competition.soloDivisions'])->where('access_code', $accessCode)->first();
+      }, 'competition.divisions.round', 'competition.soloDivisions'])->where('access_code', $accessCode)->first();
       
       if(!$commentUrl)
       {
