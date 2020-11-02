@@ -33,15 +33,18 @@ class CountExpectedScores {
 
   public function getDistinctCaptions()
   {
-    $this->captions = $this->division->round->sheet->criteria->unique('caption_id')->pluck('caption_id', 'caption_id')->toArray();
+      if (!$this->division->round->sheet) {
+          return $this->captions = collect([]);
+      }
+      $this->captions = $this->division->round->sheet->criteria->unique('caption_id')->pluck('caption_id', 'caption_id')->toArray();
 
-    foreach ($this->captions as $key => $caption) {
-      $this->captions[$key] = [
-        'judgeCount' => 0,
-        'criteriaCount' => 0,
-        'expectedTotalCount' => 0
-      ];
-    }
+      foreach ($this->captions as $key => $caption) {
+          $this->captions[$key] = [
+              'judgeCount' => 0,
+              'criteriaCount' => 0,
+              'expectedTotalCount' => 0
+          ];
+      }
   }
 
   public function countChoirs()
