@@ -786,7 +786,7 @@ $(document).ready(function() {
 
     Swal.fire({
       title: 'Are you sure?',
-      text: 'Are you sure you want to remove the choir?',
+          text: 'Are you sure you want to remove the ' + resourceType + '?',
       icon: "warning",
       showCancelButton: true,
       focusCancel: true,
