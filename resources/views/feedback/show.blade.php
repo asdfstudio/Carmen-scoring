@@ -13,8 +13,8 @@
   <h3>Divisions</h3>
 
   @foreach($competition->divisions as $div)
-      {{ $round = $div->round }}
       @php
+        $round = $div->round;
         $round_comments = $comments->where('subject_id', $round->id)->where('subject_type', 'App\Round');
         $round_recordings = $recordings->where('round_id', $round->id);
       @endphp
