@@ -26,11 +26,6 @@
 						{{ link_to_route('organizer.competition.division.judge.edit', 'Edit Captions', [$division->competition,$division,$judge], ['class' => 'action']) }}
 					</li>
 				@endcan
-				@if($judge->user)
-					<li>
-						{{ link_to_route('user.password.edit', 'Change Password', [$judge->user->id], ['class' => 'action']) }}
-					</li>
-				@endif
 			</ul>
 
 		</li>
