@@ -27,7 +27,6 @@
         <li class="spacer top"></li>
         @foreach($schedule->items as $item)
           <li class="schedule-item award" data-division-id="{{ $item->division_id }}" data-round-id="{{ $item->round_id }}" data-award-id="{{ $item->award_id }}" data-caption-id="{{ $item->caption_id }}" data-rank="{{ $item->rank }}">
-            <!-- {{ print_r($item) }} -->
             @if($item->division)
               <span class="division-name">{{ $item->division->name }}</span>
             @endif
@@ -66,7 +65,6 @@
             <ul class="awards">
               <!-- Begin division overall and caption specific awards -->
                   @foreach ($div->awardSettings as $awardSetting)
-                      <p>{{ $awardSetting }}</p>
                     @if($awardSetting->award_count > 0)
                       @php
                       $i = 1;
