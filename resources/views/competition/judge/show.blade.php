@@ -18,6 +18,4 @@
       <p>There are no solo divisions.</p>
     @endif
 
-    {{ link_to_route('judge.competition.schedule.index', 'Show Schedules', [$competition]) }}
-
 @endsection

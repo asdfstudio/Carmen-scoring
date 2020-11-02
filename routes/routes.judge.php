@@ -21,15 +21,6 @@ Route::group([
 			'as' => 'competition.show', 'uses' => 'CompetitionController@show'
 		]);
 
-
-    Route::get('competition/{competition}/schedule', [
-			'as' => 'competition.schedule.index', 'uses' => 'ScheduleController@index'
-		]);
-
-    Route::get('competition/{competition}/schedule/{schedule}', [
-			'as' => 'competition.schedule.show', 'uses' => 'ScheduleController@show'
-		]);
-
     Route::get('competition/{competition}/solo-division/{soloDivision}', [
 			'as' => 'competition.solo-division.show', 'uses' => 'SoloDivisionController@show'
 		]);
