@@ -375,6 +375,10 @@ class CompetitionSoloDivisionController extends Controller
 
       }
 
+      if ($request->input('redirect')) {
+        return redirect($request->input('redirect'))->with('success', "$soloDivision->name scoring has been updated.");
+      }
+
       return redirect()->route('organizer.competition.solo-division.show', [$competition, $soloDivision]);
     }
 

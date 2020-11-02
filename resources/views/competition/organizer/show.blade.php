@@ -67,7 +67,7 @@
 
   @if($competition->soloDivisions->count() > 0)
       <p>{{ link_to_route('organizer.competition.solo-division.create','Create a solo division',[$competition], ['class' => 'action']) }}</p>
-      @include('solo-division.organizer.list',['soloDivisions' => $competition->soloDivisions])
+      @include('solo-division.organizer.list',['soloDivisions' => $competition->soloDivisions, 'scoringForms' => $divisionScoringForms])
   @else
       <p>{{ link_to_route('organizer.competition.solo-division.create','Create your first solo division',[$competition], ['class' => 'action']) }}</p>
   @endif
