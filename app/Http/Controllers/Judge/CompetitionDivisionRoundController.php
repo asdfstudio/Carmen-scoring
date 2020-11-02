@@ -90,10 +90,14 @@ class CompetitionDivisionRoundController extends Controller
 
         $competition = $round->competition;
 
+        if ($round->divisions->count() == 0) {
+            return redirect()->route('judge.competition.show', [$competition])->with('warning', 'No choirs have been designated for this round yet.');
+        }
+
         $recording_judges = $round->judges;
 
         // TODO: Allocate these properly to divisions
-        $rating_system = $round->divisions()->first()->rating_system;
+        $rating_system = $round->divisions->first()->rating_system;
 
         $judge = Judge::with(['captions' => function($query) use ($round_id, $round) {
             $query->where('round_id', $round_id);
