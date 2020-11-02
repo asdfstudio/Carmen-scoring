@@ -42,7 +42,7 @@
   </ul>
 
   <h3>Manage Rounds</h3>
-  <p>Rounds are a group of divisions that utilize the same scoring system.</p>
+  <p>Rounds are groups of divisions that use the same scoresheet, scoring method, and judges.</p>
 
   @if($roundsCount > 0)
       <p>{{ link_to_route('organizer.competition.round.index','Manage your rounds',[$competition], ['class' => 'action']) }}</p>
@@ -52,7 +52,7 @@
   @endif
 
   <h3>Manage Divisions</h3>
-  <p>Divisions are used to organize your competition and consist of choirs and judges.</p>
+  <p>Divisions are used to organize competitor and division specific awards.</p>
 
   @if($divisionCount > 0)
       <p>{{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition], ['class' => 'action']) }}</p>
