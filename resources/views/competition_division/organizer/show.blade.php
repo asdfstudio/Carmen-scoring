@@ -158,12 +158,16 @@
         </ul>
     @endif
 
+    @if($rawScores->count() === 0)
+        <p class="alert alert-warning">Scores have not been entered. Please try again after judges have entered scores.</p>
+    @else
         {{-- Condorcet methods have an extra table that is formatted a little differently to show rankings. --}}
         @if($is_condorcet)
             @include('scores.organizer.ranked_condorcet',['choirs' => $choirs, 'judges' => $judges])
         @endif
 
-    @include('scores.organizer.composite',['choirs' => $choirs, 'judges' => $judges])
+        @include('scores.organizer.composite',['choirs' => $choirs, 'judges' => $judges])
+    @endif
 
 @endif
   </div>

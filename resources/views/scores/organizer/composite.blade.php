@@ -5,6 +5,11 @@
     $total_col_class = 'total_column weighted raw';
   }
 @endphp
+@if($rawScores->count() === 0)
+
+<p class="alert alert-warning">Scores have not been entered. Please try again after judges have entered scores.</p>
+
+@else
 <div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered scoreboard toggle-scores weighted raw rank">
   @foreach($captions as $caption)
@@ -224,3 +229,4 @@
 
 </table>
 </div>
+@endif
