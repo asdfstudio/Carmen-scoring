@@ -87,7 +87,7 @@ class DivisionPolicy extends BasePolicy
     {
         $scoresMissing = $division->isMissingScores();
 
-        if ($this->isOrgAdmin AND !$scoresMissing AND $division->status_slug() != 'completed') {
+        if ($this->isOrgAdmin AND !$scoresMissing AND !$division->is_completed) {
             return true;
         }
     }
