@@ -34,12 +34,8 @@ Route::get('results/division/{division}/audience-vote-results/{access_code}', [
   'as' => 'results.division.audience-vote-results', 'uses' => 'ResultsController@audienceVoteResult'
 ]);
 
-Route::get('results/division/{division}/round/{round}/{access_code}', [
-  'as' => 'results.division.round.show', 'uses' => 'ResultsController@divisionRound'
-]);
-
-Route::get('results/division/{division}/round-shared/{round}/{target_round_id}/{access_code}', [
-  'as' => 'results.division.round-shared.show', 'uses' => 'ResultsController@divisionRoundShared'
+Route::get('results/division/{division}/scores/{access_code}', [
+  'as' => 'results.division.scores', 'uses' => 'ResultsController@divisionScores'
 ]);
 
 Route::get('results/division/{division}/round/{round}/choir/{choir}/{access_code}', [

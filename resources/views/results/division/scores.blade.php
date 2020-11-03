@@ -7,7 +7,7 @@
 @section('content')
 
   @php
-    if($division->scoring_method_id === 3 || $division->scoring_method_id === 4){
+    if($round->scoring_method_id === 3 || $round->scoring_method_id === 4){
       $rankings_tab_name = "Condorcet";
       $rankings_class = "condorcet";
       $is_condorcet = true;
@@ -19,8 +19,8 @@
       $show_borda = false;
     }
   @endphp
-  
-	<h2>{{ $round->name}}</h2>
+
+	<h2>{{ $division->name}}</h2>
 
 	@if($show_links)
 		<div class="alert alert-info">
@@ -28,33 +28,33 @@
 			<p>Click on the name of a <strong>choir</strong> or <strong>judge</strong> to view their score details.</p>
 		</div>
 	@endif
-  
-  <p class="scoring-method-note">This division uses the <strong>{{ $division->scoringMethod->name }}</strong> method of scoring. <a href="https://carmenscoring.com/scoring-methods" target="blank">View scoring method explanations</a>.</p>
-  
+
+  <p class="scoring-method-note">This division uses the <strong>{{ $round->scoringMethod->name }}</strong> method of scoring. <a href="https://carmenscoring.com/scoring-methods" target="blank">View scoring method explanations</a>.</p>
+
   {{-- Raw Scoring, 50/50 --}}
-  @if ($division->scoring_method_id === 1 && $division->caption_weighting_id === 2)
+  @if ($round->scoring_method_id === 1 && $round->caption_weighting_id === 2)
     <ul class="list-group horizontal">
       <li class="list-group-item">
         <a class="score-view-toggle active" href="#raw" data-score-view="raw">Raw</a>
       </li>
     </ul>
   @endif
-  
+
   {{-- Raw Scoring, 60/40 --}}
-  @if ($division->scoring_method_id === 1 && $division->caption_weighting_id === 1)
+  @if ($round->scoring_method_id === 1 && $round->caption_weighting_id === 1)
     <ul class="list-group horizontal">
       <li class="list-group-item">
         <a class="score-view-toggle active division-scoring-method" href="#weighted" data-score-view="weighted">Weighted</a>
-        <span>(division scoring method, {{ $division->captionWeighting->name }})</span>
+        <span>(division scoring method, {{ $round->captionWeighting->name }})</span>
       </li>
       <li class="list-group-item">
         <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
       </li>
     </ul>
   @endif
-  
+
   {{-- Ranked Scoring, 50/50 --}}
-  @if ($division->scoring_method_id > 1 && $division->caption_weighting_id === 2)
+  @if ($round->scoring_method_id > 1 && $round->caption_weighting_id === 2)
     <ul class="list-group horizontal">
       <li class="list-group-item">
         <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>
@@ -72,7 +72,7 @@
   @endif
 
   {{-- Ranked Scoring, 60/40 --}}
-  @if ($division->scoring_method_id > 1 && $division->caption_weighting_id === 1)
+  @if ($round->scoring_method_id > 1 && $round->caption_weighting_id === 1)
     <ul class="list-group horizontal">
       <li class="list-group-item">
         <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>
@@ -85,17 +85,17 @@
     @endif
       <li class="list-group-item">
         <a class="score-view-toggle" href="#weighted" data-score-view="weighted">Weighted</a>
-        <span>({{ $division->captionWeighting->name }})</span>
+        <span>({{ $round->captionWeighting->name }})</span>
       </li>
       <li class="list-group-item">
         <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
       </li>
     </ul>
   @endif
-  
+
   {{-- Condorcet methods have an extra table that is formatted a little differently to show rankings. --}}
-  @if($division->scoring_method_id === 3 || $division->scoring_method_id === 4)
-  	@include('scores.public.ranked_condorcet',['choirs' => $choirs, 'judges' => $division->judges])
+  @if($round->scoring_method_id === 3 || $round->scoring_method_id === 4)
+  	@include('scores.public.ranked_condorcet',['choirs' => $choirs, 'judges' => $round->judges])
   @endif
 
   @include('scores.public.composite',['choirs' => $choirs, 'judges' => $judges, 'scoreboard' => $scoreboard])

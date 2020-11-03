@@ -70,10 +70,10 @@
               @endphp
               <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
-              @php $weighted = $scoreboard->weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_caption_id', $caption->id)->sum('weightedScore');@endphp
+              @php $weighted = $weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_caption_id', $caption->id)->sum('weightedScore');@endphp
               <span class="weighted score {{ $tied }}">{{ $weighted }}</span>
 
-              @php $raw = $scoreboard->rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_caption_id', $caption->id)->sum('score');@endphp
+              @php $raw = $rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_caption_id', $caption->id)->sum('score');@endphp
               <span class="raw score {{ $tied }}">{{ $raw }}</span>
 
             </td>
@@ -82,13 +82,13 @@
         @endforeach
 
         <td class="{{ $total_col_class }}">
-          @php $rank = $scoreboard->rankedScores->total($choir->id, $caption->id);@endphp
+          @php $rank = $rankedScores->total($choir->id, $caption->id);@endphp
           <span class="rank score">{{ $rank }}</span>
 
-          @php $weighted = $scoreboard->weightedScores->where('choir_id', $choir->id)->where('criterion_caption_id', $caption->id)->sum('weightedScore');@endphp
+          @php $weighted = $weightedScores->where('choir_id', $choir->id)->where('criterion_caption_id', $caption->id)->sum('weightedScore');@endphp
           <span class="weighted score">{{ $weighted }}</span>
 
-          @php $raw = $scoreboard->rawScores->where('choir_id', $choir->id)->where('criterion_caption_id', $caption->id)->sum('score');@endphp
+          @php $raw = $rawScores->where('choir_id', $choir->id)->where('criterion_caption_id', $caption->id)->sum('score');@endphp
           <span class="raw score">{{ $raw }}</span>
         </td>
         <td>
@@ -168,10 +168,10 @@
           @endphp
           <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
-          @php $weightedSubtotal = $scoreboard->weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->sum('weightedScore');@endphp
+          @php $weightedSubtotal = $weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->sum('weightedScore');@endphp
           <span class="weighted subtotal score">{{ $weightedSubtotal }}</span>
 
-          @php $raw = $scoreboard->rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->sum('score');@endphp
+          @php $raw = $rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->sum('score');@endphp
           <span class="raw score">{{ $raw }}</span>
 
           @php $penalty = $scoreboard->penalties->where('choir_id', $choir->id)->where('apply_per_judge', 1)->sum('amount');@endphp
@@ -184,13 +184,13 @@
       @endforeach
 
       <td class="{{ $total_col_class }}">
-        @php $rank = $scoreboard->rankedScores->total($choir->id);@endphp
+        @php $rank = $rankedScores->total($choir->id);@endphp
         <span class="rank score">{{ $rank }}</span>
 
-        @php $weightedSubtotal = $scoreboard->weightedScores->where('choir_id', $choir->id)->sum('weightedScore');@endphp
+        @php $weightedSubtotal = $weightedScores->where('choir_id', $choir->id)->sum('weightedScore');@endphp
         <span class="weighted subtotal score">{{ $weightedSubtotal }}</span>
 
-        @php $rawSubtotal = $scoreboard->rawScores->where('choir_id', $choir->id)->sum('score');@endphp
+        @php $rawSubtotal = $rawScores->where('choir_id', $choir->id)->sum('score');@endphp
         <span class="raw score">{{ $rawSubtotal }}</span>
 
         @php $penalty = $scoreboard->penalties->where('choir_id', $choir->id)->where('apply_per_judge', 0)->sum('amount');@endphp

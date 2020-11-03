@@ -66,7 +66,7 @@
       </th>
       @foreach($division->choirs as $choir)
         <th>
-          @php $rank = $scoreboard->rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
+          @php $rank = $scoreboard->rankedScoresForCurrentMethod->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
           {{ $rank }}
         </th>
       @endforeach
@@ -90,7 +90,7 @@
 
     @foreach($division->choirs as $choir)
     	<th>
-        @php $rank = $scoreboard->rankedScores->rank($judge->id)->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
+        @php $rank = $scoreboard->rankedScoresForCurrentMethod->rank($judge->id)->where('choir_id', $choir->id)->pluck('rank')->first();@endphp
         {{ $rank }}
       </th>
     @endforeach

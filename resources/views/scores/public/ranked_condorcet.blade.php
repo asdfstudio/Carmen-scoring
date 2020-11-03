@@ -3,12 +3,12 @@
   @foreach($captions as $caption)
 
     @php
-      if($division->caption_weighting_id === 1){
+      if($round->caption_weighting_id === 1){
         $captionTotalRank = $rankedScores->total_weighted_rank($caption->id);
       } else {
         $captionTotalRank = $rankedScores->total_raw_rank($caption->id);
       }
-      $election_key = $division->caption_weighting_id === 1 ? 'caption_'.$caption->id.'_weighted' : 'caption_'.$caption->id;
+      $election_key = $round->caption_weighting_id === 1 ? 'caption_'.$caption->id.'_weighted' : 'caption_'.$caption->id;
     @endphp
 
     <tr class="caption-header {{ $caption->background_css }}">
@@ -32,9 +32,9 @@
           </div>
         </th>
       @endforeach
-      
+
       <th>Sum</th>
-      
+
       <th>Rank</th>
 
       @if(!empty($ratings))
@@ -51,17 +51,17 @@
             {{ $choir->name }}
           @endif
         </th>
-        
+
         @foreach($choirs as $choir_comp)
           <td>
             {{ $rankedScores->pairwise_bit($election_key, $choir->id, $choir_comp->id) }}
           </td>
         @endforeach
-        
+
         <td>
           {{ $rankedScores->pairwise_bit_sum($election_key, $choir->id) }}
         </td>
-        
+
         <td>
           @php
             $rank = $captionTotalRank->where('choir_id', $choir->id)->pluck('rank')->first();
@@ -79,12 +79,12 @@
 
 
   @php
-    if($division->caption_weighting_id === 1){
+    if($round->caption_weighting_id === 1){
       $totalRank = $rankedScores->total_weighted_rank();
     } else {
       $totalRank = $rankedScores->total_raw_rank();
     }
-    $election_key = $division->caption_weighting_id === 1 ? 'overall_weighted' : 'overall';
+    $election_key = $round->caption_weighting_id === 1 ? 'overall_weighted' : 'overall';
   @endphp
 
   <tr class="caption-header caption-place">

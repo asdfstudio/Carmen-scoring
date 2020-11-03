@@ -39,13 +39,9 @@ class ResultsController extends Controller
       {
         $current_page = 'standings';
       }
-      elseif($segment == 'round')
+      elseif($segment == 'scores' OR $segment == 'round')
       {
-        $current_page = 'round_'.$request->segment(5);
-      }
-      elseif($segment == 'round-shared')
-      {
-        $current_page = 'round_shared_'.$request->segment(5);
+          $current_page = 'scores';
       }
       elseif($segment == 'audience-vote-results')
       {
@@ -256,18 +252,18 @@ class ResultsController extends Controller
       return view('results.division.standings', compact('division', 'scoreboards', 'captions', 'access_code'));
     }
 
-    public function divisionRound($division_id, $round_id, $access_code)
+    public function divisionScores($division_id, $access_code)
     {
       $this->loadDivision($division_id, $access_code);
       $division = $this->division;
       $captions = $this->captions;
 
-      $round = $division->rounds()->find($round_id);
+      $round = $division->round;
 
-      $choirs = $round->choirs;
-      $judges = $division->round->judges;
+      $choirs = $division->choirs;
+      $judges = $round->judges;
 
-      $scoreboard = new Scoreboard(['round_id' => $round_id]);
+      $scoreboard = new Scoreboard(['division_id' => $division_id]);
       $ratings = (new Ratings($division))->all();
       $rawScores = $scoreboard->extendedRawScores;
       $weightedScores = $scoreboard->extendedRawScores;
@@ -275,54 +271,8 @@ class ResultsController extends Controller
 
       $show_links = true;
 
-      return view('results.division_round.show', compact('division', 'round', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'captions', 'access_code', 'choirs', 'judges', 'show_links', 'ratings'));
+      return view('results.division.scores', compact('division', 'round', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'captions', 'access_code', 'choirs', 'judges', 'show_links', 'ratings'));
     }
-
-
-    public function divisionRoundShared($division_id, $round_id, $target_round_id, $access_code)
-    {
-      $this->loadDivision($division_id, $access_code);
-      $division = $this->division;
-      $captions = $this->captions;
-
-      $round = $division->rounds()->find($round_id)->targets()->find($target_round_id);
-
-      $source_rounds = $round->sources;
-
-      $source_choirs = collect();
-      $source_judges = collect();
-
-      $source_rounds->each(function($item, $key) use ($source_choirs, $source_judges) {
-        if($item->has('choirs'))
-        {
-          $item->choirs->each(function($choir,$key) use ($source_choirs) {
-            return $source_choirs->push($choir);
-          });
-        }
-
-        if($item->division->has('judges'))
-        {
-          $item->division->judges->each(function($judge,$key) use ($source_judges) {
-            return $source_judges->push($judge->id);
-          });
-        }
-      });
-
-      $choirs = $source_choirs;
-      $judge_ids = $source_judges->unique();
-      $judges = Judge::whereIn('id', $judge_ids)->get();
-
-      $scoreboard = new Scoreboard(['round_id' => $source_rounds->pluck('id')->toArray()]);
-      $ratings = (new Ratings($division))->all();
-      $rawScores = $scoreboard->extendedRawScores;
-      $weightedScores = $scoreboard->extendedRawScores;
-      $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
-
-      $show_links = false;
-
-      return view('results.division_round.show_shared', compact('division', 'round', 'scoreboard', 'rankedScores', 'captions', 'access_code', 'choirs', 'judges', 'show_links'));
-    }
-
 
     public function divisionRoundChoir($division_id, $round_id, $choir_id, $access_code)
     {
@@ -330,7 +280,7 @@ class ResultsController extends Controller
       $division = $this->division;
       $captions = $this->captions;
 
-      $round = $division->rounds()->find($round_id);
+      $round = $division->round;
       $choir = Choir::with(['penalties' => function($query) use ($round_id){
         $query->where('round_id', $round_id);
       }])->find($choir_id);
@@ -347,13 +297,13 @@ class ResultsController extends Controller
       $division = $this->division;
       $captions = $this->captions;
 
-      $round = $division->rounds()->find($round_id);
-      $judge = $division->round->judges()->with(['captions' => function($query) use ($division_id) {
-        $query->where('division_id', $division_id);
+      $round = $division->round;
+      $judge = $round->judges()->with(['captions' => function($query) use ($round_id) {
+        $query->where('round_id', $round_id);
       }])->find($judge_id);
 
 
-      $scoreboard = new Scoreboard(['round_id' => $round_id, 'judge_id' => $judge_id]);
+      $scoreboard = new Scoreboard(['division_id' => $division_id, 'judge_id' => $judge_id]);
 
       return view('results.division_round_judge.show', compact('division', 'round', 'judge', 'scoreboard', 'captions', 'access_code'));
     }
