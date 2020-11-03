@@ -31,7 +31,7 @@ class SendSMSFeedbackLink
      * @param  DivisionScoringCompleted  $event
      * @return void
      */
-    public function handle(DivisionScoringCompleted $event)
+    public function handle(DivisionScoringFinalized $event)
     {
       // Skip sending results
       if(env('SEND_FEEDBACK_URL_SMS') == false)
