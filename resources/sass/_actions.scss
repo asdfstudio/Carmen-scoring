@@ -21,6 +21,11 @@
     }
   }
 
+  // Fix for a very specific safari bug on the manage awards page
+  li.division-check {
+    font-size: 16px;
+  }
+
 }
 
 .action {

@@ -19,10 +19,10 @@
 	</div>
 
 	<ul class="actions-group">
-		<li>
+		<li class="division-check">
 			<a href="#" class="check-all action secondary" data-checkbox="awards">Check all</a>
 		</li>
-		<li>
+		<li class="division-check">
 			<a href="#" class="uncheck-all action secondary" data-checkbox="awards">Uncheck all</a>
 		</li>
 	</ul>
