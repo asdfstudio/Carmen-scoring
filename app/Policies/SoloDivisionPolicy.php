@@ -90,7 +90,7 @@ class SoloDivisionPolicy extends BasePolicy
 
     public function completeScoring(User $user, SoloDivision $soloSoloDivision)
     {
-      if($this->isOrgAdmin AND $soloSoloDivision->status_slug == 'active')
+      if($this->isOrgAdmin AND !$soloSoloDivision->is_completed)
       {
         return true;
       }
