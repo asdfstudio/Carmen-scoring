@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\DivisionScoringCompleted;
+use App\Events\DivisionScoringFinalized;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
