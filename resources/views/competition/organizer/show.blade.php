@@ -52,7 +52,7 @@
   @endif
 
   <h3>Manage Divisions</h3>
-  <p>Divisions are used to organize competitor and division specific awards.</p>
+  <p>Divisions are used to organize competitors and division specific awards.</p>
 
   @if($divisionCount > 0)
       <p>{{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition], ['class' => 'action']) }}</p>
