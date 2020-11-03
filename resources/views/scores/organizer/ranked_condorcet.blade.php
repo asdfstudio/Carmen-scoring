@@ -29,13 +29,13 @@
       @foreach($choirs as $choir)
         <th>
           <div class="sideways-header">
-            {{ link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$round->division->competition,$round->division,$round,$choir]) }}
+              {{ link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$division->competition,$division,$division->round,$choir]) }}
           </div>
         </th>
       @endforeach
-      
+
       <th>Sum</th>
-      
+
       <th>Rank</th>
 
       @if(!empty($ratings))
@@ -46,19 +46,19 @@
     @foreach($choirs as $choir)
       <tr>
         <th>
-          {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
+            {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$division->competition,$division,$division->round,$choir]) }}
         </th>
-        
+
         @foreach($choirs as $choir_comp)
           <td>
             {{ $rankedScores->pairwise_bit($election_key, $choir->id, $choir_comp->id) }}
           </td>
         @endforeach
-        
+
         <td>
           {{ $rankedScores->pairwise_bit_sum($election_key, $choir->id) }}
         </td>
-        
+
         <td>
           @php
             $rank = $captionTotalRank->where('choir_id', $choir->id)->pluck('rank')->first();
@@ -97,7 +97,7 @@
     @foreach($choirs as $choir)
       <th>
         <div class="sideways-header">
-          {{ link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$round->division->competition,$round->division,$round,$choir]) }}
+            {{ link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$division->competition,$division,$division->round,$choir]) }}
         </div>
       </th>
     @endforeach
@@ -114,7 +114,7 @@
   @foreach($choirs as $choir)
     <tr>
       <th>
-        {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$round->division->competition,$round->division,$round,$choir]) }}
+            {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$division->competition,$division,$division->round,$choir]) }}
       </th>
       @foreach($choirs as $choir_comp)
         <td>{{ $rankedScores->pairwise_bit($election_key, $choir->id, $choir_comp->id) }}</td>
