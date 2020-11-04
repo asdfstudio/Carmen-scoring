@@ -36,3 +36,8 @@
   @include('scores.organizer.choir_raw',['division' => $division])
 
 @endsection
+
+@push('own-scripts')
+  <script src="{{asset('dist/js/vendor/dropzone.js')}}" type="text/javascript"></script>
+  <script src="{{asset('dist/js/recording.js')}}" type="text/javascript"></script>
+@endpush

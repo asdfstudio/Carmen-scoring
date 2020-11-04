@@ -17,7 +17,7 @@
     <ul class="actions-group">
         <li>{{ link_to_route('organizer.competition.division.show', 'Back to the Division', [$competition,$division],['class' => 'action']) }}</li>
     </ul>
-    <h2>Edit Choirs and Judges</h2>
+    <h2>Edit Choirs</h2>
 
     @include('choir.board.board-list')
 
