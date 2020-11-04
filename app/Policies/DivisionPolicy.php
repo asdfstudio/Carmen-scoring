@@ -132,7 +132,7 @@ class DivisionPolicy extends BasePolicy
 
     public function assignPenalty(User $user, Division $division)
     {
-        if($this->isOrgAdmin AND $division->status_slug() == 'activated')
+        if($this->isOrgAdmin AND $division->status_slug() != 'finalized')
         {
             return true;
         }
