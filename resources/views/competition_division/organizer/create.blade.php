@@ -45,5 +45,8 @@
         @endcan
     @endif
     </div>
-
 @endsection
+
+@push('own-scripts')
+<script src="/dist/js/validation.js"></script>
+@endpush

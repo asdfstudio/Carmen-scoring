@@ -157,7 +157,7 @@ class CreateRoundForm extends Form
       $this->add('submit', 'submit', [
         'label' => 'Save Round',
         'value' => 'submit',
-        'attr' => ['class' => 'btn btn-primary', 'name' => 'submit']
+        'attr' => ['class' => 'btn btn-primary createRound', 'name' => 'submit']
       ]);
 
       // $this->add('submit_create_another', 'submit', [

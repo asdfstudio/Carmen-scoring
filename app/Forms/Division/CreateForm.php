@@ -259,14 +259,14 @@ class CreateForm extends Form
 		$this->add('submit', 'submit', [
           'label' => 'Save Division',
           'value' => 'submit',
-          'attr' => ['class' => 'btn btn-primary', 'name' => 'submit']
+          'attr' => ['class' => 'btn btn-primary createDivision', 'name' => 'submit']
         ]);
 
         $is_new = $this->getData('is_new');
         if(isset($is_new)) {
             $this->add('submit_create_another', 'submit', [
                 'label' => 'Save & Create Another',
-                'attr' => ['class' => 'btn btn-secondary', 'name' => 'submit_create_another']
+                'attr' => ['class' => 'btn btn-secondary createDivision', 'name' => 'submit_create_another']
             ]);
         }
     }

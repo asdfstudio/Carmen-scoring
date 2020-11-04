@@ -13,3 +13,7 @@
 @section('content')
 		{!! form($form) !!}
 @endsection
+
+@push('own-scripts')
+<script src="/dist/js/validation.js"></script>
+@endpush
