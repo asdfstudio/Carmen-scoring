@@ -15,6 +15,7 @@ use App\Choir;
 use App\Round;
 use App\RawScore;
 use App\Caption;
+use App\Sheet;
 use App\Judge;
 use App\CommentUrl;
 
@@ -124,6 +125,11 @@ class CompetitionRoundController extends Controller
         $this->authorize('create','App\Round', $competition);
         $selected = [];
 
+        $sheets = Sheet::with('criteria')->get()->where('is_retired', 0);
+        foreach ($sheets as $sheet) {
+            $sheet->captions = Caption::forSheet($sheet);
+        }
+
         $form = $formBuilder->create('Round\CreateRoundForm', [
             'method' => 'POST',
             'class' => 'create-round-form',
@@ -133,7 +139,7 @@ class CompetitionRoundController extends Controller
             'url' => route('organizer.competition.round.store', [$competition])
         ]);
 
-        return view('competition_round.organizer.create', compact('competition','form'));
+        return view('competition_round.organizer.create', compact('competition','form', 'sheets'));
     }
 
 
@@ -323,6 +329,12 @@ class CompetitionRoundController extends Controller
         $this->authorize('update', $round);
         $selected = [];
 
+        $sheets = Sheet::with('criteria')->get()->where('is_retired', 0);
+        foreach ($sheets as $sheet) {
+            $sheet->captions = Caption::forSheet($sheet);
+        }
+
+
         $form = $formBuilder->create('Round\CreateRoundForm', [
             'method' => 'PATCH',
             'model' => $round,
@@ -339,7 +351,7 @@ class CompetitionRoundController extends Controller
         ]);
 
 
-        return view('competition_round.organizer.edit', compact('round', 'form', 'deleteForm', ));
+        return view('competition_round.organizer.edit', compact('round', 'form', 'sheets', 'deleteForm', ));
     }
 
 

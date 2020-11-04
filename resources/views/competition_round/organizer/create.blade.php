@@ -12,6 +12,7 @@
 
 @section('content')
 		{!! form($form) !!}
+		@include('sheets.partial.info-wrapper')
 @endsection
 
 @push('own-scripts')

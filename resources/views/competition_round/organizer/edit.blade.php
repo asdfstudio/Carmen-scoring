@@ -20,4 +20,5 @@
       {!! form($deleteForm) !!}
     @endcan
 
+	@include('sheets.partial.info-wrapper')
 @endsection
