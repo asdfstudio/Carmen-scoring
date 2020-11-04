@@ -48,6 +48,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\CommentSaved' => [
           'App\Listeners\CreateCommentsUrlIfNonexistent'
+        ],
+        'App\Events\PerformanceOrderChanged' => [
+            'App\Listeners\UpdatePerformanceOrder'
         ]
     ];
 
