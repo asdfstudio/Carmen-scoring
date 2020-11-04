@@ -90,8 +90,9 @@ class CompetitionDivisionRoundChoirController extends Controller
 		}
 
 
-    public function assign_penalty($competition_id, $division_id, $choir_id)
+    public function assign_penalty(Request $request,$competition_id, $division_id, $choir_id)
     {
+
       $division = Division::find($division_id);
       $round = $division->round;
 
@@ -110,12 +111,14 @@ class CompetitionDivisionRoundChoirController extends Controller
       // }])->get();
       $penalties->load('choirs');
 
+      $redirect = $request->input('redirect');
       // Display
-      return view('competition_division_round_choir_penalty.organizer.assign',compact('choir', 'round', 'division', 'penalties', 'selected_penalties'));
+      return view('competition_division_round_choir_penalty.organizer.assign',compact('choir', 'round', 'division', 'penalties', 'selected_penalties', 'redirect'));
     }
 
     public function update_penalty(Request $request, $competition_id, $division_id, $choir_id)
     {
+
       $division = Division::find($division_id);
       $round = $division->round;
 
@@ -136,6 +139,11 @@ class CompetitionDivisionRoundChoirController extends Controller
       $choir->penalties()->wherePivot('round_id', $round_id)->sync($data);
 
       // Set flash data and redirect
+      $redirect = $request->input('redirect');
+      if(isset($redirect) && $redirect == 'choir_score'){
+
+        return redirect()->route('organizer.competition.division.round.choir.show', [$competition_id, $division_id, $round, $choir])->with('success','Choir Penalties Assigned.');
+      }
       return redirect()->route('organizer.competition.division.penalty.index', [$competition_id, $division_id])->with('success','Choir Penalties Assigned.');
     }
 

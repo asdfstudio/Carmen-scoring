@@ -1,9 +1,10 @@
 @if($penalties->isEmpty())
 	<p>There are no penalties.</p>
 @endif
-
 @if(!$penalties->isEmpty())
     {!! Form::open(['url' => route('organizer.competition.division.penalty.choir.update_assign', [$round->competition, $division, $choir]), 'method' => 'post']) !!}
+	<input type="hidden" name="redirect" value="{{$redirect}}" />
+
 <ul class="list-group">
   @foreach($penalties as $penalty)
 		<li class="penalty list-group-item">

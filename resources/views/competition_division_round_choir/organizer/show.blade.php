@@ -11,12 +11,14 @@
 	</ul>
 @endsection
 
-
 @section('content')
 
 	<h2>Penalties</h2>
 
-	{{ link_to_route('organizer.competition.division.penalty.choir.assign', 'Assign / Remove Penalties', [$competition->id, $division->id, $round->id, $choir->id], ['class' => 'action'])}}
+	<!-- The organizers will need to assign/remove penalties after scores have been completed, but never after scores have been sent. -->
+	@if($division->status_slug() != 'finalized')
+		{{ link_to_route('organizer.competition.division.penalty.choir.assign', 'Assign / Remove Penalties', [$competition->id, $division->id, $choir->id, 'redirect=choir_score'], ['class' => 'action'])}}
+	@endif
 
 	<hr>
 
