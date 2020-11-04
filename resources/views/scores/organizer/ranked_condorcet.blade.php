@@ -8,12 +8,12 @@
   @foreach($captions as $caption)
 
     @php
-      if($division->caption_weighting_id === 1){
+      if($round->caption_weighting_id === 1){
         $captionTotalRank = $rankedScores->total_weighted_rank($caption->id);
       } else {
         $captionTotalRank = $rankedScores->total_raw_rank($caption->id);
       }
-      $election_key = $division->caption_weighting_id === 1 ? 'caption_'.$caption->id.'_weighted' : 'caption_'.$caption->id;
+      $election_key = $round->caption_weighting_id === 1 ? 'caption_'.$caption->id.'_weighted' : 'caption_'.$caption->id;
     @endphp
 
     <tr class="caption-header {{ $caption->background_css }}">
@@ -27,11 +27,11 @@
       <th></th>
 
       @foreach($choirs as $choir)
-        <th>
-          <div class="sideways-header">
-              {{ link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$division->competition,$division,$division->round,$choir]) }}
-          </div>
-        </th>
+          <th>
+              <div class="sideways-header">
+                  {{ link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$competition, $choir->pivot->division_id, $round, $choir]) }}
+              </div>
+          </th>
       @endforeach
 
       <th>Sum</th>
@@ -46,7 +46,7 @@
     @foreach($choirs as $choir)
       <tr>
         <th>
-            {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$division->competition,$division,$division->round,$choir]) }}
+                {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$competition, $choir->pivot->division_id, $round, $choir]) }}
         </th>
 
         @foreach($choirs as $choir_comp)
@@ -76,12 +76,12 @@
 
 
   @php
-    if($division->caption_weighting_id === 1){
+    if($round->caption_weighting_id === 1){
       $totalRank = $rankedScores->total_weighted_rank();
     } else {
       $totalRank = $rankedScores->total_raw_rank();
     }
-    $election_key = $division->caption_weighting_id === 1 ? 'overall_weighted' : 'overall';
+    $election_key = $round->caption_weighting_id === 1 ? 'overall_weighted' : 'overall';
   @endphp
 
   <tr class="caption-header caption-place">
@@ -97,7 +97,7 @@
     @foreach($choirs as $choir)
       <th>
         <div class="sideways-header">
-            {{ link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$division->competition,$division,$division->round,$choir]) }}
+                {{ link_to_route('organizer.competition.division.round.choir.show',$choir->name,[$competition, $choir->pivot->division_id, $round, $choir]) }}
         </div>
       </th>
     @endforeach
@@ -114,7 +114,7 @@
   @foreach($choirs as $choir)
     <tr>
       <th>
-            {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$division->competition,$division,$division->round,$choir]) }}
+                {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$competition, $choir->pivot->division_id, $round, $choir]) }}
       </th>
       @foreach($choirs as $choir_comp)
         <td>{{ $rankedScores->pairwise_bit($election_key, $choir->id, $choir_comp->id) }}</td>

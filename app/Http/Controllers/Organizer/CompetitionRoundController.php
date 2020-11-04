@@ -250,6 +250,11 @@ class CompetitionRoundController extends Controller
         $competition = $round->competition;
         $divisions = $round->divisions;
 
+        $choirs = collect([]);
+        foreach ($round->divisions as $division) {
+            $choirs = $choirs->concat($division->choirs);
+        }
+
         $judges = $round->judges;
         $caption_ids = $round->sheet->caption_ids;
         $captions = Caption::forSheet($round->sheet);
@@ -260,8 +265,8 @@ class CompetitionRoundController extends Controller
         $weightedScores = $scoreboard->extendedRawScores;
         $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
-        return view('competition_round.organizer.scores', compact('rawScores', 'weightedScores', 'rankedScores', 'round', 'competition', 'divisions',
-            'scoreboard', 'judges', 'captions'));
+        return view('competition_round.organizer.scores', compact('rawScores', 'weightedScores', 'rankedScores',
+            'round', 'competition', 'scoreboard', 'judges', 'choirs', 'captions'));
     }
 
 

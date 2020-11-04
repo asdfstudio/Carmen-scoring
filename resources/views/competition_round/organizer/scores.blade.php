@@ -96,14 +96,12 @@
     </ul>
   @endif
 
-  @foreach ($round->divisions as $division)
   {{-- Condorcet methods have an extra table that is formatted a little differently to show rankings. --}}
   @if($round->scoring_method_id === 3 || $round->scoring_method_id === 4)
-      @include('scores.organizer.ranked_condorcet', ['choirs' => $division->choirs, 'judges' => $judges])
+      @include('scores.organizer.ranked_condorcet', ['choirs' => $choirs, 'judges' => $judges])
   @endif
 
-  @include('scores.organizer.composite', ['choirs' => $division->choirs, 'judges' => $judges])
-  @endforeach
+  @include('scores.organizer.composite', ['choirs' => $choirs, 'judges' => $judges])
 
   </div>
 

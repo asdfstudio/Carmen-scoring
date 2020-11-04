@@ -156,15 +156,16 @@ class CompetitionDivisionController extends Controller
      */
     public function show($competition_id, $division_id, FormBuilder $formBuilder)
     {
-        $division = Division::with(['round', 'competition', 'choirs', 'round.judges' => function ($query) {
+        $division = Division::with(['choirs', 'round', 'round.sheet', 'round.competition', 'round.judges' => function ($query) {
             $query->groupBy('judge_id');
         }])->find($division_id);
 
-      $competition = $division->round->competition;
+      $round = $division->round;
+      $competition = $round->competition;
       $captions = Caption::forSheet($division->round->sheet);
-      $judges = $division->round->judges;
+      $judges = $round->judges;
       $choirs = $division->choirs;
-      $caption_ids = $division->round->sheet->caption_ids;
+      $caption_ids = $round->sheet->caption_ids;
       $captions = Caption::forSheet($division->round->sheet);
       $ratings = (new Ratings($division))->all();
 
@@ -206,7 +207,7 @@ class CompetitionDivisionController extends Controller
 
         $include_division_navigation_bar = TRUE;
 
-        return view('competition_division.organizer.show', compact('include_division_navigation_bar', 'competition', 'division', 'judges', 'choirs',
+        return view('competition_division.organizer.show', compact('include_division_navigation_bar', 'round', 'competition', 'division', 'judges', 'choirs',
             'captions', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores',
             'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'finalizeScoringForm'));
     }

@@ -1,7 +1,7 @@
 @php
   // Hide the "Total" column for Consensus Ordinal Rank (scoring method 5)
   $total_col_class = 'total_column weighted raw rank';
-  if($division->scoring_method_id == 5){
+  if($round->scoring_method_id == 5){
     $total_col_class = 'total_column weighted raw';
   }
 @endphp
@@ -15,7 +15,7 @@
   @foreach($captions as $caption)
 
     @php
-      if($division->caption_weighting_id === 1){
+      if($round->caption_weighting_id === 1){
         $captionTotalRank = $rankedScores->total_weighted_rank($caption->id);
       } else {
         $captionTotalRank = $rankedScores->total_raw_rank($caption->id);
@@ -52,7 +52,7 @@
     @foreach($choirs as $choir)
       <tr>
         <th>
-          {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$division->competition,$division,$division->round,$choir]) }}
+        {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$competition, $choir->pivot->division_id, $round, $choir]) }}
         </th>
         @foreach($judges as $judge)
 
@@ -64,7 +64,7 @@
             <td>
               @php
                 $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();
-                $tied = $division->scoring_method_id !== 1 && !empty($rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+                $tied = $round->scoring_method_id !== 1 && !empty($rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
               @endphp
               <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
@@ -128,7 +128,7 @@
       </th>
     @endforeach
 
-    @if($division->scoring_method_id !== 5)
+    @if($round->scoring_method_id !== 5)
     <th>Total</th>
     @endif
 
@@ -140,7 +140,7 @@
   </tr>
 
   @php
-    if($division->caption_weighting_id === 1){
+    if($round->caption_weighting_id === 1){
       $totalRank = $rankedScores->total_weighted_rank();
     } else {
       $totalRank = $rankedScores->total_raw_rank();
@@ -152,7 +152,7 @@
   @foreach($choirs as $choir)
     <tr>
       <th>
-        {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$division->competition,$division,$division->round,$choir]) }}
+        {{ link_to_route('organizer.competition.division.round.choir.show',$choir->full_name,[$competition, $choir->pivot->division_id, $round, $choir]) }}
       </th>
       @foreach($judges as $judge)
         <td>
