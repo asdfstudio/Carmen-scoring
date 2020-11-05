@@ -327,7 +327,7 @@ class CompetitionSoloDivisionController extends Controller
 
         }
 
-        return redirect()->route('organizer.competition.solo-division.manage', [$competition, $id])->with('success', 'Performers saved!');
+        return redirect()->route('organizer.competition.solo-division.show', [$competition, $id])->with('success', 'Performers saved!');
     }
 
 
