@@ -17,8 +17,8 @@ class DivisionSeeder extends Seeder
     $divisions = [
       ['round_id' => $round1, 'name' => 'Demo Band'],
       ['round_id' => $round1, 'name' => 'Demo High School Division 1'],
-      ['round_id' => $round2, 'name' => 'Demo High School Division 2'],
-      ['round_id' => $round1, 'name' => 'Demo High School Finals'],
+      ['round_id' => $round1, 'name' => 'Demo High School Division 2'],
+      ['round_id' => $round2, 'name' => 'Demo High School Finals'],
     ];
 
     foreach ($divisions as $division) {

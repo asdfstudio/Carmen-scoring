@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Round;
+use App\Choir;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -17,14 +18,18 @@ class PerformanceOrderChanged
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $round;
+    public $choir;
+
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Round $round)
+    public function __construct(Round $round, Choir $choir = null)
     {
         $this->round = $round;
+        $this->choir = $choir;
     }
 
     /**
