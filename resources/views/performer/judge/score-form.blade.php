@@ -1,5 +1,5 @@
 @if(!$soloDivision->sheet->criteria->isEmpty())
-{!! Form::open(array('route' => array('judge.competition.solo-division.performer.score.store', $competition, $soloDivision, $performer), 'method' => 'post', 'class' => 'scorecard autosave')) !!}
+{!! Form::open(array('route' => array('judge.competition.solo-division.performer.score.store', $competition, $soloDivision, $performer), 'method' => 'post', 'class' => 'scorecard autosave' , 'id' => 'solo-score-form')) !!}
 <div class="scorecard">
 
 

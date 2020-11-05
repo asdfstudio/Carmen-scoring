@@ -457,6 +457,8 @@ $(document).ready(function() {
     // Give the judge an opportunity to submit as-is or
     // Return to scorecard to fill in missing values
     $('form.scorecard').on('submit', function(e) {
+      e.preventDefault();
+
       var score_inputs = $('input.criterion-score-input');
       var score_inputs_count = score_inputs.length;
       var inputs_missing_scores_count = 0;
@@ -474,11 +476,8 @@ $(document).ready(function() {
 
       if(inputs_missing_scores_count > 0)
       {
-        if(confirm('Some of your scoring criteria are missing values. Choose "OK" to submit your scores as-is. Choose "Cancel" to stop submission and continue entering your scores.') == false)
-        {
-          e.preventDefault();
-        }
-
+          var dialogText = 'Some of your scoring criteria are missing values. Choose "OK" to submit your scores as-is. Choose "Cancel" to stop submission and continue entering your scores.';
+          confirmAndSubmit(dialogText,'solo-score-form',null);
       }
 
     });
