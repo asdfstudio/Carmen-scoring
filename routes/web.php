@@ -38,6 +38,10 @@ Route::get('results/division/{division}/scores/{access_code}', [
   'as' => 'results.division.scores', 'uses' => 'ResultsController@divisionScores'
 ]);
 
+Route::get('results/division/{division}/round/{round}/scores/{access_code}', [
+  'as' => 'results.round.scores', 'uses' => 'ResultsController@roundScores'
+]);
+
 Route::get('results/division/{division}/round/{round}/choir/{choir}/{access_code}', [
   'as' => 'results.division.round.choir.show', 'uses' => 'ResultsController@divisionRoundChoir'
 ]);
@@ -49,6 +53,7 @@ Route::get('results/division/{division}/round/{round}/judge/{judge}/{access_code
 Route::get('results/division/{division}/{access_code}', [
   'as' => 'results.division.show', 'uses' => 'ResultsController@division'
 ]);
+
 
 Route::get('results/division/{division}', [
   'as' => 'results.division.show-public', 'uses' => 'ResultsController@divisionPublic'

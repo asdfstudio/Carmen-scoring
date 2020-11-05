@@ -39,9 +39,13 @@ class ResultsController extends Controller
       {
         $current_page = 'standings';
       }
-      elseif($segment == 'scores' OR $segment == 'round')
+      elseif($segment == 'scores')
       {
-          $current_page = 'scores';
+          $current_page = 'division-scores';
+      }
+      elseif($segment == 'round')
+      {
+          $current_page = 'round-scores';
       }
       elseif($segment == 'audience-vote-results')
       {
@@ -252,6 +256,52 @@ class ResultsController extends Controller
       return view('results.division.standings', compact('division', 'scoreboards', 'captions', 'access_code'));
     }
 
+    public function roundScores($division_id, $round_id, $access_code)
+    {
+        $round = Round::with([
+            'competition', 'divisions', 'divisions.choirs',
+            'judges' => function($query) {
+                $query->groupBy('judge_id');
+            },
+            'judges.captions' => function($query) use ($round_id) {
+                $query->where('round_id',$round_id);
+            },
+            'judges.captions.criteria'
+        ])->find($round_id);
+
+        $competition = $round->competition;
+
+        // Check the auth code and make sure the division is published
+        $division = Division::where('access_code', $access_code)
+            ->where('is_published', 1)
+            ->find($division_id);
+
+        if (!$division) {
+            return redirect('results.competition.show-public', [$competition])->with('success', 'Sorry, that page doesn\'t exist');
+        }
+
+        $choirs = collect([]);
+        foreach ($round->divisions as $division) {
+            $choirs = $choirs->concat($division->choirs);
+        }
+
+        $judges = $round->judges;
+        $caption_ids = $round->sheet->caption_ids;
+        $captions = Caption::forSheet($round->sheet);
+
+
+        $scoreboard = new Scoreboard(['round_id' => $round_id]);
+        $rawScores = $scoreboard->extendedRawScores;
+        $weightedScores = $scoreboard->extendedRawScores;
+        $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
+
+        $show_links = true;
+        $pageName = $round->name." Scores";
+
+        return view('results.division.scores', compact('division', 'round', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'captions', 'access_code', 'choirs', 'judges', 'show_links', 'pageName'));
+
+    }
+
     public function divisionScores($division_id, $access_code)
     {
       $this->loadDivision($division_id, $access_code);
@@ -269,9 +319,11 @@ class ResultsController extends Controller
       $weightedScores = $scoreboard->extendedRawScores;
       $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
 
+      $pageName = $division->name." Scores";
+
       $show_links = true;
 
-      return view('results.division.scores', compact('division', 'round', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'captions', 'access_code', 'choirs', 'judges', 'show_links', 'ratings'));
+      return view('results.division.scores', compact('division', 'round', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores', 'captions', 'access_code', 'choirs', 'judges', 'show_links', 'pageName'));
     }
 
     public function divisionRoundChoir($division_id, $round_id, $choir_id, $access_code)

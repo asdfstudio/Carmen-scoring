@@ -1,7 +1,7 @@
 @php
   // Hide the "Total" column for Consensus Ordinal Rank (scoring method 5)
   $total_col_class = 'total_column weighted raw rank';
-  if($division->scoring_method_id == 5){
+  if($round->scoring_method_id == 5){
     $total_col_class = 'total_column weighted raw';
   }
 @endphp
@@ -10,7 +10,7 @@
   @foreach($captions as $caption)
 
     @php
-      if($division->caption_weighting_id === 1){
+      if($round->caption_weighting_id === 1){
         $captionTotalRank = $rankedScores->total_weighted_rank($caption->id);
       } else {
         $captionTotalRank = $rankedScores->total_raw_rank($caption->id);
@@ -51,7 +51,7 @@
       <tr>
         <th>
           @if($show_links)
-            {{ link_to_route('results.division.round.choir.show', $choir->full_name, [$division, $round, $choir, $access_code]) }}
+            {{ link_to_route('results.division.round.choir.show', $choir->full_name, [$choir->pivot->division_id, $round, $choir, $access_code]) }}
           @else
             {{ $choir->full_name }}
           @endif
@@ -66,7 +66,7 @@
             <td>
               @php
                 $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();
-                $tied = $division->scoring_method_id !== 1 && !empty($rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
+                $tied = $round->scoring_method_id !== 1 && !empty($rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
               @endphp
               <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
@@ -142,7 +142,7 @@
   </tr>
 
   @php
-    if($division->caption_weighting_id === 1){
+    if($round->caption_weighting_id === 1){
       $totalRank = $rankedScores->total_weighted_rank();
     } else {
       $totalRank = $rankedScores->total_raw_rank();
@@ -155,7 +155,7 @@
     <tr>
       <th>
         @if($show_links)
-          {{ link_to_route('results.division.round.choir.show', $choir->full_name, [$division, $round, $choir, $access_code]) }}
+          {{ link_to_route('results.division.round.choir.show', $choir->full_name, [$choir->pivot->division_id, $round, $choir, $access_code]) }}
         @else
           {{ $choir->full_name }}
         @endif

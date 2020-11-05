@@ -20,7 +20,7 @@
     }
   @endphp
 
-	<h2>{{ $division->name}}</h2>
+  <h2>{{ $pageName }}</h2>
 
 	@if($show_links)
 		<div class="alert alert-info">
