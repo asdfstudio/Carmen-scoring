@@ -127,11 +127,14 @@
 
       <div class="form-group">
 
-        <label class="checkbox-inline">
+        <span class="disable-vote-span">Disable Vote:&nbsp;&nbsp;&nbsp;</span>
+        <label class="disable-vote-switch">
           <input type="checkbox" name="disable_vote" value="1"
                  @if(!$audience) checked @endif
-                 @if($audience) @if($audience->disable_vote)checked @endif @endif> Disable Vote</label>
-
+                 @if($audience) @if($audience->disable_vote)checked @endif @endif>
+          <span class="slider round"></span>
+        </label>
+        <br><br>
       </div>
       <button class="btn btn-primary" type="submit" name="submit">Save</button>
 
