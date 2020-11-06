@@ -59,24 +59,6 @@ class EmailDivisionResultsLink
           }
         });
 
-        // Division > Final Round > Choirs
-        $finalRound = $division->rounds()->orderBy('sequence', 'DESC')->first();
-
-        if (!$finalRound) return;
-
-        $finalRound->choirs->each(function($choir,$key) use ($directors) {
-          foreach($choir->directors as $director)
-          {
-            if($director->email)
-            {
-              $directors->push($director);
-            }
-          }
-        });
-
-        // Get unique directors
-        $directors = $directors->unique('id');
-
         Log::debug('Directors: ' . $directors);
         
         foreach($directors as $director){
