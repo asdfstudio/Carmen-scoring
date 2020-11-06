@@ -80,7 +80,7 @@ class DivisionPolicy extends BasePolicy
 
     public function reactivateScoring(User $user, $division)
     {
-        return ($this->isOrgAdmin AND !$division->isNew() AND $division->status_slug == 'deactivated');
+        return ($this->isOrgAdmin AND !$division->isNew() AND !$division->is_scoring_active);
     }
 
     public function completeScoring(User $user, $division)
