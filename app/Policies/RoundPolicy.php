@@ -66,6 +66,12 @@ class RoundPolicy extends BasePolicy
 
     public function importJudges(User $user, Round $round)
     {
+        // Can't import if there are no other rounds
+        if ($round->competition->rounds()->count() === 1)
+        {
+            return false;
+        }
+
         if($this->isOrgAdmin AND $round->status_slug() == 'active' AND $round->competition->is_completed == false)
         {
             return true;
