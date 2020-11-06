@@ -20,7 +20,8 @@ class CompleteScoringForm extends Form
           $btnAttr = ['class' => 'action'];
         }
 
-        $btnAttr['onclick'] = 'confirmAndSubmit("You are about to lock in scores for this division. This action prevents the judges from making any changes and it calculates the results. This action can be undone by clicking ‘activate scoring’.", "complete_scoring_form");';
+        $btnAttr['onclick'] = 'confirmAndSubmit("You are about to lock in scores for this division. This action prevents the judges from making any changes and it calculates the results. '.
+            'This action can be undone by clicking ‘activate scoring’.", null, this);';
 
         $this->add('complete','hidden',['value' => '1']);
         $this->add('button', 'button', [
