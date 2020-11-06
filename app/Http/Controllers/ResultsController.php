@@ -277,7 +277,7 @@ class ResultsController extends Controller
             ->find($division_id);
 
         if (!$division) {
-            return redirect('results.competition.show-public', [$competition])->with('success', 'Sorry, that page doesn\'t exist');
+            return redirect(route('results.competition.show-public', [$competition]))->with('success', 'Sorry, that page doesn\'t exist');
         }
 
         $choirs = collect([]);
