@@ -16,7 +16,7 @@
   <tr>
 
     <td>@if($choir->school) {{ $choir->school->name }} @endif</td>
-    <td>{{ link_to_route('organizer.competition.division.choir.show',$choir->name,[$division->competition,$division,$choir]) }}</td>
+    <td>{{ $choir->name }}</td>
     <td>@if($choir->school AND $choir->school->place) {{ $choir->school->place->city }} @endif</td>
     <td>@if($choir->school AND $choir->school->place) {{ $choir->school->place->state }} @endif</td>
   </tr>
