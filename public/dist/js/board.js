@@ -574,8 +574,9 @@ $(document).ready(function() {
         else if((result.value || {}).status === 'failed') {
           if(result.value.errors.includes('users_email_unique')) {
             dgSwalNotify('Failed', 'Duplicated email address! Input another email!', 'error');
-          }
-          else {
+          } else if (result.value.errors.includes('choir_in_round')) {
+            dgSwalNotify('Failed', 'Request failed: The choir you selected already belongs to this round.', 'error');
+          } else {
             console.log('error:', result.value.errors)
             dgSwalNotify('Failed', 'Something went wrong!', 'error');
           }

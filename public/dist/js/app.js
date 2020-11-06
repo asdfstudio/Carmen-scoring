@@ -476,8 +476,8 @@ $(document).ready(function() {
 
       if(inputs_missing_scores_count > 0)
       {
-         var dialogText = 'Some of your scoring criteria are missing values. Choose "OK" to submit your scores as-is. Choose "Cancel" to stop submission and continue entering your scores.';
-         confirmAndSubmit(dialogText,'solo-score-form',null);
+          var dialogText = 'Some of your scoring criteria are missing values. Choose "OK" to submit your scores as-is. Choose "Cancel" to stop submission and continue entering your scores.';
+          confirmAndSubmit(dialogText,'solo-score-form',null);
       }
 
     });

@@ -192,7 +192,7 @@ class CompetitionDivisionChoirController extends Controller
         }
 
 				// Get the division
-				$division = Division::with('competition','choirs')->find($division_id);
+				$division = Division::with('competition','round', 'choirs')->find($division_id);
 
         //die(print_r($request->all(), true));
         
@@ -276,13 +276,13 @@ class CompetitionDivisionChoirController extends Controller
 				// Attach choir to the division
 				if($choir)
 				{
-          $existing_choir = $division->choirs()->where('id', $choir->id)->pluck('id');
+          $existing_choir = $division->round->choirs->where('id', $choir->id)->pluck('id');
           if($existing_choir->count() > 0) {
-            $warning_message = "The '$choir->name' choir already belongs to this division.";
+            $warning_message = "The '$choir->name' choir already belongs to this division or round.";
             if($request->wantsJson()) {
               $response = [];
               $response['status'] = 'failed';
-              $response['errors'] = $warning_message;
+              $response['errors'] = 'choir_in_round';
               return response()->json($response);
             }
             else {

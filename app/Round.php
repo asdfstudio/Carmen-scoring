@@ -45,6 +45,11 @@ class Round extends Model
         return $this->belongsToMany('App\Penalty', 'choir_penalty')->withPivot('choir_id');
     }
 
+    public function choirs()
+    {
+        return $this->belongsToMany('App\Choir', 'choir_round');
+    }
+
     // TODO: See if the migration affected the morph here. Might need to update the subject_type columns.
     public function feedback()
     {
