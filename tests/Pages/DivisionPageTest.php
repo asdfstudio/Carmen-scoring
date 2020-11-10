@@ -9,12 +9,10 @@ use Tests\TestCase;
 class DivisionPageTest  extends TestCase
 {
     use RefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setup();
-        if (\App::environment() != 'testing') {
-            $this->markTestSkipped();
-        }
         $this->seed('PagesTestSeeder');
     }
 

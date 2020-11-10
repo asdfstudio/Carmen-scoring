@@ -21,15 +21,6 @@ class PerformanceOrderTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        // Only run this on a testing environment
-        if (\App::environment() != 'testing') {
-            $this->markTestSkipped();
-        }
-    }
-
     /**
      * Test the UpdatePerformanceOrder listener.
      *
