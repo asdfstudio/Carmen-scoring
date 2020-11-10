@@ -72,7 +72,6 @@ class PerformanceOrderTest extends TestCase
             'choir_id' => $bChoir,
             'scheduled_time' => '10:00:00',
         ]);
-        event(new PerformanceOrderChanged($round));
         $this->assertEquals(['B', 'A'], $this->getOrderedChoirNames($round));
         $this->assertEquals(2, $this->getPerformanceOrder($aChoir, $round));
 
@@ -91,7 +90,6 @@ class PerformanceOrderTest extends TestCase
             'choir_id' => $cChoir,
             'scheduled_time' => '09:30:00',
         ]);
-        event(new PerformanceOrderChanged($round));
         $this->assertEquals(['C', 'B', 'A'], $this->getOrderedChoirNames($round));
         $this->assertEquals(3, $this->getPerformanceOrder($aChoir, $round));
 
@@ -103,7 +101,6 @@ class PerformanceOrderTest extends TestCase
 
         // Remove the scheduleItem for B. Still B-A?
         $bItem->delete();
-        event(new PerformanceOrderChanged($round));
         $this->assertEquals(['B', 'A'], $this->getOrderedChoirNames($round));
         $this->assertEquals(2, $this->getPerformanceOrder($aChoir, $round));
     }

@@ -39,6 +39,6 @@ class RemoveChoirDivisionRawScores
 
       $deletedRows = RawScore::where('division_id', $division->id)->where('choir_id', $choir->id)->delete();
 
-      Log::info('A division choir was removed and the scores for the choir have been deleted. Division: '. $division->id . ', Choir: ' . $choir->id . '. Records deleted: ' . $deletedRows);
+      Log::debug('A division choir was removed and the scores for the choir have been deleted. Division: '. $division->id . ', Choir: ' . $choir->id . '. Records deleted: ' . $deletedRows);
     }
 }
