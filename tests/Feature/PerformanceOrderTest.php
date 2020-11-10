@@ -14,7 +14,6 @@ use App\Choir;
 use App\Schedule;
 use App\ScheduleItem;
 
-use App\Events\PerformanceOrderChanged;
 use App\Events\DivisionChoirCreated;
 use App\Events\DivisionChoirRemoved;
 
@@ -49,14 +48,12 @@ class PerformanceOrderTest extends TestCase
         // When a choir A is added to a round, does it get a performanceOrder set? #1?
         $division->choirs()->save($aChoir);
         event(new DivisionChoirCreated($division, $aChoir));
-        event(new PerformanceOrderChanged($round));
         $this->assertEquals(['A'], $this->getOrderedChoirNames($round));
         $this->assertEquals(1, $this->getPerformanceOrder($aChoir, $round));
 
         // When a choir B is added to a round, does it get performanceOrder set #2?
         $division->choirs()->save($bChoir);
         event(new DivisionChoirCreated($division, $bChoir));
-        event(new PerformanceOrderChanged($round));
         $this->assertEquals(['A', 'B'], $this->getOrderedChoirNames($round));
         $this->assertEquals(2, $this->getPerformanceOrder($bChoir, $round));
 
@@ -79,7 +76,6 @@ class PerformanceOrderTest extends TestCase
         $division2 = factory(Division::class)->create(['round_id' => $round]);
         $division2->choirs()->save($cChoir);
         event(new DivisionChoirCreated($division2, $cChoir));
-        event(new PerformanceOrderChanged($round));
         $this->assertEquals(['B', 'A', 'C'], $this->getOrderedChoirNames($round));
         $this->assertEquals(3, $this->getPerformanceOrder($cChoir, $round));
 
@@ -96,7 +92,6 @@ class PerformanceOrderTest extends TestCase
         // Delete choir C. Is the order now B-A?
         $division2->choirs()->detach($cChoir);
         event(new DivisionChoirRemoved($division, $cChoir));
-        event(new PerformanceOrderChanged($round));
         $this->assertEquals(['B', 'A'], $this->getOrderedChoirNames($round));
 
         // Remove the scheduleItem for B. Still B-A?

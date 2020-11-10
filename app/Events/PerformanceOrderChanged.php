@@ -3,7 +3,6 @@
 namespace App\Events;
 
 use App\Round;
-use App\Choir;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -13,12 +12,11 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PerformanceOrderChanged
+class PerformanceOrderChanged extends Event
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $round;
-    public $choir;
 
 
     /**
@@ -26,10 +24,9 @@ class PerformanceOrderChanged
      *
      * @return void
      */
-    public function __construct(Round $round, Choir $choir = null)
+    public function __construct(Round $round)
     {
         $this->round = $round;
-        $this->choir = $choir;
     }
 
     /**
@@ -39,6 +36,6 @@ class PerformanceOrderChanged
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new PrivateChannel('performance-order');
     }
 }

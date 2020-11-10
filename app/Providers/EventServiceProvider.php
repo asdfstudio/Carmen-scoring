@@ -28,11 +28,13 @@ class EventServiceProvider extends ServiceProvider
           'App\Listeners\ProduceFinalStandings',
         ],
         'App\Events\DivisionChoirCreated' => [
-          'App\Listeners\AddChoirToRound'
+          'App\Listeners\AddChoirToRound',
+          'App\Listeners\UpdatePerformanceOrder'
         ],
         'App\Events\DivisionChoirRemoved' => [
           'App\Listeners\RemoveChoirFromRound',
-          'App\Listeners\RemoveChoirDivisionRawScores'
+          'App\Listeners\RemoveChoirDivisionRawScores',
+          'App\Listeners\UpdatePerformanceOrder'
         ],
         'App\Events\DivisionScoringFinalized' => [
           'App\Listeners\EmailFeedbackLink',

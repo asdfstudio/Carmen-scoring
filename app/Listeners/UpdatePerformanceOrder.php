@@ -3,6 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\PerformanceOrderChanged;
+use App\Events\DivisionChoirCreated;
+use App\Events\DivisionChoirRemoved;
+
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
@@ -22,19 +25,24 @@ class UpdatePerformanceOrder
     /**
      * Reorder the choir_division items according to any performance times.
      *
-     * @param  PerformanceOrderChanged  $event
+     * @param  $event
      * @return void
      */
-    public function handle(PerformanceOrderChanged $event)
+    public function handle($event)
     {
-        $round = $event->round;
+
+        if ($event instanceof PerformanceOrderChanged) {
+            $round_id = $event->round->id;
+        } elseif ($event instanceof DivisionChoirCreated OR $event instanceof DivisionChoirRemoved) {
+            $round_id = $event->division->round->id;
+        }
 
         $choirs = DB::table('choir_division AS cd')
             ->join('divisions AS d', 'd.id', '=', 'cd.division_id')
             ->leftJoin('schedule_items AS si', function($join) {
                 $join->on('cd.choir_id', '=', 'si.choir_id')->on('cd.division_id', '=', 'si.division_id');
             })
-            ->where('d.round_id', '=', $round->id)
+            ->where('d.round_id', '=', $round_id)
             // scheduled_time opposite descending, which puts nulls last and earlier times first
             ->orderByRaw('-si.scheduled_time desc')
             // New choir_divisions have a performance_order of 0, which should be sorted last (~0 is bitwise-not-zero, AKA big as it gets)
