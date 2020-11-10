@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 use App\Round;
@@ -13,6 +15,8 @@ use App\Schedule;
 use App\ScheduleItem;
 
 use App\Events\PerformanceOrderChanged;
+use App\Events\DivisionChoirCreated;
+use App\Events\DivisionChoirRemoved;
 
 class PerformanceOrderTest extends TestCase
 {
@@ -25,8 +29,6 @@ class PerformanceOrderTest extends TestCase
         if (\App::environment() != 'testing') {
             $this->markTestSkipped();
         }
-
-        $this->seed('DatabaseSeeder');
     }
 
     /**
@@ -37,8 +39,8 @@ class PerformanceOrderTest extends TestCase
     public function testPerformanceOrder()
     {
         // Seed the database to create a basic competition, round, division
-        $round = Round::firstWhere('name', 'Prelims');
-        $division = Division::firstWhere('name', 'Demo High School Division 1');
+        $round = factory(Round::class)->create();
+        $division = factory(Division::class)->create(['round_id' => $round]);
 
         $aChoir = factory(Choir::class)->create(['name' => 'A']);
         $bChoir = factory(Choir::class)->create(['name' => 'B']);
@@ -46,15 +48,15 @@ class PerformanceOrderTest extends TestCase
 
         // When a choir A is added to a round, does it get a performanceOrder set? #1?
         $division->choirs()->save($aChoir);
-        // Manually fire the event to test
+        event(new DivisionChoirCreated($division, $aChoir));
         event(new PerformanceOrderChanged($round));
-        // $this->assertEquals(['A'], $this->getPerformanceOrder($round));
+        $this->assertEquals(['A'], $this->getPerformanceOrder($round));
 
         // When a choir B is added to a round, does it get performanceOrder set #2?
         $division->choirs()->save($bChoir);
-        // Manually fire the event to test
+        event(new DivisionChoirCreated($division, $bChoir));
         event(new PerformanceOrderChanged($round));
-        // $this->assertEquals(['A', 'B'], $this->getPerformanceOrder($round));
+        $this->assertEquals(['A', 'B'], $this->getPerformanceOrder($round));
 
         // Create a ScheduleItem for the choir B. Is the order now B-A?
         $schedule = factory(Schedule::class)->create([
@@ -64,40 +66,53 @@ class PerformanceOrderTest extends TestCase
 
         $bItem = factory(ScheduleItem::class)->create([
             'schedule_id' => $schedule,
-            'division_id' => $division->id,
+            'division_id' => $division,
             'choir_id' => $bChoir,
             'scheduled_time' => '10:00:00',
         ]);
-        // $this->assertEquals(['B', 'A'], $this->getPerformanceOrder($round));
+        event(new PerformanceOrderChanged($round));
+        $this->assertEquals(['B', 'A'], $this->getPerformanceOrder($round));
 
         // Add  a choir C in another division. Is it order #3 in the round?
-        $division2 = Division::firstWhere('name', 'Demo High School Division 2');
+        $division2 = factory(Division::class)->create(['round_id' => $round]);
         $division2->choirs()->save($cChoir);
-        // $this->assertEquals(['B', 'A', 'C'], $this->getPerformanceOrder($round));
+        event(new DivisionChoirCreated($division2, $cChoir));
+        event(new PerformanceOrderChanged($round));
+        $this->assertEquals(['B', 'A', 'C'], $this->getPerformanceOrder($round));
 
-        // Add an earlier scheduleItem for the first item. Numbers swapped?
+        // Add an earlier scheduleItem for the third item. Numbers swapped?
         $cItem = factory(ScheduleItem::class)->create([
             'schedule_id' => $schedule,
-            'division_id' => $division2->id,
-            'choir_id' => $bChoir,
+            'division_id' => $division2,
+            'choir_id' => $cChoir,
             'scheduled_time' => '09:30:00',
         ]);
-        // $this->assertEquals(['C', 'A', 'B'], $this->getPerformanceOrder($round));
+        event(new PerformanceOrderChanged($round));
+        $this->assertEquals(['C', 'B', 'A'], $this->getPerformanceOrder($round));
+
         // Delete choir A. Is the order now B-C?
         $division->choirs()->detach($aChoir);
-        // $this->assertEquals(['B', 'C'], $this->getPerformanceOrder($round));
+        event(new DivisionChoirRemoved($division, $aChoir));
+        event(new PerformanceOrderChanged($round));
+        $this->assertEquals(['C', 'B'], $this->getPerformanceOrder($round));
 
         // Remove the scheduleItem for B. Still B-C?
         $bItem->delete();
-        // $this->assertEquals(['B', 'C'], $this->getPerformanceOrder($round));
+        event(new PerformanceOrderChanged($round));
+        $this->assertEquals(['C', 'B'], $this->getPerformanceOrder($round));
     }
 
     /**
      * Given a round, return an array of choir names indexed by performance order
      */
     private function getPerformanceOrder(Round $round)  {
+        $choirs = DB::table('choirs AS c')
+            ->leftJoin('choir_division AS cd', 'c.id', '=', 'cd.choir_id')
+            ->join('divisions AS d', 'd.id', '=', 'cd.division_id')
+            ->where('d.round_id', $round->id)
+            ->orderBy('cd.performance_order', 'asc')
+            ->select('c.name', 'cd.performance_order');
 
-        // Return an array of the choir names for a given round, in order
-        return [];
+        return $choirs->get()->pluck('name')->toArray();
     }
 }
