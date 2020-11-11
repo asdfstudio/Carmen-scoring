@@ -30,10 +30,12 @@
         @endif
 
         @if($item->round)
-          <span class="division-name">{{ $item->round->division->name }}</span>
           <span class="round-name">{{ $item->round->name }}</span>
         @endif
 
+        @if($item->division)
+          <span class="division-name">{{ $item->division->name }}</span>
+        @endif
 
         @if($item->choir)
           <span class="choir-name">{{ $item->choir->full_name }}</span>
