@@ -49,7 +49,7 @@ class ScheduleItem extends Model
 
     public function setScheduledTimeAttribute($value)
     {
-        $this->attributes['scheduled_time'] = date("G:i", strtotime($value));
+        $this->attributes['scheduled_time'] = date("Y-m-d G:i", strtotime($value));
     }
 
 }

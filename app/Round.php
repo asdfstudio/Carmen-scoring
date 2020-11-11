@@ -47,7 +47,7 @@ class Round extends Model
 
     public function choirs()
     {
-        return $this->belongsToMany('App\Choir', 'choir_round');
+        return $this->belongsToMany('App\Choir')->withPivot('performance_order')->orderBy('performance_order', 'ASC');
     }
 
     // TODO: See if the migration affected the morph here. Might need to update the subject_type columns.

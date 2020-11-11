@@ -15,7 +15,7 @@ $factory->define(ScheduleItem::class, function (Faker $faker) {
         'schedule_id' => factory(Schedule::class),
         'division_id' => factory(Division::class),
         'choir_id' => factory(Choir::class),
-        'scheduled_time' => $faker->time('H:i:s'),
+        'scheduled_time' => $faker->time('Y-m-d G:i'),
         'performance_order' => 0
     ];
 });

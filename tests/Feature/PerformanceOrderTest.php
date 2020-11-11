@@ -58,7 +58,7 @@ class PerformanceOrderTest extends TestCase
             'schedule_id' => $schedule,
             'division_id' => $division,
             'choir_id' => $bChoir,
-            'scheduled_time' => '10:00:00',
+            'scheduled_time' => '2020-01-01 10:00',
         ]);
         $this->assertEquals(['B', 'A'], $this->getOrderedChoirNames($round));
         $this->assertEquals(2, $this->getPerformanceOrder($aChoir, $round));
@@ -75,8 +75,9 @@ class PerformanceOrderTest extends TestCase
             'schedule_id' => $schedule,
             'division_id' => $division2,
             'choir_id' => $cChoir,
-            'scheduled_time' => '09:30:00',
+            'scheduled_time' => '2020-01-01 09:30',
         ]);
+
         $this->assertEquals(['C', 'B', 'A'], $this->getOrderedChoirNames($round));
         $this->assertEquals(3, $this->getPerformanceOrder($aChoir, $round));
 
@@ -106,7 +107,7 @@ class PerformanceOrderTest extends TestCase
     private function getPerformanceOrder(Choir $choir, Round $round) {
         $choir = $this->getChoirDivisionBuilder($round)
             ->where('c.id', $choir->id)
-            ->select('cd.performance_order')
+            ->select('cr.performance_order')
             ->first();
         return $choir->performance_order;
     }
@@ -116,10 +117,9 @@ class PerformanceOrderTest extends TestCase
      */
     private function getChoirDivisionBuilder($round) {
         return DB::table('choirs AS c')
-            ->leftJoin('choir_division AS cd', 'c.id', '=', 'cd.choir_id')
-            ->join('divisions AS d', 'd.id', '=', 'cd.division_id')
-            ->where('d.round_id', $round->id)
-            ->orderBy('cd.performance_order', 'asc');
+            ->join('choir_round AS cr', 'c.id', '=', 'cr.choir_id')
+            ->where('cr.round_id', '=', $round->id)
+            ->orderBy('cr.performance_order', 'asc');
     }
 
 }

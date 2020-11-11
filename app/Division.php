@@ -54,7 +54,7 @@ class Division extends Model
 
     public function choirs()
     {
-        return $this->belongsToMany('App\Choir')->withPivot( 'performance_order')->orderBy('performance_order', 'ASC');
+        return $this->belongsToMany('App\Choir');
     }
 
     public function judges()
