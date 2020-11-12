@@ -34,17 +34,17 @@ class ScheduleItem extends Model
 
     public function division()
     {
-        return $this->belongsTo('App\Division');
+        return $this->belongsTo('App\Division')->withDefault();
     }
 
     public function round()
     {
-        return $this->hasOneThrough('App\Round', 'App\Division', 'id', 'id', 'division_id', 'round_id');
+        return $this->hasOneThrough('App\Round', 'App\Division', 'id', 'id', 'division_id', 'round_id')->withDefault();
     }
 
     public function choir()
     {
-        return $this->belongsTo('App\Choir');
+        return $this->belongsTo('App\Choir')->withDefault();
     }
 
     public function setScheduledTimeAttribute($value)

@@ -15,6 +15,10 @@ class SyncAwardScheduleItemKeys extends Migration
     {
         Schema::table('schedule_items', function (Blueprint $table) {
             $table->dropForeign(['choir_id']);
+            $table->dropForeign(['division_id']);
+
+            $table->unsignedBigInteger('choir_id')->after('id')->default(0)->change();
+            $table->unsignedBigInteger('division_id')->after('choir_id')->default(0)->change();
         });
 
         Schema::table('award_schedule_items', function (Blueprint $table) {
@@ -50,6 +54,11 @@ class SyncAwardScheduleItemKeys extends Migration
             $table->foreignId('choir_id')
                 ->change()
                 ->constrained('choirs')
+                ->onDelete('cascade');
+
+            $table->foreignId('division_id')
+                ->change()
+                ->constrained('divisions')
                 ->onDelete('cascade');
         });
     }

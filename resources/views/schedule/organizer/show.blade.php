@@ -5,7 +5,15 @@
 @endsection
 
 @section('content-header')
-  <h1>{{ $schedule->name }}</h1>
+    @php
+        $schedule_day = $schedule->items->count() > 0 ? $schedule->items->first()->scheduled_time : FALSE;
+        if ($schedule_day) {
+            $schedule_day = \Carbon\Carbon::parse($schedule_day);
+            // Only display the date if it's not the default
+            $dateString = $schedule_day->year > 1000 ? $schedule_day->format('m/d/Y') : FALSE;
+        }
+    @endphp
+    <h1>{{ $schedule->name }}@if($dateString) - {{ $dateString }}@endif</h1>
 
   <ul class="actions-group">
 		<li>{{ link_to_route('organizer.competition.schedule.edit', 'Edit Name', [$competition,$schedule], ['class' => 'action']) }}</li>
@@ -29,15 +37,15 @@
           <span class="item-name">{{ $item->name }}</span>
         @endif
 
-        @if($item->round)
+        @if($item->round->id)
           <span class="round-name">{{ $item->round->name }}</span>
         @endif
 
-        @if($item->division)
+        @if($item->division->id)
           <span class="division-name">{{ $item->division->name }}</span>
         @endif
 
-        @if($item->choir)
+        @if($item->choir->id)
           <span class="choir-name">{{ $item->choir->full_name }}</span>
         @elseif(!$item->name)
           <span class="choir-name tbd">TBD</span>

@@ -19,6 +19,10 @@
   <p>Build your schedule by dragging choirs to the schedule.</p>
 
   <div class="well">
+    @php $schedule_day = $schedule->items->count() > 0 ? $schedule->items->first()->scheduled_time : new DateTime() ; @endphp
+    <label for="">Schedule Day</label>
+    <input type="date" class="timepicker-options" name="schedule_day" value="{{ \Carbon\Carbon::parse($schedule_day)->format('Y-m-d') }}">
+
     <label for="">First Performance</label>
     <input type="text" class="timepicker-options" name="first_performance" placeholder="First performance" value="8:00">
 
@@ -41,18 +45,18 @@
         @foreach($schedule->items as $item)
             <li class="schedule-item choir ui-draggable" id="item_{{ $item->division_id}}_{{ $item->choir_id }}" data-division-id="{{ $item->division_id }}" data-choir-id="{{ $item->choir_id }}">
             <span class="sort-handle ui-draggable-handle"><i class="fa fa-sort"></i></span>
-            <input type="text" class="scheduled_time" value="{{ $item->scheduled_time }}">
+            <input type="text" class="scheduled_time" value="{{ \Carbon\Carbon::parse($item->scheduled_time)->format('g:i a') }}">
 
             @if ($item->name)
               <input type="text" class="item_name" value="{{ $item->name }}">
             @endif
 
-            @if ($item->division)
+            @if ($item->division->id)
                 <span class="division-name">{{ $item->division->name }}</span>
                 <span class="round-name">{{ $item->division->round->name }}</span>
             @endif
 
-            @if($item->choir)
+            @if($item->choir->id)
               <span class="choir-name">{{ $item->choir->name }}</span>
             @elseif(!$item->name)
               <span class="choir-name tbd">TBD</span>
@@ -184,16 +188,18 @@
         'step': 30
       });
 
-      $('input.timepicker-options').not('input[name="step"]').timepicker({
+      $('input.timepicker-options')
+            .not('input[name="schedule_day"]')
+            .not('input[name="step"]').timepicker({
         'timeFormat': 'h:i a'
       });
 
       $('input.timepicker-options').on('change', function(event) {
         event.preventDefault();
+
         var firstPerformance = $('input[name="first_performance"]').val();
         var lastPerformance = $('input[name="last_performance"]').val();
         var step = $('input[name="step"]').val();
-        console.log('ready or change');
 
         $('input.scheduled_time').timepicker('option', {
           'minTime': firstPerformance,
