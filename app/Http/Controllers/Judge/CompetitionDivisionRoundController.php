@@ -134,19 +134,25 @@ class CompetitionDivisionRoundController extends Controller
 
         $divisions = $round->divisions->pluck('id', 'name');
 
-        $choirs = [];
-        foreach ($round->divisions as $division) {
-            foreach ($division->choirs as $choir) {
-                $choirs[] = [
-                    'id' => $choir->id,
-                    'name' => $choir->full_name,
-                    'round_id' => $round_id,
-                    'division_id' => $division->id,
-                    'division_name' => $division->name,
-                    'performance_order' => $choir->pivot->performance_order
-                ];
-            }
-        }
+        $choirs = DB::table('choir_round AS cr')
+            ->join('choirs AS c', 'c.id', '=', 'cr.choir_id')
+            ->join('schools AS s', 's.id', '=', 'c.school_id')
+            ->join('divisions AS d', 'cr.round_id', '=', 'd.round_id')
+            ->join('rounds AS r', 'r.id', '=', 'd.round_id')
+            ->join('choir_division as cd', function($join) {
+                $join->on('cd.division_id', '=', 'd.id')->on('cr.choir_id', '=', 'cd.choir_id');
+            })
+            ->leftJoin('schedule_items AS si', function($join) {
+                $join->on('si.division_id', '=', 'cd.division_id')->on('si.choir_id', '=', 'cr.choir_id');
+            })
+            ->where('cr.round_id', '=', $round_id)
+            ->select('c.id', 'cr.performance_order', // 'si.scheduled_time',
+                'r.id AS round_id', 'r.name as round_name',
+                'd.id as division_id', 'd.name as division_name')
+                ->addSelect(DB::raw('CONCAT(s.name, \' \', c.name) AS name'))
+                ->addSelect(DB::raw('DATE_FORMAT(si.scheduled_time, \'%l:%i %p\') AS scheduled_time'))
+                ->orderBy('cr.performance_order')
+            ->get();
 
         $criteria = $criteria->map(function ($item, $key) {
             return [
@@ -173,9 +179,9 @@ class CompetitionDivisionRoundController extends Controller
         foreach($choirs as $choir){
             $placeholder_comment = Comment::firstOrNew([
                 'judge_id' => $judge_id,
-                'choir_id' => $choir['id'],
+                'choir_id' => $choir->id,
                 'recipient_type' => 'App\Choir',
-                'recipient_id' => $choir['id'],
+                'recipient_id' => $choir->id,
                 'subject_type' => 'App\Round',
                 'subject_id' => $round_id
             ]);

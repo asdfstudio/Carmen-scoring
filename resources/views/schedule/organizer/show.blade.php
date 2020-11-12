@@ -10,10 +10,12 @@
         if ($schedule_day) {
             $schedule_day = \Carbon\Carbon::parse($schedule_day);
             // Only display the date if it's not the default
-            $dateString = $schedule_day->year > 1000 ? $schedule_day->format('m/d/Y') : FALSE;
+            if ($schedule_day->year > 1000) {
+                $dateString = $schedule_day->format('m/d/Y');
+            }
         }
     @endphp
-    <h1>{{ $schedule->name }}@if($dateString) - {{ $dateString }}@endif</h1>
+    <h1>{{ $schedule->name }}@isset($dateString) - {{ $dateString }}@endif</h1>
 
   <ul class="actions-group">
 		<li>{{ link_to_route('organizer.competition.schedule.edit', 'Edit Name', [$competition,$schedule], ['class' => 'action']) }}</li>

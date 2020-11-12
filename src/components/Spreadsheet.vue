@@ -9,6 +9,7 @@
 
           <th v-for="choir in choirsList" class="choir-header"  :choir="choir" v-bind:key="choir.id">
             <span class="clickable" @click="activateChoirModal(choir)">{{ choir.name }}</span>
+            <span class="time">@{{ choir.scheduled_time }}</span>
             <span class="division">{{ choir.division_name }}</span>
           </th>
         </tr>
