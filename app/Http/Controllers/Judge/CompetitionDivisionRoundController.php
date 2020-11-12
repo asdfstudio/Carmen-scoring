@@ -187,7 +187,7 @@ class CompetitionDivisionRoundController extends Controller
             ]);
             if(!$placeholder_comment->exists){
                 $placeholder_comment->save();
-                event(new CommentSaved($placeholder_comment, $division->competition));
+                event(new CommentSaved($placeholder_comment, $round->competition));
             }
         }
 
