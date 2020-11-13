@@ -34,11 +34,6 @@
         <a href="{{ route('admin.caption.index') }}" class="{{ $link_class }}">Captions</a>
       </li>
 
-      <li>
-        @php $link_class = Request::segment(2) == 'raw-score-log' ? 'active' : false; @endphp
-        <a href="{{ route('admin.raw-score-log.index') }}" class="{{ $link_class }}">Logs</a>
-      </li>
-
       @if(env('IS_WORKSHOP_ENABLED'))
         <li>
           @php $link_class = Request::segment(2) == 'workshop' ? 'active' : false; @endphp

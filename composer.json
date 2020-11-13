@@ -22,8 +22,7 @@
         "laravel/ui": "^2.1",
         "laravelcollective/html": "^6.0",
         "league/flysystem-aws-s3-v3": "^1.0",
-        "stripe/stripe-php": "^7.52",
-        "tolawho/loggy": "^1.0"
+        "stripe/stripe-php": "^7.52"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

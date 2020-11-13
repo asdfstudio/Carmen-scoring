@@ -13,7 +13,6 @@ use App\SoloRawScore;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Events\CommentSaved;
-use App\Carmen\SoloScorekeeper;
 use App\Http\Controllers\Controller;
 use Kris\LaravelFormBuilder\FormBuilder;
 

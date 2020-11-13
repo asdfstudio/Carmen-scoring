@@ -44,15 +44,6 @@ Route::group([
     Route::resource('criteria', 'CriteriaController');
     Route::resource('caption', 'CaptionController');
 
-    Route::get('raw-score-log', [
-      'as' => 'raw-score-log.index', 'uses' => 'RawScoreLogController@index'
-    ]);
-
-    Route::get('raw-score-log/{date}', [
-      'as' => 'raw-score-log.show', 'uses' => 'RawScoreLogController@show'
-    ]);
-
-
     Route::get('sheet/{sheet}/manage', [
       'as' => 'sheet.manage', 'uses' => 'SheetController@manage'
     ]);

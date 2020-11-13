@@ -3,7 +3,6 @@
 namespace App\Carmen;
 
 use App\RawScore;
-use Loggy;
 
 class Scorekeeper {
 
@@ -108,10 +107,6 @@ class Scorekeeper {
 
 		$score->score = (float) $this->score;
 		$result = $score->save();
-
-		if ($scoreChanged) {
-			Loggy::write('scores', $score);
-		}
 
 		return $result;
 	}
