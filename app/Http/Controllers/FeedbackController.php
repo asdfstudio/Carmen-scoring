@@ -22,34 +22,33 @@ class FeedbackController extends Controller
         return view('feedback.guest', ['message' => 'Please enter an access token to view comments from judges.']);
       }
 
-      $commentUrl = CommentUrl::with(['recipient', 'choir', 'competition', 'competition.divisions' => function($q) {
+      $commentUrl = CommentUrl::with(['competition' => function($q) {
         $q->withoutGlobalScope('organization');
-      }, 'competition.divisions.round', 'competition.soloDivisions'])->where('access_code', $accessCode)->first();
-      
+      }, 'competition.divisions', 'competition.soloDivisions'])->where('access_code', $accessCode)->first();
+
       if(!$commentUrl)
       {
         return view('feedback.guest', ['message' => 'The access token you specified is not valid.']);
       }
 
-      /*if ($commentUrl->recipient_type == 'App\Choir') {
-        $commentUrl->load('recipient.school');
-        $choir = $commentUrl->recipient;
-      }
-
-      if ($commentUrl->recipient_type == 'App\Performer') {
-        $commentUrl->load('recipient.choir', 'recipient.choir.school');
-        $performer = $commentUrl->recipient;
-        $choir = $performer->choir;
-      }*/
-
       $choir = $commentUrl->choir;
+      $competition = $commentUrl->competition;
       $comment_recipient_id = $commentUrl->recipient_id;
 
+      // Get all the commments for this choir in Rounds and Solo Divisions
+      $comments = Comment::with(['judge'])
+          ->where('choir_id', $comment_recipient_id)
+          ->where(function($query) use ($competition) {
+              $query->where('subject_type', 'App\Round')->whereIn('subject_id', $competition->rounds->pluck('id'))
+                  ->orWhere(function($query) use ($competition) {
+                      $query->where('subject_type', 'App\SoloDivision')->whereIn('subject_id', $competition->soloDivisions->pluck('id'));
+                  });
+          })
+          ->get();
 
-      $comments = Comment::with(['judge'])->where('choir_id', $comment_recipient_id)->get();
-      //dd($comments);
-      $recordings = Recording::where('choir_id', $comment_recipient_id)->whereIn('division_id', $commentUrl->competition->divisions->pluck('id')->toArray())->get();
-      //dd($recordings);
-      return view('feedback.show', ['comments' => $comments, 'recordings' => $recordings, 'competition' => $commentUrl->competition, 'choir' => $choir, 'comment_recipient_id' => $comment_recipient_id]);
+      // Get all the Division Recordings
+      $recordings = Recording::where('choir_id', $comment_recipient_id)->whereIn('division_id', $competition->divisions->pluck('id'))->get();
+
+      return view('feedback.show', ['comments' => $comments, 'recordings' => $recordings, 'competition' => $competition, 'choir' => $choir]);
     }
 }
