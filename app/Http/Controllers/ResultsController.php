@@ -108,9 +108,11 @@ class ResultsController extends Controller
 
     public function indexYear($year)
     {
-        $competitions = Competition::withoutGlobalScope('organization')->year($year)->completed()
-            ->with(['rounds', 'rounds.divisions' => function($query) {
-                $query->where('is_published', 1);
+        $competitions = Competition::withoutGlobalScope('organization')->year($year)
+            ->with(['divisions' => function($query) {
+                $query->published();
+            }, 'soloDivisions' => function($query) {
+                $query->published();
             }])->orderBy('name', 'asc')->get();
 
         return view('results.index', compact('competitions', 'year'));
@@ -118,11 +120,12 @@ class ResultsController extends Controller
 
     public function competitionPublic($competition_id, Request $request)
     {
-      $competition = Competition::withoutGlobalScope('organization')->with(['rounds', 'rounds.divisions' => function($query) {
-        $query->published();
-      }, 'soloDivisions' => function($query) {
-        $query->published();
-      }])->find($competition_id);
+        $competition = Competition::withoutGlobalScope('organization')
+            ->with(['divisions' => function($query) {
+                $query->published();
+            }, 'soloDivisions' => function($query) {
+                $query->published();
+            }])->find($competition_id);
 
       if (!$competition) {
         return view('results.competition.no-match');
