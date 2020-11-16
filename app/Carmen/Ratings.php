@@ -92,9 +92,9 @@ class Ratings
         IF(criteria.caption_id = 1, sum(criteria.max_score * 1.5), sum(criteria.max_score)) as max_score
       FROM raw_scores
       LEFT JOIN criteria ON criteria.id = criterion_id
-      WHERE round_id = ?
+      WHERE division_id = ?
       GROUP BY choir_id, caption_id",
-      [$this->division->round->id]);
+      [$this->division->id]);
 
     return collect($scores);
   }

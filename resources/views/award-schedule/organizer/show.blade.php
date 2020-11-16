@@ -61,12 +61,14 @@
             <span class="division-name" data-division-id="{{ $item->division->id }}">{{ $item->division->name }}</span>
           @endif
 
-          @if($item->round)
-            <span class="award-name">{{ $item->round->name }} Ratings</span>
+          @if($ratings)
+            <span class="award-name">{{ $item->division->name }} Ratings</span>
             @foreach($ratings as $rating)
+              @if ($rating['rating'])
               <span class="award-winner pull-right">
                   <span class="rating">{{ $rating['rating']['name'] }}:</span> <span class="award-winner-choir">{{ $rating['choir']->full_name }}</span>
               </span><br>
+              @endif
             @endforeach
           @endif
 
