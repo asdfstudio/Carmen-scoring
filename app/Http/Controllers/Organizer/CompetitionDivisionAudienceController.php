@@ -19,7 +19,8 @@ use App\Director;
 use App\Person;
 
 use Illuminate\Support\Facades\Storage;
-use \Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 use Kris\LaravelFormBuilder\FormBuilder;
 
 use Event;
@@ -94,7 +95,10 @@ class CompetitionDivisionAudienceController extends Controller
 
           // Check extension
           if(in_array(strtolower($extension), $validextensions)){
-             if (env('VOTING_AWS_ACCESS_KEY_ID')) {
+
+            // Try to store to S3
+            try {
+                $storageDriver = Storage::disk('voting');
 
                if (strtolower($extension) === 'mp4') {
                  $destinationPath =  $destinationPath.'/'.'video';
@@ -102,17 +106,18 @@ class CompetitionDivisionAudienceController extends Controller
                  $destinationPath =  $destinationPath.'/'.'image';
                }
 
-               $path = Storage::disk('voting')->put($destinationPath, $request->file);
+               $path = $storageDriver->put($destinationPath, $request->file);
                $request->merge([
                  'size' => $request->file->getSize(),
                  'path' => $path
                ]);
 
                $fileName = $path;
-             } else {
-               $fileName = str_slug(Carbon::now()->toDayDateTimeString()).rand(11111, 99999) .'.' . $extension;
+            } catch (\Exception $e) {
+                // Store in an uploads folder on the server if S3 unavailable
+               $fileName = Str::slug(Carbon::now()->toDayDateTimeString()).rand(11111, 99999) .'.' . $extension;
                $request->file('file')->move($destinationPath, $fileName);
-             }
+            }
           }
 
         echo json_encode(array('file_name'=>$fileName));
