@@ -144,7 +144,6 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
 
 
 
@@ -157,6 +156,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Aloha\Twilio\Support\Laravel\ServiceProvider::class,
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+        Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Kris\LaravelFormBuilder\FormBuilderServiceProvider::class,
 
