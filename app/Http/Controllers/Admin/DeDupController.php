@@ -39,7 +39,7 @@ class DeDupController extends Controller
   public function recordings()
   {
     require_once 'MIME/Type.php';
-    $storage_driver = Storage::disk("s3");
+    $storage_driver = Storage::disk("recordings");
     $recordings = Recording::all()->toArray();
     $start = intval($_GET['start']);
     $length = intval($_GET['length']);

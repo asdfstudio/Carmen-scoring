@@ -59,22 +59,24 @@ return [
             'visibility' => 'public',
         ],
 
-        's3' => [
+        'recordings' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
+            'bucket' => env('AWS_RECORDING_BUCKET'),
             'url' => env('AWS_URL'),
+            'endpoint' => env('AWS_ENDPOINT'),
         ],
 
-        'votingS3' => [
-          'driver' => 's3',
-          'key' => env('VOTING_AWS_ACCESS_KEY_ID'),
-          'secret' => env('VOTING_AWS_SECRET_ACCESS_KEY'),
-          'region' => env('VOTING_AWS_DEFAULT_REGION'),
-          'bucket' => env('VOTING_AWS_BUCKET'),
-          'url' => env('VOTING_AWS_URL'),
+        'voting' => [
+            'driver' => 's3',
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION'),
+            'bucket' => env('AWS_VOTING_BUCKET'),
+            'url' => env('AWS_URL'),
+            'endpoint' => env('AWS_ENDPOINT'),
         ],
 
     ],

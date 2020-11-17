@@ -102,7 +102,7 @@ class CompetitionDivisionAudienceController extends Controller
                  $destinationPath =  $destinationPath.'/'.'image';
                }
 
-               $path = Storage::disk('votingS3')->put($destinationPath, $request->file);
+               $path = Storage::disk('voting')->put($destinationPath, $request->file);
                $request->merge([
                  'size' => $request->file->getSize(),
                  'path' => $path

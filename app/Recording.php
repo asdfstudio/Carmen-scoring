@@ -16,7 +16,7 @@ class Recording extends Model
 
 	public function getUrlAttribute($path)
   {
-    return ($path) ? Storage::disk('s3')->url($path) : '';
+    return ($path) ? Storage::disk('recordings')->url($path) : '';
   }
 
   public function judge()

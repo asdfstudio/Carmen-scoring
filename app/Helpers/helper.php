@@ -13,7 +13,7 @@ function ordinal($number) {
 
 
 function uploadToS3($path, $contents, $options = []) {
-    $storageDriver = Storage::disk("s3");
+    $storageDriver = Storage::disk("recordings");
 
     if($storageDriver->put($path, file_get_contents($contents), $options)){
         $storedFilePath = $storageDriver->path($path);
@@ -23,8 +23,8 @@ function uploadToS3($path, $contents, $options = []) {
 
  function removeS3File($pathUrl) {
 
-    if(Storage::disk('s3')->exists($pathUrl)) {
-        Storage::disk('s3')->delete($pathUrl);
+    if(Storage::disk('recordings')->exists($pathUrl)) {
+        Storage::disk('recordings')->delete($pathUrl);
         return true;
     }
     return false;
