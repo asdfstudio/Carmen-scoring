@@ -1,29 +1,22 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {captions} from './captions'
-import {divisions} from './divisions'
-import {choirs} from './choirs'
-import {criteria} from './criteria'
-import {scores} from './scores'
-import {comments} from './comments'
-import {ratings} from './ratings'
 import CommentsApi from '../api/comments'
 import RecordingApi from '../api/recordings'
 import ScoresApi from '../api/scores'
 import _ from 'lodash'
 
-let captionsList = window.__CAPTIONS__ ? window.__CAPTIONS__ : captions
-let captionWeightingId = window.__CAPTION_WEIGHTING_ID__ ? window.__CAPTION_WEIGHTING_ID__ : 1
-let divisionsList = window.__DIVISIONS__ ? window.__DIVISIONS__ : divisions
-let choirsList = window.__CHOIRS__ ? window.__CHOIRS__ : choirs
-let criteriaList = window.__CRITERIA__ ? window.__CRITERIA__ : criteria
-let scoresList = window.__SCORES__ ? window.__SCORES__ : scores
-let commentsList = window.__COMMENTS__ ? window.__COMMENTS__ : comments
-let ratingSystem = window.__RATINGS__ ? _.values(window.__RATINGS__) : ratings
-let recordedComments = window.__RECORDED_COMMENTS__ || []
-let competition = window.__COMPETITION__ || {}
-let spreadsheetTitle = window.__SPREADSHEET_TITLE__ ? window.__SPREADSHEET_TITLE__ : 'Spreadsheet title'
-let backUrl = window.__BACK_URL__ ? window.__BACK_URL__ : '/test-back-url'
+let captionsList = window.__CAPTIONS__ ||  {};
+let captionWeightingId = window.__CAPTION_WEIGHTING_ID__ || 1;
+let divisionsList = window.__DIVISIONS__ || [];
+let choirsList = window.__CHOIRS__ || [];
+let criteriaList = window.__CRITERIA__ || [];
+let scoresList = window.__SCORES__ || [];
+let commentsList = window.__COMMENTS__ || [];
+let ratingSystem = window.__RATINGS__ || [];
+let recordedComments = window.__RECORDED_COMMENTS__ || [];
+let competition = window.__COMPETITION__ || {};
+let spreadsheetTitle = window.__SPREADSHEET_TITLE__ || 'Carmen Scoring';
+let backUrl = window.__BACK_URL__ || '/';
 let isSpreadsheetScoringActive = window.__IS_SPREADSHEET_SCORING_ACTIVE__ === 'Active'
 
 Vue.use(Vuex)
@@ -244,17 +237,17 @@ export const store = new Vuex.Store({
           rank++
         }
       }
-      return choirs.sort(function (a, b) {
-        if (typeof a.performance_order === 'undefined' || typeof a.performance_order === 'undefined') {
-          return a.name.localeCompare(b.name)
-        } else {
-          var performanceOrderDifference = a.performance_order - b.performance_order
-          if (performanceOrderDifference === 0) {
-            return a.name.localeCompare(b.name)
-          }
-          return performanceOrderDifference
-        }
-      })
+      // return choirs.sort(function (a, b) {
+      //   if (typeof a.performance_order === 'undefined' || typeof a.performance_order === 'undefined') {
+      //     return a.name.localeCompare(b.name)
+      //   } else {
+      //     var performanceOrderDifference = a.performance_order - b.performance_order
+      //     if (performanceOrderDifference === 0) {
+      //       return a.name.localeCompare(b.name)
+      //     }
+      //     return performanceOrderDifference
+      //   }
+      // })
     },
     getChoirRating: (state, getters) => (score) => {
       var percentage = score === 0 ? 0 : Math.round(score / getters.maxScore * 100)
