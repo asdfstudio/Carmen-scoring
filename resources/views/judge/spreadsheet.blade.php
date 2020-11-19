@@ -18,7 +18,6 @@
     window.__SPREADSHEET_TITLE__ = "{!! $spreadsheetTitle !!}";
     window.__BACK_URL__ = "{!! $backUrl !!}";
     window.__API_URL__ = "{!! $apiUrl !!}";
-    window.__IS_SPREADSHEET_SCORING_ACTIVE__ = "{!! $isSpreadsheetScoringActive !!}";
     window.__RECORDED_COMMENTS__ = {!! $recordedComments !!};
     window.__COMPETITION__ = {!! $competition !!};
   </script>

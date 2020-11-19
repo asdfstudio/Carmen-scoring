@@ -116,7 +116,7 @@ class CompetitionDivisionRoundController extends Controller
         //dd($allocatedSize/1024/1024);
 
         $spreadsheetTitle = $round->name;
-        $apiUrl = route('spreadsheet.show', [$round->id]);
+        $apiUrl = route('api.spreadsheet.show', [$round->id]);
         $backUrl = route('judge.competition.show', [$competition_id]);
 
         $isSpreadsheetScoringActive = $round->status;

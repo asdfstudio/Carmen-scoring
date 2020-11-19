@@ -15,4 +15,4 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // })->middleware('auth:api');
 
-Route::resource('spreadsheet', 'JudgingSpreadsheetController')->middleware(['web', 'auth', 'auth.judge']);
+Route::resource('spreadsheet', 'JudgingSpreadsheetController')->middleware(['auth', 'auth.judge']);
