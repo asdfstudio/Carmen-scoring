@@ -6,18 +6,8 @@ import ScoresApi from '../api/scores'
 import _ from 'lodash'
 import axios from 'axios'
 
-let captionsList = window.__CAPTIONS__ ||  {};
-let captionWeightingId = window.__CAPTION_WEIGHTING_ID__ || 1;
-let divisionsList = window.__DIVISIONS__ || [];
-let choirsList = window.__CHOIRS__ || [];
-let criteriaList = window.__CRITERIA__ || [];
-let scoresList = window.__SCORES__ || [];
-let commentsList = window.__COMMENTS__ || [];
-let ratingSystem = window.__RATINGS__ || [];
-let recordedComments = window.__RECORDED_COMMENTS__ || [];
-let competition = window.__COMPETITION__ || {};
-let backUrl = window.__BACK_URL__ || '/';
 let apiUrl = window.__API_URL__;
+let backUrl = window.__BACK_URL__;
 
 Vue.use(Vuex)
 
@@ -48,19 +38,19 @@ export const store = new Vuex.Store({
     count: 0,
     isSpreadsheetScoringActive: false,
     // scoringStatus: 'Active',
-    captionsList: captionsList,
-    captionWeightingId: captionWeightingId,
-    divisions: divisionsList,
-    recordings: recordedComments,
-    competition: competition,
-    choirsList: choirsList,
-    criteriaList: criteriaList,
-    scores: scoresList,
+    captionsList: [],
+    captionWeightingId: -1,
+    divisions: [],
+    recordings: [],
+    competition: {},
+    ratings: [],
+    choirsList: [],
+    criteriaList: [],
+    scores: [],
     saving: {},
     saved: {},
     errored: {},
     comments: {},
-    ratings: ratingSystem,
     activeModal: false,
     protectModal: false,
     activeCriterion: false,
@@ -150,16 +140,16 @@ export const store = new Vuex.Store({
       state.errored = Object.assign({}, state.errored, statusObj)
     },
     setApiData (state, payload) {
-      // state.captionsList = payload.captions
-      // state.captionWeightingId = payload.captionWeightingId
-      // state.division = payload.divisions
-      // state.choirsList = payload.choirs
-      // state.criteriaList = payload.criteria
+      state.ratings = payload.rating_system
+      state.captionWeightingId = payload.captionWeightingId
+      state.captionsList = payload.captions
+      state.division = payload.divisions
+      state.choirsList = payload.choirs;
+      state.criteriaList = payload.criteria
       state.scores = payload.scores
       state.comments = payload.comments
-      // state.ratings = payload.ratings
-      // state.recordedComments = payload.recordedComments
-      // state.competition = payload.competition
+      state.recordedComments = payload.recordedComments
+      state.competition = payload.competition
       state.spreadsheetTitle = payload.spreadsheetTitle
       state.backUrl = payload.backUrl
       state.isSpreadsheetScoringActive = payload.isSpreadsheetScoringActive

@@ -175,7 +175,7 @@ class JudgingSpreadsheetController extends Controller
 
         // JSON encode
         $divisions = $round->divisions;
-        $recordedComments = $recordedComments->first();
+        // $recordedComments = $recordedComments->first();
 
         return response()->json(compact('isSpreadsheetScoringActive', 'divisions', 'captions', 'captionWeightingId', 'choirs',
             'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'rating_system','recordedComments','competition'));

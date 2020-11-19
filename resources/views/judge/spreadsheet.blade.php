@@ -7,19 +7,8 @@
   <title>Carmen - Judge Spreadsheet</title>
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
   <script>
-    window.__DIVISIONS__ = {!! $divisions !!};
-    window.__CHOIRS__ = {!! $choirs !!};
-    window.__CRITERIA__ = {!! $criteria !!};
-    window.__SCORES__ = {!! $scores !!};
-    window.__COMMENTS__ = {!! $comments !!};
-    window.__CAPTIONS__ = {!! $captions !!};
-    window.__CAPTION_WEIGHTING_ID__ = {!! $captionWeightingId !!};
-    window.__RATINGS__ = {!! $rating_system !!};
-    window.__SPREADSHEET_TITLE__ = "{!! $spreadsheetTitle !!}";
     window.__BACK_URL__ = "{!! $backUrl !!}";
     window.__API_URL__ = "{!! $apiUrl !!}";
-    window.__RECORDED_COMMENTS__ = {!! $recordedComments !!};
-    window.__COMPETITION__ = {!! $competition !!};
   </script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@9"></script>

@@ -139,7 +139,6 @@
           <th class="criterion-name">Record Comments</th>
           <td  v-for="choir in choirsList" :key="choir.id">
             <Record
-              :recordsList="recordsList"
               :choir="choir"
               :recordings ="recordings"
               @start-recording="onRecordingStart(choir.id)"
@@ -210,7 +209,7 @@ export default {
       return this.$store.state.ratings.length !== 0
     },
     hasPremium () {
-      return this.$store.state.competition.organization.is_premium
+      return this.$store.state.competition?.organization?.is_premium
     },
     activeModal () {
       return this.$store.state.activeModal
