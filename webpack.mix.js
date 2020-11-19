@@ -21,7 +21,7 @@ mix.autoload({ 'jquery': ['window.$', 'window.jQuery'] })
   // Build the vue components
   // .js('resources/js/components', 'public/dist/js/vue-app.js')
   .js('src/main.js', 'public/dist/vue')
-    .sourceMaps()
+    .sourceMaps(false, 'source-map')
   // Build css
   .extract(['bootstrap-sass', 'vue', 'vue2-dropzone'])
   .sass('resources/sass/app.scss', 'public/dist/css', {

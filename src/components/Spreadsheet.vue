@@ -384,10 +384,15 @@ export default {
     },
     warnUploadRecordingError: function () {
       alert('There was an error uploading your file to the server.  Please refresh this page and try uploading the file again.')
+    },
+    getApiData: function () {
+      return this.$store.dispatch('getApiData')
     }
+
   },
   mounted () {
     this.updateChoirsRanks()
+    this.getApiData()
   },
   beforeUpdate () {
     this.updateChoirsRanks()

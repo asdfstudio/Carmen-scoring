@@ -4,6 +4,7 @@ import CommentsApi from '../api/comments'
 import RecordingApi from '../api/recordings'
 import ScoresApi from '../api/scores'
 import _ from 'lodash'
+import axios from 'axios'
 
 let captionsList = window.__CAPTIONS__ ||  {};
 let captionWeightingId = window.__CAPTION_WEIGHTING_ID__ || 1;
@@ -15,9 +16,8 @@ let commentsList = window.__COMMENTS__ || [];
 let ratingSystem = window.__RATINGS__ || [];
 let recordedComments = window.__RECORDED_COMMENTS__ || [];
 let competition = window.__COMPETITION__ || {};
-let spreadsheetTitle = window.__SPREADSHEET_TITLE__ || 'Carmen Scoring';
 let backUrl = window.__BACK_URL__ || '/';
-let isSpreadsheetScoringActive = window.__IS_SPREADSHEET_SCORING_ACTIVE__ === 'Active'
+let apiUrl = window.__API_URL__;
 
 Vue.use(Vuex)
 
@@ -46,7 +46,7 @@ var saveDebouncedScore = _.wrap(
 export const store = new Vuex.Store({
   state: {
     count: 0,
-    isSpreadsheetScoringActive: isSpreadsheetScoringActive,
+    isSpreadsheetScoringActive: false,
     // scoringStatus: 'Active',
     captionsList: captionsList,
     captionWeightingId: captionWeightingId,
@@ -59,15 +59,16 @@ export const store = new Vuex.Store({
     saving: {},
     saved: {},
     errored: {},
-    comments: commentsList,
+    comments: {},
     ratings: ratingSystem,
     activeModal: false,
     protectModal: false,
     activeCriterion: false,
     activeChoir: false,
     activeComment: false,
-    spreadsheetTitle: spreadsheetTitle,
-    backUrl: backUrl
+    spreadsheetTitle: 'Default Spreadsheet Title',
+    backUrl: backUrl,
+    apiUrl: apiUrl
   },
   mutations: {
     activateModal (state, data) {
@@ -147,9 +148,28 @@ export const store = new Vuex.Store({
     },
     setErroredStatus (state, statusObj) {
       state.errored = Object.assign({}, state.errored, statusObj)
+    },
+    setApiData (state, payload) {
+      // state.captionsList = payload.captions
+      // state.captionWeightingId = payload.captionWeightingId
+      // state.division = payload.divisions
+      // state.choirsList = payload.choirs
+      // state.criteriaList = payload.criteria
+      state.scores = payload.scores
+      state.comments = payload.comments
+      // state.ratings = payload.ratings
+      // state.recordedComments = payload.recordedComments
+      // state.competition = payload.competition
+      state.spreadsheetTitle = payload.spreadsheetTitle
+      state.backUrl = payload.backUrl
+      state.isSpreadsheetScoringActive = payload.isSpreadsheetScoringActive
     }
   },
   actions: {
+    async getApiData(context) {
+      const { data } = await axios.get(store.state.apiUrl)
+      context.commit("setApiData", data)
+    },
     setScore (context, payload) {
       // Find the matching choir
       var matches = store.state.choirsList.filter(choir => choir.id === payload.choir_id)

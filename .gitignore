@@ -9,6 +9,7 @@
 /public/hot
 /public/storage
 /public/uploads
+/public/dist/**/*.map
 /storage/*.key
 Homestead.yaml
 Homestead.json

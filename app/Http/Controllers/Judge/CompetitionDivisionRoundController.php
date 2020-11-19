@@ -116,6 +116,7 @@ class CompetitionDivisionRoundController extends Controller
         //dd($allocatedSize/1024/1024);
 
         $spreadsheetTitle = $round->name;
+        $apiUrl = route('spreadsheet.show', [$round->id]);
         $backUrl = route('judge.competition.show', [$competition_id]);
 
         $isSpreadsheetScoringActive = $round->status;
@@ -215,7 +216,7 @@ class CompetitionDivisionRoundController extends Controller
         $competition = json_encode($competition);
 
         return view('judge.spreadsheet', compact('isSpreadsheetScoringActive', 'divisions', 'captions', 'captionWeightingId', 'choirs',
-            'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'rating_system','recordedComments','competition'));
+            'criteria', 'scores', 'comments', 'spreadsheetTitle', 'apiUrl', 'backUrl', 'rating_system','recordedComments','competition'));
     }
 
     public function spreadsheet_sources($competition_id, $division_id, $round_id)
