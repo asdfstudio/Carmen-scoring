@@ -79,12 +79,6 @@ export const store = new Vuex.Store({
       state.activeChoir = choir
       state.activeCriterion = false
     },
-    activateCriterionModal (state, criterion) {
-      state.activeModal = true
-      state.activeComment = false
-      state.activeChoir = false
-      state.activeCriterion = criterion
-    },
     activateChoirCriterionModal (state, payload) {
       state.activeModal = true
       state.activeComment = false

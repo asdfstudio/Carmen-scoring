@@ -33,7 +33,7 @@
         <!-- Caption Criteria Start -->
         <tr class="criteria-row" v-for="criterion in criteriaList.filter(cr => cr.caption_id === caption.id)" v-bind:key="criterion.id">
           <th  class="criterion-name">
-            <span class="clickable" @click="activateCriterionModal(criterion)">{{ criterion.name }}</span>
+            <span>{{ criterion.name }}</span>
           </th>
 
           <td
@@ -263,14 +263,6 @@ export default {
       this.$store.commit('startModalProtection')
       if (this.isSpreadsheetScoringActive) {
         this.$store.commit('activateChoirCommentModal', choir)
-      } else {
-        this.displayScoringInactiveMessage()
-      }
-    },
-    activateCriterionModal: function (criterion) {
-      this.$store.commit('startModalProtection')
-      if (this.isSpreadsheetScoringActive) {
-        this.$store.commit('activateCriterionModal', criterion)
       } else {
         this.displayScoringInactiveMessage()
       }
