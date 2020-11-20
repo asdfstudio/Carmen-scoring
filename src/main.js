@@ -2,12 +2,12 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 
-import App from './App'
 import { store } from './store/index'
-// let store = window.__INITIAL_STATE__
-// console.log(store)
+import App from './App'
+import VueHotKey from 'v-hotkey'
 
 Vue.config.productionTip = false
+Vue.use(VueHotKey)
 
 /* eslint-disable no-new */
 new Vue({

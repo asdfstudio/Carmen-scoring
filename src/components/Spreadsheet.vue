@@ -1,5 +1,5 @@
 <template>
-  <div id="spreadsheet">
+  <div id="spreadsheet" v-hotkey="keymap">
     <table>
       <thead>
         <tr class="table-header">
@@ -42,6 +42,8 @@
             @click="activateChoirCriterionModal(choir, criterion)"
             :choir="choir"
             :criterion="criterion"
+            :data-choir-id="choir.id"
+            :data-criterion-id="criterion.id"
             v-bind:key="choir.id"
             v-bind:class="{editing: isEditing(choir, criterion), saving: getSavingStatus(choir.id + '_' + caption.id + '_' + criterion.id), saved: getSavedStatus(choir.id + '_' + caption.id + '_' + criterion.id), errored: getErroredStatus(choir.id + '_' + caption.id + '_' + criterion.id)}"
             >{{ score(choir, criterion) }}</td>
@@ -222,7 +224,16 @@ export default {
     },
     recordings () {
       return this.$store.state.recordings
+    },
+    keymap () {
+      return {
+        'left': this.move.bind(this, 'left'),
+        'right': this.move.bind(this, 'right'),
+        'up': this.move.bind(this, 'up'),
+        'down': this.move.bind(this, 'down'),
+      }
     }
+
   },
   watch: {
     activeChoir: function (newValue, oldValue) {
@@ -378,8 +389,35 @@ export default {
     },
     getApiData: function () {
       return this.$store.dispatch('getApiData')
-    }
+    },
+    move: function (direction) {
+      if (this.$store.getters.activeChoir && this.$store.getters.activeCriterion) {
+        var target, current = document.querySelector('td.caption-value.editing')
 
+        if (direction == 'left') {
+          target = current.previousElementSibling
+        } else if (direction == 'right') {
+          target = current.nextElementSibling
+        } else if (direction == 'up' || direction == 'down') {
+          var column = document.querySelectorAll('td.caption-value:nth-child(' + (current.cellIndex + 1) + ')'); // Account for first column
+          var currentIndex = Array.prototype.indexOf.call(column, current)
+          var targetIndex = direction == 'up' ? currentIndex - 1 : currentIndex + 1
+          target = column[targetIndex]
+        }
+
+        if (target && target.classList.contains('caption-value')) {
+          var choir = this.choirsList.find(function(el) {
+            return el.id == target.dataset.choirId;
+          });
+          var criterion = this.criteriaList.find(function(el) {
+            return el.id == target.dataset.criterionId;
+          });
+          this.deactivateModal();
+          this.activateChoirCriterionModal(choir, criterion);
+          this.score(choir, criterion);
+        }
+      }
+    },
   },
   mounted () {
     this.updateChoirsRanks()
