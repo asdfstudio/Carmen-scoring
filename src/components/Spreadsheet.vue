@@ -414,7 +414,6 @@ export default {
           });
           this.deactivateModal();
           this.activateChoirCriterionModal(choir, criterion);
-          this.score(choir, criterion);
         }
       }
     },

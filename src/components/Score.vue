@@ -96,14 +96,19 @@ export default {
     }
   },
   watch: {
+    initialScore: function (newValue, oldValue) {
+      this.currentScore = newValue
+    },
     currentScore: function (newValue, oldValue) {
-      const payload = {
-        choir_id: this.choirId,
-        criterion_id: this.criterionId,
-        caption_id: this.captionId,
-        raw_score: newValue
+      if (this.currentScore != this.initialScore) {
+        const payload = {
+          choir_id: this.choirId,
+          criterion_id: this.criterionId,
+          caption_id: this.captionId,
+          raw_score: newValue
+        }
+        this.$store.dispatch('setScore', payload)
       }
-      this.$store.dispatch('setScore', payload)
     }
   },
   methods: {
