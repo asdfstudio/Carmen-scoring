@@ -1,7 +1,8 @@
 <template>
-  <Modal>
+  <Modal v-hotkey="keymap">
     <ModalBody>
       <Score
+        ref="score"
         :min="criterion.minScore"
         :max="criterion.maxScore"
         :initialScore="currentScore"
@@ -55,11 +56,35 @@ export default {
     },
     currentScore () {
       return this.$store.getters.getChoirCriterionScore(this.choir.id, this.criterion.id)
+    },
+    keymap () {
+      return {
+        '1': this.writeScore.bind(this, 1),
+        '2': this.writeScore.bind(this, 2),
+        '3': this.writeScore.bind(this, 3),
+        '4': this.writeScore.bind(this, 4),
+        '5': this.writeScore.bind(this, 5),
+        '6': this.writeScore.bind(this, 6),
+        '7': this.writeScore.bind(this, 7),
+        '8': this.writeScore.bind(this, 8),
+        '9': this.writeScore.bind(this, 9),
+        'u': this.incrementScore,
+        'd': this.decrementScore,
+      }
     }
   },
   watch: {
   },
   methods: {
+    incrementScore () {
+      this.$refs.score.up()
+    },
+    decrementScore () {
+      this.$refs.score.down()
+    },
+    writeScore (newScore) {
+      this.$refs.score.change(newScore)
+    }
   }
 }
 
