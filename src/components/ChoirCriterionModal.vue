@@ -1,5 +1,20 @@
 <template>
-  <Modal v-hotkey="keymap">
+  <Modal>
+    <GlobalEvents
+      @keyup.digit1="writeScore(1)"
+      @keyup.digit2="writeScore(2)"
+      @keyup.digit3="writeScore(3)"
+      @keyup.digit4="writeScore(4)"
+      @keyup.digit5="writeScore(5)"
+      @keyup.digit6="writeScore(6)"
+      @keyup.digit7="writeScore(7)"
+      @keyup.digit8="writeScore(8)"
+      @keyup.digit9="writeScore(9)"
+      @keyup.digit0="writeScore(10)"
+      @keyup.+="incrementScore"
+      @keyup.period="incrementScore"
+      @keyup.-="decrementScore"
+    />
     <ModalBody>
       <Score
         ref="score"
@@ -32,6 +47,8 @@ import ModalHeader from './ModalHeader'
 import ModalBody from './ModalBody'
 import ModalFooter from './ModalFooter'
 import Score from './Score'
+import GlobalEvents from 'vue-global-events'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'ChoirCriterionModal',
@@ -40,7 +57,8 @@ export default {
     ModalHeader,
     ModalBody,
     ModalFooter,
-    Score
+    Score,
+    GlobalEvents
   },
   data: function () {
     return {
@@ -57,21 +75,6 @@ export default {
     currentScore () {
       return this.$store.getters.getChoirCriterionScore(this.choir.id, this.criterion.id)
     },
-    keymap () {
-      return {
-        '1': this.writeScore.bind(this, 1),
-        '2': this.writeScore.bind(this, 2),
-        '3': this.writeScore.bind(this, 3),
-        '4': this.writeScore.bind(this, 4),
-        '5': this.writeScore.bind(this, 5),
-        '6': this.writeScore.bind(this, 6),
-        '7': this.writeScore.bind(this, 7),
-        '8': this.writeScore.bind(this, 8),
-        '9': this.writeScore.bind(this, 9),
-        'u': this.incrementScore,
-        'd': this.decrementScore,
-      }
-    }
   },
   watch: {
   },
@@ -84,7 +87,7 @@ export default {
     },
     writeScore (newScore) {
       this.$refs.score.change(newScore)
-    }
+    },
   }
 }
 

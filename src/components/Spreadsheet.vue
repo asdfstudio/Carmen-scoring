@@ -1,5 +1,13 @@
 <template>
-  <div id="spreadsheet" v-hotkey="keymap">
+  <div id="spreadsheet">
+    <GlobalEvents
+      @keyup.up="move('up')"
+      @keyup.down="move('down')"
+      @keyup.left="move('left')"
+      @keyup.right="move('right')"
+      @keyup.?="showHelp"
+      @keyup.esc="deactivateChoirCriterionModal"
+    />
     <table>
       <thead>
         <tr class="table-header">
@@ -171,10 +179,12 @@
 <script>
 import Record from './Record'
 import DropZone from './DropZone'
+import GlobalEvents from 'vue-global-events'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'Spreadsheet',
-  components: { Record, DropZone },
+  components: { Record, DropZone, GlobalEvents },
   data: function () {
     return {
       activeChoir: null,
@@ -225,15 +235,6 @@ export default {
     recordings () {
       return this.$store.state.recordings
     },
-    keymap () {
-      return {
-        'left': this.move.bind(this, 'left'),
-        'right': this.move.bind(this, 'right'),
-        'up': this.move.bind(this, 'up'),
-        'down': this.move.bind(this, 'down'),
-      }
-    }
-
   },
   watch: {
     activeChoir: function (newValue, oldValue) {
@@ -295,9 +296,6 @@ export default {
       this.activeCriterion = criterion
       this.$store.commit('activateCriterion', this.activeCriterion)
     },
-    deactiveCriterion: function () {
-      this.activeCriterion = null
-    },
     activateChoir: function (choir) {
       this.activeChoir = choir
       this.$store.commit('activateChoir', this.activeChoir)
@@ -308,11 +306,15 @@ export default {
       this.$store.commit('activateChoir', this.activeChoir)
       this.$store.commit('activateCriterion', this.activeCriterion)
     },
-    deactiveChoir: function () {
-      this.activeChoir = null
-    },
     deactivateModal: function () {
       this.$store.commit('deactivateModal')
+    },
+    deactivateChoirCriterionModal: function () {
+      this.activeChoir = null
+      this.activeCriterion = null
+      this.$store.commit('activateChoir', null)
+      this.$store.commit('activateCriterion', null)
+      this.deactivateModal()
     },
     incrementCount: function () {
       this.$store.commit('increment')
@@ -391,6 +393,7 @@ export default {
       return this.$store.dispatch('getApiData')
     },
     move: function (direction) {
+      // If we're already active, see where we're at where the desired cell is
       if (this.$store.getters.activeChoir && this.$store.getters.activeCriterion) {
         var target, current = document.querySelector('td.caption-value.editing')
 
@@ -404,19 +407,30 @@ export default {
           var targetIndex = direction == 'up' ? currentIndex - 1 : currentIndex + 1
           target = column[targetIndex]
         }
+      } else {
+        // If we're not active, our target is the first cell
+        var target = document.querySelector('td.caption-value')
+      }
 
-        if (target && target.classList.contains('caption-value')) {
-          var choir = this.choirsList.find(function(el) {
-            return el.id == target.dataset.choirId;
-          });
-          var criterion = this.criteriaList.find(function(el) {
-            return el.id == target.dataset.criterionId;
-          });
-          this.deactivateModal();
-          this.activateChoirCriterionModal(choir, criterion);
-        }
+      if (target && target.classList.contains('caption-value')) {
+        var choir = this.choirsList.find(function(el) {
+          return el.id == target.dataset.choirId;
+        });
+        var criterion = this.criteriaList.find(function(el) {
+          return el.id == target.dataset.criterionId;
+        });
+        this.deactivateModal();
+        this.activateChoirCriterionModal(choir, criterion);
       }
     },
+    showHelp () {
+      Swal.fire({
+        icon: 'question',
+        title: 'Keyboard Help',
+        text: 'Use the arrow keys to select a score. 0-9 will set a score. + or . increment the score. - decrements the score. esc closes the scoring pad.',
+        showCloseButton: true
+      })
+    }
   },
   mounted () {
     this.updateChoirsRanks()

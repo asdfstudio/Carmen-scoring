@@ -9,7 +9,9 @@
         Scores can't be edited now.
       </div>
     </h2>
+    <div class="kb-help">Press ? to see keyboard help</div>
   </div>
+
 </template>
 
 <script>
@@ -85,6 +87,12 @@ button, .button {
 
 .change-division-button {
   right: 15px;
+}
+
+.kb-help {
+  position: absolute;
+  left: 80%;
+  top: 10%;
 }
 
 .scoring-status {
