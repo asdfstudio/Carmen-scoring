@@ -17,7 +17,8 @@ export default {
   padding: 25px;
   background: #fff;
   margin: 0;
-  overflow: hidden;
+  overflow-y: scroll;
+  max-height: 78vh;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
