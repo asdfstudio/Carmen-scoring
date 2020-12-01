@@ -37,13 +37,11 @@ export const store = new Vuex.Store({
   state: {
     count: 0,
     isSpreadsheetScoringActive: false,
-    // scoringStatus: 'Active',
     captionsList: [],
     captionWeightingId: -1,
     divisions: [],
     recordings: [],
     competition: {},
-    ratings: [],
     choirsList: [],
     criteriaList: [],
     scores: [],
@@ -51,6 +49,7 @@ export const store = new Vuex.Store({
     saved: {},
     errored: {},
     comments: {},
+    hasRatings: false,
     activeModal: false,
     protectModal: false,
     activeCriterion: false,
@@ -133,12 +132,16 @@ export const store = new Vuex.Store({
     setErroredStatus (state, statusObj) {
       state.errored = Object.assign({}, state.errored, statusObj)
     },
+    setHasRatings (state) {
+      state.hasRatings = state.divisions.some(function(division) {
+        return division.rating_system != null && division.rating_system.length > 0
+      })
+    },
     setApiData (state, payload) {
-      state.ratings = payload.rating_system
       state.captionWeightingId = payload.captionWeightingId
       state.captionsList = payload.captions
-      state.division = payload.divisions
-      state.choirsList = payload.choirs;
+      state.divisions = payload.divisions
+      state.choirsList = payload.choirs
       state.criteriaList = payload.criteria
       state.scores = payload.scores
       state.comments = payload.comments
@@ -152,7 +155,8 @@ export const store = new Vuex.Store({
   actions: {
     async getApiData(context) {
       const { data } = await axios.get(store.state.apiUrl)
-      context.commit("setApiData", data)
+      context.commit('setApiData', data)
+      context.commit('setHasRatings')
     },
     setScore (context, payload) {
       // Find the matching choir
@@ -253,17 +257,24 @@ export const store = new Vuex.Store({
       //   }
       // })
     },
-    getChoirRating: (state, getters) => (score) => {
+    getChoirRating: (state, getters) => (choir, score) => {
       var percentage = score === 0 ? 0 : Math.round(score / getters.maxScore * 100)
       var highestRatingMinScore = 0
       var ratingName = 'No Rating'
-      for (let rating of state.ratings) {
-        if (percentage >= rating.min_score && highestRatingMinScore < rating.min_score) {
-          highestRatingMinScore = rating.min_score
-          ratingName = rating.name
-        }
+      var division = state.divisions.find(function(division) {
+          return division.id == choir.division_id;
+      });
+      if (division?.rating_system) {
+          for (let rating of division.rating_system) {
+            if (percentage >= rating.min_score && highestRatingMinScore < rating.min_score) {
+              highestRatingMinScore = rating.min_score
+              ratingName = rating.name
+            }
+          }
+          return ratingName + ' (' + percentage + '%)'
+      } else {
+        return "Division Not Rated"
       }
-      return ratingName + ' (' + percentage + '%)'
     },
     getChoirCaptionRank: (state, getters) => (choirId, captionId) => {
       var choirs = state.choirsList

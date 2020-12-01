@@ -66,9 +66,6 @@ class JudgingSpreadsheetController extends Controller
 
         $recording_judges = $round->judges;
 
-        // TODO: Allocate these properly to divisions
-        $rating_system = $round->divisions->first()->rating_system;
-
         $judge = Judge::with(['captions' => function($query) use ($round_id, $round) {
             $query->where('round_id', $round_id);
         }])->find($judge_id);
@@ -178,7 +175,7 @@ class JudgingSpreadsheetController extends Controller
         // $recordedComments = $recordedComments->first();
 
         return response()->json(compact('isSpreadsheetScoringActive', 'divisions', 'captions', 'captionWeightingId', 'choirs',
-            'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'rating_system','recordedComments','competition'));
+            'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'recordedComments','competition'));
     }
 
     /**

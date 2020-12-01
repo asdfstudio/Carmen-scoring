@@ -124,7 +124,7 @@
             class="rank-rating-value"
             >
             {{ choirRank(choir, 'Place') }} <span class="tied-badge" v-if="choirRankTied(choir)">Tied</span><br>
-            <span v-if="hasRatings">{{ scoreToRating(choir.total_score) }}</span>
+            <span v-if="hasRatings">{{ scoreToRating(choir, choir.total_score) }}</span>
           </td>
         </tr>
         <!-- Rank / Rating end -->
@@ -214,11 +214,8 @@ export default {
     scores () {
       return this.$store.state.scores
     },
-    ratings () {
-      return this.$store.state.ratings
-    },
     hasRatings () {
-      return this.$store.state.ratings.length !== 0
+      return this.$store.state.hasRatings
     },
     hasPremium () {
       return this.$store.state.competition?.organization?.is_premium
@@ -343,8 +340,8 @@ export default {
     choirTotalWeightedScore: function (choir) {
       return this.$store.getters.getChoirTotalWeightedScore(choir.id)
     },
-    scoreToRating: function (score) {
-      return this.$store.getters.getChoirRating(score)
+    scoreToRating: function (choir, score) {
+      return this.$store.getters.getChoirRating(choir, score)
     },
     getChoirCaptionSubtotalScore: function (choir, caption) {
       return this.$store.getters.getChoirCaptionSubtotalScore(choir.id, caption.id)
