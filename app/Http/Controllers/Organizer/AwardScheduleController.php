@@ -157,20 +157,7 @@ class AwardScheduleController extends Controller
         $query->where('competition_id', $competition_id);
       })->with(['division', 'division.choirs'])->get();
 
-      $ratings = [];
-
-      foreach ($schedule->items as $item) {
-        if (!$item->division) continue;
-
-        $ratings[] = [
-          'division_id' => $item->division_id,
-          'ratings' => (new Ratings($item->division))->all()
-        ];
-      }
-
-      $ratings = collect($ratings);
-
-      return view('award-schedule.organizer.show-announcer', compact('competition', 'schedule', 'awardWinners', 'standings', 'ratings'));
+      return view('award-schedule.organizer.show-announcer', compact('competition', 'schedule', 'awardWinners', 'standings'));
     }
 
 

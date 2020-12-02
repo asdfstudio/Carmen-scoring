@@ -86,13 +86,15 @@
 
           @if($item->round)
               <ul class="list-group">
-                @if(!$item->round->is_completed)
-                  <li class="list-group-item"><span>Awaiting Final Scores for this Round</span></li>
-                @else
-                  @foreach($ratings as $rating)
-                    <li class="list-group-item"><span class="rating">{{ $rating['rating']['name'] }}:</span> <span class="award-winner-choir">{{ $rating['choir']->full_name }}</span></li>
-                  @endforeach
-                @endif
+                  @if(!$item->round->status == 'Active')
+                      <li class="list-group-item"><span>Awaiting Final Scores for this Round</span></li>
+                  @else
+                      @foreach($ratings as $rating)
+                          @if (!empty($rating['rating']['name']))
+                              <li class="list-group-item"><span class="rating">{{ $rating['rating']['name'] }}:</span> <span class="award-winner-choir">{{ $rating['choir']->full_name }}</span></li>
+                          @endif
+                      @endforeach
+                  @endif
               </ul>
           @endif
 
