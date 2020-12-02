@@ -85,7 +85,7 @@ class JudgingSpreadsheetController extends Controller
         $spreadsheetTitle = $round->name;
         $backUrl = route('judge.competition.show', [$round->competition->id]);
 
-        $isSpreadsheetScoringActive = $round->status;
+        $isSpreadsheetScoringActive = $round->status == 'Active';
 
         $captionWeightingId = $round->caption_weighting_id;
 
