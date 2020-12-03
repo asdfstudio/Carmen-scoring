@@ -51,30 +51,23 @@ class JudgingSpreadsheetController extends Controller
 
         $round = Round::with(['competition', 'competition.organization', 'sheet',
             'divisions', 'divisions.choirs', 'divisions.choirs.recordings',
-            'judges' => function($query) {
-                $query->groupBy('judge_id');
+            'judges' => function($query) use ($judge_id) {
+                $query->where('judge_id', $judge_id);
             },'judges.captions' => function($query) use ($round_id) {
                 $query->where('round_id',$round_id);
             }, 'judges.captions.criteria'
             ])->find($round_id);
 
         $competition = $round->competition;
+        $divisions = $round->divisions;
 
-        if ($round->divisions->count() == 0) {
+        if ($divisions->count() == 0) {
             return redirect()->route('judge.competition.show', [$competition])->with('warning', 'No choirs have been designated for this round yet.');
         }
-
-        $recording_judges = $round->judges;
 
         $judge = Judge::with(['captions' => function($query) use ($round_id, $round) {
             $query->where('round_id', $round_id);
         }])->find($judge_id);
-
-        $judgeCaptionIds = $judge->captions->pluck('id')->toArray();
-        $captions = Caption::forSheet($round->sheet);
-        $captions = $captions->whereIn('id', $judgeCaptionIds);
-
-        $criteria = $round->sheet->criteria->whereIn('caption_id', $judgeCaptionIds);
 
         //$before = memory_get_usage();
         $scoreboard = new Scoreboard(['round_id' => $round_id, 'judge_id' => $judge_id]);
@@ -89,6 +82,10 @@ class JudgingSpreadsheetController extends Controller
 
         $captionWeightingId = $round->caption_weighting_id;
 
+        $captions = Caption::forSheet($round->sheet);
+        $judgeCaptionIds = $judge->captions->pluck('id')->toArray();
+        $captions = $captions->whereIn('id', $judgeCaptionIds);
+
         // Convert to arrays for use with new Vue spreadsheet
         $captions = $captions->map(function ($item, $key) {
             return [
@@ -98,8 +95,6 @@ class JudgingSpreadsheetController extends Controller
             ];
         })->toArray();
         $captions = array_values($captions);
-
-        $divisions = $round->divisions->pluck('id', 'name');
 
         $choirs = DB::table('choir_round AS cr')
             ->join('choirs AS c', 'c.id', '=', 'cr.choir_id')
@@ -121,6 +116,7 @@ class JudgingSpreadsheetController extends Controller
                 ->orderBy('cr.performance_order')
             ->get();
 
+        $criteria = $round->sheet->criteria->whereIn('caption_id', $judgeCaptionIds);
         $criteria = $criteria->map(function ($item, $key) {
             return [
                 'id' => $item->id,
@@ -157,7 +153,6 @@ class JudgingSpreadsheetController extends Controller
                 event(new CommentSaved($placeholder_comment, $round->competition));
             }
         }
-
         $round->refresh();
 
         $comments = $round->feedback->where('judge_id', $judge_id)->map(function ($item, $key) {
@@ -166,16 +161,10 @@ class JudgingSpreadsheetController extends Controller
                 'comment' => $item->comments
             ];
         })->toArray();
-        $recordedComments = $recording_judges->map(function ($item, $key) {
-            return $item->recordings;
-        });
-
-        // JSON encode
-        $divisions = $round->divisions;
-        // $recordedComments = $recordedComments->first();
+        $recordings = $judge->recordings;
 
         return response()->json(compact('isSpreadsheetScoringActive', 'divisions', 'captions', 'captionWeightingId', 'choirs',
-            'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'recordedComments','competition'));
+            'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'recordings','competition'));
     }
 
     /**

@@ -30,8 +30,6 @@ class ScoreController extends Controller
 			$round_id = $request->input('round_id', NULL);
 			$choir_id = $request->input('choir_id', NULL);
 
-			//return response()->json([$judge_id, $request->input()]);
-
 			$scorekeeper = new Scorekeeper([
 				'division_id' => $division_id,
 				'round_id' => $round_id,
@@ -42,7 +40,6 @@ class ScoreController extends Controller
 			$criterion_id = $request->input('criterion_id', NULL);
 			$score = $request->input('score', NULL);
 
-
 			// Save a single score
 			if($criterion_id AND $score)
 			{
@@ -52,17 +49,5 @@ class ScoreController extends Controller
 					return response()->json(['success' => true]);
 				}
 			}
-
-			/*$findExistingData = $data;
-			unset($findExistingData['score']);
-			//dd($data);
-
-			$score = RawScore::firstOrNew($findExistingData);
-
-			$score->score = $request->input('score');
-			$score->save();
-			dd($score);
-
-			dd($request->input());*/
 		}
 }

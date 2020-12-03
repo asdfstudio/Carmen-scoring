@@ -1,5 +1,5 @@
 // Array to hold all audio recorder instances that may be on the page.
-window.audioRecorers = [];
+window.audioRecorders = [];
 
 // The audio recorder class that will be initialized for each audio recorder widget on the page.
 function AudioRecorder(element) {
@@ -546,33 +546,11 @@ function AudioRecorder(element) {
 $(document).ready(function() {
   // Initialize all audio recorder widgets.
   $(".audio-recorder").each(function(i, element) {
-    window.audioRecorers.push(new AudioRecorder(element));
+    window.audioRecorders.push(new AudioRecorder(element));
   });
 
-  // -dg-download recording file from s3
-  // $(document).on('click', 'a.ar-playlist-download', function(e) {
-  //   e.preventDefault();
-
-  //   const downloadURL = $(this).attr('href');
-  //   console.log('dowonload clicked')
-  //   fetch(downloadURL).then(function(t) {
-  //     return t.blob().then((b)=>{
-  //         var dgDownloadLink = document.createElement("a");
-  //         dgDownloadLink.href = URL.createObjectURL(b);
-  //         dgDownloadLink.setAttribute("download", 'Recording.mp3');
-  //         document.body.appendChild(dgDownloadLink);
-  //         dgDownloadLink.click();
-  //         document.body.removeChild(dgDownloadLink);
-  //         delete dgDownloadLink;
-  //     });
-  //   })
-  //   .catch((error) => {
-  //     console.log('download Error:', error)
-  //   });
-  // })
-
   // Initialize the Dropzone.
-  if ($("#myAwesomeDropzone").lenth) {
+  if ($("#myAwesomeDropzone").length) {
     // eslint-disable-next-line no-undef
     Dropzone.autoDiscover = false;
     $("#myAwesomeDropzone").dropzone({

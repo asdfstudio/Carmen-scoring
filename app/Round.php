@@ -13,8 +13,6 @@ class Round extends Model
 {
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
-
     protected $fillable = [
         'name',
         'sequence',
@@ -97,6 +95,11 @@ class Round extends Model
     public function getStatusSlugAttribute()
     {
         return $this->status_slug();
+    }
+
+    public function getIsCompletedAttribute()
+    {
+        return $this->status() != 'Active';
     }
 
     public function status_label($class_attr = false)

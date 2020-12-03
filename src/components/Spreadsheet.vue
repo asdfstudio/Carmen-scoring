@@ -12,6 +12,7 @@
       <thead>
         <tr class="table-header">
           <th class="criteria-header">
+            <span class="clickable" @click="sortByTime">Sort by Time</span>
             <!--Caption / Criteria-->
           </th>
 
@@ -98,7 +99,7 @@
         <tr class="score-row">
           <th class="score-total-label">
             <span v-if="captionWeightingId === 1">Raw</span> Total
-            <div v-if="captionWeightingId === 1">Weighted Total</div>
+            <div @click="sortByTotalScore" v-if="captionWeightingId === 1">Weighted Total</div>
           </th>
           <td
             v-for="choir in choirsList"
@@ -254,7 +255,11 @@ export default {
       return (choir.id === activeChoirId && criterion.id === activeCriterionId && this.activeModal)
     },
     displayScoringInactiveMessage: function () {
-      alert('Scoring is currently inactive.')
+      Swal.fire({
+        icon: 'warning',
+        title: 'Scoring is Inactive',
+        showCloseButton: true
+      })
     },
     activateModal: function (data) {
       this.$store.commit('startModalProtection')
@@ -381,13 +386,27 @@ export default {
       return this.$store.getters.getErroredStatus(property)
     },
     warnRecordingSaveError: function () {
-      alert('There was an error saving your recording to the server.  You can save your recording to your device using the link in the recording name.  Then refresh this page and try uploading the file.')
+      Swal.fire({
+        icon: 'warning',
+        title: 'There was an error saving your recording to the server.  You can save your recording to your device using the link in the recording name.  Then refresh this page and try uploading the file.',
+        showCloseButton: true
+      })
     },
     warnUploadRecordingError: function () {
-      alert('There was an error uploading your file to the server.  Please refresh this page and try uploading the file again.')
+      Swal.fire({
+        icon: 'error',
+        title: 'There was an error uploading your file to the server.  Please refresh this page and try uploading the file again.',
+        showCloseButton: true
+      })
     },
     getApiData: function () {
       return this.$store.dispatch('getApiData')
+    },
+    sortByTime: function () {
+      this.$store.commit('sortByTime')
+    },
+    sortByTotalScore: function () {
+      this.$store.commit('sortByTotalScore')
     },
     move: function (direction) {
       // If we're already active, see where we're at where the desired cell is
@@ -420,13 +439,45 @@ export default {
         this.activateChoirCriterionModal(choir, criterion);
       }
     },
-    showHelp () {
+    showHelp: function () {
       Swal.fire({
         icon: 'question',
         title: 'Keyboard Help',
         text: 'Use the arrow keys to select a score. 0-9 will set a score. + or . increment the score. - decrements the score. esc closes the scoring pad.',
         showCloseButton: true
       })
+    },
+    // Initialize all audio recorder widgets.
+    initializeAudioRecorders: function () {
+      $(".audio-recorder").each(function(i, element) {
+        window.audioRecorders.push(new AudioRecorder(element))
+      })
+    },
+    // Initialize all dropzone widgets.
+    initializeDropzones: function () {
+      if ($("#myAwesomeDropzone").length) {
+        Dropzone.autoDiscover = false;
+        $("#myAwesomeDropzone").dropzone({
+          init: function() {
+            this.on("success", function(file, response) {
+              console.log(response);
+              if (typeof response.url === "undefined") {
+                warnUploadRecordingError();
+              }
+              console.log("Response:", response);
+            });
+            this.on("error", function(file, errorMessage, xhr) {
+              warnUploadRecordingError();
+              console.log("Error Message:", errorMessage);
+              console.log("XMLHttpRequest:", xhr);
+            });
+          },
+          paramName: "file", // The name that will be used to transfer the file
+          maxFilesize: 500, // MB
+          acceptedFiles: "audio/*",
+          addRemoveLinks: false
+        });
+      }
     }
   },
   mounted () {
@@ -435,6 +486,10 @@ export default {
   },
   beforeUpdate () {
     this.updateChoirsRanks()
+  },
+  updated () {
+    this.initializeAudioRecorders()
+    this.initializeDropzones()
   }
 }
 </script>

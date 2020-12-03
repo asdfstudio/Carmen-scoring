@@ -35,7 +35,6 @@ var saveDebouncedScore = _.wrap(
 
 export const store = new Vuex.Store({
   state: {
-    count: 0,
     isSpreadsheetScoringActive: false,
     captionsList: [],
     captionWeightingId: -1,
@@ -145,7 +144,7 @@ export const store = new Vuex.Store({
       state.criteriaList = payload.criteria
       state.scores = payload.scores
       state.comments = payload.comments
-      state.recordedComments = payload.recordedComments
+      state.recordings = payload.recordings
       state.competition = payload.competition
       state.spreadsheetTitle = payload.spreadsheetTitle
       state.backUrl = payload.backUrl
@@ -196,9 +195,6 @@ export const store = new Vuex.Store({
   getters: {
     captionWeightingId: (state) => {
       return state.captionWeightingId
-    },
-    getCount: (state) => {
-      return state.count
     },
     getChoirsList: (state) => {
       return state.choirsList.slice(0).sort(function (a, b) {
