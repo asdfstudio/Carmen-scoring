@@ -35,6 +35,21 @@ class FeedbackController extends Controller
       $competition = $commentUrl->competition;
       $comment_recipient_id = $commentUrl->recipient_id;
 
+      // Get the divisions that this choir is in
+      $division_ids = DB::Table('choir_division AS cd')
+          ->select('division_id')
+          ->join('divisions AS d', 'd.id', '=', 'cd.division_id')
+          ->join('rounds AS r', 'r.id', '=', 'd.round_id')
+          ->join('competitions AS c', 'r.competition_id', '=', 'c.id')
+          ->where('c.id', $competition->id)
+          ->where('cd.choir_id', $choir->id)
+          ->get()->pluck('division_id')
+          ;
+
+      $divisions = $competition->divisions->filter(function($value) use ($division_ids) {
+          return $division_ids->contains($value->id);
+      });
+
       // Get all the commments for this choir in Rounds and Solo Divisions
       $comments = Comment::with(['judge'])
           ->where('choir_id', $comment_recipient_id)
@@ -49,6 +64,6 @@ class FeedbackController extends Controller
       // Get all the Division Recordings
       $recordings = Recording::where('choir_id', $comment_recipient_id)->whereIn('division_id', $competition->divisions->pluck('id'))->get();
 
-      return view('feedback.show', ['comments' => $comments, 'recordings' => $recordings, 'competition' => $competition, 'choir' => $choir]);
+      return view('feedback.show', ['comments' => $comments, 'recordings' => $recordings, 'competition' => $competition, 'divisions' => $divisions, 'choir' => $choir]);
     }
 }

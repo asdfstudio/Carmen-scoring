@@ -12,7 +12,8 @@
 
   <h3>Divisions</h3>
 
-  @foreach($competition->divisions as $div)
+  <!-- Although Comments and Recordings are linked to a round, we want to display these by the Division the choir is in -->
+  @foreach($divisions as $div)
       @php
         $round = $div->round;
         $round_comments = $comments->where('subject_id', $round->id)->where('subject_type', 'App\Round');
@@ -21,11 +22,11 @@
       @if($round_comments->count() || $round_recordings->count())
         <h4>{{ $div->name }}, {{ $round->name }}</h4>
 
-        @if(!$round->is_completed)
-          <p>Feedback for this round will be available once this round is complete.</p>
+        @if(!$div->is_completed)
+          <p>Feedback for this division will be available once this division is complete.</p>
         @endif
 
-        @if($round->is_completed)
+        @if($div->is_completed)
           @php
             $judges = collect();
             foreach($round_comments as $comment){
