@@ -1,5 +1,5 @@
 <template>
-  <vue2-dropzone ref="dropzone" :options="dropzoneOptions" @vdropzone-sending="uploadFile"  @vdropzone-file-added="uploadprogress" @vdropzone-success="success" @vdropzone-complete="complete" @vdropzone-error="error" />
+  <vue2-dropzone :id="'dropzone-' + this.choir.id" ref="dropzone" :options="dropzoneOptions" @vdropzone-sending="uploadFile"  @vdropzone-file-added="uploadprogress" @vdropzone-success="success" @vdropzone-complete="complete" @vdropzone-error="error" />
 </template>
 
 <script>

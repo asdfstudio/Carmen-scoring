@@ -29,7 +29,7 @@
         <template v-for="caption in captionsList">
 
         <!-- Caption header start -->
-        <tr class="caption-row caption-header" v-bind:key="caption.id">
+        <tr class="caption-row caption-header" >
           <th class="caption-name" :class="['background-color-' + caption.color_id]">
             {{ caption.name }}
           </th>
@@ -60,7 +60,7 @@
         <!-- Caption Criteria End -->
 
         <!-- Caption footer start -->
-        <tr class="caption-row caption-footer" v-bind:key="caption.id">
+        <tr class="caption-row caption-footer" >
           <th class="caption-subtotal caption-subtotal-label" :class="['lighter-background-color-' + caption.color_id]">
             {{ caption.name }} <span v-if="caption.id === 1 && captionWeightingId === 1">Raw</span> Subtotal
             <div v-if="caption.id === 1 && captionWeightingId === 1">{{ caption.name }} Weighted Subtotal</div>
@@ -76,7 +76,7 @@
               <div v-if="caption.id === 1 && captionWeightingId === 1">{{ getChoirCaptionSubtotalScore(choir, caption) * 1.5 }}</div>
             </td>
         </tr>
-        <tr class="caption-row caption-footer" v-bind:key="caption.id">
+        <tr class="caption-row caption-footer" >
           <th class="caption-rank caption-rank-label" :class="['lighter-background-color-' + caption.color_id]">
             {{ caption.name }} Rank
           </th>
