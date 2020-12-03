@@ -61,11 +61,9 @@ function AudioRecorder(element) {
               )}</div>
               <div class="ar-playlist-functions">
                 <button class="ar-playlist-play-pause" title="Play/Pause"></button>
-                <a class="ar-playlist-download" href="${
-                  recording.url
-                }" title="Download Recording" download="${niceDate(
-      recording.created_at
-    )}" target="_blank"></a>
+                <a class="ar-playlist-download" href="${recording.url}"
+                    title="To download, Right-Click and Save Link As..."
+                    download="${niceDate(recording.created_at)}" target="_blank"></a>
                 ${maybeDeleteButton}
               </div>
             </li>`;
