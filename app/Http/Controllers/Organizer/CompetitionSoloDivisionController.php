@@ -346,6 +346,37 @@ class CompetitionSoloDivisionController extends Controller
     }
 
     /**
+     * Shows the page to manage Judges for a Solo Division
+     */
+    public function manageJudges(Competition $competition, SoloDivision $soloDivision, FormBuilder $formBuilder)
+    {
+        $soloDivision->load('judges');
+
+        $form = $formBuilder->create('Judge\ChooseSoloDivisionJudgesForm', [
+          'url' => route('organizer.competition.solo-division.manage.judges.store', [$competition, $soloDivision]),
+          'model' => $soloDivision,
+        ]);
+
+        return view('solo-division.organizer.manage-judges', compact('competition', 'soloDivision', 'form'));
+    }
+
+    /**
+     * Called via POST to store the judges for a Solo Division
+     */
+    public function manageJudgesStore(Request $request, Competition $competition, SoloDivision $soloDivision, FormBuilder $formBuilder)
+    {
+        $form = $formBuilder->create('Judge\ChooseSoloDivisionJudgesForm', [
+            'model' => $soloDivision
+        ]);
+        $form->redirectIfNotValid();
+
+        $judges = collect($form->getFieldValues()['judges'])->pluck('id');
+        $soloDivision->judges()->sync($judges);
+
+      return redirect()->route('organizer.competition.solo-division.show', [$competition, $soloDivision])->with('success', 'Judges Saved!');
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id

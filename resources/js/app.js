@@ -275,6 +275,38 @@ $(document).ready(function() {
         choir_container.find('.new_school_container').addClass('hidden');
     });
 
+
+    $('body').on('click', '.add-judge button', function(e) {
+        e.preventDefault();
+        var wrapper = $('.collection-container');
+        var container = wrapper.children().first();
+        var count = container.children().length;
+        var proto = wrapper.data('prototype').replace(/__NAME__/g, count);
+        container.append(proto);
+    });
+
+    $('body').on('click', '.remove-judge button', function(e) {
+        var judgeRow = $(e.target).closest('.judge-row');
+        var judgeName = judgeRow.find('select option:selected').text();
+        var message = '<p class="alert alert-warning">The judge "' + judgeName + '" will be removed when you save this form.</p>';
+
+        if (judgeName != 'Choose judge...') {
+           var formGroup = judgeRow.parent('.form-group');
+           judgeRow.detach();
+           judgeRow.children().remove();
+           judgeRow.append(message);
+           formGroup.prepend(judgeRow);
+           // judgeRow.insertBefore(formGroup.children(':first'));
+        } else {
+           judgeRow.remove();
+        }
+
+        if(formGroup.find('.remove-judge').length === 0){
+            // If there are no judge fields left, trigger the button to add a new one.
+            $('.add-judge button').trigger('click');
+        }
+    });
+
     $('body').on('click', '.add-rating button', function(e) {
         e.preventDefault();
         var wrapper = $('.collection-container');

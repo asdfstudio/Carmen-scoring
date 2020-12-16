@@ -369,6 +369,14 @@ Route::post('competition/{competition}/division/{division}/audience/update', [
     'as' => 'competition.solo-division.manage.store', 'uses' => 'CompetitionSoloDivisionController@manageStore'
   ]);
 
+  Route::get('competition/{competition}/solo-division/{soloDivision}/judges', [
+    'as' => 'competition.solo-division.manage.judges', 'uses' => 'CompetitionSoloDivisionController@manageJudges'
+  ]);
+
+  Route::post('competition/{competition}/solo-division/{soloDivision}/judges', [
+    'as' => 'competition.solo-division.manage.judges.store', 'uses' => 'CompetitionSoloDivisionController@manageJudgesStore'
+  ]);
+
   Route::post('competition/{competition}/solo-division/{soloDivision}/update-status', [
     'as' => 'competition.solo-division.update-status', 'uses' => 'CompetitionSoloDivisionController@updateStatus'
   ]);

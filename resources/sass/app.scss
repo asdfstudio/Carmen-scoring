@@ -347,6 +347,16 @@ a.active {
   }
 }
 
+.add-judge {
+  clear: both;
+  padding: 15px;
+
+  button {
+    display: block;
+    width: 100%;
+  }
+}
+
 .add-rating {
   clear: both;
   padding: 15px;
@@ -355,6 +365,12 @@ a.active {
     display: block;
     width: 100%;
   }
+}
+
+.remove-judge button{
+    color: #a94442;
+    border-color: #a94442;
+    font-weight: 700;
 }
 
 .remove-rating {
