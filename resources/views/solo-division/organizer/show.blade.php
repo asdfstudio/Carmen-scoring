@@ -7,7 +7,7 @@
 	<ul class="actions-group">
 		<li>{{ link_to_route('organizer.competition.show','Back to Competition',[$competition],['class' => 'action']) }}</li>
     <li>{{ link_to_route('organizer.competition.solo-division.edit','Edit Solo Division',[$competition, $soloDivision],['class' => 'action']) }}</li>
-    <li>{{ link_to_route('organizer.competition.solo-division.manage','Manage Performers',[$competition, $soloDivision],['class' => 'action']) }}</li>
+    <li>{{ link_to_route('organizer.competition.solo-division.manage.performers','Manage Performers',[$competition, $soloDivision],['class' => 'action']) }}</li>
     <li>{{ link_to_route('organizer.competition.solo-division.manage.judges','Manage Judges',[$competition, $soloDivision],['class' => 'action']) }}</li>
 
     @if($competition->organization->vote_setting)

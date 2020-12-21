@@ -280,7 +280,7 @@ class CompetitionSoloDivisionController extends Controller
         return redirect()->route('organizer.competition.solo-division.show', [$competition, $soloDivision])->with('success', 'Your solo division has been updated.');
     }
 
-    public function manage(Competition $competition, FormBuilder $formBuilder, $id)
+    public function managePerformers(Competition $competition, FormBuilder $formBuilder, $id)
     {
         $choirs = Choir::get()->pluck('full_name', 'id')->toArray();;
         $soloDivision = SoloDivision::with(['performers'])->find($id);
@@ -289,7 +289,7 @@ class CompetitionSoloDivisionController extends Controller
     }
 
 
-    public function manageStore(Competition $competition, Request $request, $id)
+    public function managePerformersStore(Competition $competition, Request $request, $id)
     {
         //dd($request->input('performer'));
         $soloDivision = SoloDivision::find($id);
