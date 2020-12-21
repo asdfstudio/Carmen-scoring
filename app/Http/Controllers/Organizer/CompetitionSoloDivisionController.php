@@ -40,12 +40,8 @@ class CompetitionSoloDivisionController extends Controller
      */
     public function create(Competition $competition, Request $request, FormBuilder $formBuilder)
     {
-        $judges = Judge::get()->pluck('full_name', 'id')->toArray();
         $form = $formBuilder->create('SoloDivision\CreateForm', [
           'url' => route('organizer.competition.solo-division.store', $competition),
-          'data' => [
-            'judges' => $judges
-          ]
         ]);
 
         return view('solo-division.organizer.create', compact('competition', 'form'));
@@ -63,7 +59,6 @@ class CompetitionSoloDivisionController extends Controller
         $soloDivision->competition()->associate($competition);
         $soloDivision->fill($request->input());
         $soloDivision->save();
-        $soloDivision->judges()->sync($request->input('judge_id'));
 
         return redirect()->route('organizer.competition.solo-division.show', [$competition, $soloDivision])->with('success', 'Your solo division has been created.');
     }
@@ -259,15 +254,11 @@ class CompetitionSoloDivisionController extends Controller
     public function edit(Competition $competition, Request $request, FormBuilder $formBuilder, $id)
     {
       $soloDivision = SoloDivision::find($id);
-      $judges = Judge::get()->pluck('full_name', 'id')->toArray();
 
       $form = $formBuilder->create('SoloDivision\CreateForm', [
         'url' => route('organizer.competition.solo-division.update', [$competition, $id]),
         'method' => 'PATCH',
         'model' => $soloDivision,
-        'data' => [
-          'judges' => $judges
-        ]
       ]);
 
       return view('solo-division.organizer.edit', compact('competition', 'form', 'soloDivision'));
@@ -285,7 +276,6 @@ class CompetitionSoloDivisionController extends Controller
         $soloDivision = SoloDivision::find($id);
         $soloDivision->fill($request->input());
         $soloDivision->save();
-        $soloDivision->judges()->sync($request->input('judge_id'));
 
         return redirect()->route('organizer.competition.solo-division.show', [$competition, $soloDivision])->with('success', 'Your solo division has been updated.');
     }
