@@ -31,23 +31,27 @@ class Audience extends Model
     ];
 
     protected $casts = [
-      'list_of_votes' => 'array'
+        'list_of_votes' => 'array'
     ];
 
-  public function division()
-    {
-        return $this->belongsTo('App\Division');
-    }
     public function competition()
     {
         return $this->belongsTo('App\Competition');
     }
 
-  /**
-   * @return \Illuminate\Database\Eloquent\Relations\HasMany
-   */
+    /**
+     * Audiences can belong to a Round or a SoloDivision
+     */
+    public function audienceable()
+    {
+        return $this->morphTo();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function votes()
     {
-      return $this->hasMany('App\Vote');
+        return $this->hasMany('App\Vote');
     }
 }

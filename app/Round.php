@@ -69,6 +69,11 @@ class Round extends Model
         return $this->belongsTo('App\CaptionWeighting');
     }
 
+    public function audience()
+    {
+        return $this->morphOne('App\Audience', 'audienceable');
+    }
+
     public function status()
     {
         $total = $this->divisions()->count();

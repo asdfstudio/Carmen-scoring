@@ -142,7 +142,7 @@
     $('.userInfo').click(function () {
       const voteID = $(this).data('vote');
       const token = $("input[name='_token']").val();
-      const audientId = $('input[name="audientId"]').val();
+      const audienceId = $('input[name="audienceId"]').val();
       const wrapper = $(this).closest('.wbg2');
       const likeCount = $(this).find('.vote-count');
 
@@ -153,7 +153,7 @@
           'voteId': voteID,
           'divisionId': $("#divisionId").val(),
           'isSoloDivision': $("#isSoloDivision").val(),
-          'audientId': audientId,
+          'audienceId': audienceId,
           '_token': token,
         },
         error: function (data) {

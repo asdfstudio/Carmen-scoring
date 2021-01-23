@@ -41,7 +41,7 @@ class Vote extends Model
   /**
    * Get Vote
    *
-   * @param $audientId
+   * @param $audienceId
    * @param $voteId
    * @return mixed
    */

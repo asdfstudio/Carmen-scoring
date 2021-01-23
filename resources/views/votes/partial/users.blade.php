@@ -1,7 +1,7 @@
 <section class="userSection ptb_80">
   <div class="container">
     <div class="row">
-      <input type="hidden" name="audientId" value="{{$audience?$audience->id:''}}">
+      <input type="hidden" name="audienceId" value="{{$audience?$audience->id:''}}">
       <input type="hidden" id="isSoloDivision" value="0" />
       @foreach ($division->choirs as $key => $choir)
         <div class="col-lg-4" data-choir="{{$choir->id}}">
