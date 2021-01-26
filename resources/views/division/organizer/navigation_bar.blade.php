@@ -33,13 +33,6 @@
                 <span class="count">{{ $division->awards->count() }}</span>
             </a>
         </li>
-        @if($division->competition->organization->vote_setting)
-            <li>
-                @php $link_class = Request::segment(6) == 'audience' ? 'active' : false; @endphp
-                <a href="{{ route('organizer.competition.division.audience.index', [$competition, $division]) }}" class="{{ $link_class }}">Audience Vote
-                </a>
-            </li>
-        @endif
         <li>
             @php $link_class = Request::segment(6) == 'standing' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.division.standing.show', [$competition, $division]) }}" class="{{ $link_class }}">Final Standings</a>

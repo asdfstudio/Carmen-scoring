@@ -30,16 +30,16 @@ Route::get('results/division/{division}/standings/{access_code}', [
   'as' => 'results.division.standings', 'uses' => 'ResultsController@divisionStandings'
 ]);
 
-Route::get('results/division/{division}/audience-vote-results/{access_code}', [
-  'as' => 'results.division.audience-vote-results', 'uses' => 'ResultsController@audienceVoteResult'
-]);
-
 Route::get('results/division/{division}/scores/{access_code}', [
   'as' => 'results.division.scores', 'uses' => 'ResultsController@divisionScores'
 ]);
 
 Route::get('results/division/{division}/round/{round}/scores/{access_code}', [
   'as' => 'results.round.scores', 'uses' => 'ResultsController@roundScores'
+]);
+
+Route::get('results/division/{round}/audience-vote-results/{access_code}', [
+  'as' => 'results.round.audience-vote-results', 'uses' => 'ResultsController@audienceVoteResult'
 ]);
 
 Route::get('results/division/{division}/round/{round}/choir/{choir}/{access_code}', [

@@ -2,32 +2,19 @@
 
 namespace App\Http\Controllers\Organizer;
 
-use App\Audience;
-use App\Option;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use App\Competition;
-use App\Division;
-use App\Choir;
-use App\School;
-use App\Place;
-use App\Director;
-use App\Person;
-
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
-use Kris\LaravelFormBuilder\FormBuilder;
 
-use Event;
-use App\Events\DivisionChoirCreated;
-use App\Events\DivisionChoirRemoved;
+use App\Audience;
+use App\Round;
 
-class CompetitionDivisionAudienceController extends Controller
+
+class AudienceController extends Controller
 {
 
   /**
@@ -35,17 +22,19 @@ class CompetitionDivisionAudienceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(FormBuilder $formBuilder, $competition_id,$division_id)
+    public function index($competition_id, $round_id)
     {
-        $audience =Audience::where('division_id',$division_id)->first();
-        $division = Division::with('competition','choirs', 'choirs.directors')->find($division_id);
-        $organization_slug = $this->getOrganizationSlug($division->competition->organization);
-				return view('competition_division_audience_vote.organizer.index',compact('division','competition_id','division_id','organization_slug','audience'));
+        $audience = Audience::where('audienceable_id',$round_id)
+            ->where('audienceable_type', 'App\Round')
+            ->first();
+        $round = Round::with('competition', 'choirs', 'choirs.directors')->find($round_id);
+        $organization_slug = $this->getOrganizationSlug($round->competition->organization);
+				return view('competition_round_audience_vote.organizer.index',compact('round', 'organization_slug', 'audience'));
     }
 
     public function store(Request $request){
         $data = $request->all();
-        $audience =Audience::where('division_id',$data['division_id'])->first();
+        $audience =Audience::where('round_id',$data['round_id'])->first();
         if($audience){
             $audience->alias_name = $data['alias_name'];
             $audience->is_dark = $data['is_dark'];
@@ -65,7 +54,7 @@ class CompetitionDivisionAudienceController extends Controller
              Audience::create($data);
         }
 
-        return redirect(route('organizer.competition.division.audience.index',[$data['competition_id'],$data['division_id']]));
+        return redirect(route('organizer.competition.round.audience.index',[$data['competition_id'],$data['round_id']]));
     }
 
     private function getOrganizationSlug($organization){

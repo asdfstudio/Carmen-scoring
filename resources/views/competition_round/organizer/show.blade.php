@@ -13,6 +13,9 @@
             <li>{{ link_to_route('organizer.competition.round.board', 'Edit Judges', [$competition, $round], ['class' => 'action']) }}</li>
             <li>{{ link_to_route('organizer.competition.division.index', 'Manage Divisions', [$competition, $round], ['class' => 'action']) }}</li>
         @endcan
+        @if($round->competition->organization->vote_setting)
+            <li> {{ link_to_route('organizer.competition.round.audience.index', 'Manage Audience Voting', [$competition, $round], ['class' => 'action']) }}</li>
+        @endif
         @can('showAll', $round)
             <li>{{ link_to_route('organizer.competition.round.scores.show', 'See Scores', [$competition, $round], ['class' => 'action']) }}</li>
             <li>{{ link_to_route('organizer.competition.round.index', 'Back to all Rounds', [$competition], ['class' => 'action']) }}</li>

@@ -318,12 +318,12 @@ Route::group([
     'as' => 'competition.division.choir.setup.store', 'uses' => 'CompetitionDivisionChoirController@storeMultiple'
   ]);
 
-Route::get('competition/{competition}/division/{division}/audience', [
-    'as' => 'competition.division.audience.index', 'uses' => 'CompetitionDivisionAudienceController@index'
+Route::get('competition/{competition}/round/{round}/audience', [
+    'as' => 'competition.round.audience.index', 'uses' => 'AudienceController@index'
 ]);
 
-Route::post('competition/{competition}/division/{division}/audience/update', [
-    'as' => 'competition.division.audience.store', 'uses' => 'CompetitionDivisionAudienceController@store'
+Route::post('competition/{competition}/round/{round}/audience/update', [
+    'as' => 'competition.round.audience.store', 'uses' => 'AudienceController@store'
 ]);
 
   Route::get('competition/{competition}/division/{division}/judge/import', [

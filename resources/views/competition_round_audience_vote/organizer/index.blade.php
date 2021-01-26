@@ -1,13 +1,21 @@
 @extends('layouts.simple')
 
-@php $include_division_navigation_bar = TRUE @endphp
+@php $include_round_navigation_bar = TRUE @endphp
 
 @section('breadcrumbs')
-  {!! Breadcrumbs::render('organizer.competition.division.choir.index',$division->competition,$division) !!}
+    {!! Breadcrumbs::render('organizer.competition.round.show',$round->competition, $round) !!}
 @endsection
 
 @section('content-header')
+	<h1>Audience Vote settings for {{ $round->name }} </h1>
 
+	<ul class="actions-group">
+
+		@can('showAll','App\Round')
+            <li>{{ link_to_route('organizer.competition.round.show', 'Back to Round', [$round->competition,$round], ['class' => 'action']) }}</li>
+		@endcan
+
+	</ul>
 @endsection
 
 @section('content')
@@ -15,19 +23,19 @@
   <link rel="stylesheet" type="text/css" href="{{asset('dist/css/vendor/dropzone.css')}}">
   <!-- JS -->
   <script src="{{asset('dist/js/vendor/dropzone.js')}}" type="text/javascript"></script>
-  <form method="POST" action="{{route('organizer.competition.division.audience.store',[$competition_id,$division_id])}}"
+  <form method="POST" action="{{route('organizer.competition.round.audience.store',[$round->competition->id, $round->id])}}"
         accept-charset="UTF-8"
         id="organizer_form">
     {{ csrf_field() }}
-    <input type="hidden" name="division_id" value="{{$division_id}}">
-    <input type="hidden" name="competition_id" value="{{$competition_id}}">
+    <input type="hidden" name="round_id" value="{{$round->id}}">
+    <input type="hidden" name="competition_id" value="{{$round->competition->id}}">
     <div class="form-group">
       <label class="control-label required">Public Link</label>
       <div>
-        <span id="preview_url">{{url('/home/'.$organization_slug)}}-{{$division_id}}/</span>
+          <span id="preview_url">{{url('/home/'.$organization_slug)}}-{{$round->id}}/</span>
         <input
           class="form-control" required
-          value="{{isset($audience)?$audience->alias_name:str_replace(' ','-', $division->name)}}"
+          value="{{isset($audience)?$audience->alias_name:str_replace(' ','-', $round->name)}}"
           style="max-width: 150px;display: inline-block" name="alias_name" id="alias_name" type="text">
 
         <button type="button" class="ml-5 btn btn-primary" onclick="copyLink(1)">Copy Link</button>
@@ -35,9 +43,9 @@
 
       <br>
       <div>
-        {{url('/home/'.$organization_slug)}}-{{$division_id}}/<span
+          {{url('/home/'.$organization_slug)}}-{{$round->id}}/<span
           style="min-width: 20px; width:auto;display: inline-block" readonly id="copy_alias_name"
-          type="text">{{isset($audience)?$audience->alias_name:str_replace(' ','-', $division->name)}}</span>/results
+          type="text">{{isset($audience)?$audience->alias_name:str_replace(' ','-', $round->name)}}</span>/results
         <button type="button" class="ml-5 btn btn-primary" onclick="copyLink(2)">Copy Link</button>
       </div>
 
@@ -85,7 +93,7 @@
             <div id="banner-element" class="dz-preview dz-processing dz-success dz-complete dz-image-preview img-uploaded">
               <div class="dz-image">
                   @php
-                    $banner_url = 'uploads/'.$audience->batnner_upload;
+                    $banner_url = 'uploads/'.$audience->banner_upload;
                     if(env('VOTING_AWS_ACCESS_KEY_ID')) {
                       $banner_url = env('VOTING_AWS_URL').$audience->banner_upload;
                     }
@@ -217,7 +225,7 @@
       $(window).load(function () {
         const data = $('#organizer_form').serialize();
         $.ajax({
-          url: '{{route('organizer.competition.division.audience.store',[$competition_id,$division_id])}}',
+            url: '{{route('organizer.competition.round.audience.store',[$round->competition->id,$round->id])}}',
           type: 'POST',
           data: data,
           error: function (data) {
