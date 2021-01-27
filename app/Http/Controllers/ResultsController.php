@@ -631,7 +631,7 @@ class ResultsController extends Controller
       $roundId = end($tmp);
       $round = Round::with('competition', 'divisions', 'divisions.choirs')
           ->find($roundId);
-      return redirect()->route('results.round.audience-vote-results', [$roundId, $division->access_code]);
+      return redirect()->route('results.round.audience-vote-results', [$round->id]);
     }
 
     /**
@@ -647,6 +647,6 @@ class ResultsController extends Controller
       $divisionId = end($tmp);
       $soloDivision = SoloDivision::find($divisionId);
       return redirect()->route('results.solo-division.show',
-        [  $divisionId, $soloDivision->access_code, 'view'=>'audience-vote'])->with('view', 'audience-vote');
+        [  $divisionId, $soloDivision->access_code, 'view'=>'audience-vote'])->with('view', 'aucience-vote');
     }
 }

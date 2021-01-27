@@ -38,7 +38,7 @@ Route::get('results/division/{division}/round/{round}/scores/{access_code}', [
   'as' => 'results.round.scores', 'uses' => 'ResultsController@roundScores'
 ]);
 
-Route::get('results/division/{round}/audience-vote-results/{access_code}', [
+Route::get('results/round/{round}/audience-vote-results/', [
   'as' => 'results.round.audience-vote-results', 'uses' => 'ResultsController@audienceVoteResult'
 ]);
 

@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Audience;
 use App\Competition;
 use App\SoloDivision;
+use App\Round;
 use App\Vote;
 use Illuminate\Http\Request;
-use App\Division;
 
 class HomeController extends Controller
 {
@@ -39,8 +39,8 @@ class HomeController extends Controller
   public function organizer($organizer, $alias)
   {
     $tmp = explode('-', $organizer);
-    $divisionId = end($tmp);
-    $division = Division::with('competition', 'choirs')->find($divisionId);
+    $roundId = end($tmp);
+    $division = Round::with('divisions', 'competition', 'divisions.choirs')->find($roundId);
     $audience = $division->audience;
     $colors = ['Red', 'Green', 'Orange', 'Purple', 'Blue', 'Black'];
     $view = 'votes.bright';
