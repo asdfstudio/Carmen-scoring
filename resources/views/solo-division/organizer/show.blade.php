@@ -11,7 +11,7 @@
     <li>{{ link_to_route('organizer.competition.solo-division.manage.judges','Manage Judges',[$competition, $soloDivision],['class' => 'action']) }}</li>
 
     @if($competition->organization->vote_setting)
-    <li>{{ link_to_route('organizer.competition.solo-division.audience-votes','Audience Vote',[$competition, $soloDivision],['class' => 'action']) }}</li>
+    <li>{{ link_to_route('organizer.competition.solo-division.audience-votes','Manage Audience Voting',[$competition, $soloDivision],['class' => 'action']) }}</li>
     @endif
 
     <li>{{ link_to_route('organizer.competition.solo-division.results','View Results',[$competition, $soloDivision],['class' => 'action']) }}</li>

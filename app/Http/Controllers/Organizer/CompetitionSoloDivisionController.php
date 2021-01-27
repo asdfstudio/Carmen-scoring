@@ -217,8 +217,9 @@ class CompetitionSoloDivisionController extends Controller
 
         $showAudienceVoteResult = false;
         $audience = Audience::where('competition_id', $competition->id)
-          ->where('division_id', $id)
-          ->first();
+            ->where('audienceable_id', $id)
+            ->where('audienceable_type', 'App\SoloDivision')
+            ->first();
         if ($request->input('view')) {
           $categoryName = 'Audience vote';
           $showAudienceVoteResult = true;
@@ -420,42 +421,43 @@ class CompetitionSoloDivisionController extends Controller
    */
     public function audienceVote($competitionId, $soloDivisionId)
     {
-      $competition = Competition::find($competitionId);
-      $soloDivision = SoloDivision::find($soloDivisionId);
-      $organization_slug = $this->getOrganizationSlug($soloDivision->competition->organization);
-      $audience = Audience::where('division_id', $soloDivisionId)->first();
+        $competition = Competition::find($competitionId);
+        $soloDivision = SoloDivision::find($soloDivisionId);
+        $organization_slug = $this->getOrganizationSlug($soloDivision->competition->organization);
+        $audience = Audience::where('audienceable_id', $soloDivisionId)
+            ->where('audienceable_type', 'App\SoloDivision')
+            ->first();
 
-      return view('solo-division.organizer.audience-vote',
-        compact(
-          'soloDivision',
-          'audience',
-          'competition',
-          'organization_slug'
-        ));
+        return view('solo-division.organizer.audience-vote',
+            compact(
+                'soloDivision',
+                'audience',
+                'competition',
+                'organization_slug'
+            ));
     }
 
-  public function soloDivisionStore(Request $request){
-    $data = $request->all();
+    public function soloDivisionStore(Request $request){
+        $audience = Audience::where('audienceable_id',$request['division_id'])
+            ->where('audienceable_type', 'App\SoloDivision')
+            ->first();
 
-    $audience =Audience::where('division_id',$data['division_id'])->first();
-    if($audience){
-      $audience->alias_name = $data['alias_name'];
-      $audience->is_dark = $data['is_dark'];
-      $audience->banner_type = $data['banner_type'];
-      $audience->banner_upload = $data['banner_upload'];
-      $audience->list_of_votes = isset($data['list_of_votes'])?$data['list_of_votes']:[];
-      $audience->banner_embed = $data['banner_embed'];
-      $audience->limit_result = $data['limit_result'];
-      $audience->is_premium_vote = $data['is_premium_vote'];
-      $audience->disable_vote = isset($data['disable_vote'])?1:0;
-      $audience->save();
-    }else{
-      $data['created_at'] = date("Y-m-d H:i:s");
-      if(!isset($data['disable_vote']))$data['disable_vote'] = 0;
+        if(!$audience){
+            $audience = new Audience();
+            $soloDivision = soloDivision::find($request->get('division_id'));
+            $audience->audienceable()->associate($soloDivision);
+            $audience->competition()->associate($soloDivision->competition);
+        }
+        $audience->alias_name = $request->post('alias_name');
+        $audience->is_dark = $request->post('is_dark');
+        $audience->banner_type = $request->post('banner_type');
+        $audience->banner_upload = $request->post('banner_upload');
+        $audience->banner_embed = $request->post('banner_embed');
+        $audience->limit_result = $request->post('limit_result');
+        $audience->is_premium_vote = $request->post('is_premium_vote', false);
+        $audience->disable_vote = $request->post('disable_vote', false);
+        $audience->save();
 
-      Audience::create($data);
+        return redirect()->route('organizer.competition.solo-division.audience-votes',[$audience->competition->id, $audience->audienceable->id])->with('success', 'Vote Settings Saved');
     }
-
-    return redirect(route('organizer.competition.solo-division.audience-votes',[$data['competition_id'],$data['division_id']]));
-  }
 }
