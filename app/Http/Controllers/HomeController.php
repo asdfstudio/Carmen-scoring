@@ -61,9 +61,9 @@ class HomeController extends Controller
     $divisionId = end($tmp);
     $division = SoloDivision::with( 'competition','performers')->find($divisionId);
     $competition = $division->competition;
-    $audience = Audience::where('division_id', $divisionId)
-      ->where('competition_id', $competition->id)
-      ->first();
+    $audience = Audience::where('audienceable_id', $divisionId)
+        ->where('audienceable_type', 'App\SoloDivision')
+        ->first();
     $colors = ['Red', 'Green', 'Orange', 'Purple', 'Blue', 'Black'];
     $view = 'votes.solo.bright';
     if (isset($audience) && 1 === $audience->is_dark) {

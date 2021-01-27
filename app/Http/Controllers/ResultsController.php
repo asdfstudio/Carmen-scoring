@@ -461,9 +461,10 @@ class ResultsController extends Controller
       $soloDivision->performers = $soloDivision->performers->sortBy('rank');
 
       if ($request->input('view') && 'audience-vote' === $request->input('view')){
-        $audience = Audience::where('division_id', $soloDivision->id)
-          ->where('competition_id', $competition->id)
-          ->first();
+          $audience = Audience::where('audienceable_id', $soloDivision->id)
+              ->where('audienceable_type', 'App\SoloDivision')
+              ->where('competition_id', $competition->id)
+              ->first();
 
         $this->updateSoloVoteList($audience, $soloDivision);
 
@@ -627,9 +628,10 @@ class ResultsController extends Controller
     public function showAudienceVoteResult($organizer)
     {
       $tmp = explode('-', $organizer);
-      $divisionId = end($tmp);
-      $division = Division::with('competition', 'choirs')->find($divisionId);
-      return redirect()->route('results.division.audience-vote-results', [$divisionId, $division->access_code]);
+      $roundId = end($tmp);
+      $round = Round::with('competition', 'divisions', 'divisions.choirs')
+          ->find($roundId);
+      return redirect()->route('results.round.audience-vote-results', [$roundId, $division->access_code]);
     }
 
     /**
@@ -645,6 +647,6 @@ class ResultsController extends Controller
       $divisionId = end($tmp);
       $soloDivision = SoloDivision::find($divisionId);
       return redirect()->route('results.solo-division.show',
-        [  $divisionId, $soloDivision->access_code, 'view'=>'audience-vote'])->with('view', 'aucience-vote');
+        [  $divisionId, $soloDivision->access_code, 'view'=>'audience-vote'])->with('view', 'audience-vote');
     }
 }
