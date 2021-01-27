@@ -35,7 +35,7 @@
       @endif
       </div>
     <div class="videoTitle">
-        <h2 class="videoTitle">Audience Vote – {{$division->name}}, {{ isset($division->competition)?$division->competition->name:'' }}
+        <h2 class="videoTitle">Audience Vote – {{$audience->audienceable->name}}, {{ isset($audience->audienceable->competition)?$audience->audienceable->competition->name:'' }}
         </h2>
     </div>
     </div>

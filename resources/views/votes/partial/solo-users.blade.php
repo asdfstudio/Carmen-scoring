@@ -4,7 +4,7 @@
     <div class="row">
       <input type="hidden" name="audienceId" value="{{$audience?$audience->id:''}}">
       <input type="hidden" id="isSoloDivision" value="1" />
-      @foreach ($division->performers as $key => $performer)
+      @foreach ($audience->audienceable->performers as $key => $performer)
         <div class="col-lg-4" data-choir="{{$performer->id}}">
           <div class="white-bg wbg2 {{$colors[$key%6]}}">
 

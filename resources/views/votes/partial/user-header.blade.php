@@ -1,4 +1,4 @@
-<input type="hidden" id="divisionId" value="{{$division->id}}" />
+<input type="hidden" id="divisionId" value="{{$audience->audienceable->id}}" />
 <div id="myDIV" class="login-navigation login @if (!Auth::guest()) loggedInSuccessfully @endif">
   @if (Auth::guest())
     <div class="not-login">

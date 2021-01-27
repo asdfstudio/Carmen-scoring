@@ -40,15 +40,16 @@ class HomeController extends Controller
   {
     $tmp = explode('-', $organizer);
     $roundId = end($tmp);
-    $division = Round::with('divisions', 'competition', 'divisions.choirs')->find($roundId);
-    $audience = $division->audience;
+    $audience = Audience::where('audienceable_id', $roundId)
+        ->where('audienceable_type', 'App\Round')
+        ->first();
     $colors = ['Red', 'Green', 'Orange', 'Purple', 'Blue', 'Black'];
     $view = 'votes.bright';
 
     if (isset($audience) && 1 === $audience->is_dark) {
       $view = 'votes.dark';
     }
-    return view($view, compact('division','audience', 'colors'));
+    return view($view, compact('audience', 'colors'));
   }
 
   /**
@@ -58,17 +59,16 @@ class HomeController extends Controller
    */
   public function soloDivisionVote($organizer, $alias) {
     $tmp = explode('-', $organizer);
-    $divisionId = end($tmp);
-    $division = SoloDivision::with( 'competition','performers')->find($divisionId);
-    $competition = $division->competition;
-    $audience = Audience::where('audienceable_id', $divisionId)
+    $soloDivisionId = end($tmp);
+    $audience = Audience::where('audienceable_id', $soloDivisionId)
         ->where('audienceable_type', 'App\SoloDivision')
         ->first();
+    $audienceable = $audience->audienceable;
     $colors = ['Red', 'Green', 'Orange', 'Purple', 'Blue', 'Black'];
     $view = 'votes.solo.bright';
     if (isset($audience) && 1 === $audience->is_dark) {
       $view = 'votes.solo.dark';
     }
-    return view($view, compact('division','audience', 'colors'));
+    return view($view, compact('audience', 'colors'));
   }
 }
