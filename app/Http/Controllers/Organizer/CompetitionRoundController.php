@@ -31,7 +31,6 @@ use App\Carmen\CountExpectedScores;
 use Kris\LaravelFormBuilder\FormBuilder;
 
 use Event;
-use App\Events\RoundSaved;
 use App\Events\StandingRefreshNeeded;
 
 class CompetitionRoundController extends Controller
@@ -168,10 +167,7 @@ class CompetitionRoundController extends Controller
         $round->competition()->associate($competition);
         $round->save();
 
-        // TODO: Check out which events should actually be running
-        // event(new RoundSaved($round));
-
-        $successMessage = "$round->name has been added to this division.";
+        $successMessage = "$round->name has been added to this competition.";
 
         if($request->wantsJson())
         {
@@ -387,8 +383,6 @@ class CompetitionRoundController extends Controller
         $round->scoring_method_id = $request->input('scoring_method_id');
 
         $round->save();
-
-        event(new RoundSaved($round));
 
         return redirect()->route('organizer.competition.round.index',[$competition])->with('success',$round->name ." has been updated.");
     }

@@ -15,7 +15,6 @@ use Event;
 use App\Events\DivisionScoringFinalized;
 use App\Events\RoundScoringActivated;
 use App\Events\RoundScoringCompleted;
-use App\Events\RoundSaved;
 
 class WorkshopController extends Controller
 {
