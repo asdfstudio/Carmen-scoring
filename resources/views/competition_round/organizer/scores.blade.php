@@ -5,7 +5,7 @@
 @endsection
 
 @section('content-header')
-	<h1>{{ $round->name }} Sources</h1>
+	<h1>{{ $round->name }} Scores</h1>
 
 	<ul class="actions-group">
 
