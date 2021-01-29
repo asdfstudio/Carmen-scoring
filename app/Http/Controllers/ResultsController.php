@@ -231,9 +231,7 @@ class ResultsController extends Controller
       $caption_ids = $division->sheet->caption_ids;
       $captions = Caption::forSheet($division->sheet);
 
-      $voteResults  = $this->votedList($division->audience);
-
-      return view('results.division.show-public', compact('division', 'captions', 'voteResults'));
+      return view('results.division.show-public', compact('division', 'captions'));
     }
 
     public function division($division_id, $access_code)
@@ -534,19 +532,21 @@ class ResultsController extends Controller
    * @param null $access_code
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
    */
-    public function audienceVoteResult( $divisionId, $access_code = NULL)
+    public function audienceVoteResult( $roundId )
     {
-      $this->loadDivision($divisionId, $access_code);
-      $division = $this->division;
-      $audience = Audience::where('division_id', $divisionId)->first();
-      $votes = [];
+        $audience = Audience::where('audienceable_id', $roundId)
+            ->where('audienceable_type', 'App\Round')
+            ->first();
+        $round= $audience->audienceable;
 
-      if (isset($audience)) {
-        $this->updateVoteList($audience);
-        $votes = $this->votedList($audience);
-      }
+        $votes = [];
+        if (isset($audience)) {
+            $this->updateVoteList($audience);
+            $votes = $this->votedList($audience);
+        }
 
-      return view('results.division.audience_vote_results', compact('division', 'access_code','audience','votes'));
+        return view('results.round.audience_vote_results',
+            compact('round', 'audience','votes'));
     }
 
   /**
@@ -574,7 +574,7 @@ class ResultsController extends Controller
    */
     public function updateVoteList($audience)
     {
-      $choirInAudiences = $audience->division->choirs;
+      $choirInAudiences = $audience->audienceable->choirs;
       $allChoirs = [];
 
       foreach ($choirInAudiences as $key => $choirInAudience) {

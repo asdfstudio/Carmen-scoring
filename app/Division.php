@@ -255,15 +255,6 @@ class Division extends Model
         return $roundIsMissingScores;
     }
 
-  /**
-   * Get audience
-   *
-   * @return HasOne
-   */
-    public function audience()
-    {
-      return $this->hasOne('App\Audience');
-    }
     public function isNew()
     {
       return strcmp($this->created_at, $this->updated_at) === 0;

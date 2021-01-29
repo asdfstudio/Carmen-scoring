@@ -59,7 +59,7 @@
       <div class="content-subheader caption background-color-3">
         <h3>Audience vote results</h3>
       </div>
-      @if($voteResults)
+      @if($voteResults ?? '')
       <ul class="list-group">
         @foreach($voteResults as $key => $result)
         <li class="list-group-item standing">

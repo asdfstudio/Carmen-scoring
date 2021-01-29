@@ -1,7 +1,7 @@
 @extends('layouts.public_results')
 
 @section('breadcrumbs')
-  {!! Breadcrumbs::render('results.division.show-public', $division) !!}
+    {!! Breadcrumbs::render('results.competition.show-public', $round->competition) !!}
 @endsection
 
 @section('content')
