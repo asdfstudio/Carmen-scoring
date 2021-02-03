@@ -54,7 +54,7 @@ class DivisionPolicy extends BasePolicy
         {
             return true;
         }
-        elseif($this->isOrgAdmin AND $division->status_slug() == 'activated' AND $division->competition->is_completed == false)
+        elseif($this->isOrgAdmin AND $division->competition->status_slug() == 'active')
         {
             return true;
         }
@@ -62,7 +62,7 @@ class DivisionPolicy extends BasePolicy
 
     public function destroy(User $user, $division)
     {
-        if($this->isOrgAdmin AND $division->status_slug() == 'activated')
+        if($this->isOrgAdmin AND $division->competition->status_slug() == 'active')
         {
             return true;
         }
@@ -99,7 +99,7 @@ class DivisionPolicy extends BasePolicy
 
     public function addChoir(User $user, Division $division)
     {
-        if($this->isOrgAdmin AND $division->status_slug() == 'activated' AND $division->competition->is_completed == false)
+        if($this->isOrgAdmin AND $division->competition->status_slug() == 'active')
         {
             return true;
         }
@@ -107,7 +107,7 @@ class DivisionPolicy extends BasePolicy
 
     public function removeChoir(User $user, Division $division)
     {
-        if($this->isOrgAdmin AND $division->status_slug() == 'activated')
+        if($this->isOrgAdmin AND $division->competition->status_slug() == 'active')
         {
             return true;
         }
