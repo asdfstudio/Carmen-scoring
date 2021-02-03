@@ -25,7 +25,7 @@ class AwardPolicy extends BasePolicy
 
 
 
-		public function create($division)
+		public function createForDivision(User $user, Division $division)
 		{
       if($division)
       {
