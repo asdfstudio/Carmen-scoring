@@ -1,8 +1,9 @@
-var personId, personIdSelectize, schoolId, schoolIdSelectize, toggleNewDirector, directorSearchGroup, initSelectize, activateSearch, activateCreate;
+var isBoard, personId, personIdSelectize, schoolId, schoolIdSelectize, toggleNewDirector, directorSearchGroup, initSelectize, activateSearch, activateCreate;
 
 // Customize the behaviour of the forms that add a director to a choir.
 jQuery(document).ready(function($){
-  
+
+  isBoard = isBoard || false;
   personId = isBoard ? $('#modal_person-id') : $('#person-id');
   schoolId = isBoard ? $('#modal_school_id') : $('#school_id');
   toggleNewDirector = $('.toggle-new-director');
@@ -53,9 +54,13 @@ jQuery(document).ready(function($){
 
     // Clear the Selectize field so that the placeholder will show
     // and validation will detect the field as empty.
-    schoolIdSelectize[0].selectize.clear();
-    personIdSelectize[0].selectize.clear();
-    
+    if (!schoolIdSelectize.empty()) {
+      schoolIdSelectize[0].selectize.clear();
+    }
+    if (!personIdSelectize.empty()) {
+      personIdSelectize[0].selectize.clear();
+    }
+
     // By default we start with the "search" view.
     activateSearch();
     
