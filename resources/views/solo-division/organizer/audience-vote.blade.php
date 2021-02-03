@@ -60,10 +60,10 @@
       <div>
         <label class="radio-inline">
           <input type="radio" name="is_premium_vote" value="0" class="form-check-input"
-                 @if($audience) @if(!$audience->is_premium_vote)checked @endif  @else checked @endif>Free</label>
+                 @if($audience) @if(!$audience->is_premium_vote)checked @endif  @else checked @endif>Free Audience Vote</label>
         <label class="radio-inline">
           <input type="radio" name="is_premium_vote" value="1" class="form-check-input"
-                 @if($audience) @if($audience->is_premium_vote)checked @endif @endif>Premium</label>
+                 @if($audience) @if($audience->is_premium_vote)checked @endif @endif>1$ per Audience Vote</label>
       </div>
     </div>
 
