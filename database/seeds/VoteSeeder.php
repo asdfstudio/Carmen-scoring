@@ -16,7 +16,7 @@ class VoteSeeder extends Seeder
             factory(App\Audience::class)->create([
                 'competition_id' => $competition->id,
                 'division_id' => $division->id,
-                'disable_vote' => 0,
+                'is_enabled' => 0,
                 'is_premium_vote' => 1,
                 'banner_type' => 'hide',
             ]);

@@ -53,7 +53,7 @@ class AudienceController extends Controller
         $audience->banner_embed = $request->post('banner_embed');
         $audience->limit_result = $request->post('limit_result');
         $audience->is_premium_vote = $request->post('is_premium_vote', false);
-        $audience->disable_vote = $request->post('disable_vote', false);
+        $audience->is_enabled = $request->post('is_enabled', false);
         $audience->save();
 
         return redirect()->route('organizer.competition.round.audience.index', [$audience->competition->id, $audience->audienceable->id])->with('success', 'Vote Settings Saved');

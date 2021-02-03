@@ -35,7 +35,7 @@ class VoteController extends Controller
 
         if (NULL === $audience) {
             return $this->notOpen();
-        } elseif ($audience->disable_vote) {
+        } elseif (!$audience->is_enabled) {
             return $this->disableVote();
         } elseif ($user->email_verified_at === "0000-00-00 00:00:00") {
             return $this->requireActiveAccount();
@@ -321,7 +321,7 @@ class VoteController extends Controller
     public function notOpen()
     {
         return response()->json([
-            'message' => 'Vote still not open please contact the administrator'
+            'message' => 'Voting is not yet open'
         ], 500);
     }
 
@@ -340,6 +340,6 @@ class VoteController extends Controller
      */
     public function disableVote()
     {
-        return response()->json(['message' => 'Vote has been disabled!'], 500);
+        return response()->json(['message' => 'Voting is not open'], 500);
     }
 }
