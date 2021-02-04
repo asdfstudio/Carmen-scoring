@@ -489,9 +489,12 @@ Route::post('competition/{competition}/round/{round}/audience/update', [
       'as' => 'option.setting-audience', 'uses' => 'OrganizationController@voteSetting'
   ] );
 
+  Route::post('/audience/fileupload/', [
+      'as' => 'audience.fileupload', 'uses' => 'AudienceController@fileupload'
+  ]);
+
 });
 
-Route::post('/audience/fileupload/','Organizer\CompetitionDivisionAudienceController@fileupload')->name('audience.fileupload');
 
 
 // ======================
