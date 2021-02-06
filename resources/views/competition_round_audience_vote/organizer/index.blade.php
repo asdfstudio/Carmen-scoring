@@ -183,7 +183,7 @@
     var myDropzone = new Dropzone(".dropzone", {
       maxFiles: 1,
       maxFilesize: 30,  // 3 mb
-      url: "{{route('audience.fileupload')}}",
+      url: "{{route('organizer.audience.fileupload')}}",
       acceptedFiles: ".jpeg,.jpg,.png,.pdf,.mp4",
       init: function () {
         this.on("maxfilesexceeded", function (file) {
