@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Audience;
+use App\Division;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -101,8 +103,11 @@ class LoginController extends Controller
       if (auth()->attempt(array('email' => $request->input('username'),
         'password' => $request->input('password')), true)) {
 
-        $division = \App\Division::find($request->input('divisionId'));
-        return view('votes.partial.user-header' , compact('division'));
+        $audience = Audience::where('audienceable_id', $request->get('divisionId'))
+            ->where('audienceable_type', 'App\Round')
+            ->first();
+
+        return view('votes.partial.user-header' , compact('audience'));
       }
       return response()->json(['error' => 'Sorry User not found.'], 500);
     }
