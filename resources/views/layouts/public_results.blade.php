@@ -36,9 +36,6 @@
             <li>
                 <a href="{{ route('results.round.scores', [$division, $division->round, $access_code]) }}" class="@if($current_page == 'round-scores') active @endif action">Round Scores</a>
             </li>
-          <li>
-            <a href="{{ route('results.division.audience-vote-results', [$division, $access_code]) }}" class="@if($current_page == 'vote-results') active @endif action">Audience Vote Results</a>
-          </li>
       	</ul>
       @endif
 
