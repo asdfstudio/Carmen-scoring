@@ -42,18 +42,17 @@ class EmailFeedbackLink
         }
 
         Log::info('EmailFeedbackLink listener fired. Preparing to send email.');
-        
-        $round = $event->round;
-        $round->load('feedback');
-        $competition = $round->division->competition;
 
-        $choirIds = $round->feedback->unique('choir_id')->pluck('choir_id')->toArray();
+        $division = $event->division;
+        $competition = $division->competition;
+        $choirIds = $division->choirs->pluck('choir_id')->toArray();
 
         if(!$choirIds) return;
 
-        $commentUrls = CommentUrl::with('choir', 'choir.directors')->where('competition_id', $competition->id)->whereIn('choir_id', $choirIds)->get();
-
-        //dd($commentUrls);
+        $commentUrls = CommentUrl::with('choir', 'choir.directors')
+            ->where('competition_id', $competition->id)
+            ->whereIn('choir_id', $choirIds)
+            ->get();
 
         foreach($commentUrls as $commentUrl)
         {
