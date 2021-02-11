@@ -42,13 +42,12 @@ class EmailDivisionResultsLink
           return true;
         }
 
-        Log::info('EmailSoloDivisionFeedbackLink listener fired. Preparing to send email.');
-        
+        Log::info('EmailDivisionResultsLink listener fired. Preparing to send email.');
+
         $division = $event->division;
 
         $directors = collect();
 
-        // Dvisision > Choirs
         $division->choirs->each(function($choir,$key) use ($directors) {
           foreach($choir->directors as $director)
           {
