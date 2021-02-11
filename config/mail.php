@@ -98,6 +98,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Global Email Address
+    |--------------------------------------------------------------------------
+    |
+    | If this is set in the .env file, all emails will be addressed to this
+    | recipient.
+    |
+    */
+
+    'to' => [
+        'address' => env('MAIL_GLOBAL_RECIPIENT'), // defaults to null
+        'name' => 'Carmen Developer'
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Sendmail System Path
     |--------------------------------------------------------------------------
     |
