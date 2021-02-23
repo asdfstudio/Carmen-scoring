@@ -45,7 +45,7 @@ class EmailFeedbackLink
 
         $division = $event->division;
         $competition = $division->competition;
-        $choirIds = $division->choirs->pluck('choir_id')->toArray();
+        $choirIds = $division->choirs->pluck('id')->toArray();
 
         if(!$choirIds) return;
 
@@ -58,20 +58,17 @@ class EmailFeedbackLink
         {
           $directors = collect();
 
-          $commentUrl->choir->directors->each(function($director,$key) use ($directors) {
+          $commentUrl->choir->directors->each( function($director, $key) use ($directors) {
             if($director->email)
             {
               $directors->push($director);
             }
           });
 
-          // Get unique directors
-          $directors = $directors->unique('id');
-
           Log::debug('Directors to notify of Feedback URL: ' . $directors);
 
           if ($directors->count() < 1) return;
-          
+
           foreach($directors as $director){
             try {
               $email_addresses = [$director->email];

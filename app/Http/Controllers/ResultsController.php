@@ -216,7 +216,7 @@ class ResultsController extends Controller
 
     public function divisionPublic($division_id, FormBuilder $formBuilder)
     {
-      $division = Division::with(['standings' => function($query) {
+      $division = Division::with(['sheet', 'standings' => function($query) {
         $query->orderBy('caption_id', 'DESC');
       }, 'standings.choirs', 'standings.caption', 'awardSettings',
       'competition' => function($query) {
