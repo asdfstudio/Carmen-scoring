@@ -516,6 +516,7 @@ class ResultsController extends Controller
       }
 
       $soloDivision->load('sheet', 'judges');
+      $judges = $soloDivision->judges;
       $captionsIds = $soloDivision->sheet->caption_ids;
       $captions = Caption::forSheet($soloDivision->sheet);
 
