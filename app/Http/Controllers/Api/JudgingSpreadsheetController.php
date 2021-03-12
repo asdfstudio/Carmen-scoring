@@ -65,9 +65,12 @@ class JudgingSpreadsheetController extends Controller
             return redirect()->route('judge.competition.show', [$competition])->with('warning', 'No choirs have been designated for this round yet.');
         }
 
-        $judge = Judge::with(['captions' => function($query) use ($round_id, $round) {
+        $judge = Judge::with(['captions' => function($query) use ($round_id) {
+            $query->where('round_id', $round_id);
+        }, 'recordings' => function($query) use ($round_id) {
             $query->where('round_id', $round_id);
         }])->find($judge_id);
+        $recordings = $judge->recordings;
 
         //$before = memory_get_usage();
         $scoreboard = new Scoreboard(['round_id' => $round_id, 'judge_id' => $judge_id]);
@@ -161,7 +164,6 @@ class JudgingSpreadsheetController extends Controller
                 'comment' => $item->comments
             ];
         })->toArray();
-        $recordings = $judge->recordings;
 
         return response()->json(compact('isSpreadsheetScoringActive', 'divisions', 'captions', 'captionWeightingId', 'choirs',
             'criteria', 'scores', 'comments', 'spreadsheetTitle', 'backUrl', 'recordings','competition'));
