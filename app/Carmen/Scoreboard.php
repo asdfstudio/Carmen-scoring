@@ -92,21 +92,21 @@ class Scoreboard {
 
     protected function getPenalties()
     {
-        $query = ChoirRoundPenalty::with('penalty');
-
-        if($this->round_id)
-        {
-            if(is_array($this->round_id))
-                $query->whereIn('round_id', $this->round_id);
-            else
-                $query->where('round_id', $this->round_id);
-        }
-
-        $penalties_raw = $query->get();
-
         $penalties = collect();
 
-        $penalties_raw->each(function($item, $key) use ($penalties){
+        $query = ChoirRoundPenalty::with('penalty');
+
+        if ($this->division_id && !$this->round_id) {
+            $this->round_id = $this->getRound()->id;
+        }
+
+        if(is_array($this->round_id)) {
+            $query->whereIn('round_id', $this->round_id);
+        } else {
+            $query->where('round_id', $this->round_id);
+        }
+
+        $query->get()->each(function($item, $key) use ($penalties){
 
             if ($item->penalty) {
                 $penalties->put($key, [
