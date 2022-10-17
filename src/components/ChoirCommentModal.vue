@@ -2,7 +2,7 @@
   <Modal>
     <ModalHeader>
       <h1>{{ choir.name }}</h1>
-      <h3>Feeback</h3>
+      <h3>Feedback</h3>
     </ModalHeader>
     <ModalSubheader>
       <p>Please keep your feedback positive and constructive.</p>
