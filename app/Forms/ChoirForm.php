@@ -13,15 +13,15 @@ class ChoirForm extends Form
 				$schools = School::get();
 
 				$this->add('school_id','select', [
-          'label' => 'School That the Choir Belongs To',
+          'label' => 'School That the Ensemble Belongs To',
 					'choices' => $schools->pluck('name','id')->toArray(),
 					'empty_value' => 'Choose school...',
           'attr' => ['class' => 'selectize']
 				]);
         $this->add('name','text', [
-          'label' => 'Choir Name',
+          'label' => 'Ensemble Name',
           'rules' => 'required'
         ]);
-				$this->add('submit', 'submit', ['label' => 'Save Choir', 'attr' => ['class' => 'btn btn-primary']]);
+				$this->add('submit', 'submit', ['label' => 'Save Ensemble', 'attr' => ['class' => 'btn btn-primary']]);
     }
 }

@@ -5,7 +5,7 @@
 @if(!$commentUrls->isEmpty())
 <table class="table table-striped table-bordered">
   <tr>
-  	<th>Choir</th>
+  	<th>Ensemble</th>
     <th>URL</th>
   </tr>
 
