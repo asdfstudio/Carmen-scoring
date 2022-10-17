@@ -74,7 +74,7 @@
 
   <h3>Manage Schedules</h3>
 
-  <p>Set the performance order for your competition. Do this after you have created all of your divisions, rounds and choirs.</p>
+  <p>Set the performance order for your competition. Do this after you have created all of your divisions, rounds and ensembles.</p>
 
   <p>{{ link_to_route('organizer.competition.schedule.create','Add a performance schedule',[$competition], ['class' => 'action']) }}</p>
 
@@ -90,7 +90,7 @@
 
 
   <h3>Feedback Links</h3>
-  <p>View the URLs where choir directors can view feedback from judges.</p>
+  <p>View the URLs where ensemble directors can view feedback from judges.</p>
   <p>{{ link_to_route('organizer.competition.comment-links.index','View feedback links',[$competition], ['class' => 'action']) }}</p>
 
 @endsection

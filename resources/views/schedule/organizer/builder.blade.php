@@ -16,7 +16,7 @@
 
 @section('content')
 
-  <p>Build your schedule by dragging choirs to the schedule.</p>
+  <p>Build your schedule by dragging ensembles to the schedule.</p>
 
   <div class="well">
     @php $schedule_day = $schedule->items->count() > 0 ? $schedule->items->first()->scheduled_time : new DateTime() ; @endphp
@@ -70,7 +70,7 @@
 
     <div class="schedule-builder">
       <div class="schedule-builder-header">
-        Choirs
+        Ensembles
       </div>
       <ul class="schedule-builder-list schedule-items divisions">
 

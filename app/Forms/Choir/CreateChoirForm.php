@@ -17,8 +17,8 @@ class CreateChoirForm extends Form
 
         $this->add('choir_id','choice', [
           'choices' => $this->data,
-          'empty_value' => 'Choose choir...',
-          'label' => 'Choose from existing choirs',
+          'empty_value' => 'Choose ensemble...',
+          'label' => 'Choose from existing ensembles',
           'attr' => ['class' => 'choir_id form-control'],
           'rules' => ['required_without:name'],
           'wrapper' => ['class' => 'existing_choir_container text-left']
@@ -27,7 +27,7 @@ class CreateChoirForm extends Form
         $this->add('add_new_choir','static', [
           'tag' => 'a',
           'attr' => ['class' => 'toggle-new-choir-container btn btn-secondary'],
-          'value' => 'Or create a new choir',
+          'value' => 'Or create a new ensemble',
           'label_show' => false,
           'wrapper' => ['class' => 'text-left']
         ]);
@@ -46,7 +46,7 @@ class CreateChoirForm extends Form
           'label' => 'Choir Name',
           'rules' => ['required_without:choir_id']
         ]);
-        
+
         // Add a school when creating a choir
         $this->add('school_heading', 'static', [
           'tag' => 'h2',
@@ -92,7 +92,7 @@ class CreateChoirForm extends Form
           'value' => 'submit',
           'attr' => ['class' => 'btn btn-primary', 'name' => 'submit']
         ]);
-        
+
         /*
         $this->add('submit_create_another', 'submit', [
           'label' => 'Save & Add Another',

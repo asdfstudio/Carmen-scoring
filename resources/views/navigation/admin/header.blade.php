@@ -12,7 +12,7 @@
       </li>
       <li>
         @php $link_class = Request::segment(2) == 'choir' ? 'active' : false; @endphp
-        <a href="{{ route('admin.choir.index') }}" class="{{ $link_class }}">Choirs</a>
+        <a href="{{ route('admin.choir.index') }}" class="{{ $link_class }}">Ensembles</a>
       </li>
       <li>
         @php $link_class = Request::segment(2) == 'school' ? 'active' : false; @endphp

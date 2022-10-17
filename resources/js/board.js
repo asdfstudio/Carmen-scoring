@@ -470,10 +470,10 @@ $(document).ready(function() {
       const fHtml = Form.getForm('choir', false, {});
 
       Swal.fire({
-        title: 'Add a Choir',
+        title: 'Add an Ensemble',
         html: fHtml,
         showCancelButton: true,
-        confirmButtonText: "Add a Choir",
+        confirmButtonText: "Add an Ensemble",
         focusConfirm: false,
         showLoaderOnConfirm: true,
         allowOutsideClick: () => !Swal.isLoading(),
