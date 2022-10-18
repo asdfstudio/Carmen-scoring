@@ -47,7 +47,7 @@ export default {
   right: 0;
   background: #272B2D;
   text-align: left;
-  overflow: scroll;
+//   overflow: scroll;
   z-index: 1;
 
   h2 {
