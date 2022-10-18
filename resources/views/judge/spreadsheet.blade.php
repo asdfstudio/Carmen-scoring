@@ -40,35 +40,35 @@
       window.spreadsheetHeaderVisible = true
       window.spreadsheetHeaderHidden = false
 
-      $(window.spreadsheetContainer).scroll(function(e){
+    //   $(window.spreadsheetContainer).scroll(function(e){
 
-        if(e.target.scrollTop != 0 && window.spreadsheetHeaderVisible){
+    //     if(e.target.scrollTop != 0 && window.spreadsheetHeaderVisible){
 
-          var combinedHeight = e.target.offsetHeight + window.spreadsheetHeader.height() + 50
+    //       var combinedHeight = e.target.offsetHeight + window.spreadsheetHeader.height() + 50
 
-          if(window.spreadsheetTable.height() > combinedHeight){
+    //       if(window.spreadsheetTable.height() > combinedHeight){
 
-            window.spreadsheetHeaderVisible = false
+    //         window.spreadsheetHeaderVisible = false
 
-            window.spreadsheetHeader.hide(100, function(){
-              //setTimeout(function(){ window.spreadsheetHeaderHidden = true }, 100)
-              window.spreadsheetHeaderHidden = true
-            })
+    //         window.spreadsheetHeader.hide(100, function(){
+    //           //setTimeout(function(){ window.spreadsheetHeaderHidden = true }, 100)
+    //           window.spreadsheetHeaderHidden = true
+    //         })
 
-          }
+    //       }
 
-        } else if(e.target.scrollTop == 0 && window.spreadsheetHeaderHidden){
+    //     } else if(e.target.scrollTop == 0 && window.spreadsheetHeaderHidden){
 
-          window.spreadsheetHeaderHidden = false
+    //       window.spreadsheetHeaderHidden = false
 
-          window.spreadsheetHeader.show(100, function(){
-            setTimeout(function(){ window.spreadsheetHeaderVisible = true }, 500)
-            //window.spreadsheetHeaderVisible = true
-          })
+    //       window.spreadsheetHeader.show(100, function(){
+    //         setTimeout(function(){ window.spreadsheetHeaderVisible = true }, 500)
+    //         //window.spreadsheetHeaderVisible = true
+    //       })
 
-        }
+    //     }
 
-      })
+    //   })
     })
   </script>
   <script type="text/javascript" src="/dist/vue/manifest.js"></script>
