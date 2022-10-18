@@ -282,8 +282,8 @@ class ResultsController extends Controller
         }
 
         $choirs = collect([]);
-        foreach ($round->divisions as $division) {
-            $choirs = $choirs->concat($division->choirs);
+        foreach ($round->divisions as $roundDivision) {
+            $choirs = $choirs->concat($roundDivision->choirs);
         }
 
         $judges = $round->judges;
