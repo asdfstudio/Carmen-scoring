@@ -1,5 +1,5 @@
 @if($division->choirs->isEmpty())
-	<p>There are no choirs. {{ link_to_route('organizer.competition.division.board','Add one',[$division->competition,$division]) }}</p>
+	<p>There are no ensembles. {{ link_to_route('organizer.competition.division.board','Add one',[$division->competition,$division]) }}</p>
 @endif
 
 @if(!$division->choirs->isEmpty())
@@ -7,7 +7,7 @@
 <table class="table table-striped table-bordered">
   <tr>
   	<th>School</th>
-    <th>Choir Name</th>
+    <th>Ensemble Name</th>
     <th>City</th>
     <th>State</th>
   </tr>

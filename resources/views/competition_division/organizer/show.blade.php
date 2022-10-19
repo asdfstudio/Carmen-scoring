@@ -73,7 +73,7 @@
             @endif
         </li>
         <li class="list-group-item">
-            <h3>Choirs</h3>
+            <h3>Ensembles</h3>
             @include('competition_division_choir.organizer.table')
         </li>
     </ul>

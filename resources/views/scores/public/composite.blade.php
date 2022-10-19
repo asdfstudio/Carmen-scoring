@@ -4,6 +4,15 @@
   if($round->scoring_method_id == 5){
     $total_col_class = 'total_column weighted raw';
   }
+  
+  foreach ($choirs as $choir) {
+    $choir_division = $choir->divisions->find($choir->pivot->division_id);
+    $choir->division_id = $choir->pivot->division_id;
+    $choir->division_access_code = $choir_division && $choir_division->access_code 
+      ? $choir_division->access_code 
+      : $access_code;
+  }
+
 @endphp
 <div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered scoreboard toggle-scores weighted raw rank">
@@ -32,7 +41,7 @@
       @foreach($judges as $judge)
         <th>
           @if($show_links)
-            {{ link_to_route('results.division.round.judge.show', $judge->full_name, [$division, $round, $judge, $access_code]) }}
+            {{ link_to_route('results.division.round.judge.show', $judge->full_name, [$division, $round, $judge, $division->access_code]) }}
           @else
             {{ $judge->full_name }}
           @endif
@@ -51,7 +60,7 @@
       <tr>
         <th>
           @if($show_links)
-            {{ link_to_route('results.division.round.choir.show', $choir->full_name, [$choir->pivot->division_id, $round, $choir, $access_code]) }}
+            {{ link_to_route('results.division.round.choir.show', $choir->full_name, [$choir->division_id, $round, $choir, $choir->division_access_code]) }}
           @else
             {{ $choir->full_name }}
           @endif
@@ -126,7 +135,7 @@
     @foreach($judges as $judge)
       <th>
         @if($show_links)
-          {{ link_to_route('results.division.round.judge.show', $judge->full_name, [$division, $round, $judge, $access_code]) }}
+          {{ link_to_route('results.division.round.judge.show', $judge->full_name, [$division, $round, $judge, $division->access_code]) }}
         @else
           {{ $judge->full_name }}
         @endif
@@ -155,7 +164,7 @@
     <tr>
       <th>
         @if($show_links)
-          {{ link_to_route('results.division.round.choir.show', $choir->full_name, [$choir->pivot->division_id, $round, $choir, $access_code]) }}
+          {{ link_to_route('results.division.round.choir.show', $choir->full_name, [$choir->division_id, $round, $choir, $choir->division_access_code]) }}
         @else
           {{ $choir->full_name }}
         @endif
