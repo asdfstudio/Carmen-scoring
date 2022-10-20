@@ -120,6 +120,7 @@ class JudgingSpreadsheetController extends Controller
             ->get();
 
         $criteria = $round->sheet->criteria->whereIn('caption_id', $judgeCaptionIds);
+
         $criteria = $criteria->map(function ($item, $key) {
             return [
                 'id' => $item->id,
@@ -128,7 +129,7 @@ class JudgingSpreadsheetController extends Controller
                 'description' => $item->description,
                 'minScore' => 0,
                 'maxScore' => $item->max_score,
-                'increment' => 0.5 // needs set
+                'increment' => $item->allow_fractional ? 0.5 : 1 // needs set
             ];
         })->values();
 
