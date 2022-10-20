@@ -28,7 +28,12 @@ class CriterionForm extends Form
         'label' => 'Description'
       ]);
 
-      $choices = array_combine(range(1,10), range(1,10));
+      $this->add('allow_fractional','choice', [
+        'label' => 'Allow score points with 0.5s',
+        'choices' => [1 => 'Allow', 0 => 'Restrict'],
+      ]);
+
+      $choices = array_combine(range(1,100), range(1,100));
 
       $this->add('max_score', 'choice', [
         'expanded' => false,

@@ -43,7 +43,7 @@ class Scorekeeper {
 	{
 		// Set score equal to 0 if provided score is outside
 		// of 0-10 range
-		if($score < 0 OR $score > 10) $score = 0;
+		if($score < 0 OR $score > 100) $score = 0;
 
 		$this->score = $score;
 

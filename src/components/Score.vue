@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="score-container" v-bind:class="displayType">
-      <div class="row" v-bind:class="displayType">
+      <!--<div class="row" v-bind:class="displayType">
         <button @click="down" v-if="showIncrements  && isScoringActive" class="score-down score-increment" v-bind:class="{ outlined : isIncrementOutlined }">-</button>
 
         <div
@@ -34,22 +34,28 @@
           @score-changed="change(n)"
           :size="scoreButtonSize"
         />
-      </div>
+      </div>-->
+      <ScrollPicker v-model="selectedScore" :options="range"/>
+      <button class="btn" @click="saveNewScore">Save</button>
     </div>
   </div>
 </template>
 
 <script>
+import "vue-scroll-picker/dist/style.css"
 import CriterionScoringRange from './CriterionScoringRange'
 import ScoreButton from './ScoreButton'
 import ScoreOption from './ScoreOption'
+import { ScrollPicker, ScrollPickerGroup } from "vue-scroll-picker"
 
 export default {
   name: 'Score',
   components: {
     CriterionScoringRange,
     ScoreButton,
-    ScoreOption
+    ScoreOption,
+    ScrollPicker,
+    ScrollPickerGroup
   },
   props: {
     min: Number,
@@ -71,16 +77,14 @@ export default {
   },
   data: function () {
     return {
+      selectedScore: this.initialScore,
       currentScore: this.initialScore
     }
   },
   computed: {
-    /* isScoringActive () {
-      return this.$store.state.isScoringActive
-    }, */
     range () {
       var range = []
-      for (var i = this.min; i <= this.max; i = i + this.increment) {
+      for (var i = this.max; i >= this.min; i = i - this.increment) {
         range.push(i)
       }
       return range
@@ -98,20 +102,18 @@ export default {
   watch: {
     initialScore: function (newValue, oldValue) {
       this.currentScore = newValue
-    },
-    currentScore: function (newValue, oldValue) {
-      if (this.currentScore != this.initialScore) {
-        const payload = {
-          choir_id: this.choirId,
-          criterion_id: this.criterionId,
-          caption_id: this.captionId,
-          raw_score: newValue
-        }
-        this.$store.dispatch('setScore', payload)
-      }
     }
   },
   methods: {
+    saveNewScore () {
+      const payload = {
+        choir_id: this.choirId,
+        criterion_id: this.criterionId,
+        caption_id: this.captionId,
+        raw_score: this.selectedScore
+      }
+      this.$store.dispatch('setScore', payload)
+    },
     down: function (event) {
       var newScore = this.currentScore - this.increment
       if (newScore >= this.min) {

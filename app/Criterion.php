@@ -11,7 +11,7 @@ class Criterion extends Model
 
 		protected $dates = ['deleted_at'];
 
-		protected $fillable = ['caption_id', 'name', 'description', 'max_score'];
+		protected $fillable = ['caption_id', 'name', 'description', 'max_score', 'allow_fractional'];
 
 		public function sheets()
     {
