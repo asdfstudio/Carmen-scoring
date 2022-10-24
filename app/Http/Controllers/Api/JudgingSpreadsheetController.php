@@ -161,6 +161,8 @@ class JudgingSpreadsheetController extends Controller
 
         $comments = $round->feedback->where('judge_id', $judge_id)->map(function ($item, $key) {
             return [
+                'recipient_id' => $item->recipient_id,
+                'recipient_type' => $item->recipient_type,
                 'choir_id' => $item->choir_id,
                 'comment' => $item->comments
             ];

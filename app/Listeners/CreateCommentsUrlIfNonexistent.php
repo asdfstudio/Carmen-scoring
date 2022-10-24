@@ -36,18 +36,30 @@ class CreateCommentsUrlIfNonexistent
           $choir = $comment->recipient;
         } elseif ($comment->recipient_type == 'App\Performer') {
           $choir = $comment->recipient->choir;
+        } elseif ($comment->recipient_type == 'App\Criterion') {
+          $criterion = $comment->recipient;
+          $choir = false;
         } else {
           $choir = false;
         }
 
-        if (!$choir) return;
+        if (!$choir && !$criterion) return;
 
-        $commentUrl = CommentUrl::firstOrCreate([
-          'competition_id' => $competition->id,
-          'recipient_type' => 'App\Choir',
-          'recipient_id' => $choir->id,
-          'choir_id' => $choir->id
-        ]);
+        if ($criterion) {
+            $commentUrl = CommentUrl::firstOrCreate([
+                'competition_id' => $competition->id,
+                'recipient_type' => 'App\Criterion',
+                'recipient_id' => $criterion->id,
+                'choir_id' => $comment->choir_id
+              ]);
+        } else {
+            $commentUrl = CommentUrl::firstOrCreate([
+                'competition_id' => $competition->id,
+                'recipient_type' => 'App\Choir',
+                'recipient_id' => $choir->id,
+                'choir_id' => $choir->id
+              ]);
+        }
 
         if(!$commentUrl->wasRecentlyCreated) return;
 

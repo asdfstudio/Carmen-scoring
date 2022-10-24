@@ -12,7 +12,6 @@ let backUrl = window.__BACK_URL__;
 Vue.use(Vuex)
 
 // Debounced API calls
-const saveComment = _.debounce(CommentsApi.saveComment, 1000)
 const saveRecording = RecordingApi.saveRecording
 
 // See https://stackoverflow.com/questions/28787436/debounce-a-function-with-argument
@@ -32,6 +31,19 @@ var saveDebouncedScore = _.wrap(
     return func(obj, store)(obj, store)
   }
 )
+
+var setComment = _.debounce(async function (payload) {
+    // Send ajax request
+    const data = await CommentsApi.saveComment(payload)
+
+    // Send to mutation
+    store.commit('setComment', {
+        choir_id: data.choir_id,
+        comment: data.comments,
+        recipient_id: data.recipient_id,
+        recipient_type: data.recipient_type
+    });
+}, 1000);
 
 export const store = new Vuex.Store({
   state: {
@@ -54,6 +66,7 @@ export const store = new Vuex.Store({
     activeCriterion: false,
     activeChoir: false,
     activeComment: false,
+    activeChoirCriterionComment:false,
     spreadsheetTitle: 'Default Spreadsheet Title',
     backUrl: backUrl,
     apiUrl: apiUrl
@@ -70,18 +83,27 @@ export const store = new Vuex.Store({
       state.activeComment = true
       state.activeChoir = choir
       state.activeCriterion = false
+      state.activeChoirCriterionComment = false
     },
     activateChoirModal (state, choir) {
       state.activeModal = true
       state.activeComment = false
+      state.activeChoirCriterionComment = false
       state.activeChoir = choir
       state.activeCriterion = false
     },
     activateChoirCriterionModal (state, payload) {
       state.activeModal = true
       state.activeComment = false
+      state.activeChoirCriterionComment = false
       state.activeChoir = payload.choir
       state.activeCriterion = payload.criterion
+    },
+    activateChoirCriterionCommentModal (state, payload) {
+        state.activeModal = true
+        state.activeChoirCriterionComment = payload
+        state.activeChoir = false
+        state.activeCriterion = false
     },
     deactivateModal (state) {
       state.activeModal = false
@@ -113,14 +135,20 @@ export const store = new Vuex.Store({
       // Find the matching comment and update it
       // var matches = state.comments.filter(comment => comment.choir_id === payload.choir_id)
       for (var c in state.comments) {
-        if (state.comments[c].choir_id === payload.choir_id) {
+        const isChoirCriterionComment = state.comments[c].choir_id === payload.choir_id
+                && state.comments[c].recipient_id === payload.recipient_id
+                && state.comments[c].recipient_type === payload.recipient_type;
+        if (isChoirCriterionComment) {
           state.comments[c].comment = payload.comment
           return
         }
       }
 
+      const keys = Object.keys(state.comments);
+      const index = keys.pop() || 0;
+
       // Otherwise append it to the array
-      state.comments.push(payload)
+      state.comments[+index + 1] = payload;
     },
     setSavingStatus (state, statusObj) {
       state.saving = Object.assign({}, state.saving, statusObj)
@@ -180,12 +208,8 @@ export const store = new Vuex.Store({
       // console.log('Calling saveDebouncedScore(payload) where payload is:\n', payload)
       saveDebouncedScore(payload, store)
     },
-    setComment (context, payload) {
-      // Send to mutation
-      store.commit('setComment', payload)
-
-      // Send ajax request, use debounce
-      saveComment(payload)
+    async setComment(context, payload) {
+        setComment(payload)
     },
     saveRecording (context, payload) {
       // Send ajax request
@@ -365,6 +389,17 @@ export const store = new Vuex.Store({
         }
       }
       return null
+    },
+    getChoirCriterionComment: (state) => (choirId, criterionId) => {
+        for (var c in state.comments) {
+            const isChoirCriterionComment = state.comments[c].choir_id === choirId
+                && state.comments[c].recipient_id === criterionId
+                && state.comments[c].recipient_type === 'App\\Criterion';
+            if (isChoirCriterionComment) {
+                return state.comments[c].comment
+            }
+        }
+        return null
     },
     getSavingStatus: (state) => (property) => {
       return (typeof state.saving[property] !== 'undefined' && state.saving[property])

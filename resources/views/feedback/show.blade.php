@@ -18,6 +18,8 @@
         $round = $div->round;
         $round_comments = $comments->where('subject_id', $round->id)->where('subject_type', 'App\Round');
         $round_recordings = $recordings->where('round_id', $round->id);
+
+        $criterion_comments_check = $comments->where('recipient_type', 'App\Criterion');
       @endphp
       @if($round_comments->count() || $round_recordings->count())
         <h4>{{ $div->name }}, {{ $round->name }}</h4>
@@ -57,7 +59,9 @@
                   <div>
                     @if($comments_not_empty)
                       @foreach($judge_comments as $comment)
-                        {!! nl2br($comment->comments) !!}
+                        @if($comment->recipient_type == 'App\Choir')
+                            {!! nl2br($comment->comments) !!}
+                        @endif
                       @endforeach
                     @else
                       <i class="text-muted">No typed comments were entered by this judge.</i>
@@ -77,6 +81,19 @@
                         @endforeach
                       </ol>
                     </div>
+                  @endif
+                  @if (count($criterion_comments_check))
+                    <h4>Criterias</h4>
+                    @foreach ($criterion_comments as $criterion_comment)
+                        <p>
+                            <div>
+                                <b> Criteria: </b>{{ $criterion_comment->name }}
+                            </div>
+                            <div>
+                                <b> Comments: </b>{{ $criterion_comment->comments }}
+                            </div>
+                        </p>
+                    @endforeach
                   @endif
                 </div>
               </li>

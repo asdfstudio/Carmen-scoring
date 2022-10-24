@@ -18,23 +18,34 @@ class CommentController extends Controller
         $judge_id = Auth::user()->person_id;
         $round_id = $request->input('round_id', NULL);
         $choir_id = $request->input('choir_id', NULL);
+        $criteria_id = $request->input('criteria_id', NULL);
 
         $round = Round::with(['competition' => function($query) {
             $query->withoutGlobalScope('organization');
         }])->find($round_id);
         $competition = $round->competition;
 
-        // Save comments
-        $comment = Comment::firstOrNew([
-            'judge_id' => $judge_id,
-            'choir_id' => $choir_id,
-            'recipient_type' => 'App\Choir',
-            'recipient_id' => $choir_id,
-            'subject_type' => 'App\Round',
-            'subject_id' => $round_id
-        ]);
-
-        $comment_text = $request->input('comment');
+        if ($criteria_id) {
+            // Save comment for criterion
+            $comment = Comment::firstOrNew([
+                'judge_id' => $judge_id,
+                'choir_id' => $choir_id,
+                'recipient_type' => 'App\Criterion',
+                'recipient_id' => $criteria_id,
+                'subject_type' => 'App\Round',
+                'subject_id' => $round_id
+            ]);
+        } else {
+            // Save comment for choir
+            $comment = Comment::firstOrNew([
+                'judge_id' => $judge_id,
+                'choir_id' => $choir_id,
+                'recipient_type' => 'App\Choir',
+                'recipient_id' => $choir_id,
+                'subject_type' => 'App\Round',
+                'subject_id' => $round_id
+            ]);
+        }
 
         $comment->comments = $request->input('comment');
         $comment->save();

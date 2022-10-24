@@ -5,6 +5,7 @@ export default {
     const postPayload = {
       round_id: payload.round_id,
       choir_id: payload.choir_id,
+      criteria_id: payload.criteria_id,
       comment: payload.comment
     }
     return axios.post('/judge/comment/save', postPayload)

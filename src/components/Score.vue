@@ -36,7 +36,8 @@
         />
       </div>-->
       <ScrollPicker v-model="selectedScore" :options="range"/>
-      <button class="btn" @click="saveNewScore">Save</button>
+      <button class="btn save-score-btn" @click="saveNewScore">Save</button>
+      <button class="btn" @click="activateChoirCriterionCommentModal">Comment</button>
     </div>
   </div>
 </template>
@@ -113,6 +114,12 @@ export default {
         raw_score: this.selectedScore
       }
       this.$store.dispatch('setScore', payload)
+
+      const saveScoreBtn = $('.save-score-btn')
+
+      saveScoreBtn.addClass('bg-primary')
+      saveScoreBtn.html('Saved')
+      setTimeout(() => saveScoreBtn.removeClass('bg-primary'), 1000);
     },
     down: function (event) {
       var newScore = this.currentScore - this.increment
@@ -139,6 +146,10 @@ export default {
     },
     getErroredStatus: function (property) {
       return this.$store.getters.getErroredStatus(property)
+    },
+    activateChoirCriterionCommentModal: function () {
+      this.$store.commit('startModalProtection')
+      this.$store.commit('activateChoirCriterionCommentModal', {choirId: this.choirId, criterionId: this.criterionId} )
     }
   }
 }
@@ -278,6 +289,10 @@ export default {
         font-size: 12px;
       }
     }
+  }
+
+  .criteria-comment {
+    margin-top: 10px;
   }
 
 }
