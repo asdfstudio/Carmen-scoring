@@ -43,7 +43,7 @@ class CreateCommentsUrlIfNonexistent
           $choir = false;
         }
 
-        if (!$choir && !$criterion) return;
+        if (!$choir || !isset($criterion)) return;
 
         if ($criterion) {
             $commentUrl = CommentUrl::firstOrCreate([
