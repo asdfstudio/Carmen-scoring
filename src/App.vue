@@ -13,6 +13,8 @@
 
       <ChoirCommentModal v-if="activeModalType === 'choirComment'" v-bind:class="activeModalType"/>
 
+      <CriterionCommentModal v-if="activeModalType === 'choirCriterionComment'" v-bind:class="activeModalType"/>
+
       <ChoirCriterionModal v-if="activeModalType === 'choirCriterion'" v-bind:class="activeModalType"/>
 
     </div>
@@ -25,6 +27,7 @@ import Spreadsheet from './components/Spreadsheet'
 import ChoirCriterionModal from './components/ChoirCriterionModal'
 import ChoirModal from './components/ChoirModal'
 import ChoirCommentModal from './components/ChoirCommentModal'
+import CriterionCommentModal from './components/CriterionCommentModal'
 import SpreadsheetHeader from './components/SpreadsheetHeader'
 
 export default {
@@ -34,6 +37,7 @@ export default {
     Spreadsheet,
     ChoirCriterionModal,
     ChoirCommentModal,
+    CriterionCommentModal,
     ChoirModal
   },
   computed: {
@@ -55,12 +59,17 @@ export default {
     activeComment () {
       return this.$store.state.activeComment
     },
+    activeChoirCriterionComment () {
+      return this.$store.state.activeChoirCriterionComment
+    },
     activeModalType () {
       if (!this.activeModal) {
         return null
       }
 
-      if (this.activeChoir && this.activeCriterion) {
+      if (this.activeChoirCriterionComment) {
+        return 'choirCriterionComment'
+      } else if (this.activeChoir && this.activeCriterion) {
         return 'choirCriterion'
       } else if (this.activeChoir && this.activeComment) {
         return 'choirComment'

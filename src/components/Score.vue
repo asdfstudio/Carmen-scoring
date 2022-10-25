@@ -36,7 +36,8 @@
         />
       </div>-->
       <ScrollPicker v-model="selectedScore" :options="range"/>
-      <button class="btn" @click="saveNewScore">Save</button>
+      <button class="btn" @click="saveNewScore($event)">Save</button>
+      <button class="btn" @click="activateChoirCriterionCommentModal">Comment</button>
     </div>
   </div>
 </template>
@@ -105,7 +106,7 @@ export default {
     }
   },
   methods: {
-    saveNewScore () {
+    saveNewScore ($event) {
       const payload = {
         choir_id: this.choirId,
         criterion_id: this.criterionId,
@@ -113,6 +114,12 @@ export default {
         raw_score: this.selectedScore
       }
       this.$store.dispatch('setScore', payload)
+
+      const saveScoreBtn = $event.target
+
+      saveScoreBtn.classList.add('bg-primary')
+      saveScoreBtn.innerHTML = 'Saved'
+      setTimeout(() => saveScoreBtn.classList.remove('bg-primary'), 1000);
     },
     down: function (event) {
       var newScore = this.currentScore - this.increment
@@ -139,6 +146,10 @@ export default {
     },
     getErroredStatus: function (property) {
       return this.$store.getters.getErroredStatus(property)
+    },
+    activateChoirCriterionCommentModal: function () {
+      this.$store.commit('startModalProtection')
+      this.$store.commit('activateChoirCriterionCommentModal', {choirId: this.choirId, criterionId: this.criterionId} )
     }
   }
 }
@@ -278,6 +289,10 @@ export default {
         font-size: 12px;
       }
     }
+  }
+
+  .criteria-comment {
+    margin-top: 10px;
   }
 
 }

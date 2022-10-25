@@ -33,7 +33,7 @@ class FeedbackController extends Controller
 
       $choir = $commentUrl->choir;
       $competition = $commentUrl->competition;
-      $comment_recipient_id = $commentUrl->recipient_id;
+      $comment_recipient_id = $commentUrl->recipient_type == 'App\Criterion' ? $commentUrl->choir_id : $commentUrl->recipient_id;
 
       // Get the divisions that this choir is in
       $division_ids = DB::Table('choir_division AS cd')
@@ -64,6 +64,12 @@ class FeedbackController extends Controller
       // Get all the Division Recordings
       $recordings = Recording::where('choir_id', $comment_recipient_id)->whereIn('division_id', $competition->divisions->pluck('id'))->get();
 
-      return view('feedback.show', ['comments' => $comments, 'recordings' => $recordings, 'competition' => $competition, 'divisions' => $divisions, 'choir' => $choir]);
+      $criterion_comments = DB::table('comments AS cm')
+          ->where('recipient_type', '=', 'App\Criterion')
+          ->join('criteria AS ct', 'cm.recipient_id', '=', 'ct.id')
+          ->select('ct.name', 'cm.comments')
+          ->get();
+
+      return view('feedback.show', ['comments' => $comments, 'criterion_comments' => $criterion_comments, 'recordings' => $recordings, 'competition' => $competition, 'divisions' => $divisions, 'choir' => $choir]);
     }
 }
