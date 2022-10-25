@@ -20,6 +20,11 @@ class Comment extends Model
 			return $this->belongsTo('App\Choir');
 		}*/
 
+        public function criterion()
+		{
+			return $this->belongsTo('App\Criterion', 'recipient_id', 'id');
+		}
+
 		public function recipient()
 		{
 			return $this->morphTo();

@@ -18,8 +18,6 @@
         $round = $div->round;
         $round_comments = $comments->where('subject_id', $round->id)->where('subject_type', 'App\Round');
         $round_recordings = $recordings->where('round_id', $round->id);
-
-        $criterion_comments_check = $comments->where('recipient_type', 'App\Criterion');
       @endphp
       @if($round_comments->count() || $round_recordings->count())
         <h4>{{ $div->name }}, {{ $round->name }}</h4>
@@ -43,6 +41,9 @@
             @foreach($judges as $judge)
               @php
                 $judge_comments = $round_comments->where('judge_id', $judge->id);
+                $judge_criteria_comments = $criterion_comments
+                    ->where('judge_id', $judge->id)
+                    ->where('subject_id', $round->id);
                 $judge_recordings = $round_recordings->where('judge_id', $judge->id);
                 $comments_not_empty = false;
                 foreach($judge_comments as $comment){
@@ -82,15 +83,15 @@
                       </ol>
                     </div>
                   @endif
-                  @if (count($criterion_comments_check))
-                    <h4>Criterias</h4>
-                    @foreach ($criterion_comments as $criterion_comment)
+                  @if (count($judge_criteria_comments))
+                    <h4>Criteria</h4>
+                    @foreach ($judge_criteria_comments as $criterion_comment)
                         <p>
                             <div>
-                                <b> Criteria: </b>{{ $criterion_comment->name }}
+                                <b> Criterion: </b>{{ $criterion_comment->criterion->name }}
                             </div>
                             <div>
-                                <b> Comments: </b>{{ $criterion_comment->comments }}
+                                <b> Comment: </b>{{ $criterion_comment->comments }}
                             </div>
                         </p>
                     @endforeach
