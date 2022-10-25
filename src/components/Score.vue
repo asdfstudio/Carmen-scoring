@@ -36,7 +36,7 @@
         />
       </div>-->
       <ScrollPicker v-model="selectedScore" :options="range"/>
-      <button class="btn save-score-btn" @click="saveNewScore">Save</button>
+      <button class="btn" @click="saveNewScore($event)">Save</button>
       <button class="btn" @click="activateChoirCriterionCommentModal">Comment</button>
     </div>
   </div>
@@ -106,7 +106,7 @@ export default {
     }
   },
   methods: {
-    saveNewScore () {
+    saveNewScore ($event) {
       const payload = {
         choir_id: this.choirId,
         criterion_id: this.criterionId,
@@ -115,11 +115,11 @@ export default {
       }
       this.$store.dispatch('setScore', payload)
 
-      const saveScoreBtn = $('.save-score-btn')
+      const saveScoreBtn = $event.target
 
-      saveScoreBtn.addClass('bg-primary')
-      saveScoreBtn.html('Saved')
-      setTimeout(() => saveScoreBtn.removeClass('bg-primary'), 1000);
+      saveScoreBtn.classList.add('bg-primary')
+      saveScoreBtn.innerHTML = 'Saved'
+      setTimeout(() => saveScoreBtn.classList.remove('bg-primary'), 1000);
     },
     down: function (event) {
       var newScore = this.currentScore - this.increment

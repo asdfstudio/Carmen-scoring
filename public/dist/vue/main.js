@@ -2957,7 +2957,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    saveNewScore: function saveNewScore() {
+    saveNewScore: function saveNewScore($event) {
       var payload = {
         choir_id: this.choirId,
         criterion_id: this.criterionId,
@@ -2965,11 +2965,11 @@ __webpack_require__.r(__webpack_exports__);
         raw_score: this.selectedScore
       };
       this.$store.dispatch('setScore', payload);
-      var saveScoreBtn = $('.save-score-btn');
-      saveScoreBtn.addClass('bg-primary');
-      saveScoreBtn.html('Saved');
+      var saveScoreBtn = $event.target;
+      saveScoreBtn.classList.add('bg-primary');
+      saveScoreBtn.innerHTML = 'Saved';
       setTimeout(function () {
-        return saveScoreBtn.removeClass('bg-primary');
+        return saveScoreBtn.classList.remove('bg-primary');
       }, 1000);
     },
     down: function down(event) {
@@ -28126,8 +28126,12 @@ var render = function() {
         _c(
           "button",
           {
-            staticClass: "btn save-score-btn",
-            on: { click: _vm.saveNewScore }
+            staticClass: "btn",
+            on: {
+              click: function($event) {
+                return _vm.saveNewScore($event)
+              }
+            }
           },
           [_vm._v("Save")]
         ),
