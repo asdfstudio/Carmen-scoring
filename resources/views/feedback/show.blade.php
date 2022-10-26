@@ -68,6 +68,19 @@
                       <i class="text-muted">No typed comments were entered by this judge.</i>
                     @endif
                   </div>
+                  @if (count($judge_criteria_comments))
+                    <h4>Criteria</h4>
+                    @foreach ($judge_criteria_comments as $criterion_comment)
+                        <p>
+                            <div>
+                                <b> Criterion: </b>{{ $criterion_comment->criterion->name }}
+                            </div>
+                            <div>
+                                <b> Comment: </b>{{ $criterion_comment->comments }}
+                            </div>
+                        </p>
+                    @endforeach
+                  @endif
                   @if($competition->organization->is_premium == 1 && $judge_recordings->count())
                     <div class="record-row">
                       <h5>Audio Comments:</h5>
@@ -82,19 +95,6 @@
                         @endforeach
                       </ol>
                     </div>
-                  @endif
-                  @if (count($judge_criteria_comments))
-                    <h4>Criteria</h4>
-                    @foreach ($judge_criteria_comments as $criterion_comment)
-                        <p>
-                            <div>
-                                <b> Criterion: </b>{{ $criterion_comment->criterion->name }}
-                            </div>
-                            <div>
-                                <b> Comment: </b>{{ $criterion_comment->comments }}
-                            </div>
-                        </p>
-                    @endforeach
                   @endif
                 </div>
               </li>
