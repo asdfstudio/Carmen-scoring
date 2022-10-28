@@ -264,6 +264,49 @@ Route::group([
     'as' => 'competition.division.award.update_assignment', 'uses' => 'CompetitionDivisionAwardController@update_assignment'
   ]);
 
+  // List round awards
+  Route::get('competition/{competition}/round/{round}/award', [
+    'as' => 'competition.round.award.index', 'uses' => 'CompetitionRoundAwardController@index'
+  ]);
+
+  // Create a round award
+  Route::get('competition/{competition}/round/{round}/award/create', [
+    'as' => 'competition.round.award.create', 'uses' => 'CompetitionRoundAwardController@create'
+  ]);
+
+  // Save a round award
+  Route::post('competition/{competition}/round/{round}/award/', [
+    'as' => 'competition.round.award.store', 'uses' => 'CompetitionRoundAwardController@store'
+  ]);
+
+  // Choose round awards
+  Route::get('competition/{competition}/round/{round}/award/manage', [
+    'as' => 'competition.round.award.manage', 'uses' => 'CompetitionRoundAwardController@manage'
+  ]);
+
+  // Save round awards
+  Route::post('competition/{competition}/round/{round}/award/manage', [
+    'as' => 'competition.round.award.update', 'uses' => 'CompetitionRoundAwardController@update'
+  ]);
+
+  // Assign round awards
+  Route::get('competition/{competition}/round/{round}/award/assign', [
+    'as' => 'competition.round.award.assign', 'uses' => 'CompetitionRoundAwardController@assign'
+  ]);
+
+  // Save assigned round awards
+  Route::post('competition/{competition}/round/{round}/award/assign', [
+    'as' => 'competition.round.award.update_assignment', 'uses' => 'CompetitionRoundAwardController@update_assignment'
+  ]);
+
+  Route::get('competition/{competition}/round/{round}/award-settings', [
+    'as' => 'competition.round.award.settings.edit', 'uses' => 'CompetitionRoundAwardSettingsController@edit'
+  ]);
+
+  Route::post('competition/{competition}/round/{round}/settings', [
+    'as' => 'competition.round.award.settings.store', 'uses' => 'CompetitionRoundAwardSettingsController@update'
+  ]);
+
   // Show organization details
   Route::get('organization', [
     'as' => 'organization.show',

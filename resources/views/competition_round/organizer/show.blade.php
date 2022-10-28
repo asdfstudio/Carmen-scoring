@@ -20,6 +20,9 @@
             <li>{{ link_to_route('organizer.competition.round.scores.show', 'See Scores', [$competition, $round], ['class' => 'action']) }}</li>
             <li>{{ link_to_route('organizer.competition.round.index', 'Back to all Rounds', [$competition], ['class' => 'action']) }}</li>
         @endcan
+        <li>
+            {{ link_to_route('organizer.competition.round.award.index', 'Awards', [$round->competition->id, $round], ['class' => 'action']) }}
+        </li>
     </ul>
 @endsection
 

@@ -161,6 +161,9 @@
         .division-name {
           font-weight: bold;
         }
+        .round-name {
+            font-weight: bold;
+        }
         .award-name, .caption-name {
           color: #888;
           font-size: 0.9em;
@@ -270,6 +273,9 @@ ul.schedule-list {
       overflow: hidden;
 
       .division-name {
+        font-weight: bold;
+      }
+      .round-name {
         font-weight: bold;
       }
       .award-name, .caption-name {

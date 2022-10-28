@@ -6488,6 +6488,11 @@ label.block {
   font-weight: bold;
 }
 
+.schedule-builder-container ul.schedule-builder-list li.schedule-item.award .round-name,
+.schedule-builder-container ul.schedule-list li.schedule-item.award .round-name {
+  font-weight: bold;
+}
+
 .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .award-name,
 .schedule-builder-container ul.schedule-builder-list li.schedule-item.award .caption-name,
 .schedule-builder-container ul.schedule-list li.schedule-item.award .award-name,
@@ -6594,6 +6599,10 @@ ul.schedule-list li.schedule-item.award {
 }
 
 ul.schedule-list li.schedule-item.award .division-name {
+  font-weight: bold;
+}
+
+ul.schedule-list li.schedule-item.award .round-name {
   font-weight: bold;
 }
 

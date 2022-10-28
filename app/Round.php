@@ -33,6 +33,16 @@ class Round extends Model
         return $this->hasMany('App\Division');
     }
 
+    public function awards()
+    {
+        return $this->belongsToMany('App\Award', 'round_award')->withPivot('choir_id', 'recipient', 'sponsor');
+    }
+
+    public function awardSettings()
+    {
+        return $this->hasMany('App\RoundAwardSetting');
+    }
+
     public function judges()
     {
         return $this->belongsToMany('App\Judge', 'round_judge')->withPivot('caption_id');

@@ -7,6 +7,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 use App\User;
 use App\Award;
 use App\Division;
+use App\Round;
 
 class AwardPolicy extends BasePolicy
 {
@@ -25,11 +26,10 @@ class AwardPolicy extends BasePolicy
 
 
 
-		public function createForDivision(User $user, Division $division)
-		{
-      if($division)
-      {
-        if($this->isOrgAdmin AND !empty($division->competition->organization_id) AND $division->competition->organization_id === $this->orgId)
+    public function createForDivision(User $user, Division $division)
+    {
+      if ($division) {
+        if ($this->isOrgAdmin AND !empty($division->competition->organization_id) AND $division->competition->organization_id === $this->orgId)
         {
           return true;
         } else {
@@ -40,43 +40,51 @@ class AwardPolicy extends BasePolicy
       {
         return $this->isOrgAdmin;
       }
-		}
+    }
+
+    public function createForRound(User $user, Round $round)
+    {
+      if($round) {
+        if($this->isOrgAdmin AND !empty($round->competition->organization_id) AND $round->competition->organization_id === $this->orgId)
+        {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      else
+      {
+        return $this->isOrgAdmin;
+      }
+    }
 
     public function update(User $user, $award)
-		{
-      if($this->isOrgAdmin AND $this->orgId === $award->organization_id)
-      {
+    {
+      if($this->isOrgAdmin AND $this->orgId === $award->organization_id) {
         return true;
       }
-		}
+    }
 
-
-
-		public function destroy(User $user, $award)
-		{
-      if($this->isOrgAdmin AND $this->orgId === $award->organization_id)
-      {
+    public function destroy(User $user, $award)
+    {
+      if($this->isOrgAdmin AND $this->orgId === $award->organization_id) {
         return true;
       }
-		}
+    }
 
 
     public function assign($award, Division $division)
-		{
-        if($this->isOrgAdmin AND $this->orgId === $award->organization_id)
-        {
+    {
+        if($this->isOrgAdmin AND $this->orgId === $award->organization_id) {
           return true;
         }
-		}
+    }
 
     public function manage($award, Division $division)
-		{
-        if($this->isOrgAdmin AND $this->orgId === $award->organization_id)
-        {
+    {
+        if($this->isOrgAdmin AND $this->orgId === $award->organization_id) {
           return true;
         }
-		}
-
-
+    }
 
 }
