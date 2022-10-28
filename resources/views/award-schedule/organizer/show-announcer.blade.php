@@ -70,9 +70,15 @@
             @if($item->round)
               <span class="award-name">{{ $item->round->name }} Ratings</span>
             @endif
-
+            <br>
             @if($item->award)
-              <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
+                @if (!empty($item->round->awards))
+                    @foreach ($item->round->awards as $roundAward)
+                        <span class="award-name">{{ $roundAward->name }}</span>
+                    @endforeach
+                @else
+                    <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
+                @endif
             @endif
 
             @if($item->caption)

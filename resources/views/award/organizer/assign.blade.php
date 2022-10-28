@@ -25,7 +25,11 @@
 				}
 				@endphp
 				{{ Form::label('Choir') }}
+                @if (isset($round))
+                {{ Form::select("awards[".$award->id."][choir_id]", $round->choirs->pluck('FullName', 'id'), $selected, ['placeholder' => 'Select Choir', 'class' => 'form-control']) }}
+                @else
 				{{ Form::select("awards[".$award->id."][choir_id]", $division->choirs->pluck('FullName', 'id'), $selected, ['placeholder' => 'Select Choir', 'class' => 'form-control']) }}
+                @endif
 			</div>
 
 		</li>

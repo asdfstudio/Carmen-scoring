@@ -32,7 +32,12 @@
             @endif
 
             @if($item->round)
-              <span class="award-name">{{ $item->round->name }} Ratings</span>
+              <p class="round-name">{{ $item->round->name }} Ratings</p>
+              @if ($item->round->awards)
+                @foreach ($item->round->awards as $roundAward)
+                    <span class="award-name">{{ $roundAward->name }}</span>
+                @endforeach
+              @endif
             @endif
 
             @if($item->award)
@@ -62,8 +67,8 @@
             <span class="division-heading">{{ $round->name }}</span>
               @foreach ($round->divisions as $div)
                 <span class="round-heading">{{ $div->name }}</span>
-            <ul class="awards">
-              <!-- Begin division overall and caption specific awards -->
+                <ul class="awards">
+                  <!-- Begin division overall and caption specific awards -->
                   @foreach ($div->awardSettings as $awardSetting)
                     @if($awardSetting->award_count > 0)
                       @php
@@ -95,9 +100,7 @@
                       @endwhile
                     @endif
                   @endforeach
-
-
-              <!-- End division overall and caption specific awards -->
+                  <!-- End division overall and caption specific awards -->
 
               <!-- Begin Round Ratings -->
                 @php
@@ -110,6 +113,11 @@
                     <span class="division-name">{{ $div->name }}</span>
                     <span class="award-name rating">{{ $round->name }} Ratings</span>
                   </li>
+                  @foreach ($round->awards as $roundAward)
+                  <li class="schedule-item award">
+                    <span class="award-name">{{ $roundAward->name }}</span>
+                  </li>
+                  @endforeach
                 @endif
               <!-- End Round Ratings -->
 
