@@ -47,32 +47,7 @@ class CompetitionRoundController extends Controller
 
         $competition = Competition::find($competition_id);
 
-        // $division = Division::with('competition','rounds')->find($division_id);
-
-        // $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm');
-        //
-        // $deactivateScoringForm = $formBuilder->create('Scoring\DeactivateScoringForm');
-        //
-        // $completeScoringForm = $formBuilder->create('Scoring\CompleteScoringForm');
-        //
-        // $reactivateScoringForm = $formBuilder->create('Scoring\ReactivateScoringForm');
-        //
-        // $finalizeScoringFormData = [
-        //   'method' => 'POST',
-        //   'url' => route('organizer.competition.round.scoring', [
-        //       $competition_id,
-        //       // $round_id
-        //   ]),
-        // ];
-
-        // if($division->status_slug() != 'completed') {
-        //   $finalizeScoringFormData['disabled'] = true;
-        // }
-        //
-        // $finalizeScoringForm = $formBuilder->create('Scoring\FinalizeScoringForm', $finalizeScoringFormData);
-
         return view('competition_round.organizer.index', compact('competition'));
-        // 'division','activateScoringForm', 'finalizeScoringForm', 'deactivateScoringForm', 'reactivateScoringForm', 'completeScoringForm' ));
     }
 
 
@@ -205,7 +180,9 @@ class CompetitionRoundController extends Controller
         $judges = $round->judges;
         $division = $round->divisions->first();
 
-        return view('competition_round.organizer.show', compact('captions', 'judges', 'competition', 'round', 'division' ));
+        $include_round_navigation_bar = true;
+
+        return view('competition_round.organizer.show', compact('captions', 'judges', 'competition', 'round', 'division', 'include_round_navigation_bar'));
     }
 
 

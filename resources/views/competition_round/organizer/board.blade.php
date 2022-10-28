@@ -1,5 +1,7 @@
 @extends('layouts.simple')
 
+@php $include_round_navigation_bar = TRUE @endphp
+
 @section('breadcrumbs')
     {!! Breadcrumbs::render('organizer.competition.round.index',$competition) !!}
 @endsection

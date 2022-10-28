@@ -32,12 +32,7 @@
             @endif
 
             @if($item->round)
-              <p class="round-name">{{ $item->round->name }} Ratings</p>
-              @if ($item->round->awards)
-                @foreach ($item->round->awards as $roundAward)
-                    <span class="award-name">{{ $roundAward->name }}</span>
-                @endforeach
-              @endif
+              <span class="award-name">{{ $item->round->name }} Ratings</span>
             @endif
 
             @if($item->award)
@@ -113,14 +108,8 @@
                     <span class="division-name">{{ $div->name }}</span>
                     <span class="award-name rating">{{ $round->name }} Ratings</span>
                   </li>
-                  @foreach ($round->awards as $roundAward)
-                  <li class="schedule-item award">
-                    <span class="award-name">{{ $roundAward->name }}</span>
-                  </li>
-                  @endforeach
                 @endif
               <!-- End Round Ratings -->
-
 
               @foreach($div->awards as $award)
                 @php
@@ -138,6 +127,18 @@
             </ul>
               @endforeach
           </li>
+
+          <li class="round">
+            <span class="division-heading">Round awards</span>
+
+            @foreach ($round->awards as $roundAward)
+            <li class="schedule-item award">
+                <span class="division-name">{{ $round->name }}</span>
+                    <span class="award-name">{{ $roundAward->name }}</span>
+            </li>
+            @endforeach
+          </li>
+
         @endforeach
       </ul>
     </div>

@@ -16,6 +16,7 @@
 
   @includeWhen(isset($include_division_navigation_bar), 'division.organizer.navigation_bar')
   @includeWhen(isset($include_judge_navigation_bar), 'division.judge.navigation_bar')
+  @includeWhen(isset($include_round_navigation_bar), 'round.organizer.navigation_bar')
 
   <div class="collapse content body-width">
 

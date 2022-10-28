@@ -1,5 +1,6 @@
 @extends('layouts.simple')
 
+@php $include_round_navigation_bar = TRUE @endphp
 
 @section('content-header')
   <h1>Edit round</h1>

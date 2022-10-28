@@ -1,29 +1,13 @@
 @extends('layouts.simple')
 
+@php $include_round_navigation_bar = TRUE @endphp
+
 @section('breadcrumbs')
     {!! Breadcrumbs::render('organizer.competition.round.show',$competition, $round) !!}
 @endsection
 
 @section('content-header')
     <h1>{{ $round->name }}</h1>
-
-    <ul class="actions-group">
-        @can('update', $round)
-            <li> {{ link_to_route('organizer.competition.round.edit', 'Edit Scoring', [$competition,$round], ['class' => 'action']) }} </li>
-            <li>{{ link_to_route('organizer.competition.round.board', 'Edit Judges', [$competition, $round], ['class' => 'action']) }}</li>
-            <li>{{ link_to_route('organizer.competition.division.index', 'Manage Divisions', [$competition, $round], ['class' => 'action']) }}</li>
-        @endcan
-        @if($round->competition->organization->vote_setting)
-            <li> {{ link_to_route('organizer.competition.round.audience.index', 'Manage Audience Voting', [$competition, $round], ['class' => 'action']) }}</li>
-        @endif
-        @can('showAll', $round)
-            <li>{{ link_to_route('organizer.competition.round.scores.show', 'See Scores', [$competition, $round], ['class' => 'action']) }}</li>
-            <li>{{ link_to_route('organizer.competition.round.index', 'Back to all Rounds', [$competition], ['class' => 'action']) }}</li>
-        @endcan
-        <li>
-            {{ link_to_route('organizer.competition.round.award.index', 'Awards', [$round->competition->id, $round], ['class' => 'action']) }}
-        </li>
-    </ul>
 @endsection
 
 @section('content')

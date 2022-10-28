@@ -1,5 +1,7 @@
 @extends('layouts.simple')
 
+@php $include_round_navigation_bar = TRUE @endphp
+
 @section('content')
 
 	<div class="content-header">
