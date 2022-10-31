@@ -63,10 +63,12 @@
             <div class="award-heading">
 
                 @if($item->round)
-                <span class="division-name" data-division-id="{{ $item->division->id }}">{{ $item->round->name }}</span>
+                    <span class="division-name" data-division-id="{{ $item->division->id }}">{{ $item->round->name }}</span>
                 @endif
 
-                <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
+                @if($item->award)
+                    <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
+                @endif
             </div>
         </li>
 

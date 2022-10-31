@@ -72,6 +72,10 @@
             @endforeach
           @endif
 
+          @if($item->round)
+            <span class="division-name">{{ $item->round->name }}</span>
+          @endif
+
           @if($item->award)
             <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
           @endif
