@@ -58,7 +58,19 @@
 
       @endphp
 
-      @if(!empty($awardWinner) || !empty($ratings))
+      @if (!empty($item->round->awards))
+        <li class="schedule-item award">
+            <div class="award-heading">
+
+                @if($item->round)
+                <span class="division-name" data-division-id="{{ $item->division->id }}">{{ $item->round->name }}</span>
+                @endif
+
+                <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
+            </div>
+        </li>
+
+      @elseif(!empty($awardWinner) || !empty($ratings))
         <li class="schedule-item award">
 
           <div class="award-heading">
@@ -70,15 +82,9 @@
             @if($item->round)
               <span class="award-name">{{ $item->round->name }} Ratings</span>
             @endif
-            <br>
+
             @if($item->award)
-                @if (!empty($item->round->awards))
-                    @foreach ($item->round->awards as $roundAward)
-                        <span class="award-name">{{ $roundAward->name }}</span>
-                    @endforeach
-                @else
-                    <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
-                @endif
+                <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
             @endif
 
             @if($item->caption)

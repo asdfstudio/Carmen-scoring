@@ -51,6 +51,8 @@ var ScheduleBuilder = (function () {
       scheduleItem.is_rating = typeof $(this).data('rating') === 'undefined' ? 0 : 1;
       scheduleItem.scheduled_time = scheduleDay + ' ' + $(this).find('input.scheduled_time').val()
       scheduleItem.name = $(this).find('input.item_name').val()
+      scheduleItem.awardable_id = $(this).data('awardable-id')
+      scheduleItem.awardable_type = $(this).data('awardable-type')
       data.push(scheduleItem)
     })
 

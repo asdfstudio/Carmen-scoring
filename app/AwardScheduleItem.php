@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AwardScheduleItem extends Model
 {
-		protected $fillable = ['division_id', 'round_id', 'award_id', 'caption_id', 'rank', 'performance_order'];
+		protected $fillable = ['division_id', 'round_id', 'award_id', 'caption_id', 'rank', 'performance_order', 'awardable_id', 'awardable_type'];
 
 
 		public function schedule()
@@ -43,7 +43,7 @@ class AwardScheduleItem extends Model
 		public function getNamedRankAttribute()
 		{
 			if(!$this->rank) return false;
-			
+   
 			if ($this->division->competition->use_runner_up_names) {
 				if ($this->rank == 1) {
           $rank_name = 'Grand Champion';

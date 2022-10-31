@@ -25,19 +25,19 @@ class AwardSchedule extends Model
         return $this->hasMany('App\AwardScheduleItem');
     }
 
-		public function syncItems($items = [])
-		{
-			$scheduleItems = [];
+	public function syncItems($items = [])
+	{
+		$scheduleItems = [];
 
-      foreach($items as $item)
-      {
-        $scheduleItems[] = new AwardScheduleItem($item);
-      }
+        foreach($items as $item)
+        {
+            $scheduleItems[] = new AwardScheduleItem($item);
+        }
 
-      $deleted = $this->items()->delete();
-      $success = $this->items()->saveMany($scheduleItems);
+        $deleted = $this->items()->delete();
+        $success = $this->items()->saveMany($scheduleItems);
 
-			return $this;
-		}
+		return $this;
+	}
 
 }
