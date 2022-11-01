@@ -79,19 +79,6 @@
           <li class="division">
             <span class="division-heading">{{ $round->name }}</span>
               @foreach ($round->divisions as $div)
-                @foreach ($round->awards as $roundAward)
-                    @php
-                    $isInSchedule = $schedule->items->where('division_id', $div->id)->where('award_id', $roundAward->id)->count();
-
-                    $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('award_id', $roundAward->id)->count();
-                    @endphp
-                    @if(!$isInSchedule AND !$isInAnotherSchedule)
-                    <li class="schedule-item award" data-awardable-id="{{ $round->id }}" data-awardable-type="App\Round" data-round-id="{{ $round->id }}" data-division-id="{{ $div->id }}" data-award-id="{{ $roundAward->id }}">
-                        <span class="division-name">{{ $round->name }}</span>
-                        <span class="award-name">{{ $roundAward->name }}</span>
-                    </li>
-                    @endif
-                @endforeach
 
                 <span class="round-heading">{{ $div->name }}</span>
                 <ul class="awards">
@@ -152,8 +139,8 @@
                         $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('caption_id', $roundAwardSetting->caption_id)->where('rank', $i)->count();
                         @endphp
                         @if(!$isInSchedule AND !$isInAnotherSchedule)
-                        <li class="schedule-item award" data-division-id="{{ $div->id }}" data-caption-id="{{ $roundAwardSetting->caption_id }}" data-rank="{{ $i }}">
-                            <span class="division-name">{{ $div->name }}</span>
+                        <li class="schedule-item award" data-awardable-id="{{ $round->id }}" data-awardable-type="App\Round" data-division-id="{{ $div->id }}" data-round-id="{{ $round->id }}" data-caption-id="{{ $roundAwardSetting->caption_id }}" data-rank="{{ $i }}">
+                            <span class="division-name">{{ $round->name }}</span>
                             <span class="caption-name {{ $captionCss }}">{{ $captionName}} {{ ordinal($i) }} Place</span>
                         </li>
                         @endif
@@ -188,6 +175,20 @@
                     <span class="division-name">{{ $div->name }}</span>
                     <span class="award-name">{{ $award->name }}</span>
                   </li>
+                @endif
+              @endforeach
+
+              @foreach ($round->awards as $roundAward)
+                @php
+                $isInSchedule = $schedule->items->where('division_id', $div->id)->where('award_id', $roundAward->id)->count();
+
+                $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('award_id', $roundAward->id)->count();
+                @endphp
+                @if(!$isInSchedule AND !$isInAnotherSchedule)
+                <li class="schedule-item award" data-awardable-id="{{ $round->id }}" data-awardable-type="App\Round" data-round-id="{{ $round->id }}" data-division-id="{{ $div->id }}" data-award-id="{{ $roundAward->id }}">
+                    <span class="division-name">{{ $round->name }}</span>
+                    <span class="award-name">{{ $roundAward->name }}</span>
+                </li>
                 @endif
               @endforeach
             </ul>

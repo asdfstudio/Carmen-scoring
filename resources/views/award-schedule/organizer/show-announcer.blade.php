@@ -58,7 +58,7 @@
 
       @endphp
 
-      @if (!empty($item->round->awards))
+      @if ($item->round_id !== 0)
         <li class="schedule-item award">
             <div class="award-heading">
 
@@ -69,10 +69,17 @@
                 @if($item->award)
                     <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
                 @endif
+
+                @if($item->caption)
+                    <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
+                @elseif($item->rank)
+                    <span class="caption-name caption-overall">Overall {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
+                @endif
             </div>
         </li>
+      @endif
 
-      @elseif(!empty($awardWinner) || !empty($ratings))
+      @if(!empty($awardWinner) || !empty($ratings))
         <li class="schedule-item award">
 
           <div class="award-heading">
@@ -85,13 +92,13 @@
               <span class="award-name">{{ $item->round->name }} Ratings</span>
             @endif
 
-            @if($item->award)
-                <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
+            @if($item->award && !isset($item->round))
+              <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
             @endif
 
-            @if($item->caption)
+            @if($item->caption && !isset($item->round))
               <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
-            @elseif($item->rank)
+            @elseif($item->rank && !isset($item->round))
               <span class="caption-name caption-overall">Overall {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
             @endif
 

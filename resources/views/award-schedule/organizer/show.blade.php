@@ -72,7 +72,7 @@
             @endforeach
           @endif
 
-          @if($item->round)
+          @if($item->awardable_type == 'App\Round')
             <span class="division-name">{{ $item->round->name }}</span>
           @endif
 
