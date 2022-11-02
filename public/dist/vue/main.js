@@ -28523,56 +28523,6 @@ var render = function() {
                     })
                   ],
                   2
-                ),
-                _vm._v(" "),
-                _c(
-                  "tr",
-                  { staticClass: "caption-row caption-footer" },
-                  [
-                    _c(
-                      "th",
-                      {
-                        staticClass: "caption-rank caption-rank-label",
-                        class: ["lighter-background-color-" + caption.color_id]
-                      },
-                      [
-                        _vm._v(
-                          "\n          " +
-                            _vm._s(caption.name) +
-                            " Rank\n        "
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _vm._l(_vm.choirsList, function(choir) {
-                      return _c(
-                        "td",
-                        {
-                          key: choir.id,
-                          staticClass: "caption-rank caption-rank-value",
-                          class: [
-                            "lighter-background-color-" + caption.color_id
-                          ],
-                          attrs: { choir: choir }
-                        },
-                        [
-                          _vm._v(
-                            "\n            " +
-                              _vm._s(
-                                _vm.choirCaptionRank(choir, caption, "Place")
-                              ) +
-                              " "
-                          ),
-                          _vm.choirCaptionRankTied(choir, caption)
-                            ? _c("span", { staticClass: "tied-badge" }, [
-                                _vm._v("Tied")
-                              ])
-                            : _vm._e()
-                        ]
-                      )
-                    })
-                  ],
-                  2
                 )
               ]
             }),
@@ -28624,8 +28574,7 @@ var render = function() {
               { staticClass: "rank-rating-row" },
               [
                 _c("th", { staticClass: "rank-rating-label" }, [
-                  _vm._v("\n          Rank "),
-                  _vm.hasRatings ? _c("span", [_vm._v("& Rating")]) : _vm._e()
+                  _vm.hasRatings ? _c("span", [_vm._v("Rating")]) : _vm._e()
                 ]),
                 _vm._v(" "),
                 _vm._l(_vm.choirsList, function(choir) {
@@ -28637,18 +28586,6 @@ var render = function() {
                       attrs: { choir: choir }
                     },
                     [
-                      _vm._v(
-                        "\n          " +
-                          _vm._s(_vm.choirRank(choir, "Place")) +
-                          " "
-                      ),
-                      _vm.choirRankTied(choir)
-                        ? _c("span", { staticClass: "tied-badge" }, [
-                            _vm._v("Tied")
-                          ])
-                        : _vm._e(),
-                      _c("br"),
-                      _vm._v(" "),
                       _vm.hasRatings
                         ? _c("span", [
                             _vm._v(

@@ -76,7 +76,7 @@
               <div v-if="caption.id === 1 && captionWeightingId === 1">{{ getChoirCaptionSubtotalScore(choir, caption) * 1.5 }}</div>
             </td>
         </tr>
-        <tr class="caption-row caption-footer" >
+        <!-- <tr class="caption-row caption-footer" >
           <th class="caption-rank caption-rank-label" :class="['lighter-background-color-' + caption.color_id]">
             {{ caption.name }} Rank
           </th>
@@ -89,7 +89,7 @@
             >
               {{ choirCaptionRank(choir, caption, 'Place') }} <span class="tied-badge" v-if="choirCaptionRankTied(choir, caption)">Tied</span>
             </td>
-        </tr>
+        </tr> -->
         <!-- Caption footer end -->
 
         </template>
@@ -116,7 +116,7 @@
         <!-- Rank / Rating start -->
         <tr class="rank-rating-row">
           <th class="rank-rating-label">
-            Rank <span v-if="hasRatings">&amp; Rating</span>
+            <span v-if="hasRatings">Rating</span>
           </th>
           <td
             v-for="choir in choirsList"
@@ -124,7 +124,7 @@
             v-bind:key="choir.id"
             class="rank-rating-value"
             >
-            {{ choirRank(choir, 'Place') }} <span class="tied-badge" v-if="choirRankTied(choir)">Tied</span><br>
+            <!-- {{ choirRank(choir, 'Place') }} <span class="tied-badge" v-if="choirRankTied(choir)">Tied</span><br> -->
             <span v-if="hasRatings">{{ scoreToRating(choir, choir.total_score) }}</span>
           </td>
         </tr>
