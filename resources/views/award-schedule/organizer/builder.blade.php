@@ -1,215 +1,212 @@
 @extends('layouts.simple')
 
 @section('breadcrumbs')
-  {!! Breadcrumbs::render('organizer.competition.award-schedule.show', $competition, $schedule) !!}
+    {!! Breadcrumbs::render('organizer.competition.award-schedule.show', $competition, $schedule) !!}
 @endsection
 
 @section('content-header')
-  <h1>{{ $schedule->name }}</h1>
+    <h1>{{ $schedule->name }}</h1>
 
-  <ul class="actions-group">
-		<li>{{ link_to_route('organizer.competition.award-schedule.show', 'View Schedule', [$competition,$schedule], ['class' => 'action']) }}</li>
-    <li>{{ link_to_route('organizer.competition.award-schedule.edit', 'Edit Name', [$competition,$schedule], ['class' => 'action']) }}</li>
-	</ul>
+    <ul class="actions-group">
+        <li>{{ link_to_route('organizer.competition.award-schedule.show', 'View Schedule', [$competition,$schedule], ['class' => 'action']) }}</li>
+        <li>{{ link_to_route('organizer.competition.award-schedule.edit', 'Edit Name', [$competition,$schedule], ['class' => 'action']) }}</li>
+    </ul>
 
 @endsection
 
 @section('content')
 
-  <p>Build your schedule by dragging awards to the schedule.</p>
+    <p>Build your schedule by dragging awards to the schedule.</p>
 
-  <div class="schedule-builder-container">
-    <div class="schedule-builder">
-      <div class="schedule-builder-header">
-        Award Ceremony Schedule
-      </div>
-      <ul class="schedule-builder-list schedule">
-        <li class="spacer top"></li>
-        @foreach($schedule->items as $item)
+    <div class="schedule-builder-container">
+        <div class="schedule-builder">
+            <div class="schedule-builder-header">
+                Award Ceremony Schedule
+            </div>
+            <ul class="schedule-builder-list schedule">
+                <li class="spacer top"></li>
+                @foreach($schedule->items as $item)
 
-            @if ($item->awardable_type == 'App\Round')
-                <li class="schedule-item award" data-awardable-id="{{ $item->awardable_id }}" data-awardable-type="{{ $item->awardable_type }}" data-division-id="{{ $item->division_id }}" data-round-id="{{ $item->round_id }}" data-award-id="{{ $item->award_id }}" data-caption-id="{{ $item->caption_id }}" data-rank="{{ $item->rank }}">
-                    @if($item->round)
-                        <span class="division-name">{{ $item->round->name }}</span>
-                    @endif
-                    @if($item->award)
-                        <span class="award-name">{{ $item->award->name }}</span>
-                    @endif
+                    @if ($item->awardable_type == 'App\Round')
+                        <li class="schedule-item award" data-awardable-id="{{ $item->awardable_id }}" data-awardable-type="{{ $item->awardable_type }}" data-division-id="{{ $item->division_id }}" data-round-id="{{ $item->round_id }}" data-award-id="{{ $item->award_id }}" data-caption-id="{{ $item->caption_id }}" data-rank="{{ $item->rank }}">
+                            @if($item->round)
+                                <span class="division-name">{{ $item->round->name }}</span>
+                            @endif
+                            @if($item->award)
+                                <span class="award-name">{{ $item->award->name }}</span>
+                            @endif
 
-                    @if($item->caption)
-                        <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ ordinal($item->rank) }} Place</span>
-                    @elseif($item->rank)
-                        <span class="caption-name caption-overall">Overall {{ ordinal($item->rank) }} Place</span>
-                    @endif
-                </li>
-            @else
-                <li class="schedule-item award" data-awardable-id="{{ $item->awardable_id }}" data-awardable-type="{{ $item->awardable_type }}" data-division-id="{{ $item->division_id }}" data-round-id="{{ $item->round_id }}" data-award-id="{{ $item->award_id }}" data-caption-id="{{ $item->caption_id }}" data-rank="{{ $item->rank }}">
-                    @if($item->division)
-                    <span class="division-name">{{ $item->division->name }}</span>
-                    @endif
-
-                    @if($item->round)
-                    <span class="award-name">{{ $item->round->name }} Ratings</span>
-                    @endif
-
-                    @if($item->award)
-                    <span class="award-name">{{ $item->award->name }}</span>
-                    @endif
-
-                    @if($item->caption)
-                    <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ ordinal($item->rank) }} Place</span>
-                    @elseif($item->rank)
-                    <span class="caption-name caption-overall">Overall {{ ordinal($item->rank) }} Place</span>
-                    @endif
-                </li>
-            @endif
-        @endforeach
-        <li class="spacer bottom"></li>
-      </ul>
-    </div>
-
-
-    <div class="schedule-builder">
-      <div class="schedule-builder-header">
-        Awards
-      </div>
-
-      <ul class="schedule-builder-list schedule-items divisions">
-        @foreach($competition->rounds as $round)
-          <li class="division">
-            <span class="division-heading">{{ $round->name }}</span>
-              @foreach ($round->divisions as $div)
-
-                <span class="round-heading">{{ $div->name }}</span>
-                <ul class="awards">
-                  <!-- Begin division overall and caption specific awards -->
-                  @foreach ($div->awardSettings as $awardSetting)
-                    @if($awardSetting->award_count > 0)
-                      @php
-                      $i = 1;
-
-                      if ($awardSetting->caption) {
-                        $captionName = $awardSetting->caption->name;
-                        $captionSlug = $awardSetting->caption->slug;
-                        $captionCss = $awardSetting->caption->text_css;
-                      } else {
-                        $captionName = 'Overall';
-                        $captionSlug = 'overall';
-                        $captionCss = false;
-                      }
-                      @endphp
-                      @while($i <= $awardSetting->award_count)
-                        @php
-                        $isInSchedule = $schedule->items->where('division_id', $div->id)->where('caption_id', $awardSetting->caption_id)->where('rank', $i)->count();
-
-                        $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('caption_id', $awardSetting->caption_id)->where('rank', $i)->count();
-                        @endphp
-                        @if(!$isInSchedule AND !$isInAnotherSchedule)
-                          <li class="schedule-item award" data-division-id="{{ $div->id }}" data-caption-id="{{ $awardSetting->caption_id }}" data-rank="{{ $i }}">
-                            <span class="division-name">{{ $div->name }}</span>
-                            <span class="caption-name {{ $captionCss }}">{{ $captionName}} {{ ordinal($i) }} Place</span>
-                          </li>
-                        @endif
-                        @php $i++; @endphp
-                      @endwhile
-                    @endif
-                  @endforeach
-                  <!-- End division overall and caption specific awards -->
-
-                  {{-- Begin round overall and caption specific awards --}}
-                  @foreach ($round->awardSettings as $roundAwardSetting)
-                    @if($roundAwardSetting->award_count > 0)
-                    @php
-                    $i = 1;
-
-                    if ($roundAwardSetting->caption) {
-                        $captionName = $roundAwardSetting->caption->name;
-                        $captionSlug = $roundAwardSetting->caption->slug;
-                        $captionCss = $roundAwardSetting->caption->text_css;
-                    } else {
-                        $captionName = 'Overall';
-                        $captionSlug = 'overall';
-                        $captionCss = false;
-                    }
-                    @endphp
-                    @while($i <= $roundAwardSetting->award_count)
-                        @php
-                        $isInSchedule = $schedule->items->where('division_id', $div->id)->where('caption_id', $roundAwardSetting->caption_id)->where('rank', $i)->count();
-
-                        $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('caption_id', $roundAwardSetting->caption_id)->where('rank', $i)->count();
-                        @endphp
-                        @if(!$isInSchedule AND !$isInAnotherSchedule)
-                        <li class="schedule-item award" data-awardable-id="{{ $round->id }}" data-awardable-type="App\Round" data-division-id="{{ $div->id }}" data-round-id="{{ $round->id }}" data-caption-id="{{ $roundAwardSetting->caption_id }}" data-rank="{{ $i }}">
-                            <span class="division-name">{{ $round->name }}</span>
-                            <span class="caption-name {{ $captionCss }}">{{ $captionName}} {{ ordinal($i) }} Place</span>
+                            @if($item->caption)
+                                <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ ordinal($item->rank) }} Place</span>
+                            @elseif($item->rank)
+                                <span class="caption-name caption-overall">Overall {{ ordinal($item->rank) }} Place</span>
+                            @endif
                         </li>
-                        @endif
-                        @php $i++; @endphp
-                    @endwhile
+                    @else
+                        <li class="schedule-item award" data-awardable-id="{{ $item->awardable_id }}" data-awardable-type="{{ $item->awardable_type }}" data-division-id="{{ $item->division_id }}" data-round-id="{{ $item->round_id }}" data-award-id="{{ $item->award_id }}" data-caption-id="{{ $item->caption_id }}" data-rank="{{ $item->rank }}">
+                            @if($item->division)
+                                <span class="division-name">{{ $item->division->name }}</span>
+                            @endif
+
+                            @if($item->round)
+                                <span class="award-name">{{ $item->round->name }} Ratings</span>
+                            @endif
+
+                            @if($item->award)
+                                <span class="award-name">{{ $item->award->name }}</span>
+                            @endif
+
+                            @if($item->caption)
+                                <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ ordinal($item->rank) }} Place</span>
+                            @elseif($item->rank)
+                                <span class="caption-name caption-overall">Overall {{ ordinal($item->rank) }} Place</span>
+                            @endif
+                        </li>
                     @endif
-                  @endforeach
-                  <!-- End round overall and caption specific awards -->
-
-              <!-- Begin Round Ratings -->
-                @php
-                $isInSchedule = $schedule->items->where('division_id', $div->id)->where('round_id', $round->id)->count();
-
-                $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('round_id', $round->id)->count();
-                @endphp
-                @if(!$isInSchedule AND !$isInAnotherSchedule)
-                  <li class="schedule-item award" data-division-id="{{ $div->id }}" data-round-id="{{ $round->id }}" data-rating="1">
-                    <span class="division-name">{{ $div->name }}</span>
-                    <span class="award-name rating">{{ $round->name }} Ratings</span>
-                  </li>
-                @endif
-              <!-- End Round Ratings -->
-
-              @foreach($div->awards as $award)
-                @php
-                $isInSchedule = $schedule->items->where('division_id', $div->id)->where('award_id', $award->id)->count();
-
-                $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('award_id', $award->id)->count();
-                @endphp
-                @if(!$isInSchedule AND !$isInAnotherSchedule)
-                  <li class="schedule-item award" id="item_{{ $award->pivot_division_id }}_{{ $award->id }}" data-division-id="{{ $div->id }}" data-award-id="{{ $award->id }}">
-                    <span class="division-name">{{ $div->name }}</span>
-                    <span class="award-name">{{ $award->name }}</span>
-                  </li>
-                @endif
-              @endforeach
-
-              @foreach ($round->awards as $roundAward)
-                @php
-                $isInSchedule = $schedule->items->where('division_id', $div->id)->where('award_id', $roundAward->id)->count();
-
-                $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('award_id', $roundAward->id)->count();
-                @endphp
-                @if(!$isInSchedule AND !$isInAnotherSchedule)
-                <li class="schedule-item award" data-awardable-id="{{ $round->id }}" data-awardable-type="App\Round" data-round-id="{{ $round->id }}" data-division-id="{{ $div->id }}" data-award-id="{{ $roundAward->id }}">
-                    <span class="division-name">{{ $round->name }}</span>
-                    <span class="award-name">{{ $roundAward->name }}</span>
-                </li>
-                @endif
-              @endforeach
+                @endforeach
+                <li class="spacer bottom"></li>
             </ul>
-              @endforeach
-          </li>
-        @endforeach
-      </ul>
-    </div>
+        </div>
 
 
-    <div class="schedule-builder-footer">
+        <div class="schedule-builder">
+            <div class="schedule-builder-header">
+                Awards
+            </div>
 
-      <span class="schedule-builder-status-message"></span>
+            <ul class="schedule-builder-list schedule-items divisions">
+                @foreach($competition->rounds as $round)
+                    <li class="division">
+                        <span class="division-heading">{{ $round->name }}</span>
+                    @foreach ($round->awards as $roundAward)
+                        @php
+                            $isInSchedule = $schedule->items->where('round_id', $round->id)->where('award_id', $roundAward->id)->count();
 
-      <span class="is-dirty-message alert alert-danger">
+                            $isInAnotherSchedule = $excludedScheduleItems->where('round_id', $round->id)->where('award_id', $roundAward->id)->count();
+                        @endphp
+
+                        @if(!$isInSchedule AND !$isInAnotherSchedule)
+                            <li class="schedule-item award" id="item_{{ $roundAward->pivot_round_id }}_{{ $roundAward->id }}" data-division-id="" data-round-id="{{ $round->id }}" data-award-id="{{ $roundAward->id }}" data-awardable-id="{{ $round->id }}" data-awardable-type="App\Round">
+                                <span class="division-name">{{ $round->name }}</span>
+                                <span class="award-name">{{ $roundAward->name }}</span>
+                            </li>
+                        @endif
+                    @endforeach
+                    @foreach ($round->awardSettings as $roundAwardSetting)
+                        @if($roundAwardSetting->award_count > 0)
+                            @php
+                                $i = 1;
+
+                                if ($roundAwardSetting->caption) {
+                                    $captionName = $roundAwardSetting->caption->name;
+                                    $captionSlug = $roundAwardSetting->caption->slug;
+                                    $captionCss = $roundAwardSetting->caption->text_css;
+                                } else {
+                                    $captionName = 'Overall';
+                                    $captionSlug = 'overall';
+                                    $captionCss = false;
+                                }
+                            @endphp
+                            @while($i <= $roundAwardSetting->award_count)
+                                @php
+                                    $isInSchedule = $schedule->items->where('round_id', $round->id)->where('caption_id', $roundAwardSetting->caption_id)->where('rank', $i)->count();
+
+                                    $isInAnotherSchedule = $excludedScheduleItems->where('round_id', $round->id)->where('caption_id', $roundAwardSetting->caption_id)->where('rank', $i)->count();
+                                @endphp
+                                @if(!$isInSchedule AND !$isInAnotherSchedule)
+                                    <li class="schedule-item award" data-awardable-id="{{ $round->id }}" data-awardable-type="App\Round" data-division-id="0" data-round-id="{{ $round->id }}" data-caption-id="{{ $roundAwardSetting->caption_id }}" data-rank="{{ $i }}">
+                                        <span class="division-name">{{ $round->name }}</span>
+                                        <span class="caption-name {{ $captionCss }}">{{ $captionName}} {{ ordinal($i) }} Place</span>
+                                    </li>
+                                @endif
+                                @php $i++; @endphp
+                            @endwhile
+                        @endif
+                    @endforeach
+                    @foreach ($round->divisions as $div)
+
+                        <span class="round-heading">{{ $div->name }}</span>
+                        <ul class="awards">
+                            <!-- Begin division overall and caption specific awards -->
+                            @foreach ($div->awardSettings as $awardSetting)
+                                @if($awardSetting->award_count > 0)
+                                    @php
+                                        $i = 1;
+
+                                        if ($awardSetting->caption) {
+                                          $captionName = $awardSetting->caption->name;
+                                          $captionSlug = $awardSetting->caption->slug;
+                                          $captionCss = $awardSetting->caption->text_css;
+                                        } else {
+                                          $captionName = 'Overall';
+                                          $captionSlug = 'overall';
+                                          $captionCss = false;
+                                        }
+                                    @endphp
+                                    @while($i <= $awardSetting->award_count)
+                                        @php
+                                            $isInSchedule = $schedule->items->where('division_id', $div->id)->where('caption_id', $awardSetting->caption_id)->where('rank', $i)->count();
+
+                                            $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('caption_id', $awardSetting->caption_id)->where('rank', $i)->count();
+                                        @endphp
+                                        @if(!$isInSchedule AND !$isInAnotherSchedule)
+                                            <li class="schedule-item award" data-division-id="{{ $div->id }}" data-caption-id="{{ $awardSetting->caption_id }}" data-rank="{{ $i }}">
+                                                <span class="division-name">{{ $div->name }}</span>
+                                                <span class="caption-name {{ $captionCss }}">{{ $captionName}} {{ ordinal($i) }} Place</span>
+                                            </li>
+                                        @endif
+                                        @php $i++; @endphp
+                                    @endwhile
+                                @endif
+                            @endforeach
+                            <!-- End division overall and caption specific awards -->
+
+                            <!-- Begin Round Ratings -->
+                            @php
+                                $isInSchedule = $schedule->items->where('division_id', $div->id)->where('round_id', $round->id)->count();
+
+                                $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('round_id', $round->id)->count();
+                            @endphp
+                            @if(!$isInSchedule AND !$isInAnotherSchedule)
+                                <li class="schedule-item award" data-division-id="{{ $div->id }}" data-round-id="{{ $round->id }}" data-rating="1">
+                                    <span class="division-name">{{ $div->name }}</span>
+                                    <span class="award-name rating">{{ $round->name }} Ratings</span>
+                                </li>
+                            @endif
+                            <!-- End Round Ratings -->
+
+                            @foreach($div->awards as $award)
+                                @php
+                                    $isInSchedule = $schedule->items->where('division_id', $div->id)->where('award_id', $award->id)->count();
+
+                                    $isInAnotherSchedule = $excludedScheduleItems->where('division_id', $div->id)->where('award_id', $award->id)->count();
+                                @endphp
+                                @if(!$isInSchedule AND !$isInAnotherSchedule)
+                                    <li class="schedule-item award" id="item_{{ $award->pivot_division_id }}_{{ $award->id }}" data-division-id="{{ $div->id }}" data-award-id="{{ $award->id }}">
+                                        <span class="division-name">{{ $div->name }}</span>
+                                        <span class="award-name">{{ $award->name }}</span>
+                                    </li>
+                                @endif
+                            @endforeach
+                        </ul>
+                        @endforeach
+                        </li>
+                    @endforeach
+            </ul>
+        </div>
+
+
+        <div class="schedule-builder-footer">
+
+            <span class="schedule-builder-status-message"></span>
+
+            <span class="is-dirty-message alert alert-danger">
         <i class="fa fa-exclamation-triangle dg-fs-20 mr"></i>
         Your schedule has changed. You must click "Save Schedule" to complete your changes.
       </span>
-      <a href="{{ route('organizer.competition.award-schedule.builder.store', [$competition->id, $schedule->id]) }}" class="save-schedule-btn btn btn-primary" disabled>Save Award Ceremony Schedule</a>
+            <a href="{{ route('organizer.competition.award-schedule.builder.store', [$competition->id, $schedule->id]) }}" class="save-schedule-btn btn btn-primary" disabled>Save Award Ceremony Schedule</a>
+        </div>
     </div>
-  </div>
 
 
 @endsection
@@ -217,20 +214,20 @@
 
 @section('body-footer')
 
-  <script src="/dist/js/schedule-builder.js"></script>
-  <script>
-    $( function() {
+    <script src="/dist/js/schedule-builder.js"></script>
+    <script>
+        $( function() {
 
-      ScheduleBuilder.init();
+            ScheduleBuilder.init();
 
-      $('.save-schedule-btn').on('click', function(event) {
-        event.preventDefault();
-        ScheduleBuilder.save($(this).attr('href'));
-      });
+            $('.save-schedule-btn').on('click', function(event) {
+                event.preventDefault();
+                ScheduleBuilder.save($(this).attr('href'));
+            });
 
-      $('ul.schedule').on('sortupdate', function(event, ui) {
+            $('ul.schedule').on('sortupdate', function(event, ui) {
 
-      });
-    });
-  </script>
+            });
+        });
+    </script>
 @endsection

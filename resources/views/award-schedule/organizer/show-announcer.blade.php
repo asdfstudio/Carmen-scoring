@@ -1,156 +1,148 @@
 @extends('layouts.simple')
 
 @section('breadcrumbs')
-  {!! Breadcrumbs::render('organizer.competition.award-schedule.show', $competition, $schedule) !!}
+    {!! Breadcrumbs::render('organizer.competition.award-schedule.show', $competition, $schedule) !!}
 @endsection
 
 @section('content-header')
-  <h1>{{ $schedule->name }}</h1>
+    <h1>{{ $schedule->name }}</h1>
 
 @endsection
 
 @section('content')
 
-  <ul class="schedule-list announcer-view">
-    @foreach($schedule->items as $item)
+    <ul class="schedule-list announcer-view">
+        @foreach($schedule->items as $item)
 
-      @php
-      $awardWinner = false;
-      $sponsor = false;
-      $tied = false;
-      $ratings = null;
+            @php
+                $awardWinner = false;
+                $sponsor = false;
+                $tied = false;
+                $ratings = null;
 
-      if($item->division AND $item->award)
-      {
-        $awardWinner = $awardWinners->where('division_id', $item->division->id)->where('award_id', $item->award->id);
-        $tied = $awardWinner->count() > 1 ? true : false;
-        if(!empty($awardWinner->first()->sponsor)){
-          $sponsor = $awardWinner->first()->sponsor;
-        }
-      }
-      elseif($item->division)
-      {
-        if($item->caption)
-        {
-          $standing = $standings->where('division_id', $item->division->id)->where('caption_id', $item->caption->id)->first();
+                if($item->division AND $item->award)
+                {
+                  $awardWinner = $awardWinners->where('division_id', $item->division->id)->where('award_id', $item->award->id);
+                  $tied = $awardWinner->count() > 1 ? true : false;
+                  if(!empty($awardWinner->first()->sponsor)){
+                    $sponsor = $awardWinner->first()->sponsor;
+                  }
+                }
+                elseif($item->division)
+                {
+                  if($item->caption)
+                  {
+                    $standing = $standings->where('division_id', $item->division->id)->where('caption_id', $item->caption->id)->first();
 
-          $sponsor = $item->division->awardSettings->where('caption_id', $item->caption->id)->first()->awardSponsor($item->rank);
-        }
-        else {
-          $standing = $standings->where('division_id', $item->division->id)->where('caption_id', null)->first();
-          $dg_sponsors = $item->division->awardSettings->where('caption_id', 0);
-          if($dg_sponsors->isNotEmpty()) {
-            $sponsor = $dg_sponsors->first()->awardSponsor($item->rank);
-          }
-        }
+                    $sponsor = $item->division->awardSettings->where('caption_id', $item->caption->id)->first()->awardSponsor($item->rank);
+                  }
+                  else {
+                    $standing = $standings->where('division_id', $item->division->id)->where('caption_id', null)->first();
+                    $dg_sponsors = $item->division->awardSettings->where('caption_id', 0);
+                    if($dg_sponsors->isNotEmpty()) {
+                      $sponsor = $dg_sponsors->first()->awardSponsor($item->rank);
+                    }
+                  }
 
 
-        if($standing AND $standing->choirs)
-        {
-          $awardWinner = $standing->choirs->where('pivot.final_rank', $item->rank);
-          $tied = $awardWinner->count() > 1 ? true : false;
-        }
-      }
+                  if($standing AND $standing->choirs)
+                  {
+                    $awardWinner = $standing->choirs->where('pivot.final_rank', $item->rank);
+                    $tied = $awardWinner->count() > 1 ? true : false;
+                  }
+                }
 
-      if($item->division){
-        $ratings = $item->division->getRatings();
-      }
+                if($item->division){
+                  $ratings = $item->division->getRatings();
+                }
 
-      @endphp
-
-      @if ($item->round_id !== 0)
-        <li class="schedule-item award">
-            <div class="award-heading">
-
-                @if($item->round)
-                    <span class="division-name" data-division-id="{{ $item->division->id }}">{{ $item->round->name }}</span>
-                @endif
-
-                @if($item->award)
-                    <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
-                @endif
-
-                @if($item->caption)
-                    <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
-                @elseif($item->rank)
-                    <span class="caption-name caption-overall">Overall {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
-                @endif
-            </div>
-        </li>
-      @endif
-
-      @if(!empty($awardWinner) || !empty($ratings))
-        <li class="schedule-item award">
-
-          <div class="award-heading">
-
-            @if($item->division)
-              <span class="division-name" data-division-id="{{ $item->division->id }}">{{ $item->division->name }}</span>
+            @endphp
+            @if ($item->round_id !== 0 && $item->awardable_type === 'App\Round')
+                <li class="schedule-item award">
+                    <div class="award-heading">
+                        @if($item->round)
+                            <span class="division-name" data-round-id="{{ $item->round->id }}">{{ $item->round->name }}</span>
+                        @endif
+                        @if($item->award)
+                            <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
+                        @endif
+                        @if($item->caption)
+                            <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
+                        @elseif($item->rank)
+                            <span class="caption-name caption-overall">Overall {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
+                        @endif
+                    </div>
+                </li>
             @endif
 
-            @if($item->round)
-              <span class="award-name">{{ $item->round->name }} Ratings</span>
+            @if(!empty($awardWinner) || !empty($ratings))
+                <li class="schedule-item award">
+                    <div class="award-heading">
+                        @if ($item->awardable_type !== 'App\Round')
+                            @if($item->division)
+                                <span class="division-name" data-division-id="{{ $item->division->id }}">{{ $item->division->name }}</span>
+                            @endif
+                        @endif
+
+                        @if($item->round)
+                            <span class="award-name">{{ $item->round->name }} Ratings</span>
+                        @endif
+
+                        @if($item->award && !isset($item->round))
+                            <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
+                        @endif
+
+                        @if($item->caption && !isset($item->round))
+                            <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
+                        @elseif($item->rank && !isset($item->round))
+                            <span class="caption-name caption-overall">Overall {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
+                        @endif
+
+                    </div> <!-- end award heading-->
+
+                    @if($item->round)
+                        <ul class="list-group">
+                            @if(!$item->round->status == 'Active')
+                                <li class="list-group-item"><span>Awaiting Final Scores for this Round</span></li>
+                            @else
+                                @foreach($ratings as $rating)
+                                    @if (!empty($rating['rating']['name']))
+                                        <li class="list-group-item"><span class="rating">{{ $rating['rating']['name'] }}:</span> <span class="award-winner-choir">{{ $rating['choir']->full_name }}</span></li>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </ul>
+                    @endif
+
+                    @if ($awardWinner)
+                        @foreach($awardWinner as $theWinner)
+                            <span class="award-winner">
+                            @if ($item->division and !$item->division->is_completed)
+                                    <span class="award-winner-choir">Awaiting Final Scores for this Division</span>
+                            @else
+                                @if(!empty($theWinner->recipient))
+                                    <span class="award-winner-recipient">{{ $theWinner->recipient }}</span>
+                                @endif
+
+                                @if(!empty($theWinner->choir))
+                                    <span class="award-winner-choir">{{ $theWinner->choir->full_name }}</span>
+                                @endif
+
+                                @if(!empty($theWinner->full_name))
+                                    <span class="award-winner-choir">{{ $theWinner->full_name }}</span>
+                                @endif
+                            @endif
+                            </span>
+                         @endforeach
+                    @endif
+
+                    @if($sponsor)
+                        <span class="award-sponsor">Sponsor: {{ $sponsor }}</span>
+                    @endif
+                </li>
             @endif
-
-            @if($item->award && !isset($item->round))
-              <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
-            @endif
-
-            @if($item->caption && !isset($item->round))
-              <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
-            @elseif($item->rank && !isset($item->round))
-              <span class="caption-name caption-overall">Overall {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
-            @endif
-
-          </div> <!-- end award heading-->
-
-
-          @if($item->round)
-              <ul class="list-group">
-                  @if(!$item->round->status == 'Active')
-                      <li class="list-group-item"><span>Awaiting Final Scores for this Round</span></li>
-                  @else
-                      @foreach($ratings as $rating)
-                          @if (!empty($rating['rating']['name']))
-                              <li class="list-group-item"><span class="rating">{{ $rating['rating']['name'] }}:</span> <span class="award-winner-choir">{{ $rating['choir']->full_name }}</span></li>
-                          @endif
-                      @endforeach
-                  @endif
-              </ul>
-          @endif
-
-          @if ($awardWinner)
-          @foreach($awardWinner as $theWinner)
-            <span class="award-winner">
-              @if ($item->division and !$item->division->is_completed)
-                <span class="award-winner-choir">Awaiting Final Scores for this Division</span>
-              @else
-                @if(!empty($theWinner->recipient))
-                  <span class="award-winner-recipient">{{ $theWinner->recipient }}</span>
-                @endif
-
-                @if(!empty($theWinner->choir))
-                  <span class="award-winner-choir">{{ $theWinner->choir->full_name }}</span>
-                @endif
-
-                @if(!empty($theWinner->full_name))
-                  <span class="award-winner-choir">{{ $theWinner->full_name }}</span>
-                @endif
-              @endif
-
-            </span>
-          @endforeach
-          @endif
-
-          @if($sponsor)
-            <span class="award-sponsor">Sponsor: {{ $sponsor }}</span>
-          @endif
-
-
-        </li>
-      @endif
-    @endforeach
-  </ul>
+        @endforeach
+    </ul>
 
 
 @endsection
@@ -158,12 +150,12 @@
 
 @section('body-footer')
 
-  <script>
-    $( function() {
-      $('li.schedule-item').on('click', function(event) {
-        event.preventDefault();
-        $(this).toggleClass('done');
-      });
-    });
-  </script>
+    <script>
+        $( function() {
+            $('li.schedule-item').on('click', function(event) {
+                event.preventDefault();
+                $(this).toggleClass('done');
+            });
+        });
+    </script>
 @endsection
