@@ -24,11 +24,11 @@
       @foreach($choirs as $choir)
         <th>
           <div class="sideways-header">
-          @if($show_links)
+          {{-- @if($show_links)
             {{ link_to_route('results.division.round.choir.show', $choir->name, [$division, $round, $choir, $access_code]) }}
-          @else
+          @else --}}
             <span>{{ $choir->name }}</span>
-          @endif
+          {{-- @endif --}}
           </div>
         </th>
       @endforeach
@@ -45,11 +45,11 @@
     @foreach($choirs as $choir)
       <tr>
         <th>
-          @if($show_links)
+          {{-- @if($show_links)
             {{ link_to_route('results.division.round.choir.show', $choir->name, [$division, $round, $choir, $access_code]) }}
-          @else
+          @else --}}
             {{ $choir->name }}
-          @endif
+          {{-- @endif --}}
         </th>
 
         @foreach($choirs as $choir_comp)
@@ -100,11 +100,11 @@
     @foreach($choirs as $choir)
       <th>
         <div class="sideways-header">
-          @if($show_links)
+          {{-- @if($show_links)
             {{ link_to_route('results.division.round.choir.show', $choir->name, [$division, $round, $choir, $access_code]) }}
-          @else
+          @else --}}
             <span>{{ $choir->name }}</span>
-          @endif
+          {{-- @endif --}}
         </div>
       </th>
     @endforeach
@@ -121,11 +121,11 @@
   @foreach($choirs as $choir)
     <tr>
       <th>
-        @if($show_links)
+        {{-- @if($show_links)
           {{ link_to_route('results.division.round.choir.show', $choir->name, [$division, $round, $choir, $access_code]) }}
-        @else
+        @else --}}
           {{ $choir->name }}
-        @endif
+        {{-- @endif --}}
       </th>
       @foreach($choirs as $choir_comp)
         <td>{{ $rankedScores->pairwise_bit($election_key, $choir->id, $choir_comp->id) }}</td>
