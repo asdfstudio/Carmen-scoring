@@ -4,12 +4,12 @@
   if($round->scoring_method_id == 5){
     $total_col_class = 'total_column weighted raw';
   }
-  
+
   foreach ($choirs as $choir) {
     $choir_division = $choir->divisions->find($choir->pivot->division_id);
     $choir->division_id = $choir->pivot->division_id;
-    $choir->division_access_code = $choir_division && $choir_division->access_code 
-      ? $choir_division->access_code 
+    $choir->division_access_code = $choir_division && $choir_division->access_code
+      ? $choir_division->access_code
       : $access_code;
   }
 
@@ -59,11 +59,11 @@
     @foreach($choirs as $choir)
       <tr>
         <th>
-          @if($show_links)
+          {{-- @if($show_links)
             {{ link_to_route('results.division.round.choir.show', $choir->full_name, [$choir->division_id, $round, $choir, $choir->division_access_code]) }}
-          @else
+          @else --}}
             {{ $choir->full_name }}
-          @endif
+          {{-- @endif --}}
         </th>
         @foreach($judges as $judge)
 
@@ -163,11 +163,11 @@
   @foreach($choirs as $choir)
     <tr>
       <th>
-        @if($show_links)
+        {{-- @if($show_links)
           {{ link_to_route('results.division.round.choir.show', $choir->full_name, [$choir->division_id, $round, $choir, $choir->division_access_code]) }}
-        @else
+        @else --}}
           {{ $choir->full_name }}
-        @endif
+        {{-- @endif --}}
       </th>
       @foreach($judges as $judge)
         <td>
