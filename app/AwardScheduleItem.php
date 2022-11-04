@@ -40,22 +40,22 @@ class AwardScheduleItem extends Model
 		}
 
 
-    public function getNamedRankAttribute()
-    {
-        if(!$this->rank) return false;
-
-        if ($this->division && $this->division->competition->use_runner_up_names) {
-            if ($this->rank == 1) {
-                $rank_name = 'Grand Champion';
-            } else {
-                $rank_name = ordinal($this->rank - 1) . ' Runner Up';
-            }
-        } else {
-            $rank_name = ordinal($this->rank);
+		public function getNamedRankAttribute()
+		{
+			if(!$this->rank) return false;
+   
+			if ($this->division->competition->use_runner_up_names) {
+				if ($this->rank == 1) {
+          $rank_name = 'Grand Champion';
+				} else {
+          $rank_name = ordinal($this->rank - 1) . ' Runner Up';
         }
+      } else {
+        $rank_name = ordinal($this->rank);
+      }
 
-        return $rank_name;
-    }
+			return $rank_name;
+		}
 
 
 		public function scopePerformanceOrder($query)

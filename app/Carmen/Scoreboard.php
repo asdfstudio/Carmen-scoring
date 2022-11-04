@@ -142,6 +142,11 @@ class Scoreboard {
         return new RankedScores($this->extendedRawScores, $this->penalties);
     }
 
+    protected function getAverageScores()
+    {
+        return new AverageScores($this->extendedRawScores, $this->penalties);
+    }
+
     protected function getBordaCountScores()
     {
         return new BordaCountScores($this->extendedRawScores, $this->penalties);
@@ -184,6 +189,9 @@ class Scoreboard {
             break;
         case 'Borda Count':
             $this->rankedScoresForCurrentMethod = new BordaCountScores($this->extendedRawScores, $this->penalties, $competition_skip_epoch);
+            break;
+        case 'Average Scores':
+            $this->rankedScoresForCurrentMethod = new AverageScores($this->extendedRawScores, $this->penalties, $competition_skip_epoch);
             break;
         default:
             $this->rankedScoresForCurrentMethod = null;

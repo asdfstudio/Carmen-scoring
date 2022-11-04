@@ -17,7 +17,8 @@ class ScoringMethodSeeder extends Seeder
             ['name' => 'Condorcet - Ranked Pairs Winning'],
             ['name' => 'Condorcet - Schultze Winning'],
             ['name' => 'Consensus Ordinal Rank'],
-            ['name' => 'Borda Count']
+            ['name' => 'Borda Count'],
+            ['name' => 'Average Scores']
         ]);
     }
 }

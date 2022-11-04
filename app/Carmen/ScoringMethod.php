@@ -123,19 +123,29 @@ class ScoringMethod {
 
   public function total($choir_id, $caption_id = false)
   {
+
+    $child_class = get_class($this);
+
     $key = $choir_id.'x'.$caption_id;
     if(array_key_exists($key, $this->totaled)){
       return $this->totaled[$key];
     }
 
     $total = 0;
+    $judges_count = $this->judges->count();
 
     $this->judges->each(function($judge_id, $key) use ($choir_id, $caption_id, &$total) {
       $rank = $this->rank($judge_id, $caption_id)->where('choir_id', $choir_id)->pluck('rank')->first();
       $total = $total + $rank;
     });
 
+    // TODO:
+    // if ($child_class === AverageScores::class) {
+    //     $total = round($total / $judges_count, 1);
+    // }
+
     $this->totaled[$key] = $total;
+
     return $total;
   }
 

@@ -55,22 +55,6 @@
 
       @endphp
 
-      @if($item->awardable_type == 'App\Round')
-        <li class="schedule-item award">
-            <span class="division-name">{{ $item->round->name }}</span>
-
-            @if($item->award)
-                <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
-            @endif
-
-            @if($item->caption)
-                <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
-            @elseif($item->named_rank)
-                <span class="caption-name caption-overall">Overall {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
-            @endif
-        </li>
-      @endif
-
       @if(!empty($awardWinner) || !empty($ratings))
         <li class="schedule-item award">
           @if($item->division)
@@ -88,7 +72,7 @@
             @endforeach
           @endif
 
-          @if($item->awardable_type == 'App\Round')
+          @if($item->round)
             <span class="division-name">{{ $item->round->name }}</span>
           @endif
 
