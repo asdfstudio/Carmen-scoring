@@ -1,6 +1,6 @@
 @php
   // Hide the "Total" column for Consensus Ordinal Rank (scoring method 5)
-  $total_col_class = 'total_column weighted raw rank';
+  $total_col_class = 'total_column weighted raw average rank';
   if($round->scoring_method_id == 5){
     $total_col_class = 'total_column weighted raw';
   }
@@ -11,7 +11,7 @@
 
 @else
 <div class="table-wrapper-responsive">
-<table class="table table-striped table-bordered scoreboard toggle-scores weighted raw rank">
+<table class="table table-striped table-bordered scoreboard toggle-scores weighted raw average rank">
   @foreach($captions as $caption)
 
     @php
@@ -72,7 +72,7 @@
               <span class="weighted score {{ $tied }}">{{ $weighted }}</span>
 
               @php $raw = $rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_caption_id', $caption->id)->sum('score');@endphp
-              <span class="raw score {{ $tied }}">{{ $raw }}</span>
+              <span class="raw average score {{ $tied }}">{{ $raw }}</span>
 
             </td>
           @endif
@@ -88,6 +88,9 @@
 
           @php $raw = $rawScores->where('choir_id', $choir->id)->where('criterion_caption_id', $caption->id)->sum('score');@endphp
           <span class="raw score">{{ $raw }}</span>
+
+          @php $average = round($rawScores->where('choir_id', $choir->id)->where('criterion_caption_id', $caption->id)->sum('score') / count($judges), 1);@endphp
+          <span class="average score">{{ $average }}</span>
         </td>
 
         <td>
@@ -101,7 +104,7 @@
           <span class="weighted score {{ $tied }}">{{ $rank }}</span>
 
           @php $rank = $totalRawRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
-          <span class="raw score {{ $tied }}">{{ $rank }}</span>
+          <span class="raw average score {{ $tied }}">{{ $rank }}</span>
         </td>
 
         @if(!empty($ratings))
@@ -166,16 +169,16 @@
           <span class="weighted subtotal score">{{ $weightedSubtotal }}</span>
 
           @php $rawSubtotal = $rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->sum('score');@endphp
-          <span class="raw score">{{ $rawSubtotal }}</span>
+          <span class="raw average score">{{ $rawSubtotal }}</span>
 
           @php $penalty = $scoreboard->penalties->where('choir_id', $choir->id)->where('apply_per_judge', 1)->sum('amount');@endphp
-          <span class="penalty raw weighted score">{{ $penalty }}</span>
+          <span class="penalty raw average weighted score">{{ $penalty }}</span>
 
           @php $weightedTotal = $weightedSubtotal - $penalty; @endphp
           <span class="weighted total score">{{ $weightedTotal }}</span>
 
           @php $rawTotal = $rawSubtotal - $penalty; @endphp
-          <span class="raw total score">{{ $rawTotal }}</span>
+          <span class="raw total average score">{{ $rawTotal }}</span>
 
         </td>
       @endforeach
@@ -189,6 +192,9 @@
 
         @php $rawSubtotal = $rawScores->where('choir_id', $choir->id)->sum('score');@endphp
         <span class="raw score">{{ $rawSubtotal }}</span>
+
+        @php $averageTotal = round($rawScores->where('choir_id', $choir->id)->sum('score')/count($judges), 1);@endphp
+        <span class="average score">{{ $averageTotal }}</span>
 
         @php $penalty = $scoreboard->penalties->where('choir_id', $choir->id)->where('apply_per_judge', 0)->sum('amount');@endphp
         <span class="penalty raw weighted overall score">{{ $penalty }}</span>
@@ -215,7 +221,7 @@
         <span class="weighted score {{ $tied }}">{{ $rank }}</span>
 
         @php $rank = $totalRawRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
-        <span class="raw score {{ $tied }}">{{ $rank }}</span>
+        <span class="raw average score {{ $tied }}">{{ $rank }}</span>
 
 
       </td>

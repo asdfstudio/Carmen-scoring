@@ -90,6 +90,9 @@
       <li class="list-group-item">
         <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
       </li>
+      <li class="list-group-item">
+        <a class="score-view-toggle" href="#average" data-score-view="average">Average</a>
+      </li>
     </ul>
   @endif
 
