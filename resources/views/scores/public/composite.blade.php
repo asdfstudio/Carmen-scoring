@@ -40,11 +40,11 @@
 
       @foreach($judges as $judge)
         <th>
-          @if($show_links)
+          {{-- @if($show_links)
             {{ link_to_route('results.division.round.judge.show', $judge->full_name, [$division, $round, $judge, $division->access_code]) }}
-          @else
+          @else --}}
             {{ $judge->full_name }}
-          @endif
+          {{-- @endif --}}
         </th>
       @endforeach
 
@@ -59,11 +59,11 @@
     @foreach($choirs as $choir)
       <tr>
         <th>
-          @if($show_links)
+          {{-- @if($show_links)
             {{ link_to_route('results.division.round.choir.show', $choir->full_name, [$choir->division_id, $round, $choir, $choir->division_access_code]) }}
-          @else
+          @else --}}
             {{ $choir->full_name }}
-          @endif
+          {{-- @endif --}}
         </th>
         @foreach($judges as $judge)
 
@@ -137,11 +137,11 @@
 
     @foreach($judges as $judge)
       <th>
-        @if($show_links)
+        {{-- @if($show_links)
           {{ link_to_route('results.division.round.judge.show', $judge->full_name, [$division, $round, $judge, $division->access_code]) }}
-        @else
+        @else --}}
           {{ $judge->full_name }}
-        @endif
+        {{-- @endif --}}
       </th>
     @endforeach
 
@@ -166,11 +166,11 @@
   @foreach($choirs as $choir)
     <tr>
       <th>
-        @if($show_links)
+        {{-- @if($show_links)
           {{ link_to_route('results.division.round.choir.show', $choir->full_name, [$choir->division_id, $round, $choir, $choir->division_access_code]) }}
-        @else
+        @else --}}
           {{ $choir->full_name }}
-        @endif
+        {{-- @endif --}}
       </th>
       @foreach($judges as $judge)
         <td>
