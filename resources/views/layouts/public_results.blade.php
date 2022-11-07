@@ -2,7 +2,12 @@
 
 @section('body-header')
   <div class="body-header body-width">
-    <a href="/"><img src="/images/logo-with-dark-text.png" width="185" alt="Carmen Scoring System"  /></a>
+    @if(str_contains(Request::url(), 'feedback'))
+      <a href="/"><img src="/images/worldstrides-logo.png" width="185" alt="Carmen Scoring System" class="worldstrides-logo" /></a>
+      <a href="/"><img src="/images/logo-with-dark-text.png" width="185" alt="Carmen Scoring System" style="float: right" /></a>
+    @else
+      <a href="/"><img src="/images/logo-with-dark-text.png" width="185" alt="Carmen Scoring System" class="carmen-scoring-logo" /></a>
+    @endif
 
     @if(isset($division))
       <div class="heading-container">

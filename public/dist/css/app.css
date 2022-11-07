@@ -7715,7 +7715,14 @@ body#public-layout img.page-featured-image {
 }
 
 @media only screen and (min-width: 768px) {
-  .body-header img {
+  .body-header .worldstrides-logo {
+    float: left;
+    margin-top: 15px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .body-header .carmen-scoring-logo {
     float: left;
   }
 }

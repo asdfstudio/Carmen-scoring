@@ -824,9 +824,15 @@ body#public-layout {
   text-align: center;
   overflow: hidden;
 
-  img {
+  .worldstrides-logo {
+    @include min-screen($tablet-min)
+    {
+      float: left;
+      margin-top: 15px;
+    }
+  }
 
-
+  .carmen-scoring-logo {
     @include min-screen($tablet-min)
     {
       float: left;
