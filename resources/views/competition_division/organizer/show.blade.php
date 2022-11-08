@@ -118,6 +118,14 @@
         </ul>
     @endif
 
+    @if ($division->round->scoring_method_id === 7 && $division->round->caption_weighting_id === 1)
+        <ul class="list-group horizontal">
+            <li class="list-group-item">
+                <a class="score-view-toggle active" href="#average" data-score-view="average">Average</a>
+            </li>
+        </ul>
+    @endif
+
     {{-- Ranked Scoring, 50/50 --}}
     @if ($division->round->scoring_method_id > 1 && $division->round->caption_weighting_id === 2)
         <ul class="list-group horizontal">
@@ -137,7 +145,7 @@
     @endif
 
     {{-- Ranked Scoring, 60/40 --}}
-    @if ($division->round->scoring_method_id > 1 && $division->round->caption_weighting_id === 1)
+    @if ($division->round->scoring_method_id > 1 && $division->round->caption_weighting_id === 1 && $division->round->scoring_method_id !== 7)
         <ul class="list-group horizontal">
             <li class="list-group-item">
                 <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>
@@ -154,9 +162,6 @@
             </li>
             <li class="list-group-item">
                 <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
-            </li>
-            <li class="list-group-item">
-                <a class="score-view-toggle" href="#average" data-score-view="average">Average</a>
             </li>
         </ul>
     @endif

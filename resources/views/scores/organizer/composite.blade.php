@@ -40,7 +40,7 @@
         </th>
       @endforeach
 
-      <th class="{{ $total_col_class }}">Total</th>
+      <th class="{{ $total_col_class }} total-col">Total</th>
 
       <th>Place</th>
 
@@ -132,7 +132,7 @@
     @endforeach
 
     @if($round->scoring_method_id !== 5)
-    <th>Total</th>
+      <th class="total-col">Total</th>
     @endif
 
     <th>Place</th>

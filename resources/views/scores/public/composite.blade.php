@@ -48,7 +48,7 @@
         </th>
       @endforeach
 
-      <th class="{{ $total_col_class }}">Total</th>
+      <th class="{{ $total_col_class }} total-col">Total</th>
       <th>Place</th>
 
       @if(!empty($ratings))
@@ -145,7 +145,7 @@
       </th>
     @endforeach
 
-    <th class="{{ $total_col_class }}">Total</th>
+    <th class="{{ $total_col_class }} total-col">Total</th>
     <th>Place</th>
 
     @if(!empty($ratings))

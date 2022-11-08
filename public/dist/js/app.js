@@ -323,11 +323,11 @@ $(document).ready(function() {
         var ratingName = ratingGroup.find('input').val();
         var message = '<p class="alert alert-warning">The rating "' + ratingName + '" will be removed when you save this form.</p>';
         ratingGroup.children().remove();
-        
+
         if(ratingName.length){
            ratingGroup.append(message);
         }
-        
+
         if(ratingsContainer.find('.remove-rating').length === 0){
             // If there are no rating fields left, trigger the button to add a new one.
             $('.add-rating button').trigger('click');
@@ -477,6 +477,10 @@ $(document).ready(function() {
     $('table.scoreboard.toggle-scores').ready(function() {
       var active_view = $('.score-view-toggle.active').data('score-view');
       $('.score-view-toggle.active').toggleScoreView(active_view);
+
+      if (active_view == 'average') {
+        $('.total-col').html('Average');
+      }
     });
 
     $('.score-view-toggle').on('click', function(e) {
@@ -530,7 +534,7 @@ $(document).ready(function() {
       }
       swal_save_create_another('edit', $(this));
     });
-    
+
     // In "Create a division" page, when click "Save & Create Another"
     $('.create-division-content button[name="submit_create_another"]').on('click', function(e) {
       e.preventDefault();
