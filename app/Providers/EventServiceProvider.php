@@ -39,12 +39,12 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\DivisionScoringFinalized' => [
           'App\Listeners\EmailFeedbackLink',
           'App\Listeners\SendSMSFeedbackLink',
-          'App\Listeners\EmailDivisionResultsLink',
-          'App\Listeners\SendSMSDivisionResultsLink'
+        //   'App\Listeners\EmailDivisionResultsLink',
+        //   'App\Listeners\SendSMSDivisionResultsLink'
         ],
         'App\Events\SoloDivisionScoringFinalized' => [
-          'App\Listeners\EmailSoloDivisionResultsLink',
-          'App\Listeners\SendSMSSoloDivisionResultsLink',
+        //   'App\Listeners\EmailSoloDivisionResultsLink',
+        //   'App\Listeners\SendSMSSoloDivisionResultsLink',
           'App\Listeners\EmailSoloDivisionFeedbackLink',
           'App\Listeners\SendSMSSoloDivisionFeedbackLink',
         ],
