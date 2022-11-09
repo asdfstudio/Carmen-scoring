@@ -45,6 +45,15 @@
                     ->where('judge_id', $judge->id)
                     ->where('subject_id', $round->id);
                 $judge_recordings = $round_recordings->where('judge_id', $judge->id);
+
+                $captions = App\Caption::forSheet($div->sheet);
+
+                $scoreboard = new App\Carmen\Scoreboard(['division_id' => $div->id]);
+                $rawScores = $scoreboard->extendedRawScores;
+
+                $judgeScoreTotal = $rawScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->sum('score');
+                $allJudgesTotalScore = $rawScores->where('choir_id', $choir->id)->sum('score');
+
                 $comments_not_empty = false;
                 foreach($judge_comments as $comment){
                   if(!empty($comment->comments)){
@@ -68,19 +77,26 @@
                       <i class="text-muted">No typed comments were entered by this judge.</i>
                     @endif
                   </div>
-                  @if (count($judge_criteria_comments))
-                    <h4>Criteria</h4>
-                    @foreach ($judge_criteria_comments as $criterion_comment)
-                        <p>
-                            <div>
-                                <b> Criterion: </b>{{ $criterion_comment->criterion->name }}
-                            </div>
-                            <div>
-                                <b> Comment: </b>{{ $criterion_comment->comments }}
-                            </div>
-                        </p>
+                  <h4>Criteria</h4>
+                  @foreach ($captions as $caption)
+                    <h5 class="dg-p-12 dg-mb-8 {{ $caption->background_css }}" style="color: #fff; display: inline-block">{{ $caption->name }}</h5>
+                    @foreach($div->sheet->criteria->where('caption_id', $caption->id) as $criterion)
+                        @php
+                            $rawScore = $rawScores->where('criterion_id', $criterion->id)->where('judge_id',$judge->id)->where('choir_id', $choir->id)->pluck('score');
+                            $score = $rawScore->first()
+                        @endphp
+                        <p><b> Criterion: </b> {{ $criterion->name }} - <b>{{ $score }}</b> out of <b>{{ $criterion->max_score }}</b></p>
+                        @if (count($judge_criteria_comments))
+                            @foreach ($judge_criteria_comments as $criterion_comment)
+                                @if ($criterion_comment->recipient_id === $criterion->id)
+                                    <p><b> Comment: </b>{{ $criterion_comment->comments }}</p>
+                                @endif
+                            @endforeach
+                        @endif
+                        <hr>
                     @endforeach
-                  @endif
+                  @endforeach
+
                   @if($competition->organization->is_premium == 1 && $judge_recordings->count())
                     <div class="record-row">
                       <h5>Audio Comments:</h5>
@@ -96,6 +112,8 @@
                       </ol>
                     </div>
                   @endif
+                  <hr>
+                  <p>Judge Score Total: <b>{{ $judgeScoreTotal }}</b> out of <b>{{ $allJudgesTotalScore }}</b> </p>
                 </div>
               </li>
             @endforeach
@@ -169,4 +187,10 @@
         @endif
       @endif
   @endforeach
+
+  <hr>
+  @php
+      $averageScore = round($allJudgesTotalScore/count($judges), 1)
+  @endphp
+  <h4>Average Score: <span class="dg-fs-14"><b>{{ $averageScore }}</b></span></h4>
 @endsection
