@@ -190,6 +190,7 @@
 
   <hr>
   @php
+      $allJudgesTotalScore = $rawScores->where('choir_id', $choir->id)->sum('score');
       $averageScore = round($allJudgesTotalScore/count($judges), 1)
   @endphp
   <h4>Average Score: <span class="dg-fs-14"><b>{{ $averageScore }}</b></span></h4>
