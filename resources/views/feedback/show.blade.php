@@ -47,6 +47,7 @@
                 $judge_recordings = $round_recordings->where('judge_id', $judge->id);
 
                 $captions = App\Caption::forSheet($div->sheet);
+                $totalPoints = $div->sheet->max_score;
 
                 $scoreboard = new App\Carmen\Scoreboard(['division_id' => $div->id]);
                 $rawScores = $scoreboard->extendedRawScores;
@@ -113,7 +114,7 @@
                     </div>
                   @endif
                   <hr>
-                  <p>Judge Score Total: <b>{{ $judgeScoreTotal }}</b> out of <b>{{ $allJudgesTotalScore }}</b> </p>
+                  <p>Judge Score Total: <b>{{ $judgeScoreTotal }}</b> out of <b>{{ $totalPoints }}</b> </p>
                 </div>
               </li>
             @endforeach
