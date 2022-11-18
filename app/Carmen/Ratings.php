@@ -32,23 +32,25 @@ class Ratings
   {
     $percentages = [];
 
+    // Exclude choirs that don't receive ratings
     foreach ($this->division->choirs as $choir) {
-      $earnedScore = $scores->where('choir_id', $choir->id)->sum('earned_score');
-      $maxScore = $scores->where('choir_id', $choir->id)->sum('max_score');
+      if ($choir->pivot->receives_ratings) {
+          $earnedScore = $scores->where('choir_id', $choir->id)->sum('earned_score');
+          $maxScore = $scores->where('choir_id', $choir->id)->sum('max_score');
 
-      if (!$maxScore) {
-        $earnedPercent = 0;
-      } else {
-        $earnedPercent = $earnedScore / $maxScore;
+          if (!$maxScore) {
+            $earnedPercent = 0;
+          } else {
+            $earnedPercent = $earnedScore / $maxScore;
+          }
+
+          $percentages[] = [
+            'choir' => $choir,
+            'earned_percent' => $earnedPercent,
+            'earned_score' => $earnedScore,
+            'max_score' => $maxScore
+          ];
       }
-
-
-      $percentages[] = [
-        'choir' => $choir,
-        'earned_percent' => $earnedPercent,
-        'earned_score' => $earnedScore,
-        'max_score' => $maxScore
-      ];
     }
 
     return $percentages;

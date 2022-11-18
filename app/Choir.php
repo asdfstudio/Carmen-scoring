@@ -54,10 +54,10 @@ class Choir extends Model
       return $this->hasMany('App\Performer');
     }
 
-		public function divisions()
-		{
-			return $this->belongsToMany('App\Division');
-		}
+    public function divisions()
+    {
+        return $this->belongsToMany('App\Division')->withPivot('receives_rankings', 'receives_ratings');
+    }
 
     public function scheduleItems()
     {
@@ -85,21 +85,21 @@ class Choir extends Model
     */
 
     public function penalties()
-		{
-			return $this->belongsToMany('App\Penalty')->withPivot('round_id');
-		}
+    {
+        return $this->belongsToMany('App\Penalty')->withPivot('round_id');
+    }
 
     public function comments()
-		{
-			//return $this->belongsToMany('App\Comment');
-			return $this->morphMany('App\Comment', 'recipient');
-			//return $this->hasMany('App\Comment');
-		}
+    {
+        //return $this->belongsToMany('App\Comment');
+        return $this->morphMany('App\Comment', 'recipient');
+        //return $this->hasMany('App\Comment');
+    }
 
     public function standings()
-		{
-			return $this->belongsToMany('App\Standing')->withPivot('raw_rank', 'final_rank')->orderBy('pivot_final_rank', 'ASC');
-		}
+    {
+        return $this->belongsToMany('App\Standing')->withPivot('raw_rank', 'final_rank')->orderBy('pivot_final_rank', 'ASC');
+    }
 
     public function name()
     {
@@ -108,14 +108,14 @@ class Choir extends Model
 
     public function getFullNameAttribute()
     {
-			$h = '';
-			if($this->school)
-			{
-				$h.= $this->school->name . ' ';
-			}
-			$h.= $this->name();
+        $h = '';
+        if($this->school)
+        {
+            $h.= $this->school->name . ' ';
+        }
+        $h.= $this->name();
 
-			return $h;
+        return $h;
     }
 
     public function recordings()
@@ -123,21 +123,21 @@ class Choir extends Model
 		return $this->hasMany('App\Recording');
 	}
 
-  public function vote()
-  {
-    return $this->hasMany('App\Vote','vote_id','id');
-  }
+    public function vote()
+    {
+        return $this->hasMany('App\Vote','vote_id','id');
+    }
 
-  /**
-   * Get vote from votes table
-   *
-   * @param $audienceId
-   * @return mixed
-   */
-  public function votes($audienceId)
-  {
-    return Vote::getVote($audienceId, $this->id);
-  }
+    /**
+     * Get vote from votes table
+     *
+     * @param $audienceId
+     * @return mixed
+     */
+    public function votes($audienceId)
+    {
+        return Vote::getVote($audienceId, $this->id);
+    }
 
     public function votes_byUser($audienceId)
     {

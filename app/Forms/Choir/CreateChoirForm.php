@@ -86,6 +86,18 @@ class CreateChoirForm extends Form
           'label' => 'Choir Director'
         ]);
 
+        $this->add('receives_rankings', 'checkbox', [
+            'value' => 1,
+            'checked' => true,
+            'label' => 'Can receive rankings'
+        ]);
+
+        $this->add('receives_ratings', 'checkbox', [
+            'value' => 1,
+            'checked' => true,
+            'label' => 'Can receive ratings'
+        ]);
+
         // Submit
         $this->add('submit', 'submit', [
           'label' => 'Save Choir',
