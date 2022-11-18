@@ -78,7 +78,9 @@
           @endif
 
           @if($ratings)
-            <span class="award-name">{{ $item->division->name }} Ratings</span>
+            @if ($item->division->is_completed)
+              <span class="award-name">{{ $item->division->name }} Ratings</span>
+            @endif
             @foreach($ratings as $rating)
               @if ($rating['rating'])
               <span class="award-winner pull-right">
