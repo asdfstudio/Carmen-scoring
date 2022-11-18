@@ -39,7 +39,9 @@ class CompetitionDivisionStandingController extends Controller
 
     public function edit($competition_id, $division_id, $standing_id)
     {
-      $division = Division::find($division_id);
+      $division = Division::with(['choirs' => function ($query) {
+        $query->where('choir_division.receives_rankings', 1);
+      }])->find($division_id);
 
       $standing = $division->standings()->with('choirs')->where('id', $standing_id)->first();
 

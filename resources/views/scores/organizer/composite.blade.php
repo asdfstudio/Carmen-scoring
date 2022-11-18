@@ -95,15 +95,15 @@
 
         <td>
           @php
-            $rank = $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();
+            $rank = !$choir->pivot->receives_rankings ? 'No Rank' : $captionTotalRank->where('choir_id' , $choir->id)->pluck('rank')->first();
             $tied = !empty($captionTotalRank->where('choir_id' , $choir->id)->pluck('tied')->first()) ? 'tied' : '';
           @endphp
           <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
-          @php $rank = $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
+          @php $rank = !$choir->pivot->receives_rankings ? 'No Rank' : $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
           <span class="weighted score {{ $tied }}">{{ $rank }}</span>
 
-          @php $rank = $totalRawRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
+          @php $rank = !$choir->pivot->receives_rankings ? 'No Rank' : $totalRawRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
           <span class="raw average score {{ $tied }}">{{ $rank }}</span>
         </td>
 
@@ -212,15 +212,17 @@
 
       <td>
         @php
-          $rank = $totalRank->where('choir_id' , $choir->id)->pluck('rank')->first();
+          $rank = !$choir->pivot->receives_rankings ? 'No Rank' : $totalRank->where('choir_id' , $choir->id)->pluck('rank')->first();
           $tied = !empty($totalRank->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
         @endphp
         <span class="rank score {{ $tied }}">{{ $rank }}</span>
 
-        @php $rank = $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
+        @php $rank = !$choir->pivot->receives_rankings ? 'No Rank' : $totalWeightedRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
         <span class="weighted score {{ $tied }}">{{ $rank }}</span>
 
-        @php $rank = $totalRawRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
+        @php
+          $rank = !$choir->pivot->receives_rankings ? 'No Rank' : $totalRawRank->where('choir_id' , $choir->id)->pluck('rank')->first();
+        @endphp
         <span class="raw average score {{ $tied }}">{{ $rank }}</span>
 
 

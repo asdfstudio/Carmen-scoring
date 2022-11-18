@@ -36,6 +36,13 @@
     @endif
   @endforeach
 
+  <div class="actions text-center" style="border-bottom: 1px solid lightgray">
+    <a data-resource-type="choir" data-resource-id="{{ $choir->id }}" data-csrf-token="{{ csrf_token() }}" href="{{ route('organizer.competition.division.choir.edit',[$division->competition,$division,$choir]) }}">
+        <i class="fa fa-pencil"></i>
+        Edit
+    </a>
+  </div>
+
   <div class="actions text-center">
     @can('removeChoir', $division)
       <a class="remove-resource" data-resource-type="choir" data-resource-id="{{ $choir->id }}" data-csrf-token="{{ csrf_token() }}" href="{{ route('organizer.competition.division.choir.destroy',[$division->competition,$division,$choir]) }}">

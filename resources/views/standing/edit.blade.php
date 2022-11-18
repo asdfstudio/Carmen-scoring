@@ -8,6 +8,7 @@
 {{ Form::open(['method' => 'post']) }}
 <ul class="list-group">
   @foreach($standing->choirs as $choir)
+    @if($division->choirs->where('id', $choir->id)->count())
     <li class="list-group-item standing">
       <span class="choir">{{ $choir->full_name }}</span>
 
@@ -27,6 +28,7 @@
 
 
     </li>
+    @endif
   @endforeach
 </ul>
 

@@ -106,7 +106,9 @@ class ScoringMethod {
 
     $captionRank = collect();
 
-    $this->choirs->each(function($choir_id, $key) use ($caption_id, $captionRank){
+    $choir_ids = $this->filterNotRankedChoirs();
+
+    $choir_ids->each(function($choir_id, $key) use ($caption_id, $captionRank){
       $score = $this->total($choir_id, $caption_id);
       $captionRank->put($choir_id,['choir_id' => $choir_id, 'score' => $score]);
     });
@@ -118,6 +120,25 @@ class ScoringMethod {
     $rank = $this->assign_rank_skippy($sorted);
 
     return $this->total_ranked[$key] = $rank;
+  }
+
+  public function filterNotRankedChoirs() {
+    $division_id = isset($this->weighted_scores()[0])
+        ? $this->weighted_scores()[0]->division_id
+        : null;
+
+    if (!$division_id) {
+        return collect();
+    }
+
+    $choir_ids = $this->choirs;
+
+    $result = Division::where('id', $division_id)->with(['choirs' => function ($query) use ($choir_ids){
+        $query->whereIn('id', $choir_ids)
+        ->where('choir_division.receives_rankings', 1);
+    }])->first();
+
+    return $result->choirs->pluck('id');
   }
 
 

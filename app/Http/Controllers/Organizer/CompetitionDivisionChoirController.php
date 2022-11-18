@@ -184,54 +184,48 @@ class CompetitionDivisionChoirController extends Controller
         //$this->authorize('create','App\Choir');
         if($request->wantsJson() == false) {
           $form = $formBuilder->create('Choir\CreateChoirForm');
-          
+
           // Validate input
           if (!$form->isValid()) {
              return redirect()->back()->withErrors($form->getErrors())->withInput();
           }
         }
 
-				// Get the division
-				$division = Division::with('competition','round', 'choirs')->find($division_id);
+        // Get the division
+        $division = Division::with('competition','round', 'choirs')->find($division_id);
 
         //die(print_r($request->all(), true));
-        
+
         // Create school and location
-				if($request->filled('school.name'))
-				{
+        if($request->filled('school.name')) {
           $school = new School();
           $school->name = $request->input('school.name');
 					$school->save();
 
           // Create a school location
-          if($request->filled('school.place'))
-  				{
+          if($request->filled('school.place')) {
             $place = new Place($request->input('school.place'));
             $school->place()->save($place);
           }
-				}
+		}
         // Retrieve school
         elseif($request->input('school_id')) {
           $school = School::find($request->input('school_id'));
-        }
-        else {
+        } else {
           $school = false;
         }
 
         // Create or retrieve choir
-				if($school AND $request->filled('name'))
-				{
-					$choir = new Choir();
+		    if($school AND $request->filled('name')) {
+		      $choir = new Choir();
           $choir->name = $request->input('name');
           $school->choirs()->save($choir);
-				}
-        elseif($request->filled('choir_id'))
-        {
-          $choir = Choir::with('school')->find($request->input('choir_id'));
+		    } elseif($request->filled('choir_id')) {
+          $choir = Choir::with('school', 'divisions')->find($request->input('choir_id'));
         }
 
         //die(print_r($choir, true));
-        
+
         /*
         // Create a director and attach to choir
         if($request->filled('director'))
@@ -241,18 +235,18 @@ class CompetitionDivisionChoirController extends Controller
 					$choir->directors()->save($director);
 				}
         */
-        
+
         // If the form is submitted with an existing person ID...
-        if($request->has('director.person_id') && !empty($request->input('director.person_id'))){
-          
+        if($request->has('director.person_id') && !empty($request->input('director.person_id'))) {
+
           $director_id = $request->input('director.person_id');
-          
+
           // Make sure this person is recorded as a director in the database.
           $person = Person::with('types')->find($director_id);
-          if(!$person->getIsDirectorAttribute()){
+          if(!$person->getIsDirectorAttribute()) {
             $person->types()->syncWithoutDetaching([2]);
           }
-          
+
           // Attach the person to this choir.
           $choir->directors()->syncWithoutDetaching([intval($director_id)]);
 
@@ -272,27 +266,31 @@ class CompetitionDivisionChoirController extends Controller
           $choir->directors()->save($director);
 
         }
-      // dd($division->choirs);
-				// Attach choir to the division
-				if($choir)
-				{
-          $existing_choir = $division->round->choirs->where('id', $choir->id)->pluck('id');
-          if($existing_choir->count() > 0) {
-            $warning_message = "The '$choir->name' choir already belongs to this division or round.";
-            if($request->wantsJson()) {
-              $response = [];
-              $response['status'] = 'failed';
-              $response['errors'] = 'choir_in_round';
-              return response()->json($response);
-            }
-            else {
-              return redirect()->back()->with('warning',$warning_message);
+
+		      // Attach choir to the division
+		      if ($choir) {
+            $existing_choir = $division->round->choirs->where('id', $choir->id)->pluck('id');
+            if($existing_choir->count() > 0) {
+              $warning_message = "The '$choir->name' choir already belongs to this division or round.";
+              if($request->wantsJson()) {
+                $response = [];
+                $response['status'] = 'failed';
+                $response['errors'] = 'choir_in_round';
+                return response()->json($response);
+              } else {
+                return redirect()->back()->with('warning',$warning_message);
+              }
+          } else {
+            // Check if ensemble receives rankings or ratings
+            if (!$request->filled('receives_rankings')) {
+                $division->choirs()->attach($choir->id, ['receives_rankings' => 0]);
+            } elseif (!$request->filled('receives_ratings')) {
+                $division->choirs()->attach($choir->id, ['receives_ratings' => 0]);
+            } else {
+                $division->choirs()->attach($choir->id);
             }
           }
-          else {
-            $division->choirs()->attach($choir->id);
-          }
-				}
+		}
 
         event(new DivisionChoirCreated($division, $choir));
 
@@ -339,15 +337,15 @@ class CompetitionDivisionChoirController extends Controller
      */
     public function show($competition_id, $division_id, $choir_id, FormBuilder $formBuilder)
     {
-				$division = Division::with('competition')->find($division_id);
+		$division = Division::with('competition')->find($division_id);
         $choir = Choir::with('school')->find($choir_id);
 
-				$form = $formBuilder->create('DeleteChoirForm', [
-					'method' => 'DELETE',
-					'url' => route('organizer.competition.division.choir.destroy',[$division->competition,$division,$choir])
-				]);
+        $form = $formBuilder->create('DeleteChoirForm', [
+            'method' => 'DELETE',
+            'url' => route('organizer.competition.division.choir.destroy',[$division->competition,$division,$choir])
+        ]);
 
-				return view('competition_division_choir.organizer.show', compact('division','choir','form'));
+        return view('competition_division_choir.organizer.show', compact('division','choir','form'));
     }
 
     /**
@@ -356,9 +354,22 @@ class CompetitionDivisionChoirController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($competition_id, $division_id, $choir_id, FormBuilder $formBuilder)
     {
-        //
+        $division = Division::with('competition')->find($division_id);
+        $choir = Choir::with(['divisions' => function ($query) use ($division_id) {
+            $query->where('id', $division_id);
+        }])->find($choir_id);
+
+        $form = $formBuilder->create('EditChoirForm', [
+            'method' => 'PUT',
+            'url' => route('organizer.competition.division.choir.update',[$division->competition,$division,$choir]),
+            'data' => [
+                'choir' => $choir
+            ],
+        ]);
+
+        return view('competition_division_choir.organizer.edit', compact('division','choir','form'));
     }
 
     /**
@@ -368,9 +379,22 @@ class CompetitionDivisionChoirController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($competition_id, $division_id, $choir_id, FormBuilder $formBuilder, Request $request)
     {
+        $division = Division::with('competition')->find($division_id);
+        $choir = Choir::with('school')->find($choir_id);
 
+        $receives_ratings = $request->filled('receives_ratings');
+        $receives_rankings = $request->filled('receives_rankings');
+
+        // Check if ensemble receives rankings or ratings
+        $division->choirs()->updateExistingPivot($choir->id, [
+            'receives_rankings' => (int)$receives_rankings,
+            'receives_ratings' => (int)$receives_ratings
+        ]);
+
+        // Set flash data and redirect
+  		return redirect()->route('organizer.competition.division.board',[$division->competition, $division])->with('success',"$choir->name has been updated for this division." );
     }
 
     /**
@@ -384,7 +408,7 @@ class CompetitionDivisionChoirController extends Controller
         $division = Division::with('competition')->find($division_id);
         $choir = Choir::with('school')->find($choir_id);
 
-				$division->choirs()->detach($choir_id);
+		$division->choirs()->detach($choir_id);
 
         event(new DivisionChoirRemoved($division, $choir));
 
@@ -394,7 +418,7 @@ class CompetitionDivisionChoirController extends Controller
         }
         else {
           // Set flash data and redirect
-  				return redirect()->route('organizer.competition.division.choir.index',[$division->competition, $division])->with('success',"$choir->name has been removed from this division." );
+  		  return redirect()->route('organizer.competition.division.choir.index',[$division->competition, $division])->with('success',"$choir->name has been removed from this division." );
         }
 
 
