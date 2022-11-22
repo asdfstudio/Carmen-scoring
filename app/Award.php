@@ -25,6 +25,11 @@ class Award extends Model
     return $this->belongsTo('App\Organization');
   }
 
+  public function competition()
+  {
+    return $this->belongsToMany('App\Competition', 'competition_award')->withPivot('choir_id', 'recipient');
+  }
+
   public function divisions()
   {
     return $this->belongsToMany('App\Division', 'division_award')->withPivot('choir_id', 'recipient');
