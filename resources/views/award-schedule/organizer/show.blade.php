@@ -26,6 +26,11 @@
       $tied = false;
       $ratings = null;
 
+      if($item->awardable_type == 'App\Competition') {
+        $awardWinner = $contestAwardWinners->where('award_id', $item->award->id);
+        $tied = $awardWinner->count() > 1 ? true : false;
+      }
+
       if($item->division AND $item->award)
       {
         $awardWinner = $awardWinners->where('division_id', $item->division->id)->where('award_id', $item->award->id);
@@ -86,6 +91,10 @@
               </span><br>
               @endif
             @endforeach
+          @endif
+
+          @if($item->awardable_type == 'App\Competition')
+            <span class="division-name">{{ $competition->name }}</span>
           @endif
 
           @if($item->awardable_type == 'App\Round')

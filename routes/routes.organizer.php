@@ -228,6 +228,36 @@ Route::group([
     'as' => 'competition.division.board', 'uses' => 'CompetitionDivisionController@board'
   ]);
 
+  // Create a competition award
+  Route::get('competition/{competition}/award/create', [
+    'as' => 'competition.award.create', 'uses' => 'CompetitionAwardController@create'
+  ]);
+
+  // Save a competition award
+  Route::post('competition/{competition}/award/', [
+    'as' => 'competition.award.store', 'uses' => 'CompetitionAwardController@store'
+  ]);
+
+  // Choose competition awards
+  Route::get('competition/{competition}/award/manage', [
+    'as' => 'competition.award.manage', 'uses' => 'CompetitionAwardController@manage'
+  ]);
+
+  // Save competition awards
+  Route::post('competition/{competition}/award/manage', [
+    'as' => 'competition.award.update', 'uses' => 'CompetitionAwardController@update'
+  ]);
+
+  // Assign competition awards
+  Route::get('competition/{competition}/award/assign', [
+    'as' => 'competition.award.assign', 'uses' => 'CompetitionAwardController@assign'
+  ]);
+
+  // Save assigned competition awards
+  Route::post('competition/{competition}/award/assign', [
+    'as' => 'competition.award.update_assignment', 'uses' => 'CompetitionAwardController@update_assignment'
+  ]);
+
   // List division awards
   Route::get('competition/{competition}/division/{division}/award', [
     'as' => 'competition.division.award.index', 'uses' => 'CompetitionDivisionAwardController@index'

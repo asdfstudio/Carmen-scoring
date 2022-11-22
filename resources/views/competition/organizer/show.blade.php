@@ -72,6 +72,29 @@
       <p>{{ link_to_route('organizer.competition.solo-division.create','Create your first solo division',[$competition], ['class' => 'action']) }}</p>
   @endif
 
+  <h3>Manage Competition Awards</h3>
+  <ul class="actions-group">
+    @can('createForCompetition', ['App\Award', $competition])
+        <li>
+            {{ link_to_route('organizer.competition.award.create','Create competition award', [$competition->id], ['class' => 'action']) }}
+        </li>
+    @endcan
+    @can('manage' , ['App\Award', $competition])
+        <li>
+            {{ link_to_route('organizer.competition.award.manage','Manage competition awards', [$competition->id], ['class' => 'action']) }}
+        </li>
+    @endcan
+
+    @can('assign' , ['App\Award', $competition])
+        <li>
+            {{ link_to_route('organizer.competition.award.assign', 'Assign awards', [$competition->id], ['class' => 'action']) }}
+        </li>
+    @endcan
+  </ul><br>
+
+  {{-- Awards will appear here  --}}
+  @include('award.organizer.list')
+
   <h3>Manage Schedules</h3>
 
   <p>Set the performance order for your competition. Do this after you have created all of your divisions, rounds and ensembles.</p>

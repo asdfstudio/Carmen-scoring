@@ -42,6 +42,13 @@
                                 <span class="caption-name caption-overall">Overall {{ ordinal($item->rank) }} Place</span>
                             @endif
                         </li>
+                    @elseif ($item->awardable_type == 'App\Competition')
+                        <li class="schedule-item award" data-awardable-id="{{ $item->awardable_id }}" data-awardable-type="{{ $item->awardable_type }}" data-division-id="{{ $item->division_id }}" data-round-id="{{ $item->round_id }}" data-award-id="{{ $item->award_id }}" data-caption-id="{{ $item->caption_id }}" data-rank="{{ $item->rank }}">
+                            <span class="division-name">{{ $competition->name }}</span>
+                            @if($item->award)
+                                <span class="award-name">{{ $item->award->name }}</span>
+                            @endif
+                        </li>
                     @else
                         <li class="schedule-item award" data-awardable-id="{{ $item->awardable_id }}" data-awardable-type="{{ $item->awardable_type }}" data-division-id="{{ $item->division_id }}" data-round-id="{{ $item->round_id }}" data-award-id="{{ $item->award_id }}" data-caption-id="{{ $item->caption_id }}" data-rank="{{ $item->rank }}">
                             @if($item->division)
@@ -75,6 +82,23 @@
             </div>
 
             <ul class="schedule-builder-list schedule-items divisions">
+                @foreach ($competition->awards as $competitionAward)
+                    <li class="division">
+                        <span class="division-heading">Contest</span>
+                    @php
+                        $isInSchedule = $schedule->items->where('award_id', $competitionAward->id)->count();
+
+                        $isInAnotherSchedule = $excludedScheduleItems->where('award_id', $competitionAward->id)->count();
+                    @endphp
+                    @if(!$isInSchedule AND !$isInAnotherSchedule)
+                        <li class="schedule-item award" data-division-id="" data-round-id="" data-award-id="{{ $competitionAward->id }}" data-awardable-id="{{ $competition->id }}" data-awardable-type="App\Competition">
+                            <span class="division-heading">{{$competition->name}}</span>
+                            <span class="award-name">{{ $competitionAward->name }}</span>
+                        </li>
+                    @endif
+                    </li>
+                @endforeach
+
                 @foreach($competition->rounds as $round)
                     <li class="division">
                         <span class="division-heading">{{ $round->name }}</span>

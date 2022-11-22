@@ -25,14 +25,14 @@ class CompetitionController extends Controller
      */
     public function index(FormBuilder $formBuilder)
     {
-				$competitions = Competition::with('organization', 'place')->active()->get();
+        $competitions = Competition::with('organization', 'place')->active()->get();
 
-				$archivedCompetitions = Competition::with('organization', 'place')->archived()->get();
+        $archivedCompetitions = Competition::with('organization', 'place')->archived()->get();
 
-				$organization =  Organization::find(Auth::user()->organization_id);
+        $organization =  Organization::find(Auth::user()->organization_id);
 
         $deleteCompetitionForm = $formBuilder->create('GenericDeleteForm');
-				return view('competition.organizer.index', compact('competitions', 'archivedCompetitions', 'deleteCompetitionForm','organization'));
+        return view('competition.organizer.index', compact('competitions', 'archivedCompetitions', 'deleteCompetitionForm','organization'));
 
     }
 
@@ -95,7 +95,7 @@ class CompetitionController extends Controller
      */
     public function show($id, FormBuilder $formBuilder)
     {
-        $competition = Competition::with('place','organization','divisions', 'soloDivisions')->find($id);
+        $competition = Competition::with('place','organization','divisions', 'soloDivisions', 'awards')->find($id);
 
         $this->authorize('show', $competition);
 
@@ -116,6 +116,8 @@ class CompetitionController extends Controller
 
         $roundsCount = $competition->rounds->count();
         $divisionCount = Division::join('rounds', 'divisions.round_id', '=', 'rounds.id')->where('rounds.competition_id', '=', $competition->id)->count();
+
+        $awards = $competition->awards;
 
         $scoringForms = [];
         $returnUrl = route('organizer.competition.show', $id);
@@ -149,7 +151,7 @@ class CompetitionController extends Controller
         ];
 
 
-        return view('competition.organizer.show', compact('competition', 'roundsCount', 'divisionCount', 'divisionScoringForms', 'activateScoringForm', 'completeScoringForm', 'archiveCompetitionForm'));
+        return view('competition.organizer.show', compact('competition', 'roundsCount', 'divisionCount', 'awards', 'divisionScoringForms', 'activateScoringForm', 'completeScoringForm', 'archiveCompetitionForm'));
     }
 
     /**

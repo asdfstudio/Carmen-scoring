@@ -13,6 +13,7 @@ use App\AwardScheduleItem;
 use App\Carmen\Ratings;
 use App\Caption;
 use App\AwardWinner;
+use App\ContestAwardWinner;
 use App\Standing;
 
 use Auth;
@@ -127,6 +128,10 @@ class AwardScheduleController extends Controller
           $query->where('competition_id', $competition_id);
       }])->get();
 
+      $contestAwardWinners = ContestAwardWinner::with(['competition' => function ($query) use ($competition_id) {
+        $query->where('id', $competition_id);
+      }])->get();
+
       $standings = Standing::whereHas('round', function($query) use ($competition_id) {
         $query->where('competition_id', $competition_id);
       })->with(['division', 'division.choirs'])->get();
@@ -136,7 +141,7 @@ class AwardScheduleController extends Controller
         'url' => route('organizer.competition.award-schedule.destroy',[$competition, $schedule])
       ]);
 
-      return view('award-schedule.organizer.show', compact('competition', 'schedule', 'deleteForm', 'awardWinners', 'standings'));
+      return view('award-schedule.organizer.show', compact('competition', 'schedule', 'deleteForm', 'awardWinners', 'contestAwardWinners', 'standings'));
     }
 
 
@@ -156,11 +161,15 @@ class AwardScheduleController extends Controller
           $query->where('competition_id', $competition_id);
       }])->get();
 
+      $contestAwardWinners = ContestAwardWinner::with(['competition' => function ($query) use ($competition_id) {
+        $query->where('id', $competition_id);
+      }])->get();
+
       $standings = Standing::whereHas('round', function($query) use ($competition_id) {
         $query->where('competition_id', $competition_id);
       })->with(['division', 'division.choirs'])->get();
 
-      return view('award-schedule.organizer.show-announcer', compact('competition', 'schedule', 'awardWinners', 'standings'));
+      return view('award-schedule.organizer.show-announcer', compact('competition', 'schedule', 'awardWinners', 'contestAwardWinners', 'standings'));
     }
 
 

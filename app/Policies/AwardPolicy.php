@@ -6,6 +6,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 use App\User;
 use App\Award;
+use App\Competition;
 use App\Division;
 use App\Round;
 
@@ -30,6 +31,22 @@ class AwardPolicy extends BasePolicy
     {
       if ($division) {
         if ($this->isOrgAdmin AND !empty($division->competition->organization_id) AND $division->competition->organization_id === $this->orgId)
+        {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      else
+      {
+        return $this->isOrgAdmin;
+      }
+    }
+
+    public function createForCompetition(User $user, Competition $competition)
+    {
+      if ($competition) {
+        if ($this->isOrgAdmin AND !empty($competition->organization_id) AND $competition->organization_id === $this->orgId)
         {
           return true;
         } else {
