@@ -23,6 +23,9 @@
                 if($item->awardable_type == 'App\Competition') {
                     $awardWinner = $contestAwardWinners->where('award_id', $item->award->id);
                     $tied = $awardWinner->count() > 1 ? true : false;
+                    if(!empty($awardWinner->first()->sponsor)){
+                        $sponsor = $awardWinner->first()->sponsor;
+                    }
                 }
 
                 if($item->division AND $item->award)

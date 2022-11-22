@@ -82,9 +82,11 @@
             </div>
 
             <ul class="schedule-builder-list schedule-items divisions">
-                @foreach ($competition->awards as $competitionAward)
+                @if ($competition->awards)
                     <li class="division">
                         <span class="division-heading">Contest</span>
+                @endif
+                @foreach ($competition->awards as $competitionAward)
                     @php
                         $isInSchedule = $schedule->items->where('award_id', $competitionAward->id)->count();
 
