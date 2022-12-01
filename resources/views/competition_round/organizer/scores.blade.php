@@ -58,7 +58,8 @@
     </ul>
   @endif
 
-  @if ($round->scoring_method_id === 7 && $round->caption_weighting_id === 1 || $round->caption_weighting_id === 2)
+  {{-- Average Scoring --}}
+  @if ($round->scoring_method_id === 7)
     <ul class="list-group horizontal">
       <li class="list-group-item">
         <a class="score-view-toggle active" href="#average" data-score-view="average">Average</a>
