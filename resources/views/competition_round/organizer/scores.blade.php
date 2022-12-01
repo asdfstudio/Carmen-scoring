@@ -58,7 +58,7 @@
     </ul>
   @endif
 
-  @if ($round->scoring_method_id === 7 && $round->caption_weighting_id === 1)
+  @if ($round->scoring_method_id === 7 && $round->caption_weighting_id === 1 || $round->caption_weighting_id === 2)
     <ul class="list-group horizontal">
       <li class="list-group-item">
         <a class="score-view-toggle active" href="#average" data-score-view="average">Average</a>
@@ -67,7 +67,7 @@
   @endif
 
   {{-- Ranked Scoring, 50/50 --}}
-  @if ($round->scoring_method_id > 1 && $round->caption_weighting_id === 2)
+  @if ($round->scoring_method_id > 1 && $round->caption_weighting_id === 2 && $round->scoring_method_id !== 7)
     <ul class="list-group horizontal">
       <li class="list-group-item">
         <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>
