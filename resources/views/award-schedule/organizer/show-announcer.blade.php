@@ -28,6 +28,14 @@
                     }
                 }
 
+                if ($item->round AND $item->award) {
+                    $awardWinner = $roundAwardWinners->where('round_id', $item->round->id)->where('award_id', $item->award->id);
+                    $tied = $awardWinner->count() > 1 ? true : false;
+                    if(!empty($awardWinner->first()->sponsor)){
+                        $sponsor = $awardWinner->first()->sponsor;
+                    }
+                }
+
                 if($item->division AND $item->award)
                 {
                   $awardWinner = $awardWinners->where('division_id', $item->division->id)->where('award_id', $item->award->id);
@@ -65,7 +73,7 @@
                 }
 
             @endphp
-            @if ($item->round_id !== 0 && $item->awardable_type === 'App\Round')
+            {{-- @if ($item->round_id !== 0 && $item->awardable_type === 'App\Round')
                 <li class="schedule-item award">
                     <div class="award-heading">
                         @if($item->round)
@@ -81,32 +89,32 @@
                         @endif
                     </div>
                 </li>
-            @endif
+            @endif --}}
 
             @if(!empty($awardWinner) || !empty($ratings))
                 <li class="schedule-item award">
                     <div class="award-heading">
-                        @if ($item->awardable_type !== 'App\Round')
+                        {{-- @if ($item->awardable_type !== 'App\Round') --}}
                             @if($item->division)
                                 <span class="division-name" data-division-id="{{ $item->division->id }}">{{ $item->division->name }}</span>
                             @endif
-                        @endif
+                        {{-- @endif --}}
 
                         @if($item->awardable_type == 'App\Competition')
                             <span class="division-name">{{ $competition->name }}</span>
                         @endif
 
                         @if($item->round)
-                            <span class="award-name">{{ $item->round->name }} Ratings</span>
+                            <span class="division-name" data-round-id="{{ $item->round->id }}">{{ $item->round->name }}</span>
                         @endif
 
-                        @if($item->award && !isset($item->round))
+                        @if($item->award)
                             <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
                         @endif
 
-                        @if($item->caption && !isset($item->round))
+                        @if($item->caption)
                             <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
-                        @elseif($item->rank && !isset($item->round))
+                        @elseif($item->rank)
                             <span class="caption-name caption-overall">Overall {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
                         @endif
 
@@ -117,11 +125,13 @@
                             @if(!$item->round->status == 'Active')
                                 <li class="list-group-item"><span>Awaiting Final Scores for this Round</span></li>
                             @else
-                                @foreach($ratings as $rating)
-                                    @if (!empty($rating['rating']['name']))
-                                        <li class="list-group-item"><span class="rating">{{ $rating['rating']['name'] }}:</span> <span class="award-winner-choir">{{ $rating['choir']->full_name }}</span></li>
-                                    @endif
-                                @endforeach
+                                @if($ratings)
+                                    @foreach($ratings as $rating)
+                                        @if (!empty($rating['rating']['name']))
+                                            <li class="list-group-item"><span class="rating">{{ $rating['rating']['name'] }}:</span> <span class="award-winner-choir">{{ $rating['choir']->full_name }}</span></li>
+                                        @endif
+                                    @endforeach
+                                @endif
                             @endif
                         </ul>
                     @endif

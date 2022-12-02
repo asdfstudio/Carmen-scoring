@@ -31,6 +31,11 @@
         $tied = $awardWinner->count() > 1 ? true : false;
       }
 
+      if($item->round AND $item->award) {
+        $awardWinner = $roundAwardWinners->where('round_id', $item->round->id)->where('award_id', $item->award->id);
+        $tied = $awardWinner->count() > 1 ? true : false;
+      }
+
       if($item->division AND $item->award)
       {
         $awardWinner = $awardWinners->where('division_id', $item->division->id)->where('award_id', $item->award->id);
@@ -60,7 +65,7 @@
 
       @endphp
 
-      @if($item->awardable_type == 'App\Round')
+      {{-- @if($item->awardable_type == 'App\Round')
         <li class="schedule-item award">
             <span class="division-name">{{ $item->round->name }}</span>
 
@@ -74,7 +79,7 @@
                 <span class="caption-name caption-overall">Overall {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
             @endif
         </li>
-      @endif
+      @endif --}}
 
       @if(!empty($awardWinner) || !empty($ratings))
         <li class="schedule-item award">
