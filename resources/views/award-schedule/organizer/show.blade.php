@@ -65,7 +65,7 @@
 
       @endphp
 
-      {{-- @if($item->awardable_type == 'App\Round')
+      @if($item->awardable_type == 'App\Round' && $item->caption)
         <li class="schedule-item award">
             <span class="division-name">{{ $item->round->name }}</span>
 
@@ -79,7 +79,7 @@
                 <span class="caption-name caption-overall">Overall {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
             @endif
         </li>
-      @endif --}}
+      @endif
 
       @if(!empty($awardWinner) || !empty($ratings))
         <li class="schedule-item award">

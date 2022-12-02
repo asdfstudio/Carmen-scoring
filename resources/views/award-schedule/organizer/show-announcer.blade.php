@@ -73,7 +73,7 @@
                 }
 
             @endphp
-            {{-- @if ($item->round_id !== 0 && $item->awardable_type === 'App\Round')
+            @if ($item->round_id !== 0 && $item->awardable_type === 'App\Round' && $item->caption)
                 <li class="schedule-item award">
                     <div class="award-heading">
                         @if($item->round)
@@ -89,7 +89,7 @@
                         @endif
                     </div>
                 </li>
-            @endif --}}
+            @endif
 
             @if(!empty($awardWinner) || !empty($ratings))
                 <li class="schedule-item award">
