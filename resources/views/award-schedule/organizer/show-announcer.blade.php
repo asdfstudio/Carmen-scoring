@@ -84,7 +84,21 @@
                         @endif
                         @if($item->caption)
                             <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
-                        @elseif($item->rank)
+                        @endif
+                    </div>
+                </li>
+            @endif
+
+            @if ($item->round_id !== 0 && $item->awardable_type === 'App\Round' && $item->named_rank && !$item->caption)
+                <li class="schedule-item award">
+                    <div class="award-heading">
+                        @if($item->round)
+                            <span class="division-name" data-round-id="{{ $item->round->id }}">{{ $item->round->name }}</span>
+                        @endif
+                        @if($item->award)
+                            <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
+                        @endif
+                        @if($item->rank)
                             <span class="caption-name caption-overall">Overall {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
                         @endif
                     </div>
