@@ -34,6 +34,17 @@
       if($item->round AND $item->award) {
         $awardWinner = $roundAwardWinners->where('round_id', $item->round->id)->where('award_id', $item->award->id);
         $tied = $awardWinner->count() > 1 ? true : false;
+      } elseif ($item->round) {
+        if ($item->caption) {
+            $standing = $standings->where('round_id', $item->round->id)->where('caption_id', $item->caption->id)->first();
+        } else {
+            $standing = $standings->where('round_id', $item->round->id)->where('caption_id', NULL)->first();
+        }
+
+        if($standing AND $standing->choirs) {
+          $awardWinner = $standing->choirs->where('pivot.final_rank', $item->rank);
+          $tied = $awardWinner->count() > 1 ? true : false;
+        }
       }
 
       if($item->division AND $item->award)
@@ -64,34 +75,6 @@
       }
 
       @endphp
-
-      @if($item->awardable_type == 'App\Round' && $item->caption)
-        <li class="schedule-item award">
-            <span class="division-name">{{ $item->round->name }}</span>
-
-            @if($item->award)
-                <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
-            @endif
-
-            @if($item->caption)
-                <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
-            @endif
-        </li>
-      @endif
-
-      @if($item->awardable_type == 'App\Round' && $item->named_rank && !$item->caption)
-        <li class="schedule-item award">
-            <span class="division-name">{{ $item->round->name }}</span>
-
-            @if($item->award)
-                <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
-            @endif
-
-            @if($item->named_rank)
-                <span class="caption-name caption-overall">Overall {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
-            @endif
-        </li>
-      @endif
 
       @if(!empty($awardWinner) || !empty($ratings))
         <li class="schedule-item award">

@@ -34,6 +34,23 @@
                     if(!empty($awardWinner->first()->sponsor)){
                         $sponsor = $awardWinner->first()->sponsor;
                     }
+                } elseif ($item->round) {
+                    if($item->caption) {
+                        $standing = $standings->where('round_id', $item->round->id)->where('caption_id', $item->caption->id)->first();
+
+                        $sponsor = $item->round->awardSettings->where('caption_id', $item->caption->id)->first()->awardSponsor($item->rank);
+                    } else {
+                        $standing = $standings->where('round_id', $item->round->id)->where('caption_id', null)->first();
+                        $dg_sponsors = $item->round->awardSettings->where('caption_id', 0);
+                        if($dg_sponsors->isNotEmpty()) {
+                            $sponsor = $dg_sponsors->first()->awardSponsor($item->rank);
+                        }
+                    }
+
+                    if($standing AND $standing->choirs) {
+                        $awardWinner = $standing->choirs->where('pivot.final_rank', $item->rank);
+                        $tied = $awardWinner->count() > 1 ? true : false;
+                    }
                 }
 
                 if($item->division AND $item->award)
@@ -73,37 +90,6 @@
                 }
 
             @endphp
-            @if ($item->round_id !== 0 && $item->awardable_type === 'App\Round' && $item->caption)
-                <li class="schedule-item award">
-                    <div class="award-heading">
-                        @if($item->round)
-                            <span class="division-name" data-round-id="{{ $item->round->id }}">{{ $item->round->name }}</span>
-                        @endif
-                        @if($item->award)
-                            <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
-                        @endif
-                        @if($item->caption)
-                            <span class="caption-name {{ $item->caption->text_css }}">{{ $item->caption->name }} {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
-                        @endif
-                    </div>
-                </li>
-            @endif
-
-            @if ($item->round_id !== 0 && $item->awardable_type === 'App\Round' && $item->named_rank && !$item->caption)
-                <li class="schedule-item award">
-                    <div class="award-heading">
-                        @if($item->round)
-                            <span class="division-name" data-round-id="{{ $item->round->id }}">{{ $item->round->name }}</span>
-                        @endif
-                        @if($item->award)
-                            <span class="award-name">{{ $item->award->name }} @if($tied) <span class="tied">tied</span> @endif </span>
-                        @endif
-                        @if($item->rank)
-                            <span class="caption-name caption-overall">Overall {{ $item->named_rank }} @if($tied) <span class="tied">tied</span> @endif </span>
-                        @endif
-                    </div>
-                </li>
-            @endif
 
             @if(!empty($awardWinner) || !empty($ratings))
                 <li class="schedule-item award">
