@@ -54,6 +54,7 @@
       }
       elseif($item->division)
       {
+        $choirsWithRankings = $item->division->choirs->where('pivot.receives_rankings', 1)->pluck('id');
         if($item->caption)
         {
           $standing = $standings->where('division_id', $item->division->id)->where('caption_id', $item->caption->id)->first();
@@ -65,7 +66,7 @@
 
         if($standing AND $standing->choirs)
         {
-          $awardWinner = $standing->choirs->where('pivot.final_rank', $item->rank);
+          $awardWinner = $standing->choirs->where('pivot.final_rank', $item->rank)->whereIn('id', $choirsWithRankings);
           $tied = $awardWinner->count() > 1 ? true : false;
         }
       }

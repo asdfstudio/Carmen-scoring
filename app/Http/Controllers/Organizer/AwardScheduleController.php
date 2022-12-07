@@ -156,11 +156,13 @@ class AwardScheduleController extends Controller
       $competition = Competition::find($competition_id);
       $schedule = AwardSchedule::with(['items' => function($query) {
         $query->performanceOrder();
-      }, 'items.division', 'items.division', 'items.division.awardSettings', 'items.round', 'items.round.competition', 'items.award' => function($query) {
+      }, 'items.division', 'items.division', 'items.division.choirs', 'items.division.awardSettings', 'items.round', 'items.round.competition', 'items.award' => function($query) {
         $query->withoutGlobalScope('organization');
       }, 'items.caption'])->find($schedule_id);
 
-      $awardWinners = AwardWinner::with(['division', 'division.choirs', 'division.round' => function($query) use ($competition_id) {
+      $awardWinners = AwardWinner::with(['division', 'division.choirs' => function ($query) {
+        $query->where('choir_division.receives_rankings', 1);
+      }, 'division.round' => function($query) use ($competition_id) {
           $query->where('competition_id', $competition_id);
       }])->get();
 
