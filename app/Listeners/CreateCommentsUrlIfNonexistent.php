@@ -43,9 +43,9 @@ class CreateCommentsUrlIfNonexistent
           $choir = false;
         }
 
-        if (!$choir || !isset($criterion)) return;
+        if (!$choir && !isset($criterion)) return;
 
-        if ($criterion) {
+        if (isset($criterion)) {
             $commentUrl = CommentUrl::firstOrCreate([
                 'competition_id' => $competition->id,
                 'recipient_type' => 'App\Criterion',
