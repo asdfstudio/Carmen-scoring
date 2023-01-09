@@ -42,7 +42,7 @@ class SendSMSFeedbackLink
 
         $division = $event->division;
         $competition = $division->competition;
-        $choirIds = $division->choirs->pluck('choir_id')->toArray();
+        $choirIds = $division->choirs->pluck('id')->toArray();
 
         if(!$choirIds) return;
 
