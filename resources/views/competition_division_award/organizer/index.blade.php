@@ -7,7 +7,7 @@
     <ul class="actions-group">
         @can('update', $division)
             <li>
-            {{ link_to_route('organizer.competition.division.award.settings.edit', 'Edit caption awards', [$division->competition->id, $division], ['class' => 'action']) }}
+            {{ link_to_route('organizer.competition.division.award.settings.edit', 'Edit point based awards', [$division->competition->id, $division], ['class' => 'action']) }}
             </li>
         @endcan
         @can('createForDivision', ['App\Award', $division])
