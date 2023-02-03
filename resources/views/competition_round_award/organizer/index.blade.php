@@ -37,6 +37,6 @@
     @include('round_award_settings.organizer.list', ['awardSettings' => $round->awardSettings])
 
     <h2>Other Awards</h2>
-    @include('award.organizer.list')
+    @include('award.organizer.round_awards_list')
 
 @endsection
