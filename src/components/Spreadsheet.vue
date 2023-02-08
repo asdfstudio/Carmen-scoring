@@ -117,6 +117,15 @@
         <tr class="rank-rating-row">
           <th class="rank-rating-label">
             <span v-if="hasRatings">Rating</span>
+            <div v-if="hasRatings">
+              <div
+                v-for="ratingsRange in getRatingsRange"
+                :key="ratingsRange"
+                class="dg-mt-8"
+                >
+                {{ ratingsRange }}
+              </div>
+            </div>
           </th>
           <td
             v-for="choir in choirsList"
@@ -227,8 +236,27 @@ export default {
     isSpreadsheetScoringActive () {
       return this.$store.state.isSpreadsheetScoringActive
     },
-    division () {
+    divisions () {
       return this.$store.state.divisions
+    },
+    getRatingsRange () {
+      let range = [];
+      this.divisions.forEach((division, index) => {
+
+        division.rating_system.forEach((item, index) => {
+          let currentMinScore = parseInt(item.min_score);
+
+          let prevRating = division.rating_system[index-1];
+          let prevMinScore = parseInt(prevRating?.min_score);
+
+          if (currentMinScore >= 90) {
+            range.push(`${item.name}: ${currentMinScore} - 100`);
+          } else if (currentMinScore < prevMinScore) {
+            range.push(`${item.name}: ${currentMinScore} - ${prevMinScore-0.01}`);
+          }
+        })
+      })
+      return range;
     },
     recordings () {
       return this.$store.state.recordings
