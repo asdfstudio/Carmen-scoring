@@ -242,19 +242,20 @@ export default {
     getRatingsRange () {
       let range = [];
       this.divisions.forEach((division, index) => {
+        if (division.rating_system) {
+          division.rating_system.forEach((item, index) => {
+            let currentMinScore = parseInt(item.min_score);
 
-        division.rating_system.forEach((item, index) => {
-          let currentMinScore = parseInt(item.min_score);
+            let prevRating = division.rating_system[index-1];
+            let prevMinScore = parseInt(prevRating?.min_score);
 
-          let prevRating = division.rating_system[index-1];
-          let prevMinScore = parseInt(prevRating?.min_score);
-
-          if (currentMinScore >= 90) {
-            range.push(`${item.name}: ${currentMinScore} - 100`);
-          } else if (currentMinScore < prevMinScore) {
-            range.push(`${item.name}: ${currentMinScore} - ${prevMinScore-0.01}`);
-          }
-        })
+            if (currentMinScore >= 90) {
+              range.push(`${item.name}: ${currentMinScore} - 100`);
+            } else if (currentMinScore < prevMinScore) {
+              range.push(`${item.name}: ${currentMinScore} - ${prevMinScore-0.01}`);
+            }
+          })
+        }
       })
       return range;
     },
