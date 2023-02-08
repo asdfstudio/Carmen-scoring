@@ -3261,6 +3261,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3318,8 +3327,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     isSpreadsheetScoringActive: function isSpreadsheetScoringActive() {
       return this.$store.state.isSpreadsheetScoringActive;
     },
-    division: function division() {
+    divisions: function divisions() {
       return this.$store.state.divisions;
+    },
+    getRatingsRange: function getRatingsRange() {
+      var range = [];
+      this.divisions.forEach(function (division, index) {
+        division.rating_system.forEach(function (item, index) {
+          var currentMinScore = parseInt(item.min_score);
+          var prevRating = division.rating_system[index - 1];
+          var prevMinScore = parseInt(prevRating === null || prevRating === void 0 ? void 0 : prevRating.min_score);
+
+          if (currentMinScore >= 90) {
+            range.push("".concat(item.name, ": ").concat(currentMinScore, " - 100"));
+          } else if (currentMinScore < prevMinScore) {
+            range.push("".concat(item.name, ": ").concat(currentMinScore, " - ").concat(prevMinScore - 0.01));
+          }
+        });
+      });
+      return range;
     },
     recordings: function recordings() {
       return this.$store.state.recordings;
@@ -28574,7 +28600,27 @@ var render = function() {
               { staticClass: "rank-rating-row" },
               [
                 _c("th", { staticClass: "rank-rating-label" }, [
-                  _vm.hasRatings ? _c("span", [_vm._v("Rating")]) : _vm._e()
+                  _vm.hasRatings ? _c("span", [_vm._v("Rating")]) : _vm._e(),
+                  _vm._v(" "),
+                  _vm.hasRatings
+                    ? _c(
+                        "div",
+                        _vm._l(_vm.getRatingsRange, function(ratingsRange) {
+                          return _c(
+                            "div",
+                            { key: ratingsRange, staticClass: "dg-mt-8" },
+                            [
+                              _vm._v(
+                                "\n              " +
+                                  _vm._s(ratingsRange) +
+                                  "\n            "
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    : _vm._e()
                 ]),
                 _vm._v(" "),
                 _vm._l(_vm.choirsList, function(choir) {
