@@ -242,6 +242,7 @@ export default {
     getRatingsRange () {
       let range = [];
       this.divisions.forEach((division, index) => {
+        range.push(division.name);
         if (division.rating_system) {
           division.rating_system.forEach((item, index) => {
             let currentMinScore = parseInt(item.min_score);
@@ -249,7 +250,7 @@ export default {
             let prevRating = division.rating_system[index-1];
             let prevMinScore = parseInt(prevRating?.min_score);
 
-            if (currentMinScore >= 90) {
+            if (currentMinScore >= 90 || !prevMinScore) {
               range.push(`${item.name}: ${currentMinScore} - 100`);
             } else if (currentMinScore < prevMinScore) {
               range.push(`${item.name}: ${currentMinScore} - ${prevMinScore-0.01}`);

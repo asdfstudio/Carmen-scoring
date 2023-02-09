@@ -3333,13 +3333,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getRatingsRange: function getRatingsRange() {
       var range = [];
       this.divisions.forEach(function (division, index) {
+        range.push(division.name);
+
         if (division.rating_system) {
           division.rating_system.forEach(function (item, index) {
             var currentMinScore = parseInt(item.min_score);
             var prevRating = division.rating_system[index - 1];
             var prevMinScore = parseInt(prevRating === null || prevRating === void 0 ? void 0 : prevRating.min_score);
 
-            if (currentMinScore >= 90) {
+            if (currentMinScore >= 90 || !prevMinScore) {
               range.push("".concat(item.name, ": ").concat(currentMinScore, " - 100"));
             } else if (currentMinScore < prevMinScore) {
               range.push("".concat(item.name, ": ").concat(currentMinScore, " - ").concat(prevMinScore - 0.01));
