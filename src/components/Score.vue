@@ -35,7 +35,23 @@
           :size="scoreButtonSize"
         />
       </div>-->
-      <ScrollPicker v-model="selectedScore" :options="range"/>
+      <!-- <ScrollPicker v-model="selectedScore" :options="range"/> -->
+      <br>
+      <p class="mt-4">Enter score from 0-10</p>
+      <span v-if="this.increment == 1" class="text-danger">Half point numbers not allowed</span>
+      <input
+        type="number"
+        name="score"
+        id="score"
+        class="form-control"
+        style="width: 200px; margin: auto"
+        :value="currentScore"
+        @keydown="keepScore($event)"
+        @input="onInput"
+        :step="this.increment == 1 ? 1 : 0.5"
+        :min="min"
+        :max="inputMaxValue">
+      <br>
       <button class="btn" @click="saveNewScore($event)">Save</button>
       <button class="btn" @click="activateChoirCriterionCommentModal">Comment</button>
     </div>
@@ -79,7 +95,8 @@ export default {
   data: function () {
     return {
       selectedScore: this.initialScore,
-      currentScore: this.initialScore
+      currentScore: this.initialScore,
+      inputMaxValue: 10
     }
   },
   computed: {
@@ -103,15 +120,60 @@ export default {
   watch: {
     initialScore: function (newValue, oldValue) {
       this.currentScore = newValue
+    },
+    currentScore: function (newValue, oldValue) {
+      if (this.currentScore != this.initialScore) {
+        const payload = {
+          choir_id: this.choirId,
+          criterion_id: this.criterionId,
+          caption_id: this.captionId,
+          raw_score: +newValue
+        }
+        this.$store.dispatch('setScore', payload)
+      }
     }
   },
   methods: {
+    onInput (e) {
+      if (e.data === '+') {
+         if (this.currentScore === this.inputMaxValue) {
+          e.target.value = this.inputMaxValue;
+          return
+        }
+        this.up();
+      } else if (e.data === '-') {
+        if (this.currentScore === this.min) {
+          e.target.value = this.min;
+          return
+        }
+        this.down();
+      } else {
+        if (e.target.value > this.inputMaxValue) {
+          e.target.value = this.inputMaxValue;
+          return
+        }
+         if (e.target.value < this.min) {
+          e.target.value = this.min;
+          return
+        }
+        if (this.checkFractional(e)) {
+          if (+e.target.value % 1 != 0) {
+            var text = e.target.value
+            this.currentScore = text.includes('.55') ? +text.slice(0, -1) : +e.target.value
+            e.target.value = text.includes('.55') ? +text.slice(0, -1) : +e.target.value
+          }
+          this.currentScore = +e.target.value
+        } else {
+          e.target.value = this.min;
+        }
+      }
+    },
     saveNewScore ($event) {
       const payload = {
         choir_id: this.choirId,
         criterion_id: this.criterionId,
         caption_id: this.captionId,
-        raw_score: this.selectedScore
+        raw_score: this.currentScore
       }
       this.$store.dispatch('setScore', payload)
 
@@ -137,6 +199,17 @@ export default {
       if (newScore >= this.min && newScore <= this.max) {
         this.currentScore = newScore
       }
+    },
+    keepScore: function(e) {
+      if (e.which === 38 || e.which === 40) {
+        e.preventDefault();
+      }
+    },
+    checkFractional: function(e) {
+      const val = +e.target.value;
+        return this.increment == 1
+          ? !(Number(val) === val && val % 1 !== 0)
+          : true
     },
     getSavingStatus: function (property) {
       return this.$store.getters.getSavingStatus(property)

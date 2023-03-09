@@ -2099,10 +2099,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -2893,6 +2889,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2928,7 +2940,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       selectedScore: this.initialScore,
-      currentScore: this.initialScore
+      currentScore: this.initialScore,
+      inputMaxValue: 10
     };
   },
   computed: {
@@ -2954,15 +2967,65 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     initialScore: function initialScore(newValue, oldValue) {
       this.currentScore = newValue;
+    },
+    currentScore: function currentScore(newValue, oldValue) {
+      if (this.currentScore != this.initialScore) {
+        var payload = {
+          choir_id: this.choirId,
+          criterion_id: this.criterionId,
+          caption_id: this.captionId,
+          raw_score: +newValue
+        };
+        this.$store.dispatch('setScore', payload);
+      }
     }
   },
   methods: {
+    onInput: function onInput(e) {
+      if (e.data === '+') {
+        if (this.currentScore === this.inputMaxValue) {
+          e.target.value = this.inputMaxValue;
+          return;
+        }
+
+        this.up();
+      } else if (e.data === '-') {
+        if (this.currentScore === this.min) {
+          e.target.value = this.min;
+          return;
+        }
+
+        this.down();
+      } else {
+        if (e.target.value > this.inputMaxValue) {
+          e.target.value = this.inputMaxValue;
+          return;
+        }
+
+        if (e.target.value < this.min) {
+          e.target.value = this.min;
+          return;
+        }
+
+        if (this.checkFractional(e)) {
+          if (+e.target.value % 1 != 0) {
+            var text = e.target.value;
+            this.currentScore = text.includes('.55') ? +text.slice(0, -1) : +e.target.value;
+            e.target.value = text.includes('.55') ? +text.slice(0, -1) : +e.target.value;
+          }
+
+          this.currentScore = +e.target.value;
+        } else {
+          e.target.value = this.min;
+        }
+      }
+    },
     saveNewScore: function saveNewScore($event) {
       var payload = {
         choir_id: this.choirId,
         criterion_id: this.criterionId,
         caption_id: this.captionId,
-        raw_score: this.selectedScore
+        raw_score: this.currentScore
       };
       this.$store.dispatch('setScore', payload);
       var saveScoreBtn = $event.target;
@@ -2990,6 +3053,15 @@ __webpack_require__.r(__webpack_exports__);
       if (newScore >= this.min && newScore <= this.max) {
         this.currentScore = newScore;
       }
+    },
+    keepScore: function keepScore(e) {
+      if (e.which === 38 || e.which === 40) {
+        e.preventDefault();
+      }
+    },
+    checkFractional: function checkFractional(e) {
+      var val = +e.target.value;
+      return this.increment == 1 ? !(Number(val) === val && val % 1 !== 0) : true;
     },
     getSavingStatus: function getSavingStatus(property) {
       return this.$store.getters.getSavingStatus(property);
@@ -27292,21 +27364,6 @@ var render = function() {
                 !$event.type.indexOf("key") &&
                 _vm._k(
                   $event.keyCode,
-                  "digit5",
-                  undefined,
-                  $event.key,
-                  undefined
-                )
-              ) {
-                return null
-              }
-              return _vm.writeScore(5)
-            },
-            function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k(
-                  $event.keyCode,
                   "digit6",
                   undefined,
                   $event.key,
@@ -27376,39 +27433,6 @@ var render = function() {
                 return null
               }
               return _vm.writeScore(10)
-            },
-            function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k($event.keyCode, "+", undefined, $event.key, undefined)
-              ) {
-                return null
-              }
-              return _vm.incrementScore($event)
-            },
-            function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k(
-                  $event.keyCode,
-                  "period",
-                  undefined,
-                  $event.key,
-                  undefined
-                )
-              ) {
-                return null
-              }
-              return _vm.incrementScore($event)
-            },
-            function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k($event.keyCode, "-", undefined, $event.key, undefined)
-              ) {
-                return null
-              }
-              return _vm.decrementScore($event)
             }
           ]
         }
@@ -28138,45 +28162,61 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      { staticClass: "score-container", class: _vm.displayType },
-      [
-        _c("ScrollPicker", {
-          attrs: { options: _vm.range },
-          model: {
-            value: _vm.selectedScore,
-            callback: function($$v) {
-              _vm.selectedScore = $$v
-            },
-            expression: "selectedScore"
-          }
-        }),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn",
-            on: {
-              click: function($event) {
-                return _vm.saveNewScore($event)
-              }
+    _c("div", { staticClass: "score-container", class: _vm.displayType }, [
+      _c("br"),
+      _vm._v(" "),
+      _c("p", { staticClass: "mt-4" }, [_vm._v("Enter score from 0-10")]),
+      _vm._v(" "),
+      this.increment == 1
+        ? _c("span", { staticClass: "text-danger" }, [
+            _vm._v("Half point numbers not allowed")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form-control",
+        staticStyle: { width: "200px", margin: "auto" },
+        attrs: {
+          type: "number",
+          name: "score",
+          id: "score",
+          step: this.increment == 1 ? 1 : 0.5,
+          min: _vm.min,
+          max: _vm.inputMaxValue
+        },
+        domProps: { value: _vm.currentScore },
+        on: {
+          keydown: function($event) {
+            return _vm.keepScore($event)
+          },
+          input: _vm.onInput
+        }
+      }),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn",
+          on: {
+            click: function($event) {
+              return _vm.saveNewScore($event)
             }
-          },
-          [_vm._v("Save")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn",
-            on: { click: _vm.activateChoirCriterionCommentModal }
-          },
-          [_vm._v("Comment")]
-        )
-      ],
-      1
-    )
+          }
+        },
+        [_vm._v("Save")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn",
+          on: { click: _vm.activateChoirCriterionCommentModal }
+        },
+        [_vm._v("Comment")]
+      )
+    ])
   ])
 }
 var staticRenderFns = []
