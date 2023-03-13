@@ -2905,6 +2905,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -2983,8 +2984,13 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     onInput: function onInput(e) {
       if (e.data === '+') {
-        if (this.currentScore === this.inputMaxValue) {
-          e.target.value = this.inputMaxValue;
+        if (this.currentScore === this.max) {
+          e.target.value = this.max;
+          var errText = document.getElementById('maxNumError');
+          errText.innerHTML = "Max number for this criterion is: ".concat(this.max);
+          setTimeout(function () {
+            return errText.innerHTML = '';
+          }, 3000);
           return;
         }
 
@@ -2997,8 +3003,14 @@ __webpack_require__.r(__webpack_exports__);
 
         this.down();
       } else {
-        if (e.target.value > this.inputMaxValue) {
-          e.target.value = this.inputMaxValue;
+        if (e.target.value > this.max) {
+          e.target.value = this.max;
+          var errText = document.getElementById('maxNumError');
+          errText.innerHTML = "Max number for this criterion is: ".concat(this.max);
+          setTimeout(function () {
+            return errText.innerHTML = '';
+          }, 3000);
+          this.currentScore = +e.target.value;
           return;
         }
 
@@ -28173,6 +28185,8 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
+      _c("p", { staticClass: "text-danger", attrs: { id: "maxNumError" } }),
+      _vm._v(" "),
       _c("input", {
         staticClass: "form-control",
         staticStyle: { width: "200px", margin: "auto" },
@@ -28182,7 +28196,7 @@ var render = function() {
           id: "score",
           step: this.increment == 1 ? 1 : 0.5,
           min: _vm.min,
-          max: _vm.inputMaxValue
+          max: this.max
         },
         domProps: { value: _vm.currentScore },
         on: {

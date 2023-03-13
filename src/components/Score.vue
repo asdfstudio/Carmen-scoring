@@ -39,6 +39,7 @@
       <br>
       <p class="mt-4">Enter score from 0-10</p>
       <span v-if="this.increment == 1" class="text-danger">Half point numbers not allowed</span>
+      <p id="maxNumError" class="text-danger"></p>
       <input
         type="number"
         name="score"
@@ -50,7 +51,7 @@
         @input="onInput"
         :step="this.increment == 1 ? 1 : 0.5"
         :min="min"
-        :max="inputMaxValue">
+        :max="this.max">
       <br>
       <button class="btn" @click="saveNewScore($event)">Save</button>
       <button class="btn" @click="activateChoirCriterionCommentModal">Comment</button>
@@ -136,8 +137,11 @@ export default {
   methods: {
     onInput (e) {
       if (e.data === '+') {
-         if (this.currentScore === this.inputMaxValue) {
-          e.target.value = this.inputMaxValue;
+         if (this.currentScore === this.max) {
+          e.target.value = this.max
+          var errText = document.getElementById('maxNumError')
+          errText.innerHTML = `Max number for this criterion is: ${this.max}`
+          setTimeout(() => errText.innerHTML = '', 3000)
           return
         }
         this.up();
@@ -148,8 +152,12 @@ export default {
         }
         this.down();
       } else {
-        if (e.target.value > this.inputMaxValue) {
-          e.target.value = this.inputMaxValue;
+        if (e.target.value > this.max) {
+          e.target.value = this.max;
+          var errText = document.getElementById('maxNumError')
+          errText.innerHTML = `Max number for this criterion is: ${this.max}`
+          setTimeout(() => errText.innerHTML = '', 3000)
+          this.currentScore = +e.target.value
           return
         }
          if (e.target.value < this.min) {
