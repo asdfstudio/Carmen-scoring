@@ -1,16 +1,5 @@
 <template>
   <Modal>
-    <GlobalEvents
-      @keyup.digit1="writeScore(1)"
-      @keyup.digit2="writeScore(2)"
-      @keyup.digit3="writeScore(3)"
-      @keyup.digit4="writeScore(4)"
-      @keyup.digit6="writeScore(6)"
-      @keyup.digit7="writeScore(7)"
-      @keyup.digit8="writeScore(8)"
-      @keyup.digit9="writeScore(9)"
-      @keyup.digit0="writeScore(10)"
-    />
     <ModalBody>
       <Score
         ref="score"

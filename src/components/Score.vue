@@ -167,8 +167,34 @@ export default {
         if (this.checkFractional(e)) {
           if (+e.target.value % 1 != 0) {
             var text = e.target.value
+
+            //TODO refactor this includes() checkings
+            this.currentScore = text.includes('.1') ? +text.slice(0, -1) : +e.target.value
+            e.target.value = text.includes('.1') ? +text.slice(0, -1) : +e.target.value
+
+            this.currentScore = text.includes('.2') ? +text.slice(0, -1) : +e.target.value
+            e.target.value = text.includes('.2') ? +text.slice(0, -1) : +e.target.value
+
+            this.currentScore = text.includes('.3') ? +text.slice(0, -1) : +e.target.value
+            e.target.value = text.includes('.3') ? +text.slice(0, -1) : +e.target.value
+
+            this.currentScore = text.includes('.4') ? +text.slice(0, -1) : +e.target.value
+            e.target.value = text.includes('.4') ? +text.slice(0, -1) : +e.target.value
+
             this.currentScore = text.includes('.55') ? +text.slice(0, -1) : +e.target.value
             e.target.value = text.includes('.55') ? +text.slice(0, -1) : +e.target.value
+
+            this.currentScore = text.includes('.6') ? +text.slice(0, -1) : +e.target.value
+            e.target.value = text.includes('.6') ? +text.slice(0, -1) : +e.target.value
+
+            this.currentScore = text.includes('.7') ? +text.slice(0, -1) : +e.target.value
+            e.target.value = text.includes('.7') ? +text.slice(0, -1) : +e.target.value
+
+            this.currentScore = text.includes('.8') ? +text.slice(0, -1) : +e.target.value
+            e.target.value = text.includes('.8') ? +text.slice(0, -1) : +e.target.value
+
+            this.currentScore = text.includes('.9') ? +text.slice(0, -1) : +e.target.value
+            e.target.value = text.includes('.9') ? +text.slice(0, -1) : +e.target.value
           }
           this.currentScore = +e.target.value
         } else {

@@ -2088,17 +2088,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -3021,9 +3010,26 @@ __webpack_require__.r(__webpack_exports__);
 
         if (this.checkFractional(e)) {
           if (+e.target.value % 1 != 0) {
-            var text = e.target.value;
+            var text = e.target.value; //TODO refactor this includes() checkings
+
+            this.currentScore = text.includes('.1') ? +text.slice(0, -1) : +e.target.value;
+            e.target.value = text.includes('.1') ? +text.slice(0, -1) : +e.target.value;
+            this.currentScore = text.includes('.2') ? +text.slice(0, -1) : +e.target.value;
+            e.target.value = text.includes('.2') ? +text.slice(0, -1) : +e.target.value;
+            this.currentScore = text.includes('.3') ? +text.slice(0, -1) : +e.target.value;
+            e.target.value = text.includes('.3') ? +text.slice(0, -1) : +e.target.value;
+            this.currentScore = text.includes('.4') ? +text.slice(0, -1) : +e.target.value;
+            e.target.value = text.includes('.4') ? +text.slice(0, -1) : +e.target.value;
             this.currentScore = text.includes('.55') ? +text.slice(0, -1) : +e.target.value;
             e.target.value = text.includes('.55') ? +text.slice(0, -1) : +e.target.value;
+            this.currentScore = text.includes('.6') ? +text.slice(0, -1) : +e.target.value;
+            e.target.value = text.includes('.6') ? +text.slice(0, -1) : +e.target.value;
+            this.currentScore = text.includes('.7') ? +text.slice(0, -1) : +e.target.value;
+            e.target.value = text.includes('.7') ? +text.slice(0, -1) : +e.target.value;
+            this.currentScore = text.includes('.8') ? +text.slice(0, -1) : +e.target.value;
+            e.target.value = text.includes('.8') ? +text.slice(0, -1) : +e.target.value;
+            this.currentScore = text.includes('.9') ? +text.slice(0, -1) : +e.target.value;
+            e.target.value = text.includes('.9') ? +text.slice(0, -1) : +e.target.value;
           }
 
           this.currentScore = +e.target.value;
@@ -27308,148 +27314,6 @@ var render = function() {
   return _c(
     "Modal",
     [
-      _c("GlobalEvents", {
-        on: {
-          keyup: [
-            function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k(
-                  $event.keyCode,
-                  "digit1",
-                  undefined,
-                  $event.key,
-                  undefined
-                )
-              ) {
-                return null
-              }
-              return _vm.writeScore(1)
-            },
-            function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k(
-                  $event.keyCode,
-                  "digit2",
-                  undefined,
-                  $event.key,
-                  undefined
-                )
-              ) {
-                return null
-              }
-              return _vm.writeScore(2)
-            },
-            function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k(
-                  $event.keyCode,
-                  "digit3",
-                  undefined,
-                  $event.key,
-                  undefined
-                )
-              ) {
-                return null
-              }
-              return _vm.writeScore(3)
-            },
-            function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k(
-                  $event.keyCode,
-                  "digit4",
-                  undefined,
-                  $event.key,
-                  undefined
-                )
-              ) {
-                return null
-              }
-              return _vm.writeScore(4)
-            },
-            function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k(
-                  $event.keyCode,
-                  "digit6",
-                  undefined,
-                  $event.key,
-                  undefined
-                )
-              ) {
-                return null
-              }
-              return _vm.writeScore(6)
-            },
-            function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k(
-                  $event.keyCode,
-                  "digit7",
-                  undefined,
-                  $event.key,
-                  undefined
-                )
-              ) {
-                return null
-              }
-              return _vm.writeScore(7)
-            },
-            function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k(
-                  $event.keyCode,
-                  "digit8",
-                  undefined,
-                  $event.key,
-                  undefined
-                )
-              ) {
-                return null
-              }
-              return _vm.writeScore(8)
-            },
-            function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k(
-                  $event.keyCode,
-                  "digit9",
-                  undefined,
-                  $event.key,
-                  undefined
-                )
-              ) {
-                return null
-              }
-              return _vm.writeScore(9)
-            },
-            function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k(
-                  $event.keyCode,
-                  "digit0",
-                  undefined,
-                  $event.key,
-                  undefined
-                )
-              ) {
-                return null
-              }
-              return _vm.writeScore(10)
-            }
-          ]
-        }
-      }),
-      _vm._v(" "),
       _c(
         "ModalBody",
         [
