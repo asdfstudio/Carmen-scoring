@@ -37,7 +37,7 @@
       </div>-->
       <!-- <ScrollPicker v-model="selectedScore" :options="range"/> -->
       <br>
-      <p class="mt-4">Enter score from 0-10</p>
+      <p class="mt-4">Enter score from 0-{{this.max}}</p>
       <span v-if="this.increment == 1" class="text-danger">Half point numbers not allowed</span>
       <p id="maxNumError" class="text-danger"></p>
       <input

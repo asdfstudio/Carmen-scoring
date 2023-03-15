@@ -28177,7 +28177,9 @@ var render = function() {
     _c("div", { staticClass: "score-container", class: _vm.displayType }, [
       _c("br"),
       _vm._v(" "),
-      _c("p", { staticClass: "mt-4" }, [_vm._v("Enter score from 0-10")]),
+      _c("p", { staticClass: "mt-4" }, [
+        _vm._v("Enter score from 0-" + _vm._s(this.max))
+      ]),
       _vm._v(" "),
       this.increment == 1
         ? _c("span", { staticClass: "text-danger" }, [
