@@ -31,7 +31,7 @@
                   <li>
                     ID: {{ $school->id }}<br>
                     Name: {{ $school->name }}<br>
-                    Choirs:
+                    Ensembles:
                       @foreach($school->choirs as $i => $choir)
                         @if($i < count($school->choirs)-1)
                           {{ $choir->id }}, 

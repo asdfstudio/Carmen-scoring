@@ -423,7 +423,7 @@ class UserPersonForm extends Form
         'value' => 'Roles',
         'label_show' => false,
         'help_block' => [
-          'text' => 'Judge status for users can be enabled or disabled below. Director and choreographer status can only be changed by <a href="' . route('admin.choir.index') . '">editing a choir</a> and adding this person to it.'
+          'text' => 'Judge status for users can be enabled or disabled below. Director and choreographer status can only be changed by <a href="' . route('admin.choir.index') . '">editing a ensemble</a> and adding this person to it.'
         ]
       ]);
 
@@ -478,7 +478,7 @@ class UserPersonForm extends Form
 
           $this->modify('is_director', 'static', [
             'help_block' => [
-              'text' => 'Choirs: '.$choirs_directed_list,
+              'text' => 'Ensembles: '.$choirs_directed_list,
               'attr' => ['class' => 'help-block indented']
             ]
           ]);
@@ -507,7 +507,7 @@ class UserPersonForm extends Form
 
           $this->modify('is_choreographer', 'static', [
             'help_block' => [
-              'text' => 'Choirs: '.$choirs_choreographed_list,
+              'text' => 'Ensembles: '.$choirs_choreographed_list,
               'attr' => ['class' => 'help-block indented']
             ]
           ]);

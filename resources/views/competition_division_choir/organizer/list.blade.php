@@ -1,5 +1,5 @@
 @if($choirs->isEmpty())
-	<p>There are no choirs.</p>
+	<p>There are no ensembles.</p>
 @endif
 
 @if(!$choirs->isEmpty())

@@ -4,7 +4,7 @@
             <a href="#scoring" class="active tab-link" data-tab-id="scoring">Settings</a>
         </li>
         <li>
-            <a href="#choirs" class="tab-link" data-tab-id="choirs">Choirs</a>
+            <a href="#choirs" class="tab-link" data-tab-id="choirs">Ensembles</a>
         </li>
 
         <li>

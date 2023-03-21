@@ -14,7 +14,7 @@
     </div>
 
     <div data-tab-id="choirs" class="tab-content col-xs-12 col-sm-12">
-      <h2>Choirs</h2>
+      <h2>Ensembles</h2>
       @include('competition_division_choir.judge.list',['choirs' => $division->choirs])
     </div>
 

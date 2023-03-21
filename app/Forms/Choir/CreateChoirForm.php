@@ -34,7 +34,7 @@ class CreateChoirForm extends Form
 
         $this->add('heading', 'static', [
           'tag' => 'h2',
-          'value' => 'Choir',
+          'value' => 'Ensemble',
           'label_show' => false,
           'attr' => ['class' => 'new_choir_container text-left']
         ]);
@@ -43,7 +43,7 @@ class CreateChoirForm extends Form
         $this->add('name','text', [
           'rules' => '',
           'wrapper' => ['class' => 'new_choir_container form-group text-left'],
-          'label' => 'Choir Name',
+          'label' => 'Ensemble Name',
           'rules' => ['required_without:choir_id']
         ]);
 
@@ -83,7 +83,7 @@ class CreateChoirForm extends Form
           'class' => $this->formBuilder->create('Director\DirectorForm'),
           'wrapper' => ['class' => 'new_choir_container'],
           'label_show' => false,
-          'label' => 'Choir Director'
+          'label' => 'Ensemble Director'
         ]);
 
         $this->add('receives_rankings', 'checkbox', [
@@ -100,7 +100,7 @@ class CreateChoirForm extends Form
 
         // Submit
         $this->add('submit', 'submit', [
-          'label' => 'Save Choir',
+          'label' => 'Save Ensemble',
           'value' => 'submit',
           'attr' => ['class' => 'btn btn-primary', 'name' => 'submit']
         ]);

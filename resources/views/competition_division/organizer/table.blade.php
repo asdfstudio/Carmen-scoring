@@ -8,7 +8,7 @@
                 <th>Edit</th>
                 <th>Status</th>
                 <th>Round</th>
-                <th>Choirs</th>
+                <th>Ensembles</th>
                 <th>Penalties</th>
                 <th>Awards</th>
             </tr>

@@ -4,7 +4,7 @@
     <h1>{{ $choir->full_name }}</h1>
 
     <ul class="actions-group">
-        <li>{{ link_to_route('admin.choir.index','Back to All Choirs', [], ['class' => 'action']) }}</li>
+        <li>{{ link_to_route('admin.choir.index','Back to All Ensembles', [], ['class' => 'action']) }}</li>
     </ul>
 @endsection
 

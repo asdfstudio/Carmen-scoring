@@ -1,10 +1,10 @@
 @extends('layouts.simple')
 
 @section('content-header')
-  <h1>Add a choir</h1>
+  <h1>Add an ensemble</h1>
 
   <ul class="actions-group">
-		<li>{{ link_to_route('organizer.competition.division.settings','Back to choirs',[$division->competition,$division], ['class' => 'action']) }}</li>
+		<li>{{ link_to_route('organizer.competition.division.settings','Back to ensembles',[$division->competition,$division], ['class' => 'action']) }}</li>
 	</ul>
 @endsection
 
@@ -45,10 +45,10 @@
         showNewSchoolForm: showNewSchoolForm
       };
     })();
-    
+
     jQuery(document).ready(function($){
       ChoirForm.init($('#create-choir-form'));
-      
+
       $('body').on('click', '.toggle-new-choir-container', function(e) {
         e.preventDefault();
         ChoirForm.showNewChoirForm();

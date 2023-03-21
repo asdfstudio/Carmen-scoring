@@ -26,5 +26,5 @@
 
   <h5>Raw Scores</h5>
 
-  <h5>Round + Choirs</h5>
+  <h5>Round + Ensembles</h5>
 @endsection

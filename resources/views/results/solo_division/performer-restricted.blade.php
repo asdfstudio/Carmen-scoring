@@ -15,7 +15,7 @@
   <div class="alert alert-info">
     <h3>Participants - Access Full Results</h3>
     <ol>
-      <li>Enter the email address on file for the director of your choir.</li>
+      <li>Enter the email address on file for the director of your ensemble.</li>
     </ol>
 
     {!! form($accessCodeForm) !!}

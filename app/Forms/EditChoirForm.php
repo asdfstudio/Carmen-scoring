@@ -23,6 +23,6 @@ class EditChoirForm extends Form
             'label' => 'Can receive ratings'
         ]);
 
-		$this->add('submit', 'submit', ['label' => 'Edit Choir', 'attr' => ['class' => 'btn btn-primary']]);
+		$this->add('submit', 'submit', ['label' => 'Edit ensemble', 'attr' => ['class' => 'btn btn-primary']]);
     }
 }

@@ -53,7 +53,7 @@
                 <div style="flex-grow: 1; margin: 20px; padding: 20px; background: #f7f7f7; border: 1px #c0c0c0 solid; border-radius: 8px;">
                   <label style="white-space: pre"><input type="checkbox" name="duplicates[{{ $key }}][]" value="{{ $school->id }}">  {{ $school->name }} (ID: {{ $school->id }})</label>
                   <ul>
-                    <li>Choirs: 
+                    <li>Ensembles: 
                       @foreach($school->choirs as $i => $choir)
                         @if($i < count($school->choirs)-1)
                           {{ $choir->id }}, 

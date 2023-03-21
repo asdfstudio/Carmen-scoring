@@ -16,8 +16,8 @@ class PrototypeForm extends Form
 
         $this->add('choir_id','entity', [
           'class' => 'App\Choir',
-          'empty_value' => 'Choose choir...',
-          'label' => 'Choose an Existing Choir',
+          'empty_value' => 'Choose ensemble...',
+          'label' => 'Choose an Existing Ensemble',
           'attr' => ['class' => 'choir_id'],
           'wrapper' => ['class' => 'existing_choir_container']
         ]);
@@ -25,7 +25,7 @@ class PrototypeForm extends Form
         $this->add('add_new_choir','static', [
           'tag' => 'a',
           'attr' => ['class' => 'toggle-new-choir-container btn btn-secondary'],
-          'value' => 'Create a new choir',
+          'value' => 'Create a new Ensemble',
           'label_show' => false
         ]);
 
@@ -33,7 +33,7 @@ class PrototypeForm extends Form
         $this->add('name','text', [
           'rules' => '',
           'wrapper' => ['class' => 'new_choir_container'],
-          'label' => 'Choir Name'
+          'label' => 'Ensemble Name'
         ]);
 
         $this->add('school_id','entity', [

@@ -516,7 +516,7 @@ $(document).ready(function() {
             }
             else {
               if(!(formDataObj[2] || {}).value) {
-                Swal.showValidationMessage('Request failed: Choir Name is required!')
+                Swal.showValidationMessage('Request failed: Ensemble Name is required!')
               }
               else if(!isClickedNewSchool && formData.includes('&school_id=&')) {
                 // check school choice,

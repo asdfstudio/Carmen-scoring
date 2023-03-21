@@ -4,7 +4,7 @@
 
 		{!! Breadcrumbs::render('admin.choir.edit', $choir) !!}
 
-		<h1>Edit choir</h1>
+		<h1>Edit ensemble</h1>
 
 		{!! form($form) !!}
 

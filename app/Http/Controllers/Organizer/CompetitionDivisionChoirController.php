@@ -55,7 +55,7 @@ class CompetitionDivisionChoirController extends Controller
 					//'url' => route('organizer.competition.division.choir.destroy',[$division->competition,$division,$judge])
 				]);
 
-        $deleteForm->modify('submit','submit',['label' => 'Remove Choir']);
+        $deleteForm->modify('submit','submit',['label' => 'Remove Ensemble']);
 
 				return view('competition_division_choir.organizer.index', compact('division', 'deleteForm'));
     }
@@ -271,7 +271,7 @@ class CompetitionDivisionChoirController extends Controller
 		      if ($choir) {
             $existing_choir = $division->round->choirs->where('id', $choir->id)->pluck('id');
             if($existing_choir->count() > 0) {
-              $warning_message = "The '$choir->name' choir already belongs to this division or round.";
+              $warning_message = "The '$choir->name' ensemble already belongs to this division or round.";
               if($request->wantsJson()) {
                 $response = [];
                 $response['status'] = 'failed';

@@ -8,7 +8,7 @@
 <div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered">
   <tr>
-  	<th>Choir Name</th>
+  	<th>Ensemble Name</th>
     <th>School</th>
     <th>City</th>
     <th>State</th>

@@ -12,7 +12,7 @@
     This script converts the type (Judge, Director, Choreographer) of every person in
     the database to the new table structure. This will allow one person to have multiple
     types.  This script also looks up existing relationships between judges and divisions
-    and between directors/choreographers and choirs, and converts those associations into
+    and between directors/choreographers and ensembles, and converts those associations into
     the new table structure.
   </p>
 

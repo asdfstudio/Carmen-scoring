@@ -5,12 +5,12 @@
 @endsection
 
 @section('content-header')
-	<h1>Manage Choirs</h1>
+	<h1>Manage Ensembles</h1>
 
 	<ul class="actions-group">
 		@can('addChoir', $division)
 			<li>
-				{{ link_to_route('organizer.competition.division.choir.create','Add a choir',[$division->competition,$division], ['class' => 'action']) }}
+				{{ link_to_route('organizer.competition.division.choir.create','Add an ensemble',[$division->competition,$division], ['class' => 'action']) }}
 			</li>
 		@endcan
 	</ul>

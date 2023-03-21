@@ -60,7 +60,7 @@
                           </li>
                           <li>Phone: {{ $person->tel }}</li>
                           <li>Type(s): {{ implode(', ', $person->typeNames()) }}</li>
-                          <li>Choir(s): {{ implode(', ', $person->choirIds()) }}</li>
+                          <li>Ensemble(s): {{ implode(', ', $person->choirIds()) }}</li>
                           <li>Schools(s): {{ implode(', ', $person->schoolIds()) }}</li>
                         @if(isset($person->user))
                           <li>User Account:

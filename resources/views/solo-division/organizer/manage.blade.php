@@ -17,7 +17,7 @@
     {{ Form::open() }}
     <table class="table table-striped table-bordered">
       <tr>
-        <th>Choir</th>
+        <th>Ensemble</th>
         <th>Category</th>
         <th>Name</th>
       </tr>

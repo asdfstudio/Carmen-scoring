@@ -2,7 +2,7 @@
   <!-- Left Side Of Navbar -->
   <ul class="nav navbar-nav">
       <li><a href="{{ url('/admin/organization') }}">Organizations</a></li>
-      <li><a href="{{ url('/admin/choir') }}">Choirs</a></li>
+      <li><a href="{{ url('/admin/choir') }}">Ensembles</a></li>
       <li><a href="{{ url('/admin/school') }}">Schools</a></li>
       <li><a href="{{ url('/admin/competition') }}">Competitions</a></li>
       <li><a href="{{ url('/admin/judge') }}">Judges</a></li>

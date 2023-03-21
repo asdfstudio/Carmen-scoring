@@ -9,7 +9,7 @@
 @section('content')
   
   <p>
-    This script finds duplicate choirs based on name or school association. (Very similar names will be lumped together in case of typos.)
+    This script finds duplicate ensembles based on name or school association. (Very similar names will be lumped together in case of typos.)
     Then you can manually merge them if you confirm that they are the same school.
   </p>
   

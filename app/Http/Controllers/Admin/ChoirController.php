@@ -67,7 +67,7 @@ class ChoirController extends Controller
 				$choir = Choir::create($request->input());
 
 				// Set flash data and redirect
-				return redirect()->route('admin.choir.index')->with('success','Choir successfully created.');
+				return redirect()->route('admin.choir.index')->with('success','Ensemble successfully created.');
     }
 
     /**
@@ -138,7 +138,7 @@ class ChoirController extends Controller
 				// Set flash data
 
 				// Redirect
-				return redirect()->route('admin.choir.index')->with('success',"Choir $choir->name has been updated.");
+				return redirect()->route('admin.choir.index')->with('success',"Ensemble $choir->name has been updated.");
     }
 
     /**

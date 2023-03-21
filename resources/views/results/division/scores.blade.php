@@ -25,7 +25,7 @@
 	@if($show_links)
 		<div class="alert alert-info">
 			<h3>Participants, You can view full scores</h3>
-			<p>Click on the name of a <strong>choir</strong> or <strong>judge</strong> to view their score details.</p>
+			<p>Click on the name of a <strong>ensemble</strong> or <strong>judge</strong> to view their score details.</p>
 		</div>
 	@endif
 

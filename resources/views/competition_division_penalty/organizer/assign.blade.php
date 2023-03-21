@@ -16,7 +16,7 @@
 
 @section('content')
 
-    <h2>Choose a Choir</h2>
+    <h2>Choose an Ensemble</h2>
 
     <ul class="list-group">
       @foreach($division->choirs as $choir)

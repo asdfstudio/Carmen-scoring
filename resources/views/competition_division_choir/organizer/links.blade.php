@@ -1,6 +1,6 @@
 @if($choirs)
 
-  <h3>Choirs</h3>
+  <h3>Ensembles</h3>
 
   @foreach($choirs as $choir)
     <li>

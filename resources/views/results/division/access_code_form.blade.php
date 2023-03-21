@@ -7,7 +7,7 @@
   <p>There are two ways to access the full results:</p>
   <ol>
     <li>Enter the access code for this division that was provided by your competition.</li>
-    <li>Enter the email address on file for the director of your choir.</li>
+    <li>Enter the email address on file for the director of your ensemble.</li>
   </ol>
 
   {!! form($accessCodeForm) !!}

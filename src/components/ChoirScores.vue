@@ -1,7 +1,7 @@
 <template>
   <table class="choirs-scores">
     <tr class="table-header">
-      <th class="choir-column">Choir name</th>
+      <th class="choir-column">Ensemble name</th>
       <th class="score-column">Score</th>
     </tr>
     <ChoirScore

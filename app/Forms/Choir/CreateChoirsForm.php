@@ -23,6 +23,6 @@ class CreateChoirsForm extends Form
               ]
           ]);
 
-      $this->add('submit', 'submit', ['label' => 'Save Choirs', 'attr' => ['class' => 'btn btn-primary']]);
+      $this->add('submit', 'submit', ['label' => 'Save Ensembles', 'attr' => ['class' => 'btn btn-primary']]);
   }
 }

@@ -3,7 +3,7 @@
 <div class="table-wrapper-responsive">
   <table class="table scoreboard last-col-right">
     <tr>
-      <th>Choir</th>
+      <th>Ensemble</th>
       <th>My Raw Score</th>
 
       @if($division->round->captionWeighting->slug == '60-40')

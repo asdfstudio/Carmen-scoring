@@ -6,7 +6,7 @@
 
   <table>
     <tr>
-      <th>Choir</th>
+      <th>Ensemble</th>
       <th>Position</th>
     </tr>
     <tr>
@@ -22,9 +22,9 @@
 
   <table>
     <tr>
-      <th>Choir</th>
+      <th>Ensemble</th>
       <th>Position</th>
-      <th>Choir</th>
+      <th>Ensemble</th>
       <th>Position</th>
     </tr>
     <tr>

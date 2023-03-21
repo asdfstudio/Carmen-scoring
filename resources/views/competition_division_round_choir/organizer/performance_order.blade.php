@@ -1,7 +1,7 @@
 @extends('layouts.simple')
 
 @section('content-header')
-	<h1>Manage Choir Performance Order</h1>
+	<h1>Manage Ensemble Performance Order</h1>
 
 	<ul class="actions-group">
 		@can('create',['App\Round',$division])
@@ -17,7 +17,7 @@
 @section('content')
 
 	<div class="alert alert-info">
-		<p>Drag and drop the choirs to change the performance order.</p>
+		<p>Drag and drop the ensembles to change the performance order.</p>
 
 		<p>The top of the list is the first performer and bottom of list is the final performer.</p>
 	</div>

@@ -14,7 +14,7 @@
 		<h2>Set the performer's name</h2>
 
     <ul class="list-group">
-      <li class="list-group-item">School / Choir: {{ $performer->choir->full_name }}</li>
+      <li class="list-group-item">School / Ensemble: {{ $performer->choir->full_name }}</li>
     </ul>
     {!! form($form) !!}
 

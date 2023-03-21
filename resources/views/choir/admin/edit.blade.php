@@ -2,9 +2,9 @@
 
 
 @section('content-header')
-  <h1>Edit choir</h1>
+  <h1>Edit ensemble</h1>
 
-	{{ link_to_route('admin.choir.index', 'Back to choirs', [], ['class' => 'action'])}}
+	{{ link_to_route('admin.choir.index', 'Back to ensembles', [], ['class' => 'action'])}}
 @endsection
 
 @section('content')

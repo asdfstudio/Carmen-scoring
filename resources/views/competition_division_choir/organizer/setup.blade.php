@@ -6,7 +6,7 @@
     <div class="collection-container" data-prototype="{{ form_row($form->choirs->prototype()) }}">
       {!! form_row($form->choirs) !!}
     </div>
-    <button type="button" class="add-to-collection btn btn-secondary">Add choir</button>
+    <button type="button" class="add-to-collection btn btn-secondary">Add ensemble</button>
   {!! form_end($form) !!}
 
 

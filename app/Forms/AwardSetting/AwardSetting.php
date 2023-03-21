@@ -29,7 +29,7 @@ class AwardSetting extends Form
       $this->add('award_count','number', [
         'rules' => 'required',
         'help_block' => [
-          'text' => 'How many choirs will receive awards?'
+          'text' => 'How many ensembles will receive awards?'
         ],
         'default_value' => $awardCount,
         'attr' => ['min' => 0]

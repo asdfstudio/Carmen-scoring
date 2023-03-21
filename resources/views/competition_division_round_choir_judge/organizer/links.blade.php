@@ -19,10 +19,10 @@
 
 @if($choirs AND $judge)
 
-  <h3>Scores from {{ $judge->full_name }} By Choir</h3>
+  <h3>Scores from {{ $judge->full_name }} By Ensemble</h3>
 
   <ul class="list-group">
-    {{ link_to_route('organizer.competition.division.round.judge.show', 'All Choirs', [$division->competition_id,$division,$round,$judge],['class' => 'list-group-item'])}}
+    {{ link_to_route('organizer.competition.division.round.judge.show', 'All Ensembles', [$division->competition_id,$division,$round,$judge],['class' => 'list-group-item'])}}
     @foreach($choirs as $choir)
       <!--<li class="list-group-item">-->
         {{ link_to_route('organizer.competition.division.round.choir.judge.show', $choir->name, [$division->competition_id,$division,$round,$choir,$judge],['class' => 'list-group-item'])}}

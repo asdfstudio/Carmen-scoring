@@ -9,7 +9,7 @@
 
   <ul class="actions-group">
     <li>
-      {{ link_to_route('judge.round.scores.summary', 'All Choirs', [$competition, $division, $round], ['class' => 'action'])}}
+      {{ link_to_route('judge.round.scores.summary', 'All Ensembles', [$competition, $division, $round], ['class' => 'action'])}}
     </li>
   </ul>
 @endsection

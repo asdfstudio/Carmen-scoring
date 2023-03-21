@@ -14,9 +14,9 @@ class ChooseChoirForm extends Form
 
 				$this->add('choir_id','select', [
 					'choices' => $choirs->pluck('name','id')->toArray(),
-					'empty_value' => 'Choose choir...',
-					'label' => 'Choir'
+					'empty_value' => 'Choose ensemble...',
+					'label' => 'Ensemble'
 				]);
-				$this->add('submit', 'submit', ['label' => 'Add Choir', 'attr' => ['class' => 'btn btn-primary']]);
+				$this->add('submit', 'submit', ['label' => 'Add ensemble', 'attr' => ['class' => 'btn btn-primary']]);
     }
 }

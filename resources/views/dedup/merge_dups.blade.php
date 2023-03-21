@@ -11,7 +11,7 @@
   <p>
     This script checks for dubplicates in the 'people' table of the database and
     merges them into a single record for each person. Data such as their role as a
-    choir director, choir choreographer, and judge will be preserved.
+    ensemble director, ensemble choreographer, and judge will be preserved.
   </p>
 
   <p>It is safe to run this script more than once. It will NOT harm data that has already been merged.</p>

@@ -4,7 +4,7 @@
   <h1>{{ $choir->full_name }}</h1>
 
   <ul class="actions-group">
-		<li>{{ link_to_route('admin.choir.show','Back to Choir', [$choir], ['class' => 'action']) }}</li>
+		<li>{{ link_to_route('admin.choir.show','Back to Ensemble', [$choir], ['class' => 'action']) }}</li>
 	</ul>
 @endsection
 
@@ -14,7 +14,7 @@
 
   {!! form($form) !!}
 
-  <h2>Remove director from choir</h2>
+  <h2>Remove director from ensemble</h2>
 
   {!! form($deleteForm) !!}
 

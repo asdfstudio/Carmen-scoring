@@ -25,11 +25,11 @@
 					$selected = false;
 				}
 				@endphp
-				{{ Form::label('Choir') }}
+				{{ Form::label('Ensemble') }}
                 @if (isset($round))
-                {{ Form::select("awards[".$award->id."][choir_id]", $round->choirs->pluck('FullName', 'id'), $selected, ['placeholder' => 'Select Choir', 'class' => 'form-control']) }}
+                {{ Form::select("awards[".$award->id."][choir_id]", $round->choirs->pluck('FullName', 'id'), $selected, ['placeholder' => 'Select Ensemble', 'class' => 'form-control']) }}
                 @elseif (isset($division))
-				{{ Form::select("awards[".$award->id."][choir_id]", $division->choirs->pluck('FullName', 'id'), $selected, ['placeholder' => 'Select Choir', 'class' => 'form-control']) }}
+				{{ Form::select("awards[".$award->id."][choir_id]", $division->choirs->pluck('FullName', 'id'), $selected, ['placeholder' => 'Select Ensemble', 'class' => 'form-control']) }}
                 @endif
 			</div>
             @endif

@@ -74,7 +74,7 @@ class ChoirDirectorController extends Controller
     }
 
       // Set flash data and redirect
-      return redirect()->route('admin.choir.index')->with('success','Choir director successfully added.');
+      return redirect()->route('admin.choir.index')->with('success','Ensemble director successfully added.');
   }
 
   /**
@@ -139,7 +139,7 @@ class ChoirDirectorController extends Controller
     $director->save();
 
     // Set flash data and redirect
-    return redirect()->route('admin.choir.index')->with('success','Choir director successfully updated.');
+    return redirect()->route('admin.choir.index')->with('success','Ensemble director successfully updated.');
   }
 
   /**
@@ -155,6 +155,6 @@ class ChoirDirectorController extends Controller
     $choir->directors()->detach($director->id);
 
     // Set flash data and redirect
-    return redirect()->route('admin.choir.show', [$choir])->with('success','Choir director successfully removed.');
+    return redirect()->route('admin.choir.show', [$choir])->with('success','Ensemble director successfully removed.');
   }
 }

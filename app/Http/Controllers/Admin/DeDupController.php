@@ -219,7 +219,7 @@ class DeDupController extends Controller
 
             $info = new \stdClass();
 
-            $info->intro = $person->getFullNameAttribute().' (ID '.$person->id.') is a choir director.';
+            $info->intro = $person->getFullNameAttribute().' (ID '.$person->id.') is a ensemble director.';
 
             $info->run_messages = array();
 
@@ -251,10 +251,10 @@ class DeDupController extends Controller
                 }
 
                 if($choir->directors->contains('id', $person->id)){
-                  $info->run_messages[] = $prefix . 'Person '.$person->id.' is already assigned as a director of choir '.$choir->id.' in the new table structure.';
+                  $info->run_messages[] = $prefix . 'Person '.$person->id.' is already assigned as a director of ensemble '.$choir->id.' in the new table structure.';
                 } else {
-                  $info->run_messages[] = $prefix . 'Assigning person '.$person->id.' as a director of choir '.$choir->id.'.';
-                  $info->run_messages[] = $prefix . '$choir is set to the choir with ID '.$choir->id.'.';
+                  $info->run_messages[] = $prefix . 'Assigning person '.$person->id.' as a director of ensemble '.$choir->id.'.';
+                  $info->run_messages[] = $prefix . '$choir is set to the ensemble with ID '.$choir->id.'.';
                   $info->run_messages[] = $prefix . '<code>$choir->directors()->attach('.$person->id.')</code>';
                   if($run){
                     $choir->directors()->attach($person->id);
@@ -263,7 +263,7 @@ class DeDupController extends Controller
 
               } else {
 
-                $info->choir = 'Choir: None';
+                $info->choir = 'Ensemble: None';
                 $info->school = 'School: None';
 
               }
@@ -277,7 +277,7 @@ class DeDupController extends Controller
 
             $info = new \stdClass();
 
-            $info->intro = $person->getFullNameAttribute().' (ID '.$person->id.') is a choir choreographer.';
+            $info->intro = $person->getFullNameAttribute().' (ID '.$person->id.') is a ensemble choreographer.';
 
             $info->run_messages = array();
 
@@ -309,10 +309,10 @@ class DeDupController extends Controller
                 }
 
                 if($choir->choreographers->contains('id', $person->id)){
-                  $info->run_messages[] = $prefix . 'Person '.$person->id.' is already assigned as a choreographer of choir '.$choir->id.' in the new table structure.';
+                  $info->run_messages[] = $prefix . 'Person '.$person->id.' is already assigned as a choreographer of ensemble '.$choir->id.' in the new table structure.';
                 } else {
-                  $info->run_messages[] = $prefix . 'Assigning person '.$person->id.' as a choreographer of choir '.$choir->id.'.';
-                  $info->run_messages[] = $prefix . '$choir is set to the choir with ID '.$choir->id.'.';
+                  $info->run_messages[] = $prefix . 'Assigning person '.$person->id.' as a choreographer of ensemble '.$choir->id.'.';
+                  $info->run_messages[] = $prefix . '$choir is set to the ensemble with ID '.$choir->id.'.';
                   $info->run_messages[] = $prefix . '<code>$choir->choreographers()->attach('.$person->id.')</code>';
                   if($run){
                     $choir->choreographers()->attach($person->id);
@@ -321,7 +321,7 @@ class DeDupController extends Controller
 
               } else {
 
-                $info->choir = 'Choir: None';
+                $info->choir = 'Ensemble: None';
                 $info->school = 'School: None';
 
               }
@@ -674,7 +674,7 @@ class DeDupController extends Controller
             }
 
             if($info->choirs_directed){
-              $info->run_messages[] = $prefix . 'Syncing all choirs directed.';
+              $info->run_messages[] = $prefix . 'Syncing all ensembles directed.';
               $info->run_messages[] = $prefix . '<code>$person->director()->choirs()->sync(['.implode(', ', $info->choirs_directed).'])</code>';
               if($run){
                 $person->director()->choirs()->sync($info->choirs_directed);
@@ -682,7 +682,7 @@ class DeDupController extends Controller
             }
 
             if($info->choirs_choreographed){
-              $info->run_messages[] = $prefix . 'Syncing all choirs choreographed.';
+              $info->run_messages[] = $prefix . 'Syncing all ensembles choreographed.';
               $info->run_messages[] = $prefix . '<code>$person->choreographer()->choirs()->sync(['.implode(', ', $info->choirs_choreographed).'])</code>';
               if($run){
                 $person->choreographer()->choirs()->sync($info->choirs_choreographed);

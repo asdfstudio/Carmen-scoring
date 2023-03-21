@@ -3,7 +3,7 @@
 <div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered">
   <tr>
-  	<th>Choir</th>
+  	<th>Ensemble</th>
 
     @if(!$judges->isEmpty())
     	@foreach($judges as $judge)

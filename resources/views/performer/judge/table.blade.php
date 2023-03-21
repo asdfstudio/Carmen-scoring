@@ -2,7 +2,7 @@
 <table class="table table-striped table-bordered">
   <tr>
     <th>Category</th>
-    <th>Choir</th>
+    <th>Ensemble</th>
     <th>Performer</th>
     <th>Score</th>
     <th>Actions</th>

@@ -5,7 +5,7 @@
         <li>{{ link_to_route('organizer.competition.division.show', 'Back to the Division', [$division->competition, $division], ['class' => 'action']) }}
         </li>
     </ul>
-    <h1>Competition > Divisions > Choirs > {{ $choir->name }}</h1>
+    <h1>Competition > Divisions > Ensembles > {{ $choir->name }}</h1>
 
 
     @include('choir.partial.single')

@@ -85,7 +85,7 @@ class CompetitionDivisionRoundController extends Controller
             }])->find($round_id);
 
         if ($round->divisions->count() == 0) {
-            return redirect()->route('judge.competition.show', [$competition_id])->with('warning', 'No choirs have been designated for this round yet.');
+            return redirect()->route('judge.competition.show', [$competition_id])->with('warning', 'No ensembles have been designated for this round yet.');
         }
 
         $apiUrl = route('api.spreadsheet.show', [$round_id]);

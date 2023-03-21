@@ -144,7 +144,7 @@ class CompetitionDivisionRoundChoirController extends Controller
 
         return redirect()->route('organizer.competition.division.round.choir.show', [$competition_id, $division_id, $round, $choir])->with('success','Choir Penalties Assigned.');
       }
-      return redirect()->route('organizer.competition.division.penalty.index', [$competition_id, $division_id])->with('success','Choir Penalties Assigned.');
+      return redirect()->route('organizer.competition.division.penalty.index', [$competition_id, $division_id])->with('success','Ensemble Penalties Assigned.');
     }
 
 
@@ -181,6 +181,6 @@ class CompetitionDivisionRoundChoirController extends Controller
 
       $round->choirs()->sync($data);
 
-      return redirect()->route('organizer.competition.division.round.index', [$competition_id, $division_id, $round_id])->with('success','Choir performance order updated!');
+      return redirect()->route('organizer.competition.division.round.index', [$competition_id, $division_id, $round_id])->with('success','Ensemble performance order updated!');
     }
 }

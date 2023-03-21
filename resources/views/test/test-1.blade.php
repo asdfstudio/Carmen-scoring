@@ -81,7 +81,7 @@
 
     <div class="board-list choirs" id="choir-list" data-min-cards="0" data-max-cards="8">
       <div class="list-header">
-        <h3>Choirs</h3>
+        <h3>Ensembles</h3>
         <span class="card-count" data-resource-type="choir">{{ count($choirs) }}</span>
       </div>
 
@@ -93,7 +93,7 @@
         <label>Choir Name</label>
         <input type="text" name="name" placeholder="Enter choir name" value="@{{name}}" />
 
-        <button type="submit">Save Choir</button>
+        <button type="submit">Save Ensemble</button>
         <input type="submit" value="Save Choir" />
 
       </form>
@@ -105,8 +105,8 @@
           <div class="title">@{{name}}</div>
           <div class="subtitle">@{{id}}</div>
           <div class="actions">
-            <a class="edit-choir" href="#">Edit choir</a>
-            <a class="remove-choir" href="#">Remove choir</a>
+            <a class="edit-choir" href="#">Edit ensemble</a>
+            <a class="remove-choir" href="#">Remove ensemble</a>
           </div>
         </li>
 
@@ -121,7 +121,7 @@
           </li>
         @endforeach
       </ul>
-      <a class="add-resource" data-resource-type="choir" href="#">Add a choir resource...</a>
+      <a class="add-resource" data-resource-type="choir" href="#">Add a ensemble resource...</a>
     </div>
 
   </div>
