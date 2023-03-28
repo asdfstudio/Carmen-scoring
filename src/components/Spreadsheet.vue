@@ -119,11 +119,17 @@
             <span v-if="hasRatings">Rating</span>
             <div v-if="hasRatings">
               <div
-                v-for="ratingsRange in getRatingsRange"
-                :key="ratingsRange"
+                v-for="item in getRatingsRange"
+                :key="item.divisionName"
                 class="dg-mt-8"
                 >
-                {{ ratingsRange }}
+                <p class="dg-fw-bold">{{item.divisionName}}</p>
+                <div
+                 class="dg-mt-8"
+                 v-for="range in item.range"
+                 :key="range"
+                 >{{range}}
+                 </div>
               </div>
             </div>
           </th>
@@ -240,9 +246,10 @@ export default {
       return this.$store.state.divisions
     },
     getRatingsRange () {
-      let range = [];
+      let container = [];
       this.divisions.forEach((division, index) => {
-        range.push(division.name);
+        let range = [];
+
         if (division.rating_system) {
           division.rating_system.forEach((item, index) => {
             let currentMinScore = parseInt(item.min_score);
@@ -256,9 +263,10 @@ export default {
               range.push(`${item.name}: ${currentMinScore} - ${prevMinScore-0.01}`);
             }
           })
+          container.push({'divisionName': division.name, 'range': range});
         }
       })
-      return range;
+      return container;
     },
     recordings () {
       return this.$store.state.recordings

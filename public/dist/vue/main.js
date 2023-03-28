@@ -3360,6 +3360,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3421,9 +3427,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.$store.state.divisions;
     },
     getRatingsRange: function getRatingsRange() {
-      var range = [];
+      var container = [];
       this.divisions.forEach(function (division, index) {
-        range.push(division.name);
+        var range = [];
 
         if (division.rating_system) {
           division.rating_system.forEach(function (item, index) {
@@ -3437,9 +3443,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               range.push("".concat(item.name, ": ").concat(currentMinScore, " - ").concat(prevMinScore - 0.01));
             }
           });
+          container.push({
+            'divisionName': division.name,
+            'range': range
+          });
         }
       });
-      return range;
+      return container;
     },
     recordings: function recordings() {
       return this.$store.state.recordings;
@@ -3966,7 +3976,7 @@ exports = module.exports = __webpack_require__(/*! ../node_modules/css-loader/li
 
 
 // module
-exports.push([module.i, "\nbody {\n  background: #eee;\n  margin: 0;\n}\n#app {\n  font-family: \"Lato\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 14px;\n  line-height: 1.42;\n  text-align: center;\n  color: #333333;\n  padding: 0;\n  position: relative;\n  height: 100%;\n  overflow: hidden;\n  display: flex;\n  flex-direction: column;\n}\n#modal-cover {\n  background: #333;\n  opacity: 0.8;\n  position: fixed;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  z-index: 10;\n}\n#modal-cover.choirCriterion {\n  opacity: .25;\n}\n#modal-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  overflow: scroll;\n}\n.clickable {\n  /*border-bottom: 1px dotted;*/\n  cursor: pointer;\n}\n.saving,\n.saved,\n.errored {\n  position: relative;\n}\n.saving::after {\n  content: \"\";\n  display: block;\n  width: 100%;\n  height: 50%;\n  position: absolute;\n  top: 25%;\n  left: 25px;\n  background: url(/images/loading-puff.svg) center center no-repeat;\n  background-size: contain;\n}\n.saved::after {\n  content: \"\";\n  display: block;\n  width: 100%;\n  height: 40%;\n  position: absolute;\n  top: 30%;\n  left: 25px;\n  background: url(/images/check-solid.svg) center center no-repeat; /* Icon by FontAwesome: https://fontawesome.com/license */\n  background-size: contain;\n  -webkit-animation-name: fade;\n  -moz-animation-name: fade;\n  -webkit-animation: fade 3s ease-in forwards;\n          animation: fade 3s ease-in forwards;\n}\n.errored::after {\n  content: \"\";\n  display: block;\n  height: 24px;\n  width: 24px;\n  position: absolute;\n  top: 2px;\n  left: 50%;\n  margin-left: 13px;\n  background: url(/images/exclamation-circle-solid.svg) center center no-repeat; /* Icon by FontAwesome: https://fontawesome.com/license */\n  background-size: contain;\n}\n@-webkit-keyframes fade {\n25% {opacity:1;}\n75% {opacity:.5;}\n100% {opacity:0;}\n}\n@keyframes fade {\n25% {opacity:1;}\n75% {opacity:.5;}\n100% {opacity:0;}\n}\n", ""]);
+exports.push([module.i, "\nbody {\r\n  background: #eee;\r\n  margin: 0;\n}\n#app {\r\n  font-family: \"Lato\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;\r\n  font-size: 14px;\r\n  line-height: 1.42;\r\n  text-align: center;\r\n  color: #333333;\r\n  padding: 0;\r\n  position: relative;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  display: flex;\r\n  flex-direction: column;\n}\n#modal-cover {\r\n  background: #333;\r\n  opacity: 0.8;\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  bottom: 0;\r\n  right: 0;\r\n  z-index: 10;\n}\n#modal-cover.choirCriterion {\r\n  opacity: .25;\n}\n#modal-wrapper {\r\n  position: absolute;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: scroll;\n}\n.clickable {\r\n  /*border-bottom: 1px dotted;*/\r\n  cursor: pointer;\n}\n.saving,\r\n.saved,\r\n.errored {\r\n  position: relative;\n}\n.saving::after {\r\n  content: \"\";\r\n  display: block;\r\n  width: 100%;\r\n  height: 50%;\r\n  position: absolute;\r\n  top: 25%;\r\n  left: 25px;\r\n  background: url(/images/loading-puff.svg) center center no-repeat;\r\n  background-size: contain;\n}\n.saved::after {\r\n  content: \"\";\r\n  display: block;\r\n  width: 100%;\r\n  height: 40%;\r\n  position: absolute;\r\n  top: 30%;\r\n  left: 25px;\r\n  background: url(/images/check-solid.svg) center center no-repeat; /* Icon by FontAwesome: https://fontawesome.com/license */\r\n  background-size: contain;\r\n  -webkit-animation-name: fade;\r\n  -moz-animation-name: fade;\r\n  -webkit-animation: fade 3s ease-in forwards;\r\n          animation: fade 3s ease-in forwards;\n}\n.errored::after {\r\n  content: \"\";\r\n  display: block;\r\n  height: 24px;\r\n  width: 24px;\r\n  position: absolute;\r\n  top: 2px;\r\n  left: 50%;\r\n  margin-left: 13px;\r\n  background: url(/images/exclamation-circle-solid.svg) center center no-repeat; /* Icon by FontAwesome: https://fontawesome.com/license */\r\n  background-size: contain;\n}\n@-webkit-keyframes fade {\n25% {opacity:1;}\n75% {opacity:.5;}\n100% {opacity:0;}\n}\n@keyframes fade {\n25% {opacity:1;}\n75% {opacity:.5;}\n100% {opacity:0;}\n}\r\n", ""]);
 
 // exports
 
@@ -3985,7 +3995,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n#modal.choirCriterion[data-v-00a23d82] {\n  width: auto;\n  max-width: 100%;\n  background: #ffffff;\n  padding: 0;\n  margin: 0;\n  overflow: hidden;\n  border-radius: 0;\n  z-index: 100;\n  position: fixed;\n  top: auto;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  box-shadow: 0 0 50px rgba(0,0,0,.5);\n}\n", ""]);
+exports.push([module.i, "\n#modal.choirCriterion[data-v-00a23d82] {\r\n  width: auto;\r\n  max-width: 100%;\r\n  background: #ffffff;\r\n  padding: 0;\r\n  margin: 0;\r\n  overflow: hidden;\r\n  border-radius: 0;\r\n  z-index: 100;\r\n  position: fixed;\r\n  top: auto;\r\n  bottom: 0;\r\n  left: 0;\r\n  right: 0;\r\n  box-shadow: 0 0 50px rgba(0,0,0,.5);\n}\r\n", ""]);
 
 // exports
 
@@ -4004,7 +4014,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\ntable td[data-v-e1d9abbe] {\n  background: #F8F7F7;\n}\n.criterion-column[data-v-e1d9abbe] {\n  padding-right: 20px;\n  text-align: right;\n}\n.deactive-scoring-button[data-v-e1d9abbe] {\n  background: #fff;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n  color: #777;\n  padding: 4px 8px;\n  margin-top: 10px;\n}\n", ""]);
+exports.push([module.i, "\ntable td[data-v-e1d9abbe] {\r\n  background: #F8F7F7;\n}\n.criterion-column[data-v-e1d9abbe] {\r\n  padding-right: 20px;\r\n  text-align: right;\n}\n.deactive-scoring-button[data-v-e1d9abbe] {\r\n  background: #fff;\r\n  border: 1px solid #ccc;\r\n  border-radius: 5px;\r\n  color: #777;\r\n  padding: 4px 8px;\r\n  margin-top: 10px;\n}\r\n", ""]);
 
 // exports
 
@@ -4023,7 +4033,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n#modal[data-v-701ac82d] {\n  max-width: 100%;\n  background: #F0F0F0;\n  padding: 10px;\n  margin: 20px auto;\n  overflow: hidden;\n  border-radius: 16px;\n  z-index: 100;\n  position: absolute;\n  top: 20px;\n  left: 0;\n  right: 0;\n}\n@media (min-width: 750px) {\n#modal[data-v-701ac82d] {\n    width: 750px;\n}\n}\n", ""]);
+exports.push([module.i, "\n#modal[data-v-701ac82d] {\r\n  max-width: 100%;\r\n  background: #F0F0F0;\r\n  padding: 10px;\r\n  margin: 20px auto;\r\n  overflow: hidden;\r\n  border-radius: 16px;\r\n  z-index: 100;\r\n  position: absolute;\r\n  top: 20px;\r\n  left: 0;\r\n  right: 0;\n}\n@media (min-width: 750px) {\n#modal[data-v-701ac82d] {\r\n    width: 750px;\n}\n}\r\n", ""]);
 
 // exports
 
@@ -4042,7 +4052,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n#modal-body[data-v-676af26f] {\n  padding: 25px;\n  background: #fff;\n  margin: 0;\n  overflow-y: scroll;\n  max-height: 78vh;\n  border-bottom-left-radius: 8px;\n  border-bottom-right-radius: 8px;\n}\n", ""]);
+exports.push([module.i, "\n#modal-body[data-v-676af26f] {\r\n  padding: 25px;\r\n  background: #fff;\r\n  margin: 0;\r\n  overflow-y: scroll;\r\n  max-height: 78vh;\r\n  border-bottom-left-radius: 8px;\r\n  border-bottom-right-radius: 8px;\n}\r\n", ""]);
 
 // exports
 
@@ -4061,7 +4071,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n#modal-footer[data-v-55645eb0] {\n  padding: 10px;\n  min-height: 30px;\n  background: #F8F7F7;\n  color: #ABABAB;\n  border-bottom-left-radius: 8px;\n  border-bottom-right-radius: 8px;\n  margin-top: -8px;\n}\np[data-v-55645eb0] {\n  margin: 0\n}\n", ""]);
+exports.push([module.i, "\n#modal-footer[data-v-55645eb0] {\r\n  padding: 10px;\r\n  min-height: 30px;\r\n  background: #F8F7F7;\r\n  color: #ABABAB;\r\n  border-bottom-left-radius: 8px;\r\n  border-bottom-right-radius: 8px;\r\n  margin-top: -8px;\n}\np[data-v-55645eb0] {\r\n  margin: 0\n}\r\n", ""]);
 
 // exports
 
@@ -4080,7 +4090,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n#modal-header[data-v-12ff96cc] {\n  padding: 20px 0 3px;\n  min-height: 30px;\n  color: #707070\n}\nbutton[data-v-12ff96cc] {\n  background: #ccc;\n  padding: 5px 15px;\n  text-transform: lowercase;\n  border-radius: 20px;\n  border: 0;\n  position: absolute;\n  top: 15px;\n}\n.cancel-button[data-v-12ff96cc] {\n  left: 15px;\n}\n.save-button[data-v-12ff96cc] {\n  right: 15px;\n}\nh1[data-v-12ff96cc], h2[data-v-12ff96cc], h3[data-v-12ff96cc] {\n  margin-top: 0;\n  margin-bottom: 10px;\n  font-weight: normal;\n}\nh1[data-v-12ff96cc] {\n  font-size: 28px;\n  line-height: 28px;\n}\nh2[data-v-12ff96cc] {\n  font-size: 20px;\n  line-height: 20px;\n}\nh3[data-v-12ff96cc] {\n  font-size: 18px;\n  line-height: 18px;\n}\n", ""]);
+exports.push([module.i, "\n#modal-header[data-v-12ff96cc] {\r\n  padding: 20px 0 3px;\r\n  min-height: 30px;\r\n  color: #707070\n}\nbutton[data-v-12ff96cc] {\r\n  background: #ccc;\r\n  padding: 5px 15px;\r\n  text-transform: lowercase;\r\n  border-radius: 20px;\r\n  border: 0;\r\n  position: absolute;\r\n  top: 15px;\n}\n.cancel-button[data-v-12ff96cc] {\r\n  left: 15px;\n}\n.save-button[data-v-12ff96cc] {\r\n  right: 15px;\n}\nh1[data-v-12ff96cc], h2[data-v-12ff96cc], h3[data-v-12ff96cc] {\r\n  margin-top: 0;\r\n  margin-bottom: 10px;\r\n  font-weight: normal;\n}\nh1[data-v-12ff96cc] {\r\n  font-size: 28px;\r\n  line-height: 28px;\n}\nh2[data-v-12ff96cc] {\r\n  font-size: 20px;\r\n  line-height: 20px;\n}\nh3[data-v-12ff96cc] {\r\n  font-size: 18px;\r\n  line-height: 18px;\n}\r\n", ""]);
 
 // exports
 
@@ -4099,7 +4109,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n#modal-subheader[data-v-50eff260] {\n  padding: 10px;\n  min-height: 30px;\n  background: #F8F7F7;\n  color: #ABABAB;\n  border-top-left-radius: 8px;\n  border-top-right-radius: 8px;\n}\np[data-v-50eff260] {\n  margin: 0\n}\n", ""]);
+exports.push([module.i, "\n#modal-subheader[data-v-50eff260] {\r\n  padding: 10px;\r\n  min-height: 30px;\r\n  background: #F8F7F7;\r\n  color: #ABABAB;\r\n  border-top-left-radius: 8px;\r\n  border-top-right-radius: 8px;\n}\np[data-v-50eff260] {\r\n  margin: 0\n}\r\n", ""]);
 
 // exports
 
@@ -28529,17 +28539,24 @@ var render = function() {
                   _vm.hasRatings
                     ? _c(
                         "div",
-                        _vm._l(_vm.getRatingsRange, function(ratingsRange) {
+                        _vm._l(_vm.getRatingsRange, function(item) {
                           return _c(
                             "div",
-                            { key: ratingsRange, staticClass: "dg-mt-8" },
+                            { key: item.divisionName, staticClass: "dg-mt-8" },
                             [
-                              _vm._v(
-                                "\n              " +
-                                  _vm._s(ratingsRange) +
-                                  "\n            "
-                              )
-                            ]
+                              _c("p", { staticClass: "dg-fw-bold" }, [
+                                _vm._v(_vm._s(item.divisionName))
+                              ]),
+                              _vm._v(" "),
+                              _vm._l(item.range, function(range) {
+                                return _c(
+                                  "div",
+                                  { key: range, staticClass: "dg-mt-8" },
+                                  [_vm._v(_vm._s(range) + "\n               ")]
+                                )
+                              })
+                            ],
+                            2
                           )
                         }),
                         0
@@ -32652,8 +32669,8 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.mixin({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/work/Desktop/projects/cameron/src/main.js */"./src/main.js");
-module.exports = __webpack_require__(/*! /home/work/Desktop/projects/cameron/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\OpenServer\domains\cameron\src\main.js */"./src/main.js");
+module.exports = __webpack_require__(/*! C:\OpenServer\domains\cameron\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
