@@ -46,6 +46,10 @@ class CreateCommentsUrlIfNonexistent
         if (!$choir && !isset($criterion)) return;
 
         if (isset($criterion)) {
+            $existingComment = CommentUrl::where('choir_id', $comment->choir_id)->first();
+            if($existingComment) {
+                return;
+            }
             $commentUrl = CommentUrl::firstOrCreate([
                 'competition_id' => $competition->id,
                 'recipient_type' => 'App\Criterion',

@@ -64,7 +64,7 @@ class FeedbackController extends Controller
       // Get all the Division Recordings
       $recordings = Recording::where('choir_id', $comment_recipient_id)->whereIn('division_id', $competition->divisions->pluck('id'))->get();
 
-      $criterion_comments = Comment::with(['criterion'])->where('recipient_type', 'App\\Criterion')->get();
+      $criterion_comments = Comment::with(['criterion'])->where('recipient_type', 'App\\Criterion')->where('choir_id', $comment_recipient_id)->get();
 
       return view('feedback.show', ['comments' => $comments, 'criterion_comments' => $criterion_comments, 'recordings' => $recordings, 'competition' => $competition, 'divisions' => $divisions, 'choir' => $choir]);
     }
