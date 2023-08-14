@@ -8,7 +8,7 @@ class RatingsForm extends Form
 {
     public function buildForm()
     {
-      
+
       $this->add('name', 'text', [
         'label' => 'Rating Name',
         'wrapper' => [
@@ -16,21 +16,21 @@ class RatingsForm extends Form
         ]
       ]);
 
-      $this->add('min_score', 'number', [
+      $this->add('min_score', 'text', [
         'label' => 'Minimum % of Total Available Score',
-        'attr' => [
-          'min' => 0,
-          'max' => 100
-        ],
+//        'attr' => [
+//          'min' => 0,
+//          'max' => 100
+//        ],
         'wrapper' => [
           'class' => 'form-group col-md-5 col-xs-10'
         ]
       ]);
-      
+
       $this->add('remove_rating', 'button', [
         'wrapper' => ['class' => 'remove-rating form-group col-md-1 col-xs-2'],
         'label' => 'X'
       ]);
-      
+
     }
 }
