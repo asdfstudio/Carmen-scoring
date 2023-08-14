@@ -17,7 +17,7 @@ class RatingsForm extends Form
       ]);
 
       $this->add('min_score', 'text', [
-        'label' => 'Minimum % of Total Available Score',
+        'label' => 'Range of Points',
 //        'attr' => [
 //          'min' => 0,
 //          'max' => 100
