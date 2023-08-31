@@ -62,7 +62,7 @@ class PdfScoreController extends Controller
         ))->render();
         $fileName = "round_score_" . Carbon::now() .'.pdf';
          Browsershot::html($html)->format('letter')->setOption('landscape', true)
-             ->margins(10, 10, 10, 10)
+             ->noSandbox()
              ->emulateMedia("screen")
             ->save(storage_path('app/public').'/'.$fileName);
         return \Storage::disk('public')->download($fileName);

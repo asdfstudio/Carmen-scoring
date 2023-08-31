@@ -6,7 +6,7 @@
     body {
         font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-size: 14px;
-        margin: 0px;
+        margin: 20px;
     }
     table {
         border-spacing: 0;
@@ -47,7 +47,7 @@
     }
 
     .table > thead > tr > th, .table > thead > tr > td, .table > tbody > tr > th, .table > tbody > tr > td, .table > tfoot > tr > th, .table > tfoot > tr > td {
-        padding: 3px;
+        padding: 8px;
         line-height: 1.42857143;
         vertical-align: top;
         border-top: 1px solid #ddd;
@@ -195,6 +195,7 @@
         height: 120px;
     }
     .sideways-header a, .sideways-header span {
+        font-size: 12px;
         display: inline;
         transform: rotate(180deg);
         -ms-writing-mode: tb-rl;
@@ -203,5 +204,5 @@
 </style>
 <h1>{{$round->name}}</h1>
 @if($typePdf === 'condorcet')
-    @include('pdf_score.organizer.ranked_condorcet',['choirs' => $choirs, 'judges' => $judges])
+    @include('pdf_score.organizer.ranked_condorcet',['choirs' => $choirs, 'judges' => $judges, 'rankedScores' => $rankedScores])
 @endif

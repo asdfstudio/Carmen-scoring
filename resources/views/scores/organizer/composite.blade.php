@@ -16,12 +16,12 @@
 
     @php
       if($round->caption_weighting_id === 1){
-        $captionTotalRank = $rankedScores->total_weighted_rank($caption->id);
+        $captionTotalRank = $rankedScores ? $rankedScores->total_weighted_rank($caption->id) : 0;
       } else {
-        $captionTotalRank = $rankedScores->total_raw_rank($caption->id);
+        $captionTotalRank = $rankedScores ? $rankedScores->total_raw_rank($caption->id) : 0;
       }
-      $totalWeightedRank = $rankedScores->total_weighted_rank($caption->id);
-      $totalRawRank = $rankedScores->total_raw_rank($caption->id);
+      $totalWeightedRank = $rankedScores ? $rankedScores->total_weighted_rank($caption->id): 0;
+      $totalRawRank =$rankedScores ? $rankedScores->total_raw_rank($caption->id) : 0;
     @endphp
 
     <tr class="caption-header {{ $caption->background_css }}">
