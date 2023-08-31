@@ -48,8 +48,8 @@ class Caption extends Model
       $desiredOrder = $sheet->caption_sort_order;
 
       $ordered = $raw->sort(function($a, $b) use ($desiredOrder) {
-        $pos_a = array_search($a->id, $desiredOrder);
-        $pos_b = array_search($b->id, $desiredOrder);
+        $pos_a = array_search($a->id, $desiredOrder ?? []);
+        $pos_b = array_search($b->id, $desiredOrder ?? []);
         return $pos_a - $pos_b;
       });
 

@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "lodash": "^4.17.19",
+        "puppeteer": "^14.4.1",
         "sweetalert2": "^10.10.2",
         "vue": "^2.6.12",
         "vue-global-events": "^1.2.1",

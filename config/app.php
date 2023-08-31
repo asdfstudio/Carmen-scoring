@@ -158,8 +158,7 @@ return [
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
         Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        Kris\LaravelFormBuilder\FormBuilderServiceProvider::class,
-
+        Kris\LaravelFormBuilder\FormBuilderServiceProvider::class
     ],
 
     /*
@@ -213,7 +212,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Former' => Former\Facades\Former::class,
         'FormBuilder' => Kris\LaravelFormBuilder\Facades\FormBuilder::class,
-        'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class,
+        'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class
     ],
 
 ];
