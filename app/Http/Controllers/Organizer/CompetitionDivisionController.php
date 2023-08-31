@@ -173,7 +173,6 @@ class CompetitionDivisionController extends Controller
       $rawScores = $scoreboard->extendedRawScores;
       $weightedScores = $scoreboard->extendedRawScores;
       $rankedScores = $scoreboard->rankedScoresForCurrentMethod;
-
         $activateScoringForm = $formBuilder->create('Scoring\ActivateScoringForm', [
           'method' => 'POST',
           'url' => route('organizer.competition.division.scoring',[$competition_id,$division_id])
@@ -206,7 +205,6 @@ class CompetitionDivisionController extends Controller
         ]);
 
         $include_division_navigation_bar = TRUE;
-
         return view('competition_division.organizer.show', compact('include_division_navigation_bar', 'round', 'competition', 'division', 'judges', 'choirs',
             'captions', 'scoreboard', 'rawScores', 'weightedScores', 'rankedScores',
             'activateScoringForm', 'reactivateScoringForm', 'deactivateScoringForm', 'completeScoringForm', 'finalizeScoringForm'));

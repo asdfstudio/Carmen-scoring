@@ -64,9 +64,10 @@
             <td>
               @php
                 $rank = $rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('rank')->first();
+
                 $tied = $round->scoring_method_id !== 1 && !empty($rankedScores->rank($judge->id, $caption->id)->where('choir_id', $choir->id)->pluck('tied')->first()) ? 'tied' : '';
               @endphp
-              <span class="rank score {{ $tied }}">{{ $rank }}</span>
+              <span class="rank score {{ $tied }}">{{ $rank }} </span>
 
               @php $weighted = $weightedScores->where('choir_id', $choir->id)->where('judge_id', $judge->id)->where('criterion_caption_id', $caption->id)->sum('weightedScore');@endphp
               <span class="weighted score {{ $tied }}">{{ $weighted }}</span>

@@ -102,6 +102,10 @@
             <li class="list-group-item">
                 <a class="score-view-toggle active" href="#raw" data-score-view="raw">Raw</a>
             </li>
+{{--            <li class="list-group-item">--}}
+{{--                <a target="_blank"  href="{{route('organizer.pdf-score.download', ['competition_id' => $competition->id, 'division_id' => $division->id, 'type_pdf' => 'raw'])}}"--}}
+{{--               >Download Raw</a>--}}
+{{--            </li>--}}
         </ul>
     @endif
 
@@ -116,6 +120,16 @@
                 <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
             </li>
         </ul>
+{{--        <ul class="list-group horizontal">--}}
+{{--            <li class="list-group-item">--}}
+{{--                <a target="_blank" href="{{route('organizer.pdf-score.download', ['competition_id' => $competition->id, 'division_id' => $division->id, 'type_pdf' => 'weighted'])}}"--}}
+{{--                >Download Weighted pdf</a>--}}
+{{--            </li>--}}
+{{--            <li class="list-group-item">--}}
+{{--                <a target="_blank" href="{{route('organizer.pdf-score.download', ['competition_id' => $competition->id, 'division_id' => $division->id, 'type_pdf' => 'raw'])}}"--}}
+{{--                >Download Raw</a>--}}
+{{--            </li>--}}
+{{--        </ul>--}}
     @endif
 
     {{-- Average Scoring --}}
@@ -125,6 +139,12 @@
                 <a class="score-view-toggle active" href="#average" data-score-view="average">Average</a>
             </li>
         </ul>
+{{--        <ul class="list-group horizontal">--}}
+{{--            <li class="list-group-item">--}}
+{{--                <a target="_blank"  href="{{route('organizer.pdf-score.download', ['competition_id' => $competition->id, 'division_id' => $division->id, 'type_pdf' => 'average'])}}"--}}
+{{--                >Download Average</a>--}}
+{{--            </li>--}}
+{{--        </ul>--}}
     @endif
 
     {{-- Ranked Scoring, 50/50 --}}
@@ -143,6 +163,23 @@
                 <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
             </li>
         </ul>
+{{--        <ul class="list-group horizontal">--}}
+{{--            <li class="list-group-item">--}}
+{{--                <a target="_blank"  href="{{route('organizer.pdf-score.download', ['competition_id' => $competition->id, 'division_id' => $division->id, 'type_pdf' => $rankings_class])}}"--}}
+{{--                >Download {{$rankings_tab_name}}</a>--}}
+{{--            </li>--}}
+{{--            @if ($show_borda)--}}
+{{--                <li class="list-group-item">--}}
+{{--                    <a  target="_blank" href="{{route('organizer.pdf-score.download', ['competition_id' => $competition->id, 'division_id' => $division->id, 'type_pdf' => 'rank'])}}"--}}
+{{--                    >Download Borda Count</a>--}}
+{{--                </li>--}}
+{{--            @endif--}}
+
+{{--            <li class="list-group-item">--}}
+{{--                <a target="_blank" href="{{route('organizer.pdf-score.download', ['competition_id' => $competition->id, 'division_id' => $division->id, 'type_pdf' => 'raw'])}}"--}}
+{{--                >Download Raw</a>--}}
+{{--            </li>--}}
+{{--        </ul>--}}
     @endif
 
     {{-- Ranked Scoring, 60/40 --}}
@@ -165,6 +202,26 @@
                 <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
             </li>
         </ul>
+{{--        <ul class="list-group horizontal">--}}
+{{--            <li class="list-group-item">--}}
+{{--                <a target="_blank"  href="{{route('organizer.pdf-score.download', ['competition_id' => $competition->id, 'division_id' => $division->id, 'type_pdf' => $rankings_class])}}"--}}
+{{--                >Download {{$rankings_tab_name}}</a>--}}
+{{--            </li>--}}
+{{--            @if ($show_borda)--}}
+{{--                <li class="list-group-item">--}}
+{{--                    <a  target="_blank" href="{{route('organizer.pdf-score.download', ['competition_id' => $competition->id, 'division_id' => $division->id, 'type_pdf' => 'rank'])}}"--}}
+{{--                    >Download Borda Count</a>--}}
+{{--                </li>--}}
+{{--            @endif--}}
+{{--            <li class="list-group-item">--}}
+{{--                <a target="_blank"  href="{{route('organizer.pdf-score.download', ['competition_id' => $competition->id, 'division_id' => $division->id, 'type_pdf' => 'weighted'])}}"--}}
+{{--                >Download Weighted ({{ $division->round->captionWeighting->name }})</a>--}}
+{{--            </li>--}}
+{{--            <li class="list-group-item">--}}
+{{--                <a target="_blank" href="{{route('organizer.pdf-score.download', ['competition_id' => $competition->id, 'division_id' => $division->id, 'type_pdf' => 'raw'])}}"--}}
+{{--                >Download Raw</a>--}}
+{{--            </li>--}}
+{{--        </ul>--}}
     @endif
 
     @if($rawScores->count() === 0)

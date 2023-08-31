@@ -30,7 +30,12 @@ Route::group([
   'namespace' => 'Organizer'
   ], function() {
 
-
+  Route::get('download-pdf-score', [
+      'as' => 'pdf-score.download', 'uses' => 'PdfScoreController@download'
+  ]);
+  Route::get('pdf-score/round', [
+        'as' => 'pdf-score.round', 'uses' => 'PdfScoreController@downloadForRound'
+    ]);
   Route::resource('user', 'UserController');
 
   Route::post('user/get-new-username', [
