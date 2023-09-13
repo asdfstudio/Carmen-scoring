@@ -43,6 +43,12 @@
         <a class="score-view-toggle active" href="#raw" data-score-view="raw">Raw</a>
       </li>
     </ul>
+    <ul class="list-group horizontal">
+        <li class="list-group-item">
+            <a target="_blank"  href="{{route('organizer.pdf-score.round', ['competition_id' => $competition->id, 'round_id' => $round->id, 'type_pdf' => 'raw'])}}"
+            >Download Raw</a>
+        </li>
+    </ul>
   @endif
 
   {{-- Raw Scoring, 60/40 --}}
@@ -56,6 +62,17 @@
         <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
       </li>
     </ul>
+    <ul class="list-group horizontal">
+        <li class="list-group-item">
+            <a target="_blank"  href="{{route('organizer.pdf-score.round', ['competition_id' => $competition->id, 'round_id' => $round->id, 'type_pdf' => 'weighted'])}}"
+            >Download Weighted</a>
+        </li>
+        <li class="list-group-item">
+            <a target="_blank"  href="{{route('organizer.pdf-score.round', ['competition_id' => $competition->id, 'round_id' => $round->id, 'type_pdf' => 'raw'])}}"
+            >Download Raw</a>
+        </li>
+    </ul>
+
   @endif
 
   {{-- Average Scoring --}}
@@ -64,6 +81,12 @@
       <li class="list-group-item">
         <a class="score-view-toggle active" href="#average" data-score-view="average">Average</a>
       </li>
+    </ul>
+    <ul class="list-group horizontal">
+        <li class="list-group-item">
+            <a target="_blank"  href="{{route('organizer.pdf-score.round', ['competition_id' => $competition->id, 'round_id' => $round->id, 'type_pdf' => 'average'])}}"
+            >Download Average</a>
+        </li>
     </ul>
   @endif
 
@@ -83,14 +106,22 @@
         <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
       </li>
     </ul>
-    @if($rankings_tab_name === 'Condorcet')
         <ul class="list-group horizontal">
             <li class="list-group-item">
                 <a target="_blank"  href="{{route('organizer.pdf-score.round', ['competition_id' => $competition->id, 'round_id' => $round->id, 'type_pdf' => $rankings_class])}}"
                 >Download {{$rankings_tab_name}}</a>
             </li>
+            @if($show_borda)
+                <li class="list-group-item">
+                    <a target="_blank"  href="{{route('organizer.pdf-score.round', ['competition_id' => $competition->id, 'round_id' => $round->id, 'type_pdf' => 'rank'])}}"
+                    >Download Borda Count</a>
+                </li>
+            @endif
+            <li class="list-group-item">
+                <a target="_blank"  href="{{route('organizer.pdf-score.round', ['competition_id' => $competition->id, 'round_id' => $round->id, 'type_pdf' => 'raw'])}}"
+                >Download Raw</a>
+            </li>
         </ul>
-    @endif
   @endif
 
   {{-- Ranked Scoring, 60/40 --}}
@@ -113,14 +144,26 @@
         <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
       </li>
     </ul>
-    @if($rankings_tab_name === 'Condorcet')
     <ul class="list-group horizontal">
         <li class="list-group-item">
             <a target="_blank"  href="{{route('organizer.pdf-score.round', ['competition_id' => $competition->id, 'round_id' => $round->id, 'type_pdf' => $rankings_class])}}"
             >Download {{$rankings_tab_name}}</a>
         </li>
+        @if($show_borda)
+            <li class="list-group-item">
+                <a target="_blank"  href="{{route('organizer.pdf-score.round', ['competition_id' => $competition->id, 'round_id' => $round->id, 'type_pdf' => 'rank'])}}"
+                >Download Borda Count</a>
+            </li>
+        @endif
+        <li class="list-group-item">
+            <a target="_blank"  href="{{route('organizer.pdf-score.round', ['competition_id' => $competition->id, 'round_id' => $round->id, 'type_pdf' => 'weighted'])}}"
+            >Download Weighted</a>
+        </li>
+        <li class="list-group-item">
+            <a target="_blank"  href="{{route('organizer.pdf-score.round', ['competition_id' => $competition->id, 'round_id' => $round->id, 'type_pdf' => 'raw'])}}"
+            >Download Raw</a>
+        </li>
     </ul>
-    @endif
   @endif
 
   {{-- Condorcet methods have an extra table that is formatted a little differently to show rankings. --}}
@@ -130,6 +173,5 @@
 
   @include('scores.organizer.composite', ['choirs' => $choirs, 'judges' => $judges, 'rankedScores' => $rankedScores])
 
-  </div>
 
 @endsection

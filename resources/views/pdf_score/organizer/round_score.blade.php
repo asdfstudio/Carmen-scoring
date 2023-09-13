@@ -203,6 +203,9 @@
     }
 </style>
 <h1>{{$round->name}}</h1>
+<h4>{{$kindScore}}</h4>
 @if($typePdf === 'condorcet')
     @include('pdf_score.organizer.ranked_condorcet',['choirs' => $choirs, 'judges' => $judges, 'rankedScores' => $rankedScores])
 @endif
+@include('pdf_score.organizer.composite',['typePdf' => $typePdf,'choirs' => $choirs, 'judges' => $judges])
+
