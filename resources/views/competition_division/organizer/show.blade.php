@@ -60,7 +60,7 @@
                 <table class="table table-striped table-bordered">
                     <tr>
                         <th>Rating Name</th>
-                        <th>Minimum % of Total Available Score</th>
+                        <th>Range of Points</th>
                     </tr>
                     @foreach ($division->rating_system as $rating)
                         <tr>
