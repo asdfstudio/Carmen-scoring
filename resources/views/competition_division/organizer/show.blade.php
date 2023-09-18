@@ -65,7 +65,7 @@
                     @foreach ($division->rating_system as $rating)
                         <tr>
                             <td>{{ $rating['name'] }}</td>
-                            <td>{{ $rating['min_score'] }} Range of Points</td>
+                            <td>{{ $rating['min_score'] }} Points</td>
                         </tr>
                     @endforeach
                 </table>
