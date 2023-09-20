@@ -572,6 +572,71 @@ $(document).ready(function() {
       addRemoveLinks: false
     });
   }
+    if ($("#myUploadingBox").length) {
+        // eslint-disable-next-line no-undef
+        Dropzone.autoDiscover = false;
+        $("#myUploadingBox").dropzone({
+            init: function() {
+                this.on("success", function(file, response) {
+                    console.log(response);
+                    if (typeof response.url === "undefined") {
+                        warnUploadRecordingError();
+                    }
+                    console.log("Response:", response);
+                });
+                this.on("error", function(file, errorMessage, xhr) {
+                    warnUploadRecordingError();
+                    console.log("Error Message:", errorMessage);
+                    console.log("XMLHttpRequest:", xhr);
+                });
+            },
+            paramName: "file", // The name that will be used to transfer the file
+            maxFilesize: 500, // MB
+            // acceptedFiles: "audio/*",
+            addRemoveLinks: false
+        });
+    }
+
+    $('.ar-file-delete').click(e => {
+        e.preventDefault();
+        let id = $(e.target)
+            .closest("li")
+            .data("id");
+        deleteDivisionFile(id);
+    });
+    const deleteDivisionFile = (id) => {
+        if (confirm("Are you sure you want to delete the file?") == true) {
+            let widget = $('.division-file-list');
+            let existingRecordingCount = parseInt(widget.data("count")) || 0
+            var itemToDelete = $(`#division-file-${id}`)
+            $.ajax({
+                url: "/organizer/division-file/delete/" + id,
+                method: "DELETE",
+                beforeSend: (jqXHR, settings) => {
+                    jqXHR.setRequestHeader(
+                        "X-CSRF-TOKEN",
+                        $('meta[name="_token"]').attr("content")
+                    );
+                    widget.addClass("deleting");
+                    itemToDelete.addClass("deleting");
+                }
+            }).done((result, textStatus, jqXHR) => {
+                itemToDelete.animate({ height: 0 }, 250, "swing", () => {
+                    itemToDelete.remove();
+                });
+                existingRecordingCount--;
+                widget.data("count", existingRecordingCount);
+                widget.attr("data-count", existingRecordingCount);
+                widget.removeClass("deleting");
+                widget.find(".ar-existing").text(
+                    existingRecordingCount +
+                    " " +
+                    (existingRecordingCount == 1 ? "File" : "Files")
+
+                );
+            });
+        }
+    };
 });
 
 niceDate = dateString => {

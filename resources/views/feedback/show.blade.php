@@ -129,6 +129,19 @@
             <h4>Average Score: <span class="dg-fs-14"><b>{{ $averageScore }}</b></span></h4>
         @endif
       @endif
+
+      @php
+          $recordings =\App\Models\DivisionFile::query()->where('division_id', $div->id)->where('choir_id', $choir->id)->where('round_id', $round->id)->get();
+          $recording_count = $recordings->count();
+          $mode = 'player';
+          $role = 'organizer'
+      @endphp
+      @if($recording_count)
+          <h3>Files</h3>
+          <div class="recording-wrapper">
+              @include('division_file.list_file', ['choir' => $choir, 'round' => $round, 'recordings' => $recordings, 'recording_count' => $recording_count, 'mode' => $mode, 'role' => $role])
+          </div>
+      @endif
   @endforeach
 
   <h3>Solo Divisions</h3>

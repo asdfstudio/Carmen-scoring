@@ -570,7 +570,12 @@ Route::post('competition/{competition}/round/{round}/audience/update', [
   Route::post('/audience/fileupload/', [
       'as' => 'audience.fileupload', 'uses' => 'AudienceController@fileupload'
   ]);
-
+    Route::post('/division-file/upload', [
+        'as' => 'division-file.upload', 'uses' => 'DivisionFileController@postFile'
+    ]);
+    Route::delete('/division-file/delete/{id}', [
+        'as' => 'division-file.delete', 'uses' => 'DivisionFileController@destroy'
+    ]);
 });
 
 

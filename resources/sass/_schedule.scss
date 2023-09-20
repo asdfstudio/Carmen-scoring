@@ -222,6 +222,9 @@ ul.schedule-list {
       &.done {
         background: #ccc;
         text-decoration: line-through;
+          .award-script{
+              text-decoration: line-through;
+          }
       }
     }
   }

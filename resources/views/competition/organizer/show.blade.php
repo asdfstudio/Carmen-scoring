@@ -41,27 +41,29 @@
     <li class="list-group-item">Access Code: {{ $competition->access_code }}</li>
   </ul>
 
-  <h3>Manage Rounds</h3>
+  <h3>Group divisions</h3>
   <p>Rounds are groups of divisions that use the same scoresheet, scoring method, and judges.</p>
 
   @if($roundsCount > 0)
-      <p>{{ link_to_route('organizer.competition.round.index','Manage your rounds',[$competition], ['class' => 'action']) }}</p>
+      <p>{{ link_to_route('organizer.competition.round.index','Manage your rounds',[$competition], ['class' => 'action']) }}
+          {{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition], ['class' => 'action']) }}
+      </p>
       @include('round.organizer.list',['rounds' => $competition->rounds])
   @else
       <p>{{ link_to_route('organizer.competition.round.create','Create your first round',[$competition], ['class' => 'action']) }}</p>
   @endif
 
-  <h3>Manage Divisions</h3>
-  <p>Divisions are used to organize competitors and division specific awards.</p>
+{{--  <h3>Manage Divisions</h3>--}}
+{{--  <p>Divisions are used to organize competitors and division specific awards.</p>--}}
 
-  @if($divisionCount > 0)
-      <p>{{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition], ['class' => 'action']) }}</p>
-      @include('division.organizer.list',['divisions' => $competition->divisions, 'scoringForms' => $divisionScoringForms])
-  @elseif($roundsCount > 0)
-      <p>{{ link_to_route('organizer.competition.division.create','Create your first division',[$competition], ['class' => 'action']) }}</p>
-  @else
-      <p>{{ link_to_route('organizer.competition.round.create','Create your first round to add divisions',[$competition], ['class' => 'action']) }}</p>
-  @endif
+{{--  @if($divisionCount > 0)--}}
+{{--      <p>{{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition], ['class' => 'action']) }}</p>--}}
+{{--      @include('division.organizer.list',['divisions' => $competition->divisions, 'scoringForms' => $divisionScoringForms])--}}
+{{--  @elseif($roundsCount > 0)--}}
+{{--      <p>{{ link_to_route('organizer.competition.division.create','Create your first division',[$competition], ['class' => 'action']) }}</p>--}}
+{{--  @else--}}
+{{--      <p>{{ link_to_route('organizer.competition.round.create','Create your first round to add divisions',[$competition], ['class' => 'action']) }}</p>--}}
+{{--  @endif--}}
 
   <h3>Manage Solo Divisions</h3>
 

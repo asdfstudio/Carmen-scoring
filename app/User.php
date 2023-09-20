@@ -73,7 +73,10 @@ class User extends Authenticatable implements MustVerifyEmail
 		{
 			return $this->organization_id;
 		}
-
+            public function isOrganizerAdmin()
+            {
+                return $this->organization_role === 'admin' && $this->organization_id;
+            }
 		public function isJudge()
 		{
       if($this->person)

@@ -31,6 +31,26 @@
 
 	<hr>
 	@endif
+
+    <h2>Uploading box</h2>
+    <div>
+        {!! Form::open(array('route' => array('organizer.division-file.upload'), 'class' => 'dropzone', 'id' => 'myUploadingBox')) !!}
+        {{ Form::hidden('division_id', $division->id) }}
+        {{ Form::hidden('choir_id', $choir->id) }}
+        {{ Form::hidden('round_id', $round->id) }}
+        {!! Form::close() !!}
+
+        <div class="recording-wrapper">
+            @php
+                $recordings =\App\Models\DivisionFile::query()->where('division_id', $division->id)->where('choir_id', $choir->id)->where('round_id', $round->id)->get();
+                $recording_count = $recordings->count();
+                $mode = 'player';
+                $role = 'organizer';
+               $canDelete = true;
+            @endphp
+            @include('division_file.list_file', ['canDelete' => $canDelete,'choir' => $choir, 'round' => $round, 'recordings' => $recordings, 'recording_count' => $recording_count, 'mode' => $mode, 'role' => $role])
+        </div>
+    </div>
 	<h2>Scores</h2>
 
   @include('scores.organizer.choir_raw',['division' => $division])

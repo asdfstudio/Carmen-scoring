@@ -24,6 +24,10 @@ var ScheduleBuilder = (function () {
       $('.schedule-builder-container').addClass('is-dirty')
       document.getElementsByClassName('save-schedule-btn')[0].removeAttribute('disabled')
     })
+      $('.schedule-builder-list.schedule .award-script').on('blur', function () {
+          $('.schedule-builder-container').addClass('is-dirty')
+          document.getElementsByClassName('save-schedule-btn')[0].removeAttribute('disabled')
+      })
   }
 
   /* var handleListUpdate = function(event, ui) {
@@ -53,6 +57,8 @@ var ScheduleBuilder = (function () {
       scheduleItem.name = $(this).find('input.item_name').val()
       scheduleItem.awardable_id = $(this).data('awardable-id')
       scheduleItem.awardable_type = $(this).data('awardable-type')
+        scheduleItem.script_award = $(this).find('.award-script').val()
+        scheduleItem.kind = $(this).find('.award-kind').val()
       data.push(scheduleItem)
     })
 

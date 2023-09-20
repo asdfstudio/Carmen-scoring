@@ -51,6 +51,10 @@
                         </li>
                     @else
                         <li class="schedule-item award" data-awardable-id="{{ $item->awardable_id }}" data-awardable-type="{{ $item->awardable_type }}" data-division-id="{{ $item->division_id }}" data-round-id="{{ $item->round_id }}" data-award-id="{{ $item->award_id }}" data-caption-id="{{ $item->caption_id }}" data-rank="{{ $item->rank }}">
+                            @if($item->kind === \App\AwardScheduleItem::KIND_SCRIPT)
+                                <input type="hidden" class="award-kind" value="{{\App\AwardScheduleItem::KIND_SCRIPT}}">
+                                <textarea class="award-script" placeholder="Write your script" rows="4" style="width: 90%">{{$item->script_award}}</textarea>
+                            @endif
                             @if($item->division)
                                 <span class="division-name">{{ $item->division->name }}</span>
                             @endif
@@ -82,6 +86,20 @@
             </div>
 
             <ul class="schedule-builder-list schedule-items divisions">
+                <li class="division">
+                    <span class="division-heading">Scripts</span>
+                    <ul class="choirs non-performance-items">
+                        @php $i = 0; @endphp
+                        @while ($i < 20)
+                            <li class="schedule-item award">
+                                <input type="hidden" class="award-kind" value="{{\App\AwardScheduleItem::KIND_SCRIPT}}">
+                                <textarea class="award-script" placeholder="Write your script" rows="4" style="width: 90%"></textarea>
+                            </li>
+                            @php $i++; @endphp
+                        @endwhile
+
+                    </ul>
+                </li>
                 @if ($competition->awards)
                     <li class="division">
                         <span class="division-heading">Contest</span>

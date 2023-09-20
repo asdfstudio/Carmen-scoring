@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class AwardScheduleItem extends Model
 {
-		protected $fillable = ['division_id', 'round_id', 'award_id', 'caption_id', 'rank', 'performance_order', 'awardable_id', 'awardable_type'];
 
-
+    protected $fillable = ['division_id', 'round_id', 'award_id', 'caption_id', 'rank', 'performance_order', 'awardable_id', 'awardable_type','script_award','kind'];
+    CONST KIND_SCRIPT = 'SCRIPT';
 		public function schedule()
 		{
 			return $this->belongsTo('App\AwardSchedule', 'award_schedule_id');

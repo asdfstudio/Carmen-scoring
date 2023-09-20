@@ -17,9 +17,9 @@
           </th>
 
           <th v-for="choir in choirsList" class="choir-header"  :choir="choir" v-bind:key="choir.id">
-            <span class="clickable" @click="activateChoirModal(choir)">{{ choir.name }}</span>
-            <span v-if="choir.scheduled_time" class="time">@{{ choir.scheduled_time }}</span>
-            <span class="division">{{ choir.division_name }}</span>
+            <div class="clickable choir-name" @click="activateChoirModal(choir)">{{ choir.name }}</div>
+            <div class="division choir-division-name">{{ choir.division_name }}</div>
+            <div v-if="choir.scheduled_time" class="time choir-time">@{{ choir.scheduled_time }}</div>
           </th>
         </tr>
       </thead>
@@ -632,7 +632,18 @@ table {
     padding: 3px 7px 3px 6px;
     border-radius: 12px;
   }
-
+  .choir-header {
+    .choir-name {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    .choir-division-name {
+      font-size: 1.2em !important;
+    }
+    .choir-time {
+      font-size: 0.9em !important;
+    }
+  }
   .choir-header,
   .caption-value {
     min-width: 150px;

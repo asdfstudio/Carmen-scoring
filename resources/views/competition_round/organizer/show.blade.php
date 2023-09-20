@@ -18,7 +18,10 @@
         @include('round.partial.single')
     </ul>
     <ul class="list-group">
-        <h3>Divisions</h3>
+        <div>
+            <h3 style="width: 49%;display: inline-block">Divisions</h3>
+            <div style="width: 50%;display: inline-block;text-align: right;padding-bottom: 10px">{{ link_to_route('organizer.competition.division.create','Create your division',[$competition], ['class' => 'action']) }}</div>
+        </div>
         @foreach($round->divisions as $div)
             <li class="division list-group-item">
                 <span class="name">{{ link_to_route('organizer.competition.division.show', $div->name, [$div->competition,$div]) }}</span>

@@ -91,7 +91,11 @@
                 }
 
             @endphp
-
+            @if($item->kind === \App\AwardScheduleItem::KIND_SCRIPT)
+                <li class="schedule-item award">
+                    <div class="award-script" disabled style="width: 90%;min-height: 80px;white-space: pre-wrap;" >{{$item->script_award}}</div>
+                </li>
+            @endif
             @if(!empty($awardWinner) || !empty($ratings))
                 <li class="schedule-item award">
                     <div class="award-heading">

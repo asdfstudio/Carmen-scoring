@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-
+use Illuminate\Support\Str;
 class AuthenticateJudge
 {
     /**
@@ -15,16 +15,21 @@ class AuthenticateJudge
      */
     public function handle($request, Closure $next)
     {
-        if($request->user()->isJudge() == false AND $request->user()->isAdmin() == false)
-				{
-					if ($request->ajax() || $request->wantsJson()) 
-					{
-          		return response('Unauthorized.', 401);
-          }
+        $user = $request->user();
+        $url = $request->fullUrl();
+        if(Str::contains($url,'judge/recording/save')) {
+            if($user->isOrganizerAdmin() || $user->isOrganizer()) {
+                return $next($request);
+            }
+        }
 
-          return redirect()->guest('login');
-				}
-				
+        if(!$user->isJudge() AND !$user->isAdmin()) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response('Unauthorized.', 401);
+            }
+            return redirect()->guest('login');
+        }
+
         return $next($request);
     }
 }
