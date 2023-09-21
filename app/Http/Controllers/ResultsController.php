@@ -239,10 +239,10 @@ class ResultsController extends Controller
       $this->loadDivision($division_id, $access_code);
       $division = $this->division;
       $captions = $this->captions;
-
-      $scoreboards[$division->id] = new Scoreboard(['division_id' => $division->id]);
-
-      return view('results.division.show', compact('division', 'scoreboards', 'captions', 'access_code'));
+        return redirect(route('results.division.scores', [$division, $access_code]));
+//      $scoreboards[$division->id] = new Scoreboard(['division_id' => $division->id]);
+//
+//      return view('results.division.show', compact('division', 'scoreboards', 'captions', 'access_code'));
     }
 
 

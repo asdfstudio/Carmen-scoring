@@ -31,77 +31,113 @@
 
   <p class="scoring-method-note">This division uses the <strong>{{ $round->scoringMethod->name }}</strong> method of scoring. <a href="https://carmenscoring.com/scoring-methods" target="blank">View scoring method explanations</a>.</p>
 
-  {{-- Raw Scoring, 50/50 --}}
-  @if ($round->scoring_method_id === 1 && $round->caption_weighting_id === 2)
-    <ul class="list-group horizontal">
-      <li class="list-group-item">
-        <a class="score-view-toggle active" href="#raw" data-score-view="raw">Raw</a>
-      </li>
-    </ul>
-  @endif
+{{--  --}}{{-- Raw Scoring, 50/50 --}}
+{{--  @if ($round->scoring_method_id === 1 && $round->caption_weighting_id === 2)--}}
+{{--    <ul class="list-group horizontal">--}}
+{{--      <li class="list-group-item">--}}
+{{--        <a class="score-view-toggle active" href="#raw" data-score-view="raw">Raw</a>--}}
+{{--      </li>--}}
+{{--    </ul>--}}
+{{--  @endif--}}
 
-  {{-- Raw Scoring, 60/40 --}}
-  @if ($round->scoring_method_id === 1 && $round->caption_weighting_id === 1)
-    <ul class="list-group horizontal">
-      <li class="list-group-item">
-        <a class="score-view-toggle active division-scoring-method" href="#weighted" data-score-view="weighted">Weighted</a>
-        <span>(division scoring method, {{ $round->captionWeighting->name }})</span>
-      </li>
-      <li class="list-group-item">
-        <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
-      </li>
-    </ul>
-  @endif
+{{--  --}}{{-- Raw Scoring, 60/40 --}}
+{{--  @if ($round->scoring_method_id === 1 && $round->caption_weighting_id === 1)--}}
+{{--    <ul class="list-group horizontal">--}}
+{{--      <li class="list-group-item">--}}
+{{--        <a class="score-view-toggle active division-scoring-method" href="#weighted" data-score-view="weighted">Weighted</a>--}}
+{{--        <span>(division scoring method, {{ $round->captionWeighting->name }})</span>--}}
+{{--      </li>--}}
+{{--      <li class="list-group-item">--}}
+{{--        <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>--}}
+{{--      </li>--}}
+{{--    </ul>--}}
+{{--  @endif--}}
 
-  {{-- Average Scoring --}}
-  @if ($round->scoring_method_id === 7)
-    <ul class="list-group horizontal">
-        <li class="list-group-item">
-          <a class="score-view-toggle active" href="#average" data-score-view="average">Average</a>
-        </li>
-    </ul>
-  @endif
+{{--  --}}{{-- Average Scoring --}}
+{{--  @if ($round->scoring_method_id === 7)--}}
+{{--    <ul class="list-group horizontal">--}}
+{{--        <li class="list-group-item">--}}
+{{--          <a class="score-view-toggle active" href="#average" data-score-view="average">Average</a>--}}
+{{--        </li>--}}
+{{--    </ul>--}}
+{{--  @endif--}}
 
-  {{-- Ranked Scoring, 50/50 --}}
-  @if ($round->scoring_method_id > 1 && $round->caption_weighting_id === 2 && $round->scoring_method_id !== 7)
-    <ul class="list-group horizontal">
-      <li class="list-group-item">
-        <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>
-        <span>(division scoring method)</span>
-      </li>
-    @if ($show_borda)
-      <li class="list-group-item">
-        <a class="score-view-toggle" href="#rankings" data-score-view="rank">Borda Count</a>
-      </li>
-    @endif
-      <li class="list-group-item">
-        <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
-      </li>
-    </ul>
-  @endif
+{{--  --}}{{-- Ranked Scoring, 50/50 --}}
+{{--  @if ($round->scoring_method_id > 1 && $round->caption_weighting_id === 2 && $round->scoring_method_id !== 7)--}}
+{{--    <ul class="list-group horizontal">--}}
+{{--      <li class="list-group-item">--}}
+{{--        <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>--}}
+{{--        <span>(division scoring method)</span>--}}
+{{--      </li>--}}
+{{--    @if ($show_borda)--}}
+{{--      <li class="list-group-item">--}}
+{{--        <a class="score-view-toggle" href="#rankings" data-score-view="rank">Borda Count</a>--}}
+{{--      </li>--}}
+{{--    @endif--}}
+{{--      <li class="list-group-item">--}}
+{{--        <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>--}}
+{{--      </li>--}}
+{{--    </ul>--}}
+{{--  @endif--}}
 
-  {{-- Ranked Scoring, 60/40 --}}
-  @if ($round->scoring_method_id > 1 && $round->caption_weighting_id === 1 && $round->scoring_method_id !== 7)
-    <ul class="list-group horizontal">
-      <li class="list-group-item">
-        <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>
-        <span>(division scoring method)</span>
-      </li>
-    @if ($show_borda)
-      <li class="list-group-item">
-        <a class="score-view-toggle" href="#rankings" data-score-view="rank">Borda Count</a>
-      </li>
-    @endif
-      <li class="list-group-item">
-        <a class="score-view-toggle" href="#weighted" data-score-view="weighted">Weighted</a>
-        <span>({{ $round->captionWeighting->name }})</span>
-      </li>
-      <li class="list-group-item">
-        <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
-      </li>
-    </ul>
-  @endif
+{{--  --}}{{-- Ranked Scoring, 60/40 --}}
+{{--  @if ($round->scoring_method_id > 1 && $round->caption_weighting_id === 1 && $round->scoring_method_id !== 7)--}}
+{{--    <ul class="list-group horizontal">--}}
+{{--      <li class="list-group-item">--}}
+{{--        <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>--}}
+{{--        <span>(division scoring method)</span>--}}
+{{--      </li>--}}
+{{--    @if ($show_borda)--}}
+{{--      <li class="list-group-item">--}}
+{{--        <a class="score-view-toggle" href="#rankings" data-score-view="rank">Borda Count</a>--}}
+{{--      </li>--}}
+{{--    @endif--}}
+{{--      <li class="list-group-item">--}}
+{{--        <a class="score-view-toggle" href="#weighted" data-score-view="weighted">Weighted</a>--}}
+{{--        <span>({{ $round->captionWeighting->name }})</span>--}}
+{{--      </li>--}}
+{{--      <li class="list-group-item">--}}
+{{--        <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>--}}
+{{--      </li>--}}
+{{--    </ul>--}}
+{{--  @endif--}}
+  <ul class="list-group horizontal">
+      @if($round->scoring_method_id === 1)
+          <li class="list-group-item">
+              <a class="score-view-toggle active" href="#raw" data-score-view="raw">Raw</a>
+          </li>
+      @endif
+      @if($round->scoring_method_id === 2)
+          <li class="list-group-item">
+              <a class="score-view-toggle active division-scoring-method" href="#rankings"
+                 data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>
+              <span>(division scoring method)</span>
+          </li>
+      @endif
+      @if($round->scoring_method_id === 3 || $round->scoring_method_id === 4)
+          <li class="list-group-item">
+              <a class="score-view-toggle active division-scoring-method" href="#rankings"
+                 data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>
+              <span>(division scoring method)</span>
+          </li>
+      @endif
 
+      @if($round->scoring_method_id === 5)
+          <li class="list-group-item">
+              <a class="score-view-toggle active" href="#rankings" data-score-view="rank">Consensus Ordinal Ranking</a>
+          </li>
+      @endif
+      @if($round->scoring_method_id === 6)
+          <li class="list-group-item">
+              <a class="score-view-toggle active" href="#rankings" data-score-view="rank">Borda Count</a>
+          </li>
+      @endif
+          @if($round->scoring_method_id === 7)
+              <li class="list-group-item">
+                  <a class="score-view-toggle active" href="#average" data-score-view="average">Average</a>
+              </li>
+          @endif
+  </ul>
   {{-- Condorcet methods have an extra table that is formatted a little differently to show rankings. --}}
   @if($round->scoring_method_id === 3 || $round->scoring_method_id === 4)
   	@include('scores.public.ranked_condorcet',['choirs' => $choirs, 'judges' => $round->judges])

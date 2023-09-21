@@ -29,18 +29,21 @@
 
       @if(isset($access_code))
         <ul class="actions-group centered">
-      		<li>
-      			<a href="{{ route('results.division.show', [$division, $access_code]) }}" class="@if($current_page == 'awards') active @endif action">Awards</a>
-      		</li>
-      		<li>
-      			<a href="{{ route('results.division.standings', [$division, $access_code]) }}" class="@if($current_page == 'standings') active @endif action">Standings</a>
-      		</li>
+{{--      		<li>--}}
+{{--      			<a href="{{ route('results.division.show', [$division, $access_code]) }}" class="@if($current_page == 'awards') active @endif action">Awards</a>--}}
+{{--      		</li>--}}
+{{--      		<li>--}}
+{{--      			<a href="{{ route('results.division.standings', [$division, $access_code]) }}" class="@if($current_page == 'standings') active @endif action">Standings</a>--}}
+{{--      		</li>--}}
             <li>
                 <a href="{{ route('results.division.scores', [$division, $access_code]) }}" class="@if($current_page == 'division-scores') active @endif action">Division Scores</a>
             </li>
-            <li>
-                <a href="{{ route('results.round.scores', [$division, $division->round, $access_code]) }}" class="@if($current_page == 'round-scores') active @endif action">Round Scores</a>
-            </li>
+            @php $round = $division->round;@endphp
+            @if($round->divisions->count() > 1)
+                <li>
+                    <a href="{{ route('results.round.scores', [$division, $division->round, $access_code]) }}" class="@if($current_page == 'round-scores') active @endif action">Round Scores</a>
+                </li>
+            @endif
       	</ul>
       @endif
 
