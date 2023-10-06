@@ -2,294 +2,315 @@
 
 namespace App\Carmen;
 
-use App\RawScore;
 use App\Division;
-use App\Competition;
+use DB;
+class ScoringMethod
+{
 
-class ScoringMethod {
-
-  protected $weightedScores;
-  protected $penalties;
-  protected $judges = [];
-  protected $choirs = [];
-  protected $captions = [];
-  protected $calculated_scores = [];
-  protected $ranked = [];
-  protected $total_ranked = [];
-  protected $totaled = [];
-  protected $totals = [];
-  protected $is_the_skip_epoch;
+    protected $weightedScores;
+    protected $penalties;
+    protected $judges = [];
+    protected $choirs = [];
+    protected $captions = [];
+    protected $calculated_scores = [];
+    protected $ranked = [];
+    protected $total_ranked = [];
+    protected $totaled = [];
+    protected $totals = [];
+    protected $is_the_skip_epoch;
 
 
-  public function __construct($weightedScores, $penalties = false, $is_the_skip_epoch = FALSE)
-  {
-    // Set whether to skip tied ranks, with URL input overridding time-based parameter from Scoreboard
-    if(isset($_GET['skip_ranks'])){
-      $this->is_the_skip_epoch = boolval(intval($_GET['skip_ranks']));
-    } elseif ($is_the_skip_epoch) {
-        $this->is_the_skip_epoch = TRUE;
+    public function __construct($weightedScores, $penalties = false, $is_the_skip_epoch = FALSE)
+    {
+        // Set whether to skip tied ranks, with URL input overridding time-based parameter from Scoreboard
+        if (isset($_GET['skip_ranks'])) {
+            $this->is_the_skip_epoch = boolval(intval($_GET['skip_ranks']));
+        } elseif ($is_the_skip_epoch) {
+            $this->is_the_skip_epoch = TRUE;
+        }
+        $this->weightedScores = $weightedScores;
+        $this->penalties = $penalties;
+        $this->judges = $this->weightedScores->unique('judge_id')->pluck('judge_id');
+        $this->dataChoirs = $this->weightedScores->unique(function ($item) {
+            return $item->division_id . '-' . $item->choir_id;
+        });
+        $this->choirs = $this->weightedScores->unique('choir_id')->pluck('choir_id');
+        $this->captions = $this->weightedScores->unique('criterion_caption_id')->pluck('criterion_caption_id');
     }
-    $this->weightedScores = $weightedScores;
-    $this->penalties = $penalties;
-    $this->judges = $this->weightedScores->unique('judge_id')->pluck('judge_id');
-    $this->choirs = $this->weightedScores->unique('choir_id')->pluck('choir_id');
-    $this->captions = $this->weightedScores->unique('criterion_caption_id')->pluck('criterion_caption_id');
-  }
 
 
-  public function weighted_scores()
-  {
-    return $this->weightedScores;
-  }
+    public function weighted_scores()
+    {
+        return $this->weightedScores;
+    }
 
 
-  public function total_raw_rank($caption_id = false)
-  {
-    return $this->calculate_rank('score', $caption_id);
-  }
+    public function total_raw_rank($caption_id = false)
+    {
+        return $this->calculate_rank('score', $caption_id);
+    }
 
 
-  public function total_weighted_rank($caption_id = false)
-  {
-    return $this->calculate_rank('weightedScore', $caption_id);
-  }
+    public function total_weighted_rank($caption_id = false)
+    {
+        return $this->calculate_rank('weightedScore', $caption_id);
+    }
 
-
-  public function calculate_rank($scoreField = 'score', $caption_id = false)
-  {
-    $captionRank = collect();
-
-    $this->choirs->each(function($choir_id, $key) use ($caption_id, $captionRank, $scoreField){
-
-      $query = $this->weightedScores->where('choir_id', $choir_id);
-
-      if($caption_id)
-        $query = $query->where('criterion_caption_id', $caption_id);
-
-      $score = $query->sum($scoreField);
-
-      // Subtract any penalties from the score
-      if($this->penalties AND !$caption_id)
-      {
-        $choir_penalties = $this->penalties->where('choir_id', $choir_id);
-
-        if(!$choir_penalties->isEmpty())
-        {
-          // Get all overall penalties
-          $overall_penalty_amount = $choir_penalties->where('apply_per_judge', 0)->sum('amount');
-          $score = $score - $overall_penalty_amount;
-
-          // Get all judge penalties
-          $judge_penalty_amount = $this->judges->count() * $choir_penalties->where('apply_per_judge', 1)->sum('amount');
-          $score = $score - $judge_penalty_amount;
+    public function getNotRankedChoirs()
+    {
+        try {
+            $listDivisionId = [];
+            $listChoirId = [];
+            $this->dataChoirs->each(function($item) use (&$listDivisionId, &$listChoirId) {
+                $listDivisionId[] = $item->division_id;
+                $listChoirId[] = $item->choir_id;
+            });
+            $listDivisionId = array_unique($listDivisionId);
+            $listChoirId = array_unique($listChoirId);
+            $result = DB::table('choir_division')->whereIn('division_id', $listDivisionId)->whereIn('choir_id', $listChoirId)
+                ->where('receives_rankings', 0)->select('choir_id','division_id')->get();
+            return $result;
+        }catch (\Exception $ex) {
+            return collect();
         }
 
-      }
-
-      $captionRank->put($choir_id,['choir_id' => $choir_id, 'score' => $score]);
-    });
-
-    // Sort
-    $sorted = $captionRank->sortByDesc('score');
-
-    // Assign rank and return
-    return $this->assign_rank_skippy($sorted);
-  }
-
-
-  public function total_rank($caption_id = false)
-  {
-    $key = $caption_id ? $caption_id : 0;
-    if(array_key_exists($key, $this->total_ranked)){
-      return $this->total_ranked[$key];
     }
 
-    $captionRank = collect();
+    public function calculate_rank($scoreField = 'score', $caption_id = false)
+    {
+        $captionRank = collect();
+        $filterNotRanked = $this->getNotRankedChoirs();
+        $this->dataChoirs->each(function ($item, $key) use ($caption_id, $captionRank, $scoreField, $filterNotRanked) {
+            $choir_id = $item->choir_id;
+            $division_id = $item->division_id;
+            $query = $this->weightedScores->where('choir_id', $choir_id);
 
-    $choir_ids = $this->filterNotRankedChoirs();
+            if ($caption_id)
+                $query = $query->where('criterion_caption_id', $caption_id);
 
-    $choir_ids->each(function($choir_id, $key) use ($caption_id, $captionRank){
-      $score = $this->total($choir_id, $caption_id);
-      $captionRank->put($choir_id,['choir_id' => $choir_id, 'score' => $score]);
-    });
+            $score = $query->sum($scoreField);
 
-    // Sort
-    $sorted = $captionRank->sortBy('score');
+            // Subtract any penalties from the score
+            if ($this->penalties and !$caption_id) {
+                $choir_penalties = $this->penalties->where('choir_id', $choir_id);
 
-    // Assign rank and return
-    $rank = $this->assign_rank_skippy($sorted);
+                if (!$choir_penalties->isEmpty()) {
+                    // Get all overall penalties
+                    $overall_penalty_amount = $choir_penalties->where('apply_per_judge', 0)->sum('amount');
+                    $score = $score - $overall_penalty_amount;
 
-    return $this->total_ranked[$key] = $rank;
-  }
+                    // Get all judge penalties
+                    $judge_penalty_amount = $this->judges->count() * $choir_penalties->where('apply_per_judge', 1)->sum('amount');
+                    $score = $score - $judge_penalty_amount;
+                }
 
-  public function filterNotRankedChoirs() {
-    $division_id = isset($this->weighted_scores()[0])
-        ? $this->weighted_scores()[0]->division_id
-        : null;
+            }
+            $exists = $filterNotRanked->contains(function ($itemChoir) use($choir_id, $division_id) {
+                return $itemChoir->choir_id == $choir_id && $itemChoir->division_id == $division_id;
+            });
+            if(!$exists) {
+                $captionRank->put($choir_id, ['choir_id' => $choir_id, 'score' => $score]);
+            }
+        });
 
-    if (!$division_id) {
-        return collect();
+        // Sort
+        $sorted = $captionRank->sortByDesc('score');
+        // Assign rank and return
+        return $this->assign_rank_skippy($sorted);
     }
 
-    $choir_ids = $this->choirs;
 
-    $result = Division::where('id', $division_id)->with(['choirs' => function ($query) use ($choir_ids){
-        $query->whereIn('id', $choir_ids)
-        ->where('choir_division.receives_rankings', 1);
-    }])->first();
-
-    return $result->choirs->pluck('id');
-  }
-
-
-  public function total($choir_id, $caption_id = false)
-  {
-
-    $child_class = get_class($this);
-
-    $key = $choir_id.'x'.$caption_id;
-    if(array_key_exists($key, $this->totaled)){
-      return $this->totaled[$key];
-    }
-
-    $total = 0;
-    $judges_count = $this->judges->count();
-
-    $this->judges->each(function($judge_id, $key) use ($choir_id, $caption_id, &$total) {
-      $rank = $this->rank($judge_id, $caption_id)->where('choir_id', $choir_id)->pluck('rank')->first();
-      $total = $total + $rank;
-    });
-
-    // TODO:
-    // if ($child_class === AverageScores::class) {
-    //     $total = round($total / $judges_count, 1);
-    // }
-
-    $this->totaled[$key] = $total;
-
-    return $total;
-  }
-
-
-  public function rank($judge_id = false, $caption_id = false)
-  {
-    $key = $judge_id."x".$caption_id;
-    if(array_key_exists($key, $this->ranked)){
-      return $this->ranked[$key];
-    }
-
-    // Caclculate total scores
-    $scores = $this->calculate_scores($judge_id, $caption_id);
-
-    // Sort by sum descending
-    $sorted = $scores->sortByDesc('score');
-
-    return $this->ranked[$key] = $this->assign_rank($sorted);
-  }
-
-
-  protected function calculate_scores($judge_id, $caption_id, $scoreField = 'weightedScore')
-  {
-    $key = $judge_id."x".$caption_id;
-    if(array_key_exists($key, $this->calculated_scores)){
-      return $this->calculated_scores[$key];
-    }
-
-    // Create new $scores collection
-    $scores = collect();
-
-    // Loop through choirs and compare sums
-    $this->choirs->each(function($choir_id, $key) use ($judge_id, $caption_id, $scores, $scoreField){
-      // Get the sum of the weighted scores for each choir
-      $query = $this->weightedScores->where('choir_id', $choir_id);
-
-      // Filter by judge
-      if($judge_id)
-        $query = $query->where('judge_id', $judge_id);
-
-      // Filter by caption
-      if($caption_id)
-        $query = $query->where('criterion_caption_id', $caption_id);
-
-      // Get the sum
-      $score = $query->sum($scoreField);
-
-      // Subtract any penalties from the score
-      if($this->penalties AND $caption_id == false)
-      {
-        $choir_penalties = $this->penalties->where('choir_id', $choir_id);
-
-        if(!$choir_penalties->isEmpty())
-        {
-          // Get all judge penalties
-          $per_judge_penalty_amount = $choir_penalties->where('apply_per_judge', 1)->sum('amount');
-          $score = $score - $per_judge_penalty_amount;
+    public function total_rank($caption_id = false)
+    {
+        $key = $caption_id ? $caption_id : 0;
+        if (array_key_exists($key, $this->total_ranked)) {
+            return $this->total_ranked[$key];
         }
 
-      }
+        $captionRank = collect();
 
-      // Add the choir and score to the $scores collection
-      if($score){
-        $scores->put($choir_id, ['choir_id' => $choir_id, 'score' => $score]);
-      }
-    });
+        $choir_ids = $this->filterNotRankedChoirs();
 
-    return $this->calculated_scores[$key] = $scores;
-  }
+        $choir_ids->each(function ($choir_id, $key) use ($caption_id, $captionRank) {
+            $score = $this->total($choir_id, $caption_id);
+            $captionRank->put($choir_id, ['choir_id' => $choir_id, 'score' => $score]);
+        });
 
+        // Sort
+        $sorted = $captionRank->sortBy('score');
 
-  protected function assign_rank($sortedTotals, $force_skippy = false)
-  {
-    // Assign number rank
-    $loops = 1;
-    $previous_rank = 1;
-    $previous_score = false;
-    $tied_ranks = [];
+        // Assign rank and return
+        $rank = $this->assign_rank_skippy($sorted);
 
-    $rank = $sortedTotals->map(function($item) use (&$loops, &$previous_rank,  &$previous_score, &$tied_ranks, $force_skippy) {
+        return $this->total_ranked[$key] = $rank;
+    }
 
-      if($item['score'] == $previous_score){
-        $item['rank'] = $previous_rank;
-        $tied_ranks[] = $item['rank'];
-      } else {
-        $item['rank'] = $loops;
-        $previous_rank = $loops;
-      }
+    public function filterNotRankedChoirs()
+    {
+        $division_id = isset($this->weighted_scores()[0])
+            ? $this->weighted_scores()[0]->division_id
+            : null;
 
-      $previous_score = $item['score'];
+        if (!$division_id) {
+            return collect();
+        }
 
-      // The skip epoch ensures that all competitions after a certain point will use the
-      // skippy method, while leaving historical scores unaffected.
-      if($this->is_the_skip_epoch || $force_skippy){
-        $loops++;
-      } else {
-        $loops = $previous_rank + 1;
-      }
+        $choir_ids = $this->choirs;
 
-      return $item;
-    });
+        $result = Division::where('id', $division_id)->with(['choirs' => function ($query) use ($choir_ids) {
+            $query->whereIn('id', $choir_ids)
+                ->where('choir_division.receives_rankings', 1);
+        }])->first();
 
-    // Go back through and flag any results that are a tie.
-    $rank = $rank->map(function($item) use ($tied_ranks) {
-
-      if(in_array($item['rank'], $tied_ranks)){
-        $item['tied'] = 1;
-      } else {
-        $item['tied'] = 0;
-      }
-
-      return $item;
-    });
-
-    return $rank;
-  }
+        return $result->choirs->pluck('id');
+    }
 
 
-  protected function assign_rank_skippy($sortedTotals)
-  {
-    // The second argument forces the skippy method.
-    return $this->assign_rank($sortedTotals, true);
-  }
+    public function total($choir_id, $caption_id = false)
+    {
+
+        $child_class = get_class($this);
+
+        $key = $choir_id . 'x' . $caption_id;
+        if (array_key_exists($key, $this->totaled)) {
+            return $this->totaled[$key];
+        }
+
+        $total = 0;
+        $judges_count = $this->judges->count();
+
+        $this->judges->each(function ($judge_id, $key) use ($choir_id, $caption_id, &$total) {
+            $rank = $this->rank($judge_id, $caption_id)->where('choir_id', $choir_id)->pluck('rank')->first();
+            $total = $total + $rank;
+        });
+
+        // TODO:
+        // if ($child_class === AverageScores::class) {
+        //     $total = round($total / $judges_count, 1);
+        // }
+
+        $this->totaled[$key] = $total;
+
+        return $total;
+    }
+
+
+    public function rank($judge_id = false, $caption_id = false)
+    {
+        $key = $judge_id . "x" . $caption_id;
+        if (array_key_exists($key, $this->ranked)) {
+            return $this->ranked[$key];
+        }
+
+        // Caclculate total scores
+        $scores = $this->calculate_scores($judge_id, $caption_id);
+
+        // Sort by sum descending
+        $sorted = $scores->sortByDesc('score');
+
+        return $this->ranked[$key] = $this->assign_rank($sorted);
+    }
+
+
+    protected function calculate_scores($judge_id, $caption_id, $scoreField = 'weightedScore')
+    {
+        $key = $judge_id . "x" . $caption_id;
+        if (array_key_exists($key, $this->calculated_scores)) {
+            return $this->calculated_scores[$key];
+        }
+
+        // Create new $scores collection
+        $scores = collect();
+
+        // Loop through choirs and compare sums
+        $this->choirs->each(function ($choir_id, $key) use ($judge_id, $caption_id, $scores, $scoreField) {
+            // Get the sum of the weighted scores for each choir
+            $query = $this->weightedScores->where('choir_id', $choir_id);
+
+            // Filter by judge
+            if ($judge_id)
+                $query = $query->where('judge_id', $judge_id);
+
+            // Filter by caption
+            if ($caption_id)
+                $query = $query->where('criterion_caption_id', $caption_id);
+
+            // Get the sum
+            $score = $query->sum($scoreField);
+
+            // Subtract any penalties from the score
+            if ($this->penalties and $caption_id == false) {
+                $choir_penalties = $this->penalties->where('choir_id', $choir_id);
+
+                if (!$choir_penalties->isEmpty()) {
+                    // Get all judge penalties
+                    $per_judge_penalty_amount = $choir_penalties->where('apply_per_judge', 1)->sum('amount');
+                    $score = $score - $per_judge_penalty_amount;
+                }
+
+            }
+
+            // Add the choir and score to the $scores collection
+            if ($score) {
+                $scores->put($choir_id, ['choir_id' => $choir_id, 'score' => $score]);
+            }
+        });
+
+        return $this->calculated_scores[$key] = $scores;
+    }
+
+
+    protected function assign_rank($sortedTotals, $force_skippy = false)
+    {
+        // Assign number rank
+        $loops = 1;
+        $previous_rank = 1;
+        $previous_score = false;
+        $tied_ranks = [];
+        $rank = $sortedTotals->map(function ($item) use (&$loops, &$previous_rank, &$previous_score, &$tied_ranks, $force_skippy) {
+
+            if ($item['score'] == $previous_score) {
+                $item['rank'] = $previous_rank;
+                $tied_ranks[] = $item['rank'];
+            } else {
+                $item['rank'] = $loops;
+                $previous_rank = $loops;
+            }
+
+            $previous_score = $item['score'];
+
+            // The skip epoch ensures that all competitions after a certain point will use the
+            // skippy method, while leaving historical scores unaffected.
+            if ($this->is_the_skip_epoch || $force_skippy) {
+                $loops++;
+            } else {
+                $loops = $previous_rank + 1;
+            }
+
+            return $item;
+        });
+
+        // Go back through and flag any results that are a tie.
+        $rank = $rank->map(function ($item) use ($tied_ranks) {
+
+            if (in_array($item['rank'], $tied_ranks)) {
+                $item['tied'] = 1;
+            } else {
+                $item['tied'] = 0;
+            }
+
+            return $item;
+        });
+
+        return $rank;
+    }
+
+
+    protected function assign_rank_skippy($sortedTotals)
+    {
+        // The second argument forces the skippy method.
+        return $this->assign_rank($sortedTotals, true);
+    }
 
 
 }
