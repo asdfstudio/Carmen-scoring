@@ -1,7 +1,9 @@
 @php
     // Hide the "Total" column for Consensus Ordinal Rank (scoring method 5)
+         $showRating = true;
+
     $total_col_class = 'total_column weighted raw average rank';
-    $totalCol = $judges->count() + 1 + 1 + 1 + (!empty($ratings) ? 1 : 0);
+    $totalCol = $judges->count() + 1 + 1 + 1 + ($showRating ? 1 : 0);
     if($round->scoring_method_id == 5){
       $total_col_class = 'total_column weighted raw';
       if($typePdf === 'rank') {
@@ -50,8 +52,8 @@
 
                     <th>Place</th>
 
-                    @if(!empty($ratings))
-                        <th>Rating</th>
+                    @if($showRating)
+                        <th class="raw weighted column-rating total_column">Rating</th>
                     @endif
                 </tr>
 
@@ -113,8 +115,8 @@
                             <span class="raw average score {{ $tied }}">{{ $rank }}</span>
                         </td>
 
-                        @if(!empty($ratings))
-                            <td></td>
+                        @if($showRating)
+                            <td class="raw weighted column-rating total_column"></td>
                         @endif
                     </tr>
                 @endforeach
@@ -143,8 +145,8 @@
 
                 <th>Place</th>
 
-                @if(!empty($ratings))
-                    <th>Rating</th>
+                @if($showRating)
+                    <th class="raw weighted column-rating total_column">Rating</th>
                 @endif
             </tr>
 
@@ -234,9 +236,24 @@
 
                     </td>
 
-                    @if(!empty($ratings))
-                        <td>{{ $ratings->where('choir.id', $choir->id)->pluck('rating.name')->first() }}</td>
+                    @if($showRating)
+                        @php
+                            if(!$choir->pivot->receives_ratings) {
+                                $ratingRaw = 'No Rating';
+                                $ratingWeight = 'No Rating';
+                            } else {
+                                $ratingRaw = $rankedScores->getRatingOfChoir($rawTotal, $choir->pivot->division_id);
+                                $ratingWeight = $rankedScores->getRatingOfChoir($weightedTotal, $choir->pivot->division_id);
+                            }
+                        @endphp
+                        <td class="raw column-rating total_column">
+                            {{$ratingRaw}}
+                        </td>
+                        <td class="weighted column-rating total_column">
+                            {{$ratingWeight}}
+                        </td>
                     @endif
+
 
                 </tr>
             @endforeach

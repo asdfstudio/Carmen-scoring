@@ -19,6 +19,7 @@ class ScoringMethod
     protected $totals = [];
     protected $is_the_skip_epoch;
 
+  protected $listDivision = [];
 
     public function __construct($weightedScores, $penalties = false, $is_the_skip_epoch = FALSE)
     {
@@ -38,6 +39,31 @@ class ScoringMethod
         $this->captions = $this->weightedScores->unique('criterion_caption_id')->pluck('criterion_caption_id');
     }
 
+  public function getRatingOfChoir($score, $division_id) {
+      try {
+          $division = null;
+          if(isset($this->listDivision[$division_id])) {
+              $division = $this->listDivision[$division_id];
+          }
+          if(!$division) {
+              $division = Division::find($division_id);
+              $this->listDivision[$division_id] = $division;
+          }
+          $ratingOptions = collect($division->rating_system);
+          $ratingOptions = $ratingOptions->sortByDesc('min_score')->toArray();
+          $ratingName = '';
+          foreach ($ratingOptions as $ratingOption) {
+                if($score >= $ratingOption['min_score']) {
+                    $ratingName =  $ratingOption['name'];
+                    break;
+                }
+          }
+          return $ratingName;
+      }catch (\Exception $ex) {
+          return '';
+      }
+
+  }
 
     public function weighted_scores()
     {
