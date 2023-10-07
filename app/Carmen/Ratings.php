@@ -76,7 +76,7 @@ class Ratings
 
       foreach ($ratingOptions as $ratingOption) {
 
-        if ($wholeEarnedPercent >= $ratingOption['min_score']) {
+        if ($percentage['max_score'] >= $ratingOption['min_score']) {
           $ratings[$index]['rating'] = $ratingOption;
           continue 2;
         }

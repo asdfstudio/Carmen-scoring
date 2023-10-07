@@ -4,6 +4,7 @@
   if($round->scoring_method_id == 5){
     $total_col_class = 'total_column weighted raw';
   }
+  $showRating = true;
 @endphp
 @if($rawScores->count() === 0)
 
@@ -43,10 +44,9 @@
       <th class="{{ $total_col_class }} total-col">Total</th>
 
       <th>Place</th>
-
-      @if(!empty($ratings))
-        <th>Rating</th>
-      @endif
+        @if($showRating)
+        <th class="raw weighted column-rating total_column">Rating</th>
+        @endif
     </tr>
 
     @foreach($choirs as $choir)
@@ -107,10 +107,9 @@
           @php $rank = !$choir->pivot->receives_rankings ? 'No Rank' : $totalRawRank->where('choir_id' , $choir->id)->pluck('rank')->first(); @endphp
           <span class="raw average score {{ $tied }}">{{ $rank }}</span>
         </td>
-
-        @if(!empty($ratings))
-          <td></td>
-        @endif
+          @if($showRating)
+            <td class="raw weighted column-rating total_column"></td>
+          @endif
       </tr>
     @endforeach
   @endforeach
@@ -137,10 +136,9 @@
     @endif
 
     <th>Place</th>
-
-    @if(!empty($ratings))
-      <th>Rating</th>
-    @endif
+      @if($showRating)
+      <th class="raw weighted column-rating total_column">Rating</th>
+      @endif
   </tr>
 
   @php
@@ -228,10 +226,23 @@
 
 
       </td>
-
-      @if(!empty($ratings))
-        <td>{{ $ratings->where('choir.id', $choir->id)->pluck('rating.name')->first() }}</td>
-      @endif
+        @if($showRating)
+            @php
+                if(!$choir->pivot->receives_ratings) {
+                    $ratingRaw = 'No Rating';
+                    $ratingWeight = 'No Rating';
+                } else {
+                    $ratingRaw = $rankedScores->getRatingOfChoir($rawTotal, $choir->pivot->division_id);
+                    $ratingWeight = $rankedScores->getRatingOfChoir($weightedTotal, $choir->pivot->division_id);
+                }
+            @endphp
+            <td class="raw column-rating total_column">
+                {{$ratingRaw}}
+            </td>
+            <td class="weighted column-rating total_column">
+                {{$ratingWeight}}
+            </td>
+        @endif
 
     </tr>
   @endforeach
