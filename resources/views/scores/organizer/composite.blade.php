@@ -45,7 +45,7 @@
 
       <th>Place</th>
         @if($showRating)
-        <th class="raw weighted column-rating total_column">Rating</th>
+        <th class="">Rating</th>
         @endif
     </tr>
 
@@ -108,7 +108,7 @@
           <span class="raw average score {{ $tied }}">{{ $rank }}</span>
         </td>
           @if($showRating)
-            <td class="raw weighted column-rating total_column"></td>
+            <td class=""></td>
           @endif
       </tr>
     @endforeach
@@ -137,7 +137,7 @@
 
     <th>Place</th>
       @if($showRating)
-      <th class="raw weighted column-rating total_column">Rating</th>
+      <th class=" ">Rating</th>
       @endif
   </tr>
 
@@ -241,6 +241,13 @@
             </td>
             <td class="weighted column-rating total_column">
                 {{$ratingWeight}}
+            </td>
+            <td class="average rank column-rating total_column">
+                @if($round->caption_weighting_id === 1)
+                    {{$ratingWeight}}
+                @else
+                    {{$ratingRaw}}
+                @endif
             </td>
         @endif
 

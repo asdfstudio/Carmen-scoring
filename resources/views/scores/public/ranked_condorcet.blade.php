@@ -1,3 +1,7 @@
+
+@php
+    $showRating = true;
+@endphp
 <div class="table-wrapper-responsive">
 <table class="table table-striped table-bordered scoreboard toggle-scores condorcet">
   @foreach($captions as $caption)
@@ -37,9 +41,9 @@
 
       <th>Rank</th>
 
-      @if(!empty($ratings))
-        <th>Rating</th>
-      @endif
+        @if($showRating)
+            <th class="">Rating</th>
+        @endif
     </tr>
 
     @foreach($choirs as $choir)
@@ -70,9 +74,9 @@
           <span class="condorcet score {{ $tied }}">{{ $rank }}</span>
         </td>
 
-        @if(!empty($ratings))
-          <td></td>
-        @endif
+          @if($showRating)
+              <td class=""></td>
+          @endif
       </tr>
     @endforeach
   @endforeach
@@ -113,9 +117,9 @@
 
     <th>Rank</th>
 
-    @if(!empty($ratings))
-      <th>Rating</th>
-    @endif
+      @if($showRating)
+          <th class="">Rating</th>
+      @endif
   </tr>
 
   @foreach($choirs as $choir)
@@ -143,9 +147,38 @@
         <span class="condorcet score {{ $tied }}">{{ $rank }}</span>
       </td>
 
-      @if(!empty($ratings))
-        <td>{{ $ratings->where('choir.id', $choir->id)->pluck('rating.name')->first() }}</td>
-      @endif
+        @if($showRating)
+            @php
+                if(!$choir->pivot->receives_ratings) {
+                    $ratingRaw = 'No Rating';
+                    $ratingWeight = 'No Rating';
+                } else {
+                    $penalty = $scoreboard->penalties->where('choir_id', $choir->id)->where('apply_per_judge', 0)->sum('amount');
+                    $judgePenalty = $judges->count() * $scoreboard->penalties->where('choir_id', $choir->id)->where('apply_per_judge', 1)->sum('amount');
+                    $weightedSubtotal = $weightedScores->where('choir_id', $choir->id)->sum('weightedScore');
+                    $rawSubtotal = $rawScores->where('choir_id', $choir->id)->sum('score');
+
+                    $weightedTotal = $weightedSubtotal - $penalty - $judgePenalty;
+                    $rawTotal = $rawSubtotal - $penalty - $judgePenalty;
+
+                    $ratingRaw = $rankedScores->getRatingOfChoir($rawTotal, $choir->pivot->division_id);
+                    $ratingWeight = $rankedScores->getRatingOfChoir($weightedTotal, $choir->pivot->division_id);
+                }
+            @endphp
+            <td class="raw column-rating total_column">
+                {{$ratingRaw}}
+            </td>
+            <td class="weighted column-rating total_column">
+                {{$ratingWeight}}
+            </td>
+            <td class="average rank condorcet  column-rating total_column">
+                @if($round->caption_weighting_id === 1)
+                    {{$ratingWeight}}
+                @else
+                    {{$ratingRaw}}
+                @endif
+            </td>
+        @endif
     </tr>
   @endforeach
 
