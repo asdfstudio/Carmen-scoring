@@ -231,9 +231,11 @@
                 if(!$choir->pivot->receives_ratings) {
                     $ratingRaw = 'No Rating';
                     $ratingWeight = 'No Rating';
+                    $ratingAverage = 'No Rating';
                 } else {
                     $ratingRaw = $rankedScores->getRatingOfChoir($rawTotal, $choir->pivot->division_id);
                     $ratingWeight = $rankedScores->getRatingOfChoir($weightedTotal, $choir->pivot->division_id);
+                    $ratingAverage = $rankedScores->getRatingOfChoir($averageTotal, $choir->pivot->division_id);
                 }
             @endphp
             <td class="raw column-rating total_column">
@@ -242,7 +244,10 @@
             <td class="weighted column-rating total_column">
                 {{$ratingWeight}}
             </td>
-            <td class="average rank column-rating total_column">
+            <td class="average column-rating total_column">
+                {{$ratingAverage}}
+            </td>
+            <td class="rank column-rating total_column">
                 @if($round->caption_weighting_id === 1)
                     {{$ratingWeight}}
                 @else
