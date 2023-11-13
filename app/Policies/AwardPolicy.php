@@ -90,14 +90,14 @@ class AwardPolicy extends BasePolicy
     }
 
 
-    public function assign($award, Division $division)
+    public function assign($award)
     {
         if($this->isOrgAdmin AND $this->orgId === $award->organization_id) {
           return true;
         }
     }
 
-    public function manage($award, Division $division)
+    public function manage($award)
     {
         if($this->isOrgAdmin AND $this->orgId === $award->organization_id) {
           return true;
