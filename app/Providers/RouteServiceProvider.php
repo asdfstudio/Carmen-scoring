@@ -1,5 +1,6 @@
 <?php
 namespace App\Providers;
+use App\Competition;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 class RouteServiceProvider extends ServiceProvider
@@ -21,6 +22,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         //
         parent::boot();
+        // Route::model('competition', Competition::class);
     }
     /**
      * Define the routes for the application.

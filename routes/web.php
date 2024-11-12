@@ -23,84 +23,104 @@ Route::redirect('/contact', '/login');
 ]);*/
 
 Route::get('feedback/{access_code?}', [
-  'as' => 'feedback.show', 'uses' => 'FeedbackController@show'
+  'as' => 'feedback.show',
+  'uses' => 'FeedbackController@show'
 ]);
 
 Route::get('results/division/{division}/standings/{access_code}', [
-  'as' => 'results.division.standings', 'uses' => 'ResultsController@divisionStandings'
+  'as' => 'results.division.standings',
+  'uses' => 'ResultsController@divisionStandings'
 ]);
 
 Route::get('results/division/{division}/scores/{access_code}', [
-  'as' => 'results.division.scores', 'uses' => 'ResultsController@divisionScores'
+  'as' => 'results.division.scores',
+  'uses' => 'ResultsController@divisionScores'
 ]);
 
 Route::get('results/division/{division}/round/{round}/scores/{access_code}', [
-  'as' => 'results.round.scores', 'uses' => 'ResultsController@roundScores'
+  'as' => 'results.round.scores',
+  'uses' => 'ResultsController@roundScores'
 ]);
 
 Route::get('results/round/{round}/audience-vote-results/', [
-  'as' => 'results.round.audience-vote-results', 'uses' => 'ResultsController@audienceVoteResult'
+  'as' => 'results.round.audience-vote-results',
+  'uses' => 'ResultsController@audienceVoteResult'
 ]);
 
 Route::get('results/division/{division}/round/{round}/choir/{choir}/{access_code}', [
-  'as' => 'results.division.round.choir.show', 'uses' => 'ResultsController@divisionRoundChoir'
+  'as' => 'results.division.round.choir.show',
+  'uses' => 'ResultsController@divisionRoundChoir'
 ]);
 
 Route::get('results/division/{division}/round/{round}/judge/{judge}/{access_code}', [
-  'as' => 'results.division.round.judge.show', 'uses' => 'ResultsController@divisionRoundJudge'
+  'as' => 'results.division.round.judge.show',
+  'uses' => 'ResultsController@divisionRoundJudge'
 ]);
 
 Route::get('results/division/{division}/{access_code}', [
-  'as' => 'results.division.show', 'uses' => 'ResultsController@division'
+  'as' => 'results.division.show',
+  'uses' => 'ResultsController@division'
 ]);
 
 
 Route::get('results/division/{division}', [
-  'as' => 'results.division.show-public', 'uses' => 'ResultsController@divisionPublic'
+  'as' => 'results.division.show-public',
+  'uses' => 'ResultsController@divisionPublic'
 ]);
 
 Route::post('results/division/{division}', [
-  'as' => 'results.division.access-protected', 'uses' => 'ResultsController@divisionAccessProtected'
+  'as' => 'results.division.access-protected',
+  'uses' => 'ResultsController@divisionAccessProtected'
 ]);
 
 Route::match(['get', 'post'], 'results/solo-division/{soloDivision}/performer/{performer}/{access_code?}/{director_email?}/', [
-  'as' => 'results.solo-division.performer.show', 'uses' => 'ResultsController@soloDivisionPerformer'
+  'as' => 'results.solo-division.performer.show',
+  'uses' => 'ResultsController@soloDivisionPerformer'
 ]);
 
 Route::match(['get', 'post'], 'results/solo-division/{soloDivision}/{access_code?}/', [
-  'as' => 'results.solo-division.show', 'uses' => 'ResultsController@soloDivision'
+  'as' => 'results.solo-division.show',
+  'uses' => 'ResultsController@soloDivision'
 ]);
 
 Route::get('results/competition/{competition}', [
-  'as' => 'results.competition.show-public', 'uses' => 'ResultsController@competitionPublic'
+  'as' => 'results.competition.show-public',
+  'uses' => 'ResultsController@competitionPublic'
 ]);
 
 Route::any('/results/view/{competition_slug}', [
-  'as' => 'results.competition.show-custom', 'uses' => 'ResultsController@competitionCustom'
+  'as' => 'results.competition.show-custom',
+  'uses' => 'ResultsController@competitionCustom'
 ]);
 
 Route::get('results/{year}', [
-  'as' => 'results.year', 'uses' => 'ResultsController@indexYear'
+  'as' => 'results.year',
+  'uses' => 'ResultsController@indexYear'
 ]);
 
 Route::get('results', [
-  'as' => 'results.index', 'uses' => 'ResultsController@index'
+  'as' => 'results.index',
+  'uses' => 'ResultsController@index'
 ]);
 
 Route::get('profile', [
-  'as' => 'profile.edit', 'uses' => 'ProfileController@edit'
+  'as' => 'profile.edit',
+  'uses' => 'ProfileController@edit'
 ]);
 
 Route::patch('profile', [
-  'as' => 'profile.update', 'uses' => 'ProfileController@update'
+  'as' => 'profile.update',
+  'uses' => 'ProfileController@update'
 ]);
 
 Route::get('profile/password', [
-  'as' => 'password.edit', 'uses' => 'PasswordController@edit'
+  'as' => 'password.edit',
+  'uses' => 'PasswordController@edit'
 ]);
 
 Route::put('profile/password', [
-  'as' => 'password.update.self', 'uses' => 'PasswordController@update'
+  'as' => 'password.update.self',
+  'uses' => 'PasswordController@update'
 ]);
 
 
@@ -119,21 +139,80 @@ Route::get('email/resend', 'Auth\VerificationController@resend')->name('verifica
 Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::get('home/{organizer}/{alias}', [
-    'as' => 'home.organizer', 'uses' => 'HomeController@organizer'
+  'as' => 'home.organizer',
+  'uses' => 'HomeController@organizer'
 ]);
 
 Route::get('home/{organizer}/{alias}/results', [
-    'as' => 'home.organizer.results', 'uses' => 'ResultsController@showAudienceVoteResult'
+  'as' => 'home.organizer.results',
+  'uses' => 'ResultsController@showAudienceVoteResult'
 ]);
 
 Route::get('solo-division/{organizer}/{alias}', [
-  'as' => 'home.solo-division', 'uses' => 'HomeController@soloDivisionVote'
+  'as' => 'home.solo-division',
+  'uses' => 'HomeController@soloDivisionVote'
 ]);
 
 Route::get('solo-division/{organizer}/{alias}/results', [
-  'as' => 'home.solo-division.results', 'uses' => 'ResultsController@viewSoloAudienceVoteResult'
+  'as' => 'home.solo-division.results',
+  'uses' => 'ResultsController@viewSoloAudienceVoteResult'
 ]);
 
 Route::post('buy-petl-points', [
-  'as' => 'buy-petl-points', 'uses' => 'PaymentController@paymentStripe'
+  'as' => 'buy-petl-points',
+  'uses' => 'PaymentController@paymentStripe'
 ]);
+
+// Route::group(['middleware' => ['auth']], function () {
+//   Route::get('organizer/competition/{competition}/recap', [App\Http\Controllers\Organizer\CompetitionController::class, 'showRecap'])
+//       ->name('organizer.competition.recap.show')
+//       ->middleware('can:view,competition');
+
+//   Route::get('organizer/competition/{competition}/recap/download', [App\Http\Controllers\Organizer\CompetitionController::class, 'downloadRecap'])
+//       ->name('organizer.competition.recap.download')
+//       ->middleware('can:view,competition');
+// });
+
+
+
+Route::group(['middleware' => ['auth']], function () {
+  //   Route::get('organizer/competition/{competition}/recap', [App\Http\Controllers\Organizer\CompetitionController::class, 'showRecap'])
+//       ->name('organizer.competition.recap.show')
+//       ->middleware('can:view,competition');
+
+  //   Route::get('organizer/competition/{competition}/recap/download', [App\Http\Controllers\Organizer\CompetitionController::class, 'downloadRecap'])
+//       ->name('organizer.competition.recap.download')
+//       ->middleware('can:view,competition');
+// });
+// Route::get('organizer/competition/{competition}/recap', [
+//   'as' => 'organizer.competition.recap.show', 
+//   'uses' => 'Organizer\CompetitionController@showRecap'
+// ])->middleware('can:view,competition');
+
+  // Route::get('organizer/competition/{competition}/recap/download', [App\Http\Controllers\Organizer\CompetitionController::class, 'downloadRecap'])
+//     ->name('organizer.competition.recap.download')
+//     ->middleware('can:view,competition');
+
+  // // Show Recap Route
+// Route::get('organizer/competition/{competition}/recap', [App\Http\Controllers\Organizer\CompetitionController::class, 'showRecap'])
+//     ->name('organizer.competition.recap.show')
+//     ->middleware('can:view,competition');
+
+  // // Download Recap Route
+// Route::get('organizer/competition/{competition}/recap/download/{format}', [App\Http\Controllers\Organizer\CompetitionController::class, 'downloadRecap'])
+//     ->name('organizer.competition.recap.download')
+//     ->middleware('can:view,competition');
+
+
+  // Routes for authenticated users with "can:view,competition" middleware
+  Route::group(['middleware' => ['auth']], function () {
+    Route::get('organizer/competition/{competition}/recap', [App\Http\Controllers\Organizer\CompetitionController::class, 'showRecap'])
+      ->name('organizer.competition.recap.show')
+      ->middleware('can:view,competition');
+
+    Route::get('organizer/competition/{competition}/recap/download/{format?}', [App\Http\Controllers\Organizer\CompetitionController::class, 'downloadRecap'])
+      ->name('organizer.competition.recap.download')
+      ->middleware('can:view,competition');
+  });
+});
+

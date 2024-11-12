@@ -14,6 +14,23 @@ class CompetitionPolicy extends BasePolicy
     use HandlesAuthorization;
 
     /**
+     * Determine whether the user can view the competition.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Competition  $competition
+     * @return mixed
+     */
+    public function view(User $user, Competition $competition)
+    {
+        return $user->organization_id === $competition->organization_id;
+    }
+    
+    
+    
+    
+    
+
+    /**
      * Create a new policy instance.
      *
      * @return void

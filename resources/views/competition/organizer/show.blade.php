@@ -41,16 +41,23 @@
     <li class="list-group-item">Access Code: {{ $competition->access_code }}</li>
   </ul>
 
-  <h3>Group divisions</h3>
-  <p>Rounds are groups of divisions that use the same scoresheet, scoring method, and judges.</p>
+  <h3>Digital Recap Sheet</h3>
+  <p>View and download the recap of the entire competition, including ensemble rankings and awards.</p>
+  <ul class="actions-group">
+    <li>{{ link_to_route('organizer.competition.recap.show', 'View Recap Sheet', [$competition->id], ['class' => 'action']) }}</li>
+    <li>{{ link_to_route('organizer.competition.recap.download', 'Download as PDF', [$competition->id, 'format' => 'pdf'], ['class' => 'action']) }}</li>
+  </ul>
 
+  <h3>Group classes</h3>
+  <p>Types are groups of classes that use the same scoresheet, scoring method, and judges.</p>
+<!-- replace division to class -->
   @if($roundsCount > 0)
-      <p>{{ link_to_route('organizer.competition.round.index','Manage your rounds',[$competition], ['class' => 'action']) }}
-          {{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition], ['class' => 'action']) }}
+      <p>{{ link_to_route('organizer.competition.round.index','Manage your types',[$competition], ['class' => 'action']) }}
+          {{ link_to_route('organizer.competition.division.index','Manage your classes',[$competition], ['class' => 'action']) }}
       </p>
       @include('round.organizer.list',['rounds' => $competition->rounds])
   @else
-      <p>{{ link_to_route('organizer.competition.round.create','Create your first round',[$competition], ['class' => 'action']) }}</p>
+      <p>{{ link_to_route('organizer.competition.round.create','Create your first type',[$competition], ['class' => 'action']) }}</p>
   @endif
 
 {{--  <h3>Manage Divisions</h3>--}}
@@ -65,13 +72,13 @@
 {{--      <p>{{ link_to_route('organizer.competition.round.create','Create your first round to add divisions',[$competition], ['class' => 'action']) }}</p>--}}
 {{--  @endif--}}
 
-  <h3>Manage Solo Divisions</h3>
+  <h3>Manage Solo Classes</h3>
 
   @if($competition->soloDivisions->count() > 0)
-      <p>{{ link_to_route('organizer.competition.solo-division.create','Create a solo division',[$competition], ['class' => 'action']) }}</p>
+      <p>{{ link_to_route('organizer.competition.solo-division.create','Create a solo class',[$competition], ['class' => 'action']) }}</p>
       @include('solo-division.organizer.list',['soloDivisions' => $competition->soloDivisions, 'scoringForms' => $divisionScoringForms])
   @else
-      <p>{{ link_to_route('organizer.competition.solo-division.create','Create your first solo division',[$competition], ['class' => 'action']) }}</p>
+      <p>{{ link_to_route('organizer.competition.solo-division.create','Create your first solo class',[$competition], ['class' => 'action']) }}</p>
   @endif
 
   <h3>Manage Competition Awards</h3>
@@ -99,7 +106,7 @@
 
   <h3>Manage Schedules</h3>
 
-  <p>Set the performance order for your competition. Do this after you have created all of your divisions, rounds and ensembles.</p>
+  <p>Set the performance order for your competition. Do this after you have created all of your classes, types and ensembles.</p>
 
   <p>{{ link_to_route('organizer.competition.schedule.create','Add a performance schedule',[$competition], ['class' => 'action']) }}</p>
 
