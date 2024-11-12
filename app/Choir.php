@@ -56,7 +56,7 @@ class Choir extends Model
 
     public function divisions()
     {
-        return $this->belongsToMany('App\Division')->withPivot('receives_rankings', 'receives_ratings');
+        return $this->belongsToMany('App\Division')->withPivot('receives_rankings', 'receives_ratings', 'choral_sweepstakes', 'instrumental_sweepstakes', 'festival_sweepstakes');
     }
 
     public function scheduleItems()

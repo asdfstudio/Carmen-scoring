@@ -381,20 +381,63 @@ class CompetitionDivisionChoirController extends Controller
      */
     public function update($competition_id, $division_id, $choir_id, FormBuilder $formBuilder, Request $request)
     {
-        $division = Division::with('competition')->find($division_id);
-        $choir = Choir::with('school')->find($choir_id);
-
-        $receives_ratings = $request->filled('receives_ratings');
-        $receives_rankings = $request->filled('receives_rankings');
-
-        // Check if ensemble receives rankings or ratings
-        $division->choirs()->updateExistingPivot($choir->id, [
-            'receives_rankings' => (int)$receives_rankings,
-            'receives_ratings' => (int)$receives_ratings
+      // Ensure RawScore is imported
+  
+  
+      // Fetch the choir with its current division
+      $choir = Choir::with('divisions')->find($choir_id);
+  
+      // Get the new division ID from the request
+      $newDivisionId = $request->input('division_id');
+  
+      // Check if the new division is different from the current one
+      if ($choir->divisions->first()->id != $newDivisionId) {
+        // Move choir to the new division
+        $choir->divisions()->detach($division_id);
+        $choir->divisions()->attach($newDivisionId, [
+          'receives_rankings' => $request->filled('receives_rankings'),
+          'receives_ratings' => $request->filled('receives_ratings'),
+          // Add new fields for sweepstakes
+          'choral_sweepstakes' => $request->filled('choral_sweepstakes'),
+          'instrumental_sweepstakes' => $request->filled('instrumental_sweepstakes'),
+          'festival_sweepstakes' => $request->filled('festival_sweepstakes'),
         ]);
-
-        // Set flash data and redirect
-  		return redirect()->route('organizer.competition.division.board',[$division->competition, $division])->with('success',"$choir->name has been updated for this division." );
+  
+  
+        RawScore::where('choir_id', $choir_id)
+          ->where('division_id', $division_id)
+          ->update(['division_id' => $newDivisionId]);
+  
+        Comment::where('choir_id', $choir_id)
+          ->where('recipient_type', 'division')
+          ->where('recipient_id', $division_id)
+          ->update(['recipient_id' => $newDivisionId]);
+  
+        DivisionFile::where('choir_id', $choir_id)
+          ->where('division_id', $division_id)
+          ->update(['division_id' => $newDivisionId]);
+  
+        ScheduleItem::where('choir_id', $choir_id)
+          ->where('division_id', $division_id)
+          ->update(['division_id' => $newDivisionId]);
+  
+  
+  
+      } else {
+        // Just update the current division's pivot data if the division is the same
+        $choir->divisions()->updateExistingPivot($division_id, [
+          'receives_rankings' => (int) $request->filled('receives_rankings'),
+          'receives_ratings' => (int) $request->filled('receives_ratings'),
+                  // Add new fields for sweepstakes
+                  'choral_sweepstakes' => $request->filled('choral_sweepstakes'),
+                  'instrumental_sweepstakes' => $request->filled('instrumental_sweepstakes'),
+                  'festival_sweepstakes' => $request->filled('festival_sweepstakes'),
+        ]);
+      }
+  
+      // Redirect with success message
+      return redirect()->route('organizer.competition.division.board', [$competition_id, $division_id])
+        ->with('success', "$choir->name has been updated and moved to the new division along with all related data.");
     }
 
     /**

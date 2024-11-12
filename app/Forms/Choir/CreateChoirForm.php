@@ -78,7 +78,6 @@ class CreateChoirForm extends Form
           'label_show' => false
         ]);
 
-        // Add a director when creating a choir
         $this->add('director', 'form', [
           'class' => $this->formBuilder->create('Director\DirectorForm'),
           'wrapper' => ['class' => 'new_choir_container'],
@@ -97,6 +96,25 @@ class CreateChoirForm extends Form
             'checked' => true,
             'label' => 'Can receive ratings'
         ]);
+
+        $this->add('choral_sweepstakes', 'checkbox', [
+          'value' => 1,
+          'checked' => true,
+          'label' => 'Choral Sweepstakes Qualification',
+      ]);
+      
+      $this->add('instrumental_sweepstakes', 'checkbox', [
+          'value' => 1,
+          'checked' => true,
+          'label' => 'Instrumental Sweepstakes Qualification',
+      ]);
+      
+      $this->add('festival_sweepstakes', 'checkbox', [
+          'value' => 1,
+          'checked' => true,
+          'label' => 'Festival Sweepstakes Qualification',
+      ]);
+        
 
         // Submit
         $this->add('submit', 'submit', [

@@ -16,6 +16,11 @@ class AddColumnsToChoirDivisionTable extends Migration
         Schema::table('choir_division', function (Blueprint $table) {
             $table->boolean('receives_rankings')->default(true);
             $table->boolean('receives_ratings')->default(true);
+
+            //sweepstakes
+            $table->boolean('choral_sweepstakes')->default(true);
+            $table->boolean('instrumental_sweepstakes')->default(true);
+            $table->boolean('festival_sweepstakes')->default(true);
         });
     }
 
@@ -29,6 +34,11 @@ class AddColumnsToChoirDivisionTable extends Migration
         Schema::table('choir_division', function (Blueprint $table) {
             $table->dropColumn('receives_rankings');
             $table->dropColumn('receives_ratings');
+
+            //sweepstakes
+            $table->dropColumn('choral_sweepstakes');
+            $table->dropColumn('instrumental_sweepstakes');
+            $table->dropColumn('festival_sweepstakes');
         });
     }
 }
