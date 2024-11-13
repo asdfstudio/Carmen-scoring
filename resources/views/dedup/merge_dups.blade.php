@@ -56,7 +56,7 @@
                 <li>No user account associated with this person</li>
               @endif
               @if($person->divisions_judged)
-                <li>Judge of {{ count($person->divisions_judged) }} division(s) and {{ count($person->divisions_pivot_captions) }} caption(s) with {{ count($person->comments) }} comment(s)</li>
+                <li>Judge of {{ count($person->divisions_judged) }} class(es) and {{ count($person->divisions_pivot_captions) }} caption(s) with {{ count($person->comments) }} comment(s)</li>
               @endif
               @if($person->choirs_directed)
                 <li>Director of {{ count($person->choirs_directed) }} choirs(s)</li>

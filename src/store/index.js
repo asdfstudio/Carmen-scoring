@@ -293,7 +293,7 @@ export const store = new Vuex.Store({
           }
           return ratingName + ' (' + percentage + '%)'
       } else {
-        return "Division Not Rated"
+        return "Class Not Rated"
       }
     },
     getChoirCaptionRank: (state, getters) => (choirId, captionId) => {

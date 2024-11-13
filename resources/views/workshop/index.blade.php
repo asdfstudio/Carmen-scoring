@@ -12,7 +12,7 @@
       <h2>Open Scoring</h2>
       <ul>
         <li>Activates all competitions.</li>
-        <li>Activates scoring all divisions.</li>
+        <li>Activates scoring all classes.</li>
         <li>Activates scoring for all rounds.</li>
       </ul>
       {{ link_to_route('workshop.open', 'Open Scoring', [], ['class' => 'btn btn-default'])}}
@@ -22,7 +22,7 @@
       <h2>Close Scoring</h2>
       <ul>
         <li>Complete scoring for all rounds.</li>
-        <li>Complete scoring all divisions.</li>
+        <li>Complete scoring all classes.</li>
       </ul>
       {{ link_to_route('workshop.close', 'Close Scoring', [], ['class' => 'btn btn-default'])}}
     </div>
@@ -30,7 +30,7 @@
     <div class="col-md-4">
       <h2>Finalize Scoring</h2>
       <ul>
-        <li>Finalize division scoring.</li>
+        <li>Finalize class scoring.</li>
         <li>Complete competitions.</li>
       </ul>
       {{ link_to_route('workshop.finalize', 'Finalize Scoring', [], ['class' => 'btn btn-default'])}}

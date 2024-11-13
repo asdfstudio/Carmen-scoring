@@ -18,7 +18,7 @@
 
 
 	<p>
-		This page lists all of your available penalties for your organization. You can choose which penalties (or none at all) to make available in your competition divisions.
+		This page lists all of your available penalties for your organization. You can choose which penalties (or none at all) to make available in your competition classes.
 	</p>
 
 

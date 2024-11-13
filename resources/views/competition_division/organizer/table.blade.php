@@ -1,5 +1,5 @@
 @if($competition->divisions->isEmpty())
-    <p>There are no divisions.</p>
+    <p>There are no classes.</p>
 @else
     <div class="table-wrapper-responsive">
         <table class="table table-striped table-bordered">

@@ -60,7 +60,7 @@ class CompetitionSoloDivisionController extends Controller
         $soloDivision->fill($request->input());
         $soloDivision->save();
 
-        return redirect()->route('organizer.competition.solo-division.show', [$competition, $soloDivision])->with('success', 'Your solo division has been created.');
+        return redirect()->route('organizer.competition.solo-division.show', [$competition, $soloDivision])->with('success', 'Your solo class has been created.');
     }
 
     /**
@@ -278,7 +278,7 @@ class CompetitionSoloDivisionController extends Controller
         $soloDivision->fill($request->input());
         $soloDivision->save();
 
-        return redirect()->route('organizer.competition.solo-division.show', [$competition, $soloDivision])->with('success', 'Your solo division has been updated.');
+        return redirect()->route('organizer.competition.solo-division.show', [$competition, $soloDivision])->with('success', 'Your solo class has been updated.');
     }
 
     public function managePerformers(Competition $competition, FormBuilder $formBuilder, $id)

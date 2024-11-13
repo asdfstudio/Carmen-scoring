@@ -10,7 +10,7 @@
   <h2>{{ $choir->full_name }}</h2>
 
 
-  <h3>Divisions</h3>
+  <h3>Classes</h3>
 
   <!-- Although Comments and Recordings are linked to a round, we want to display these by the Division the choir is in -->
   @foreach($divisions as $div)
@@ -23,7 +23,7 @@
         <h4>{{ $div->name }}, {{ $round->name }}</h4>
 
         @if(!$div->is_completed)
-          <p>Feedback for this division will be available once this division is complete.</p>
+          <p>Feedback for this class will be available once this division is complete.</p>
         @endif
 
         @if($div->is_completed)
@@ -144,7 +144,7 @@
       @endif
   @endforeach
 
-  <h3>Solo Divisions</h3>
+  <h3>Solo Classes</h3>
 
   @foreach($competition->soloDivisions as $soloDivision)
       @php

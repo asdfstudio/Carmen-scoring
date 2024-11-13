@@ -6,7 +6,7 @@
     <div class="division-actions">
         <ul class="actions-group">
             <li>
-                {{ link_to_route( Request::segment(1) . '.competition.show', 'All Divisions', [$division->competition], ['class' => 'action'])}}
+                {{ link_to_route( Request::segment(1) . '.competition.show', 'All Classes', [$division->competition], ['class' => 'action'])}}
             </li>
         </ul>
     </div>
@@ -15,7 +15,7 @@
     <ul class="division-navigation">
         <li>
             @php $link_class = Request::segment(6) == 'edit' ? 'active' : false; @endphp
-            <a href="{{ route('organizer.competition.division.edit', [$competition, $division]) }}" class="{{ $link_class }}">Edit Division Settings</a>
+            <a href="{{ route('organizer.competition.division.edit', [$competition, $division]) }}" class="{{ $link_class }}">Edit Class Settings</a>
         </li>
         <li>
             @php $link_class = Request::segment(6) == 'board' ? 'active' : false; @endphp

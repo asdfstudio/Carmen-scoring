@@ -40,21 +40,21 @@
     <div class="clearfix"></div>
 
     @if ($division->isMissingScores())
-        <p class="alert alert-warning">This division is currently missing scores. Do not complete the scoring until you have received scores from all judges.</p>
+        <p class="alert alert-warning">This class is currently missing scores. Do not complete the scoring until you have received scores from all judges.</p>
     @endif
 
     @if($division->status_slug() == 'finalized')
         <div class="alert alert-info">
-            <p>Results for this division are available at {{ link_to_route('results.division.show', NULL, [$division, $division->access_code], ['target' => '_blank']) }} </p>
+            <p>Results for this class are available at {{ link_to_route('results.division.show', NULL, [$division, $division->access_code], ['target' => '_blank']) }} </p>
         </div>
     @endif
 
     <ul class="list-group">
         <li class="list-group-item">
-            <h3>Division in Round {{ $division->round->name }}</h3>
+            <h3>Class in Round {{ $division->round->name }}</h3>
 
             @if (isset($division->rating_system))
-            <h4>Division Rating Systems</h4>
+            <h4>Class Rating Systems</h4>
 
             <div class="table-wrapper-responsive">
                 <table class="table table-striped table-bordered">
@@ -114,7 +114,7 @@
         <ul class="list-group horizontal">
             <li class="list-group-item">
                 <a class="score-view-toggle active division-scoring-method" href="#weighted" data-score-view="weighted">Weighted</a>
-                <span>(division scoring method, {{ $division->round->captionWeighting->name }})</span>
+                <span>(class scoring method, {{ $division->round->captionWeighting->name }})</span>
             </li>
             <li class="list-group-item">
                 <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
@@ -152,7 +152,7 @@
         <ul class="list-group horizontal">
             <li class="list-group-item">
                 <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>
-                <span>(division scoring method)</span>
+                <span>(class scoring method)</span>
             </li>
             @if ($show_borda)
                 <li class="list-group-item">
@@ -187,7 +187,7 @@
         <ul class="list-group horizontal">
             <li class="list-group-item">
                 <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>
-                <span>(division scoring method)</span>
+                <span>(class scoring method)</span>
             </li>
             @if ($show_borda)
                 <li class="list-group-item">

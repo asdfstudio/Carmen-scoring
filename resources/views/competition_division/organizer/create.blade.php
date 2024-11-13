@@ -13,14 +13,14 @@
 
 @section('content-header')
     @isset($updating)
-        <h1>Edit a division</h1>
+        <h1>Edit a class</h1>
         <ul class="actions-group">
-            <li>{{ link_to_route('organizer.competition.division.show','Back to the division',[$competition, $division],['class' => 'action']) }}</li>
+            <li>{{ link_to_route('organizer.competition.division.show','Back to the class',[$competition, $division],['class' => 'action']) }}</li>
         </ul>
     @else
-        <h1>Create a division</h1>
+        <h1>Create a class</h1>
         <ul class="actions-group">
-            <li>{{ link_to_route('organizer.competition.division.index','Back to All Divisions',[$competition],['class' => 'action']) }}</li>
+            <li>{{ link_to_route('organizer.competition.division.index','Back to All Classes',[$competition],['class' => 'action']) }}</li>
         </ul>
 @endisset
 @endsection
@@ -39,7 +39,7 @@
         @isset($updating)
         @can('destroy', $division)
             <hr>
-            <h3>Delete this division?</h3>
+            <h3>Delete this class?</h3>
             <p class="alert alert-danger d-flex"><i class="fa fa-exclamation-triangle dg-fs-22 mr"></i>This is a permanent, irrecoverable action. Proceed with caution.</p>
             {!! form($deleteForm) !!}
         @endcan

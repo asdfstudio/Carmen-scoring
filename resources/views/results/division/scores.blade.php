@@ -111,14 +111,14 @@
           <li class="list-group-item">
               <a class="score-view-toggle active division-scoring-method" href="#rankings"
                  data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>
-              <span>(division scoring method)</span>
+              <span>(class scoring method)</span>
           </li>
       @endif
       @if($round->scoring_method_id === 3 || $round->scoring_method_id === 4)
           <li class="list-group-item">
               <a class="score-view-toggle active division-scoring-method" href="#rankings"
                  data-score-view="{{ $rankings_class }}">{{ $rankings_tab_name }}</a>
-              <span>(division scoring method)</span>
+              <span>(class scoring method)</span>
           </li>
       @endif
 

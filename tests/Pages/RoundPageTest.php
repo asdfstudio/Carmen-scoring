@@ -33,7 +33,7 @@ class RoundPageTest  extends TestCase
         // check Manage Divisions, Edit scoring , Edit judges button visibility
         $this->actingAs($user)
             ->get('/organizer/competition/' . $division->competition->id . '/round/' . $division->round->id)
-            ->assertSeeTextInOrder(["Edit Scoring", "Edit Judges", "Manage Divisions"]);
+            ->assertSeeTextInOrder(["Edit Scoring", "Edit Judges", "Manage Classes"]);
     }
 
     public function testRoundPageFinalizedStatus()
@@ -56,7 +56,7 @@ class RoundPageTest  extends TestCase
 
         $this->actingAs($user)
             ->get('/organizer/competition/' . $division->competition->id . '/round/' . $division->round->id)
-            ->assertDontSeeText("Manage Divisions");
+            ->assertDontSeeText("Manage Classes");
 
     }
 }

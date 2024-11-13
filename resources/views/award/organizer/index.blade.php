@@ -19,7 +19,7 @@
 
 	<h2>Custom Awards</h2>
 	<p class="content-intro">
-		Custom awards are created and used by your organization. They can be used in as many competitions and divisions as you'd like.
+		Custom awards are created and used by your organization. They can be used in as many competitions and classes as you'd like.
 	</p>
   @include('award.organizer.list')
 

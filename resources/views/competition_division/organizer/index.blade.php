@@ -5,10 +5,10 @@
 @endsection
 
 @section('content-header')
-	<h1>Manage Divisions</h1>
+	<h1>Manage Classes</h1>
 
 	@can('createDivision', [$competition])
-		{{ link_to_route('organizer.competition.division.create', 'Add a division', [$competition], ['class' => 'action']) }}
+		{{ link_to_route('organizer.competition.division.create', 'Add a class', [$competition], ['class' => 'action']) }}
 	@endcan
 @endsection
 

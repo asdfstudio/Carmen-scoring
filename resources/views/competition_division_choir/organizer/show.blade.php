@@ -4,7 +4,7 @@
 
 	{!! Breadcrumbs::render('organizer.competition.division.choir.show',$division->competition,$division, $choir) !!}
 
-	<h1>Competition > Divisions > Ensembles > {{ $choir->name }}</h1>
+	<h1>Competition > Classes > Ensembles > {{ $choir->name }}</h1>
 
 
 

@@ -6,7 +6,7 @@
 
 	<div class="content-header">
 
-		<h1>Manage Division Awards</h1>
+		<h1>Manage Class Awards</h1>
 
 		<ul class="actions-group">
 			@can('showAll','App\Award')

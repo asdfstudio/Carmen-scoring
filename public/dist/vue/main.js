@@ -32481,7 +32481,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
 
           return ratingName + ' (' + percentage + '%)';
         } else {
-          return "Division Not Rated";
+          return "Class Not Rated";
         }
       };
     },

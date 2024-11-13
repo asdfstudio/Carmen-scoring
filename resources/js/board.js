@@ -615,7 +615,7 @@ $(document).ready(function() {
         let formData = $('form.dg-import-resource-form').serialize();
         const isValid = formData.includes('&id=');
         if (result && !isValid) {
-          Swal.showValidationMessage('Request failed: There are no selected divisions!');
+          Swal.showValidationMessage('Request failed: There are no selected classes!');
         }
         else if (result && isValid){
           return new Promise(function(resolve, reject) {

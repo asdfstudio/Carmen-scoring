@@ -10,12 +10,12 @@
       <p>You have no rounds to score</p>
   @endif
 
-    <h3>Solo Divisions</h3>
+    <h3>Solo Classes</h3>
 
     @if ($competition->soloDivisions->count() > 0)
       @include('solo-division.judge.list',['soloDivisions' => $competition->soloDivisions])
     @else
-      <p>There are no solo divisions.</p>
+      <p>There are no solo classes.</p>
     @endif
 
 @endsection

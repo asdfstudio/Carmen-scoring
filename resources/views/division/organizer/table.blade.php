@@ -1,7 +1,7 @@
-<h1>Divisions</h1>
+<h1>Classes</h1>
 
 @if($divisions->isEmpty())
-	<p>There are no divisions.</p>
+	<p>There are no classes.</p>
 @endif
 
 @if(!$divisions->isEmpty())

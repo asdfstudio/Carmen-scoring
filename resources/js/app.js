@@ -548,7 +548,7 @@ $(document).ready(function() {
     // division "save & create another" on edit/create page
     const swal_save_create_another = (type, form) => {
       Swal.fire({
-        title: '<div class="dg-fs-18 dg-mt-24">Input a new division name here:</div>',
+        title: '<div class="dg-fs-18 dg-mt-24">Input a new class name here:</div>',
         input: 'text',
         inputAttributes: {
           autocapitalize: 'off'
@@ -583,10 +583,10 @@ $(document).ready(function() {
           Swal.fire({
             title: 'Success!',
             html: type === 'edit' ?
-                   `<p><b>${result.value.edited}</b> division has been <b><i>saved!</i></b></p>
-                    <p><b>${result.value.new}</b> division has been <b><i>created</i></b> successfully!</p>`
+                   `<p><b>${result.value.edited}</b> class has been <b><i>saved!</i></b></p>
+                    <p><b>${result.value.new}</b> classes has been <b><i>created</i></b> successfully!</p>`
                   :
-                  `<b>${result.value[0]}</b> and <b>${result.value[1]}</b> divisions have been <b><i>created</i></b> successfully!`,
+                  `<b>${result.value[0]}</b> and <b>${result.value[1]}</b> classes have been <b><i>created</i></b> successfully!`,
             icon: 'success',
           })
           .then((result) => {

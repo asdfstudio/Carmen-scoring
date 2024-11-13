@@ -1,6 +1,6 @@
 @if($divisions)
 
-  <h3 class="heading">Divisions</h3>
+  <h3 class="heading">Classes</h3>
 
   <ul class="list-group">
     @foreach($divisions as $div)

@@ -1,7 +1,7 @@
 @extends('layouts.simple')
 
 @section('content-header')
-  <h1>Import Judges to Division</h1>
+  <h1>Import Judges to Class</h1>
 
   <ul class="actions-group">
     <li>
@@ -13,11 +13,11 @@
 
 @section('content')
   @if (count($divisions) == 0)
-    <div>There are no divisions</div>
+    <div>There are no classes</div>
   @else
     
     {{ Form::open() }}
-      <label for="id" class="control-label">Choose a division to import judges from</label>
+      <label for="id" class="control-label">Choose a class to import judges from</label>
 
       @foreach($divisions as $division_other)
         @php

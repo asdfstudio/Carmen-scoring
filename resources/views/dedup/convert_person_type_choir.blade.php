@@ -11,7 +11,7 @@
   <p>
     This script converts the type (Judge, Director, Choreographer) of every person in
     the database to the new table structure. This will allow one person to have multiple
-    types.  This script also looks up existing relationships between judges and divisions
+    types.  This script also looks up existing relationships between judges and classes
     and between directors/choreographers and ensembles, and converts those associations into
     the new table structure.
   </p>
@@ -58,7 +58,7 @@
             <div style="padding: 20px;">
               <p>{{ $judge->intro }}</p>
               <ul>
-                <li>Assigned to {{ count($judge->divisions) }} divisions</li>
+                <li>Assigned to {{ count($judge->divisions) }} classes</li>
               </ul>
               @if(isset($judge->run_messages) && !empty($judge->run_messages))
                 <div class="alert alert-info">

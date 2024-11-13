@@ -15,7 +15,7 @@
 
 <div class="division-board content-header" id="division-13-board">
     <ul class="actions-group">
-        <li>{{ link_to_route('organizer.competition.division.show', 'Back to the Division', [$competition,$division],['class' => 'action']) }}</li>
+        <li>{{ link_to_route('organizer.competition.division.show', 'Back to the Class', [$competition,$division],['class' => 'action']) }}</li>
     </ul>
     <h2>Edit Ensembles</h2>
 

@@ -8,7 +8,7 @@
 
     <div class="division_header col-xs-12">
       @section('division_header')
-        <h1><small>Division:</small> {{ $division->name }}</h1>
+        <h1><small>Class:</small> {{ $division->name }}</h1>
       @show
     </div>
 

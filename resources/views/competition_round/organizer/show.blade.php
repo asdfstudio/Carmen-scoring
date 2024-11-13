@@ -19,7 +19,7 @@
     </ul>
     <ul class="list-group">
         <div>
-            <h3 style="width: 49%;display: inline-block">Divisions</h3>
+            <h3 style="width: 49%;display: inline-block">Classes</h3>
             <div style="width: 50%;display: inline-block;text-align: right;padding-bottom: 10px">{{ link_to_route('organizer.competition.division.create','Create your division',[$competition], ['class' => 'action']) }}</div>
         </div>
         @foreach($round->divisions as $div)

@@ -36,7 +36,7 @@
 {{--      			<a href="{{ route('results.division.standings', [$division, $access_code]) }}" class="@if($current_page == 'standings') active @endif action">Standings</a>--}}
 {{--      		</li>--}}
             <li>
-                <a href="{{ route('results.division.scores', [$division, $access_code]) }}" class="@if($current_page == 'division-scores') active @endif action">Division Scores</a>
+                <a href="{{ route('results.division.scores', [$division, $access_code]) }}" class="@if($current_page == 'division-scores') active @endif action">Class Scores</a>
             </li>
             @php $round = $division->round;@endphp
             @if($round->divisions->count() > 1)

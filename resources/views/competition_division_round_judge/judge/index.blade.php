@@ -48,7 +48,7 @@
     <ul class="list-group horizontal">
       <li class="list-group-item">
         <a class="score-view-toggle active division-scoring-method" href="#weighted" data-score-view="weighted">Weighted</a>
-        <span>(division scoring method, {{ $division->captionWeighting->name }})</span>
+        <span>(class scoring method, {{ $division->captionWeighting->name }})</span>
       </li>
       <li class="list-group-item">
         <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
@@ -61,7 +61,7 @@
     <ul class="list-group horizontal">
       <li class="list-group-item">
         <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="rank">Rankings</a>
-        <span>(division scoring method)</span>
+        <span>(class scoring method)</span>
       </li>
       <li class="list-group-item">
         <a class="score-view-toggle" href="#raw" data-score-view="raw">Raw</a>
@@ -74,7 +74,7 @@
     <ul class="list-group horizontal">
       <li class="list-group-item">
         <a class="score-view-toggle active division-scoring-method" href="#rankings" data-score-view="rank">Rankings</a>
-        <span>(division scoring method)</span>
+        <span>(class scoring method)</span>
       </li>
       <li class="list-group-item">
         <a class="score-view-toggle" href="#weighted" data-score-view="weighted">Weighted</a>

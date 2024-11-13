@@ -9,10 +9,10 @@
   @if($authorized)
     {!! Breadcrumbs::render('results.competition.show-public', $competition) !!}
 
-    <h2>{{ $competition->name }} Results By Division</h2>
+    <h2>{{ $competition->name }} Results By Class</h2>
 
     @if($competition->divisions->count() == 0)
-      <p>There are currently no divisions with published results. Please check back again shortly.</p>
+      <p>There are currently no classes with published results. Please check back again shortly.</p>
     @endif
 
 

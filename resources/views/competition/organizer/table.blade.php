@@ -10,7 +10,7 @@
   	<th>Competition Name</th>
     <th>City</th>
     <th>State</th>
-    <!--<th>Divisions</th>-->
+    <!--<th>Classes</th>-->
     <th>Edit</th>
 		<th>Delete</th>
   </tr>

@@ -16,13 +16,13 @@ class CloneForm extends Form
         $this->add('clone_rounds', 'checkbox', [
             'value' => 1,
             'checked' => false,
-            'label' => 'Clone all division rounds?'
+            'label' => 'Clone all class rounds?'
         ]);
 
         $this->add('clone_divisions', 'checkbox', [
             'value' => 1,
             'checked' => false,
-            'label' => 'Clone all divisions?',
+            'label' => 'Clone all classes?',
             //'wrapper' => ['class' => 'checkbox'],
             //'attr' => ['class' => 'checkbox']
         ]);
@@ -30,7 +30,7 @@ class CloneForm extends Form
         $this->add('clone_judges', 'checkbox', [
             'value' => 1,
             'checked' => false,
-            'label' => 'Clone all division judges?'
+            'label' => 'Clone all class judges?'
         ]);
 
         $this->add('submit', 'submit', ['label' => 'Clone Competition', 'attr' => ['class' => 'btn btn-primary']]);

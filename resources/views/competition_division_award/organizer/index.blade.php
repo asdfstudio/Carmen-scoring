@@ -12,13 +12,13 @@
         @endcan
         @can('createForDivision', ['App\Award', $division])
             <li>
-                {{ link_to_route('organizer.competition.division.award.create','Create division award', [$division->competition->id, $division->id], ['class' => 'action']) }}
+                {{ link_to_route('organizer.competition.division.award.create','Create class award', [$division->competition->id, $division->id], ['class' => 'action']) }}
             </li>
         @endcan
 
         @can('manage' , ['App\Award', $division])
             <li>
-                {{ link_to_route('organizer.competition.division.award.manage','Manage division awards', [$division->competition->id, $division->id], ['class' => 'action']) }}
+                {{ link_to_route('organizer.competition.division.award.manage','Manage class awards', [$division->competition->id, $division->id], ['class' => 'action']) }}
             </li>
         @endcan
 

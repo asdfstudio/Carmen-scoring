@@ -2,7 +2,7 @@
 
 
 @section('content-header')
-	<h1>Create a solo division</h1>
+	<h1>Create a solo class</h1>
 
 	<ul class="actions-group">
 		<li>{{ link_to_route('organizer.competition.show','Back to Competition',[$competition],['class' => 'action']) }}</li>
