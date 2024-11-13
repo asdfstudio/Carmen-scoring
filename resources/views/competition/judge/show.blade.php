@@ -3,11 +3,11 @@
 
 @section('content')
 
-    <h3>Rounds</h3>
+    <h3>Types</h3>
     @if($competition->rounds->count() > 0)
       @include('round.judge.list',['rounds' => $competition->rounds])
   @else
-      <p>You have no rounds to score</p>
+      <p>You have no types to score</p>
   @endif
 
     <h3>Solo Classes</h3>

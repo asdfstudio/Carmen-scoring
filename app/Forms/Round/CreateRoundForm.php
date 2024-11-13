@@ -15,7 +15,7 @@ class CreateRoundForm extends Form
   {
       $this->add('name','text', [
         'rules' => 'required',
-        'label' => 'Name of Round',
+        'label' => 'Name of Type',
         'help_block'=> [
           'text' => 'Prelims, Semifinals, Finals, etc.'
         ]
@@ -152,7 +152,7 @@ class CreateRoundForm extends Form
 				]);
 
       $this->add('submit', 'submit', [
-        'label' => 'Save Round',
+        'label' => 'Save Type',
         'value' => 'submit',
         'attr' => ['class' => 'btn btn-primary createRound', 'name' => 'submit']
       ]);

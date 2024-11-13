@@ -401,7 +401,7 @@ $(document).ready(function() {
               }
               else if(existingJudgeIds.findIndex(judgeId => judgeId && `${judgeId}` === (formDataObj[1] || {}).value) > -1) {
                 // check existance,
-                Swal.showValidationMessage('Request failed: The judge you selected already belongs to this division! Try again!')
+                Swal.showValidationMessage('Request failed: The judge you selected already belongs to this class! Try again!')
               }
               else {
                 // success
@@ -500,7 +500,7 @@ $(document).ready(function() {
               }
               else if(existingChoirIds.findIndex(choirId => choirId && `${choirId}` === (formDataObj[1] || {}).value) > -1) {
                 // check existance,
-                Swal.showValidationMessage('Request failed: The choir you selected already belongs to this division! Try again!')
+                Swal.showValidationMessage('Request failed: The choir you selected already belongs to this class! Try again!')
               }
               else {
                 // success
@@ -575,7 +575,7 @@ $(document).ready(function() {
           if(result.value.errors.includes('users_email_unique')) {
             dgSwalNotify('Failed', 'Duplicated email address! Input another email!', 'error');
           } else if (result.value.errors.includes('choir_in_round')) {
-            dgSwalNotify('Failed', 'Request failed: The choir you selected already belongs to this round.', 'error');
+            dgSwalNotify('Failed', 'Request failed: The choir you selected already belongs to this type.', 'error');
           } else {
             console.log('error:', result.value.errors)
             dgSwalNotify('Failed', 'Something went wrong!', 'error');
@@ -603,7 +603,7 @@ $(document).ready(function() {
     // -dg-
     const fHtml = Form.getForm('import', false, {});
     Swal.fire({
-      title: 'Choose a round to import judges from',
+      title: 'Choose a type to import judges from',
       html: fHtml,
       showCancelButton: true,
       confirmButtonText: "Import Judges",

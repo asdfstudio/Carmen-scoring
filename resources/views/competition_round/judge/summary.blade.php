@@ -44,7 +44,7 @@
   {{-- @if($round->targets->count() > 0) --}}
   {{--   <div class="alert alert-info"> --}}
   {{--     <h4>This round feeds into <strong>{{ $round->targets->first()->division->name }}, {{ $round->targets->first()->name }}</strong>  along with {{ $round->targets->first()->sources->count() }} other round(s).</h4> --}}
-  {{--     <p>{{ link_to_route('judge.round.scores.sources', 'View a combined spreadsheet', [$round->division->competition_id, $round->targets->first()->division, $round->targets->first()], ['class' => 'btn btn-primary']) }}&nbsp; showing your scores for all of these rounds together.</p> --}}
+  {{--     <p>{{ link_to_route('judge.round.scores.sources', 'View a combined spreadsheet', [$round->division->competition_id, $round->targets->first()->division, $round->targets->first()], ['class' => 'btn btn-primary']) }}&nbsp; showing your scores for all of these types together.</p> --}}
   {{--   </div> --}}
   {{-- @endif --}}
 

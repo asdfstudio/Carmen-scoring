@@ -9,7 +9,7 @@
 
   <h3>Scoring Mode</h3>
 
-  <h4>Select Round to Score</h4>
+  <h4>Select Type to Score</h4>
 
   @include('competition_round.judge.list', ['round' => $division->round])
 

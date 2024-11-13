@@ -6,7 +6,7 @@
     <div class="division-actions">
         <ul class="actions-group">
             <li>
-                {{ link_to_route( Request::segment(1) . '.competition.show', 'All Rounds', [$round->competition], ['class' => 'action'])}}
+                {{ link_to_route( Request::segment(1) . '.competition.show', 'All Types', [$round->competition], ['class' => 'action'])}}
             </li>
         </ul>
     </div>
@@ -35,7 +35,7 @@
             <a href="{{ route('organizer.competition.round.scores.show', [$round->competition,$round]) }}" class="{{ $link_class }}">See Scores</a>
         </li>
         <li>
-            <a href="{{ route('organizer.competition.round.index', [$round->competition]) }}">Back To All Rounds</a>
+            <a href="{{ route('organizer.competition.round.index', [$round->competition]) }}">Back To All Types</a>
         </li>
         @endcan
         <li>

@@ -164,7 +164,7 @@
         <h4>{{ $soloDivision->name }}</h4>
 
         @if(!$soloDivision->is_published)
-          <p>Feedback for this round will be available once this round is complete.</p>
+          <p>Feedback for this type will be available once this type is complete.</p>
         @endif
 
         @if($soloDivision->is_published)

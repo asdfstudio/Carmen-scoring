@@ -28729,7 +28729,7 @@ var render = function() {
     _c(
       "a",
       { staticClass: "button back-button", attrs: { href: _vm.backUrl } },
-      [_vm._v("Back to Rounds List")]
+      [_vm._v("Back to Types List")]
     ),
     _vm._v(" "),
     _c("h2", [

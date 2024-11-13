@@ -8,7 +8,7 @@
       <a class="add-resource" data-resource-type="judge" href="#">Add a Judge</a>
   @endcan
   @can('importJudges', $round)
-      <a class="import-resource" data-resource-type="judge" href="#">Import From Another Round</a>
+      <a class="import-resource" data-resource-type="judge" href="#">Import From Another Type</a>
   @endcan
   <a class="change-password" href="#">Change Password</a>
   {!! form($newJudgeForm) !!}
@@ -25,7 +25,7 @@
     @if (count($rounds_import_judge) > 0)
 
       {{ Form::open(['method' => 'POST', 'url' => route('organizer.competition.division.judge.import.process', [$round->competition->id, $round->id]), 'class' => 'import-resource-form-prototype', 'data-resource-type' => 'judge', 'data-resource-action' => 'import']) }}
-        <!-- <label for="id" class="control-label dg-fs-16">Choose a round to import judges from</label> -->
+        <!-- <label for="id" class="control-label dg-fs-16">Choose a type to import judges from</label> -->
 
         @foreach($rounds_import_judge as $round_import_judge)
 

@@ -271,7 +271,7 @@ class CompetitionDivisionChoirController extends Controller
 		      if ($choir) {
             $existing_choir = $division->round->choirs->where('id', $choir->id)->pluck('id');
             if($existing_choir->count() > 0) {
-              $warning_message = "The '$choir->name' ensemble already belongs to this division or round.";
+              $warning_message = "The '$choir->name' ensemble already belongs to this class or type.";
               if($request->wantsJson()) {
                 $response = [];
                 $response['status'] = 'failed';
@@ -294,7 +294,7 @@ class CompetitionDivisionChoirController extends Controller
 
         event(new DivisionChoirCreated($division, $choir));
 
-        $successMessage = "$choir->name has been added to this division.";
+        $successMessage = "$choir->name has been added to this class.";
 
         if($request->wantsJson())
         {

@@ -1,6 +1,6 @@
 <template>
   <div id="spreadsheet-header">
-    <a class="button back-button" :href="backUrl">Back to Rounds List</a>
+    <a class="button back-button" :href="backUrl">Back to Types List</a>
     <h2> {{ spreadsheetTitle}}
       <div class="scoring-status" v-if="isSpreadsheetScoringActive">
         Scoring is active

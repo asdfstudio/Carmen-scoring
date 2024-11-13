@@ -167,7 +167,7 @@ class Division extends Model
 
     public function getFullNameAttribute()
     {
-        return $this->round->name() . " round - " . $this->name();
+        return $this->round->name() . " type - " . $this->name();
     }
 
     public function getMaxChoirsTextAttribute()

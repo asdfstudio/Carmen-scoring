@@ -1,7 +1,7 @@
 @extends('layouts.simple')
 
 @section('content-header')
-  <h1>Source Division/Round Scores</h1>
+  <h1>Source Class/Type Scores</h1>
 @endsection
 
 

@@ -231,7 +231,7 @@ class CompetitionDivisionJudgeController extends Controller
 					}
 				}
 
-        $successMessage = $judge->full_name." has been added to this round";
+        $successMessage = $judge->full_name." has been added to this type";
 
 
         if($request->wantsJson())
@@ -385,7 +385,7 @@ class CompetitionDivisionJudgeController extends Controller
             return response()->json($judge_id);
         }
         else { // Set flash data and redirect
-            return redirect()->route('organizer.competition.round.show',[$round->competition, $round])->with('success', $judge->full_name . ' was successfully removed as a judge for this round.');
+            return redirect()->route('organizer.competition.round.show',[$round->competition, $round])->with('success', $judge->full_name . ' was successfully removed as a judge for this type.');
         }
     }
 

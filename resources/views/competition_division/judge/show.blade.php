@@ -31,7 +31,7 @@
     </div>
 
     <div data-tab-id="rounds" class="tab-content col-xs-12 col-sm-12">
-      <h2>Rounds</h2>
+      <h2>Types</h2>
       @include('competition_round.judge.list', ['rounds' => $division->round])
     </div>
 

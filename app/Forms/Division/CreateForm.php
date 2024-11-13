@@ -301,7 +301,7 @@ class CreateForm extends Form
 //             'property' => 'name',
 //             'property_key' => 'id',
 //             'selected' => $this->getData('round_selected'),
-//             'label' => 'Choose a Round',
+//             'label' => 'Choose a Type',
 //             'empty_value' => '-- Select From Available Rounds --',
 //             'rules' => 'required',
 //             'expanded' => false,

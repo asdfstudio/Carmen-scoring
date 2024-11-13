@@ -7,7 +7,7 @@
                 <th>Name</th>
                 <th>Edit</th>
                 <th>Status</th>
-                <th>Round</th>
+                <th>Type</th>
                 <th>Ensembles</th>
                 <th>Penalties</th>
                 <th>Awards</th>

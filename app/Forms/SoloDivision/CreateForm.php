@@ -43,7 +43,7 @@ class CreateForm extends Form
         ]);
 
         $this->add('submit', 'submit', [
-          'label' => 'Save Solo Division',
+          'label' => 'Save Solo Class',
           'value' => 'submit',
           'attr' => ['class' => 'btn btn-primary', 'name' => 'submit']
         ]);

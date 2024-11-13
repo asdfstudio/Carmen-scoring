@@ -3,7 +3,7 @@
 @php $include_round_navigation_bar = TRUE @endphp
 
 @section('content-header')
-	<h1>Assign Round Awards</h1>
+	<h1>Assign Type Awards</h1>
 
 	<ul class="actions-group">
 		@can('showAll','App\Award')

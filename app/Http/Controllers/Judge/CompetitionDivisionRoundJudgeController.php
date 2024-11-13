@@ -29,7 +29,7 @@ class CompetitionDivisionRoundJudgeController extends Controller
 
       if($round->status_slug != 'completed')
       {
-        return redirect()->route('judge.round.scores.summary', [$competition_id, $division_id, $round_id])->with('warning', "You cannot view other judge's scores until the round is complete.");
+        return redirect()->route('judge.round.scores.summary', [$competition_id, $division_id, $round_id])->with('warning', "You cannot view other judge's scores until the type is complete.");
       }
 
       $judges = $round->judges->unique('id');

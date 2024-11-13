@@ -1,6 +1,6 @@
 @if($rounds)
 
-  <h3>Rounds</h3>
+  <h3>Types</h3>
 
   <ul class="list-group">
     @foreach($rounds as $ro)

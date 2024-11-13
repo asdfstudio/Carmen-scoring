@@ -6,7 +6,7 @@
 
     <div class="round_header col-xs-12">
       @section('round_header')
-        <h1><small>Round:</small> {{ $round->name }}</h1>
+        <h1><small>Type:</small> {{ $round->name }}</h1>
         <span class="pull-right label label-default">{{ $round->status() }}</span>
 
       @show

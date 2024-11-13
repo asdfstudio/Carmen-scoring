@@ -16,7 +16,7 @@ class CloneForm extends Form
         $this->add('clone_rounds', 'checkbox', [
             'value' => 1,
             'checked' => false,
-            'label' => 'Clone all class rounds?'
+            'label' => 'Clone all class typess?'
         ]);
 
         $this->add('clone_divisions', 'checkbox', [

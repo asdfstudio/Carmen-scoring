@@ -20,6 +20,6 @@ class CreateRoundsForm extends Form
                 ]
             ]);
 
-        $this->add('submit', 'submit', ['label' => 'Save Rounds', 'attr' => ['class' => 'btn btn-primary']]);
+        $this->add('submit', 'submit', ['label' => 'Save Types', 'attr' => ['class' => 'btn btn-primary']]);
     }
 }

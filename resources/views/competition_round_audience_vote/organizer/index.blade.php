@@ -12,7 +12,7 @@
 	<ul class="actions-group">
 
 		@can('showAll','App\Round')
-            <li>{{ link_to_route('organizer.competition.round.show', 'Back to Round', [$round->competition,$round], ['class' => 'action']) }}</li>
+            <li>{{ link_to_route('organizer.competition.round.show', 'Back to Type', [$round->competition,$round], ['class' => 'action']) }}</li>
 		@endcan
 
 	</ul>

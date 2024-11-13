@@ -41,7 +41,7 @@
             @php $round = $division->round;@endphp
             @if($round->divisions->count() > 1)
                 <li>
-                    <a href="{{ route('results.round.scores', [$division, $division->round, $access_code]) }}" class="@if($current_page == 'round-scores') active @endif action">Round Scores</a>
+                    <a href="{{ route('results.round.scores', [$division, $division->round, $access_code]) }}" class="@if($current_page == 'round-scores') active @endif action">Type Scores</a>
                 </li>
             @endif
       	</ul>

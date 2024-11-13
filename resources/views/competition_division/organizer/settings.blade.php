@@ -20,7 +20,7 @@
     @can('viewResults', $round)
         <div class="alert alert-info d-flex">
             <i class="fa fa-commenting dg-fs-20 mr"></i>
-            <p>Results for this round are available at {{ link_to_route('results.round.show', NULL, [$round, $round->access_code], ['target' => '_blank']) }} </p>
+            <p>Results for this type are available at {{ link_to_route('results.round.show', NULL, [$round, $round->access_code], ['target' => '_blank']) }} </p>
         </div>
     @endcan
 

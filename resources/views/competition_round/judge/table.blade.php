@@ -1,5 +1,5 @@
 @if($division->rounds->isEmpty())
-	<p>There are no rounds.</p>
+	<p>There are no types.</p>
 @endif
 
 @if(!$division->rounds->isEmpty())

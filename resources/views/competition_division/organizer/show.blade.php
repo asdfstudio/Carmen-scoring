@@ -51,7 +51,7 @@
 
     <ul class="list-group">
         <li class="list-group-item">
-            <h3>Class in Round {{ $division->round->name }}</h3>
+            <h3>Class in Type {{ $division->round->name }}</h3>
 
             @if (isset($division->rating_system))
             <h4>Class Rating Systems</h4>

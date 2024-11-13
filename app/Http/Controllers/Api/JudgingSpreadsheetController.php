@@ -62,7 +62,7 @@ class JudgingSpreadsheetController extends Controller
         $divisions = $round->divisions;
 
         if ($divisions->count() == 0) {
-            return redirect()->route('judge.competition.show', [$competition])->with('warning', 'No ensembles have been designated for this round yet.');
+            return redirect()->route('judge.competition.show', [$competition])->with('warning', 'No ensembles have been designated for this type yet.');
         }
 
         $judge = Judge::with(['captions' => function($query) use ($round_id) {

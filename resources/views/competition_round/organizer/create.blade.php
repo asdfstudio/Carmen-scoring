@@ -1,11 +1,11 @@
 @extends('layouts.simple')
 
 @section('content-header')
-  <h1>Add a round to this competition</h1>
+  <h1>Add a type to this competition</h1>
 
   <ul class="actions-group">
 		<li>
-			{{ link_to_route('organizer.competition.round.index','Back to all rounds',[$competition], ['class' => 'action']) }}
+			{{ link_to_route('organizer.competition.round.index','Back to all types',[$competition], ['class' => 'action']) }}
 		</li>
 	</ul>
 @endsection

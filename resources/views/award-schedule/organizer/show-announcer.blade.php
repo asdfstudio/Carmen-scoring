@@ -128,7 +128,7 @@
                     @if($item->round)
                         <ul class="list-group">
                             @if(!$item->round->status == 'Active')
-                                <li class="list-group-item"><span>Awaiting Final Scores for this Round</span></li>
+                                <li class="list-group-item"><span>Awaiting Final Scores for this Type</span></li>
                             @else
                                 @if($ratings)
                                     @foreach($ratings as $rating)

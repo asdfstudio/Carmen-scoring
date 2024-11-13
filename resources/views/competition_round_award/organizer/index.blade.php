@@ -18,7 +18,7 @@
 
         @can('manage' , ['App\Award', $round])
             <li>
-                {{ link_to_route('organizer.competition.round.award.manage','Manage round awards', [$round->competition->id, $round->id], ['class' => 'action']) }}
+                {{ link_to_route('organizer.competition.round.award.manage','Manage type awards', [$round->competition->id, $round->id], ['class' => 'action']) }}
             </li>
         @endcan
 

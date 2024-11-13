@@ -16,9 +16,9 @@
   <h3>Standings</h3>
   @include('standing.public_table', ['standings' => $division->standings])
 
-  <h3>Rounds</h3>
+  <h3>Types</h3>
 
-  <h4>Round</h4>
+  <h4>Type</h4>
 
   <h5>Rankings</h5>
 
@@ -26,5 +26,5 @@
 
   <h5>Raw Scores</h5>
 
-  <h5>Round + Ensembles</h5>
+  <h5>Type + Ensembles</h5>
 @endsection
