@@ -42,13 +42,13 @@
         padding: 8px;
         text-align: left;
     }
-    .col-school { width: 20%; }
-    .col-ensemble { width: 20%; }
-    .col-type { width: 20%; }
-    .col-class { width: 17%; }
-    .col-score { width: 8%; }
-    .col-ranking { width: 8%; }
-    .col-rating { width: 8%; }
+    .col-school { width: 18%; }
+    .col-ensemble { width: 18%; }
+    .col-type { width: 18%; }
+    .col-class { width: 15%; }
+    .col-score { width: 12%; }
+    .col-ranking { width: 10%; }
+    .col-rating { width: 10%; }
     .scoree.tiedd {
         color: white;
         background-color: red;
@@ -85,9 +85,6 @@
             @foreach($data['choirs'] as $choir)
                 @php
                     // If rank exceeds limit, break the loop
-                    if ($rank > $limit) {
-                        break;
-                    }
 
                     if ($choir['rank_checked'] == "0") {
                         $choir['ranking'] = "No Rank";
@@ -96,7 +93,11 @@
                         // Only one ensemble in the division, show dash for rank
                         if (count($data['choirs']) === 1) {
                             $choir['ranking'] = '-';
-                        } else {
+                        }
+                        else if ($rank > $limit) {
+                            $choir['ranking'] = '-';
+                        } 
+                        else {
                             if ($choir['average_score'] == $previousScore && !$previousWasNoRank) {
                                 // If same score as previous and not following a "No Rank"
                                 $rankCounter++;
