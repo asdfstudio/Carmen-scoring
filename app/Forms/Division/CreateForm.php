@@ -75,16 +75,16 @@ class CreateForm extends Form
         ]);
 
         // Add Rating System Dropdown
-        // $this->add('rating_system_type', 'choice', [
-        //     'choices' => [
-        //         '3A-2A' => '3A-2A',
-        //         '1A-J' => '1A-J',
-        //         'custom' => 'Custom',
-        //     ],
-        //     'label' => 'Select Rating System',
-        //     'empty_value' => '-- Choose Rating System --',
-        //     'attr' => ['id' => 'rating-system-type'],
-        // ]);
+        $this->add('rating_system_type', 'choice', [
+            'choices' => [
+                '3A-2A' => '3A-2A',
+                '1A-J' => '1A-J',
+                'custom' => 'Custom',
+            ],
+            'label' => 'Select Rating System',
+            'empty_value' => '-- Choose Rating System --',
+            'attr' => ['id' => 'rating-system-type'],
+        ]);
 
         // Add round selection dropdown
         $competition_id = $this->getData('competition_id');

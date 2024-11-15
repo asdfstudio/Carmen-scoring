@@ -307,14 +307,83 @@ $(document).ready(function() {
         }
     });
 
-    $('body').on('click', '.add-rating button', function(e) {
-        e.preventDefault();
-        var wrapper = $('.collection-container');
-        var container = wrapper.children().first();
-        var count = container.children().length;
-        var proto = wrapper.data('prototype').replace(/__NAME__/g, count);
-        container.append(proto);
-    });
+    // $('body').on('click', '.add-rating button', function(e) {
+    //     e.preventDefault();
+    //     var wrapper = $('.collection-container');
+    //     var container = wrapper.children().first();
+    //     var count = container.children().length;
+    //     var proto = wrapper.data('prototype').replace(/__NAME__/g, count);
+    //     container.append(proto);
+    // });
+
+    $(document).ready(function() {
+      const ratingSystemSelect = $('#rating-system-type');
+      const wrapper = $('.collection-container');
+      const container = wrapper.children().first();
+  
+      // Define the data for each rating system type
+      const ratingFields3A_2A = [
+          { name: 'Gold', minScore: 90 },
+          { name: 'Silver', minScore: 80 },
+          { name: 'Bronze', minScore: 65 },
+          { name: 'Merit', minScore: 50 },
+          { name: 'Festival', minScore: 1 }
+      ];
+  
+      const ratingFields1A_J = [
+          { name: 'Gold', minScore: 85 },
+          { name: 'Silver', minScore: 75 },
+          { name: 'Bronze', minScore: 65 },
+          { name: 'Merit', minScore: 50 },
+          { name: 'Festival', minScore: 1 }
+      ];
+  
+      // Function to fill rating fields with predefined values
+      function fillRatingFields(fields) {
+          clearRatingFields();
+  
+          // Generate input sets based on the length of fields array
+          fields.forEach((field, index) => {
+              let proto = wrapper.data('prototype').replace(/__NAME__/g, index);
+              container.append(proto);
+  
+              // Populate the newly added fields with data
+              let nameInput = container.find(`input[name="rating_system[${index}][name]"]`);
+              let minScoreInput = container.find(`input[name="rating_system[${index}][min_score]"]`);
+  
+              nameInput.val(field.name);
+              minScoreInput.val(field.minScore);
+          });
+      }
+  
+      // Clear all rating fields
+      function clearRatingFields() {
+          container.empty();
+      }
+  
+      // Event handler for when the rating system type is changed
+      ratingSystemSelect.on('change', function() {
+          let selectedType = $(this).val();
+  
+          if (selectedType === '3A-2A') {
+              fillRatingFields(ratingFields3A_2A); // Fill with 3A-2A values
+          } else if (selectedType === '1A-J') {
+              fillRatingFields(ratingFields1A_J); // Fill with 1A-J values
+          } else if (selectedType === 'custom') {
+              clearRatingFields(); // Clear fields for custom
+              let proto = wrapper.data('prototype').replace(/__NAME__/g, 0);
+              container.append(proto); // Add only one input for custom
+          }
+      });
+  
+      // Button click to add additional ratings as normal
+      $('body').on('click', '.add-rating button', function(e) {
+          e.preventDefault();
+          let totalInputs = container.children().length / 2; // Number of input sets
+          let proto = wrapper.data('prototype').replace(/__NAME__/g, totalInputs);
+          container.append(proto); // Add a new input set
+      });
+  });
 
     $('body').on('click', '.remove-rating button', function(e) {
         e.preventDefault();
