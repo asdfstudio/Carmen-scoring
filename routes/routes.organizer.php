@@ -50,6 +50,13 @@ Route::group([
     'as' => 'competition.comment-links.index', 'uses' => 'CompetitionFeedbackUrlController@index'
   ]);
 
+  //files
+
+  Route::get('competition/{competition}/uploaded-files', [
+    'as' => 'competition.files.index', 
+    'uses' => 'CompetitionFileController@index'
+  ]);
+
   // List competition schedules
   Route::get('competition/{competition}/schedule', [
     'as' => 'competition.schedule.index', 'uses' => 'ScheduleController@index'

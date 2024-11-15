@@ -210,4 +210,20 @@ class Competition extends Model
       $this->is_archived = true;
       return $this->save();
     }
+
+
+    //files
+    public function uploadedFiles()
+    {
+        return $this->hasManyThrough(
+            'App\Models\DivisionFile',
+            'App\Division', 
+            'competition_id',
+            'division_id',
+            'id',
+            'id'
+        );
+    }
+    
+
 }

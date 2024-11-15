@@ -64,12 +64,12 @@
 {{--  <p>Divisions are used to organize competitors and division specific awards.</p>--}}
 
 {{--  @if($divisionCount > 0)--}}
-{{--      <p>{{ link_to_route('organizer.competition.division.index','Manage your classes',[$competition], ['class' => 'action']) }}</p>--}}
+{{--      <p>{{ link_to_route('organizer.competition.division.index','Manage your divisions',[$competition], ['class' => 'action']) }}</p>--}}
 {{--      @include('division.organizer.list',['divisions' => $competition->divisions, 'scoringForms' => $divisionScoringForms])--}}
 {{--  @elseif($roundsCount > 0)--}}
 {{--      <p>{{ link_to_route('organizer.competition.division.create','Create your first division',[$competition], ['class' => 'action']) }}</p>--}}
 {{--  @else--}}
-{{--      <p>{{ link_to_route('organizer.competition.round.create','Create your first type to add divisions',[$competition], ['class' => 'action']) }}</p>--}}
+{{--      <p>{{ link_to_route('organizer.competition.round.create','Create your first round to add divisions',[$competition], ['class' => 'action']) }}</p>--}}
 {{--  @endif--}}
 
   <h3>Manage Solo Classes</h3>
@@ -125,4 +125,6 @@
   <p>View the URLs where ensemble directors can view feedback from judges.</p>
   <p>{{ link_to_route('organizer.competition.comment-links.index','View feedback links',[$competition], ['class' => 'action']) }}</p>
 
+  <h3>Uploaded Files</h3>
+  <p>{{ link_to_route('organizer.competition.files.index', 'View uploaded files', [$competition], ['class' => 'action']) }}</p>
 @endsection

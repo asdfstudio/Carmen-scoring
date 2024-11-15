@@ -24,6 +24,16 @@ class Recording extends Model
     return $this->belongsTo('App\Judge');
   }
 
+  public function round()
+  {
+      return $this->belongsTo('App\Round', 'round_id');
+  }
+
+  public function choir()
+  {
+      return $this->belongsTo('App\Choir', 'choir_id');
+  }
+
   public function getNiceDate()
   {
     return date('M. j, Y \a\t h:i:s A (T)', strtotime($this->created_at));
