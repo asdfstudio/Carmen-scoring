@@ -21,449 +21,443 @@ use Event;
 use App\Events\DivisionChoirCreated;
 use App\Events\DivisionChoirRemoved;
 
+use App\RawScore;
+use App\Comment;
+use App\Models\DivisionFile;
+use App\ScheduleItem;
+
 class CompetitionDivisionChoirController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(FormBuilder $formBuilder, $competition_id,$division_id)
-    {
-        $division = Division::with('competition','choirs', 'choirs.directors')->find($division_id);
-				//$competition = Competition::with('organization','place','divisions')->find($competition_id);
-				//dd($division);
-
-        //$choir_ids = $division->choirs->pluck('id');
-        //$directors = Director::whereIn('choir_id', $choir_ids)->get();
-        //dd($directors);
-
-        /*$directors = collect();
-
-        $division->choirs->each(function($choir,$key) use ($directors) {
-          foreach($choir->directors as $director)
-          {
-            $directors->push($director);
-          }
-
-        });
-
-        dd($directors->pluck('email')->toArray());*/
-
-        $deleteForm = $formBuilder->create('GenericDeleteForm', [
-					'method' => 'DELETE'
-					//'url' => route('organizer.competition.division.choir.destroy',[$division->competition,$division,$judge])
-				]);
-
-        $deleteForm->modify('submit','submit',['label' => 'Remove Ensemble']);
-
-				return view('competition_division_choir.organizer.index', compact('division', 'deleteForm'));
-    }
-
-
-    public function setup($competition_id,$division_id, FormBuilder $formBuilder)
-    {
-        $division = Division::with('competition','choirs')->find($division_id);
-        $competition = $division->competition;
-
-
-
-        $form = $formBuilder->create('Choir\CreateChoirsForm', [
-          'url' => route('organizer.competition.division.choir.setup.store',[$competition,$division])
-        ]);
-
-        return view('competition_division_choir.organizer.setup', compact('division','competition','form'));
-    }
-
-
-    public function storeMultiple(Request $request, FormBuilder $formBuilder, $competition_id, $division_id)
-    {
-        $form = $formBuilder->create('Choir\CreateChoirsForm');
-
-				// Validate input
-				if (!$form->isValid()) {
-           return redirect()->back()->withErrors($form->getErrors())->withInput();
-        }
-
-        $division = Division::with('competition','choirs')->find($division_id);
-        $competition = $division->competition;
-
-        foreach($request->input('choirs') as $choir_input)
-        {
-          // Create school
-          if(!empty($choir_input['school']) AND !empty($choir_input['school']['name']))
-          {
-            //echo '1';
-            $school = School::create($choir_input['school']);
-            $school_id = $school->id;
-
-            // Create place for school
-            if(!empty($choir_input['school']['place']))
-            {
-              $place = new Place($choir_input['school']['place']);
-              $school->place()->save($place);
-            }
-
-            //dd($school);
-          }
-          elseif(!empty($choir_input['school_id']))
-          {
-            //echo '2';
-            $school_id = $choir_input['school_id'];
-            $school = School::find($school_id);
-            //dd($school);
-          }
-
-          //dd($choir_input);
-
-          // Create a choir
-          if(!empty($choir_input['name']))
-          {
-            $choir = $school->choirs()->create([
-              'name' => $choir_input['name']
-            ]);
-
-            $choir_id = $choir->id;
-          }
-          elseif(!empty($choir_input['choir_id']))
-          {
-            $choir_id = $choir_input['choir_id'];
-          }
-
-          // If choir id, attach choir to division
-          if($choir_id)
-          {
-            $division->choirs()->attach($choir_id);
-          }
-        }
-
-
-				// Set flash data and redirect
-				return redirect()->route('organizer.competition.division.settings',[$competition,$division]);
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create($competition_id, $division_id, FormBuilder $formBuilder)
-    {
-				$division = Division::with('competition','choirs')->find($division_id);
-
-        $this->authorize('addChoir', $division);
-
-        // Division choirs
-        $choirs = $division->choirs->pluck('full_name', 'id')->toArray();
-
-        // All choirs
-        $choirs = Choir::all()->pluck('full_name', 'id')->toArray();
-        //dd($choirs);
-
-        $form = $formBuilder->create('Choir\CreateChoirForm', [
-					'method' => 'POST',
-          'class' => '',
-          'data' => $choirs,
-					'url' => route('organizer.competition.division.choir.store',[$division->competition,$division])
-				]);
-
-
-
-				return view('competition_division_choir.organizer.create', compact('division','form'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store($competition_id, $division_id, Request $request, FormBuilder $formBuilder)
-    {
-        //$this->authorize('create','App\Choir');
-        if($request->wantsJson() == false) {
-          $form = $formBuilder->create('Choir\CreateChoirForm');
-
-          // Validate input
-          if (!$form->isValid()) {
-             return redirect()->back()->withErrors($form->getErrors())->withInput();
-          }
-        }
-
-        // Get the division
-        $division = Division::with('competition','round', 'choirs')->find($division_id);
-
-        //die(print_r($request->all(), true));
-
-        // Create school and location
-        if($request->filled('school.name')) {
-          $school = new School();
-          $school->name = $request->input('school.name');
-					$school->save();
-
-          // Create a school location
-          if($request->filled('school.place')) {
-            $place = new Place($request->input('school.place'));
-            $school->place()->save($place);
-          }
-		}
-        // Retrieve school
-        elseif($request->input('school_id')) {
-          $school = School::find($request->input('school_id'));
-        } else {
-          $school = false;
-        }
-
-        // Create or retrieve choir
-		    if($school AND $request->filled('name')) {
-		      $choir = new Choir();
-          $choir->name = $request->input('name');
-          $school->choirs()->save($choir);
-		    } elseif($request->filled('choir_id')) {
-          $choir = Choir::with('school', 'divisions')->find($request->input('choir_id'));
-        }
-
-        //die(print_r($choir, true));
-
-        /*
-        // Create a director and attach to choir
-        if($request->filled('director'))
-				{
-          $director = new Director();
-          $director->fill($request->input('director'));
-					$choir->directors()->save($director);
-				}
-        */
-
-        // If the form is submitted with an existing person ID...
-        if($request->has('director.person_id') && !empty($request->input('director.person_id'))) {
-
-          $director_id = $request->input('director.person_id');
-
-          // Make sure this person is recorded as a director in the database.
-          $person = Person::with('types')->find($director_id);
-          if(!$person->getIsDirectorAttribute()) {
-            $person->types()->syncWithoutDetaching([2]);
-          }
-
-          // Attach the person to this choir.
-          $choir->directors()->syncWithoutDetaching([intval($director_id)]);
-
-        } elseif($request->has('director.first_name')) {
-
-          // Otherwise, the intention is to create a new director.
-          $director = new Director();
-          $director->first_name = $request->input('director.first_name');
-          $director->last_name = $request->input('director.last_name');
-          $director->email = $request->input('director.email');
-          if($request->has('director.emails_additional')){
-            $director->emails_additional = $request->input('director.emails_additional');
-          }
-          if($request->has('director.tel')){
-            $director->tel = $request->input('director.tel');
-          }
-          $choir->directors()->save($director);
-
-        }
-
-		      // Attach choir to the division
-		      if ($choir) {
-            $existing_choir = $division->round->choirs->where('id', $choir->id)->pluck('id');
-            if($existing_choir->count() > 0) {
-              $warning_message = "The '$choir->name' ensemble already belongs to this class or type.";
-              if($request->wantsJson()) {
-                $response = [];
-                $response['status'] = 'failed';
-                $response['errors'] = 'choir_in_round';
-                return response()->json($response);
-              } else {
-                return redirect()->back()->with('warning',$warning_message);
-              }
-          } else {
-            // Check if ensemble receives rankings or ratings
-            if (!$request->filled('receives_rankings')) {
-                $division->choirs()->attach($choir->id, ['receives_rankings' => 0]);
-            } elseif (!$request->filled('receives_ratings')) {
-                $division->choirs()->attach($choir->id, ['receives_ratings' => 0]);
-            } else {
-                $division->choirs()->attach($choir->id);
-            }
-          }
-		}
-
-        event(new DivisionChoirCreated($division, $choir));
-
-        $successMessage = "$choir->name has been added to this class.";
-
-        if($request->wantsJson())
-        {
-          $choir->load('school');
-          $directors = array();
-          foreach ($choir->directors as $director)
-          {
-            $directors[] = array(
-              'fullName' => $director['fullName'],
-              'email' => substr($director['email'], 0, 2) . '****@****' . substr($director['email'], -7),
-              'tel' => empty($director['tel']) ? NULL : '( *** ) *** - ' . explode('-', $director['tel'])[1]
-            );
-          }
-          unset($choir['directors']);
-          $choir['directors'] = $directors;
-          $response = array(
-            'status' => 'success',
-            'data' => $choir
-          );
-          return response()->json($response);
-        }
-        else {
-          if($request->exists('submit_create_another'))
-          {
-            return redirect()->back()->with('success',$successMessage);
-          }
-          else {
-            return redirect()->route('organizer.competition.division.choir.index', [$division->competition, $division])->with('success',$successMessage);
-          }
-        }
-
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($competition_id, $division_id, $choir_id, FormBuilder $formBuilder)
-    {
-		$division = Division::with('competition')->find($division_id);
-        $choir = Choir::with('school')->find($choir_id);
-
-        $form = $formBuilder->create('DeleteChoirForm', [
-            'method' => 'DELETE',
-            'url' => route('organizer.competition.division.choir.destroy',[$division->competition,$division,$choir])
-        ]);
-
-        return view('competition_division_choir.organizer.show', compact('division','choir','form'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($competition_id, $division_id, $choir_id, FormBuilder $formBuilder)
-    {
-        $division = Division::with('competition')->find($division_id);
-        $choir = Choir::with(['divisions' => function ($query) use ($division_id) {
-            $query->where('id', $division_id);
-        }])->find($choir_id);
-
-        $form = $formBuilder->create('EditChoirForm', [
-            'method' => 'PUT',
-            'url' => route('organizer.competition.division.choir.update',[$division->competition,$division,$choir]),
-            'data' => [
-                'choir' => $choir
-            ],
-        ]);
-
-        return view('competition_division_choir.organizer.edit', compact('division','choir','form'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update($competition_id, $division_id, $choir_id, FormBuilder $formBuilder, Request $request)
-    {
-      // Ensure RawScore is imported
-  
-  
-      // Fetch the choir with its current division
-      $choir = Choir::with('divisions')->find($choir_id);
-  
-      // Get the new division ID from the request
-      $newDivisionId = $request->input('division_id');
-  
-      // Check if the new division is different from the current one
-      if ($choir->divisions->first()->id != $newDivisionId) {
-        // Move choir to the new division
-        $choir->divisions()->detach($division_id);
-        $choir->divisions()->attach($newDivisionId, [
-          'receives_rankings' => $request->filled('receives_rankings'),
-          'receives_ratings' => $request->filled('receives_ratings'),
-          // Add new fields for sweepstakes
-          'choral_sweepstakes' => $request->filled('choral_sweepstakes'),
-          'instrumental_sweepstakes' => $request->filled('instrumental_sweepstakes'),
-          'festival_sweepstakes' => $request->filled('festival_sweepstakes'),
-        ]);
-  
-  
-        RawScore::where('choir_id', $choir_id)
-          ->where('division_id', $division_id)
-          ->update(['division_id' => $newDivisionId]);
-  
-        Comment::where('choir_id', $choir_id)
-          ->where('recipient_type', 'division')
-          ->where('recipient_id', $division_id)
-          ->update(['recipient_id' => $newDivisionId]);
-  
-        DivisionFile::where('choir_id', $choir_id)
-          ->where('division_id', $division_id)
-          ->update(['division_id' => $newDivisionId]);
-  
-        ScheduleItem::where('choir_id', $choir_id)
-          ->where('division_id', $division_id)
-          ->update(['division_id' => $newDivisionId]);
-  
-  
-  
-      } else {
-        // Just update the current division's pivot data if the division is the same
-        $choir->divisions()->updateExistingPivot($division_id, [
-          'receives_rankings' => (int) $request->filled('receives_rankings'),
-          'receives_ratings' => (int) $request->filled('receives_ratings'),
-                  // Add new fields for sweepstakes
-                  'choral_sweepstakes' => $request->filled('choral_sweepstakes'),
-                  'instrumental_sweepstakes' => $request->filled('instrumental_sweepstakes'),
-                  'festival_sweepstakes' => $request->filled('festival_sweepstakes'),
-        ]);
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function index(FormBuilder $formBuilder, $competition_id, $division_id)
+  {
+    $division = Division::with('competition', 'choirs', 'choirs.directors')->find($division_id);
+    //$competition = Competition::with('organization','place','divisions')->find($competition_id);
+    //dd($division);
+
+    //$choir_ids = $division->choirs->pluck('id');
+    //$directors = Director::whereIn('choir_id', $choir_ids)->get();
+    //dd($directors);
+
+    /*$directors = collect();
+
+    $division->choirs->each(function($choir,$key) use ($directors) {
+      foreach($choir->directors as $director)
+      {
+        $directors->push($director);
       }
-  
-      // Redirect with success message
-      return redirect()->route('organizer.competition.division.board', [$competition_id, $division_id])
-        ->with('success', "$choir->name has been updated and moved to the new division along with all related data.");
+
+    });
+
+    dd($directors->pluck('email')->toArray());*/
+
+    $deleteForm = $formBuilder->create('GenericDeleteForm', [
+      'method' => 'DELETE'
+      //'url' => route('organizer.competition.division.choir.destroy',[$division->competition,$division,$judge])
+    ]);
+
+    $deleteForm->modify('submit', 'submit', ['label' => 'Remove Ensemble']);
+
+    return view('competition_division_choir.organizer.index', compact('division', 'deleteForm'));
+  }
+
+
+  public function setup($competition_id, $division_id, FormBuilder $formBuilder)
+  {
+    $division = Division::with('competition', 'choirs')->find($division_id);
+    $competition = $division->competition;
+
+
+
+    $form = $formBuilder->create('Choir\CreateChoirsForm', [
+      'url' => route('organizer.competition.division.choir.setup.store', [$competition, $division])
+    ]);
+
+    return view('competition_division_choir.organizer.setup', compact('division', 'competition', 'form'));
+  }
+
+
+  public function storeMultiple(Request $request, FormBuilder $formBuilder, $competition_id, $division_id)
+  {
+    $form = $formBuilder->create('Choir\CreateChoirsForm');
+
+    // Validate input
+    if (!$form->isValid()) {
+      return redirect()->back()->withErrors($form->getErrors())->withInput();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($competition_id, $division_id, $choir_id, FormBuilder $formBuilder, Request $request)
+    $division = Division::with('competition', 'choirs')->find($division_id);
+    $competition = $division->competition;
+
+    foreach ($request->input('choirs') as $choir_input) {
+      // Create school
+      if (!empty($choir_input['school']) and !empty($choir_input['school']['name'])) {
+        //echo '1';
+        $school = School::create($choir_input['school']);
+        $school_id = $school->id;
+
+        // Create place for school
+        if (!empty($choir_input['school']['place'])) {
+          $place = new Place($choir_input['school']['place']);
+          $school->place()->save($place);
+        }
+
+        //dd($school);
+      } elseif (!empty($choir_input['school_id'])) {
+        //echo '2';
+        $school_id = $choir_input['school_id'];
+        $school = School::find($school_id);
+        //dd($school);
+      }
+
+      //dd($choir_input);
+
+      // Create a choir
+      if (!empty($choir_input['name'])) {
+        $choir = $school->choirs()->create([
+          'name' => $choir_input['name']
+        ]);
+
+        $choir_id = $choir->id;
+      } elseif (!empty($choir_input['choir_id'])) {
+        $choir_id = $choir_input['choir_id'];
+      }
+
+      // If choir id, attach choir to division
+      if ($choir_id) {
+        $division->choirs()->attach($choir_id);
+      }
+    }
+
+
+    // Set flash data and redirect
+    return redirect()->route('organizer.competition.division.settings', [$competition, $division]);
+  }
+
+
+  /**
+   * Show the form for creating a new resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function create($competition_id, $division_id, FormBuilder $formBuilder)
+  {
+    $division = Division::with('competition', 'choirs')->find($division_id);
+
+    $this->authorize('addChoir', $division);
+
+    // Division choirs
+    $choirs = $division->choirs->pluck('full_name', 'id')->toArray();
+
+    // All choirs
+    $choirs = Choir::all()->pluck('full_name', 'id')->toArray();
+    //dd($choirs);
+
+    $form = $formBuilder->create('Choir\CreateChoirForm', [
+      'method' => 'POST',
+      'class' => '',
+      'data' => $choirs,
+      'url' => route('organizer.competition.division.choir.store', [$division->competition, $division])
+    ]);
+
+
+
+    return view('competition_division_choir.organizer.create', compact('division', 'form'));
+  }
+
+  /**
+   * Store a newly created resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function store($competition_id, $division_id, Request $request, FormBuilder $formBuilder)
+  {
+    //$this->authorize('create','App\Choir');
+    if ($request->wantsJson() == false) {
+      $form = $formBuilder->create('Choir\CreateChoirForm');
+
+      // Validate input
+      if (!$form->isValid()) {
+        return redirect()->back()->withErrors($form->getErrors())->withInput();
+      }
+    }
+
+    // Get the division
+    $division = Division::with('competition', 'round', 'choirs')->find($division_id);
+
+    //die(print_r($request->all(), true));
+
+    // Create school and location
+    if ($request->filled('school.name')) {
+      $school = new School();
+      $school->name = $request->input('school.name');
+      $school->save();
+
+      // Create a school location
+      if ($request->filled('school.place')) {
+        $place = new Place($request->input('school.place'));
+        $school->place()->save($place);
+      }
+    }
+    // Retrieve school
+    elseif ($request->input('school_id')) {
+      $school = School::find($request->input('school_id'));
+    } else {
+      $school = false;
+    }
+
+    // Create or retrieve choir
+    if ($school and $request->filled('name')) {
+      $choir = new Choir();
+      $choir->name = $request->input('name');
+      $school->choirs()->save($choir);
+    } elseif ($request->filled('choir_id')) {
+      $choir = Choir::with('school', 'divisions')->find($request->input('choir_id'));
+    }
+
+    //die(print_r($choir, true));
+
+    /*
+    // Create a director and attach to choir
+    if($request->filled('director'))
     {
-        $division = Division::with('competition')->find($division_id);
-        $choir = Choir::with('school')->find($choir_id);
+      $director = new Director();
+      $director->fill($request->input('director'));
+      $choir->directors()->save($director);
+    }
+    */
 
-		$division->choirs()->detach($choir_id);
+    // If the form is submitted with an existing person ID...
+    if ($request->has('director.person_id') && !empty($request->input('director.person_id'))) {
 
-        event(new DivisionChoirRemoved($division, $choir));
+      $director_id = $request->input('director.person_id');
 
-        if($request->wantsJson())
-        {
-          return response()->json($choir_id);
-        }
-        else {
-          // Set flash data and redirect
-  		  return redirect()->route('organizer.competition.division.choir.index',[$division->competition, $division])->with('success',"$choir->name has been removed from this division." );
-        }
+      // Make sure this person is recorded as a director in the database.
+      $person = Person::with('types')->find($director_id);
+      if (!$person->getIsDirectorAttribute()) {
+        $person->types()->syncWithoutDetaching([2]);
+      }
 
+      // Attach the person to this choir.
+      $choir->directors()->syncWithoutDetaching([intval($director_id)]);
+
+    } elseif ($request->has('director.first_name')) {
+
+      // Otherwise, the intention is to create a new director.
+      $director = new Director();
+      $director->first_name = $request->input('director.first_name');
+      $director->last_name = $request->input('director.last_name');
+      $director->email = $request->input('director.email');
+      if ($request->has('director.emails_additional')) {
+        $director->emails_additional = $request->input('director.emails_additional');
+      }
+      if ($request->has('director.tel')) {
+        $director->tel = $request->input('director.tel');
+      }
+      $choir->directors()->save($director);
 
     }
+
+    // Attach choir to the division
+    if ($choir) {
+      $existing_choir = $division->round->choirs->where('id', $choir->id)->pluck('id');
+      if ($existing_choir->count() > 0) {
+        $warning_message = "The '$choir->name' ensemble already belongs to this class or type.";
+        if ($request->wantsJson()) {
+          $response = [];
+          $response['status'] = 'failed';
+          $response['errors'] = 'choir_in_round';
+          return response()->json($response);
+        } else {
+          return redirect()->back()->with('warning', $warning_message);
+        }
+      } else {
+        // Check if ensemble receives rankings or ratings
+        if (!$request->filled('receives_rankings')) {
+          $division->choirs()->attach($choir->id, ['receives_rankings' => 0]);
+        } elseif (!$request->filled('receives_ratings')) {
+          $division->choirs()->attach($choir->id, ['receives_ratings' => 0]);
+        } else {
+          $division->choirs()->attach($choir->id);
+        }
+      }
+    }
+
+    event(new DivisionChoirCreated($division, $choir));
+
+    $successMessage = "$choir->name has been added to this division.";
+
+    if ($request->wantsJson()) {
+      $choir->load('school');
+      $directors = array();
+      foreach ($choir->directors as $director) {
+        $directors[] = array(
+          'fullName' => $director['fullName'],
+          'email' => substr($director['email'], 0, 2) . '****@****' . substr($director['email'], -7),
+          'tel' => empty($director['tel']) ? NULL : '( *** ) *** - ' . explode('-', $director['tel'])[1]
+        );
+      }
+      unset($choir['directors']);
+      $choir['directors'] = $directors;
+      $response = array(
+        'status' => 'success',
+        'data' => $choir
+      );
+      return response()->json($response);
+    } else {
+      if ($request->exists('submit_create_another')) {
+        return redirect()->back()->with('success', $successMessage);
+      } else {
+        return redirect()->route('organizer.competition.division.choir.index', [$division->competition, $division])->with('success', $successMessage);
+      }
+    }
+
+
+  }
+
+  /**
+   * Display the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function show($competition_id, $division_id, $choir_id, FormBuilder $formBuilder)
+  {
+    $division = Division::with('competition')->find($division_id);
+    $choir = Choir::with('school')->find($choir_id);
+
+    $form = $formBuilder->create('DeleteChoirForm', [
+      'method' => 'DELETE',
+      'url' => route('organizer.competition.division.choir.destroy', [$division->competition, $division, $choir])
+    ]);
+
+    return view('competition_division_choir.organizer.show', compact('division', 'choir', 'form'));
+  }
+
+  /**
+   * Show the form for editing the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function edit($competition_id, $division_id, $choir_id, FormBuilder $formBuilder)
+  {
+    $division = Division::with('competition')->find($division_id);
+    $choir = Choir::with([
+      'divisions' => function ($query) use ($division_id) {
+        $query->where('id', $division_id);
+      }
+    ])->find($choir_id);
+
+    $form = $formBuilder->create('EditChoirForm', [
+      'method' => 'PUT',
+      'url' => route('organizer.competition.division.choir.update', [$division->competition, $division, $choir]),
+      'data' => [
+        'choir' => $choir
+      ],
+    ]);
+
+    return view('competition_division_choir.organizer.edit', compact('division', 'choir', 'form'));
+  }
+
+  /**
+   * Update the specified resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function update($competition_id, $division_id, $choir_id, FormBuilder $formBuilder, Request $request)
+  {
+    // Ensure RawScore is imported
+
+
+    // Fetch the choir with its current division
+    $choir = Choir::with('divisions')->find($choir_id);
+
+    // Get the new division ID from the request
+    $newDivisionId = $request->input('division_id');
+
+    // Check if the new division is different from the current one
+    if ($choir->divisions->first()->id != $newDivisionId) {
+      // Move choir to the new division
+      $choir->divisions()->detach($division_id);
+      $choir->divisions()->attach($newDivisionId, [
+        'receives_rankings' => $request->filled('receives_rankings'),
+        'receives_ratings' => $request->filled('receives_ratings'),
+        // Add new fields for sweepstakes
+        'choral_sweepstakes' => $request->filled('choral_sweepstakes'),
+        'instrumental_sweepstakes' => $request->filled('instrumental_sweepstakes'),
+        'festival_sweepstakes' => $request->filled('festival_sweepstakes'),
+      ]);
+
+
+      RawScore::where('choir_id', $choir_id)
+        ->where('division_id', $division_id)
+        ->update(['division_id' => $newDivisionId]);
+
+      Comment::where('choir_id', $choir_id)
+        ->where('recipient_type', 'division')
+        ->where('recipient_id', $division_id)
+        ->update(['recipient_id' => $newDivisionId]);
+
+      DivisionFile::where('choir_id', $choir_id)
+        ->where('division_id', $division_id)
+        ->update(['division_id' => $newDivisionId]);
+
+      ScheduleItem::where('choir_id', $choir_id)
+        ->where('division_id', $division_id)
+        ->update(['division_id' => $newDivisionId]);
+
+
+
+    } else {
+      // Just update the current division's pivot data if the division is the same
+      $choir->divisions()->updateExistingPivot($division_id, [
+        'receives_rankings' => (int) $request->filled('receives_rankings'),
+        'receives_ratings' => (int) $request->filled('receives_ratings'),
+                // Add new fields for sweepstakes
+                'choral_sweepstakes' => $request->filled('choral_sweepstakes'),
+                'instrumental_sweepstakes' => $request->filled('instrumental_sweepstakes'),
+                'festival_sweepstakes' => $request->filled('festival_sweepstakes'),
+      ]);
+    }
+
+    // Redirect with success message
+    return redirect()->route('organizer.competition.division.board', [$competition_id, $division_id])
+      ->with('success', "$choir->name has been updated and moved to the new division along with all related data.");
+  }
+
+
+
+
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function destroy($competition_id, $division_id, $choir_id, FormBuilder $formBuilder, Request $request)
+  {
+    $division = Division::with('competition')->find($division_id);
+    $choir = Choir::with('school')->find($choir_id);
+
+    $division->choirs()->detach($choir_id);
+
+    event(new DivisionChoirRemoved($division, $choir));
+
+    if ($request->wantsJson()) {
+      return response()->json($choir_id);
+    } else {
+      // Set flash data and redirect
+      return redirect()->route('organizer.competition.division.choir.index', [$division->competition, $division])->with('success', "$choir->name has been removed from this division.");
+    }
+
+
+  }
 }
