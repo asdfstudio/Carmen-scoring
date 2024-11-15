@@ -30,10 +30,10 @@
         </li>
         @endif
         @can('showAll', $round)
-        <li>
+        <!-- <li>
             @php $link_class = Request::segment(6) == 'scores' ? 'active' : false; @endphp
             <a href="{{ route('organizer.competition.round.scores.show', [$round->competition,$round]) }}" class="{{ $link_class }}">See Scores</a>
-        </li>
+        </li> -->
         <li>
             <a href="{{ route('organizer.competition.round.index', [$round->competition]) }}">Back To All Types</a>
         </li>
