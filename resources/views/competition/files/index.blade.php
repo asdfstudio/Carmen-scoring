@@ -30,16 +30,24 @@ Uploaded Files for {{ $competition->name }} | @parent
             @endphp
             @foreach($groupedByChoir as $choirName => $choirFiles)
                 <div class="list-group-item">
-                    <h5><strong>Division:</strong>{{ $choirName }}</h5>
-                    <br>
+                    <h5><strong>Division:</strong> {{ $choirName }}</h5>
                     <ul class="list-group">
                         @foreach($choirFiles as $file)
                             <li class="list-group-item">
-                                <div class="record-item-audio">
-                                    <audio controls>
-                                        <source src="{{ $file->url }}">
-                                    </audio>
-                                    <span>Uploaded on: {{ $file->created_at }} (UTC)</span>
+                                <div class="record-item">
+                                    @if($file instanceof \App\Recording)
+                                        <audio controls>
+                                            <source src="{{ $file->url }}">
+                                        </audio>
+                                        <span>Uploaded on: {{ $file->created_at }} (UTC)</span>
+                                    @elseif($file instanceof \App\Models\DivisionFile)
+                                        <!-- <a href="{{ $file->url }}" target="_blank">{{ $file->name }}</a>
+                                                            <span>Uploaded on: {{ $file->created_at }} (UTC)</span> -->
+                                        <audio controls>
+                                            <source src="{{ $file->url }}">
+                                        </audio>
+                                        <span>Uploaded on: {{ $file->created_at }} (UTC)</span>
+                                    @endif
                                 </div>
                             </li>
                         @endforeach

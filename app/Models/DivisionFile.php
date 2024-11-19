@@ -15,6 +15,15 @@ class DivisionFile extends Model
 
     protected $fillable = ['division_id', 'round_id', 'choir_id','uploaded_by', 'url','mime','name'];
 
+    public function round()
+    {
+        return $this->belongsTo('App\Round', 'round_id');
+    }
+    public function choir()
+    {
+        return $this->belongsTo('App\Choir', 'choir_id');
+    }
+
     public function getUrlAttribute($path)
     {
         return ($path) ? Storage::disk('recordings')->url($path) : '';
