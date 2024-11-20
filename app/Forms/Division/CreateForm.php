@@ -74,18 +74,6 @@ class CreateForm extends Form
             'attr' => ['id' => 'division-class'],
         ]);
 
-        // Add Rating System Dropdown
-        $this->add('rating_system_type', 'choice', [
-            'choices' => [
-                '3A-2A' => '3A-2A',
-                '1A-J' => '1A-J',
-                'custom' => 'Custom',
-            ],
-            'label' => 'Select Rating System',
-            'empty_value' => '-- Choose Rating System --',
-            'attr' => ['id' => 'rating-system-type'],
-        ]);
-
         // Add round selection dropdown
         $competition_id = $this->getData('competition_id');
         $this->add('round_id', 'entity', [
@@ -101,6 +89,18 @@ class CreateForm extends Form
             'rules' => 'required',
             'expanded' => false,
             'multiple' => false
+        ]);
+
+        // Add Rating System Dropdown
+        $this->add('rating_system_type', 'choice', [
+            'choices' => [
+                '3A-2A' => '3A-2A',
+                '1A-J' => '1A-J',
+                'custom' => 'Custom',
+            ],
+            'label' => 'Select Rating System',
+            'empty_value' => '-- Choose Rating System --',
+            'attr' => ['id' => 'rating-system-type'],
         ]);
 
         // Add the rating system heading
@@ -181,7 +181,7 @@ class CreateForm extends Form
             const ratingFields1A_J = [
                 {name: 'Gold', minScore: 85},
                 {name: 'Silver', minScore: 75},
-                {name: 'Bronze', minScore: 65},
+                {name: 'Bronze', minScore: 60},
                 {name: 'Merit', minScore: 50},
                 {name: 'Festival', minScore: 1}
             ];
@@ -235,7 +235,7 @@ class CreateForm extends Form
         $ratingFields1A_J = [
             ['name' => 'Gold', 'minScore' => 85],
             ['name' => 'Silver', 'minScore' => 75],
-            ['name' => 'Bronze', 'minScore' => 65],
+            ['name' => 'Bronze', 'minScore' => 60],
             ['name' => 'Merit', 'minScore' => 50],
             ['name' => 'Festival', 'minScore' => 1],
         ];

@@ -333,7 +333,7 @@ $(document).ready(function() {
       const ratingFields1A_J = [
           { name: 'Gold', minScore: 85 },
           { name: 'Silver', minScore: 75 },
-          { name: 'Bronze', minScore: 65 },
+          { name: 'Bronze', minScore: 60 },
           { name: 'Merit', minScore: 50 },
           { name: 'Festival', minScore: 1 }
       ];
