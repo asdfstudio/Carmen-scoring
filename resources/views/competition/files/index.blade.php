@@ -17,7 +17,7 @@ Uploaded Files for {{ $competition->name }} | @parent
         <div class="record-row">
             <h4>
                 @if($roundId != 'No Round Assigned')
-                    <strong>Round:</strong> {{ $files->first()->round->name }}
+                    <strong>Type:</strong> {{ $files->first()->round->name }}
                 @else
                     No Round Assigned
                 @endif
