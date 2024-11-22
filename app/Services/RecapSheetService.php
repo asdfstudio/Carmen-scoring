@@ -148,14 +148,14 @@ class RecapSheetService
 
                 $adjustedTotalScore = $totalScore - $totalPenalty;
                 $adjustedAverageScore = $judgesCount > 0 ? round($adjustedTotalScore / $judgesCount, 1) : 'No scores available';
-                
+
                 // $rank = isset($rankedScores[$choir->id]) ? $rankedScores[$choir->id] : 'No Rank';
                 $rank = $choir->pivot->receives_rankings ? ($rankedScores[$choir->id] ?? 'No Rank') : 'No Rank';
-                
+
                 if ($division->choirs->count() === 1) {
                     $rank = '-';
                 }
-                
+
                 // $rating = self::getRating($adjustedAverageScore);
                 // $rating = $choir->pivot->receives_ratings ? self::getRating($adjustedAverageScore) : 'No Rating';
                 $rating = $choir->pivot->receives_ratings ? self::getRatingOfChoir($adjustedAverageScore, $division->id) : 'No Rating';
@@ -167,7 +167,7 @@ class RecapSheetService
                     'caption_averages' => [],
                     'ranking' => $rank,
                     'rating' => $rating,
-                    'category' => $choir->category ?? 'Unknown',
+                    'category' => $division->name ?? 'Unknown',
                     'choral_sweepstakes_checked' => $choir->pivot->choral_sweepstakes,
                     'instrumental_sweepstakes_checked' => $choir->pivot->instrumental_sweepstakes,
                     'festival_sweepstakes_checked' => $choir->pivot->festival_sweepstakes,
@@ -268,21 +268,21 @@ class RecapSheetService
     protected static function calculateRankings(Competition $competition)
     {
         $rankings = [];
-    
+
         foreach ($competition->divisions as $division) {
             $choirsForRanking = $division->choirs->filter(function ($choir) {
                 return !$choir->opt_out_of_ranking && ($choir->pivot->receives_rankings ?? true);
             });
-    
+
             if ($choirsForRanking->isNotEmpty()) {
                 $choirScores = $choirsForRanking->mapWithKeys(function ($choir) {
                     // Ensure rawScores is not null before summing
                     $totalScore = $choir->rawScores ? $choir->rawScores->sum('score') : 0;
                     return [$choir->id => $totalScore];
                 });
-    
+
                 $sortedChoirs = $choirScores->sortDesc();
-    
+
                 $currentRank = 1;
                 foreach ($sortedChoirs as $choirId => $totalScore) {
                     if ($currentRank <= 3) {
@@ -293,10 +293,10 @@ class RecapSheetService
                 }
             }
         }
-    
+
         return $rankings;
     }
-    
+
 
 
     protected static function getRating($averageScore)
@@ -317,44 +317,66 @@ class RecapSheetService
     public static function getAdjudicatorAwardWinners(Competition $competition)
     {
         $choirs = collect(self::generateRecap($competition))->flatMap(function ($division) {
-            $roundName = $division['round'] ?? 'Unknown Round';
-    
+            $roundName = $division['division'] ?? 'Unknown Round';
+
             return collect($division['choirs'] ?? [])->map(function ($choir) use ($roundName) {
-                $choir['round'] = $roundName; 
+                $choir['round'] = $roundName;
                 return $choir;
             });
         });
-    
+
+        // Round up average scores and filter eligible choral winners
         $eligibleWinners = $choirs->filter(function ($choir) {
-            return $choir['average_score'] >= 95 && $choir['ranking'] !== 'No Rank';
+            $roundedScore = ceil($choir['average_score']); // Round up to the nearest integer
+            return $roundedScore >= 95 && $choir['ranking'] !== 'No Rank';
         });
-    
+
+        // Round up average scores and filter eligible band or orchestra winners
         $bandOrchestraWinners = $choirs->filter(function ($choir) {
-            $roundName = $choir['round'];
-            return (stripos($roundName, 'band') !== false || stripos($roundName, 'orchestra') !== false) 
-                && $choir['average_score'] >= 92
+            $roundedScore = ceil($choir['average_score']); // Round up to the nearest integer
+            $roundName = $choir['category'];
+            return (stripos($roundName, 'band') !== false || stripos($roundName, 'orchestra') !== false)
+                && $roundedScore >= 92
                 && $choir['ranking'] !== 'No Rank';
         });
-    
+
+        // Combine winners and return unique entries sorted by score
         return $eligibleWinners
             ->merge($bandOrchestraWinners)
             ->unique('name')
             ->sortByDesc('average_score')
             ->values();
     }
-    
+
+
 
 
     public static function getFOGInvitationWinners(Competition $competition)
     {
         $validChoralTypes = [
-            'Choir','Vocal', 'Show Choir', 'Vocal Jazz'
+            'Choir',
+            'Vocal',
+            'Show Choir',
+            'Vocal Jazz'
         ];
 
         $validInstrumentalTypes = [
-            'Bell', 'Band', 'Orchestra', 'Guitar', 'Percussion', 'Field Show', 'Combined', 'Drumline', 'Auxiliary', 'Drum', 'Parade', 'Drumline', 'Auxiliary', 'Drum Major'
+            'Bell',
+            'Band',
+            'Orchestra',
+            'Guitar',
+            'Percussion',
+            'Field Show',
+            'Combined',
+            'Drumline',
+            'Auxiliary',
+            'Drum',
+            'Parade',
+            'Drumline',
+            'Auxiliary',
+            'Drum Major'
         ];
-        
+
         $choirs = collect(self::generateRecap($competition))->flatMap(function ($division) {
             return collect($division['choirs'])->map(function ($choir) use ($division) {
                 $choir['round'] = $division['round'] ?? 'Unknown Round';
@@ -371,14 +393,14 @@ class RecapSheetService
                 return stripos($choir['round'], $type) !== false;
             });
         })->sortBy('school')->values();
-        
+
 
         $instrumentalChoirs = $qualifiedChoirs->filter(function ($choir) use ($validInstrumentalTypes) {
             return collect($validInstrumentalTypes)->contains(function ($type) use ($choir) {
                 return stripos($choir['round'], $type) !== false;
             });
         })->sortBy('school')->values();
-        
+
 
         return [
             'choral' => $choralChoirs,
@@ -396,148 +418,199 @@ class RecapSheetService
             });
         });
     
-        $outstandingChoral = $choirs->filter(function ($choir) {
-            return stripos(strtolower($choir['round']), 'choir') !== false 
-                && $choir['ranking'] !== 'No Rank';
-        })->sortByDesc('average_score')->first();
+        // Helper function to determine ties
+        $getTiedWinners = function ($filteredChoirs) {
+            $highestScore = $filteredChoirs->max('average_score');
+            $winners = $filteredChoirs->filter(function ($choir) use ($highestScore) {
+                return $choir['average_score'] === $highestScore;
+            });
+            return $winners->map(function ($choir) use ($winners) {
+                $choir['tied'] = $winners->count() > 1;
+                return $choir;
+            });
+        };
     
+        // Get outstanding choral group(s)
+        $outstandingChoral = $choirs->filter(function ($choir) {
+            return stripos(strtolower($choir['round']), 'choir') !== false
+                && $choir['ranking'] !== 'No Rank';
+        });
+        $outstandingChoralWinners = $getTiedWinners($outstandingChoral);
+    
+        // Get outstanding band(s)
         $outstandingBand = $choirs->filter(function ($choir) {
-            $roundName = strtolower($choir['round']);
+            $roundName = strtolower($choir['category']);
             return stripos($roundName, 'band') !== false
                 && !stripos($roundName, 'percussion ensemble')
                 && !stripos($roundName, 'guitar ensemble')
                 && !stripos($roundName, 'parade band')
                 && !stripos($roundName, 'auxiliary')
                 && $choir['ranking'] !== 'No Rank';
-        })->sortByDesc('average_score')->first();
+        });
+        $outstandingBandWinners = $getTiedWinners($outstandingBand);
     
+        // Get outstanding orchestra group(s)
         $outstandingOrchestra = $choirs->filter(function ($choir) {
             return stripos(strtolower($choir['round']), 'orchestra') !== false
                 && $choir['ranking'] !== 'No Rank';
-        })->sortByDesc('average_score')->first();
+        });
+        $outstandingOrchestraWinners = $getTiedWinners($outstandingOrchestra);
     
+        // Return the results with scores
         return [
-            'choral' => $outstandingChoral,
-            'band' => $outstandingBand,
-            'orchestra' => $outstandingOrchestra,
+            'choral' => $outstandingChoralWinners,
+            'band' => $outstandingBandWinners,
+            'orchestra' => $outstandingOrchestraWinners,
         ];
     }
     
+    
+
 
     public static function getSweepstakesWinners(Competition $competition)
     {
         $choirs = collect(self::generateRecap($competition))->flatMap(function ($division) {
-            $roundName = $division['round'] ?? 'Unknown Round';
-    
+            $roundName = $division['division'] ?? 'Unknown division'; // Use 'category' instead of 'round'
             return collect($division['choirs'] ?? [])->map(function ($choir) use ($roundName) {
-                $choir['round'] = $roundName;
+                $choir['category'] = $roundName; // Assign 'category' to the choir data
                 return $choir;
             });
         });
-    
+
+
+
         $schools = $choirs->groupBy('school');
         $sweepstakesWinners = [
             'choral' => null,
             'instrumental' => null,
             'festival' => null,
         ];
-    
+
         $validChoralTypes = ['Choir', 'Vocal', 'Show Choir', 'Vocal Jazz'];
         $validInstrumentalTypes = [
-            'Bell', 'Band', 'Orchestra', 'Guitar', 'Percussion', 'Field Show', 
-            'Combined', 'Drumline', 'Auxiliary', 'Drum', 'Parade', 'Drum Major'
+            'Bell',
+            'Band',
+            'Orchestra',
+            'Guitar',
+            'Percussion',
+            'Field Show',
+            'Combined',
+            'Drumline',
+            'Auxiliary',
+            'Drum',
+            'Parade',
+            'Drum Major'
         ];
-    
+
         foreach ($schools as $schoolName => $schoolChoirs) {
             // **Choral Sweepstakes**
             $choralChoirs = $schoolChoirs->filter(function ($choir) {
-                return isset($choir['choral_sweepstakes_checked']) && 
-                       $choir['choral_sweepstakes_checked'] == 1 &&
-                       $choir['ranking'] !== "No Rank";  // Skip "No Rank" ensembles
+                return isset($choir['choral_sweepstakes_checked']) &&
+                    $choir['choral_sweepstakes_checked'] == 1 &&
+                    $choir['ranking'] !== "No Rank";  // Skip "No Rank" ensembles
             });
-    
+
             $validChoralChoirs = $choralChoirs->filter(function ($choir) use ($validChoralTypes) {
                 return collect($validChoralTypes)->contains(function ($type) use ($choir) {
-                    return stripos($choir['round'], $type) !== false;
+                    return stripos($choir['category'], $type) !== false;
                 });
             });
-    
+
             $traditionalChoral = $choralChoirs->filter(function ($choir) {
-                return preg_match('/Traditional/i', $choir['round']);
+                return preg_match('/Concert|Chamber|Upper|Lower/i', $choir['category']);
             })->sortByDesc('average_score')->first();
-    
+
             $secondChoral = $validChoralChoirs->reject(function ($choir) use ($traditionalChoral) {
                 return $traditionalChoral && $choir['name'] === $traditionalChoral['name'];
-            })->sortByDesc('average_score')->first();        
-    
+            })->sortByDesc('average_score')->first();
+
             if ($traditionalChoral && $secondChoral) {
-                $totalChoralScore = (float)$traditionalChoral['average_score'] + (float)$secondChoral['average_score'];
-                if (!isset($sweepstakesWinners['choral']) || $totalChoralScore > (float)$sweepstakesWinners['choral']['total_score']) {
+                $totalChoralScore = (float) $traditionalChoral['average_score'] + (float) $secondChoral['average_score'];
+                if (!isset($sweepstakesWinners['choral']) || $totalChoralScore > (float) $sweepstakesWinners['choral']['total_score']) {
                     $sweepstakesWinners['choral'] = [
                         'school_name' => $schoolName,
                         'choirs' => [$traditionalChoral['name'], $secondChoral['name']],
-                        'average_score' => [(float)$traditionalChoral['average_score'], (float)$secondChoral['average_score']],
+                        'average_score' => [(float) $traditionalChoral['average_score'], (float) $secondChoral['average_score']],
                         'total_score' => $totalChoralScore,
                     ];
                 }
             }
-    
+
             // **Instrumental Sweepstakes**
             $instrumentalChoirs = $schoolChoirs->filter(function ($choir) {
-                return isset($choir['instrumental_sweepstakes_checked']) && 
-                       $choir['instrumental_sweepstakes_checked'] == 1 &&
-                       $choir['ranking'] !== "No Rank"; 
+                return isset($choir['instrumental_sweepstakes_checked']) &&
+                    $choir['instrumental_sweepstakes_checked'] == 1 &&
+                    $choir['ranking'] !== "No Rank";
             });
-    
+
             $validInstrumentalChoirs = $instrumentalChoirs->filter(function ($choir) use ($validInstrumentalTypes) {
                 return collect($validInstrumentalTypes)->contains(function ($type) use ($choir) {
-                    return stripos($choir['round'], $type) !== false;
+                    return stripos($choir['category'], $type) !== false;
                 });
             });
-    
+
             $concertOrOrchestra = $instrumentalChoirs->filter(function ($choir) {
-                return preg_match('/Orchestra|Band/i', $choir['round']);
+                return preg_match('/Orchestra|Concert/i', $choir['category']);
             })->sortByDesc('average_score')->first();
-    
+
             $secondInstrumental = $validInstrumentalChoirs->reject(function ($choir) use ($concertOrOrchestra) {
                 return $concertOrOrchestra && $choir['name'] === $concertOrOrchestra['name'];
             })->sortByDesc('average_score')->first();
-    
+
             if ($concertOrOrchestra && $secondInstrumental) {
-                $totalInstrumentalScore = (float)$concertOrOrchestra['average_score'] + (float)$secondInstrumental['average_score'];
-                if (!isset($sweepstakesWinners['instrumental']) || $totalInstrumentalScore > (float)$sweepstakesWinners['instrumental']['total_score']) {
+                $totalInstrumentalScore = (float) $concertOrOrchestra['average_score'] + (float) $secondInstrumental['average_score'];
+                if (!isset($sweepstakesWinners['instrumental']) || $totalInstrumentalScore > (float) $sweepstakesWinners['instrumental']['total_score']) {
                     $sweepstakesWinners['instrumental'] = [
                         'school_name' => $schoolName,
                         'choirs' => [$concertOrOrchestra['name'], $secondInstrumental['name']],
-                        'average_score' => [(float)$concertOrOrchestra['average_score'], (float)$secondInstrumental['average_score']],
+                        'average_score' => [(float) $concertOrOrchestra['average_score'], (float) $secondInstrumental['average_score']],
                         'total_score' => $totalInstrumentalScore,
                     ];
                 }
             }
-    
+
             // **Festival Sweepstakes**
-            if ($traditionalChoral && $concertOrOrchestra) {
-                $thirdFestival = $schoolChoirs->filter(function ($choir) {
-                    return isset($choir['festival_sweepstakes_checked']) && 
-                           $choir['festival_sweepstakes_checked'] == 1 &&
-                           $choir['ranking'] !== "No Rank";  // Skip "No Rank" ensembles
-                })->reject(function ($choir) use ($traditionalChoral, $concertOrOrchestra) {
-                    return $choir['name'] === $traditionalChoral['name'] || $choir['name'] === $concertOrOrchestra['name'];
+            if ($schoolChoirs->isNotEmpty()) {
+                // Step 1: Highest-scoring choral ensemble
+                $highestChoral = $schoolChoirs->filter(function ($choir) {
+                    return isset($choir['festival_sweepstakes_checked']) &&
+                        $choir['festival_sweepstakes_checked'] == 1 &&
+                        $choir['ranking'] !== "No Rank" && // Exclude "No Rank"
+                        preg_match('/Concert Choir|Chamber Choir|Upper Voice Choir|Lower Voice Choir/i', $choir['category']);
                 })->sortByDesc('average_score')->first();
-    
-                if ($thirdFestival) {
-                    $totalFestivalScore = (float)$traditionalChoral['average_score'] 
-                        + (float)$concertOrOrchestra['average_score'] 
-                        + (float)$thirdFestival['average_score'];
-    
-                    if (!isset($sweepstakesWinners['festival']) || $totalFestivalScore > (float)$sweepstakesWinners['festival']['total_score']) {
+
+                // Step 2: Highest-scoring instrumental ensemble
+                $highestInstrumental = $schoolChoirs->filter(function ($choir) {
+                    return isset($choir['festival_sweepstakes_checked']) &&
+                        $choir['festival_sweepstakes_checked'] == 1 &&
+                        $choir['ranking'] !== "No Rank" && // Exclude "No Rank"
+                        preg_match('/Concert Band|Orchestra/i', $choir['category']);
+                })->sortByDesc('average_score')->first();
+
+                // Step 3: Highest-scoring third ensemble (not choral or instrumental already chosen)
+                $thirdEnsemble = $schoolChoirs->filter(function ($choir) use ($highestChoral, $highestInstrumental) {
+                    return isset($choir['festival_sweepstakes_checked']) &&
+                        $choir['festival_sweepstakes_checked'] == 1 &&
+                        $choir['ranking'] !== "No Rank" && // Exclude "No Rank"
+                        $choir['name'] !== ($highestChoral['name'] ?? null) &&
+                        $choir['name'] !== ($highestInstrumental['name'] ?? null);
+                })->sortByDesc('average_score')->first();
+
+                // Step 4: Calculate total festival score if all three ensembles are found
+                if ($highestChoral && $highestInstrumental && $thirdEnsemble) {
+                    $totalFestivalScore = (float) $highestChoral['average_score']
+                        + (float) $highestInstrumental['average_score']
+                        + (float) $thirdEnsemble['average_score'];
+
+                    // Step 5: Compare with current highest and update winner
+                    if (!isset($sweepstakesWinners['festival']) || $totalFestivalScore > (float) $sweepstakesWinners['festival']['total_score']) {
                         $sweepstakesWinners['festival'] = [
                             'school_name' => $schoolName,
-                            'choirs' => [$traditionalChoral['name'], $concertOrOrchestra['name'], $thirdFestival['name']],
+                            'choirs' => [$highestChoral['name'], $highestInstrumental['name'], $thirdEnsemble['name']],
                             'average_score' => [
-                                (float)$traditionalChoral['average_score'],
-                                (float)$concertOrOrchestra['average_score'],
-                                (float)$thirdFestival['average_score']
+                                (float) $highestChoral['average_score'],
+                                (float) $highestInstrumental['average_score'],
+                                (float) $thirdEnsemble['average_score']
                             ],
                             'total_score' => $totalFestivalScore,
                         ];
@@ -545,10 +618,10 @@ class RecapSheetService
                 }
             }
         }
-    
+
         return $sweepstakesWinners;
     }
-    
+
 
 
 

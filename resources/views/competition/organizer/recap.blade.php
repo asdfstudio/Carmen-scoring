@@ -9,17 +9,40 @@ Recap Sheet | {{ $competition->name }} | @parent
 
 <!-- Custom styles for consistent column widths -->
 <style>
-    .table th, .table td {
+    .table th,
+    .table td {
         padding: 8px;
         text-align: left;
     }
-    .col-school { width: 18%; }
-    .col-ensemble { width: 18%; }
-    .col-type { width: 18%; }
-    .col-class { width: 15%; }
-    .col-score { width: 12%; }
-    .col-ranking { width: 10%; }
-    .col-rating { width: 10%; }
+
+    .col-school {
+        width: 18%;
+    }
+
+    .col-ensemble {
+        width: 18%;
+    }
+
+    .col-type {
+        width: 18%;
+    }
+
+    .col-class {
+        width: 15%;
+    }
+
+    .col-score {
+        width: 12%;
+    }
+
+    .col-ranking {
+        width: 10%;
+    }
+
+    .col-rating {
+        width: 10%;
+    }
+
     .scoree.tiedd {
         color: white;
         background-color: red;
@@ -44,69 +67,67 @@ Recap Sheet | {{ $competition->name }} | @parent
     </thead>
     <tbody>
         @foreach($recapData as $data)
-            @php
-                $rank = 1;
-                $previousScore = null;
-                $previousRank = 1;
-                $rankCounter = 0;
-                $limit = 3;
-                $previousWasNoRank = false;
-            @endphp
-
-            @foreach($data['choirs'] as $choir)
                 @php
-                    // If rank exceeds limit, break the loop
-
-                    if ($choir['rank_checked'] == "0") {
-                        $choir['ranking'] = "No Rank";
-                        $previousWasNoRank = true;
-                    } else {
-                        // Only one ensemble in the division, show dash for rank
-                        if (count($data['choirs']) === 1) {
-                            $choir['ranking'] = '-';
-                        }
-                        else if ($rank > $limit) {
-                            $choir['ranking'] = '-';
-                        } 
-                        else {
-                            if ($choir['average_score'] == $previousScore && !$previousWasNoRank) {
-                                // If same score as previous and not following a "No Rank"
-                                $rankCounter++;
-                                $choir['ranking'] = $previousRank;
-                            } else {
-                                // New score or after a "No Rank"
-                                $rank += $rankCounter;
-                                $choir['ranking'] = $rank;
-                                $rankCounter = 0;
-                                $previousRank = $rank;
-                                $rank++;
-                            }
-                        }
-                        $previousWasNoRank = false; // Reset "No Rank" flag after assigning a valid rank
-                    }
-
-                    $previousScore = $choir['average_score'];
+                    $rank = 1;
+                    $previousScore = null;
+                    $previousRank = 1;
+                    $rankCounter = 0;
+                    $limit = 3;
+                    $previousWasNoRank = false;
                 @endphp
 
-                <tr>
-                    <td class="col-school">{{ $choir['school'] }}</td>
-                    <td class="col-ensemble">{{ $choir['name'] }}</td>
-                    <td class="col-type">{{ $data['round'] }}</td>
-                    <td class="col-class">{{ $data['division'] }}</td>
-                    <td class="col-score">{{ $choir['average_score'] }}</td>
-                    <td class="col-ranking">
-                        @if($choir['rank_checked'] == "0")
-                            No Rank
-                        @elseif($rankCounter > 0 && !$previousWasNoRank)
-                            <span>{{ $choir['ranking'] }}</span>
-                            <span class="scoree tiedd">tied</span>
-                        @else
-                            {{ $choir['ranking'] }}
-                        @endif
-                    </td>
-                    <td class="col-rating">{{ $choir['rating'] }}</td>
-                </tr>
-            @endforeach
+                @foreach($data['choirs'] as $choir)
+                    @php
+                        // If rank exceeds limit, break the loop
+
+                        if ($choir['rank_checked'] == "0") {
+                            $choir['ranking'] = "No Rank";
+                            $previousWasNoRank = true;
+                        } else {
+                            // Only one ensemble in the division, show dash for rank
+                            if (count($data['choirs']) === 1) {
+                                $choir['ranking'] = '-';
+                            } else if ($rank > $limit) {
+                                $choir['ranking'] = '-';
+                            } else {
+                                if ($choir['average_score'] == $previousScore && !$previousWasNoRank) {
+                                    // If same score as previous and not following a "No Rank"
+                                    $rankCounter++;
+                                    $choir['ranking'] = $previousRank;
+                                } else {
+                                    // New score or after a "No Rank"
+                                    $rank += $rankCounter;
+                                    $choir['ranking'] = $rank;
+                                    $rankCounter = 0;
+                                    $previousRank = $rank;
+                                    $rank++;
+                                }
+                            }
+                            $previousWasNoRank = false; // Reset "No Rank" flag after assigning a valid rank
+                        }
+
+                        $previousScore = $choir['average_score'];
+                    @endphp
+
+                    <tr>
+                        <td class="col-school">{{ $choir['school'] }}</td>
+                        <td class="col-ensemble">{{ $choir['name'] }}</td>
+                        <td class="col-type">{{ $data['round'] }}</td>
+                        <td class="col-class">{{ $data['division'] }}</td>
+                        <td class="col-score">{{ $choir['average_score'] }}</td>
+                        <td class="col-ranking">
+                            @if($choir['rank_checked'] == "0")
+                                No Rank
+                            @elseif($rankCounter > 0 && !$previousWasNoRank)
+                                <span>{{ $choir['ranking'] }}</span>
+                                <span class="scoree tiedd">tied</span>
+                            @else
+                                {{ $choir['ranking'] }}
+                            @endif
+                        </td>
+                        <td class="col-rating">{{ $choir['rating'] }}</td>
+                    </tr>
+                @endforeach
         @endforeach
     </tbody>
 </table>
@@ -180,59 +201,83 @@ Recap Sheet | {{ $competition->name }} | @parent
 @endif
 
 <!-- Outstanding Group Awards Winners -->
-@if(isset($outstandingWinners['choral']))
+@if($outstandingWinners['choral']->isNotEmpty())
     <h2>Outstanding Choral Group Winner</h2>
     <table class="table">
         <thead>
             <tr>
                 <th class="col-ensemble">Ensemble Name</th>
                 <th class="col-type">Type</th>
+                <th class="col-score">Score</th>
+
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="col-ensemble">{{ $outstandingWinners['choral']['school']}} “{{ $outstandingWinners['choral']['name'] }}“</td>
-                <td class="col-type">{{ $outstandingWinners['choral']['round'] }}</td>
-            </tr>
+            @foreach($outstandingWinners['choral'] as $choral)
+                <tr>
+                    <td class="col-ensemble">{{ $choral['school'] }} “{{ $choral['name'] }}“</td>
+                    <td class="col-type">{{ $choral['round'] }}</td>
+                    <td class="col-score">{{ $choral['average_score'] }} @if($choral['tied'])
+                        <span class="scoree tiedd">tied</span>
+                    @endif
+                    </td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
 @endif
 
-@if(isset($outstandingWinners['band']))
+@if($outstandingWinners['band']->isNotEmpty())
     <h2>Outstanding Band Group Winner</h2>
     <table class="table">
         <thead>
             <tr>
                 <th class="col-ensemble">Ensemble Name</th>
                 <th class="col-type">Type</th>
+                <th class="col-score">Score</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="col-ensemble">{{ $outstandingWinners['band']['school']}} “{{ $outstandingWinners['band']['name'] }}“</td>
-                <td class="col-type">{{ $outstandingWinners['band']['round'] }}</td>
-            </tr>
+            @foreach($outstandingWinners['band'] as $band)
+                <tr>
+                    <td class="col-ensemble">{{ $band['school'] }} “{{ $band['name'] }}“</td>
+                    <td class="col-type">{{ $band['round'] }}</td>
+                    <td class="col-score">{{ $band['average_score'] }} @if($band['tied'])
+                        <span class="scoree tiedd">tied</span>
+                    @endif
+                    </td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
 @endif
 
-@if(isset($outstandingWinners['orchestra']))
+@if($outstandingWinners['orchestra']->isNotEmpty())
     <h2>Outstanding Orchestra Group Winner</h2>
     <table class="table">
         <thead>
             <tr>
                 <th class="col-ensemble">Ensemble Name</th>
                 <th class="col-type">Type</th>
+                <th class="col-score">Score</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="col-ensemble">{{ $outstandingWinners['orchestra']['school']}} “{{ $outstandingWinners['orchestra']['name'] }}“</td>
-                <td class="col-type">{{ $outstandingWinners['orchestra']['round'] }}</td>
-            </tr>
+            @foreach($outstandingWinners['orchestra'] as $orchestra)
+                <tr>
+                    <td class="col-ensemble">{{ $orchestra['school'] }} “{{ $orchestra['name'] }}“</td>
+                    <td class="col-type">{{ $orchestra['round'] }}</td>
+                    <td class="col-score">{{ $orchestra['average_score'] }} @if($orchestra['tied'])
+                        <span class="scoree tiedd">tied</span>
+                    @endif
+                    </td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
 @endif
+
+
 
 <!-- Sweepstakes Winners -->
 @if(isset($sweepstakesWinners['choral']))
