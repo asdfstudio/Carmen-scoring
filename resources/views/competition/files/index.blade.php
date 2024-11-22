@@ -24,25 +24,29 @@ Uploaded Files for {{ $competition->name }} | @parent
             </h4>
             <br>
             @php
-                $groupedByChoir = $files->groupBy(function ($file) {
-                    return $file->choir ? $file->choir->name : 'No Choir Assigned';
+                $groupedBySchool = $files->groupBy(function ($file) {
+                    return $file->choir ? $file->choir->school->name : 'No School Assigned';
                 });
             @endphp
-            @foreach($groupedByChoir as $choirName => $choirFiles)
+            @foreach($groupedBySchool as $schoolName => $choirFiles)
                 <div class="list-group-item">
-                    <h5><strong>Division:</strong> {{ $choirName }}</h5>
+                    <h5><strong>School:</strong> {{ $schoolName }}</h5>
                     <ul class="list-group">
                         @foreach($choirFiles as $file)
                             <li class="list-group-item">
                                 <div class="record-item">
-                                    @if($file instanceof \App\Recording)
+                                    @if($file->type === 'recording')
+                                        <span>Judge: {{ $file->judge ? $file->judge->full_name : 'No Judge Assigned' }}</span>
+                                        <br>
+                                        <br>
                                         <audio controls>
                                             <source src="{{ $file->url }}">
                                         </audio>
                                         <span>Uploaded on: {{ $file->created_at }} (UTC)</span>
-                                    @elseif($file instanceof \App\Models\DivisionFile)
-                                        <!-- <a href="{{ $file->url }}" target="_blank">{{ $file->name }}</a>
-                                                            <span>Uploaded on: {{ $file->created_at }} (UTC)</span> -->
+                                    @elseif($file->type === 'division_file')
+                                        <span>(Stage)</span>
+                                        <br>
+                                        <br>
                                         <audio controls>
                                             <source src="{{ $file->url }}">
                                         </audio>
