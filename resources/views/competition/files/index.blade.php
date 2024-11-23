@@ -24,6 +24,7 @@ Uploaded Files for {{ $competition->name }} | @parent
             </h4>
             <br>
             @php
+                // Group files by school
                 $groupedBySchool = $files->groupBy(function ($file) {
                     return $file->choir && $file->choir->school ? $file->choir->school->name : 'No School Assigned';
                 });
@@ -32,34 +33,38 @@ Uploaded Files for {{ $competition->name }} | @parent
                 <div class="list-group-item">
                     <h5><strong>School:</strong> {{ $schoolName }}</h5>
                     @php
-                        // Group by Judge within each School
-                        $groupedByJudge = $schoolFiles->groupBy(function ($file) {
-                            return $file->judge ? $file->judge->full_name : 'No Judge Assigned';
+                        // Group files by choir within each school
+                        $groupedByChoir = $schoolFiles->groupBy(function ($file) {
+                            return $file->choir ? $file->choir->name : 'No Ensemble Assigned';
                         });
                     @endphp
-                    @foreach($groupedByJudge as $judgeName => $judgeFiles)
+                    @foreach($groupedByChoir as $choirName => $choirFiles)
                         <div class="list-group-item">
-                            <h6>
-
-                                @if($judgeName === 'No Judge Assigned')
-                                    <strong>Stage</strong>
-                                @else
-                                    <strong>Judge: </strong> {{ $judgeName }}
-                                @endif
-                            </h6>
-                            <ul class="list-group">
-                                @foreach($judgeFiles as $file)
-                                    <li class="list-group-item">
-                                        <div class="record-item">
-                                            <audio controls>
-                                                <source src="{{ $file->url }}">
-                                            </audio>
-                                            <br>
-                                            <span>Uploaded on: {{ $file->created_at }} (UTC)</span>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            </ul>
+                            <h6><strong>Ensemble:</strong> {{ $choirName }}</h6>
+                            @php
+                                // Group files by judge within each choir
+                                $groupedByJudge = $choirFiles->groupBy(function ($file) {
+                                    return $file->judge ? $file->judge->full_name : 'No Judge Assigned';
+                                });
+                            @endphp
+                            @foreach($groupedByJudge as $judgeName => $judgeFiles)
+                                <div class="list-group-item">
+                                    <h6><strong>Judge:</strong> {{ $judgeName }}</h6>
+                                    <ul class="list-group">
+                                        @foreach($judgeFiles as $file)
+                                            <li class="list-group-item">
+                                                <div class="record-item">
+                                                    <audio controls>
+                                                        <source src="{{ $file->url }}">
+                                                    </audio>
+                                                    <br>
+                                                    <span>Uploaded on: {{ $file->created_at }} (UTC)</span>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endforeach
                         </div>
                     @endforeach
                 </div>
