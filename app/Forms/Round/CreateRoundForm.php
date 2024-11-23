@@ -106,22 +106,45 @@ class CreateRoundForm extends Form
           'multiple' => false
       ]);
 
-				$this->add('caption_weighting_id','entity', [
-					'class' => 'App\CaptionWeighting',
-					'empty_value' => 'Choose caption weighting...',
-					'label' => 'Caption Weighting',
-          'label_attr' => ['class' => 'block'],
-          //'property' => 'full_name',
-          'expanded' => true,
-          'multiple' => false,
-          'choice_options' => [
-            'wrapper' => ['class' => 'choice-container'],
-            'rules' => 'required'
-          ],
-          'help_block' => [
-            'text' => ''
-          ]
-				]);
+				// $this->add('caption_weighting_id','entity', [
+				// 	'class' => 'App\CaptionWeighting',
+				// 	'empty_value' => 'Choose caption weighting...',
+				// 	'label' => 'Caption Weighting',
+        //   'label_attr' => ['class' => 'block'],
+        //   //'property' => 'full_name',
+        //   'expanded' => true,
+        //   'multiple' => false,
+        //   'choice_options' => [
+        //     'wrapper' => ['class' => 'choice-container'],
+        //     'rules' => 'required'
+        //   ],
+        //   'help_block' => [
+        //     'text' => ''
+        //   ]
+				// ]);
+
+        // Fetch all Caption Weighting options and find the one with the name "No Weighting"
+        $captionWeightings = \App\CaptionWeighting::all();
+        $defaultCaptionWeighting = $captionWeightings->firstWhere('name', 'No Weighting');
+
+        $this->add('caption_weighting_id', 'entity', [
+            'class' => 'App\CaptionWeighting',
+            'empty_value' => 'Choose caption weighting...',
+            'label' => 'Caption Weighting',
+            'label_attr' => ['class' => 'block'],
+            'expanded' => true,
+            'multiple' => false,
+            'choice_options' => [
+                'wrapper' => ['class' => 'choice-container'],
+                'rules' => 'required',
+            ],
+            'help_block' => [
+                'text' => ''
+            ],
+            // Set the default value to the ID of "No Weighting" if found
+            'default_value' => $defaultCaptionWeighting ? $defaultCaptionWeighting->id : null
+        ]);
+
 
         // When listing scoring methods, leave out ID 2 (Ranked Scores) unless it is already chosen for this division.
         $selected_scoring_method = !empty($this->model) && !empty($this->model->scoring_method_id) ? $this->model->scoring_method_id : '';
@@ -133,23 +156,40 @@ class CreateRoundForm extends Form
         //dd($scoring_methods);
         //dd($this->model->scoring_method_id);
 
-				$this->add('scoring_method_id','choice', [
-          //'class' => 'App\ScoringMethod',
+				// $this->add('scoring_method_id','choice', [
+        //   //'class' => 'App\ScoringMethod',
+        //   'choices' => $scoring_methods,
+        //   'selected' => $selected_scoring_method,
+				// 	'empty_value' => 'Choose scoring method...',
+				// 	'label' => 'Scoring Method',
+        //   'label_attr' => ['class' => 'block'],
+        //   'expanded' => true,
+        //   'multiple' => false,
+        //   'choice_options' => [
+        //     'wrapper' => ['class' => 'choice-container'],
+        //     'rules' => 'required'
+        //   ],
+        //   'help_block' => [
+        //     //'text' => 'The Ranked scoring method should be used only if at least one of the following is true: 1) The Caption Weighting is 50/50. 2) All judges are scoring both the Music and Show captions. 3) There are 50% more judges scoring the Music caption than the Show caption.'
+        //   ]
+				// ]);
+
+        $this->add('scoring_method_id', 'choice', [
           'choices' => $scoring_methods,
-          'selected' => $selected_scoring_method,
-					'empty_value' => 'Choose scoring method...',
-					'label' => 'Scoring Method',
+          'selected' => array_search('Average Scores', $scoring_methods), 
+          'empty_value' => 'Choose scoring method...',
+          'label' => 'Scoring Method',
           'label_attr' => ['class' => 'block'],
           'expanded' => true,
           'multiple' => false,
           'choice_options' => [
-            'wrapper' => ['class' => 'choice-container'],
-            'rules' => 'required'
+              'wrapper' => ['class' => 'choice-container'],
+              'rules' => 'required',
           ],
           'help_block' => [
-            //'text' => 'The Ranked scoring method should be used only if at least one of the following is true: 1) The Caption Weighting is 50/50. 2) All judges are scoring both the Music and Show captions. 3) There are 50% more judges scoring the Music caption than the Show caption.'
+              //'text' => 'The Ranked scoring method should be used only if at least one of the following is true: 1) The Caption Weighting is 50/50. 2) All judges are scoring both the Music and Show captions. 3) There are 50% more judges scoring the Music caption than the Show caption.'
           ]
-				]);
+      ]);
 
       $this->add('submit', 'submit', [
         'label' => 'Save Type',
