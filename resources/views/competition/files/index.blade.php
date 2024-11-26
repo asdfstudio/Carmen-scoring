@@ -49,7 +49,14 @@ Uploaded Files for {{ $competition->name }} | @parent
                             @endphp
                             @foreach($groupedByJudge as $judgeName => $judgeFiles)
                                 <div class="list-group-item">
-                                    <h6><strong>Judge:</strong> {{ $judgeName }}</h6>
+                                    <h6>
+                                        <strong>Judge:</strong>
+                                        @if($judgeFiles->first()->type === 'division_file')
+                                            Stage
+                                        @else
+                                            {{ $judgeName }}
+                                        @endif
+                                    </h6>
                                     <ul class="list-group">
                                         @foreach($judgeFiles as $file)
                                             <li class="list-group-item">
