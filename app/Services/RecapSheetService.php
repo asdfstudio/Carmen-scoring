@@ -357,7 +357,7 @@ class RecapSheetService
             'Show Choir',
             'Vocal Jazz'
         ];
-
+    
         $validInstrumentalTypes = [
             'Bell',
             'Band',
@@ -370,11 +370,27 @@ class RecapSheetService
             'Auxiliary',
             'Drum',
             'Parade',
-            'Drumline',
-            'Auxiliary',
             'Drum Major'
         ];
-
+    
+        $excludedTypes = [
+            'Vocal Jazz Choir',
+            'Show Choir',
+            'Bell Choir',
+            'Jazz Band/Stage Band',
+            'Percussion Ensemble',
+            'Guitar Ensemble',
+            'Parade Band/Marching Band',
+            'Field Show Combined',
+            'Field Show Drumline',
+            'Field Show Auxiliary',
+            'Field Show Drum Major',
+            'Parade Combined',
+            'Parade Drumline',
+            'Parade Auxiliary',
+            'Parade Drum Major',
+        ];
+    
         $choirs = collect(self::generateRecap($competition))->flatMap(function ($division) {
             return collect($division['choirs'])->map(function ($choir) use ($division) {
                 $choir['round'] = $division['round'] ?? 'Unknown Round';
@@ -382,6 +398,13 @@ class RecapSheetService
             });
         });
 
+        $choirs = $choirs->reject(function ($choir) use ($excludedTypes) {
+            return collect($excludedTypes)->contains(function ($type) use ($choir) {
+                return stripos($choir['round'], $type) !== false;
+            });
+        });
+    
+        // Filter choirs based on qualifications
         $qualifiedChoirs = $choirs->filter(function ($choir) {
             // return $choir['average_score'] >= 90 && $choir['ranking'] !== 'No Rank';
             return $choir['average_score'] >= 90;
@@ -400,12 +423,12 @@ class RecapSheetService
             });
         })->sortBy('school')->values();
 
-
+    
         return [
             'choral' => $choralChoirs,
             'instrumental' => $instrumentalChoirs,
         ];
-    }
+    } 
 
 
     public static function getOutstandingGroupWinners(Competition $competition)
@@ -436,12 +459,26 @@ class RecapSheetService
     
         $outstandingBand = $choirs->filter(function ($choir) {
             $roundName = strtolower($choir['category']);
-            return stripos($roundName, 'band') !== false
-                && !stripos($roundName, 'percussion ensemble')
-                && !stripos($roundName, 'guitar ensemble')
-                && !stripos($roundName, 'parade band')
-                && !stripos($roundName, 'auxiliary');
-                // && $choir['ranking'] !== 'No Rank';
+            $excludedTypes = [
+                'percussion ensemble',
+                'guitar ensemble',
+                'parade band',
+                'marching band',
+                'field show combined',
+                'field show drumline',
+                'field show auxiliary',
+                'field show drum major',
+                'parade combined',
+                'parade drumline',
+                'parade auxiliary',
+                'parade drum major',
+            ];
+            foreach ($excludedTypes as $excluded) {
+                if (stripos($roundName, $excluded) !== false) {
+                    return false;
+                }
+            }
+            return stripos($roundName, 'band') !== false;
         });
         $outstandingBandWinners = $getTiedWinners($outstandingBand);
     
@@ -470,16 +507,34 @@ class RecapSheetService
                 return $choir;
             });
         });
-
-
-
+    
+        $excludedTypes = [
+            'Guitar Ensemble',
+            'Percussion Ensemble',
+            'Parade Band/Marching Band',
+            'Field Show Combined',
+            'Field Show Drumline',
+            'Field Show Auxiliary',
+            'Field Show Drum Major',
+            'Parade Combined',
+            'Parade Drumline',
+            'Parade Auxiliary',
+            'Parade Drum Major',
+        ];
+    
+        $choirs = $choirs->reject(function ($choir) use ($excludedTypes) {
+            return collect($excludedTypes)->contains(function ($type) use ($choir) {
+                return stripos($choir['category'], $type) !== false;
+            });
+        });
+    
         $schools = $choirs->groupBy('school');
         $sweepstakesWinners = [
             'choral' => null,
             'instrumental' => null,
             'festival' => null,
         ];
-
+    
         $validChoralTypes = [
             'Choir',
             'Vocal',
@@ -504,7 +559,7 @@ class RecapSheetService
             'Parade',
             'Drum Major'
         ];
-
+    
         foreach ($schools as $schoolName => $schoolChoirs) {
             // **Choral Sweepstakes**
             $choralChoirs = $schoolChoirs->filter(function ($choir) {
@@ -512,21 +567,21 @@ class RecapSheetService
                     $choir['choral_sweepstakes_checked'] == 1;
                     // $choir['ranking'] !== "No Rank";
             });
-
+    
             $validChoralChoirs = $choralChoirs->filter(function ($choir) use ($validChoralTypes) {
                 return collect($validChoralTypes)->contains(function ($type) use ($choir) {
                     return stripos($choir['category'], $type) !== false;
                 });
             });
-
+    
             $traditionalChoral = $choralChoirs->filter(function ($choir) {
-                return preg_match('/Concert|Chamber|Upper|Lower|/i', $choir['category']);
+                return preg_match('/Concert|Chamber|Upper|Lower/i', $choir['category']);
             })->sortByDesc('average_score')->first();
-
+    
             $secondChoral = $validChoralChoirs->reject(function ($choir) use ($traditionalChoral) {
                 return $traditionalChoral && $choir['name'] === $traditionalChoral['name'];
             })->sortByDesc('average_score')->first();
-
+    
             if ($traditionalChoral && $secondChoral) {
                 $totalChoralScore = (float) $traditionalChoral['average_score'] + (float) $secondChoral['average_score'];
                 if (!isset($sweepstakesWinners['choral']) || $totalChoralScore > (float) $sweepstakesWinners['choral']['total_score']) {
@@ -538,28 +593,28 @@ class RecapSheetService
                     ];
                 }
             }
-
+    
             // **Instrumental Sweepstakes**
             $instrumentalChoirs = $schoolChoirs->filter(function ($choir) {
                 return isset($choir['instrumental_sweepstakes_checked']) &&
                     $choir['instrumental_sweepstakes_checked'] == 1;
                     // $choir['ranking'] !== "No Rank";
             });
-
+    
             $validInstrumentalChoirs = $instrumentalChoirs->filter(function ($choir) use ($validInstrumentalTypes) {
                 return collect($validInstrumentalTypes)->contains(function ($type) use ($choir) {
                     return stripos($choir['category'], $type) !== false;
                 });
             });
-
+    
             $concertOrOrchestra = $instrumentalChoirs->filter(function ($choir) {
                 return preg_match('/Orchestra|Concert Band/i', $choir['category']);
             })->sortByDesc('average_score')->first();
-
+    
             $secondInstrumental = $validInstrumentalChoirs->reject(function ($choir) use ($concertOrOrchestra) {
                 return $concertOrOrchestra && $choir['name'] === $concertOrOrchestra['name'];
             })->sortByDesc('average_score')->first();
-
+    
             if ($concertOrOrchestra && $secondInstrumental) {
                 $totalInstrumentalScore = (float) $concertOrOrchestra['average_score'] + (float) $secondInstrumental['average_score'];
                 if (!isset($sweepstakesWinners['instrumental']) || $totalInstrumentalScore > (float) $sweepstakesWinners['instrumental']['total_score']) {
@@ -571,7 +626,7 @@ class RecapSheetService
                     ];
                 }
             }
-
+    
             // **Festival Sweepstakes**
             if ($schoolChoirs->isNotEmpty()) {
                 $highestChoral = $schoolChoirs->filter(function ($choir) {
@@ -580,14 +635,14 @@ class RecapSheetService
                         // $choir['ranking'] !== "No Rank" &&
                         preg_match('/Concert Choir|Chamber Choir|Upper Voice Choir|Lower Voice Choir/i', $choir['category']);
                 })->sortByDesc('average_score')->first();
-
+    
                 $highestInstrumental = $schoolChoirs->filter(function ($choir) {
                     return isset($choir['festival_sweepstakes_checked']) &&
                         $choir['festival_sweepstakes_checked'] == 1 &&
                         // $choir['ranking'] !== "No Rank" &&
                         preg_match('/Concert Band|Orchestra/i', $choir['category']);
                 })->sortByDesc('average_score')->first();
-
+    
                 $thirdEnsemble = $schoolChoirs->filter(function ($choir) use ($highestChoral, $highestInstrumental) {
                     return isset($choir['festival_sweepstakes_checked']) &&
                         $choir['festival_sweepstakes_checked'] == 1 &&
@@ -595,12 +650,12 @@ class RecapSheetService
                         $choir['name'] !== ($highestChoral['name'] ?? null) &&
                         $choir['name'] !== ($highestInstrumental['name'] ?? null);
                 })->sortByDesc('average_score')->first();
-
+    
                 if ($highestChoral && $highestInstrumental && $thirdEnsemble) {
                     $totalFestivalScore = (float) $highestChoral['average_score']
                         + (float) $highestInstrumental['average_score']
                         + (float) $thirdEnsemble['average_score'];
-
+    
                     if (!isset($sweepstakesWinners['festival']) || $totalFestivalScore > (float) $sweepstakesWinners['festival']['total_score']) {
                         $sweepstakesWinners['festival'] = [
                             'school_name' => $schoolName,
@@ -616,10 +671,10 @@ class RecapSheetService
                 }
             }
         }
-
+    
         return $sweepstakesWinners;
     }
-
+    
 
 
 
