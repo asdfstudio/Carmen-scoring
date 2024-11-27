@@ -131,11 +131,11 @@ class CreateRoundForm extends Form
             'class' => 'App\CaptionWeighting',
             'empty_value' => 'Choose caption weighting...',
             'label' => 'Caption Weighting',
-            'label_attr' => ['class' => 'block'],
+            'label_attr' => ['class' => 'block', 'style' => 'display: none;'],
             'expanded' => true,
             'multiple' => false,
             'choice_options' => [
-                'wrapper' => ['class' => 'choice-container'],
+                'wrapper' => ['class' => 'choice-container', 'style' => 'display: none;'],
                 'rules' => 'required',
             ],
             'help_block' => [
@@ -179,11 +179,11 @@ class CreateRoundForm extends Form
           'selected' => array_search('Average Scores', $scoring_methods), 
           'empty_value' => 'Choose scoring method...',
           'label' => 'Scoring Method',
-          'label_attr' => ['class' => 'block'],
+          'label_attr' => ['class' => 'block', 'style' => 'display: none;'],
           'expanded' => true,
           'multiple' => false,
           'choice_options' => [
-              'wrapper' => ['class' => 'choice-container'],
+              'wrapper' => ['class' => 'choice-container', 'style' => 'display: none;'],
               'rules' => 'required',
           ],
           'help_block' => [
