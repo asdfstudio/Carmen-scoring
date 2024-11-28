@@ -374,13 +374,15 @@ class RecapSheetService
         ];
     
         $excludedTypes = [
-            'Vocal Jazz Choir',
+            'Vocal Jazz',
             'Show Choir',
             'Bell Choir',
-            'Jazz Band/Stage Band',
+            'Jazz Band',
+            'Stage Band',
             'Percussion Ensemble',
             'Guitar Ensemble',
-            'Parade Band/Marching Band',
+            'Parade Band',
+            'Marching Band',
             'Field Show Combined',
             'Field Show Drumline',
             'Field Show Auxiliary',
