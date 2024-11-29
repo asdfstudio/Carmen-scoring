@@ -35,12 +35,13 @@ class CreateCompetitionForm extends Form
             1 => 'Grand Champion, 1st Runner Up, 2nd Runner Up...'
           ],
           'choice_options' => [
-            'wrapper' => ['class' => 'choice-container'],
+            'wrapper' => ['class' => 'choice-container', 'style' => 'display: none;'],
               'labelAttrs' => 'label-attr'
           ],
           'label' => 'Results Naming',
           'expanded' => true,
           'multiple' => false,
+          'default_value' => 0,
       ]);
 
         $this->add('place_heading', 'static', [
