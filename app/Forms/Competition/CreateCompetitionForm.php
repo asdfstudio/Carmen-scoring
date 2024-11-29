@@ -10,16 +10,11 @@ class CreateCompetitionForm extends Form
     {
         $this->add('name','text', ['rules' => 'required', 'label' => 'Competition Name']);
 
-        $this->add('slug','text', [
+        $this->add('slug', 'text', [
           'rules' => '',
-          'label' => 'Results URL Slug'
-        ]);
-
-        $this->add('access_code','text', [
-          'rules' => '',
-          'label' => 'Results Access Code'
-        ]);
-
+          'label' => 'Results URL Slug',
+          'wrapper' => ['style' => 'display: none;'],
+      ]);
         $this->add('begin_date','text', [
           'rules' => '',
           'label' => 'Begin Date (YYYY-MM-DD)',
@@ -29,6 +24,21 @@ class CreateCompetitionForm extends Form
           'rules' => '',
           'label' => 'End Date (YYYY-MM-DD)'
         ]);
+
+        $endDateValue = old('end_date') ?? $this->model->end_date ?? null;
+        $accessCodeValue = $endDateValue ? str_replace('-', '', $endDateValue) : null;
+
+        // $this->add('access_code','text', [
+        //   'rules' => '',
+        //   'label' => 'Results Access Code'
+        // ]);
+
+        $this->add('access_code', 'text', [
+            'rules' => '',
+            'label' => 'Results Access Code',
+            'default_value' => $accessCodeValue,
+        ]);
+        
         $this->add('use_runner_up_names', 'choice', [
           'choices' => [
             0 => '1st, 2nd, 3rd...',
@@ -39,6 +49,7 @@ class CreateCompetitionForm extends Form
               'labelAttrs' => 'label-attr'
           ],
           'label' => 'Results Naming',
+          'label_attr' => ['style' => 'display: none;'],
           'expanded' => true,
           'multiple' => false,
           'default_value' => 0,
