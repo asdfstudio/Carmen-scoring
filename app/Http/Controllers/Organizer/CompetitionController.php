@@ -230,11 +230,11 @@ class CompetitionController extends Controller
     else
       $place = new Place;
 
-    $place->address = $place_input['address'];
-    $place->address_2 = $place_input['address_2'];
+    // $place->address = $place_input['address'];
+    // $place->address_2 = $place_input['address_2'];
     $place->city = $place_input['city'];
     $place->state = $place_input['state'];
-    $place->postal_code = $place_input['postal_code'];
+    // $place->postal_code = $place_input['postal_code'];
     $competition->place()->save($place);
 
     // Set flash data
