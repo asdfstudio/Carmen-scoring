@@ -21,22 +21,18 @@ class CreateCompetitionForm extends Form
         ]);
 
         $this->add('end_date','text', [
-          'rules' => '',
+          'rules' => 'required',
           'label' => 'End Date (YYYY-MM-DD)'
         ]);
 
         $endDateValue = old('end_date') ?? $this->model->end_date ?? null;
         $accessCodeValue = $endDateValue ? str_replace('-', '', $endDateValue) : null;
 
-        // $this->add('access_code','text', [
-        //   'rules' => '',
-        //   'label' => 'Results Access Code'
-        // ]);
-
         $this->add('access_code', 'text', [
             'rules' => '',
             'label' => 'Results Access Code',
             'default_value' => $accessCodeValue,
+            'wrapper' => ['style' => 'display: none;'],
         ]);
         
         $this->add('use_runner_up_names', 'choice', [
