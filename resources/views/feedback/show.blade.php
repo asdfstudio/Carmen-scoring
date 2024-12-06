@@ -144,7 +144,7 @@
       @endif
   @endforeach
 
-  <h3>Solo Classes</h3>
+  <!-- <h3>Solo Classes</h3>
 
   @foreach($competition->soloDivisions as $soloDivision)
       @php
@@ -208,6 +208,6 @@
           @endforeach
         @endif
       @endif
-  @endforeach
+  @endforeach -->
 
 @endsection

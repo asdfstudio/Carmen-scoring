@@ -5,4 +5,4 @@
 <p>{{ link_to_route('feedback.show', NULL, [$commentUrl->access_code])}}</p>
 
 <p>Thank you,</p>
-<p>Carmen Scoring</p>
+<p>WorldStrides Heritage Festivals</p>
