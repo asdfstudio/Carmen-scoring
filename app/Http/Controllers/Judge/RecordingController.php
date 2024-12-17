@@ -10,6 +10,11 @@ use App\Recording;
 use Auth;
 use Illuminate\Support\Facades\Storage;
 
+use Google_Client;
+use Google_Service_Drive;
+use Google_Service_Drive_DriveFile;
+use Google\Auth\Credentials\ServiceAccountCredentials;
+
 class RecordingController extends Controller
 {
     public function postRecording(Request $request)
@@ -42,6 +47,34 @@ class RecordingController extends Controller
             // Upload the file to S3 and save the remote path
             $remote_path = uploadToS3($storage_path, $file_to_store, ['ContentType' => $mime_type]);
             $recording->url = $remote_path;
+
+            // Now upload to Google Drive
+            $choir = $recording->choir; 
+            $judge = $recording->judge;
+            $file_name = $choir->name . '-' . $judge->last_name;
+
+            $client = new Google_Client();
+            $client->setAuthConfig(storage_path('app/google-service-account.json'));
+            $client->addScope(Google_Service_Drive::DRIVE_FILE);
+
+            $service = new Google_Service_Drive($client);
+            $file_metadata = new Google_Service_Drive_DriveFile([
+                'name' => $file_name,
+                'parents' => [env('GOOGLE_DRIVE_FOLDER_ID')]
+            ]);
+
+            // Upload the file to Google Drive
+            $content = file_get_contents($file_to_store->getRealPath());
+            $service->files->create($file_metadata, [
+                'data' => $content,
+                'mimeType' => $mime_type,
+                'uploadType' => 'multipart',
+                'fields' => 'id'
+            ]);
+
+            // // Save the Google Drive file ID in the database
+            // $recording->google_drive_file_id = $drive_file->id;
+            // $recording->judge_email = $request->judge_email;
         }
         // Save modal
         $recording->save();
