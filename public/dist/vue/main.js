@@ -28062,27 +28062,41 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _c("p", { staticClass: "text-danger", attrs: { id: "maxNumError" } }),
+      
+      //airlyy
       _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        staticStyle: { width: "200px", margin: "auto" },
-        attrs: {
-          type: "number",
-          name: "score",
-          id: "score",
-          step: this.increment == 1 ? 1 : 0.5,
-          min: _vm.min,
-          max: this.max
-        },
-        domProps: { value: _vm.currentScore },
-        on: {
-          keydown: function($event) {
-            return _vm.keepScore($event)
+      _c("div", { staticStyle: { width: "200px", margin: "auto" } }, [
+        // Dropdown for selecting the score
+        _c("select", {
+          staticClass: "form-control",
+          attrs: {
+            id: "scoreDropdown",
+            name: "score",
           },
-          input: _vm.onInput
-        }
-      }),
+          domProps: { value: _vm.currentScore },
+          on: {
+            input: function ($event) {
+              _vm.onInput($event); // Update value on input
+            },
+          },
+        },
+        _vm._l(
+          Array.from({ length: _vm.max * 2 + 1 }, (_, i) => (i / 2).toFixed(1)),
+          function (option) {
+            return _c(
+              "option",
+              {
+                domProps: { value: option },
+              },
+              [_vm._v(option)]
+            );
+          }
+        )
+        ),
+      ]),
       _vm._v(" "),
+      
+      
       _c("br"),
       _vm._v(" "),
       _c(
@@ -28622,44 +28636,44 @@ var render = function() {
               ],
               2
             ),
-            _vm._v(" "),
-            _vm.hasPremium
-              ? _c(
-                  "tr",
-                  { staticClass: "comment-row" },
-                  [
-                    _c("th", { staticClass: "criterion-name" }, [
-                      _vm._v("Record Comments")
-                    ]),
-                    _vm._v(" "),
-                    _vm._l(_vm.choirsList, function(choir) {
-                      return _c(
-                        "td",
-                        { key: choir.id },
-                        [
-                          _c("Record", {
-                            attrs: { choir: choir, recordings: _vm.recordings },
-                            on: {
-                              "start-recording": function($event) {
-                                return _vm.onRecordingStart(choir.id)
-                              },
-                              "stop-recording": function($event) {
-                                _vm.currentRecordingId = null
-                              },
-                              "upload-complete": function($event) {
-                                return _vm.changeInProgressRecValue(-1)
-                              },
-                              "upload-error": _vm.warnRecordingSaveError
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    })
-                  ],
-                  2
-                )
-              : _vm._e(),
+            // _vm._v(" "),
+            // _vm.hasPremium
+            //   ? _c(
+            //       "tr",
+            //       { staticClass: "comment-row" },
+            //       [
+            //         _c("th", { staticClass: "criterion-name" }, [
+            //           _vm._v("Record Comments")
+            //         ]),
+            //         _vm._v(" "),
+            //         _vm._l(_vm.choirsList, function(choir) {
+            //           return _c(
+            //             "td",
+            //             { key: choir.id },
+            //             [
+            //               _c("Record", {
+            //                 attrs: { choir: choir, recordings: _vm.recordings },
+            //                 on: {
+            //                   "start-recording": function($event) {
+            //                     return _vm.onRecordingStart(choir.id)
+            //                   },
+            //                   "stop-recording": function($event) {
+            //                     _vm.currentRecordingId = null
+            //                   },
+            //                   "upload-complete": function($event) {
+            //                     return _vm.changeInProgressRecValue(-1)
+            //                   },
+            //                   "upload-error": _vm.warnRecordingSaveError
+            //                 }
+            //               })
+            //             ],
+            //             1
+            //           )
+            //         })
+            //       ],
+            //       2
+            //     )
+            //   : _vm._e(),
             _vm._v(" "),
             _vm.hasPremium
               ? _c(
