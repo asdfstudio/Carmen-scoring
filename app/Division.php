@@ -240,6 +240,70 @@ class Division extends Model
         return $this->ratings->all();
     }
 
+    public function areScoresComplete()
+{
+    // Check if all scores have been entered for this division
+    return $this->scores()->whereNull('score')->count() === 0;
+}
+
+public function isScoringCompleted()
+{
+    return $this->is_completed;
+}
+
+public function canActivateScoring()
+{
+    return !$this->is_scoring_active && !$this->is_completed;
+}
+
+public function canCompleteScoring()
+{
+    return $this->is_scoring_active 
+        && !$this->is_completed 
+        && $this->areScoresComplete(); // Ensures no scores are missing
+}
+
+
+public function canSendScores()
+{
+    return $this->is_completed 
+        && !$this->is_published; // Ensures scoring is completed but not yet published
+}
+
+
+
+// public function completeScoring()
+// {
+//     $this->is_completed = true;
+//     $this->save();
+// }
+
+public function sendScoresAndFeedback()
+{
+    $this->is_published = true;
+    $this->is_scoring_active = false;
+    $this->is_completed = true;
+
+    if($this->access_code == false) {
+        $this->access_code = strtoupper(Str::random(8));
+    }
+
+    if(env('IS_WORKSHOP_ENABLED') == true) {
+        $this->access_code = $this->id;
+    }
+
+    return $this->save();
+}
+
+public function allScoresEntered()
+{
+    return $this->scores()->count() === $this->expected_scores_count;
+}
+public function scores()
+{
+    return $this->hasMany(RawScore::class); // Replace `Score` with your actual score model name
+}
+
     public function isMissingScores() {
         $expectedScores = new CountExpectedScores($this);
         $expectectedScoresCount = $expectedScores->run();

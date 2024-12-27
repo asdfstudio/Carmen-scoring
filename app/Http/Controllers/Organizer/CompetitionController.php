@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Organizer;
 
+use App\Events\DivisionScoringCompleted;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -147,6 +148,22 @@ class CompetitionController extends Controller
       'method' => 'POST',
     ])->add('redirect', 'hidden', ['value' => $returnUrl]);
 
+
+    $activateAllScoringForm = $formBuilder->create('Scoring\ActivateAllScoringForm', [
+      'method' => 'POST',
+      'url' => route('organizer.competition.activate_all_scoring', [$competition])
+  ]);
+  
+  $completeAllScoringForm = $formBuilder->create('Scoring\CompleteAllScoringForm', [
+      'method' => 'POST',
+      'url' => route('organizer.competition.complete_all_scoring', [$competition]),
+  ]);
+  
+  $sendAllScoresAndFeedbackForm = $formBuilder->create('Scoring\SendAllScoresAndFeedbackForm', [
+      'method' => 'POST',
+      'url' => route('organizer.competition.send_all_scores_feedback', [$competition]),
+  ]);
+
     $divisionScoringForms = [
       'activate' => $activateDivisionScoringForm,
       'reactivate' => $reactivateDivisionScoringForm,
@@ -156,8 +173,66 @@ class CompetitionController extends Controller
     ];
 
 
-    return view('competition.organizer.show', compact('competition', 'roundsCount', 'divisionCount', 'awards', 'divisionScoringForms', 'activateScoringForm', 'completeScoringForm', 'archiveCompetitionForm'));
+    return view('competition.organizer.show', compact('competition', 'roundsCount', 'divisionCount', 'awards', 'divisionScoringForms', 'activateScoringForm', 'completeScoringForm', 'archiveCompetitionForm', 'activateAllScoringForm', 'completeAllScoringForm', 'sendAllScoresAndFeedbackForm'));
   }
+
+  public function activateAllScoring(Competition $competition)
+  {
+      $divisions = $competition->divisions;
+      foreach ($divisions as $division) {
+          if ($division->canActivateScoring()) {
+              $division->reactivateScoring(); // This should activate scoring for the division
+          }
+      }
+      return redirect()->back()->with('success', 'All scoring activated.');
+  }
+  
+  public function completeAllScoring(Competition $competition)
+  {
+      $skippedDivisions = [];
+      $completedDivisions = [];
+  
+      foreach ($competition->divisions as $division) {
+          if ($division->canCompleteScoring()) {
+              $division->completeScoring();
+              $completedDivisions[] = $division->name; // Optional: Track completed divisions for feedback.
+          } else {
+              $skippedDivisions[] = $division->name; // Track skipped divisions for feedback.
+          }
+      }
+  
+      // Prepare feedback message
+      $message = 'Scoring completed successfully for eligible classes.';
+      if (!empty($skippedDivisions)) {
+          $message .= ' Skipped the following classes as they are not eligible: ' . implode(', ', $skippedDivisions);
+      }
+  
+      return redirect()->route('organizer.competition.show', $competition)
+          ->with('success', $message);
+  }
+  
+  
+  
+  
+
+  public function sendAllScoresAndFeedback(Competition $competition)
+  {
+      foreach ($competition->divisions as $division) {
+          if (!$division->is_completed) {
+              return redirect()->route('organizer.competition.show', $competition)
+                  ->with('error', 'Cannot send scores and feedback. Ensure all scoring is completed for all classes.');
+          }
+      }
+  
+      foreach ($competition->divisions as $division) {
+          $division->sendScoresAndFeedback(); // Publish scores and feedback for all divisions.
+      }
+  
+      return redirect()->route('organizer.competition.show', $competition)
+          ->with('success', 'All scores and feedback sent successfully!');
+  }
+  
+
 
   /**
    * Show the form for editing the specified resource.

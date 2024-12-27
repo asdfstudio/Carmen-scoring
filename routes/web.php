@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Organizer\CompetitionController;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -131,6 +133,15 @@ Route::post('/vote-logout', 'Auth\LoginController@voteLogOut');
 Route::post('/user-register', 'Auth\RegisterController@registerAjax');
 Route::post('/user-forgot', 'Auth\ForgotPasswordController@sendResetLinkEmailAjax');
 Route::post('/user-vote', 'VoteController@vote');
+
+Route::post('/competition/{competition}/activate-all-scoring', [CompetitionController::class, 'activateAllScoring'])
+    ->name('organizer.competition.activate_all_scoring');
+Route::post('/competition/{competition}/complete-all-scoring', [CompetitionController::class, 'completeAllScoring'])
+    ->name('organizer.competition.complete_all_scoring');
+
+Route::post('/competition/{competition}/send-all-scores-feedback', [CompetitionController::class, 'sendAllScoresAndFeedback'])
+    ->name('organizer.competition.send_all_scores_feedback');
+
 
 // Audience Vote Routes
 Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');

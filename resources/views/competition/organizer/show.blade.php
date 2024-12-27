@@ -52,9 +52,84 @@
   <p>Types are groups of classes that use the same scoresheet, scoring method, and judges.</p>
 <!-- replace division to class -->
   @if($roundsCount > 0)
-      <p>{{ link_to_route('organizer.competition.round.index','Manage your types',[$competition], ['class' => 'action']) }}
-          {{ link_to_route('organizer.competition.division.index','Manage your classes',[$competition], ['class' => 'action']) }}
-      </p>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+          <p>
+              {{ link_to_route('organizer.competition.round.index','Manage your types',[$competition], ['class' => 'action']) }}
+              {{ link_to_route('organizer.competition.division.index','Manage your classes',[$competition], ['class' => 'action']) }}
+          </p>
+      </div>
+      <div class="action-buttons" style="display: flex; gap: 2px;">
+      @if(isset($activateAllScoringForm))
+          @php
+              // Check if all divisions have scoring activated or completed
+              $canActivateAllScoring = false;
+              foreach ($competition->divisions as $division) {
+                  if ($division->canActivateScoring()) {
+                      $canActivateAllScoring = true;
+                      break; // No need to check further if one can be activated
+                  }
+              }
+          @endphp
+
+          {!! form($activateAllScoringForm, [
+              'attr' => [
+                  'disabled' => !$canActivateAllScoring ? 'disabled' : null,
+                  'style' => !$canActivateAllScoring ? 'cursor: not-allowed; opacity: 0.5;' : ''
+              ]
+          ]) !!}
+      @endif
+
+
+          @if(isset($completeAllScoringForm))
+              @php
+                  $canCompleteAllScoring = true;
+                  foreach ($competition->divisions as $division) {
+                      if (!$division->canCompleteScoring()) {
+                          $canCompleteAllScoring = false;
+                          break;
+                      }
+                  }
+              @endphp
+              {!! form($completeAllScoringForm, [
+                  'attr' => [
+                      'disabled' => !$canCompleteAllScoring ? 'disabled' : null,
+                      'data-can-complete' => $canCompleteAllScoring ? 'true' : 'false',
+                      'style' => !$canCompleteAllScoring ? 'cursor: not-allowed; opacity: 0.5;' : ''
+                  ]
+              ]) !!}
+          @endif
+
+          <script>
+              document.addEventListener('DOMContentLoaded', function () {
+                  const completeAllScoringButton = document.querySelector('[data-can-complete="false"]');
+                  if (completeAllScoringButton) {
+                      completeAllScoringButton.querySelector('.action').disabled = true;
+                  }
+              });
+        </script>
+
+          @if(isset($sendAllScoresAndFeedbackForm))
+              @php
+                  $canSendAllScores = true;
+                  foreach ($competition->divisions as $division) {
+                      if (!$division->is_completed) {
+                          $canSendAllScores = false;
+                          break;
+                      }
+                  }
+              @endphp
+              {!! form($sendAllScoresAndFeedbackForm, [
+                  'attr' => [
+                      'disabled' => !$canSendAllScores ? 'disabled' : null,
+                      'data-can-complete' => $canSendAllScores ? 'true' : 'false',
+                      'style' => !$canSendAllScores ? 'cursor: not-allowed; opacity: 0.5;' : ''
+                  ]
+              ]) !!}
+          @endif
+      </div>
+    </div>
+
       @include('round.organizer.list',['rounds' => $competition->rounds])
   @else
       <p>{{ link_to_route('organizer.competition.round.create','Create your first type',[$competition], ['class' => 'action']) }}</p>
