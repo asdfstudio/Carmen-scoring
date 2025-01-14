@@ -56,8 +56,11 @@ class CommentController extends Controller
         }
     
         // Ensure choir and judge are not null (You can replace these with actual data as required)
-        $choir = "Test Ensemble"; // Example placeholder for choir
-        $judge = "Judge"; // Example placeholder for judge
+        // $choir = "Test Ensemble";
+        // $judge = "Judge";
+
+        $choir = $comment->recipient->name ?? 'Unknown Choir';
+        $judge = $comment->judge->last_name ?? 'Unknown Judge';
 
         if ($choir && $judge) {
             // Construct the file name using choir and judge details
