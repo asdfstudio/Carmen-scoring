@@ -168,6 +168,10 @@ Route::group([
 			'as' => 'comment.save', 'uses' => 'CommentController@save'
 		]);
 
+		Route::any('comment/ai-summarize', [
+			'as' => 'comment.save', 'uses' => 'AICommentViewController@save'
+		]);
+
 		Route::post('recording/save', [
 			'as' => 'recording.save', 'uses' => 'RecordingController@postRecording',
 

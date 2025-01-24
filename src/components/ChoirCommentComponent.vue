@@ -13,11 +13,12 @@
     //import Vue from 'vue';
 
     export default Vue.component('choir-comment', {
-        props: ['comment', 'choir'],
+        props: ['comment', 'ai_comment', 'choir'],
         data: function() {
             return {
                 currentChoir: this.choir,
-                currentComment: this.comment
+                currentComment: this.comment,
+                aiComment: this.ai_comment
             }
         },
         methods: {

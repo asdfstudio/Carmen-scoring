@@ -5,6 +5,7 @@ import RecordingApi from '../api/recordings'
 import ScoresApi from '../api/scores'
 import _ from 'lodash'
 import axios from 'axios'
+import ai_comments_view from '../api/ai_comments_view'
 
 let apiUrl = window.__API_URL__;
 let backUrl = window.__BACK_URL__;
@@ -40,9 +41,37 @@ var setComment = _.debounce(async function (payload) {
     store.commit('setComment', {
         choir_id: data.choir_id,
         comment: data.comments,
+        ai_comment: data.ai_comments,
         recipient_id: data.recipient_id,
         recipient_type: data.recipient_type
     });
+}, 1000);
+
+var setAIComment = _.debounce(async function (payload) {
+  // Send ajax request
+  const data = await CommentsApi.saveComment(payload)
+
+  // Send to mutation
+  store.commit('setAIComment', {
+      choir_id: data.choir_id,
+      comment: data.comments,
+      ai_comment: data.ai_comments,
+      recipient_id: data.recipient_id,
+      recipient_type: data.recipient_type
+  });
+}, 1000);
+
+var setAICommentView = _.debounce(async function (payload) {
+  // Send ajax request
+  const data = await ai_comments_view.viewAIComment(payload)
+
+  // Send to mutation
+  store.commit('setAICommentView', {
+      choir_id: data.choir_id,
+      ai_comment_view: data.ai_comments_view,
+      recipient_id: data.recipient_id,
+      recipient_type: data.recipient_type
+  });
 }, 1000);
 
 export const store = new Vuex.Store({
@@ -69,7 +98,10 @@ export const store = new Vuex.Store({
     activeChoirCriterionComment:false,
     spreadsheetTitle: 'Default Spreadsheet Title',
     backUrl: backUrl,
-    apiUrl: apiUrl
+    apiUrl: apiUrl,
+    aiCommentsActive: false,
+    aiCommentsViewActive: false,
+    CommentsActive: false
   },
   mutations: {
     activateModal (state, data) {
@@ -84,6 +116,29 @@ export const store = new Vuex.Store({
       state.activeChoir = choir
       state.activeCriterion = false
       state.activeChoirCriterionComment = false
+      state.aiCommentsActive = false
+      state.aiCommentsViewActive = false
+      state.CommentsActive = true
+    },
+    activateChoirAICommentModal (state, choir) {
+      state.activeModal = true
+      state.activeComment = true
+      state.activeChoir = choir
+      state.activeCriterion = false
+      state.activeChoirCriterionComment = false
+      state.CommentsActive = false
+      state.aiCommentsViewActive = false
+      state.aiCommentsActive = true
+    },
+    activateChoirAICommentViewModal (state, choir) {
+      state.activeModal = true
+      state.activeComment = true
+      state.activeChoir = choir
+      state.activeCriterion = false
+      state.activeChoirCriterionComment = false
+      state.CommentsActive = false
+      state.aiCommentsActive = false
+      state.aiCommentsViewActive = true
     },
     activateChoirModal (state, choir) {
       state.activeModal = true
@@ -91,6 +146,9 @@ export const store = new Vuex.Store({
       state.activeChoirCriterionComment = false
       state.activeChoir = choir
       state.activeCriterion = false
+      state.CommentsActive = false
+      state.aiCommentsActive = false
+      state.aiCommentsViewActive = false
     },
     activateChoirCriterionModal (state, payload) {
       state.activeModal = true
@@ -98,6 +156,9 @@ export const store = new Vuex.Store({
       state.activeChoirCriterionComment = false
       state.activeChoir = payload.choir
       state.activeCriterion = payload.criterion
+      state.CommentsActive = false
+      state.aiCommentsActive = false
+      state.aiCommentsViewActive = false
     },
     activateChoirCriterionCommentModal (state, payload) {
         state.activeModal = true
@@ -140,6 +201,43 @@ export const store = new Vuex.Store({
                 && state.comments[c].recipient_type === payload.recipient_type;
         if (isChoirCriterionComment) {
           state.comments[c].comment = payload.comment
+          return
+        }
+      }
+      const keys = Object.keys(state.comments);
+      const index = keys.pop() || 0;
+
+      // Otherwise append it to the array
+      state.comments[+index + 1] = payload;
+    },
+    setAIComment (state, payload) { 
+      // Find the matching comment and update it
+      // var matches = state.comments.filter(comment => comment.choir_id === payload.choir_id)
+      for (var c in state.comments) {
+        const isChoirCriterionComment = state.comments[c].choir_id === payload.choir_id
+                && state.comments[c].recipient_id === payload.recipient_id
+                && state.comments[c].recipient_type === payload.recipient_type;
+        if (isChoirCriterionComment) {
+          state.comments[c].ai_comment = payload.ai_comment
+          return
+        }
+      }
+
+      const keys = Object.keys(state.comments);
+      const index = keys.pop() || 0;
+
+      // Otherwise append it to the array
+      state.comments[+index + 1] = payload;
+    },
+    setAICommentView (state, payload) { 
+      // Find the matching comment and update it
+      // var matches = state.comments.filter(comment => comment.choir_id === payload.choir_id)
+      for (var c in state.comments) {
+        const isChoirCriterionComment = state.comments[c].choir_id === payload.choir_id
+                && state.comments[c].recipient_id === payload.recipient_id
+                && state.comments[c].recipient_type === payload.recipient_type;
+        if (isChoirCriterionComment) {
+          state.comments[c].ai_comment_view = payload.ai_comment_view
           return
         }
       }
@@ -211,6 +309,12 @@ export const store = new Vuex.Store({
     async setComment(context, payload) {
         setComment(payload)
     },
+    async setAIComment(context, payload) {
+        setAIComment(payload)
+    },
+    async setAICommentView(context, payload) {
+      setAICommentView(payload)
+  },
     saveRecording (context, payload) {
       // Send ajax request
       saveRecording(payload)
@@ -386,6 +490,22 @@ export const store = new Vuex.Store({
       for (var c in state.comments) {
         if (state.comments[c].choir_id === choirId) {
           return state.comments[c].comment
+        }
+      }
+      return null
+    },
+    getChoirAIComment: (state) => (choirId) => {
+      for (var c in state.comments) {
+        if (state.comments[c].choir_id === choirId) {
+          return state.comments[c].ai_comment
+        }
+      }
+      return null
+    },
+    getChoirAICommentView: (state) => (choirId) => {
+      for (var c in state.comments) {
+        if (state.comments[c].choir_id === choirId) {
+          return state.comments[c].ai_comment_view
         }
       }
       return null

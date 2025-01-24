@@ -8,8 +8,8 @@
       <p>Please keep your feedback positive and constructive.</p>
     </ModalSubheader>
     <ModalBody>
-      <textarea v-model.lazy="comment"></textarea>
-      <button class="button" type="submit" @click="saveComment()">Save Comment</button>
+      <textarea v-model.lazy="aiCommentView"></textarea>
+      <!-- <button class="button" type="submit" @click="saveAIComment()">Save Comment</button> -->
       <button class="button cancel" type="submit" @click="cancelComment()">Cancel</button>
     </ModalBody>
   </Modal>
@@ -23,7 +23,7 @@ import ModalBody from './ModalBody'
 import ModalFooter from './ModalFooter'
 
 export default {
-  name: 'ChoirCommentModal',
+  name: 'ChoirAICommentViewModal',
   components: {
     Modal,
     ModalHeader,
@@ -33,42 +33,20 @@ export default {
   },
   data: function () {
     return {
-      initialComment: this.$store.getters.getChoirComment(this.$store.getters.activeChoir.id),
-      currentComment: this.$store.getters.getChoirComment(this.$store.getters.activeChoir.id),
-      initialAIComment: this.$store.getters.getChoirAIComment(this.$store.getters.activeChoir.id),
-      aiComment: this.$store.getters.getChoirAIComment(this.$store.getters.activeChoir.id),
-    }
+      initialAICommentView: this.$store.getters.getChoirAICommentView(this.$store.getters.activeChoir.id),
+      aiCommentView: this.$store.getters.getChoirAICommentView(this.$store.getters.activeChoir.id)
+    };
   },
   methods: {
-    autosaveComment: function (event) {
+    cancelComment: function () {
       const payload = {
         choir_id: this.choir.id,
         round_id: this.choir.round_id,
-        comment: event.target.value,
-        ai_comment: this.aiComment,
-      }
-      this.$store.dispatch('setComment', payload)
+        ai_comment_view: this.initialAICommentView,
+      };
+      this.$store.dispatch('setAICommentView', payload);
+      this.$store.commit('deactivateModal');
     },
-    saveComment: function (event) {
-      const payload = {
-        choir_id: this.choir.id,
-        round_id: this.choir.round_id,
-        comment: this.currentComment,
-        ai_comment: this.aiComment,
-      }
-      this.$store.dispatch('setComment', payload)
-      this.$store.commit('deactivateModal')
-    },
-    cancelComment: function (event) {
-      const payload = {
-        choir_id: this.choir.id,
-        round_id: this.choir.round_id,
-        comment: this.initialComment,
-        ai_comment: this.initialAIComment,
-      }
-      this.$store.dispatch('setComment', payload)
-      this.$store.commit('deactivateModal')
-    }
   },
   computed: {
     choir () {
@@ -76,10 +54,10 @@ export default {
     },
     comment: {
       get: function () {
-        return this.$store.getters.getChoirComment(this.choir.id)
+        return this.$store.getters.getChoirAICommentView(this.choir.id)
       },
       set: function (newValue) {
-        this.currentComment = newValue
+        this.aiComment = newValue
         /* const payload = {
           choir_id: this.choir.id,
           round_id: this.choir.round_id,
@@ -90,10 +68,12 @@ export default {
     }
   },
   mounted: function () {
-    var self = this
-    document.getElementsByTagName('textarea')[0].addEventListener('input', function (event) {
-      self.autosaveComment(event)
-    })
+    const payload = {
+        choir_id: this.choir.id,
+        round_id: this.choir.round_id,
+        ai_comment_view: this.initialAICommentView,
+      };
+    this.$store.dispatch('setAICommentView', payload)
   }
 }
 

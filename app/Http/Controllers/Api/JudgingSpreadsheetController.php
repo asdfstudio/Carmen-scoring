@@ -164,7 +164,9 @@ class JudgingSpreadsheetController extends Controller
                 'recipient_id' => $item->recipient_id,
                 'recipient_type' => $item->recipient_type,
                 'choir_id' => $item->choir_id,
-                'comment' => $item->comments
+                'comment' => $item->comments,
+                'ai_comment' => $item->ai_comments,
+                'ai_comment_view' => $item->ai_comments_view
             ];
         })->toArray();
 

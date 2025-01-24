@@ -145,18 +145,43 @@
         </tr>
         <!-- Rank / Rating end -->
 
-        <!-- Comments -->
+        <!-- Manual Comments -->
         <tr class="comment-row">
           <th class="criterion-name">Comments</th>
-
           <td
             class="comment-text"
             v-for="choir in choirsList"
             @click="activateChoirCommentModal(choir)"
             :choir="choir"
             v-bind:key="choir.id"
-            >
+          >
             {{ comment(choir) }}
+          </td>
+        </tr>
+
+        <!-- AI Comments -->
+        <tr class="comment-row">
+          <th class="criterion-name">AI Comments</th>
+          <td
+            class="comment-text"
+            v-for="choir in choirsList"
+            @click="activateChoirAICommentModal(choir)"
+            :key="choir.id"
+          >
+            {{ aiComment(choir) }}
+          </td>
+        </tr>
+
+        <!-- AI Summarize -->
+        <tr class="comment-row">
+          <th class="criterion-name">AI Summarize</th>
+          <td
+            class="comment-text"
+            v-for="choir in choirsList"
+            @click="activateChoirAICommentViewModal(choir)"
+            :key="choir.id"
+          >
+            {{ aiCommentView(choir) }}
           </td>
         </tr>
 
@@ -207,7 +232,9 @@ export default {
       activeCriterion: null,
       audioRecorder: null,
       recordingData: [],
-      currentRecordingId: null
+      currentRecordingId: null,
+
+      initialAICommentView: this.$store.getters.getChoirAICommentView(this.$store.getters.activeChoir.id),
     }
   },
   computed: {
@@ -319,6 +346,22 @@ export default {
         this.displayScoringInactiveMessage()
       }
     },
+    activateChoirAICommentModal: function (choir) {
+      this.$store.commit('startModalProtection')
+      if (this.isSpreadsheetScoringActive) {
+        this.$store.commit('activateChoirAICommentModal', choir)
+      } else {
+        this.displayScoringInactiveMessage()
+      }
+    },
+    activateChoirAICommentViewModal: function (choir) {
+      this.$store.commit('startModalProtection')
+      if (this.isSpreadsheetScoringActive) {
+        this.$store.commit('activateChoirAICommentViewModal', choir)
+      } else {
+        this.displayScoringInactiveMessage()
+      }
+    },
     activateChoirCriterionModal: function (choir, criterion) {
       this.$store.commit('startModalProtection')
       if (this.isSpreadsheetScoringActive) {
@@ -405,6 +448,21 @@ export default {
     },
     comment: function (choir) {
       return this.$store.getters.getChoirComment(choir.id)
+    },
+    aiComment: function (choir) {
+      return this.$store.getters.getChoirAIComment(choir.id);
+    },
+    aiCommentView: function (choir) {
+      const payload = {
+        choir_id: choir?.id,
+        round_id: choir?.round_id,
+        ai_comment_view: this.initialAICommentView,
+      };
+
+      return (
+        this.$store.dispatch('setAICommentView', payload),
+        this.$store.getters.getChoirAICommentView(choir.id)
+       )
     },
     onRecordingStart: function (choirId) {
       this.currentRecordingId = choirId

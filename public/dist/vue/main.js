@@ -1840,6 +1840,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_ChoirCommentModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/ChoirCommentModal */ "./src/components/ChoirCommentModal.vue");
 /* harmony import */ var _components_CriterionCommentModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/CriterionCommentModal */ "./src/components/CriterionCommentModal.vue");
 /* harmony import */ var _components_SpreadsheetHeader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/SpreadsheetHeader */ "./src/components/SpreadsheetHeader.vue");
+/* harmony import */ var _components_ChoirAICommentModal__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/ChoirAICommentModal */ "./src/components/ChoirAICommentModal.vue");
+/* harmony import */ var _components_ChoirAICommentViewModal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/ChoirAICommentViewModal */ "./src/components/ChoirAICommentViewModal.vue");
 //
 //
 //
@@ -1864,6 +1866,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+
+
 
 
 
@@ -1877,6 +1885,8 @@ __webpack_require__.r(__webpack_exports__);
     Spreadsheet: _components_Spreadsheet__WEBPACK_IMPORTED_MODULE_0__["default"],
     ChoirCriterionModal: _components_ChoirCriterionModal__WEBPACK_IMPORTED_MODULE_1__["default"],
     ChoirCommentModal: _components_ChoirCommentModal__WEBPACK_IMPORTED_MODULE_3__["default"],
+    ChoirAICommentModal: _components_ChoirAICommentModal__WEBPACK_IMPORTED_MODULE_6__["default"],
+    ChoirAICommentViewModal: _components_ChoirAICommentViewModal__WEBPACK_IMPORTED_MODULE_7__["default"],
     CriterionCommentModal: _components_CriterionCommentModal__WEBPACK_IMPORTED_MODULE_4__["default"],
     ChoirModal: _components_ChoirModal__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
@@ -1886,6 +1896,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     activeChoir: function activeChoir() {
       return this.$store.getters.activeChoir;
+    },
+    aiCommentsActive: function aiCommentsActive() {
+      return this.$store.state.aiCommentsActive;
+    },
+    aiCommentsViewActive: function aiCommentsViewActive() {
+      return this.$store.state.aiCommentsViewActive;
+    },
+    CommentsActive: function CommentsActive() {
+      return this.$store.state.CommentsActive;
     },
     activeCriterion: function activeCriterion() {
       return this.$store.getters.activeCriterion;
@@ -1911,8 +1930,12 @@ __webpack_require__.r(__webpack_exports__);
         return 'choirCriterionComment';
       } else if (this.activeChoir && this.activeCriterion) {
         return 'choirCriterion';
-      } else if (this.activeChoir && this.activeComment) {
+      } else if (this.activeChoir && this.activeComment && this.CommentsActive) {
         return 'choirComment';
+      } else if (this.activeChoir && this.activeComment && this.aiCommentsActive) {
+        return 'choirAIComment';
+      } else if (this.activeChoir && this.activeComment && this.aiCommentsViewActive) {
+        return 'choirAICommentView';
       } else if (this.activeChoir) {
         return 'choir';
       }
@@ -1930,6 +1953,212 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     document.addEventListener('click', this.deactivateModal);
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentModal.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ChoirAICommentModal.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Modal */ "./src/components/Modal.vue");
+/* harmony import */ var _ModalHeader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalHeader */ "./src/components/ModalHeader.vue");
+/* harmony import */ var _ModalSubheader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ModalSubheader */ "./src/components/ModalSubheader.vue");
+/* harmony import */ var _ModalBody__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ModalBody */ "./src/components/ModalBody.vue");
+/* harmony import */ var _ModalFooter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ModalFooter */ "./src/components/ModalFooter.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'ChoirAICommentModal',
+  components: {
+    Modal: _Modal__WEBPACK_IMPORTED_MODULE_0__["default"],
+    ModalHeader: _ModalHeader__WEBPACK_IMPORTED_MODULE_1__["default"],
+    ModalBody: _ModalBody__WEBPACK_IMPORTED_MODULE_3__["default"],
+    ModalFooter: _ModalFooter__WEBPACK_IMPORTED_MODULE_4__["default"],
+    ModalSubheader: _ModalSubheader__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
+  data: function data() {
+    return {
+      initialAIComment: this.$store.getters.getChoirAIComment(this.$store.getters.activeChoir.id),
+      aiComment: this.$store.getters.getChoirAIComment(this.$store.getters.activeChoir.id),
+      initialComment: this.$store.getters.getChoirComment(this.$store.getters.activeChoir.id),
+      currentComment: this.$store.getters.getChoirComment(this.$store.getters.activeChoir.id)
+    };
+  },
+  methods: {
+    autosaveComment: function autosaveComment(event) {
+      var payload = {
+        choir_id: this.choir.id,
+        round_id: this.choir.round_id,
+        comment: this.currentComment,
+        ai_comment: event.target.value
+      };
+      this.$store.dispatch('setAIComment', payload);
+    },
+    saveAIComment: function saveAIComment() {
+      var payload = {
+        choir_id: this.choir.id,
+        round_id: this.choir.round_id,
+        comment: this.currentComment,
+        ai_comment: this.aiComment
+      };
+      this.$store.dispatch('setAIComment', payload);
+      this.$store.commit('deactivateModal');
+    },
+    cancelComment: function cancelComment() {
+      var payload = {
+        choir_id: this.choir.id,
+        round_id: this.choir.round_id,
+        comment: this.initialComment,
+        ai_comment: this.initialAIComment
+      };
+      this.$store.dispatch('setAIComment', payload);
+      this.$store.commit('deactivateModal');
+    }
+  },
+  computed: {
+    choir: function choir() {
+      return this.$store.getters.activeChoir;
+    },
+    comment: {
+      get: function get() {
+        return this.$store.getters.getChoirAIComment(this.choir.id);
+      },
+      set: function set(newValue) {
+        this.aiComment = newValue;
+        /* const payload = {
+          choir_id: this.choir.id,
+          round_id: this.choir.round_id,
+          comment: newValue
+        }
+        this.$store.dispatch('setComment', payload) */
+      }
+    }
+  },
+  mounted: function mounted() {
+    var self = this;
+    document.getElementsByTagName('textarea')[0].addEventListener('input', function (event) {
+      self.autosaveComment(event);
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentViewModal.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ChoirAICommentViewModal.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Modal */ "./src/components/Modal.vue");
+/* harmony import */ var _ModalHeader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalHeader */ "./src/components/ModalHeader.vue");
+/* harmony import */ var _ModalSubheader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ModalSubheader */ "./src/components/ModalSubheader.vue");
+/* harmony import */ var _ModalBody__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ModalBody */ "./src/components/ModalBody.vue");
+/* harmony import */ var _ModalFooter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ModalFooter */ "./src/components/ModalFooter.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'ChoirAICommentViewModal',
+  components: {
+    Modal: _Modal__WEBPACK_IMPORTED_MODULE_0__["default"],
+    ModalHeader: _ModalHeader__WEBPACK_IMPORTED_MODULE_1__["default"],
+    ModalBody: _ModalBody__WEBPACK_IMPORTED_MODULE_3__["default"],
+    ModalFooter: _ModalFooter__WEBPACK_IMPORTED_MODULE_4__["default"],
+    ModalSubheader: _ModalSubheader__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
+  data: function data() {
+    return {
+      initialAICommentView: this.$store.getters.getChoirAICommentView(this.$store.getters.activeChoir.id),
+      aiCommentView: this.$store.getters.getChoirAICommentView(this.$store.getters.activeChoir.id)
+    };
+  },
+  methods: {
+    cancelComment: function cancelComment() {
+      var payload = {
+        choir_id: this.choir.id,
+        round_id: this.choir.round_id,
+        ai_comment_view: this.initialAICommentView
+      };
+      this.$store.dispatch('setAICommentView', payload);
+      this.$store.commit('deactivateModal');
+    }
+  },
+  computed: {
+    choir: function choir() {
+      return this.$store.getters.activeChoir;
+    },
+    comment: {
+      get: function get() {
+        return this.$store.getters.getChoirAICommentView(this.choir.id);
+      },
+      set: function set(newValue) {
+        this.aiComment = newValue;
+        /* const payload = {
+          choir_id: this.choir.id,
+          round_id: this.choir.round_id,
+          comment: newValue
+        }
+        this.$store.dispatch('setComment', payload) */
+      }
+    }
+  },
+  mounted: function mounted() {
+    var payload = {
+      choir_id: this.choir.id,
+      round_id: this.choir.round_id,
+      ai_comment_view: this.initialAICommentView
+    };
+    this.$store.dispatch('setAICommentView', payload);
   }
 });
 
@@ -1983,7 +2212,9 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       initialComment: this.$store.getters.getChoirComment(this.$store.getters.activeChoir.id),
-      currentComment: this.$store.getters.getChoirComment(this.$store.getters.activeChoir.id)
+      currentComment: this.$store.getters.getChoirComment(this.$store.getters.activeChoir.id),
+      initialAIComment: this.$store.getters.getChoirAIComment(this.$store.getters.activeChoir.id),
+      aiComment: this.$store.getters.getChoirAIComment(this.$store.getters.activeChoir.id)
     };
   },
   methods: {
@@ -1991,7 +2222,8 @@ __webpack_require__.r(__webpack_exports__);
       var payload = {
         choir_id: this.choir.id,
         round_id: this.choir.round_id,
-        comment: event.target.value
+        comment: event.target.value,
+        ai_comment: this.aiComment
       };
       this.$store.dispatch('setComment', payload);
     },
@@ -1999,7 +2231,8 @@ __webpack_require__.r(__webpack_exports__);
       var payload = {
         choir_id: this.choir.id,
         round_id: this.choir.round_id,
-        comment: this.currentComment
+        comment: this.currentComment,
+        ai_comment: this.aiComment
       };
       this.$store.dispatch('setComment', payload);
       this.$store.commit('deactivateModal');
@@ -2008,7 +2241,8 @@ __webpack_require__.r(__webpack_exports__);
       var payload = {
         choir_id: this.choir.id,
         round_id: this.choir.round_id,
-        comment: this.initialComment
+        comment: this.initialComment,
+        ai_comment: this.initialAIComment
       };
       this.$store.dispatch('setComment', payload);
       this.$store.commit('deactivateModal');
@@ -2895,6 +3129,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3366,6 +3615,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3383,7 +3657,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       activeCriterion: null,
       audioRecorder: null,
       recordingData: [],
-      currentRecordingId: null
+      currentRecordingId: null,
+      initialAICommentView: this.$store.getters.getChoirAICommentView(this.$store.getters.activeChoir.id)
     };
   },
   computed: {
@@ -3501,6 +3776,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.displayScoringInactiveMessage();
       }
     },
+    activateChoirAICommentModal: function activateChoirAICommentModal(choir) {
+      this.$store.commit('startModalProtection');
+
+      if (this.isSpreadsheetScoringActive) {
+        this.$store.commit('activateChoirAICommentModal', choir);
+      } else {
+        this.displayScoringInactiveMessage();
+      }
+    },
+    activateChoirAICommentViewModal: function activateChoirAICommentViewModal(choir) {
+      this.$store.commit('startModalProtection');
+
+      if (this.isSpreadsheetScoringActive) {
+        this.$store.commit('activateChoirAICommentViewModal', choir);
+      } else {
+        this.displayScoringInactiveMessage();
+      }
+    },
     activateChoirCriterionModal: function activateChoirCriterionModal(choir, criterion) {
       this.$store.commit('startModalProtection');
 
@@ -3595,6 +3888,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     comment: function comment(choir) {
       return this.$store.getters.getChoirComment(choir.id);
+    },
+    aiComment: function aiComment(choir) {
+      return this.$store.getters.getChoirAIComment(choir.id);
+    },
+    aiCommentView: function aiCommentView(choir) {
+      var payload = {
+        choir_id: choir === null || choir === void 0 ? void 0 : choir.id,
+        round_id: choir === null || choir === void 0 ? void 0 : choir.round_id,
+        ai_comment_view: this.initialAICommentView
+      };
+      return this.$store.dispatch('setAICommentView', payload), this.$store.getters.getChoirAICommentView(choir.id);
     },
     onRecordingStart: function onRecordingStart(choirId) {
       this.currentRecordingId = choirId;
@@ -3774,6 +4078,44 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentModal.vue?vue&type=style&index=0&id=8a59d12e&lang=scss&scoped=true&":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ChoirAICommentModal.vue?vue&type=style&index=0&id=8a59d12e&lang=scss&scoped=true& ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "textarea[data-v-8a59d12e] {\n  width: 100%;\n  height: 200px;\n  max-height: 100%;\n  max-width: 600px;\n  margin: 15px 0;\n  padding: 10px;\n  border: 1px solid #F0F0F0;\n  font-size: 15px;\n  box-sizing: border-box;\n}\ntextarea[data-v-8a59d12e]:focus {\n  border: 1px solid #7F4091;\n}\nbutton[data-v-8a59d12e], .button[data-v-8a59d12e] {\n  background: #7F4091;\n  color: #fff;\n  padding: 10px 15px;\n  margin: 0 5px;\n  text-align: center;\n  border: none;\n  border-radius: 5px;\n}\nbutton.cancel[data-v-8a59d12e], .button.cancel[data-v-8a59d12e] {\n  background: #ffffff;\n  padding: 9px 14px;\n  border: 1px solid #CA2128;\n  color: #CA2128;\n}", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentViewModal.vue?vue&type=style&index=0&id=862f9778&lang=scss&scoped=true&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ChoirAICommentViewModal.vue?vue&type=style&index=0&id=862f9778&lang=scss&scoped=true& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "textarea[data-v-862f9778] {\n  width: 100%;\n  height: 200px;\n  max-height: 100%;\n  max-width: 600px;\n  margin: 15px 0;\n  padding: 10px;\n  border: 1px solid #F0F0F0;\n  font-size: 15px;\n  box-sizing: border-box;\n}\ntextarea[data-v-862f9778]:focus {\n  border: 1px solid #7F4091;\n}\nbutton[data-v-862f9778], .button[data-v-862f9778] {\n  background: #7F4091;\n  color: #fff;\n  padding: 10px 15px;\n  margin: 0 5px;\n  text-align: center;\n  border: none;\n  border-radius: 5px;\n}\nbutton.cancel[data-v-862f9778], .button.cancel[data-v-862f9778] {\n  background: #ffffff;\n  padding: 9px 14px;\n  border: 1px solid #CA2128;\n  color: #CA2128;\n}", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirCommentModal.vue?vue&type=style&index=0&id=e5b3bbfe&lang=scss&scoped=true&":
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ChoirCommentModal.vue?vue&type=style&index=0&id=e5b3bbfe&lang=scss&scoped=true& ***!
@@ -3919,7 +4261,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "/* @import url('https://showchoir.carmenscoring.com/css/dynamic-colors.css'); */\n[data-v-d0de5868]::-webkit-scrollbar {\n  height: 10px;\n  width: 10px;\n}\n[data-v-d0de5868]::-webkit-scrollbar-track {\n  background: #eee;\n}\n[data-v-d0de5868]::-webkit-scrollbar-thumb {\n  background: #666;\n}\n#spreadsheet[data-v-d0de5868] {\n  margin: 5px;\n  margin-top: 5px;\n  position: relative;\n  width: calc(100% - 10px);\n  height: 100%;\n  z-index: 1;\n  overflow: scroll;\n}\n#spreadsheet.spaceBelow[data-v-d0de5868] {\n  padding-bottom: 280px;\n  height: calc(100% + 280px);\n}\n#spreadsheet th[data-v-d0de5868], #spreadsheet td[data-v-d0de5868] {\n  padding: 5px 10px;\n  border: 1px solid #ddd;\n  background: #fff;\n  vertical-align: top;\n  font-weight: normal;\n}\n#spreadsheet td.editing[data-v-d0de5868] {\n  outline: 4px #7F4091 solid;\n  border: 1px #7F4091 solid;\n  background-color: #7F4091;\n  color: #ffffff;\n  font-weight: 700;\n}\n#spreadsheet th[data-v-d0de5868] {\n  background: #f9f9f9;\n}\n#spreadsheet th[data-v-d0de5868]:first-child {\n  position: -webkit-sticky;\n  position: sticky;\n  left: 0;\n  z-index: 2;\n  background: #f9f9f9;\n  max-width: 200px;\n  min-width: 150px;\n  border-right-width: 3px;\n}\n#spreadsheet thead th[data-v-d0de5868]:first-child {\n  z-index: 5;\n}\n#spreadsheet tbody th[data-v-d0de5868] {\n  text-align: right;\n}\ntable[data-v-d0de5868] {\n  width: auto;\n  min-width: 100%;\n  margin: auto;\n  table-layout: fixed;\n  border-collapse: separate;\n  border-spacing: 0;\n  color: #333;\n  font-size: 14px;\n}\ntable thead th[data-v-d0de5868] {\n  position: -webkit-sticky;\n  position: sticky;\n  top: 0;\n  background: #eee;\n  padding: 10px 5px;\n  color: #333333;\n}\ntable .tied-badge[data-v-d0de5868] {\n  font-size: 11px;\n  padding: 3px 7px 3px 6px;\n  border-radius: 12px;\n}\ntable .choir-header[data-v-d0de5868],\ntable .caption-value[data-v-d0de5868] {\n  min-width: 150px;\n}\ntable .choir-header > span.division[data-v-d0de5868] {\n  display: inline-block;\n  font-weight: lighter;\n}\ntable tr.table-header[data-v-d0de5868] {\n  color: #fff;\n  font-size: 0.9em;\n}\ntable tr.table-header td[data-v-d0de5868] {\n  padding: 10px;\n  color: #444;\n  border-left: 1px solid #ccc;\n}\ntable tr.table-header td.criteria-header[data-v-d0de5868] {\n  background: none;\n  border: none;\n}\ntable tbody tr.caption-row.caption-header .caption-name[data-v-d0de5868] {\n  color: white;\n  text-align: left;\n  padding: 5px 10px;\n  font-size: 1.2em;\n  font-weight: normal;\n  position: -webkit-sticky;\n  position: sticky;\n}\ntable tbody tr.caption-row.caption-footer td.caption-subtotal[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-subtotal[data-v-d0de5868], table tbody tr.caption-row.caption-footer td.caption-rank[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-rank[data-v-d0de5868] {\n  color: white;\n  padding: 5px;\n}\ntable tbody tr.caption-row.caption-footer td.caption-subtotal.caption-subtotal-label[data-v-d0de5868], table tbody tr.caption-row.caption-footer td.caption-subtotal.caption-rank-label[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-subtotal.caption-subtotal-label[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-subtotal.caption-rank-label[data-v-d0de5868], table tbody tr.caption-row.caption-footer td.caption-rank.caption-subtotal-label[data-v-d0de5868], table tbody tr.caption-row.caption-footer td.caption-rank.caption-rank-label[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-rank.caption-subtotal-label[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-rank.caption-rank-label[data-v-d0de5868] {\n  text-align: right;\n  padding-right: 10px;\n}\ntable tbody tr.caption-row.caption-footer td.caption-subtotal.caption-subtotal-value[data-v-d0de5868], table tbody tr.caption-row.caption-footer td.caption-subtotal.caption-rank-value[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-subtotal.caption-subtotal-value[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-subtotal.caption-rank-value[data-v-d0de5868], table tbody tr.caption-row.caption-footer td.caption-rank.caption-subtotal-value[data-v-d0de5868], table tbody tr.caption-row.caption-footer td.caption-rank.caption-rank-value[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-rank.caption-subtotal-value[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-rank.caption-rank-value[data-v-d0de5868] {\n  text-align: center;\n}\ntable tbody td[data-v-d0de5868] {\n  background: #F8F7F7;\n  padding: 4px;\n}\ntable tbody td.criterion-name[data-v-d0de5868] {\n  font-size: 1.1em;\n  text-align: right;\n  padding: 5px 15px;\n  width: 150px;\n}\ntable tr.score-row[data-v-d0de5868] {\n  font-weight: bold;\n  font-size: 1.1em;\n}\ntable tr.score-row td[data-v-d0de5868] {\n  border-top: 4px solid #ccc;\n}\ntable tr.score-row td.score-total-label[data-v-d0de5868] {\n  text-align: right;\n  padding: 8px;\n  padding-right: 10px;\n}\ntable tr.score-row td.score-total-value[data-v-d0de5868] {\n  padding: 8px;\n}\ntable tr.caption-footer .tied-badge[data-v-d0de5868] {\n  padding: 2px 6px 2px 5px;\n  background: transparent;\n  color: #ffffff;\n  font-weight: 900 !important;\n  border: 2px solid #ffffff;\n}\ntable tr.rank-rating-row .tied-badge[data-v-d0de5868] {\n  background: #b84660;\n  color: #ffffff;\n}\ntable tr.comment-row[data-v-d0de5868] {\n  font-size: 13px;\n}\ntable tr.comment-row .comment-text[data-v-d0de5868] {\n  font-size: 15px;\n}\ntable tr.record-row[data-v-d0de5868] {\n  font-size: 13px;\n}\ntable tr.criteria-row.active[data-v-d0de5868] {\n  height: 100px;\n}", ""]);
+exports.push([module.i, "/* @import url('https://showchoir.carmenscoring.com/css/dynamic-colors.css'); */\n[data-v-d0de5868]::-webkit-scrollbar {\n  height: 10px;\n  width: 10px;\n}\n[data-v-d0de5868]::-webkit-scrollbar-track {\n  background: #eee;\n}\n[data-v-d0de5868]::-webkit-scrollbar-thumb {\n  background: #666;\n}\n#spreadsheet[data-v-d0de5868] {\n  margin: 5px;\n  margin-top: 5px;\n  position: relative;\n  width: calc(100% - 10px);\n  height: 100%;\n  z-index: 1;\n  overflow: scroll;\n}\n#spreadsheet.spaceBelow[data-v-d0de5868] {\n  padding-bottom: 280px;\n  height: calc(100% + 280px);\n}\n#spreadsheet th[data-v-d0de5868], #spreadsheet td[data-v-d0de5868] {\n  padding: 5px 10px;\n  border: 1px solid #ddd;\n  background: #fff;\n  vertical-align: top;\n  font-weight: normal;\n}\n#spreadsheet td.editing[data-v-d0de5868] {\n  outline: 4px #7F4091 solid;\n  border: 1px #7F4091 solid;\n  background-color: #7F4091;\n  color: #ffffff;\n  font-weight: 700;\n}\n#spreadsheet th[data-v-d0de5868] {\n  background: #f9f9f9;\n}\n#spreadsheet th[data-v-d0de5868]:first-child {\n  position: -webkit-sticky;\n  position: sticky;\n  left: 0;\n  z-index: 2;\n  background: #f9f9f9;\n  max-width: 200px;\n  min-width: 150px;\n  border-right-width: 3px;\n}\n#spreadsheet thead th[data-v-d0de5868]:first-child {\n  z-index: 5;\n}\n#spreadsheet tbody th[data-v-d0de5868] {\n  text-align: right;\n}\ntable[data-v-d0de5868] {\n  width: auto;\n  min-width: 100%;\n  margin: auto;\n  table-layout: fixed;\n  border-collapse: separate;\n  border-spacing: 0;\n  color: #333;\n  font-size: 14px;\n}\ntable thead th[data-v-d0de5868] {\n  position: -webkit-sticky;\n  position: sticky;\n  top: 0;\n  background: #eee;\n  padding: 10px 5px;\n  color: #333333;\n}\ntable .tied-badge[data-v-d0de5868] {\n  font-size: 11px;\n  padding: 3px 7px 3px 6px;\n  border-radius: 12px;\n}\ntable .choir-header .choir-name[data-v-d0de5868] {\n  font-size: 1.5em;\n  font-weight: bold;\n}\ntable .choir-header .choir-division-name[data-v-d0de5868] {\n  font-size: 1.2em !important;\n}\ntable .choir-header .choir-time[data-v-d0de5868] {\n  font-size: 0.9em !important;\n}\ntable .choir-header[data-v-d0de5868],\ntable .caption-value[data-v-d0de5868] {\n  min-width: 150px;\n}\ntable .choir-header > span.division[data-v-d0de5868] {\n  display: inline-block;\n  font-weight: lighter;\n}\ntable tr.table-header[data-v-d0de5868] {\n  color: #fff;\n  font-size: 0.9em;\n}\ntable tr.table-header td[data-v-d0de5868] {\n  padding: 10px;\n  color: #444;\n  border-left: 1px solid #ccc;\n}\ntable tr.table-header td.criteria-header[data-v-d0de5868] {\n  background: none;\n  border: none;\n}\ntable tbody tr.caption-row.caption-header .caption-name[data-v-d0de5868] {\n  color: white;\n  text-align: left;\n  padding: 5px 10px;\n  font-size: 1.2em;\n  font-weight: normal;\n  position: -webkit-sticky;\n  position: sticky;\n}\ntable tbody tr.caption-row.caption-footer td.caption-subtotal[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-subtotal[data-v-d0de5868], table tbody tr.caption-row.caption-footer td.caption-rank[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-rank[data-v-d0de5868] {\n  color: white;\n  padding: 5px;\n}\ntable tbody tr.caption-row.caption-footer td.caption-subtotal.caption-subtotal-label[data-v-d0de5868], table tbody tr.caption-row.caption-footer td.caption-subtotal.caption-rank-label[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-subtotal.caption-subtotal-label[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-subtotal.caption-rank-label[data-v-d0de5868], table tbody tr.caption-row.caption-footer td.caption-rank.caption-subtotal-label[data-v-d0de5868], table tbody tr.caption-row.caption-footer td.caption-rank.caption-rank-label[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-rank.caption-subtotal-label[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-rank.caption-rank-label[data-v-d0de5868] {\n  text-align: right;\n  padding-right: 10px;\n}\ntable tbody tr.caption-row.caption-footer td.caption-subtotal.caption-subtotal-value[data-v-d0de5868], table tbody tr.caption-row.caption-footer td.caption-subtotal.caption-rank-value[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-subtotal.caption-subtotal-value[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-subtotal.caption-rank-value[data-v-d0de5868], table tbody tr.caption-row.caption-footer td.caption-rank.caption-subtotal-value[data-v-d0de5868], table tbody tr.caption-row.caption-footer td.caption-rank.caption-rank-value[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-rank.caption-subtotal-value[data-v-d0de5868], table tbody tr.caption-row.caption-footer th.caption-rank.caption-rank-value[data-v-d0de5868] {\n  text-align: center;\n}\ntable tbody td[data-v-d0de5868] {\n  background: #F8F7F7;\n  padding: 4px;\n}\ntable tbody td.criterion-name[data-v-d0de5868] {\n  font-size: 1.1em;\n  text-align: right;\n  padding: 5px 15px;\n  width: 150px;\n}\ntable tr.score-row[data-v-d0de5868] {\n  font-weight: bold;\n  font-size: 1.1em;\n}\ntable tr.score-row td[data-v-d0de5868] {\n  border-top: 4px solid #ccc;\n}\ntable tr.score-row td.score-total-label[data-v-d0de5868] {\n  text-align: right;\n  padding: 8px;\n  padding-right: 10px;\n}\ntable tr.score-row td.score-total-value[data-v-d0de5868] {\n  padding: 8px;\n}\ntable tr.caption-footer .tied-badge[data-v-d0de5868] {\n  padding: 2px 6px 2px 5px;\n  background: transparent;\n  color: #ffffff;\n  font-weight: 900 !important;\n  border: 2px solid #ffffff;\n}\ntable tr.rank-rating-row .tied-badge[data-v-d0de5868] {\n  background: #b84660;\n  color: #ffffff;\n}\ntable tr.comment-row[data-v-d0de5868] {\n  font-size: 13px;\n}\ntable tr.comment-row .comment-text[data-v-d0de5868] {\n  font-size: 15px;\n}\ntable tr.record-row[data-v-d0de5868] {\n  font-size: 13px;\n}\ntable tr.criteria-row.active[data-v-d0de5868] {\n  height: 100px;\n}", ""]);
 
 // exports
 
@@ -22520,6 +22862,66 @@ try {
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentModal.vue?vue&type=style&index=0&id=8a59d12e&lang=scss&scoped=true&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ChoirAICommentModal.vue?vue&type=style&index=0&id=8a59d12e&lang=scss&scoped=true& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src??ref--7-2!../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../node_modules/vue-loader/lib??vue-loader-options!./ChoirAICommentModal.vue?vue&type=style&index=0&id=8a59d12e&lang=scss&scoped=true& */ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentModal.vue?vue&type=style&index=0&id=8a59d12e&lang=scss&scoped=true&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentViewModal.vue?vue&type=style&index=0&id=862f9778&lang=scss&scoped=true&":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ChoirAICommentViewModal.vue?vue&type=style&index=0&id=862f9778&lang=scss&scoped=true& ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src??ref--7-2!../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../node_modules/vue-loader/lib??vue-loader-options!./ChoirAICommentViewModal.vue?vue&type=style&index=0&id=862f9778&lang=scss&scoped=true& */ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentViewModal.vue?vue&type=style&index=0&id=862f9778&lang=scss&scoped=true&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirCommentModal.vue?vue&type=style&index=0&id=e5b3bbfe&lang=scss&scoped=true&":
 /*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ChoirCommentModal.vue?vue&type=style&index=0&id=e5b3bbfe&lang=scss&scoped=true& ***!
@@ -27197,6 +27599,14 @@ var render = function() {
             ? _c("ChoirCommentModal", { class: _vm.activeModalType })
             : _vm._e(),
           _vm._v(" "),
+          _vm.activeModalType === "choirAIComment"
+            ? _c("ChoirAICommentModal", { class: _vm.activeModalType })
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.activeModalType === "choirAICommentView"
+            ? _c("ChoirAICommentViewModal", { class: _vm.activeModalType })
+            : _vm._e(),
+          _vm._v(" "),
           _vm.activeModalType === "choirCriterionComment"
             ? _c("CriterionCommentModal", { class: _vm.activeModalType })
             : _vm._e(),
@@ -27207,6 +27617,168 @@ var render = function() {
         ],
         1
       )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentModal.vue?vue&type=template&id=8a59d12e&scoped=true&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ChoirAICommentModal.vue?vue&type=template&id=8a59d12e&scoped=true& ***!
+  \*************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "Modal",
+    [
+      _c("ModalHeader", [
+        _c("h1", [_vm._v(_vm._s(_vm.choir.name))]),
+        _vm._v(" "),
+        _c("h3", [_vm._v("Feedback")])
+      ]),
+      _vm._v(" "),
+      _c("ModalSubheader", [
+        _c("p", [
+          _vm._v("Please keep your feedback positive and constructive.")
+        ])
+      ]),
+      _vm._v(" "),
+      _c("ModalBody", [
+        _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model.lazy",
+              value: _vm.aiComment,
+              expression: "aiComment",
+              modifiers: { lazy: true }
+            }
+          ],
+          domProps: { value: _vm.aiComment },
+          on: {
+            change: function($event) {
+              _vm.aiComment = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "button",
+            attrs: { type: "submit" },
+            on: {
+              click: function($event) {
+                return _vm.saveAIComment()
+              }
+            }
+          },
+          [_vm._v("Save Comment")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "button cancel",
+            attrs: { type: "submit" },
+            on: {
+              click: function($event) {
+                return _vm.cancelComment()
+              }
+            }
+          },
+          [_vm._v("Cancel")]
+        )
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentViewModal.vue?vue&type=template&id=862f9778&scoped=true&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ChoirAICommentViewModal.vue?vue&type=template&id=862f9778&scoped=true& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "Modal",
+    [
+      _c("ModalHeader", [
+        _c("h1", [_vm._v(_vm._s(_vm.choir.name))]),
+        _vm._v(" "),
+        _c("h3", [_vm._v("Feedback")])
+      ]),
+      _vm._v(" "),
+      _c("ModalSubheader", [
+        _c("p", [
+          _vm._v("Please keep your feedback positive and constructive.")
+        ])
+      ]),
+      _vm._v(" "),
+      _c("ModalBody", [
+        _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model.lazy",
+              value: _vm.aiCommentView,
+              expression: "aiCommentView",
+              modifiers: { lazy: true }
+            }
+          ],
+          domProps: { value: _vm.aiCommentView },
+          on: {
+            change: function($event) {
+              _vm.aiCommentView = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "button cancel",
+            attrs: { type: "submit" },
+            on: {
+              click: function($event) {
+                return _vm.cancelComment()
+              }
+            }
+          },
+          [_vm._v("Cancel")]
+        )
+      ])
     ],
     1
   )
@@ -28062,41 +28634,49 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _c("p", { staticClass: "text-danger", attrs: { id: "maxNumError" } }),
-      
-      //airlyy
       _vm._v(" "),
-      _c("div", { staticStyle: { width: "200px", margin: "auto" } }, [
-        // Dropdown for selecting the score
-        _c("select", {
+      _c(
+        "select",
+        {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.currentScore,
+              expression: "currentScore"
+            }
+          ],
           staticClass: "form-control",
-          attrs: {
-            id: "scoreDropdown",
-            name: "score",
+          staticStyle: {
+            width: "200px",
+            margin: "auto",
+            "text-align": "center"
           },
-          domProps: { value: _vm.currentScore },
+          attrs: { id: "score", name: "score" },
           on: {
-            input: function ($event) {
-              _vm.onInput($event); // Update value on input
-            },
-          },
-        },
-        _vm._l(
-          Array.from({ length: _vm.max * 2 + 1 }, (_, i) => (i / 2).toFixed(1)),
-          function (option) {
-            return _c(
-              "option",
-              {
-                domProps: { value: option },
-              },
-              [_vm._v(option)]
-            );
+            change: function($event) {
+              var $$selectedVal = Array.prototype.filter
+                .call($event.target.options, function(o) {
+                  return o.selected
+                })
+                .map(function(o) {
+                  var val = "_value" in o ? o._value : o.value
+                  return val
+                })
+              _vm.currentScore = $event.target.multiple
+                ? $$selectedVal
+                : $$selectedVal[0]
+            }
           }
-        )
-        ),
-      ]),
+        },
+        _vm._l(_vm.range, function(score) {
+          return _c("option", { key: score, domProps: { value: score } }, [
+            _vm._v("\n          " + _vm._s(score) + "\n        ")
+          ])
+        }),
+        0
+      ),
       _vm._v(" "),
-      
-      
       _c("br"),
       _vm._v(" "),
       _c(
@@ -28313,9 +28893,9 @@ var render = function() {
                   },
                   [
                     _c(
-                      "span",
+                      "div",
                       {
-                        staticClass: "clickable",
+                        staticClass: "clickable choir-name",
                         on: {
                           click: function($event) {
                             return _vm.activateChoirModal(choir)
@@ -28325,15 +28905,15 @@ var render = function() {
                       [_vm._v(_vm._s(choir.name))]
                     ),
                     _vm._v(" "),
+                    _c("div", { staticClass: "division choir-division-name" }, [
+                      _vm._v(_vm._s(choir.division_name))
+                    ]),
+                    _vm._v(" "),
                     choir.scheduled_time
-                      ? _c("span", { staticClass: "time" }, [
+                      ? _c("div", { staticClass: "time choir-time" }, [
                           _vm._v("@" + _vm._s(choir.scheduled_time))
                         ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "division" }, [
-                      _vm._v(_vm._s(choir.division_name))
-                    ])
+                      : _vm._e()
                   ]
                 )
               })
@@ -28636,44 +29216,110 @@ var render = function() {
               ],
               2
             ),
-            // _vm._v(" "),
-            // _vm.hasPremium
-            //   ? _c(
-            //       "tr",
-            //       { staticClass: "comment-row" },
-            //       [
-            //         _c("th", { staticClass: "criterion-name" }, [
-            //           _vm._v("Record Comments")
-            //         ]),
-            //         _vm._v(" "),
-            //         _vm._l(_vm.choirsList, function(choir) {
-            //           return _c(
-            //             "td",
-            //             { key: choir.id },
-            //             [
-            //               _c("Record", {
-            //                 attrs: { choir: choir, recordings: _vm.recordings },
-            //                 on: {
-            //                   "start-recording": function($event) {
-            //                     return _vm.onRecordingStart(choir.id)
-            //                   },
-            //                   "stop-recording": function($event) {
-            //                     _vm.currentRecordingId = null
-            //                   },
-            //                   "upload-complete": function($event) {
-            //                     return _vm.changeInProgressRecValue(-1)
-            //                   },
-            //                   "upload-error": _vm.warnRecordingSaveError
-            //                 }
-            //               })
-            //             ],
-            //             1
-            //           )
-            //         })
-            //       ],
-            //       2
-            //     )
-            //   : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "tr",
+              { staticClass: "comment-row" },
+              [
+                _c("th", { staticClass: "criterion-name" }, [
+                  _vm._v("AI Comments")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.choirsList, function(choir) {
+                  return _c(
+                    "td",
+                    {
+                      key: choir.id,
+                      staticClass: "comment-text",
+                      on: {
+                        click: function($event) {
+                          return _vm.activateChoirAICommentModal(choir)
+                        }
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n          " +
+                          _vm._s(_vm.aiComment(choir)) +
+                          "\n        "
+                      )
+                    ]
+                  )
+                })
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c(
+              "tr",
+              { staticClass: "comment-row" },
+              [
+                _c("th", { staticClass: "criterion-name" }, [
+                  _vm._v("AI Summarize")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.choirsList, function(choir) {
+                  return _c(
+                    "td",
+                    {
+                      key: choir.id,
+                      staticClass: "comment-text",
+                      on: {
+                        click: function($event) {
+                          return _vm.activateChoirAICommentViewModal(choir)
+                        }
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n          " +
+                          _vm._s(_vm.aiCommentView(choir)) +
+                          "\n        "
+                      )
+                    ]
+                  )
+                })
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _vm.hasPremium
+              ? _c(
+                  "tr",
+                  { staticClass: "comment-row" },
+                  [
+                    _c("th", { staticClass: "criterion-name" }, [
+                      _vm._v("Record Comments")
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.choirsList, function(choir) {
+                      return _c(
+                        "td",
+                        { key: choir.id },
+                        [
+                          _c("Record", {
+                            attrs: { choir: choir, recordings: _vm.recordings },
+                            on: {
+                              "start-recording": function($event) {
+                                return _vm.onRecordingStart(choir.id)
+                              },
+                              "stop-recording": function($event) {
+                                _vm.currentRecordingId = null
+                              },
+                              "upload-complete": function($event) {
+                                return _vm.changeInProgressRecValue(-1)
+                              },
+                              "upload-error": _vm.warnRecordingSaveError
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
             _vm._v(" "),
             _vm.hasPremium
               ? _c(
@@ -30354,6 +31000,34 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/api/ai_comments_view.js":
+/*!*************************************!*\
+  !*** ./src/api/ai_comments_view.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  viewAIComment: function viewAIComment(payload) {
+    var postPayload = {
+      round_id: payload.round_id,
+      choir_id: payload.choir_id,
+      criteria_id: payload.criteria_id,
+      ai_comment_view: payload.ai_comment_view
+    };
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/judge/comment/ai-summarize', postPayload).then(function (response) {
+      return response.data;
+    });
+  }
+});
+
+/***/ }),
+
 /***/ "./src/api/comments.js":
 /*!*****************************!*\
   !*** ./src/api/comments.js ***!
@@ -30372,7 +31046,8 @@ __webpack_require__.r(__webpack_exports__);
       round_id: payload.round_id,
       choir_id: payload.choir_id,
       criteria_id: payload.criteria_id,
-      comment: payload.comment
+      comment: payload.comment,
+      ai_comment: payload.ai_comment
     };
     return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/judge/comment/save', postPayload).then(function (response) {
       return response.data;
@@ -30449,6 +31124,180 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   }
 });
+
+/***/ }),
+
+/***/ "./src/components/ChoirAICommentModal.vue":
+/*!************************************************!*\
+  !*** ./src/components/ChoirAICommentModal.vue ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ChoirAICommentModal_vue_vue_type_template_id_8a59d12e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChoirAICommentModal.vue?vue&type=template&id=8a59d12e&scoped=true& */ "./src/components/ChoirAICommentModal.vue?vue&type=template&id=8a59d12e&scoped=true&");
+/* harmony import */ var _ChoirAICommentModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ChoirAICommentModal.vue?vue&type=script&lang=js& */ "./src/components/ChoirAICommentModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _ChoirAICommentModal_vue_vue_type_style_index_0_id_8a59d12e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ChoirAICommentModal.vue?vue&type=style&index=0&id=8a59d12e&lang=scss&scoped=true& */ "./src/components/ChoirAICommentModal.vue?vue&type=style&index=0&id=8a59d12e&lang=scss&scoped=true&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _ChoirAICommentModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ChoirAICommentModal_vue_vue_type_template_id_8a59d12e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ChoirAICommentModal_vue_vue_type_template_id_8a59d12e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "8a59d12e",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "src/components/ChoirAICommentModal.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./src/components/ChoirAICommentModal.vue?vue&type=script&lang=js&":
+/*!*************************************************************************!*\
+  !*** ./src/components/ChoirAICommentModal.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib??ref--4-0!../../node_modules/vue-loader/lib??vue-loader-options!./ChoirAICommentModal.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./src/components/ChoirAICommentModal.vue?vue&type=style&index=0&id=8a59d12e&lang=scss&scoped=true&":
+/*!**********************************************************************************************************!*\
+  !*** ./src/components/ChoirAICommentModal.vue?vue&type=style&index=0&id=8a59d12e&lang=scss&scoped=true& ***!
+  \**********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentModal_vue_vue_type_style_index_0_id_8a59d12e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/style-loader!../../node_modules/css-loader!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src??ref--7-2!../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../node_modules/vue-loader/lib??vue-loader-options!./ChoirAICommentModal.vue?vue&type=style&index=0&id=8a59d12e&lang=scss&scoped=true& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentModal.vue?vue&type=style&index=0&id=8a59d12e&lang=scss&scoped=true&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentModal_vue_vue_type_style_index_0_id_8a59d12e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentModal_vue_vue_type_style_index_0_id_8a59d12e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentModal_vue_vue_type_style_index_0_id_8a59d12e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentModal_vue_vue_type_style_index_0_id_8a59d12e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
+
+/***/ }),
+
+/***/ "./src/components/ChoirAICommentModal.vue?vue&type=template&id=8a59d12e&scoped=true&":
+/*!*******************************************************************************************!*\
+  !*** ./src/components/ChoirAICommentModal.vue?vue&type=template&id=8a59d12e&scoped=true& ***!
+  \*******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentModal_vue_vue_type_template_id_8a59d12e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/vue-loader/lib??vue-loader-options!./ChoirAICommentModal.vue?vue&type=template&id=8a59d12e&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentModal.vue?vue&type=template&id=8a59d12e&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentModal_vue_vue_type_template_id_8a59d12e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentModal_vue_vue_type_template_id_8a59d12e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./src/components/ChoirAICommentViewModal.vue":
+/*!****************************************************!*\
+  !*** ./src/components/ChoirAICommentViewModal.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ChoirAICommentViewModal_vue_vue_type_template_id_862f9778_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChoirAICommentViewModal.vue?vue&type=template&id=862f9778&scoped=true& */ "./src/components/ChoirAICommentViewModal.vue?vue&type=template&id=862f9778&scoped=true&");
+/* harmony import */ var _ChoirAICommentViewModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ChoirAICommentViewModal.vue?vue&type=script&lang=js& */ "./src/components/ChoirAICommentViewModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _ChoirAICommentViewModal_vue_vue_type_style_index_0_id_862f9778_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ChoirAICommentViewModal.vue?vue&type=style&index=0&id=862f9778&lang=scss&scoped=true& */ "./src/components/ChoirAICommentViewModal.vue?vue&type=style&index=0&id=862f9778&lang=scss&scoped=true&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _ChoirAICommentViewModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ChoirAICommentViewModal_vue_vue_type_template_id_862f9778_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ChoirAICommentViewModal_vue_vue_type_template_id_862f9778_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "862f9778",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "src/components/ChoirAICommentViewModal.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./src/components/ChoirAICommentViewModal.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./src/components/ChoirAICommentViewModal.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentViewModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib??ref--4-0!../../node_modules/vue-loader/lib??vue-loader-options!./ChoirAICommentViewModal.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentViewModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentViewModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./src/components/ChoirAICommentViewModal.vue?vue&type=style&index=0&id=862f9778&lang=scss&scoped=true&":
+/*!**************************************************************************************************************!*\
+  !*** ./src/components/ChoirAICommentViewModal.vue?vue&type=style&index=0&id=862f9778&lang=scss&scoped=true& ***!
+  \**************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentViewModal_vue_vue_type_style_index_0_id_862f9778_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/style-loader!../../node_modules/css-loader!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src??ref--7-2!../../node_modules/sass-loader/dist/cjs.js??ref--7-3!../../node_modules/vue-loader/lib??vue-loader-options!./ChoirAICommentViewModal.vue?vue&type=style&index=0&id=862f9778&lang=scss&scoped=true& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentViewModal.vue?vue&type=style&index=0&id=862f9778&lang=scss&scoped=true&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentViewModal_vue_vue_type_style_index_0_id_862f9778_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentViewModal_vue_vue_type_style_index_0_id_862f9778_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentViewModal_vue_vue_type_style_index_0_id_862f9778_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_2_node_modules_sass_loader_dist_cjs_js_ref_7_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentViewModal_vue_vue_type_style_index_0_id_862f9778_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
+
+/***/ }),
+
+/***/ "./src/components/ChoirAICommentViewModal.vue?vue&type=template&id=862f9778&scoped=true&":
+/*!***********************************************************************************************!*\
+  !*** ./src/components/ChoirAICommentViewModal.vue?vue&type=template&id=862f9778&scoped=true& ***!
+  \***********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentViewModal_vue_vue_type_template_id_862f9778_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/vue-loader/lib??vue-loader-options!./ChoirAICommentViewModal.vue?vue&type=template&id=862f9778&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ChoirAICommentViewModal.vue?vue&type=template&id=862f9778&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentViewModal_vue_vue_type_template_id_862f9778_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChoirAICommentViewModal_vue_vue_type_template_id_862f9778_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 
@@ -32118,6 +32967,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _api_ai_comments_view__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../api/ai_comments_view */ "./src/api/ai_comments_view.js");
 
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
@@ -32131,6 +32981,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -32167,6 +33018,7 @@ var _setComment = lodash__WEBPACK_IMPORTED_MODULE_6___default.a.debounce( /*#__P
             store.commit('setComment', {
               choir_id: data.choir_id,
               comment: data.comments,
+              ai_comment: data.ai_comments,
               recipient_id: data.recipient_id,
               recipient_type: data.recipient_type
             });
@@ -32181,6 +33033,73 @@ var _setComment = lodash__WEBPACK_IMPORTED_MODULE_6___default.a.debounce( /*#__P
 
   return function (_x) {
     return _ref.apply(this, arguments);
+  };
+}(), 1000);
+
+var _setAIComment = lodash__WEBPACK_IMPORTED_MODULE_6___default.a.debounce( /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(payload) {
+    var data;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return _api_comments__WEBPACK_IMPORTED_MODULE_3__["default"].saveComment(payload);
+
+          case 2:
+            data = _context2.sent;
+            // Send to mutation
+            store.commit('setAIComment', {
+              choir_id: data.choir_id,
+              comment: data.comments,
+              ai_comment: data.ai_comments,
+              recipient_id: data.recipient_id,
+              recipient_type: data.recipient_type
+            });
+
+          case 4:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+
+  return function (_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}(), 1000);
+
+var _setAICommentView = lodash__WEBPACK_IMPORTED_MODULE_6___default.a.debounce( /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(payload) {
+    var data;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.next = 2;
+            return _api_ai_comments_view__WEBPACK_IMPORTED_MODULE_8__["default"].viewAIComment(payload);
+
+          case 2:
+            data = _context3.sent;
+            // Send to mutation
+            store.commit('setAICommentView', {
+              choir_id: data.choir_id,
+              ai_comment_view: data.ai_comments_view,
+              recipient_id: data.recipient_id,
+              recipient_type: data.recipient_type
+            });
+
+          case 4:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3);
+  }));
+
+  return function (_x3) {
+    return _ref3.apply(this, arguments);
   };
 }(), 1000);
 
@@ -32208,7 +33127,10 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
     activeChoirCriterionComment: false,
     spreadsheetTitle: 'Default Spreadsheet Title',
     backUrl: backUrl,
-    apiUrl: apiUrl
+    apiUrl: apiUrl,
+    aiCommentsActive: false,
+    aiCommentsViewActive: false,
+    CommentsActive: false
   },
   mutations: {
     activateModal: function activateModal(state, data) {
@@ -32223,6 +33145,29 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       state.activeChoir = choir;
       state.activeCriterion = false;
       state.activeChoirCriterionComment = false;
+      state.aiCommentsActive = false;
+      state.aiCommentsViewActive = false;
+      state.CommentsActive = true;
+    },
+    activateChoirAICommentModal: function activateChoirAICommentModal(state, choir) {
+      state.activeModal = true;
+      state.activeComment = true;
+      state.activeChoir = choir;
+      state.activeCriterion = false;
+      state.activeChoirCriterionComment = false;
+      state.CommentsActive = false;
+      state.aiCommentsViewActive = false;
+      state.aiCommentsActive = true;
+    },
+    activateChoirAICommentViewModal: function activateChoirAICommentViewModal(state, choir) {
+      state.activeModal = true;
+      state.activeComment = true;
+      state.activeChoir = choir;
+      state.activeCriterion = false;
+      state.activeChoirCriterionComment = false;
+      state.CommentsActive = false;
+      state.aiCommentsActive = false;
+      state.aiCommentsViewActive = true;
     },
     activateChoirModal: function activateChoirModal(state, choir) {
       state.activeModal = true;
@@ -32230,6 +33175,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       state.activeChoirCriterionComment = false;
       state.activeChoir = choir;
       state.activeCriterion = false;
+      state.CommentsActive = false;
+      state.aiCommentsActive = false;
+      state.aiCommentsViewActive = false;
     },
     activateChoirCriterionModal: function activateChoirCriterionModal(state, payload) {
       state.activeModal = true;
@@ -32237,6 +33185,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       state.activeChoirCriterionComment = false;
       state.activeChoir = payload.choir;
       state.activeCriterion = payload.criterion;
+      state.CommentsActive = false;
+      state.aiCommentsActive = false;
+      state.aiCommentsViewActive = false;
     },
     activateChoirCriterionCommentModal: function activateChoirCriterionCommentModal(state, payload) {
       state.activeModal = true;
@@ -32291,6 +33242,40 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
 
       state.comments[+index + 1] = payload;
     },
+    setAIComment: function setAIComment(state, payload) {
+      // Find the matching comment and update it
+      // var matches = state.comments.filter(comment => comment.choir_id === payload.choir_id)
+      for (var c in state.comments) {
+        var isChoirCriterionComment = state.comments[c].choir_id === payload.choir_id && state.comments[c].recipient_id === payload.recipient_id && state.comments[c].recipient_type === payload.recipient_type;
+
+        if (isChoirCriterionComment) {
+          state.comments[c].ai_comment = payload.ai_comment;
+          return;
+        }
+      }
+
+      var keys = Object.keys(state.comments);
+      var index = keys.pop() || 0; // Otherwise append it to the array
+
+      state.comments[+index + 1] = payload;
+    },
+    setAICommentView: function setAICommentView(state, payload) {
+      // Find the matching comment and update it
+      // var matches = state.comments.filter(comment => comment.choir_id === payload.choir_id)
+      for (var c in state.comments) {
+        var isChoirCriterionComment = state.comments[c].choir_id === payload.choir_id && state.comments[c].recipient_id === payload.recipient_id && state.comments[c].recipient_type === payload.recipient_type;
+
+        if (isChoirCriterionComment) {
+          state.comments[c].ai_comment_view = payload.ai_comment_view;
+          return;
+        }
+      }
+
+      var keys = Object.keys(state.comments);
+      var index = keys.pop() || 0; // Otherwise append it to the array
+
+      state.comments[+index + 1] = payload;
+    },
     setSavingStatus: function setSavingStatus(state, statusObj) {
       state.saving = Object.assign({}, state.saving, statusObj);
     },
@@ -32322,28 +33307,28 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   },
   actions: {
     getApiData: function getApiData(context) {
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         var _yield$axios$get, data;
 
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
-                _context2.next = 2;
+                _context4.next = 2;
                 return axios__WEBPACK_IMPORTED_MODULE_7___default.a.get(store.state.apiUrl);
 
               case 2:
-                _yield$axios$get = _context2.sent;
+                _yield$axios$get = _context4.sent;
                 data = _yield$axios$get.data;
                 context.commit('setApiData', data);
                 context.commit('setHasRatings');
 
               case 6:
               case "end":
-                return _context2.stop();
+                return _context4.stop();
             }
           }
-        }, _callee2);
+        }, _callee4);
       }))();
     },
     setScore: function setScore(context, payload) {
@@ -32369,19 +33354,51 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
       saveDebouncedScore(payload, store);
     },
     setComment: function setComment(context, payload) {
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
                 _setComment(payload);
 
               case 1:
               case "end":
-                return _context3.stop();
+                return _context5.stop();
             }
           }
-        }, _callee3);
+        }, _callee5);
+      }))();
+    },
+    setAIComment: function setAIComment(context, payload) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _setAIComment(payload);
+
+              case 1:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }))();
+    },
+    setAICommentView: function setAICommentView(context, payload) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _setAICommentView(payload);
+
+              case 1:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7);
       }))();
     },
     saveRecording: function saveRecording(context, payload) {
@@ -32628,6 +33645,28 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
         return null;
       };
     },
+    getChoirAIComment: function getChoirAIComment(state) {
+      return function (choirId) {
+        for (var c in state.comments) {
+          if (state.comments[c].choir_id === choirId) {
+            return state.comments[c].ai_comment;
+          }
+        }
+
+        return null;
+      };
+    },
+    getChoirAICommentView: function getChoirAICommentView(state) {
+      return function (choirId) {
+        for (var c in state.comments) {
+          if (state.comments[c].choir_id === choirId) {
+            return state.comments[c].ai_comment_view;
+          }
+        }
+
+        return null;
+      };
+    },
     getChoirCriterionComment: function getChoirCriterionComment(state) {
       return function (choirId, criterionId) {
         for (var c in state.comments) {
@@ -32683,8 +33722,8 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.mixin({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\OpenServer\domains\cameron\src\main.js */"./src/main.js");
-module.exports = __webpack_require__(/*! C:\OpenServer\domains\cameron\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\world-airly\src\main.js */"./src/main.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\world-airly\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

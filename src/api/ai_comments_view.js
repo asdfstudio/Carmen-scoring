@@ -1,15 +1,14 @@
 import axios from 'axios'
 
 export default {
-  saveComment (payload) {
+  viewAIComment (payload) {
     const postPayload = {
       round_id: payload.round_id,
       choir_id: payload.choir_id,
       criteria_id: payload.criteria_id,
-      comment: payload.comment,
-      ai_comment: payload.ai_comment
+      ai_comment_view: payload.ai_comment_view
     }
-    return axios.post('/judge/comment/save', postPayload)
+    return axios.post('/judge/comment/ai-summarize', postPayload)
       .then(response => {
         return response.data
       })

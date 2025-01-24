@@ -19,6 +19,7 @@ class CreateCommentsTable extends Migration
             $table->integer('subject_id')->index();
             $table->string('subject_type')->index();
             $table->text('comments')->nullable();
+            $table->text('ai_comments')->nullable();
             $table->timestamps();
         });
     }

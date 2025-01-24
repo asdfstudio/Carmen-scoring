@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
 
-		protected $fillable = ['judge_id', 'choir_id', 'recipient_type', 'recipient_id', 'subject_type', 'subject_id', 'comments'];
+		protected $fillable = ['judge_id', 'choir_id', 'recipient_type', 'recipient_id', 'subject_type', 'subject_id', 'comments', 'ai_comments'];
 
 		public function judge()
 		{

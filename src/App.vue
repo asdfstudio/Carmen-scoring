@@ -13,6 +13,10 @@
 
       <ChoirCommentModal v-if="activeModalType === 'choirComment'" v-bind:class="activeModalType"/>
 
+      <ChoirAICommentModal v-if="activeModalType === 'choirAIComment'" v-bind:class="activeModalType"/>
+
+      <ChoirAICommentViewModal v-if="activeModalType === 'choirAICommentView'" v-bind:class="activeModalType"/>
+
       <CriterionCommentModal v-if="activeModalType === 'choirCriterionComment'" v-bind:class="activeModalType"/>
 
       <ChoirCriterionModal v-if="activeModalType === 'choirCriterion'" v-bind:class="activeModalType"/>
@@ -29,6 +33,8 @@ import ChoirModal from './components/ChoirModal'
 import ChoirCommentModal from './components/ChoirCommentModal'
 import CriterionCommentModal from './components/CriterionCommentModal'
 import SpreadsheetHeader from './components/SpreadsheetHeader'
+import ChoirAICommentModal from './components/ChoirAICommentModal'
+import ChoirAICommentViewModal from './components/ChoirAICommentViewModal'
 
 export default {
   name: 'App',
@@ -37,6 +43,8 @@ export default {
     Spreadsheet,
     ChoirCriterionModal,
     ChoirCommentModal,
+    ChoirAICommentModal,
+    ChoirAICommentViewModal,
     CriterionCommentModal,
     ChoirModal
   },
@@ -46,6 +54,15 @@ export default {
     },
     activeChoir () {
       return this.$store.getters.activeChoir
+    },
+    aiCommentsActive () {
+      return this.$store.state.aiCommentsActive
+    },
+    aiCommentsViewActive () {
+      return this.$store.state.aiCommentsViewActive
+    },
+    CommentsActive () {
+      return this.$store.state.CommentsActive
     },
     activeCriterion () {
       return this.$store.getters.activeCriterion
@@ -71,9 +88,17 @@ export default {
         return 'choirCriterionComment'
       } else if (this.activeChoir && this.activeCriterion) {
         return 'choirCriterion'
-      } else if (this.activeChoir && this.activeComment) {
+      } 
+      else if (this.activeChoir && this.activeComment && this.CommentsActive) {
         return 'choirComment'
-      } else if (this.activeChoir) {
+      }
+       else if (this.activeChoir && this.activeComment && this.aiCommentsActive) {
+        return 'choirAIComment'
+      }
+      else if (this.activeChoir && this.activeComment && this.aiCommentsViewActive) {
+        return 'choirAICommentView'
+      }
+       else if (this.activeChoir) {
         return 'choir'
       }
     }

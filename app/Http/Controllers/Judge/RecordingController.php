@@ -51,7 +51,7 @@ class RecordingController extends Controller
             // Now upload to Google Drive
             $choir = $recording->choir; 
             $judge = $recording->judge;
-            $file_name = $choir->name . '-' . $judge->last_name;
+            $file_name = $request->round_id . '-' . $choir->id . '-' . $choir->name . '-' . $judge->last_name . '.mp3';
 
             $client = new Google_Client();
             $client->setAuthConfig(storage_path('app/google-service-account.json'));
