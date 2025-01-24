@@ -68,6 +68,8 @@ import CriterionScoringRange from './CriterionScoringRange'
 import ScoreButton from './ScoreButton'
 import ScoreOption from './ScoreOption'
 import { ScrollPicker, ScrollPickerGroup } from "vue-scroll-picker"
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 
 export default {
   name: 'Score',
@@ -76,7 +78,8 @@ export default {
     ScoreButton,
     ScoreOption,
     ScrollPicker,
-    ScrollPickerGroup
+    ScrollPickerGroup,
+    'v-select': vSelect
   },
   props: {
     min: Number,
@@ -122,19 +125,19 @@ export default {
     }
   },
   watch: {
-    initialScore: function (newValue, oldValue) {
-      this.currentScore = newValue
-    },
     currentScore: function (newValue, oldValue) {
-      if (this.currentScore != this.initialScore) {
-        const payload = {
-          choir_id: this.choirId,
-          criterion_id: this.criterionId,
-          caption_id: this.captionId,
-          raw_score: +newValue
-        }
+    if (this.currentScore != this.initialScore) {
+      const payload = {
+        choir_id: this.choirId,
+        criterion_id: this.criterionId,
+        caption_id: this.captionId,
+        raw_score: +newValue
+      }
         this.$store.dispatch('setScore', payload)
       }
+    },
+    initialScore: function (newValue, oldValue) {
+      this.currentScore = newValue
     }
   },
   methods: {
@@ -202,6 +205,29 @@ export default {
           this.currentScore = +e.target.value
         } else {
           e.target.value = this.min;
+        }
+      }
+    },
+    onSearch(search) {
+      // Validate and convert search input
+      const numSearch = parseFloat(search)
+      if (!isNaN(numSearch) && numSearch >= this.min && numSearch <= this.max) {
+        // If it's a valid number, add it to options if not already present
+        if (!this.range.includes(numSearch)) {
+          // Temporarily modify the range (note: this won't persist)
+          this.range.push(numSearch)
+        }
+      }
+    },
+    onSelectInput(value) {
+      // Validate the selected/entered value
+      if (value !== null) {
+        const numValue = parseFloat(value)
+        if (!isNaN(numValue) && numValue >= this.min && numValue <= this.max) {
+          this.currentScore = numValue
+        } else {
+          // Reset to initial score if invalid
+          this.currentScore = this.initialScore
         }
       }
     },
@@ -405,6 +431,17 @@ export default {
     margin-top: 10px;
   }
 
+}
+
+.score-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.v-select {
+  width: 200px;
+  margin: auto;
 }
 
 </style>
