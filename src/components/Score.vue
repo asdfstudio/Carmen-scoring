@@ -40,18 +40,21 @@
       <p class="mt-4">Enter score from 0-{{this.max}}</p>
       <span v-if="this.increment == 1" class="text-danger">Half point numbers not allowed</span>
       <p id="maxNumError" class="text-danger"></p>
-      <input
-        type="number"
-        name="score"
-        id="score"
-        class="form-control"
-        style="width: 200px; margin: auto"
-        :value="currentScore"
-        @keydown="keepScore($event)"
-        @input="onInput"
-        :step="this.increment == 1 ? 1 : 0.5"
-        :min="min"
-        :max="this.max">
+      <v-select 
+        ref="scoreSelect"
+        :options="range"
+        v-model="currentScore"
+        :clearable="false"
+        :searchable="true"
+        placeholder="Select or type score"
+        @search="onSearch"
+        @input="onSelectInput"
+        @keyup.enter="saveNewScore"
+      >
+        <template v-slot:no-options="{ search, searching }">
+          Type to search scores or enter a valid number
+        </template>
+      </v-select>
       <br>
       <button class="btn" @click="saveNewScore($event)">Save</button>
       <button class="btn" @click="activateChoirCriterionCommentModal">Comment</button>
