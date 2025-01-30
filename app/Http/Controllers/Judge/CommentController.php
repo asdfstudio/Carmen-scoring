@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Judge;
+
 use Auth;
 use App\Round;
 use App\Comment;
@@ -7,6 +8,10 @@ use App\Http\Requests;
 use App\Events\CommentSaved;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Google_Client;
+use Google_Service_Drive;
+use Illuminate\Support\Facades\Log;
+
 class CommentController extends Controller
 {
     public function save(Request $request)
@@ -15,10 +20,15 @@ class CommentController extends Controller
         $round_id = $request->input('round_id', NULL);
         $choir_id = $request->input('choir_id', NULL);
         $criteria_id = $request->input('criteria_id', NULL);
-        $round = Round::with(['competition' => function($query) {
-            $query->withoutGlobalScope('organization');
-        }])->find($round_id);
+
+        $round = Round::with([
+            'competition' => function ($query) {
+                $query->withoutGlobalScope('organization');
+            }
+        ])->find($round_id);
+
         $competition = $round->competition;
+
         if ($criteria_id) {
             // Save comment for criterion
             $comment = Comment::firstOrNew([
@@ -40,10 +50,57 @@ class CommentController extends Controller
                 'subject_id' => $round_id
             ]);
         }
+
+        // Assign user inputs
         $comment->comments = $request->input('comment');
-        $comment->ai_comments = $request->input('ai_comment'); 
+        $comment->ai_comments = $request->input('ai_comment');
+
+        $choir = $comment->recipient->name ?? 'Unknown Choir';
+        $judge = $comment->judge->last_name ?? 'Unknown Judge';
+
+        $round_ID = $comment->subject_id ?? 'Unknown Round ID';
+        $choir_ID = $comment->recipient_id ?? 'Unknown Choir ID';
+
+        // Google Drive integration for AI Summarized comments
+        if (empty($comment->ai_comments)) {
+            try {
+                $file_name = "$round_ID-$choir_ID-$choir-$judge.txt";
+                var_dump("Searching for AI comment file in Google Drive: {$file_name}");
+
+                $client = new Google_Client();
+                $client->setAuthConfig(storage_path('app/google-service-account.json'));
+                $client->addScope(Google_Service_Drive::DRIVE);
+                $service = new Google_Service_Drive($client);
+                $folder_id = env('GOOGLE_DRIVE_FOLDER_ID');
+
+                $results = $service->files->listFiles([
+                    'q' => "name = '$file_name' and '$folder_id' in parents",
+                    'fields' => 'files(id, name)',
+                ]);
+
+                $files = $results->getFiles();
+
+                if (count($files) > 0) {
+                    $file = $files[0];
+
+                    $file_content = $service->files->get($file->getId(), ['alt' => 'media']);
+                    $content = $file_content->getBody()->getContents();
+
+                    if (!empty($content)) {
+                        $comment->ai_comments = $content;
+                    } else {
+                        var_dump("AI Comment file is empty: " . $file->getName());
+                    }
+                } else {
+                    var_dump("AI Comment file not found in Google Drive.");
+                }
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Error retrieving AI comment: ' . $e->getMessage()], 500);
+            }
+        }
+
         $comment->save();
         event(new CommentSaved($comment, $competition));
         return response()->json($comment);
-    } 
+    }
 }

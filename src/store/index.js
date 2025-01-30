@@ -62,17 +62,40 @@ var setAIComment = _.debounce(async function (payload) {
 }, 1000);
 
 var setAICommentView = _.debounce(async function (payload) {
-  // Send ajax request
-  const data = await ai_comments_view.viewAIComment(payload)
+  // Check if AI comment already exists before making an API call
+  if (store.getters.getChoirAICommentView(payload.choir_id)) {
+    return;
+  }
 
-  // Send to mutation
-  store.commit('setAICommentView', {
+  // Set loading before the request starts
+  store.commit("SET_LOADING_STATE", { choirId: payload.choir_id, loading: true });
+
+  try {
+    // Send AJAX request
+    const data = await ai_comments_view.viewAIComment(payload);
+
+    // Send result to Vuex store
+    store.commit("setAICommentView", {
       choir_id: data.choir_id,
       ai_comment_view: data.ai_comments_view,
       recipient_id: data.recipient_id,
       recipient_type: data.recipient_type
-  });
+    });
+
+  } catch (error) {
+    console.error("Error fetching AI comments:", error);
+    store.commit("setAICommentView", {
+      choir_id: payload.choir_id,
+      ai_comment_view: "Error loading AI comment"
+    });
+
+  } finally {
+    // Set loading to false after request completes
+    store.commit("SET_LOADING_STATE", { choirId: payload.choir_id, loading: false });
+  }
 }, 1000);
+ // Reduced debounce time to 500ms for a better user experience.
+
 
 export const store = new Vuex.Store({
   state: {
@@ -101,7 +124,8 @@ export const store = new Vuex.Store({
     apiUrl: apiUrl,
     aiCommentsActive: false,
     aiCommentsViewActive: false,
-    CommentsActive: false
+    CommentsActive: false,
+    loadingAIComments: {}
   },
   mutations: {
     activateModal (state, data) {
@@ -247,6 +271,9 @@ export const store = new Vuex.Store({
 
       // Otherwise append it to the array
       state.comments[+index + 1] = payload;
+    },
+    SET_LOADING_STATE(state, { choirId, loading }) {
+      state.loadingAIComments = { ...state.loadingAIComments, [choirId]: loading };
     },
     setSavingStatus (state, statusObj) {
       state.saving = Object.assign({}, state.saving, statusObj)
@@ -510,6 +537,7 @@ export const store = new Vuex.Store({
       }
       return null
     },
+    isAICommentLoading: (state) => (choirId) => state.loadingAIComments[choirId] || false,
     getChoirCriterionComment: (state) => (choirId, criterionId) => {
         for (var c in state.comments) {
             const isChoirCriterionComment = state.comments[c].choir_id === choirId

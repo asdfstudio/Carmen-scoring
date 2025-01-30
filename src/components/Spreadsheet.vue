@@ -173,15 +173,29 @@
         </tr>
 
         <!-- AI Summarize -->
-        <tr class="comment-row">
-          <th class="criterion-name">AI Summarize</th>
+        <!-- <tr class="comment-row">
+          <th class="criterion-name">AI Comments (Non editable)</th>
           <td
             class="comment-text"
             v-for="choir in choirsList"
             @click="activateChoirAICommentViewModal(choir)"
             :key="choir.id"
           >
-            {{ aiCommentView(choir) }}
+          {{ aiCommentView(choir) }}
+          </td>
+        </tr> -->
+
+        <tr class="comment-row">
+          <th class="criterion-name">AI Comments (Non editable)</th>
+          <td
+            class="comment-text"
+            v-for="choir in choirsList"
+            @click="activateChoirAICommentViewModal(choir)"
+            :key="choir.id"
+          >
+          <span v-if="isLoading(choir.id)">Loading...</span>
+          <span v-else>{{ aiCommentView(choir) }}</span>
+          <!-- {{ aiCommentView(choir) }} -->
           </td>
         </tr>
 
@@ -463,6 +477,9 @@ export default {
         this.$store.dispatch('setAICommentView', payload),
         this.$store.getters.getChoirAICommentView(choir.id)
        )
+    },
+    isLoading(choirId) {
+      return this.$store.getters.isAICommentLoading(choirId);
     },
     onRecordingStart: function (choirId) {
       this.currentRecordingId = choirId
