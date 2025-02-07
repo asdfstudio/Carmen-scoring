@@ -97,8 +97,10 @@ class AICommentViewController extends Controller
                     $createdTime = $file->getCreatedTime();
                     $formattedDate = date("F j, Y, g:i A", strtotime($createdTime));
 
+                    $messgae = "LLM Generated Summary provided by Judge’s Assistant";
+
                     // Prepend the uploaded date to the content
-                    $ai_comment_view->ai_comments_view = "Uploaded on: $formattedDate\n\n$content";
+                    $ai_comment_view->ai_comments_view = "$messgae\n\nUploaded on: $formattedDate\n\n$content";
 
                     if (empty($comment->ai_comments)) {
                         $comment->ai_comments = $content;

@@ -161,7 +161,10 @@
 
         <!-- AI Comments -->
         <tr class="comment-row">
-          <th class="criterion-name">AI Comments</th>
+          <th class="criterion-name">
+            AI Comments
+            <button class="button" type="submit" @click="fetchComment()">Fetch Comments</button>
+          </th>
           <td
             class="comment-text"
             v-for="choir in choirsList"
@@ -186,7 +189,10 @@
         </tr> -->
 
         <tr class="comment-row">
-          <th class="criterion-name">AI Comments (Non editable)</th>
+          <th class="criterion-name">
+            AI Comments (Non editable)
+            <button class="button" type="submit" @click="fetchComment()">Fetch AI Comments</button>
+          </th>
           <td
             class="comment-text"
             v-for="choir in choirsList"
@@ -472,7 +478,6 @@ export default {
         round_id: choir?.round_id,
         ai_comment_view: this.initialAICommentView,
       };
-
       return (
         this.$store.dispatch('setAICommentView', payload),
         this.$store.getters.getChoirAICommentView(choir.id)
@@ -481,6 +486,15 @@ export default {
     isLoading(choirId) {
       return this.$store.getters.isAICommentLoading(choirId);
     },
+    fetchAIComment: function (choirsList) {
+      choirsList.forEach((choir) => {
+        this.aiCommentView(choir)
+      });
+    },
+    fetchComment: function () {
+      this.getApiData()
+    },
+
     onRecordingStart: function (choirId) {
       this.currentRecordingId = choirId
       this.changeInProgressRecValue(1)
@@ -838,6 +852,15 @@ table {
 
   tr.criteria-row.active {
     height: 100px;
+  }
+  button, .button {
+    background: #7F4091;
+    color: #fff;
+    padding: 5px 10px;
+    margin: 0 2px;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
   }
 }
 </style>
