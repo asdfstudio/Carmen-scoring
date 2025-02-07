@@ -93,7 +93,7 @@ var setAICommentView = _.debounce(async function (payload) {
     // Set loading to false after request completes
     store.commit("SET_LOADING_STATE", { choirId: payload.choir_id, loading: false });
   }
-}, 100);
+}, 1);
  // Reduced debounce time to 500ms for a better user experience.
 
 
