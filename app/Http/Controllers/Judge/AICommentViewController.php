@@ -68,13 +68,14 @@ class AICommentViewController extends Controller
         $comment->ai_comments = $request->input('ai_comment');
 
         $choir = $ai_comment_view->recipient->name ?? 'Unknown Choir';
-        $judge = $ai_comment_view->judge->last_name ?? 'Unknown Judge';
+        $judge_ID = $ai_comment_view->judge_id ?? 'Unknown Judge';
+        $judge_lastName = $ai_comment_view->judge->last_name ?? 'Unknown Judge';
 
         $round_ID = $ai_comment_view->subject_id ?? 'Unknown Round ID';
         $choir_ID = $ai_comment_view->recipient_id ?? 'Unknown Choir ID';
 
-        if ($choir && $judge) {
-            $file_name = "$round_ID-$choir_ID-$choir-$judge.txt";
+        if ($choir && $judge_ID) {
+            $file_name = "$round_ID-$choir_ID-$choir-$judge_ID-$judge_lastName.txt";
             $client = new Google_Client();
             $client->setAuthConfig(storage_path('app/google-service-account.json')); 
             $client->addScope(Google_Service_Drive::DRIVE);
