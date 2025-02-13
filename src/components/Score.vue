@@ -42,7 +42,7 @@
       <p id="maxNumError" class="text-danger"></p>
       <v-select 
         ref="scoreSelect"
-        :options="range"
+        :options="combinedRange"
         v-model="currentScore"
         :clearable="false"
         :searchable="true"
@@ -103,7 +103,8 @@ export default {
     return {
       selectedScore: this.initialScore,
       currentScore: this.initialScore,
-      inputMaxValue: 10
+      inputMaxValue: 10,
+      searchResults: []
     }
   },
   computed: {
@@ -122,6 +123,24 @@ export default {
     },
     displayScore () {
       return this.currentScore ? this.currentScore : '-'
+    },
+    combinedRange() {
+      const searchTerm = this.$refs.scoreSelect?.search
+      const numberToMatch = parseFloat(searchTerm)
+      
+      if (!isNaN(numberToMatch)) {
+        return [...new Set([...this.range, ...this.searchResults])]
+          .sort((a, b) => {
+            // Calculate absolute difference from search term
+            const diffA = Math.abs(a - numberToMatch)
+            const diffB = Math.abs(b - numberToMatch)
+            return diffA - diffB // Sort by closest match first
+          })
+      }
+      
+      // Default sorting if no valid number is being searched
+      return [...new Set([...this.range, ...this.searchResults])]
+        .sort((a, b) => b - a)
     }
   },
   watch: {
@@ -209,14 +228,21 @@ export default {
       }
     },
     onSearch(search) {
-      // Validate and convert search input
       const numSearch = parseFloat(search)
-      if (!isNaN(numSearch) && numSearch >= this.min && numSearch <= this.max) {
-        // If it's a valid number, add it to options if not already present
-        if (!this.range.includes(numSearch)) {
-          // Temporarily modify the range (note: this won't persist)
-          this.range.push(numSearch)
-        }
+      if (!isNaN(numSearch)) {
+        // Filter the range to include only numbers that contain the search term
+        const filteredNumbers = this.range.filter(num => 
+          num.toString().includes(search)
+        )
+        
+        // Sort by proximity to the searched number
+        this.searchResults = filteredNumbers.sort((a, b) => {
+          const diffA = Math.abs(a - numSearch)
+          const diffB = Math.abs(b - numSearch)
+          return diffA - diffB
+        })
+      } else {
+        this.searchResults = []
       }
     },
     onSelectInput(value) {

@@ -102,13 +102,22 @@ class AICommentViewController extends Controller
 
                     // Prepend the uploaded date to the content
                     $ai_comment_view->ai_comments_view = "$messgae\n\nUploaded on: $formattedDate\n\n$content";
+                    
+                    // Fetch the existing comment from the database
+                    $existingComment = Comment::where('judge_id', $judge_id)
+                    ->where('choir_id', $choir_id)
+                    ->where('subject_id', $round_id)
+                    ->select('ai_comments')
+                    ->first();
 
-                    if (empty($comment->ai_comments)) {
-                        $comment->ai_comments = $content;
-                        $comment->save();
+                    // Check if ai_comments is not null, then update it
+                    if ($existingComment && $existingComment->ai_comments === NULL || $existingComment->ai_comments === '') { 
+                        $comment->ai_comments = $content; 
+                        $comment->save(); 
                     }
+
                 } else {
-                    $ai_comment_view->ai_comments_view = "Do not have any AI Summarize";
+                    $ai_comment_view->ai_comments_view = "No Judge’s Assistant summaries available yet";
                 }
 
                 return response()->json($ai_comment_view);

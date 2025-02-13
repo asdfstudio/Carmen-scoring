@@ -41,6 +41,13 @@
             @foreach($judges as $judge)
               @php
                 $judge_comments = $round_comments->where('judge_id', $judge->id);
+
+                $AIComment = App\Comment::where('judge_id', $judge->id)
+                  ->where('choir_id', $choir->id)
+                  ->where('subject_id', $round->id)
+                  ->select('ai_comments')
+                  ->first();
+
                 $judge_criteria_comments = $criterion_comments
                     ->where('judge_id', $judge->id)
                     ->where('subject_id', $round->id);
@@ -114,6 +121,15 @@
                     </div>
                   @endif
                   <hr>
+                  @if($AIComment && $AIComment->ai_comments != NULL || $AIComment->ai_comments != '')
+                    <h4>Judge’s Assistant Comments:</h4>
+                    <p>{{ $AIComment->ai_comments }}</p>
+                  @else
+                    <h4>Judge’s Assistant Comments:</h4>
+                    <p><i>No Judge’s Assistant summaries available yet</i></p>
+                  @endif
+                  <hr>
+
                   <p>Judge Score Total: <b>{{ $judgeScoreTotal }}</b> out of <b>{{ $totalPoints }}</b> </p>
                 </div>
               </li>

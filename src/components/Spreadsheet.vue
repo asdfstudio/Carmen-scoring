@@ -162,8 +162,8 @@
         <!-- AI Comments -->
         <tr class="comment-row">
           <th class="criterion-name">
-            AI Comments
-            <button class="button" type="submit" @click="fetchComment()">Fetch Comments</button>
+            Judge’s Assistant Comments
+            <button class="button" type="submit" @click="fetchComment()">Copy Judge’s Assistant Comments</button>
           </th>
           <td
             class="comment-text"
@@ -190,8 +190,8 @@
 
         <tr class="comment-row">
           <th class="criterion-name">
-            AI Comments (Non editable)
-            <button class="button" type="submit" @click="fetchComment()">Fetch AI Comments</button>
+            Judge’s Assistant Comments (Non editable)
+            <button class="button" type="submit" @click="fetchComment()">Fetch Judge’s Assistant Comments</button>
           </th>
           <td
             class="comment-text"
