@@ -123,7 +123,7 @@
                   <hr>
                   @if($AIComment && $AIComment->ai_comments != NULL || $AIComment->ai_comments != '')
                     <h4>Judge’s Assistant Comments:</h4>
-                    <p>{{ $AIComment->ai_comments }}</p>
+                    <textarea style="width: 100%; height: 300px;" readonly>{{ $AIComment->ai_comments }}</textarea>
                   @else
                     <h4>Judge’s Assistant Comments:</h4>
                     <p><i>No Judge’s Assistant summaries available yet</i></p>
