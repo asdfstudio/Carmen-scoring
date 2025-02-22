@@ -217,9 +217,10 @@ Recap Sheet | {{ $competition->name }} | @parent
                 <tr>
                     <td class="col-ensemble">{{ $choral['school'] }} “{{ $choral['name'] }}“</td>
                     <td class="col-type">{{ $choral['round'] }}</td>
-                    <td class="col-score">{{ $choral['average_score'] }} @if($choral['tied'])
-                        <span class="scoree tiedd">tied</span>
-                    @endif
+                    <td class="col-score">{{ $choral['average_score'] }} 
+                        @if($choral['tied'])
+                            <span class="scoree tiedd">tied</span>
+                        @endif
                     </td>
                 </tr>
             @endforeach
@@ -301,14 +302,22 @@ Recap Sheet | {{ $competition->name }} | @parent
                 </td>
                 <td class="col-score">
                     @foreach($sweepstakesWinners['choral']['average_score'] as $Score)
-                        <div>{{ $Score }}</div>
+                        <div>
+                            {{ $Score }}
+                            @if($sweepstakesWinners['choral']['is_tied']) 
+                                <span class="scoree tiedd">tied</span>
+                            @endif
+                        </div>
                     @endforeach
                 </td>
-                <td class="col-score">{{ $sweepstakesWinners['choral']['total_score'] }}</td>
+                <td class="col-score">
+                    {{ $sweepstakesWinners['choral']['total_score'] }}
+                </td>
             </tr>
         </tbody>
     </table>
 @endif
+
 
 @if(isset($sweepstakesWinners['instrumental']))
     <h2>Instrumental Sweepstakes Winner</h2>
@@ -330,15 +339,22 @@ Recap Sheet | {{ $competition->name }} | @parent
                     @endforeach
                 </td>
                 <td class="col-score">
-                    @foreach($sweepstakesWinners['instrumental']['average_score'] as $Score)
-                        <div>{{ $Score }}</div>
+                    @foreach($sweepstakesWinners['instrumental']['average_score'] as $index => $Score)
+                        <div>{{ $Score }} 
+                            @if(isset($sweepstakesWinners['instrumental']['is_tied']) && $sweepstakesWinners['instrumental']['is_tied']) 
+                                <span class="scoree tiedd">tied</span>
+                            @endif
+                        </div>
                     @endforeach
                 </td>
-                <td class="col-score">{{ $sweepstakesWinners['instrumental']['total_score'] }}</td>
+                <td class="col-score">
+                    {{ $sweepstakesWinners['instrumental']['total_score'] }}
+                </td>
             </tr>
         </tbody>
     </table>
 @endif
+
 
 @if(isset($sweepstakesWinners['festival']))
     <h2>Festival Sweepstakes Winner</h2>
@@ -364,7 +380,12 @@ Recap Sheet | {{ $competition->name }} | @parent
                         <div>{{ $Score }}</div>
                     @endforeach
                 </td>
-                <td class="col-score">{{ $sweepstakesWinners['festival']['total_score'] }}</td>
+                <td class="col-score">
+                    {{ $sweepstakesWinners['festival']['total_score'] }}
+                    @if($sweepstakesWinners['festival']['is_tied'])
+                        <span class="scoree tiedd">tied</span>
+                    @endif
+                </td>
             </tr>
         </tbody>
     </table>
