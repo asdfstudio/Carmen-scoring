@@ -21,6 +21,7 @@ export default {
         acceptedFiles: 'audio/*',
         addRemoveLinks: true,
         maxFilesize: 500,
+        timeout: 600000,
         headers: {'X-CSRF-TOKEN': document.querySelector('meta[name="_token"]').getAttribute('content')}
       }
     }

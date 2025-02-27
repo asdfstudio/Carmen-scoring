@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Recording;
+use App\Comment;
 use Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 
 use Google_Client;
 use Google_Service_Drive;
@@ -19,6 +21,7 @@ class RecordingController extends Controller
 {
     public function postRecording(Request $request)
     {
+        ini_set('max_execution_time', 600); // 10 minutes
         $recording = new Recording;
         $recording->judge_id = isset($request->judge_id) ? $request->judge_id : Auth::user()->person_id;
         $recording->choir_id = $request->choir_id;
@@ -75,8 +78,46 @@ class RecordingController extends Controller
             // // Save the Google Drive file ID in the database
             // $recording->google_drive_file_id = $drive_file->id;
             // $recording->judge_email = $request->judge_email;
-        }
+
+            // 3. Send the audio to the transcription API
+            $response = Http::timeout(900)->attach('audio', file_get_contents($file_to_store->getRealPath()), $file_to_store->getClientOriginalName())
+            ->post('https://audiototext.asdfstudio.com/api/transcribe');
+        
+        // if ($response->successful()) {
+            $responseData = $response->json();
+        
+        //     \Log::info('Transcription API Response:', $responseData);
+        //     var_dump("zzzzzzzzzzzzzzzz", $responseData);
+        
+            if (isset($responseData['summary'])) {
+                $transcribedText = $responseData['summary'];
+            } else {
+                return response()->json(['error' => 'Transcription API did not return summary', 'response' => $responseData], 500);
+            }
+            $comment = Comment::firstOrNew([
+                'judge_id' => $recording->judge_id,
+                'choir_id' => $recording->choir_id,
+                'subject_type' => 'App\Round',
+                'subject_id' => $recording->round_id
+            ]);
+        
+            $comment->ai_comments = $transcribedText;
+            $comment->save();
+        
+            // return response()->json(['message' => 'Transcription saved', 'ai_comments' => $transcribedText], 201);
+        // } else {
+        //     // Log the failed response
+        //     \Log::error('Transcription API Failed', ['status' => $response->status(), 'body' => $response->body()]);
+            
+        //     return response()->json([
+        //         'error' => 'Transcription failed',
+        //         'message' => $response->body()
+        //     ], 500);
+        // }
+        
+        // }
         // Save modal
+        }
         $recording->save();
 
         $recording->formatted_date = $recording->getNiceDate();
