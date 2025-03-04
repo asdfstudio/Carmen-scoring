@@ -640,47 +640,68 @@ class RecapSheetService
                 }
             }
             
-    
+                
             // **Festival Sweepstakes**
             if ($schoolChoirs->isNotEmpty()) {
+                // Highest scoring choral ensemble
+                // **Find the Highest Choral Ensemble**
                 $highestChoral = $schoolChoirs->filter(function ($choir) {
                     return isset($choir['festival_sweepstakes_checked']) &&
                         $choir['festival_sweepstakes_checked'] == 1 &&
-                        // $choir['ranking'] !== "No Rank" &&
-                        preg_match('/Concert Choir|Chamber Choir|Upper Voice Choir|Lower Voice Choir|Vocal Jazz Choir|Vocal Jazz|Show Choir/i', $choir['category']);
+                        preg_match('/\b(Chamber Choir|Concert Choir|Upper Voice Choir|Lower Voice Choir|Vocal Jazz Choir|Vocal Jazz|Show Choir)\b/i', $choir['category']);
                 })->sortByDesc('average_score')->first();
 
+                // 🚀 **Ensure at least one valid choral ensemble is selected**
+                if (!$highestChoral) {
+                    $highestChoral = $schoolChoirs->filter(function ($choir) {
+                        return isset($choir['festival_sweepstakes_checked']) &&
+                            $choir['festival_sweepstakes_checked'] == 1;
+                    })->sortByDesc('average_score')->first();
+                }
+
+
+                // Highest scoring instrumental ensemble
                 $highestInstrumental = $schoolChoirs->filter(function ($choir) {
                     return isset($choir['festival_sweepstakes_checked']) &&
                         $choir['festival_sweepstakes_checked'] == 1 &&
-                        // $choir['ranking'] !== "No Rank" &&
                         preg_match('/Concert Band|Orchestra|Jazz Band/i', $choir['category']);
                 })->sortByDesc('average_score')->first();
 
+                // Third highest ensemble excluding restricted categories
                 $thirdEnsemble = $schoolChoirs->filter(function ($choir) use ($highestChoral, $highestInstrumental) {
                     return isset($choir['festival_sweepstakes_checked']) &&
                         $choir['festival_sweepstakes_checked'] == 1 &&
-                        // $choir['ranking'] !== "No Rank" &&
                         $choir['name'] !== ($highestChoral['name'] ?? null) &&
-                        $choir['name'] !== ($highestInstrumental['name'] ?? null);
+                        $choir['name'] !== ($highestInstrumental['name'] ?? null) &&
+                        !preg_match('/Percussion|Guitar|Drum Line|Parade Band|Auxiliary/i', $choir['category']); // Exclude unwanted categories
                 })->sortByDesc('average_score')->first();
 
-                // Check for null values before accessing their average_score
-                $scores = [
-                    isset($highestChoral) && isset($highestChoral['average_score']) ? (float) $highestChoral['average_score'] : 0,
-                    isset($highestInstrumental) && isset($highestInstrumental['average_score']) ? (float) $highestInstrumental['average_score'] : 0,
-                    isset($thirdEnsemble) && isset($thirdEnsemble['average_score']) ? (float) $thirdEnsemble['average_score'] : 0
-                ];
-
-                // Check for ties
-                $isTied = false;
-
-                // If any two scores are the same, mark as tied
-                if (count(array_unique($scores)) < count($scores)) {
-                    $isTied = true;
+                // 🚀 **New Fix: Ensure a third ensemble is always picked**
+                if (!$thirdEnsemble) {
+                    $thirdEnsemble = $schoolChoirs->filter(function ($choir) use ($highestChoral, $highestInstrumental) {
+                        return isset($choir['festival_sweepstakes_checked']) &&
+                            $choir['festival_sweepstakes_checked'] == 1 &&
+                            $choir['name'] !== ($highestChoral['name'] ?? null) &&
+                            $choir['name'] !== ($highestInstrumental['name'] ?? null);
+                    })->sortByDesc('average_score')->first();
                 }
 
-                if ($highestChoral && $highestInstrumental && $thirdEnsemble) {
+                // Ensure default values
+                $highestChoral = $highestChoral ?? ['name' => 'No Ensemble', 'average_score' => 0];
+                $highestInstrumental = $highestInstrumental ?? ['name' => 'No Ensemble', 'average_score' => 0];
+                $thirdEnsemble = $thirdEnsemble ?? ['name' => 'No Ensemble', 'average_score' => 0]; // Ensures valid selection
+
+                $scores = [
+                    (float) $highestChoral['average_score'],
+                    (float) $highestInstrumental['average_score'],
+                    (float) $thirdEnsemble['average_score']
+                ];
+
+                // Check if there are tied scores
+                $isTied = count(array_unique($scores)) < count($scores);
+
+                // Ensure at least one valid ensemble exists before adding results
+                if ($highestChoral['name'] !== 'No Ensemble' || $highestInstrumental['name'] !== 'No Ensemble' || $thirdEnsemble['name'] !== 'No Ensemble') {
                     $totalFestivalScore = array_sum($scores);
 
                     if (!isset($sweepstakesWinners['festival']) || $totalFestivalScore > (float) $sweepstakesWinners['festival']['total_score']) {
@@ -689,11 +710,13 @@ class RecapSheetService
                             'choirs' => [$highestChoral['name'], $highestInstrumental['name'], $thirdEnsemble['name']],
                             'average_score' => $scores,
                             'total_score' => $totalFestivalScore,
-                            'is_tied' => $isTied // Add tied status
+                            'is_tied' => $isTied
                         ];
                     }
                 }
             }
+
+
         }
     
         return $sweepstakesWinners;

@@ -377,14 +377,15 @@ Recap Sheet | {{ $competition->name }} | @parent
                 </td>
                 <td class="col-score">
                     @foreach($sweepstakesWinners['festival']['average_score'] as $Score)
-                        <div>{{ $Score }}</div>
+                        <div>{{ $Score }}
+                            @if($sweepstakesWinners['festival']['is_tied'])
+                            <span class="scoree tiedd">tied</span>
+                        </div>
+                    @endif
                     @endforeach
                 </td>
                 <td class="col-score">
                     {{ $sweepstakesWinners['festival']['total_score'] }}
-                    @if($sweepstakesWinners['festival']['is_tied'])
-                        <span class="scoree tiedd">tied</span>
-                    @endif
                 </td>
             </tr>
         </tbody>
