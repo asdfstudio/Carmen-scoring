@@ -81,7 +81,7 @@
         }
     </style>
 
-  <!-- Recap Table -->
+<!-- Recap Table -->
 <table class="table">
     <thead>
         <tr>
@@ -421,4 +421,7 @@
     </table>
 @endif
 
-@endsection
+
+</body>
+
+</html>
