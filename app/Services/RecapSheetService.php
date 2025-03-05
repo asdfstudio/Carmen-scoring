@@ -654,7 +654,7 @@ if ($schoolChoirs->isNotEmpty()) {
         return isset($choir['festival_sweepstakes_checked']) &&
                $choir['festival_sweepstakes_checked'] == 1 &&
                $choir['ranking'] !== "No Rank" &&
-               preg_match('/Band|Orchestra|Jazz Band|Jazz|/i', $choir['category']);
+               preg_match('/Band|Orchestra|Jazz Band|Jazz/i', $choir['category']); // Fixed regex
     })->sortByDesc('average_score')->first();
 
     $thirdEnsemble = $schoolChoirs->filter(function ($choir) use ($highestChoral, $highestInstrumental) {
@@ -663,7 +663,7 @@ if ($schoolChoirs->isNotEmpty()) {
                $choir['ranking'] !== "No Rank" &&
                $choir['name'] !== ($highestChoral['name'] ?? null) &&
                $choir['name'] !== ($highestInstrumental['name'] ?? null) &&
-               !preg_match('/Percussion|Guitar|Drumline|Parade|Auxiliary/i', $choir['category']); // Exclude unwanted categories
+               !preg_match('/Percussion|Guitar|Drumline|Parade|Auxiliary/i', $choir['category']);
     })->sortByDesc('average_score')->first();
 
     // Ensure non-null values before accessing their average_score
@@ -675,7 +675,8 @@ if ($schoolChoirs->isNotEmpty()) {
 
     // Check for ties
     $uniqueScores = array_filter(array_unique($scores));
-    $isTied = count($uniqueScores) < count(array_filter($scores)); // Ensures ties only count if all three have scores
+    $nonZeroScores = array_filter($scores, function ($s) { return $s > 0; }); // Traditional function syntax
+    $isTied = count($uniqueScores) < count(array_filter($scores));
 
     if ($highestChoral && $highestInstrumental && $thirdEnsemble) {
         $totalFestivalScore = array_sum($scores);
@@ -686,11 +687,12 @@ if ($schoolChoirs->isNotEmpty()) {
                 'choirs' => [$highestChoral['name'], $highestInstrumental['name'], $thirdEnsemble['name']],
                 'average_score' => $scores,
                 'total_score' => $totalFestivalScore,
-                'is_tied' => $isTied // Add tied status
+                'is_tied' => $isTied
             ];
         }
     }
 }
+
 
 
 
