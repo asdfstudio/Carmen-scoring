@@ -184,6 +184,29 @@ Route::post('buy-petl-points', [
 //       ->middleware('can:view,competition');
 // });
 
+use Illuminate\Support\Facades\Http;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
+Route::get('/download-audio', function (Illuminate\Http\Request $request) {
+    $fileUrl = urldecode($request->query('url'));
+    $filename = basename($fileUrl) . '.m4a';
+
+    return new StreamedResponse(function () use ($fileUrl) {
+        $stream = fopen($fileUrl, 'r');
+        while (!feof($stream)) {
+            echo fread($stream, 1024 * 8); // Stream in 8KB chunks
+            ob_flush(); // Send output to the browser
+            flush(); // Flush the system output buffer
+        }
+        fclose($stream);
+    }, 200, [
+        'Content-Type' => 'audio/x-m4a',
+        'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        'Cache-Control' => 'no-cache',
+        'Connection' => 'keep-alive',
+    ]);
+})->name('download.audio');
+
 
 
 Route::group(['middleware' => ['auth']], function () {
