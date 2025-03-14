@@ -114,6 +114,7 @@
                             <div class="record-item-audio">
                               <audio controls> <source src="{{$recording->url}}"> </audio>
                               <span> {{$recording->created_at}} (UTC)</span>
+                              <a href="{{ $recording->url }}" download="{{ basename($recording->url) }}" class="download-link">Download</a>
                             </div>
                           </li>
                         @endforeach
