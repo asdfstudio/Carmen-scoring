@@ -323,18 +323,18 @@ $(document).ready(function() {
   
       // Define the data for each rating system type
       const ratingFields3A_2A = [
-          { name: 'Gold', minScore: 90 },
-          { name: 'Silver', minScore: 80 },
-          { name: 'Bronze', minScore: 65 },
-          { name: 'Merit', minScore: 50 },
-          { name: 'Festival', minScore: 1 }
+        { name: 'Gold', minScore: 89.5 },
+        { name: 'Silver', minScore: 79.5 },
+        { name: 'Bronze', minScore: 64.5 },
+        { name: 'Merit', minScore: 49.5 },
+        { name: 'Festival', minScore: 1 }
       ];
-  
+
       const ratingFields1A_J = [
-          { name: 'Gold', minScore: 85 },
-          { name: 'Silver', minScore: 75 },
-          { name: 'Bronze', minScore: 60 },
-          { name: 'Merit', minScore: 50 },
+          { name: 'Gold', minScore: 84.5 },
+          { name: 'Silver', minScore: 74.5 },
+          { name: 'Bronze', minScore: 59.5 },
+          { name: 'Merit', minScore: 49.5 },
           { name: 'Festival', minScore: 1 }
       ];
   
