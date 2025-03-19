@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Organizer;
 
 use App\Events\DivisionScoringCompleted;
+use App\Events\DivisionScoringFinalized;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -152,17 +153,17 @@ class CompetitionController extends Controller
     $activateAllScoringForm = $formBuilder->create('Scoring\ActivateAllScoringForm', [
       'method' => 'POST',
       'url' => route('organizer.competition.activate_all_scoring', [$competition])
-  ]);
-  
-  $completeAllScoringForm = $formBuilder->create('Scoring\CompleteAllScoringForm', [
-      'method' => 'POST',
-      'url' => route('organizer.competition.complete_all_scoring', [$competition]),
-  ]);
-  
-  $sendAllScoresAndFeedbackForm = $formBuilder->create('Scoring\SendAllScoresAndFeedbackForm', [
-      'method' => 'POST',
-      'url' => route('organizer.competition.send_all_scores_feedback', [$competition]),
-  ]);
+    ]);
+    
+    $completeAllScoringForm = $formBuilder->create('Scoring\CompleteAllScoringForm', [
+        'method' => 'POST',
+        'url' => route('organizer.competition.complete_all_scoring', [$competition]),
+    ]);
+    
+    $sendAllScoresAndFeedbackForm = $formBuilder->create('Scoring\SendAllScoresAndFeedbackForm', [
+        'method' => 'POST',
+        'url' => route('organizer.competition.send_all_scores_feedback', [$competition]),
+    ]);
 
     $divisionScoringForms = [
       'activate' => $activateDivisionScoringForm,
@@ -226,6 +227,7 @@ class CompetitionController extends Controller
   
       foreach ($competition->divisions as $division) {
           $division->sendScoresAndFeedback(); // Publish scores and feedback for all divisions.
+          event(new DivisionScoringFinalized($division));
       }
   
       return redirect()->route('organizer.competition.show', $competition)
