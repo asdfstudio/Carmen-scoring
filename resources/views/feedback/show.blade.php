@@ -115,8 +115,13 @@
                                   <audio controls>
                                       <source src="{{ $recording->url }}"> 
                                   </audio>
-                                  <span> {{ $recording->created_at }} (UTC)</span>
-                                  <a href="{{ route('download.audio', ['url' => urlencode($recording->url)]) }}" class="download-link">Download</a>
+                                  <div style="padding: 10px;">
+                                    <span style="padding: 10px;"> {{ $recording->created_at }} (UTC)</span>
+                                    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ route('download.audio', ['url' => urlencode($recording->url)]) }}'">
+                                        Download
+                                    </button>
+                                  </div>
+                                  <!-- <a href="{{ route('download.audio', ['url' => urlencode($recording->url)]) }}" class="download-link">Download</a> -->
                               </div>
                           </li>
                       @endforeach
