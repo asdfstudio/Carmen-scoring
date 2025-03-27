@@ -224,14 +224,17 @@
         <tr class="comment-row" v-if="hasPremium">
           <th class="criterion-name">Upload Recorded File</th>
           <td v-for="choir in choirsList" :key="choir.id">
-            <DropZone :choir="choir"
-            @upload-start="changeInProgressRecValue(1)"
-            @upload-complete="changeInProgressRecValue(-1)"
-            @upload-error="warnUploadRecordingError"
+            <p v-if="fileUploadCount[choir.id] && fileUploadCount[choir.id] > 0">
+              File Count: {{ fileUploadCount[choir.id] }}
+            </p>
+            <DropZone 
+              :choir="choir"
+              @upload-start="() => { changeInProgressRecValue(1); incrementFileCounter(choir.id); }"
+              @upload-complete="() => { changeInProgressRecValue(-1); decrementFileCounter(choir.id); }"
+              @upload-error="warnUploadRecordingError"
             />
           </td>
         </tr>
-
       </tbody>
     </table>
   </div>
@@ -253,7 +256,7 @@ export default {
       audioRecorder: null,
       recordingData: [],
       currentRecordingId: null,
-
+      fileUploadCount: {},
       initialAICommentView: this.$store.getters.getChoirAICommentView(this.$store.getters.activeChoir.id),
     }
   },
@@ -332,6 +335,21 @@ export default {
     }
   },
   methods: {
+    changeInProgressRecValue(value) {
+      const input = document.getElementById('recordingsInProgress');
+      input.value = parseInt(input.value) + value;
+    },
+    incrementFileCounter(choirId) {
+      if (!this.fileUploadCount[choirId]) {
+        this.$set(this.fileUploadCount, choirId, 0);
+      }
+      this.fileUploadCount[choirId]++;
+    },
+    decrementFileCounter(choirId) {
+      if (this.fileUploadCount[choirId] && this.fileUploadCount[choirId] > 0) {
+        this.fileUploadCount[choirId]--;
+      }
+    },
     isEditing: function (choir, criterion) {
       var activeChoir = this.$store.getters.activeChoir
       var activeCriterion = this.$store.getters.activeCriterion
@@ -493,6 +511,17 @@ export default {
     },
     fetchComment: function () {
       this.getApiData()
+        .then((response) => {
+          if (response.error) {
+            console.error("API Error:", response.message);
+          } else {
+            console.log("Data received:", response);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          this.$notify({ type: "error", text: "Failed to load AI comment. Please try again later." }); // Notify user
+        });
     },
 
     onRecordingStart: function (choirId) {
