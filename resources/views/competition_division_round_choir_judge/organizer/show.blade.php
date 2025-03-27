@@ -12,6 +12,7 @@
 
   <div class="">
     <h2>Comments from {{ $judge->full_name }}</h2>
+    <h3>Category: {{ $round->name }}</h3>
     <p>{{ $comment }}</p>
   </div>
 
