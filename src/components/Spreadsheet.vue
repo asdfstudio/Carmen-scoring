@@ -230,7 +230,7 @@
             <DropZone 
               :choir="choir"
               @upload-start="() => { changeInProgressRecValue(1); incrementFileCounter(choir.id); }"
-              @upload-complete="() => { changeInProgressRecValue(-1); decrementFileCounter(choir.id); }"
+              @upload-complete="() => { changeInProgressRecValue(-1); }"
               @upload-error="warnUploadRecordingError"
             />
           </td>
