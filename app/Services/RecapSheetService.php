@@ -654,18 +654,24 @@ class RecapSheetService
 
                 // Get the highest scoring Choir group (Traditional, Jazz, or Show)
                 $highestChoral = $eligibleChoirs->filter(function ($choir) {
-                    return preg_match('/Concert|Chamber|Upper|Lower|Vocal Jazz|Show/i', $choir['category']);
+                    return preg_match('/Concert|Chamber|Upper|Lower|Vocal Jazz|Vocal|Jazz Choir|Show/i', $choir['category']);
                 })->sortByDesc('average_score')->first();
 
-                // Get the highest scoring Instrumental group (Orchestra, Band, Jazz Band)
-                $highestInstrumental = $eligibleChoirs->filter(function ($choir) {
-                    return preg_match('/Orchestra|Band|Jazz Band/i', $choir['category']);
+                // === Step 2: Get Highest Scoring INSTRUMENTAL group ===
+                $highestInstrumental = $eligibleChoirs->filter(function ($choir) use ($highestChoral) {
+                    return !empty($choir['category']) &&
+                        preg_match('/Orchestra|Band|Jazz Band/i', $choir['category']) &&
+                        !preg_match('/Vocal|Choir|Show/i', $choir['category']) && // Exclude choir-like groups
+                        $choir['name'] !== ($highestChoral['name'] ?? null);
                 })->sortByDesc('average_score')->first();
 
                 // Get the next highest scoring group (excluding Percussion, Guitar, Drum Line, Parade, Auxiliary)
                 $thirdEnsemble = $eligibleChoirs->filter(function ($choir) use ($highestChoral, $highestInstrumental) {
-                    return $choir['name'] !== ($highestChoral['name'] ?? null) &&
-                        $choir['name'] !== ($highestInstrumental['name'] ?? null) &&
+                    $excludedNames = [
+                        $highestChoral['name'] ?? '',
+                        $highestInstrumental['name'] ?? ''
+                    ];
+                    return !in_array($choir['name'], $excludedNames) &&
                         !preg_match('/Percussion|Guitar|Drumline|Parade|Auxiliary/i', $choir['category']);
                 })->sortByDesc('average_score')->first();
 
