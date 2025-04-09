@@ -100,7 +100,8 @@ Recap Sheet | {{ $competition->name }} | @parent
                                     $choir['ranking'] = $rank;
                                     $rankCounter = 0;
                                     $previousRank = $rank;
-                                    $rank++;
+                                    //$rank += 1;
+                                    //$rank++;
                                 }
                             }
                             $previousWasNoRank = false; // Reset "No Rank" flag after assigning a valid rank
