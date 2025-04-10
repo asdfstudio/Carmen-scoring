@@ -129,7 +129,8 @@
                                     $choir['ranking'] = $rank;
                                     $rankCounter = 0;
                                     $previousRank = $rank;
-                                    $rank++;
+                                    //$rank += 1;
+                                    //$rank++;
                                 }
                             }
                             $previousWasNoRank = false; // Reset "No Rank" flag after assigning a valid rank
@@ -171,6 +172,7 @@
             <tr>
                 <th class="col-ensemble">Ensemble Name</th>
                 <th class="col-type">Type</th>
+                <th class="col-score">Score</th>
             </tr>
         </thead>
         <tbody>
@@ -178,6 +180,7 @@
                 <tr>
                     <td class="col-ensemble">{{ $winner['school'] }} “{{ $winner['name'] }}”</td>
                     <td class="col-type">{{ $winner['round'] }}</td>
+                    <td class="col-score">{{ $winner['average_score'] }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -195,6 +198,7 @@
                 <tr>
                     <th class="col-ensemble">Ensemble Name</th>
                     <th class="col-type">Type</th>
+                    <th class="col-score">Score</th>
                 </tr>
             </thead>
             <tbody>
@@ -202,6 +206,7 @@
                     <tr>
                         <td class="col-ensemble">{{ $winner['school'] }} “{{ $winner['name'] }}”</td>
                         <td class="col-type">{{ $winner['round'] }}</td>
+                        <td class="col-score">{{ $winner['average_score'] }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -215,6 +220,7 @@
                 <tr>
                     <th class="col-ensemble">Ensemble Name</th>
                     <th class="col-type">Type</th>
+                    <th class="col-score">Score</th>
                 </tr>
             </thead>
             <tbody>
@@ -222,6 +228,7 @@
                     <tr>
                         <td class="col-ensemble">{{ $winner['school'] }} “{{ $winner['name'] }}”</td>
                         <td class="col-type">{{ $winner['round'] }}</td>
+                        <td class="col-score">{{ $winner['average_score'] }}</td>
                     </tr>
                 @endforeach
             </tbody>

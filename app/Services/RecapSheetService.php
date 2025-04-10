@@ -317,26 +317,22 @@ class RecapSheetService
     {
         $choirs = collect(self::generateRecap($competition))->flatMap(function ($division) {
             $roundName = $division['division'] ?? 'Unknown Round';
-
+    
             return collect($division['choirs'] ?? [])->map(function ($choir) use ($roundName) {
                 $choir['round'] = $roundName;
                 return $choir;
             });
         });
-
+    
         $eligibleWinners = $choirs->filter(function ($choir) {
-            $roundedScore = ceil($choir['average_score']);
-            // return $roundedScore >= 95 && $choir['ranking'] !== 'No Rank';
-            return $roundedScore >= 95;
+            return $choir['average_score'] >= 94.5;
         });
         $bandOrchestraWinners = $choirs->filter(function ($choir) {
-            $roundedScore = ceil($choir['average_score']);
             $roundName = $choir['round'];
             return (stripos($roundName, 'band') !== false || stripos($roundName, 'orchestra') !== false)
-                && $roundedScore >= 92;
-                // && $choir['ranking'] !== 'No Rank';
+                && $choir['average_score'] >= 91.5;
         });
-
+    
         return $eligibleWinners
             ->merge($bandOrchestraWinners)
             ->unique(function ($item) {
@@ -411,7 +407,7 @@ class RecapSheetService
         // Filter choirs based on qualifications
         $qualifiedChoirs = $choirs->filter(function ($choir) {
             // return $choir['average_score'] >= 90 && $choir['ranking'] !== 'No Rank';
-            return $choir['average_score'] >= 90;
+            return $choir['average_score'] >= 89.5;
         });
 
         $choralChoirs = $qualifiedChoirs->filter(function ($choir) use ($validChoralTypes) {
