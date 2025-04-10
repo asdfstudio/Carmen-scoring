@@ -335,7 +335,7 @@ class ScoringMethod
     protected function assign_rank_skippy($sortedTotals)
     {
         // The second argument forces the skippy method.
-        return $this->assign_rank($sortedTotals, true);
+        return $this->assign_rank($sortedTotals, false);
     }
 
 
