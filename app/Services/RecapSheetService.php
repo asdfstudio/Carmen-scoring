@@ -676,6 +676,8 @@ class RecapSheetService
                 })->sortByDesc('average_score')->first();
 
                 // If all three groups exist, calculate Festival Sweepstakes score
+                $totalScoreMap = $totalScoreMap ?? []; // Initialize only once globally
+
                 if ($highestChoral && $highestInstrumental && $thirdEnsemble) {
                     $scores = [
                         $highestChoral['average_score'] ?? 0,
@@ -684,23 +686,37 @@ class RecapSheetService
                     ];
                     
                     $totalFestivalScore = array_sum($scores);
-
-                    // Check for ties
-                    $uniqueScores = array_filter(array_unique($scores));
-                    // $isTied = count($uniqueScores) < count(array_filter($scores, fn($s) => $s > 0));
-                    $isTied = count($uniqueScores) < count(array_filter($scores));
-
-                    // Compare and update Festival Sweepstakes winner
-                    if (!isset($sweepstakesWinners['festival']) || $totalFestivalScore > (float) $sweepstakesWinners['festival']['total_score']) {
+                
+                    // Check if this total score already exists in the map (indicating a tie)
+                    $isTiedWithAnotherSchool = in_array($totalFestivalScore, $totalScoreMap);
+                
+                    // Always track the score for later comparisons
+                    $totalScoreMap[] = $totalFestivalScore;
+                
+                    if (!isset($sweepstakesWinners['festival'])) {
+                        // First school to be recorded
                         $sweepstakesWinners['festival'] = [
                             'school_name' => $schoolName,
                             'choirs' => [$highestChoral['name'], $highestInstrumental['name'], $thirdEnsemble['name']],
                             'average_score' => $scores,
                             'total_score' => $totalFestivalScore,
-                            'is_tied' => $isTied
+                            'is_tied' => false
                         ];
+                    } elseif ($totalFestivalScore > (float) $sweepstakesWinners['festival']['total_score']) {
+                        // New high score — replace previous winner
+                        $sweepstakesWinners['festival'] = [
+                            'school_name' => $schoolName,
+                            'choirs' => [$highestChoral['name'], $highestInstrumental['name'], $thirdEnsemble['name']],
+                            'average_score' => $scores,
+                            'total_score' => $totalFestivalScore,
+                            'is_tied' => false
+                        ];
+                    } elseif ($totalFestivalScore === (float) $sweepstakesWinners['festival']['total_score']) {
+                        // Exact tie with previous winner — mark both as tied
+                        $sweepstakesWinners['festival']['is_tied'] = true;
+                        $isTiedWithAnotherSchool = true;
                     }
-                }
+                }                
             }
 
         }
