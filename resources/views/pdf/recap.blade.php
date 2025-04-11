@@ -125,11 +125,11 @@
                                     $choir['ranking'] = $previousRank;
                                 } else {
                                     // New score or after a "No Rank"
-                                    $rank += $rankCounter;
+                                    //$rank += $rankCounter;
                                     $choir['ranking'] = $rank;
                                     $rankCounter = 0;
                                     $previousRank = $rank;
-                                    //$rank += 1;
+                                    $rank += 1;
                                     //$rank++;
                                 }
                             }
