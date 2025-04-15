@@ -58,6 +58,7 @@ Recap Sheet | {{ $competition->name }} | @parent
         <tr>
             <th class="col-school">School Name</th>
             <th class="col-ensemble">Ensemble Name</th>
+            <th class="col-ensemble">Director Name</th>
             <th class="col-type">Type</th>
             <th class="col-class">Class</th>
             <th class="col-score">Average Score</th>
@@ -113,6 +114,7 @@ Recap Sheet | {{ $competition->name }} | @parent
                     <tr>
                         <td class="col-school">{{ $choir['school'] }}</td>
                         <td class="col-ensemble">{{ $choir['name'] }}</td>
+                        <td class="col-ensemble">{{ $choir['director'] }}</td>
                         <td class="col-type">{{ $data['round'] }}</td>
                         <td class="col-class">{{ $data['division'] }}</td>
                         <td class="col-score">{{ $choir['average_score'] }}</td>

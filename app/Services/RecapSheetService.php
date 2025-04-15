@@ -163,6 +163,9 @@ class RecapSheetService
                 return [
                     'name' => $choir->name,
                     'school' => $choir->school->name,
+                    'director' => $choir->directors->map(function ($director) {
+                        return $director->first_name . ' ' . $director->last_name;
+                    })->implode(', '),
                     'average_score' => $adjustedAverageScore,
                     'caption_averages' => [],
                     'ranking' => $rank,
