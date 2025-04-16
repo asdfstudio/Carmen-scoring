@@ -49,7 +49,9 @@ class CompetitionDivisionRoundChoirJudgeController extends Controller
       $rankedScores = new RankedScores($weightedScores);
 
       //dd($rawScores);
+	  $criterion_comments = Comment::with(['criterion'])->where('recipient_type', 'App\\Criterion')->where('choir_id', $choir_id)->get();
 
-			return view('competition_division_round_choir_judge.organizer.show',compact('rawScores', 'weightedScores', 'rankedScores', 'choir', 'judge', 'round', 'division', 'competition', 'divisions', 'captions', 'comment'));
+
+			return view('competition_division_round_choir_judge.organizer.show',compact('rawScores', 'weightedScores', 'rankedScores', 'choir', 'judge', 'round', 'division', 'competition', 'divisions', 'captions', 'comment', 'criterion_comments'));
 		}
 }
