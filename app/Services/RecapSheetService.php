@@ -598,6 +598,7 @@ class RecapSheetService
                     $sweepstakesWinners['choral'] = [
                         'school_name' => $schoolName,
                         'choirs' => [$traditionalChoral['name'], $secondChoral['name']],
+                        'directors' => [$traditionalChoral['director'], $secondChoral['director']],
                         'average_score' => [$traditionalChoralScore, $secondChoralScore],
                         'total_score' => $totalChoralScore,
                         'is_tied' => $isInstrumentalTied, // Flag for tied scores
@@ -634,6 +635,7 @@ class RecapSheetService
                     $sweepstakesWinners['instrumental'] = [
                         'school_name' => $schoolName,
                         'choirs' => [$concertOrOrchestra['name'], $secondInstrumental['name']],
+                        'directors' => [$concertOrOrchestra['director'], $secondInstrumental['director']],
                         'average_score' => [(float) $concertOrOrchestra['average_score'], (float) $secondInstrumental['average_score']],
                         'total_score' => $totalInstrumentalScore,
                         'is_tied' => $isInstrumentalTied, // Flag for tied scores
@@ -697,6 +699,7 @@ class RecapSheetService
                         $sweepstakesWinners['festival'] = [
                             'school_name' => $schoolName,
                             'choirs' => [$highestChoral['name'], $highestInstrumental['name'], $thirdEnsemble['name']],
+                            'directors' => [$highestChoral['director'], $highestInstrumental['director'], $thirdEnsemble['director']],
                             'average_score' => $scores,
                             'total_score' => $totalFestivalScore,
                             'is_tied' => false
@@ -706,6 +709,7 @@ class RecapSheetService
                         $sweepstakesWinners['festival'] = [
                             'school_name' => $schoolName,
                             'choirs' => [$highestChoral['name'], $highestInstrumental['name'], $thirdEnsemble['name']],
+                            'directors' => [$highestChoral['director'], $highestInstrumental['director'], $thirdEnsemble['director']],
                             'average_score' => $scores,
                             'total_score' => $totalFestivalScore,
                             'is_tied' => false

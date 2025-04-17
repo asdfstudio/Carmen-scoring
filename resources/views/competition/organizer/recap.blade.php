@@ -144,6 +144,7 @@ Recap Sheet | {{ $competition->name }} | @parent
         <thead>
             <tr>
                 <th class="col-ensemble">Ensemble Name</th>
+                <th class="col-ensemble">Director Name</th>
                 <th class="col-type">Type</th>
                 <th class="col-score">Score</th>
             </tr>
@@ -152,6 +153,7 @@ Recap Sheet | {{ $competition->name }} | @parent
             @foreach($adjudicatorWinners->sortBy('school') as $winner)
                 <tr>
                     <td class="col-ensemble">{{ $winner['school'] }} “{{ $winner['name'] }}”</td>
+                    <td class="col-ensemble">{{ $winner['director'] }}</td>
                     <td class="col-type">{{ $winner['round'] }}</td>
                     <td class="col-score">{{ $winner['average_score'] }}</td>
                 </tr>
@@ -170,6 +172,7 @@ Recap Sheet | {{ $competition->name }} | @parent
             <thead>
                 <tr>
                     <th class="col-ensemble">Ensemble Name</th>
+                    <th class="col-ensemble">Director Name</th>
                     <th class="col-type">Type</th>
                     <th class="col-score">Score</th>
                 </tr>
@@ -178,6 +181,7 @@ Recap Sheet | {{ $competition->name }} | @parent
                 @foreach($fogInvitationWinners['choral'] as $winner)
                     <tr>
                         <td class="col-ensemble">{{ $winner['school'] }} “{{ $winner['name'] }}”</td>
+                        <td class="col-ensemble">{{ $winner['director'] }}</td>
                         <td class="col-type">{{ $winner['round'] }}</td>
                         <td class="col-score">{{ $winner['average_score'] }}</td>
                     </tr>
@@ -192,6 +196,7 @@ Recap Sheet | {{ $competition->name }} | @parent
             <thead>
                 <tr>
                     <th class="col-ensemble">Ensemble Name</th>
+                    <th class="col-ensemble">Director Name</th>
                     <th class="col-type">Type</th>
                     <th class="col-score">Score</th>
                 </tr>
@@ -200,6 +205,7 @@ Recap Sheet | {{ $competition->name }} | @parent
                 @foreach($fogInvitationWinners['instrumental'] as $winner)
                     <tr>
                         <td class="col-ensemble">{{ $winner['school'] }} “{{ $winner['name'] }}”</td>
+                        <td class="col-ensemble">{{ $winner['director'] }}</td>
                         <td class="col-type">{{ $winner['round'] }}</td>
                         <td class="col-score">{{ $winner['average_score'] }}</td>
                     </tr>
@@ -216,6 +222,7 @@ Recap Sheet | {{ $competition->name }} | @parent
         <thead>
             <tr>
                 <th class="col-ensemble">Ensemble Name</th>
+                <th class="col-ensemble">Director Name</th>
                 <th class="col-type">Type</th>
                 <th class="col-score">Score</th>
 
@@ -225,6 +232,7 @@ Recap Sheet | {{ $competition->name }} | @parent
             @foreach($outstandingWinners['choral'] as $choral)
                 <tr>
                     <td class="col-ensemble">{{ $choral['school'] }} “{{ $choral['name'] }}“</td>
+                    <td class="col-ensemble">{{ $choral['director'] }}</td>
                     <td class="col-type">{{ $choral['round'] }}</td>
                     <td class="col-score">{{ $choral['average_score'] }} 
                         @if($choral['tied'])
@@ -243,6 +251,7 @@ Recap Sheet | {{ $competition->name }} | @parent
         <thead>
             <tr>
                 <th class="col-ensemble">Ensemble Name</th>
+                <th class="col-ensemble">Director Name</th>
                 <th class="col-type">Type</th>
                 <th class="col-score">Score</th>
             </tr>
@@ -251,6 +260,7 @@ Recap Sheet | {{ $competition->name }} | @parent
             @foreach($outstandingWinners['band'] as $band)
                 <tr>
                     <td class="col-ensemble">{{ $band['school'] }} “{{ $band['name'] }}“</td>
+                    <td class="col-ensemble">{{ $band['director'] }}</td>
                     <td class="col-type">{{ $band['round'] }}</td>
                     <td class="col-score">{{ $band['average_score'] }} @if($band['tied'])
                         <span class="scoree tiedd">tied</span>
@@ -268,6 +278,7 @@ Recap Sheet | {{ $competition->name }} | @parent
         <thead>
             <tr>
                 <th class="col-ensemble">Ensemble Name</th>
+                <th class="col-ensemble">Director Name</th>
                 <th class="col-type">Type</th>
                 <th class="col-score">Score</th>
             </tr>
@@ -276,6 +287,7 @@ Recap Sheet | {{ $competition->name }} | @parent
             @foreach($outstandingWinners['orchestra'] as $orchestra)
                 <tr>
                     <td class="col-ensemble">{{ $orchestra['school'] }} “{{ $orchestra['name'] }}“</td>
+                    <td class="col-ensemble">{{ $orchestra['director'] }}</td>
                     <td class="col-type">{{ $orchestra['round'] }}</td>
                     <td class="col-score">{{ $orchestra['average_score'] }} @if($orchestra['tied'])
                         <span class="scoree tiedd">tied</span>
@@ -297,6 +309,7 @@ Recap Sheet | {{ $competition->name }} | @parent
             <tr>
                 <th class="col-school">School Name</th>
                 <th class="col-ensemble">Winning Ensembles</th>
+                <th class="col-ensemble">Director Name</th>
                 <th class="col-score">Score</th>
                 <th class="col-score">Combined Score</th>
             </tr>
@@ -307,6 +320,11 @@ Recap Sheet | {{ $competition->name }} | @parent
                 <td class="col-ensemble">
                     @foreach($sweepstakesWinners['choral']['choirs'] as $choirName)
                         <div>{{ $choirName }}</div>
+                    @endforeach
+                </td>
+                <td class="col-ensemble">
+                    @foreach($sweepstakesWinners['choral']['directors'] as $dirName)
+                        <div>{{ $dirName }}</div>
                     @endforeach
                 </td>
                 <td class="col-score">
@@ -347,6 +365,11 @@ Recap Sheet | {{ $competition->name }} | @parent
                         <div>{{ $choirName }}</div>
                     @endforeach
                 </td>
+                <td class="col-ensemble">
+                    @foreach($sweepstakesWinners['instrumental']['directors'] as $dirName)
+                        <div>{{ $dirName }}</div>
+                    @endforeach
+                </td>
                 <td class="col-score">
                     @foreach($sweepstakesWinners['instrumental']['average_score'] as $index => $Score)
                         <div>{{ $Score }} 
@@ -382,6 +405,11 @@ Recap Sheet | {{ $competition->name }} | @parent
                 <td class="col-ensemble">
                     @foreach($sweepstakesWinners['festival']['choirs'] as $choirName)
                         <div>{{ $choirName }}</div>
+                    @endforeach
+                </td>
+                <td class="col-ensemble">
+                    @foreach($sweepstakesWinners['festival']['directors'] as $dirName)
+                        <div>{{ $dirName }}</div>
                     @endforeach
                 </td>
                 <td class="col-score">
