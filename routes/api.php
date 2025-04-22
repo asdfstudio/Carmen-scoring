@@ -12,3 +12,10 @@ use Illuminate\Http\Request;
  */
 
 Route::resource('spreadsheet', 'JudgingSpreadsheetController')->middleware(['auth', 'auth.judge']);
+
+Route::get('/choirs/upload-totals', function () {
+    return DB::table('recordings')
+        ->select('choir_id', DB::raw('count(*) as total'))
+        ->groupBy('choir_id')
+        ->pluck('total', 'choir_id');
+});

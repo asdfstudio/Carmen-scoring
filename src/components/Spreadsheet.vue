@@ -224,6 +224,9 @@
         <tr class="comment-row" v-if="hasPremium">
           <th class="criterion-name">Upload Recorded File</th>
           <td v-for="choir in choirsList" :key="choir.id">
+            <p v-if="fileUploadTotal[choir.id] !== undefined">
+              Total Uploaded Files: {{ fileUploadTotal[choir.id] }}
+            </p>
             <p v-if="fileUploadCount[choir.id] && fileUploadCount[choir.id] > 0">
               File Count: {{ fileUploadCount[choir.id] }}
             </p>
@@ -245,6 +248,7 @@ import Record from './Record'
 import DropZone from './DropZone'
 import GlobalEvents from 'vue-global-events'
 import Swal from 'sweetalert2'
+import Axios from 'axios'
 
 export default {
   name: 'Spreadsheet',
@@ -257,6 +261,7 @@ export default {
       recordingData: [],
       currentRecordingId: null,
       fileUploadCount: {},
+      fileUploadTotal: {},
       initialAICommentView: this.$store.getters.getChoirAICommentView(this.$store.getters.activeChoir.id),
     }
   },
@@ -345,6 +350,12 @@ export default {
       }
       this.fileUploadCount[choirId]++;
     },
+    incrementFileTotal(choirId) {
+    if (!this.fileUploadTotal[choirId]) {
+      this.$set(this.fileUploadTotal, choirId, 0);
+    }
+    this.fileUploadTotal[choirId]++;
+  },
     decrementFileCounter(choirId) {
       if (this.fileUploadCount[choirId] && this.fileUploadCount[choirId] > 0) {
         this.fileUploadCount[choirId]--;
@@ -637,6 +648,10 @@ export default {
     }
   },
   mounted () {
+    Axios.get('/api/choirs/upload-totals')
+    .then(response => {
+      this.fileUploadTotal = response.data;
+    });
     this.updateChoirsRanks()
     this.getApiData()
   },
