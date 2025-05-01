@@ -176,7 +176,8 @@ class RecapSheetService
                     'festival_sweepstakes_checked' => $choir->pivot->festival_sweepstakes,
                     'rank_checked' => $choir->pivot->receives_rankings,
                     'rating_checked' => $choir->pivot->receives_ratings,
-                    'adjusted_average_score' => $adjustedAverageScore
+                    'adjusted_average_score' => $adjustedAverageScore,
+                    'round' => $division->round->name
                 ];
             })->toArray() : [];
 
@@ -655,14 +656,14 @@ class RecapSheetService
 
                 // Get the highest scoring Choir group (Traditional, Jazz, or Show)
                 $highestChoral = $eligibleChoirs->filter(function ($choir) {
-                    return preg_match('/Concert|Chamber|Upper|Lower|Vocal Jazz|Vocal|Jazz Choir|Show/i', $choir['category']);
+                    return preg_match('/Traditional|Choir|Chamber|Upper|Lower|Vocal Jazz|Vocal|Jazz Choir|Show/i', $choir['round']);
                 })->sortByDesc('average_score')->first();
 
                 // === Step 2: Get Highest Scoring INSTRUMENTAL group ===
                 $highestInstrumental = $eligibleChoirs->filter(function ($choir) use ($highestChoral) {
-                    return !empty($choir['category']) &&
-                        preg_match('/Orchestra|Band|Jazz Band/i', $choir['category']) &&
-                        !preg_match('/Vocal|Choir|Show/i', $choir['category']) && // Exclude choir-like groups
+                    return !empty($choir['round']) &&
+                        preg_match('/Orchestra|Band|Jazz Band/i', $choir['round']) &&
+                        !preg_match('/Vocal|Choir|Show/i', $choir['round']) && // Exclude choir-like groups
                         $choir['name'] !== ($highestChoral['name'] ?? null);
                 })->sortByDesc('average_score')->first();
 
@@ -673,7 +674,7 @@ class RecapSheetService
                         $highestInstrumental['name'] ?? ''
                     ];
                     return !in_array($choir['name'], $excludedNames) &&
-                        !preg_match('/Percussion|Guitar|Drumline|Parade|Auxiliary/i', $choir['category']);
+                        !preg_match('/Percussion|Guitar|Drumline|Parade|Auxiliary/i', $choir['round']);
                 })->sortByDesc('average_score')->first();
 
                 // If all three groups exist, calculate Festival Sweepstakes score
