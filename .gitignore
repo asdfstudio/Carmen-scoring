@@ -1,7 +1,6 @@
 .env*
 .gitattributes
 .DS_Store
-/.vscode
 /.nova
 /database/data
 /vendor
@@ -17,3 +16,7 @@ npm-debug.log
 yarn-error.log
 .phpunit.result.cache
 .idea/
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore
+branch_structure.json

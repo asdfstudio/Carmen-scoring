@@ -39,6 +39,25 @@ You are free to define other testing environment configuration values as necessa
 
 In addition, you may create a .env.testing file in the root of your project. This file will override the .env file when running PHPUnit tests or executing Artisan commands with the --env=testing option.
 
-You can use the test Artisan command to run your tests. The Artisan test runner provides test reports:
+
+## 👥 Team
+
+**Developed by Airly Studio**
+
+- **[Taraqul Islam Rony](https://github.com/TIRony)** - *Senior Full Stack Engineer*
+- **[Sakil Sazzad Joy](https://github.com/ss-joy)** - *Full Stack Engineer*
+
+
+## 📞 Support & Contact
+
+- **Website**: [airlystudio.com](https://airlystudio.com/)
+- **Company**: Airly Studio
+- **Email**: hello@airlystudio.com
+
+For platform support, technical assistance, or project inquiries, contact our development team.
+
+---
+
+⭐ **Showcasing Creative Excellence | Built with precision by Airly Studio**
 
     php artisan test
